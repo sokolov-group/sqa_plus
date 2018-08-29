@@ -1,0 +1,37 @@
+
+Combining like terms:
+Converting 29 terms to canonical form...
+     0   (  -1.00000) h(p0,p1) cre(y) cre(p0) des(x) des(p1) 
+     1   (   1.00000) h(p0,y) cre(p0) des(x) 
+     2   (  -1.00000) h(p0,p1) cre(y) cre(p0) des(p1) des(x) 
+     3   (  -0.25000) v(p2,p3,p4,p5) cre(y) cre(p2) cre(p3) des(x) des(p4) des(p5) 
+     4   (   0.25000) v(p2,p3,p4,y) cre(p2) cre(p3) des(x) des(p4) 
+     5   (  -0.25000) v(p2,p3,y,p5) cre(p2) cre(p3) des(x) des(p5) 
+     6   (  -0.25000) v(p2,p3,p4,p5) cre(y) cre(p2) cre(p3) des(p5) des(p4) des(x) 
+     7   (   1.00000) h(p0,p1) cre(y) cre(p0) des(x) des(p1) 
+     8   (  -1.00000) h(x,p1) cre(y) des(p1) 
+     9   (   1.00000) h(p0,p1) kdelta(x,y) cre(p0) des(p1) 
+    10   (  -1.00000) h(p0,y) cre(p0) des(x) 
+    11   (   1.00000) h(x,y) 
+    12   (  -1.00000) h(p0,p1) cre(y) cre(p0) des(x) des(p1) 
+    13   (  -1.00000) h(p0,p1) kdelta(x,y) cre(p0) des(p1) 
+    14   (   1.00000) h(x,p1) cre(y) des(p1) 
+    15   (   0.25000) v(p2,p3,p4,p5) cre(y) cre(p2) cre(p3) des(x) des(p4) des(p5) 
+    16   (   0.25000) v(x,p3,p4,p5) cre(y) cre(p3) des(p4) des(p5) 
+    17   (  -0.25000) v(p2,x,p4,p5) cre(y) cre(p2) des(p4) des(p5) 
+    18   (  -0.25000) v(p2,p3,p4,p5) kdelta(x,y) cre(p2) cre(p3) des(p4) des(p5) 
+    19   (  -0.25000) v(p2,p3,p4,y) cre(p2) cre(p3) des(x) des(p4) 
+    20   (   0.25000) v(p2,p3,y,p5) cre(p2) cre(p3) des(x) des(p5) 
+    21   (  -0.25000) v(x,p3,p4,y) cre(p3) des(p4) 
+    22   (   0.25000) v(x,p3,y,p5) cre(p3) des(p5) 
+    23   (   0.25000) v(p2,x,p4,y) cre(p2) des(p4) 
+    24   (  -0.25000) v(p2,x,y,p5) cre(p2) des(p5) 
+    25   (  -0.25000) v(p2,p3,p4,p5) cre(y) cre(p2) cre(p3) des(x) des(p4) des(p5) 
+    26   (   0.25000) v(p2,p3,p4,p5) kdelta(x,y) cre(p2) cre(p3) des(p4) des(p5) 
+    27   (  -0.25000) v(x,p3,p4,p5) cre(y) cre(p3) des(p4) des(p5) 
+    28   (   0.25000) v(p2,x,p4,p5) cre(y) cre(p2) des(p4) des(p5) 
+Finished combining terms in 0.023 seconds
+
+Final results:
+ (   1.00000) h(x,y) 
+ (   1.00000) v(x,a,y,b) cre(a) des(b) 

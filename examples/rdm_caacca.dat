@@ -1,0 +1,20 @@
+
+Combining like terms:
+Converting 7 terms to canonical form...
+     0   (  -1.00000) cre(wp) cre(y) cre(z) des(w) des(x) des(zp) 
+     1   (  -1.00000) kdelta(w,y) cre(wp) cre(z) des(x) des(zp) 
+     2   (   1.00000) kdelta(w,wp) cre(y) cre(z) des(x) des(zp) 
+     3   (   1.00000) kdelta(x,y) cre(wp) cre(z) des(w) des(zp) 
+     4   (  -1.00000) kdelta(x,wp) cre(y) cre(z) des(w) des(zp) 
+     5   (  -1.00000) kdelta(w,y) kdelta(x,wp) cre(z) des(zp) 
+     6   (   1.00000) kdelta(w,wp) kdelta(x,y) cre(z) des(zp) 
+Finished combining terms in 0.003 seconds
+
+Final results:
+ (   1.00000) kdelta(w,wp) kdelta(x,y) cre(z) des(zp) 
+ (  -1.00000) kdelta(w,y) kdelta(wp,x) cre(z) des(zp) 
+ (   1.00000) kdelta(w,wp) cre(y) cre(z) des(x) des(zp) 
+ (  -1.00000) kdelta(w,y) cre(wp) cre(z) des(x) des(zp) 
+ (  -1.00000) kdelta(wp,x) cre(y) cre(z) des(w) des(zp) 
+ (   1.00000) kdelta(x,y) cre(wp) cre(z) des(w) des(zp) 
+ (  -1.00000) cre(wp) cre(y) cre(z) des(w) des(x) des(zp) 

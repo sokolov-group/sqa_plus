@@ -1,0 +1,32 @@
+
+Combining like terms:
+Converting 22 terms to canonical form...
+     0   (   1.00000) h(p0,p1) cre(x) cre(p0) des(y) des(p1) 
+     1   (  -1.00000) h(y,p1) cre(x) des(p1) 
+     2   (   1.00000) h(p0,p1) kdelta(y,x) cre(p0) des(p1) 
+     3   (  -1.00000) h(p0,x) cre(p0) des(y) 
+     4   (   1.00000) h(y,x) 
+     5   (  -1.00000) h(p0,p1) cre(x) cre(p0) des(y) des(p1) 
+     6   (   1.00000) h(p0,x) cre(p0) des(y) 
+     7   (  -1.00000) h(p0,p1) kdelta(y,x) cre(p0) des(p1) 
+     8   (   0.25000) v(p2,p3,p4,p5) cre(x) cre(p2) cre(p3) des(y) des(p4) des(p5) 
+     9   (   0.25000) v(y,p3,p4,p5) cre(x) cre(p3) des(p4) des(p5) 
+    10   (  -0.25000) v(p2,y,p4,p5) cre(x) cre(p2) des(p4) des(p5) 
+    11   (  -0.25000) v(p2,p3,p4,p5) kdelta(y,x) cre(p2) cre(p3) des(p4) des(p5) 
+    12   (  -0.25000) v(p2,p3,p4,x) cre(p2) cre(p3) des(y) des(p4) 
+    13   (   0.25000) v(p2,p3,x,p5) cre(p2) cre(p3) des(y) des(p5) 
+    14   (  -0.25000) v(y,p3,p4,x) cre(p3) des(p4) 
+    15   (   0.25000) v(y,p3,x,p5) cre(p3) des(p5) 
+    16   (   0.25000) v(p2,y,p4,x) cre(p2) des(p4) 
+    17   (  -0.25000) v(p2,y,x,p5) cre(p2) des(p5) 
+    18   (  -0.25000) v(p2,p3,p4,p5) cre(x) cre(p2) cre(p3) des(y) des(p4) des(p5) 
+    19   (   0.25000) v(p2,p3,p4,x) cre(p2) cre(p3) des(y) des(p4) 
+    20   (  -0.25000) v(p2,p3,x,p5) cre(p2) cre(p3) des(y) des(p5) 
+    21   (   0.25000) v(p2,p3,p4,p5) kdelta(y,x) cre(p2) cre(p3) des(p4) des(p5) 
+Finished combining terms in 0.017 seconds
+
+Final results:
+ (   1.00000) h(x,y) 
+ (  -1.00000) h(y,a) cre(x) des(a) 
+ (   1.00000) v(y,a,x,b) cre(a) des(b) 
+ (   0.50000) v(y,a,b,c) cre(x) cre(a) des(b) des(c) 
