@@ -53,22 +53,46 @@ def addon(nterms):
 #        for t_tensor_index in t_tensor.indices:
 #
         for t_tensor_index in range(len(t_tensor.indices)):
-            print "koushik check len=", len(t_tensor.indices), t_tensor.indices[t_tensor_index].name, t_tensor.indices[t_tensor_index].isSummed, t_tensor,t_tensor.indices[t_tensor_index].tup()
+#            print "koushik check len=", len(t_tensor.indices), t_tensor.indices[t_tensor_index].name, t_tensor.indices[t_tensor_index].isSummed, t_tensor,t_tensor.indices[t_tensor_index].tup()
 #
        #     if t_tensor.indices[t_tensor_index].isSummed == True and t_tensor.indices[t_tensor_index].name not in ndummy:
 #
 #
-            bestmap[t_tensor.indices[t_tensor_index].tup()] = index(t_tensor.indices[t_tensor_index].name, t_tensor.indices[t_tensor_index].indType, t_tensor.indices[t_tensor_index].isSummed)
+            
+            #bestmap[t_tensor.indices[t_tensor_index].tup()] = index(t_tensor.indices[t_tensor_index].name, t_tensor.indices[t_tensor_index].indType, t_tensor.indices[t_tensor_index].isSummed)
+
+            # Decide which new label to assign
+            index_type = t_tensor.indices[t_tensor_index].indType
+            index_name = t_tensor.indices[t_tensor_index].name
+            index_summed = t_tensor.indices[t_tensor_index].isSummed
+            if index_summed:
+                if len(index_type) > 1:
+                    raise Exception('This code does not support general indices for now')
+                else:
+                    if index_name not in mymap.keys():
+                        if (index_type[0][0] == 'core'):
+                            mymap[index_name] = coreInd[0]
+                            coreInd.pop(0)
+                        elif (index_type[0][0] == 'active'):
+                            mymap[index_name] = actvInd[0]
+                            actvInd.pop(0)
+                        else:
+                            mymap[index_name] = virtInd[0]
+                            virtInd.pop(0)
+
+                    # Update the label
+                    t_tensor.indices[t_tensor_index].name = mymap[index_name]
+
 #
-            print 'ko', t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType, t_tensor.indices[t_tensor_index].isSummed, t_tensor.indices[t_tensor_index].tup()
+#            print 'ko', t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType, t_tensor.indices[t_tensor_index].isSummed, t_tensor.indices[t_tensor_index].tup()
 #
 #
 #                     if t_tensor.indices[t_tensor_index].tup() in bestmap.keys():
 #                       bestmap[t_tensor.indices[t_tensor_index].tup()].name = coreInd.pop(0)
 #
-            print 'kchk=',t_tensor.indices[t_tensor_index].name
-            print bestmap
-            print 'kchk1=',t_tensor.indices[t_tensor_index].name
+#            print 'kchk=',t_tensor.indices[t_tensor_index].name
+#            print bestmap
+#            print 'kchk1=',t_tensor.indices[t_tensor_index].name
 #            print bestmap.keys()
 
 
@@ -76,9 +100,9 @@ def addon(nterms):
 #            for key in bestmap.keys():
 #               print 'koushik check=',key,t_tensor.indices[t_tensor_index].tup()
 #
-            if t_tensor.indices[t_tensor_index].isSummed == True:
-                bestmap[t_tensor.indices[t_tensor_index].tup()].name = coreInd.pop(0)
-                t_tensor.indices[t_tensor_index] = bestmap[t_tensor.indices[t_tensor_index].tup()].copy()
+#            if t_tensor.indices[t_tensor_index].isSummed == True:
+#                bestmap[t_tensor.indices[t_tensor_index].tup()].name = coreInd.pop(0)
+#                t_tensor.indices[t_tensor_index] = bestmap[t_tensor.indices[t_tensor_index].tup()].copy()
 #####################################
 ##check
     # if t_tensor_index.indType[0] == ('core',):
@@ -97,9 +121,9 @@ def addon(nterms):
 #
 #
 #
-        index_types += t_tensor.indices[t_tensor_index].indType
+#        index_types += t_tensor.indices[t_tensor_index].indType
     print t
-    print index_types
+#    print index_types
 #    print ndummy
 #    print "koushik dictionary"
 #
