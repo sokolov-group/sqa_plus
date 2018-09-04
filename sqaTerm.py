@@ -699,7 +699,7 @@ class term:
           canonMap[bestMap[key].tup()].name = alphabet.pop(0)
           del bestMap[key]
           break
-
+#    print "koushik check"
     # Rename the indices using the canonical mapping
     for t in self.tensors:
       for i in range(len(t.indices)):
