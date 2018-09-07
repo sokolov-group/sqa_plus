@@ -1,5 +1,6 @@
 import sqa_extra.secondQuantizationAlgebra as sqa
-import sqa_extra.sqaAddon
+#import sqa_extra.sqaAddon as addonkc
+#from sqaAddon import addon,normalOrderCore
 
 sqa.options.verbose = True
 
@@ -54,6 +55,8 @@ terms = [sqa.term(1.0, [], v_t + ix_op + v_op + yj_op)]
 terms += [sqa.term(-1.0, [], v_t + ix_op + yj_op + v_op)]
 terms += [sqa.term(1.0, [], v_gamma_t + ix_op + v_gamma_op + yj_op)]
 terms += [sqa.term(-1.0, [], v_gamma_t + ix_op + yj_op + v_gamma_op)]
+#for t in terms:
+#    print t
 
 # Normal order terms
 noTerms = []
@@ -77,6 +80,59 @@ for t in noTerms:
         for t_tensor_index in t_tensor.indices:
             index_types += t_tensor_index.indType[0]
     print t
-#    print index_types
+    print index_types
+#
+#
+#i############## Koushik Chatterjee ##############
+print ""
+print ""
+print " koushik check"
+#for t in noTerms:
+print noTerms[-1]
 
-sqa_extra.sqaAddon.addon(noTerms)
+print noTerms[-1].tensors[0]
+print noTerms[-1].tensors[0].indices[2].name
+print noTerms[-1].tensors[0].indices[2].indType
+print vv[0].indType
+print vv[0].indType[0]
+print noTerms[-1].tensors[0].indices[2].isSummed
+
+print ""
+print ""
+print " koushik calling"
+
+coreterm = []
+for t in noTerms:
+  print t
+  tno = sqa.normalOrderCore(t)
+
+exit()
+
+#  coreterm.extend(tno)
+#
+for t in coreterm:
+    t.contractDeltaFuncs()
+#
+#
+sqa.termChop(coreterm)
+sqa.combineTerms(coreterm)
+#
+for t in coreterm:
+    print t
+#addon(noTerms)
+################################################
+#
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
