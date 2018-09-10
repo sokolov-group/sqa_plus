@@ -165,10 +165,10 @@ def normalOrderCore(inTerm):
             if isinstance(iTerm, creOp) and isinstance(jTerm, desOp):
 #                 print 'kterm=',iTerm,jTerm,iType[0][0],jType[0][0]
 #                 exit()
-                 if iType[0][0] == 'core' and jType[0][0] == 'core':
+                 if iType[0][0] == 'core' or jType[0][0] == 'core':
 ##koushik
                     contractionPairs.append((i,j));
-    #print "contractionPairs\n", contractionPairs
+#    print "contractionPairs\n", contractionPairs
 
     # Determine maximum contraction order
     creCount = 0
@@ -195,6 +195,8 @@ def normalOrderCore(inTerm):
         for k in range(i):
           creOpTags.append(subCons[j][k][1])
           desOpTags.append(subCons[j][k][0])
+#          creOpTags.append(subCons[j][k][0])
+#          desOpTags.append(subCons[j][k][1])
         if allDifferent(creOpTags) and allDifferent(desOpTags):
           j += 1
         else:
@@ -227,13 +229,14 @@ def normalOrderCore(inTerm):
           del(subOpString[i])
         else:
           i += 1
-      (sortSign,sortedOps) = sortOps(subOpString)
+      (sortSign,sortedOps) = sortOps1(subOpString)
       totalSign = conSign * sortSign
       outTensors = []
       outTensors.extend(nonOps)
       outTensors.extend(deltaFuncs)
       outTensors.extend(sortedOps)
       outTerms.append( term(totalSign * inTerm.numConstant, inTerm.constants, outTensors) )
+
 
   # Normal ordering for sfExOps
   elif has_sfExOps:
@@ -254,3 +257,34 @@ def normalOrderCore(inTerm):
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
+def sortOps1(unsortedOps, returnPermutation = False):
+  """
+  Sorts a list of creation/destruction operators into normal order and alphebetically.
+  Performs no contractions.  Returns the overall sign resulting from the sort and the sorted operator list.
+  """
+  sortedOps = unsortedOps + []
+  i = 0
+  sign = 1
+#  print 'kperm=',len(unsortedOps),len(sortedOps)
+  if returnPermutation:
+    perm = range(len(unsortedOps))
+#    print 'kperm=',perm
+  while i < len(sortedOps)-1:
+    if sortedOps[i] >= sortedOps[i+1]:
+#       print 'km=',sortedOps[i],sortedOps[i+1]
+       i += 1
+    else:
+#      print 'km1=',sortedOps[i],sortedOps[i+1]
+      temp = sortedOps[i+1]
+      sortedOps[i+1] = sortedOps[i]
+      sortedOps[i] = temp
+      if returnPermutation:
+        temp = perm[i+1]
+        perm[i+1] = perm[i]
+        perm[i] = temp
+      i = 0
+      sign *= -1
+  if returnPermutation:
+    return (sign,sortedOps,perm)
+  return (sign,sortedOps)
+

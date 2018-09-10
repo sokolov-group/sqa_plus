@@ -108,7 +108,7 @@ def normalOrder(inTerm):
       for j in range(len(subCons)):
         contractions.append(subCons[j])
     del(subCons,creOpTags,desOpTags,contractionPairs)
-    #print "contractions:\n", contractions
+#    print "contractions:\n", contractions
 
     # For each contraction, generate the resulting term
     outTerms = []
