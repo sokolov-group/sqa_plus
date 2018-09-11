@@ -24,7 +24,7 @@ from sqaNormalOrder import normalOrder
 #addon = index()
 
 #####################################
-def addon(nterms):
+def dummyLbl(nterms):
  "A function for dummy indices label upate."
 #
  print "Dummy indices label update:=>"
@@ -70,14 +70,14 @@ def addon(nterms):
  print ""
  print "A function for  expectation value: kill the zero terms."
  print ""
- addon1(nterms)
+ filtrVirt(nterms)
 #
 #####################################
 #
-def addon1(nterms):
- "A function for  expectation value: kill the zero terms."
+def filtrVirt(nterms):
+ "A function for  expectation value: filter zero terms wrt virtual."
 #
- print "Expectation value ( Kill the zero terms):=>"
+ print "Expectation value: Filter zero terms wrt virtual:=>"
 ##
  for t in nterms:
     mymap ={}
@@ -229,7 +229,7 @@ def normalOrderCore(inTerm):
           del(subOpString[i])
         else:
           i += 1
-      (sortSign,sortedOps) = sortOps1(subOpString)
+      (sortSign,sortedOps) = sortOpscore(subOpString)
       totalSign = conSign * sortSign
       outTensors = []
       outTensors.extend(nonOps)
@@ -257,7 +257,7 @@ def normalOrderCore(inTerm):
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
-def sortOps1(unsortedOps, returnPermutation = False):
+def sortOpscore(unsortedOps, returnPermutation = False):
   """
   Sorts a list of creation/destruction operators into normal order and alphebetically.
   Performs no contractions.  Returns the overall sign resulting from the sort and the sorted operator list.
@@ -266,25 +266,45 @@ def sortOps1(unsortedOps, returnPermutation = False):
   i = 0
   sign = 1
 #  print 'kperm=',len(unsortedOps),len(sortedOps)
+#  for i in sortedOps:
+#    print i
+#  exit()
   if returnPermutation:
     perm = range(len(unsortedOps))
 #    print 'kperm=',perm
   while i < len(sortedOps)-1:
-    if sortedOps[i] >= sortedOps[i+1]:
-#       print 'km=',sortedOps[i],sortedOps[i+1]
-       i += 1
-    else:
-#      print 'km1=',sortedOps[i],sortedOps[i+1]
-      temp = sortedOps[i+1]
-      sortedOps[i+1] = sortedOps[i]
-      sortedOps[i] = temp
-      if returnPermutation:
+####
+    if (sortedOps[i].name == 'cre') and (sortedOps[i].indices[0].indType[0][0]=='core'):
+#       print "koushik check0"
+       temp = sortedOps[i+1]
+       sortedOps[i+1] = sortedOps[i]
+       sortedOps[i] = temp
+#       print 'km1=',sortedOps[i],sortedOps[i+1]
+       if returnPermutation:
+        temp = perm[i]
+        perm[i] = perm[i+1]
+        perm[i+1] = temp
+       i = 0
+       sign *= -1
+#       i += 1
+    elif (sortedOps[i+1].name == 'des') and (sortedOps[i+1].indices[0].indType[0][0]=='core'):
+#       print "koushik check1"
+       temp = sortedOps[i]
+       sortedOps[i] = sortedOps[i+1]
+       sortedOps[i+1] = temp
+#       print 'km2=',sortedOps[i],sortedOps[i+1]
+       if returnPermutation:
         temp = perm[i+1]
         perm[i+1] = perm[i]
         perm[i] = temp
-      i = 0
-      sign *= -1
+       i = 0
+       sign *= -1
+#       i += 1
+    else:
+#       print "koushik check3"
+       i += 1
+#       i = 0
+#       sign *= -1
   if returnPermutation:
     return (sign,sortedOps,perm)
   return (sign,sortedOps)
-
