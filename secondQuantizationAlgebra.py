@@ -90,5 +90,6 @@ from sqaDecomposition_so import  \
   decomp_4rdms_to_2rdms_so,      \
   decomp_4rdms_to_3rdms_so
 
-from sqaAddon import dummyLbl,   \
-  filtrVirt,  normalOrderCore, sortOpscore
+from sqaAddon import addon,      \
+  dummyLbl, filtrVirt, filtrCore,\
+  normalOrderCore, sortOpscore

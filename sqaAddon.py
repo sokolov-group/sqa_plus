@@ -24,6 +24,56 @@ from sqaNormalOrder import normalOrder
 #addon = index()
 
 #####################################
+def addon(nterms):
+ "A addon for quasi-particle."
+#
+# Dummy indices label upate
+ dummyLbl(nterms)
+#
+# Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
+ filtrVirt(nterms)
+ termChop(nterms)
+#
+# Remove zero terms and combine like terms
+# sqa.termChop(nterms)
+# sqa.combineTerms(nterms)
+#
+# Normal ordering with respect to core orbitals
+ fTerms = []
+ for t in nterms:
+    print 'koushik=', t
+    trm = normalOrderCore(t)
+#    fTerms.extend(trm)
+ exit()
+#
+# Evaluate Kroneker delta
+ for t in fTerms:
+    t.contractDeltaFuncs()
+#
+# Remove zero terms and combine like terms
+ termChop(fTerms)
+ combineTerms(fTerms)
+#
+# Filter zero terms wrt core (note: after filtering virtual, then do for core)
+ filtrCore(fTerms)
+ termChop(fTerms)
+#
+# Remove zero terms and combine like terms
+# sqa.termChop(fTerms)
+# sqa.combineTerms(fTerms)
+#
+# Print the final results
+ print "Final results:"
+ for t in fTerms:
+    index_types = ()
+    for t_tensor in t.tensors:
+        for t_tensor_index in t_tensor.indices:
+            index_types += t_tensor_index.indType[0]
+    print t
+    print index_types
+#
+#
+#####################################
 def dummyLbl(nterms):
  "A function for dummy indices label upate."
 #
@@ -67,16 +117,13 @@ def dummyLbl(nterms):
     print t
 #    print t.numConstant
 #    print index_types
- print ""
- print "A function for  expectation value: kill the zero terms."
- print ""
- filtrVirt(nterms)
 #
 #####################################
 #
 def filtrVirt(nterms):
  "A function for  expectation value: filter zero terms wrt virtual."
 #
+ print ""
  print "Expectation value: Filter zero terms wrt virtual:=>"
 ##
  for t in nterms:
@@ -109,9 +156,46 @@ def filtrVirt(nterms):
 #
 #####################################
 #
+def filtrCore(nterms):
+ "A function for  expectation value: filter zero terms wrt core."
+#
+ print ""
+ print "Expectation value: Filter zero terms wrt core:=>"
+##
+ for t in nterms:
+    mymap ={}
+    index_types = ()
+#
+    for t_tensor in t.tensors:
+    #     print t_tensor, t_tensor.name, t_tensor.indices
+         for t_tensor_index in range(len(t_tensor.indices)):
+#
+              index_type = t_tensor.indices[t_tensor_index].indType
+              index_name = t_tensor.indices[t_tensor_index].name
+              tensor_name = t_tensor.name
+#
+              if len(index_type) > 1:
+                 raise Exception('This code does not support general indices for now')
+              else:
+#
+                 if (tensor_name == 'des'):
+                      if (index_type[0][0] == 'core'):
+                         t.numConstant = 0.0
+#                         print 'cond1:',t_tensor, t_tensor.name, t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType[0][0]
+                 elif (tensor_name == 'cre'):
+                      if (index_type[0][0] == 'core'):
+                        t.numConstant = 0.0
+#                         print 'cond2:',t_tensor, t_tensor.name, t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType[0][0]
+#
+#
+    print t
+#
+#####################################
+#
 def normalOrderCore(inTerm):
   "Returns a list of terms resulting from normal ordering the operators in inTerm."
-
+  print ""
+  print "Normal ordering with respect to core:=>"
 #  if options.verbose:
 #    print "converting to normal order:  %s" %(str(inTerm))
 
@@ -168,7 +252,7 @@ def normalOrderCore(inTerm):
                  if iType[0][0] == 'core' or jType[0][0] == 'core':
 ##koushik
                     contractionPairs.append((i,j));
-#    print "contractionPairs\n", contractionPairs
+    print "contractionPairs\n", contractionPairs
 
     # Determine maximum contraction order
     creCount = 0
@@ -269,42 +353,50 @@ def sortOpscore(unsortedOps, returnPermutation = False):
 #  for i in sortedOps:
 #    print i
 #  exit()
+  print 'ki=',i
   if returnPermutation:
     perm = range(len(unsortedOps))
-#    print 'kperm=',perm
+  print 'kperm=',len(unsortedOps),len(sortedOps)
   while i < len(sortedOps)-1:
 ####
+#    if (sortedOps[i].name == 'cre') and (sortedOps[i].indices[0].indType[0][0]=='core'):
     if (sortedOps[i].name == 'cre') and (sortedOps[i].indices[0].indType[0][0]=='core'):
-#       print "koushik check0"
-       temp = sortedOps[i+1]
-       sortedOps[i+1] = sortedOps[i]
-       sortedOps[i] = temp
-#       print 'km1=',sortedOps[i],sortedOps[i+1]
-       if returnPermutation:
-        temp = perm[i]
-        perm[i] = perm[i+1]
-        perm[i+1] = temp
-       i = 0
-       sign *= -1
-#       i += 1
+   #    if sortedOps[i] <= sortedOps[i+1]:
+     #     if (sortedOps[i+1].name == sortedOps[i].name):
+          if (sortedOps[i+1].name == 'cre') and (sortedOps[i+1].indices[0].indType[0][0]=='core'):
+            print 'km0=',sortedOps[i],sortedOps[i+1],i,i+1,len(sortedOps)
+            i +=1
+            if ((i+1) > (len(sortedOps)-1)):
+               break
+          temp = sortedOps[i]
+          sortedOps[i] = sortedOps[i+1]
+          sortedOps[i+1] = temp
+          print 'km1=',sortedOps[i],sortedOps[i+1],i
+          if returnPermutation:
+            temp = perm[i]
+            perm[i] = perm[i+1]
+            perm[i+1] = temp
+          i = 0
+          sign *= -1
+     #     if (sortedOps[i+1].name == sortedOps[i].name):
+     #       break
     elif (sortedOps[i+1].name == 'des') and (sortedOps[i+1].indices[0].indType[0][0]=='core'):
-#       print "koushik check1"
-       temp = sortedOps[i]
-       sortedOps[i] = sortedOps[i+1]
-       sortedOps[i+1] = temp
-#       print 'km2=',sortedOps[i],sortedOps[i+1]
-       if returnPermutation:
-        temp = perm[i+1]
-        perm[i+1] = perm[i]
-        perm[i] = temp
-       i = 0
-       sign *= -1
-#       i += 1
+          temp = sortedOps[i]
+          sortedOps[i] = sortedOps[i+1]
+          sortedOps[i+1] = temp
+          print 'km2=',sortedOps[i-1],sortedOps[i],i
+          if returnPermutation:
+            temp = perm[i+1]
+            perm[i+1] = perm[i]
+            perm[i] = temp
+          i = 0
+          sign *= -1
+          if (sortedOps[i+1].name == sortedOps[i].name):
+            break
     else:
-#       print "koushik check3"
+       print "koushik check3",i
        i += 1
-#       i = 0
-#       sign *= -1
   if returnPermutation:
     return (sign,sortedOps,perm)
   return (sign,sortedOps)
+########
