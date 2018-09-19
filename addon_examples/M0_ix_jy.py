@@ -3,12 +3,7 @@ import sqa_extra.secondQuantizationAlgebra as sqa
 #from sqaAddon import addon,normalOrderCore
 
 sqa.options.verbose = True
-
-# Derivation of the following term:
-# <\Psi_0| i^\dag x [\hat{V}, y^\dag j] |\Psi_0>
-# = \sum_{klwz} v_{kz}^{lw} [<\Psi_0| i^\dag x {k^\dag l} z^\dag w y^\dag j|\Psi_0> - <\Psi_0| i^\dag x y^\dag j {k^\dag l} z^\dag w] |\Psi_0>]
-# - \sum_{klwz} v_{kz}^{lw} <\Psi_0| z^\dag w \Psi_0> [<\Psi_0| i^\dag x {k^\dag l} y^\dag j |\Psi_0> - <\Psi_0| i^\dag x y^\dag j {k^\dag l} |\Psi_0>]
-
+#
 # Define operator types
 tg_c = sqa.options.core_type
 tg_a = sqa.options.active_type
@@ -44,30 +39,49 @@ Hamil.append(sqa.term(1.0, ['E_fc'], []))
 cor = cc.pop(0)
 vir = vv.pop(0)
 Hamil.append(sqa.term(1.0, ['e_i'],[sqa.creOp(cor),sqa.desOp(cor)]))
+#Hamil.append(sqa.term(-1.0, ['e_i'],[sqa.desOp(cor),sqa.creOp(cor)]))
 Hamil.append(sqa.term(1.0, ['e_v'],[sqa.creOp(vir),sqa.desOp(vir)]))
+#act = aa.pop(0)
+#cd = [sqa.creOp(act),sqa.desOp(act)]
+#credes = sqa.creDesTensor(cd)
+#Hamil.append(sqa.term(1.0, [], [credes]))
 Hact = sqa.tensor('Hact', [], [])
 Hamil.append(sqa.term(1.0, [], [Hact]))
 #
 for t in Hamil:
  print t
 #
+#term1 = sqa.commutator(sqa.term(1.0, [], ix_op),sqa.commutator(Hamil,sqa.term(1.0, [], yj_op)))
 term1 = sqa.commutator(Hamil,sqa.term(1.0, [], yj_op))
 #
-sqa.combine_transpose(term1)
+#sqa.combine_transpose(term1)
 #
 # Print first commutator
 print "First Commutator"
 for t in term1:
  print t
 #
-term2 = sqa.commutator(sqa.term(1.0, [], ix_op),Hamil)
+term2 = sqa.commutator(sqa.term(1.0, [], ix_op),term1)
+#
+#sqa.combine_transpose(term2)
 #
 # Print second commutator
 print "Second Commutator"
 for t in term2:
  print t
 
+
 exit()
+
+
+
+
+
+
+
+
+
+
 
 
 
