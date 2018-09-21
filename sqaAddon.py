@@ -47,7 +47,6 @@ def addon(nterms):
 #    print 'Term=', t
     trm = normalOrderCore(t)
     fTerms.extend(trm)
-# exit()
 #
 # Evaluate Kroneker delta
  for t in fTerms:
@@ -329,8 +328,10 @@ def normalOrderCore(inTerm):
     raise Exception('This code does not support for now')
 
   else:
-    return
-    raise RuntimeError, "Normal ordering function failed to choose what to do."
+    outTerms = []
+    outTerms = [inTerm]
+#    return outTerms
+#    raise RuntimeError, "Normal ordering function failed to choose what to do."
 
   print "Terms after normal ordering:"
   for t in outTerms:
