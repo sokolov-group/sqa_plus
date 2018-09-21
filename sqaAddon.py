@@ -1,8 +1,12 @@
 #    file:  sqaAddon.py
 #  author:  Koushik Chatterjee
 #    date:  August 31, 2018
-# summary:  addon: Defines the dummy indices according to core, active, external labels. 
-#          addon1: Evaluate expectation value and kill the zero term (make the coefficient 0). if some one want to delete, may call termChop.
+# summary:  addon: General routine which can be used to obtain finall results...
+#
+#           dummyLbl: Label dummy indices according to core, active, external...
+#           filtrVirt: Filter zero terms wrt virtual...
+#           filtrCore: Filter zero terms wrt core...
+#           normalOrderCore: Normal order with respect to core...
 #
 # (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
@@ -14,7 +18,7 @@
 
 from sqaIndex import index
 from sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp, creDesTensor
-from sqaTerm import term, multiplyTerms, termChop, sortOps
+from sqaTerm import term, multiplyTerms, termChop, sortOps, combineTerms
 from sqaOptions import options
 from sqaMisc import makeTuples, allDifferent, makePermutations
 
@@ -27,6 +31,9 @@ from sqaNormalOrder import normalOrder
 def addon(nterms):
  "A addon for quasi-particle."
 #
+ print ""
+ print "################ Addon ################"
+ print ""
 # Dummy indices label upate
  dummyLbl(nterms)
 #
@@ -34,44 +41,36 @@ def addon(nterms):
  filtrVirt(nterms)
  termChop(nterms)
 #
-# Remove zero terms and combine like terms
-# sqa.termChop(nterms)
-# sqa.combineTerms(nterms)
-#
 # Normal ordering with respect to core orbitals
  fTerms = []
  for t in nterms:
-    print 'koushik=', t
+#    print 'Term=', t
     trm = normalOrderCore(t)
-#    fTerms.extend(trm)
- exit()
+    fTerms.extend(trm)
+# exit()
 #
 # Evaluate Kroneker delta
  for t in fTerms:
     t.contractDeltaFuncs()
 #
-# Remove zero terms and combine like terms
- termChop(fTerms)
- combineTerms(fTerms)
+# termChop(fTerms)
 #
 # Filter zero terms wrt core (note: after filtering virtual, then do for core)
  filtrCore(fTerms)
  termChop(fTerms)
 #
-# Remove zero terms and combine like terms
-# sqa.termChop(fTerms)
-# sqa.combineTerms(fTerms)
-#
 # Print the final results
- print "Final results:"
+ print ""
+ print "####### Final results:#######"
  for t in fTerms:
     index_types = ()
     for t_tensor in t.tensors:
         for t_tensor_index in t_tensor.indices:
             index_types += t_tensor_index.indType[0]
     print t
-    print index_types
+#    print index_types
 #
+ print ""
 #
 #####################################
 def dummyLbl(nterms):
@@ -196,6 +195,7 @@ def normalOrderCore(inTerm):
   "Returns a list of terms resulting from normal ordering the operators in inTerm."
   print ""
   print "Normal ordering with respect to core:=>"
+  print 'Term=', inTerm
 #  if options.verbose:
 #    print "converting to normal order:  %s" %(str(inTerm))
 
@@ -252,7 +252,7 @@ def normalOrderCore(inTerm):
                  if iType[0][0] == 'core' or jType[0][0] == 'core':
 ##koushik
                     contractionPairs.append((i,j));
-    print "contractionPairs\n", contractionPairs
+#    print "contractionPairs\n", contractionPairs
 
     # Determine maximum contraction order
     creCount = 0
@@ -288,7 +288,7 @@ def normalOrderCore(inTerm):
       for j in range(len(subCons)):
         contractions.append(subCons[j])
     del(subCons,creOpTags,desOpTags,contractionPairs)
-    print "contractions:\n", contractions
+#    print "contractions:\n", contractions
 
     # For each contraction, generate the resulting term
     outTerms = []
@@ -353,10 +353,10 @@ def sortOpscore(unsortedOps, returnPermutation = False):
 #  for i in sortedOps:
 #    print i
 #  exit()
-  print 'ki=',i
+#  print 'ki=',i
   if returnPermutation:
     perm = range(len(unsortedOps))
-  print 'kperm=',len(unsortedOps),len(sortedOps)
+#  print 'kperm=',len(unsortedOps),len(sortedOps)
   while i < len(sortedOps)-1:
 ####
 #    if (sortedOps[i].name == 'cre') and (sortedOps[i].indices[0].indType[0][0]=='core'):
@@ -364,14 +364,14 @@ def sortOpscore(unsortedOps, returnPermutation = False):
    #    if sortedOps[i] <= sortedOps[i+1]:
      #     if (sortedOps[i+1].name == sortedOps[i].name):
           if (sortedOps[i+1].name == 'cre') and (sortedOps[i+1].indices[0].indType[0][0]=='core'):
-            print 'km0=',sortedOps[i],sortedOps[i+1],i,i+1,len(sortedOps)
+#            print 'km0=',sortedOps[i],sortedOps[i+1],i,i+1,len(sortedOps)
             i +=1
             if ((i+1) > (len(sortedOps)-1)):
                break
           temp = sortedOps[i]
           sortedOps[i] = sortedOps[i+1]
           sortedOps[i+1] = temp
-          print 'km1=',sortedOps[i],sortedOps[i+1],i
+#          print 'km1=',sortedOps[i],sortedOps[i+1],i
           if returnPermutation:
             temp = perm[i]
             perm[i] = perm[i+1]
@@ -384,7 +384,7 @@ def sortOpscore(unsortedOps, returnPermutation = False):
           temp = sortedOps[i]
           sortedOps[i] = sortedOps[i+1]
           sortedOps[i+1] = temp
-          print 'km2=',sortedOps[i-1],sortedOps[i],i
+#          print 'km2=',sortedOps[i-1],sortedOps[i],i
           if returnPermutation:
             temp = perm[i+1]
             perm[i+1] = perm[i]
@@ -394,7 +394,7 @@ def sortOpscore(unsortedOps, returnPermutation = False):
           if (sortedOps[i+1].name == sortedOps[i].name):
             break
     else:
-       print "koushik check3",i
+#       print "koushik check3",i
        i += 1
   if returnPermutation:
     return (sign,sortedOps,perm)
