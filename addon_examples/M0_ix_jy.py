@@ -69,7 +69,8 @@ term2 = sqa.commutator(sqa.term(1.0, [], ix_op),term1)
 print "Second Commutator"
 for t in term2:
  print t
-
+#
+sqa.addon(term2)
 
 exit()
 
