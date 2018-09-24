@@ -93,3 +93,6 @@ from sqaDecomposition_so import  \
 from sqaAddon import addon,      \
   dummyLbl, filtrVirt, filtrCore,\
   normalOrderCore, sortOpscore
+
+from sqaHeff import Heff, pertbV,  \
+  ampT
