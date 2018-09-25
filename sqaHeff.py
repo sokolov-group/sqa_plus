@@ -21,7 +21,7 @@ from sqaSymmetry import symmetry
 
 #####################################
 #
-def Heff(effH, order):
+def Heff(order):
  "Construct effective Hamiltonian(L)."
 #   order = 0 : L(0) = H(0)
 #   order = 1 : L(1) = V + [H(0),T(1) - T'(1)]
@@ -95,8 +95,8 @@ def Heff(effH, order):
 #
     effH.extend(com1)
 #
- for t in effH:
-    print 'Effec. Hamil=', t
+# for t in effH:
+#    print 'Effec. Hamil=', t
 #
  return effH
 #
@@ -126,16 +126,25 @@ def pertbV(V, vtype, cc, aa, vv):
     vir4 = vv.pop(0)
 #
     ten1 =  tensor('V', [cor3, cor4, cor1, cor2], v2sym)
-    V.append( term(1.0, ['1/4'], [ten1, creOp(cor1), creOp(cor2), desOp(cor4), desOp(cor3)]))
+#    V.append( term(1.0, ['1/4'], [ten1, creOp(cor1), creOp(cor2), desOp(cor4), desOp(cor3)]))
+    V.append( term(1.0, ['1/4'], [ten1, desOp(cor4), desOp(cor3),creOp(cor1), creOp(cor2)]))
+#
     ten2 =  tensor('V', [vir3, vir4, vir1, vir2], v2sym)
     V.append( term(1.0, ['1/4'], [ten2, creOp(vir1), creOp(vir2), desOp(vir4), desOp(vir3)]))
+#
     ten3 =  tensor('V', [vir1, cor2, cor1, vir2], v2sym)
-    V.append( term(1.0, [], [ten3, creOp(cor1), creOp(vir2), desOp(cor2), desOp(vir1)]))
+#    V.append( term(1.0, [], [ten3, creOp(cor1), creOp(vir2), desOp(cor2), desOp(vir1)]))
+    V.append( term(1.0, [], [ten3, desOp(cor2), creOp(cor1), creOp(vir2), desOp(vir1)]))
+#
     ten4 =  tensor('V', [cor2, act2, cor1, act1], v2sym)
-    V.append( term(1.0, [], [ten4, creOp(cor1), desOp(cor2), creOp(act1), desOp(act2)]))
+#    V.append( term(1.0, [], [ten4, creOp(cor1), desOp(cor2), creOp(act1), desOp(act2)]))
+    V.append( term(-1.0, [], [ten4, desOp(cor2), creOp(cor1), creOp(act1), desOp(act2)]))
+#
     ten5 = ten4
     ten6 =  tensor('gma', [act2, act1], d1sym)
-    V.append( term(-1.0, [], [ten5, ten6,  creOp(cor1), desOp(cor2)]))
+#    V.append( term(-1.0, [], [ten5, ten6,  creOp(cor1), desOp(cor2)]))
+    V.append( term(1.0, [], [ten5, ten6,  desOp(cor2), creOp(cor1)]))
+#
     ten7 =  tensor('V', [vir2, act2, vir1, act1], v2sym)
     V.append( term(1.0, [], [ten7, creOp(vir1), desOp(vir2), creOp(act1), desOp(act2)]))
     ten8 = ten7

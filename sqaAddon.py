@@ -35,7 +35,7 @@ def addon(nterms):
  print "################ Addon ################"
  print ""
 # Dummy indices label upate
- dummyLbl(nterms)
+# dummyLbl(nterms)
 #
 # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
  filtrVirt(nterms)
@@ -57,6 +57,11 @@ def addon(nterms):
 # Filter zero terms wrt core (note: after filtering virtual, then do for core)
  filtrCore(fTerms)
  termChop(fTerms)
+#
+ combineTerms(fTerms)
+#
+# Dummy indices label upate
+ dummyLbl(fTerms)
 #
 # Print the final results
  print ""
