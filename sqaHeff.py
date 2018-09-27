@@ -206,5 +206,150 @@ def ampT(T,ttype,cc, aa, vv):
 # for t in T:
 #     print 't ampli=', t
  return T
-#############
+#
+#####################################
+#
+def pertbV_default():
+ from sqaAddon import addon, dummyLbl
+#
+ "Construct perturbation operator V according to str(vtype)"
+#
+ V = []
+ v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+#
+# Define operator types
+ tg_c = options.core_type
+ tg_a = options.active_type
+ tg_v = options.virtual_type
+ tg_g = tg_c + tg_a + tg_v
+#
+# Define indices
+ dummy = True
+#
+ p = index('p', [], dummy)
+ q = index('q', [], dummy)
+ r = index('r', [], dummy)
+ s = index('s', [], dummy)
+#
+# coreInd = list('ijklmn')
+# actvInd = list('xyzwuv')
+# virtInd = list('abcdef')
+#
+ list1 = ['c%i' %p for p in range(20)]
+ list2 = ['a%i' %p for p in range(20)]
+ list3 = ['v%i' %p for p in range(20)]
+#
+ for ityp1 in range(3):
+#        list1 = list(coreInd)
+#        list2 = list(actvInd)
+#        list3 = list(virtInd)
+        if (ityp1 == 0):                              # ityp1 = 0 => Core
+               ind = list1.pop(0)
+               p = index(ind, [tg_c], dummy)
+               list1.append(ind)
+        elif (ityp1 == 1):                            #         1 => Active
+               ind = list2.pop(0)
+               p = index(ind, [tg_a], dummy)
+               list2.append(ind)
+        else:                                         #         2 => Virtual
+               ind = list3.pop(0)
+               p = index(ind, [tg_v], dummy)
+               list3.append(ind)
+#
+        for ityp2 in range(3):
+               if (ityp2 == 0):
+                      ind = list1.pop(0)
+                      q = index(ind, [tg_c], dummy)
+                      list1.append(ind)
+               elif (ityp2 == 1):
+                      ind = list2.pop(0)
+                      q = index(ind, [tg_a], dummy)
+                      list2.append(ind)
+               else:
+                      ind = list3.pop(0)
+                      q = index(ind, [tg_v], dummy)
+                      list3.append(ind)
+#
+               for ityp3 in range(3):
+                      if (ityp3 == 0):
+                             ind = list1.pop(0)
+                             r = index(ind, [tg_c], dummy)
+                             list1.append(ind)
+                      elif (ityp3 == 1):
+                             ind = list2.pop(0)
+                             r = index(ind, [tg_a], dummy)
+                             list2.append(ind)
+                      else:
+                             ind = list3.pop(0)
+                             r = index(ind, [tg_v], dummy)
+                             list3.append(ind)
+#
+                      for ityp4 in range(3):
+                             if (ityp4 == 0):
+                                  ind = list1.pop(0)
+                                  s = index(ind, [tg_c], dummy)
+                                  list1.append(ind)
+                             elif (ityp4 == 1):
+                                  ind = list2.pop(0)
+                                  s = index(ind, [tg_a], dummy)
+                                  list2.append(ind)
+                             else:
+                                  ind = list3.pop(0)
+                                  s = index(ind, [tg_v], dummy)
+                                  list3.append(ind)
+#
+#                             vTen = tensor('V', [r,s,p,q], v2sym)
+                             vTen = tensor('V', [p,q,r,s], v2sym)
+                             V.append(term(1.0, ['1/4'], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
+#
+#
+# Dummy indices label upate
+ dummyLbl(V)
+#
+# for t in V:
+#     print t, len(V)
+# addon(V)
+ exit()
+
+
+
+
+
+
+
+
+
+
+#
+ for trm in vTerm:
+       for tensr in trm.tensors: 
+#             print range(len(tensr.indices)), len(tensr.indices)
+             for tindx in range(len(tensr.indices)):
+                     ind_type = tensr.indices[tindx].indType
+                     ind_name = tensr.indices[tindx].name
+                     ind_summed = tensr.indices[tindx].isSummed
+                     print tindx, tensr, ind_type, ind_name, ind_summed
+        #             if (ind_type [0][0] == 'core'):
+        #                 print 'kchk=',ind_name, ind_type
+#
+#####################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

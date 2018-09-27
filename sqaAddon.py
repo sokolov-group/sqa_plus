@@ -87,7 +87,7 @@ def dummyLbl(nterms):
     index_types = ()
 #
     coreInd = list('ijklmn')
-    actvInd = list('xyzwvz')
+    actvInd = list('xyzwuv')
     virtInd = list('abcdef')
 #
     for t_tensor in t.tensors:

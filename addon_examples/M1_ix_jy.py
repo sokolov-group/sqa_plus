@@ -48,6 +48,11 @@ for t in term2:
 #
 sqa.addon(term2)
 #
+
+print "V general terms:"
+sqa.pertbV_default()
+
+#
 exit()
 #
 ##################################################################

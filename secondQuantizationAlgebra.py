@@ -95,4 +95,4 @@ from sqaAddon import addon,      \
   normalOrderCore, sortOpscore
 
 from sqaHeff import Heff, pertbV,  \
-  ampT
+  pertbV_default, ampT
