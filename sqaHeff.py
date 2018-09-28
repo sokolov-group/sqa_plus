@@ -14,7 +14,7 @@
 
 from sqaIndex import index
 from sqaCommutator import commutator
-from sqaTerm import term
+from sqaTerm import term, combineTerms
 from sqaTensor import tensor, creOp, desOp
 from sqaOptions import options
 from sqaSymmetry import symmetry
@@ -87,7 +87,8 @@ def Heff(order):
 # L(1) = V + [H(0),T(1) - T'(1)]
     V = []
     T = []
-    effH.extend(pertbV(V, 'V[n=0]', cc, aa, vv))
+#    effH.extend(pertbV(V, 'V[n=0]', cc, aa, vv))
+    effH.extend(pertbV_default(V))
 #
     T.extend(ampT(T,'C-A', cc, aa, vv))
 #
@@ -209,13 +210,16 @@ def ampT(T,ttype,cc, aa, vv):
 #
 #####################################
 #
-def pertbV_default():
+def pertbV_default(V):
  from sqaAddon import addon, dummyLbl
 #
  "Construct perturbation operator V according to str(vtype)"
 #
  V = []
+ V81 = []
  v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+ h1sym = [ symmetry((1,0),1)]
+ d1sym = [ symmetry((1,0),1)]
 #
 # Define operator types
  tg_c = options.core_type
@@ -235,9 +239,63 @@ def pertbV_default():
 # actvInd = list('xyzwuv')
 # virtInd = list('abcdef')
 #
- list1 = ['c%i' %p for p in range(20)]
- list2 = ['a%i' %p for p in range(20)]
- list3 = ['v%i' %p for p in range(20)]
+ list1 = ['c%i' %p for p in range(30)]
+ list2 = ['a%i' %p for p in range(30)]
+ list3 = ['v%i' %p for p in range(30)]
+#
+ indc1 = list1.pop(0)
+ indc2 = list1.pop(0)
+ inda1 = list2.pop(0)
+ inda2 = list2.pop(0)
+ indv1 = list3.pop(0)
+ indv2 = list3.pop(0)
+#
+ cor1 = index(indc1, [tg_c], dummy)
+ cor2 = index(indc2, [tg_c], dummy)
+ act1 = index(inda1, [tg_a], dummy)
+ act2 = index(inda2, [tg_a], dummy)
+ vir1 = index(indv1, [tg_v], dummy)
+ vir2 = index(indv2, [tg_v], dummy)
+#
+ ten1 =  tensor('h', [cor1, act1], h1sym)
+ V.append( term(1.0, [], [ten1, creOp(act1), desOp(cor1)]))
+#
+ ten2 =  tensor('h', [act1, cor1], h1sym)
+ V.append( term(1.0, [], [ten2, creOp(cor1), desOp(act1)]))
+#
+#
+ ten3 =  tensor('h', [act1, vir1], h1sym)
+ V.append( term(1.0, [], [ten3, creOp(vir1), desOp(act1)]))
+#
+#
+ ten4 =  tensor('h', [vir1, act1], h1sym)
+ V.append( term(1.0, [], [ten4, creOp(act1), desOp(vir1)]))
+#
+#
+ ten5 =  tensor('h', [cor1, vir1], h1sym)
+ V.append( term(1.0, [], [ten5, creOp(vir1), desOp(cor1)]))
+#
+#
+ ten6 =  tensor('h', [vir1, cor1], h1sym)
+ V.append( term(1.0, [], [ten6, creOp(cor1), desOp(vir1)]))
+#
+#
+#
+ ten7 =  tensor('V', [cor2, act2, cor1, act1], v2sym)
+# V.append( term(1.0, [], [ten7, desOp(cor1), creOp(cor2), creOp(act2), desOp(act1)]))
+#
+ ten8 =  tensor('gma', [act2, act1], d1sym)
+ V.append( term(1.0, [], [ten7, ten8,  desOp(cor2), creOp(cor1)]))
+#
+ ten9 =  tensor('V', [vir2, act2, vir1, act1], v2sym)
+# V.append( term(-1.0, [], [ten9, creOp(vir2), desOp(vir1), creOp(act2), desOp(act1)]))
+ V.append( term(-1.0, [], [ten9, ten8,  creOp(vir1), desOp(vir2)]))
+#
+#
+# for t in V:
+#    print t
+# dummyLbl(V)
+# exit()
 #
  for ityp1 in range(3):
 #        list1 = list(coreInd)
@@ -273,64 +331,78 @@ def pertbV_default():
                for ityp3 in range(3):
                       if (ityp3 == 0):
                              ind = list1.pop(0)
-                             r = index(ind, [tg_c], dummy)
+                             s = index(ind, [tg_c], dummy)
                              list1.append(ind)
                       elif (ityp3 == 1):
                              ind = list2.pop(0)
-                             r = index(ind, [tg_a], dummy)
+                             s = index(ind, [tg_a], dummy)
                              list2.append(ind)
                       else:
                              ind = list3.pop(0)
-                             r = index(ind, [tg_v], dummy)
+                             s = index(ind, [tg_v], dummy)
                              list3.append(ind)
 #
                       for ityp4 in range(3):
                              if (ityp4 == 0):
                                   ind = list1.pop(0)
-                                  s = index(ind, [tg_c], dummy)
+                                  r = index(ind, [tg_c], dummy)
                                   list1.append(ind)
                              elif (ityp4 == 1):
                                   ind = list2.pop(0)
-                                  s = index(ind, [tg_a], dummy)
+                                  r = index(ind, [tg_a], dummy)
                                   list2.append(ind)
                              else:
                                   ind = list3.pop(0)
-                                  s = index(ind, [tg_v], dummy)
+                                  r = index(ind, [tg_v], dummy)
                                   list3.append(ind)
 #
-#                             vTen = tensor('V', [r,s,p,q], v2sym)
-                             vTen = tensor('V', [p,q,r,s], v2sym)
-                             V.append(term(1.0, ['1/4'], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
+######
+                             if not (p.indType[0][0]=='active' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='active'):
+#
+                                   if (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core'):
+#                                       vTen = tensor('V', [r,s,p,q], v2sym)
+                                       vTen = tensor('V', [r,s,p,q], v2sym)
+                                       V81.append(term(-0.25, [], [vTen,desOp(r), desOp(s), creOp(p), creOp(q)]))
+#
+                                   elif ((p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='core' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='core' and s.indType[0][0]=='virtual') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='virtual')):
+                                       vTen = tensor('V', [r,s,p,q], v2sym)
+#                                       vTen = tensor('V', [p,q,r,s], v2sym)
+                                       V81.append(term(0.25, [], [vTen, creOp(q), desOp(r),desOp(s), creOp(p)]))
+#
+                                   elif ((p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='active' and q.indType[0][0]=='core' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='core' and s.indType[0][0]=='active') or (p.indType[0][0]=='active' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='active')):
+                                       vTen = tensor('V', [r,s,p,q], v2sym)
+#                                       vTen = tensor('V', [p,q,r,s], v2sym)
+                                       V81.append(term(-0.25, [], [vTen, creOp(q), desOp(r),desOp(s), creOp(p)]))
+#
+#                                   elif ((p.indType[0][0]=='active' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='active') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='active' and r.indType[0][0]=='virtual' and s.indType[0][0]=='active') or (p.indType[0][0]=='active' and q.indType[0][0]=='virtual' and r.indType[0][0]=='active' and s.indType[0][0]=='virtual') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='virtual')):
+#                                       vTen = tensor('V', [r,s,p,q], v2sym)
+#                                       vTen = tensor('V', [p,q,r,s], v2sym)
+#                                       V81.append(term(-1.0, ['1/4'], [vTen, creOp(q), desOp(r),creOp(p), desOp(s)]))
+#
+                                   else:
+                                       vTen = tensor('V', [r,s,p,q], v2sym)
+#                                       vTen = tensor('V', [p,q,r,s], v2sym)
+                                       V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
+                                   
+######
+#
+#                             if not ((p.indType[0][0]=='active' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='active') or (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='active' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='active')):
+#                                 vTen = tensor('V', [r,s,p,q], v2sym)
+#                                 vTen = tensor('V', [p,q,r,s], v2sym)
+#                                 V81.append(term(1.0, ['1/4'], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
 #
 #
+ V.extend(V81)
 # Dummy indices label upate
  dummyLbl(V)
+ print len(V81)
+ exit()
+ return V
 #
 # for t in V:
-#     print t, len(V)
-# addon(V)
- exit()
-
-
-
-
-
-
-
-
-
-
+#     print t, len(V81)
 #
- for trm in vTerm:
-       for tensr in trm.tensors: 
-#             print range(len(tensr.indices)), len(tensr.indices)
-             for tindx in range(len(tensr.indices)):
-                     ind_type = tensr.indices[tindx].indType
-                     ind_name = tensr.indices[tindx].name
-                     ind_summed = tensr.indices[tindx].isSummed
-                     print tindx, tensr, ind_type, ind_name, ind_summed
-        #             if (ind_type [0][0] == 'core'):
-        #                 print 'kchk=',ind_name, ind_type
+#
 #
 #####################################
 
