@@ -364,15 +364,15 @@ def pertbV_default(V):
                                        vTen = tensor('V', [r,s,p,q], v2sym)
                                        V81.append(term(-0.25, [], [vTen,desOp(r), desOp(s), creOp(p), creOp(q)]))
 #
-                                   elif ((p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='core' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='core' and s.indType[0][0]=='virtual') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='virtual')):
-                                       vTen = tensor('V', [r,s,p,q], v2sym)
+#                                   elif ((p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='core' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='core' and s.indType[0][0]=='virtual') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='virtual')):
+#                                       vTen = tensor('V', [r,s,p,q], v2sym)
 #                                       vTen = tensor('V', [p,q,r,s], v2sym)
-                                       V81.append(term(0.25, [], [vTen, creOp(q), desOp(r),desOp(s), creOp(p)]))
+#                                       V81.append(term(0.25, [], [vTen, creOp(q), desOp(r),desOp(s), creOp(p)]))
 #
-                                   elif ((p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='active' and q.indType[0][0]=='core' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='core' and s.indType[0][0]=='active') or (p.indType[0][0]=='active' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='active')):
-                                       vTen = tensor('V', [r,s,p,q], v2sym)
+#                                   elif ((p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='active' and q.indType[0][0]=='core' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='core' and s.indType[0][0]=='active') or (p.indType[0][0]=='active' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='active')):
+#                                       vTen = tensor('V', [r,s,p,q], v2sym)
 #                                       vTen = tensor('V', [p,q,r,s], v2sym)
-                                       V81.append(term(-0.25, [], [vTen, creOp(q), desOp(r),desOp(s), creOp(p)]))
+#                                       V81.append(term(-0.25, [], [vTen, creOp(q), desOp(r),desOp(s), creOp(p)]))
 #
 #                                   elif ((p.indType[0][0]=='active' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='active') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='active' and r.indType[0][0]=='virtual' and s.indType[0][0]=='active') or (p.indType[0][0]=='active' and q.indType[0][0]=='virtual' and r.indType[0][0]=='active' and s.indType[0][0]=='virtual') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='virtual')):
 #                                       vTen = tensor('V', [r,s,p,q], v2sym)
