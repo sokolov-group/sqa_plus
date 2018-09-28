@@ -392,6 +392,28 @@ def pertbV_default(V):
 #                                 V81.append(term(1.0, ['1/4'], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
 #
 #
+ 
+ p = index(list1.pop(0), [tg_c], dummy)
+ q = index(list3.pop(0), [tg_v], dummy)
+ s = index(list1.pop(0), [tg_c], dummy)
+ r = index(list3.pop(0), [tg_v], dummy)
+ vTen = tensor('V', [r,s,p,q], v2sym)
+ V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
+
+ p = index(list1.pop(0), [tg_c], dummy)
+ q = index(list2.pop(0), [tg_a], dummy)
+ s = index(list1.pop(0), [tg_c], dummy)
+ r = index(list2.pop(0), [tg_a], dummy)
+ vTen = tensor('V', [r,s,p,q], v2sym)
+ V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
+
+ p = index(list1.pop(0), [tg_c], dummy)
+ q = index(list3.pop(0), [tg_v], dummy)
+ s = index(list1.pop(0), [tg_c], dummy)
+ r = index(list3.pop(0), [tg_v], dummy)
+ vTen = tensor('V', [r,s,p,q], v2sym)
+ V81.append(term(1.0, [], [vTen, creOp(q), desOp(r), desOp(s), creOp(p)]))
+
  V.extend(V81)
 # Dummy indices label upate
  dummyLbl(V)
