@@ -94,5 +94,5 @@ from sqaAddon import addon,      \
   dummyLbl, filtrVirt, filtrCore,\
   normalOrderCore, sortOpscore
 
-from sqaHeff import Heff, pertbV,  \
-  pertbV_default, ampT
+from sqaHeff import Heff, ampT,  \
+  Vpertb_type, Vpertb_all

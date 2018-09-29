@@ -1,6 +1,6 @@
 #    file:  sqaHeff.py
 #  author:  Koushik Chatterjee
-#    date:  September 21, 2018
+#    date:  September 28, 2018
 # summary:  Heff : Construct effective Hamiltonian(L) ..
 #
 # (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
@@ -71,7 +71,7 @@ def Heff(order):
 #
  Hact.append( term(1.0, [], [h1,  creOp(act1), desOp(act2)]))
  Hact.append( term(1.0, [], [v1,  creOp(act1), desOp(act2)]))
- Hact.append( term(1.0, ['1/4'], [v2,  creOp(act1), creOp(act2), desOp(act4), desOp(act3)]))
+ Hact.append( term(0.25, [], [v2,  creOp(act1), creOp(act2), desOp(act4), desOp(act3)]))
 #
 # for t in Hact:
 #    print 'Hact=', t
@@ -87,8 +87,11 @@ def Heff(order):
 # L(1) = V + [H(0),T(1) - T'(1)]
     V = []
     T = []
-#    effH.extend(pertbV(V, 'V[n=0]', cc, aa, vv))
-    effH.extend(pertbV_default(V))
+#
+    vtype = 'full'
+#    vtype = 'V[n=0]'
+#
+    effH.extend(Vpertb_type(V, cc, aa, vv, vtype))
 #
     T.extend(ampT(T,'C-A', cc, aa, vv))
 #
@@ -103,7 +106,7 @@ def Heff(order):
 #
 #####################################
 #
-def pertbV(V, vtype, cc, aa, vv):
+def Vpertb_type(V, cc, aa, vv, vtype):
 #
  "Construct perturbation operator V according to str(vtype)"
 #
@@ -111,7 +114,15 @@ def pertbV(V, vtype, cc, aa, vv):
  v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
  d1sym = [ symmetry((1,0),1)]
 #
- if (vtype == 'V[n=0]'):
+ if (vtype == 'full') or (vtype == 'Full') or (vtype == ''):
+#   Default V includes all type of perturbation rank.
+    print "Perturbation(V) type = All types of V"
+    print ""
+    V.extend(Vpertb_all(V))
+#
+ elif (vtype == 'V[n=0]'):
+#
+    print "Perturbation(V) type = ",vtype
 #
     cor1 = cc.pop(0)
     cor2 = cc.pop(0)
@@ -127,11 +138,11 @@ def pertbV(V, vtype, cc, aa, vv):
     vir4 = vv.pop(0)
 #
     ten1 =  tensor('V', [cor3, cor4, cor1, cor2], v2sym)
-#    V.append( term(1.0, ['1/4'], [ten1, creOp(cor1), creOp(cor2), desOp(cor4), desOp(cor3)]))
-    V.append( term(1.0, ['1/4'], [ten1, desOp(cor4), desOp(cor3),creOp(cor1), creOp(cor2)]))
+#    V.append( term(0.25, [], [ten1, creOp(cor1), creOp(cor2), desOp(cor4), desOp(cor3)]))
+    V.append( term(0.25, [], [ten1, desOp(cor4), desOp(cor3),creOp(cor1), creOp(cor2)]))
 #
     ten2 =  tensor('V', [vir3, vir4, vir1, vir2], v2sym)
-    V.append( term(1.0, ['1/4'], [ten2, creOp(vir1), creOp(vir2), desOp(vir4), desOp(vir3)]))
+    V.append( term(0.25, [], [ten2, creOp(vir1), creOp(vir2), desOp(vir4), desOp(vir3)]))
 #
     ten3 =  tensor('V', [vir1, cor2, cor1, vir2], v2sym)
 #    V.append( term(1.0, [], [ten3, creOp(cor1), creOp(vir2), desOp(cor2), desOp(vir1)]))
@@ -151,6 +162,8 @@ def pertbV(V, vtype, cc, aa, vv):
     ten8 = ten7
     ten9 = ten6
     V.append( term(-1.0, [], [ten8, ten9,  creOp(vir1), desOp(vir2)]))
+ else:
+    raise Exception('Under implementation of perturbation V according to specific type(rank)')
 #
 # for t in V:
 #    print 'perterbative =', t
@@ -210,10 +223,10 @@ def ampT(T,ttype,cc, aa, vv):
 #
 #####################################
 #
-def pertbV_default(V):
+def Vpertb_all(V):
  from sqaAddon import addon, dummyLbl
 #
- "Construct perturbation operator V according to str(vtype)"
+ "Construct general perturbation operator V full (default) include all types of rank."
 #
  V = []
  V81 = []
@@ -291,12 +304,6 @@ def pertbV_default(V):
 # V.append( term(-1.0, [], [ten9, creOp(vir2), desOp(vir1), creOp(act2), desOp(act1)]))
  V.append( term(-1.0, [], [ten9, ten8,  creOp(vir1), desOp(vir2)]))
 #
-#
-# for t in V:
-#    print t
-# dummyLbl(V)
-# exit()
-#
  for ityp1 in range(3):
 #        list1 = list(coreInd)
 #        list2 = list(actvInd)
@@ -356,7 +363,6 @@ def pertbV_default(V):
                                   r = index(ind, [tg_v], dummy)
                                   list3.append(ind)
 #
-######
                              if not (p.indType[0][0]=='active' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='active'):
 #
                                    if (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core'):
@@ -364,33 +370,10 @@ def pertbV_default(V):
                                        vTen = tensor('V', [r,s,p,q], v2sym)
                                        V81.append(term(-0.25, [], [vTen,desOp(r), desOp(s), creOp(p), creOp(q)]))
 #
-#                                   elif ((p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='core' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='core' and s.indType[0][0]=='virtual') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='virtual')):
-#                                       vTen = tensor('V', [r,s,p,q], v2sym)
-#                                       vTen = tensor('V', [p,q,r,s], v2sym)
-#                                       V81.append(term(0.25, [], [vTen, creOp(q), desOp(r),desOp(s), creOp(p)]))
-#
-#                                   elif ((p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='active' and q.indType[0][0]=='core' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='core' and s.indType[0][0]=='active') or (p.indType[0][0]=='active' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='active')):
-#                                       vTen = tensor('V', [r,s,p,q], v2sym)
-#                                       vTen = tensor('V', [p,q,r,s], v2sym)
-#                                       V81.append(term(-0.25, [], [vTen, creOp(q), desOp(r),desOp(s), creOp(p)]))
-#
-#                                   elif ((p.indType[0][0]=='active' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='active') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='active' and r.indType[0][0]=='virtual' and s.indType[0][0]=='active') or (p.indType[0][0]=='active' and q.indType[0][0]=='virtual' and r.indType[0][0]=='active' and s.indType[0][0]=='virtual') or (p.indType[0][0]=='virtual' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='virtual')):
-#                                       vTen = tensor('V', [r,s,p,q], v2sym)
-#                                       vTen = tensor('V', [p,q,r,s], v2sym)
-#                                       V81.append(term(-1.0, ['1/4'], [vTen, creOp(q), desOp(r),creOp(p), desOp(s)]))
-#
                                    else:
                                        vTen = tensor('V', [r,s,p,q], v2sym)
 #                                       vTen = tensor('V', [p,q,r,s], v2sym)
                                        V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
-                                   
-######
-#
-#                             if not ((p.indType[0][0]=='active' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='active') or (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='core') or (p.indType[0][0]=='core' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='core') or (p.indType[0][0]=='active' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='active')):
-#                                 vTen = tensor('V', [r,s,p,q], v2sym)
-#                                 vTen = tensor('V', [p,q,r,s], v2sym)
-#                                 V81.append(term(1.0, ['1/4'], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
-#
 #
  
  p = index(list1.pop(0), [tg_c], dummy)
@@ -424,33 +407,7 @@ def pertbV_default(V):
  V.extend(V81)
 # Dummy indices label upate
  dummyLbl(V)
- print len(V81)
- exit()
+# print len(V81)
  return V
 #
-# for t in V:
-#     print t, len(V81)
-#
-#
-#
 #####################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
