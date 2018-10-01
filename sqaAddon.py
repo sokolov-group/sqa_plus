@@ -35,7 +35,7 @@ def addon(nterms):
  print "################ Addon ################"
  print ""
 # Dummy indices label upate
- dummyLbl(nterms)
+# dummyLbl(nterms)
 #
 # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
  filtrVirt(nterms)
@@ -369,15 +369,28 @@ def sortOpscore(unsortedOps, returnPermutation = False):
     if (sortedOps[i].name == 'cre') and (sortedOps[i].indices[0].indType[0][0]=='core'):
    #    if sortedOps[i] <= sortedOps[i+1]:
      #     if (sortedOps[i+1].name == sortedOps[i].name):
-          if (sortedOps[i+1].name == 'cre') and (sortedOps[i+1].indices[0].indType[0][0]=='core'):
-#            print 'km0=',sortedOps[i],sortedOps[i+1],i,i+1,len(sortedOps)
-            i +=1
-            if ((i+1) > (len(sortedOps)-1)):
+##########
+          j = i
+          for k in range(i,(len(sortedOps)-1)):
+            if (sortedOps[k+1].name == 'cre') and (sortedOps[k+1].indices[0].indType[0][0]=='core'):
+               i += 1
+               j = i
+            else:
+               i = j 
                break
+          if ((i+1) > (len(sortedOps)-1)):
+              break     
+#
+#          if (sortedOps[i+1].name == 'cre') and (sortedOps[i+1].indices[0].indType[0][0]=='core'):
+##            print 'km0=',sortedOps[i],sortedOps[i+1],i,i+1,len(sortedOps)
+#            i +=1
+#            if ((i+1) > (len(sortedOps)-1)):
+#               break
+##########
           temp = sortedOps[i]
           sortedOps[i] = sortedOps[i+1]
           sortedOps[i+1] = temp
-          print 'km1=',sortedOps[i],sortedOps[i+1],i
+#          print 'km1=',sortedOps[i],sortedOps[i+1],i
           if returnPermutation:
             temp = perm[i]
             perm[i] = perm[i+1]
@@ -406,3 +419,4 @@ def sortOpscore(unsortedOps, returnPermutation = False):
     return (sign,sortedOps,perm)
   return (sign,sortedOps)
 ########
+#--------------------------------------------------------------------------------------------------
