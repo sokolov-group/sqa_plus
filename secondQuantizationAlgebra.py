@@ -90,9 +90,11 @@ from sqaDecomposition_so import  \
   decomp_4rdms_to_2rdms_so,      \
   decomp_4rdms_to_3rdms_so
 
-from sqaAddon import addon,      \
-  dummyLbl, filtrVirt, filtrCore,\
-  normalOrderCore, sortOpscore
+from sqaAddon import matrixBlock,\
+  dummyLabel, filterVirtual,     \
+  filterCore, normalOrderCore,   \
+  sortOpsCore
 
-from sqaHeff import Heff, ampT,  \
-  Vpertb_type, Vpertb_all
+from sqaHeff import Heff,        \
+  Tamplitude, Vperturbation_type,\
+  Vperturbation

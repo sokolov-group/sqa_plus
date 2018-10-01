@@ -1,7 +1,8 @@
 #    file:  sqaHeff.py
 #  author:  Koushik Chatterjee
 #    date:  September 28, 2018
-# summary:  Heff : Construct effective Hamiltonian(L) ..
+# summary:  
+#           Heff : Construct effective Hamiltonian(L^N) of order 'N'.
 #
 # (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
@@ -88,14 +89,12 @@ def Heff(order):
     V = []
     T = []
 #
-    vtype = 'full'
 #    vtype = 'V[n=0]'
-#
-    effH.extend(Vpertb_type(V, cc, aa, vv, vtype))
+    effH.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
 #
 #    ttype = 'full'
-    ttype = 'C-E'
-    T.extend(ampT(T, cc, aa, vv, ttype))
+    ttype = 'A-E'
+    T.extend(Tamplitude(T, cc, aa, vv, ttype))
 #
     com1 =  commutator(Hamil, T)
 #
@@ -108,9 +107,9 @@ def Heff(order):
 #
 #####################################
 #
-def Vpertb_type(V, cc, aa, vv, vtype):
+def Vperturbation_type(V, cc, aa, vv, vtype):
 #
- "Construct perturbation operator V according to str(vtype)"
+ "Construct perturbation operator V according to excitation rank."
 #
  V = []
  v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
@@ -120,7 +119,7 @@ def Vpertb_type(V, cc, aa, vv, vtype):
 #   Default V includes all type of perturbation rank.
     print "Perturbation(V) type = All types of V"
     print ""
-    V.extend(Vpertb_all(V))
+    V.extend(Vperturbation(V))
 #
  elif (vtype == 'V[n=0]'):
 #
@@ -165,14 +164,14 @@ def Vpertb_type(V, cc, aa, vv, vtype):
     ten9 = ten6
     V.append( term(-1.0, [], [ten8, ten9,  creOp(vir1), desOp(vir2)]))
  else:
-    raise Exception('Under implementation of perturbation V according to specific type(rank)')
+    raise Exception('Unknown type of V..')
 #
 # for t in V:
 #    print 'perterbative =', t
  return V
 #####################################
 #
-def ampT(T, cc1, aa1, vv1, ttype):
+def Tamplitude(T, cc1, aa1, vv1, ttype):
 # Cluster operator : T - T^dag, Where T = T1 + T2
 # Single excitatio : T1
  t1_sym = [ symmetry((1,0),1)]
@@ -291,17 +290,17 @@ def ampT(T, cc1, aa1, vv1, ttype):
      T.extend(T_AE)
      T.extend(T_othr)
 #
- for t in T:
-     print 't ampli=', t
-# exit()
+# for t in T:
+#     print 't ampli=', t
+#
  return T
 #
 #####################################
 #
-def Vpertb_all(V):
- from sqaAddon import addon, dummyLbl
+def Vperturbation(V):
+ from sqaAddon import matrixBlock, dummyLabel
 #
- "Construct general perturbation operator V full (default) include all types of rank."
+ "Construct general perturbation operator V full (default) include all types of V."
 #
  V = []
  V81 = []
@@ -481,7 +480,7 @@ def Vpertb_all(V):
 
  V.extend(V81)
 # Dummy indices label upate
- dummyLbl(V)
+# dummyLabel(V)
 # print len(V81)
  return V
 #

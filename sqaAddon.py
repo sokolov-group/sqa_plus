@@ -1,12 +1,13 @@
 #    file:  sqaAddon.py
 #  author:  Koushik Chatterjee
 #    date:  August 31, 2018
-# summary:  addon: General routine which can be used to obtain finall results...
 #
-#           dummyLbl: Label dummy indices according to core, active, external...
-#           filtrVirt: Filter zero terms wrt virtual...
-#           filtrCore: Filter zero terms wrt core...
-#           normalOrderCore: Normal order with respect to core...
+# summary:
+#           matrixBlock: General routine used to construct matrix block.
+#           dummyLabel: Relabel dummy indices according to core, active, external.
+#           filterVirtual: Calculate expectation value wrt virtual orbitals.
+#           filterCore: Calculate expectation value wrt core orbitals.
+#           normalOrderCore: Normal order with respect to core orbitals.
 #
 # (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
@@ -28,17 +29,17 @@ from sqaNormalOrder import normalOrder
 #addon = index()
 
 #####################################
-def addon(nterms):
- "A addon for quasi-particle."
+def matrixBlock(nterms):
+ "Construct matrix block."
 #
  print ""
  print "################ Addon ################"
  print ""
 # Dummy indices label upate
-# dummyLbl(nterms)
+# dummyLabel(nterms)
 #
 # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
- filtrVirt(nterms)
+ filterVirtual(nterms)
  termChop(nterms)
 #
 # Normal ordering with respect to core orbitals
@@ -55,13 +56,13 @@ def addon(nterms):
 # termChop(fTerms)
 #
 # Filter zero terms wrt core (note: after filtering virtual, then do for core)
- filtrCore(fTerms)
+ filterCore(fTerms)
  termChop(fTerms)
 #
  combineTerms(fTerms)
 #
 # Dummy indices label upate
- dummyLbl(fTerms)
+ dummyLabel(fTerms)
 #
 # Print the final results
  print ""
@@ -77,8 +78,8 @@ def addon(nterms):
  print ""
 #
 #####################################
-def dummyLbl(nterms):
- "A function for dummy indices label upate."
+def dummyLabel(nterms):
+ "A function to relabel dummy indices."
 #
  print "Dummy indices label update:=>"
 ##
@@ -123,8 +124,8 @@ def dummyLbl(nterms):
 #
 #####################################
 #
-def filtrVirt(nterms):
- "A function for  expectation value: filter zero terms wrt virtual."
+def filterVirtual(nterms):
+ "A function to calculate expectation value wrt virtual: filter zero terms wrt virtual."
 #
  print ""
  print "Expectation value: Filter zero terms wrt virtual:=>"
@@ -159,8 +160,8 @@ def filtrVirt(nterms):
 #
 #####################################
 #
-def filtrCore(nterms):
- "A function for  expectation value: filter zero terms wrt core."
+def filterCore(nterms):
+ "A function to calculate expectation value wrt core: filter zero terms wrt core."
 #
  print ""
  print "Expectation value: Filter zero terms wrt core:=>"
@@ -317,7 +318,7 @@ def normalOrderCore(inTerm):
           del(subOpString[i])
         else:
           i += 1
-      (sortSign,sortedOps) = sortOpscore(subOpString)
+      (sortSign,sortedOps) = sortOpsCore(subOpString)
       totalSign = conSign * sortSign
       outTensors = []
       outTensors.extend(nonOps)
@@ -347,7 +348,7 @@ def normalOrderCore(inTerm):
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
-def sortOpscore(unsortedOps, returnPermutation = False):
+def sortOpsCore(unsortedOps, returnPermutation = False):
   """
   Sorts a list of creation/destruction operators into normal order and alphebetically.
   Performs no contractions.  Returns the overall sign resulting from the sort and the sorted operator list.
