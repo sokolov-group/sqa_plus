@@ -93,8 +93,8 @@ def Heff(order):
     effH.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
 #
 #    ttype = 'full'
-    ttype = 'A-E'
-    T.extend(Tamplitude(T, cc, aa, vv, ttype))
+#    ttype = 'C-A'
+    T.extend(Tamplitude(T, cc, aa, vv, ttype = 'full'))
 #
     com1 =  commutator(Hamil, T)
 #
