@@ -93,7 +93,9 @@ def Heff(order):
 #
     effH.extend(Vpertb_type(V, cc, aa, vv, vtype))
 #
-    T.extend(ampT(T,'C-A', cc, aa, vv))
+    ttype = 'full'
+#    ttype = 'C-A'
+    T.extend(ampT(T, cc, aa, vv, ttype))
 #
     com1 =  commutator(Hamil, T)
 #
@@ -170,55 +172,128 @@ def Vpertb_type(V, cc, aa, vv, vtype):
  return V
 #####################################
 #
-def ampT(T,ttype,cc, aa, vv):
+def ampT(T, cc1, aa1, vv1, ttype):
 # Cluster operator : T - T^dag, Where T = T1 + T2
 # Single excitatio : T1
  t1_sym = [ symmetry((1,0),1)]
  t2_sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
 #
  T = []
- Tex = []
- Tdex = []
+ #Tex = []
+ #Tdex = []
+ T_CE = []
+ T_CA = []
+ T_AE = []
+ T_othr = []
+ for typ in range(4):
+     cc = list(cc1)
+     aa = list(aa1)
+     vv = list(vv1)
+     if (typ == 0):                # Core-External
+         ind1 = cc.pop(0)
+         ind2 = vv.pop(0)
+         ind3 = aa.pop(0)
+         ind4 = aa.pop(0)
+         t1_tens =  tensor('t', [ind2,ind1],t1_sym)
+         t2_tens =  tensor('t', [ind2,ind3,ind1,ind4],t2_sym)
+         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+         T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+         T2_dex =  term(-1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+#
+         T_CE.append(T1_ex)
+         T_CE.append(T2_ex)
+         T_CE.append(T1_dex)
+         T_CE.append(T2_dex)
+     elif (typ == 1):              # Core-Active
+         ind1 = cc.pop(0)
+         ind2 = aa.pop(0)
+         ind3 = aa.pop(0)
+         ind4 = aa.pop(0)
+         t1_tens =  tensor('t', [ind2,ind1],t1_sym)
+         t2_tens =  tensor('t', [ind2,ind3,ind1,ind4],t2_sym)
+         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+         T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+         T2_dex =  term(-1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+#
+         T_CA.append(T1_ex)
+         T_CA.append(T2_ex)
+         T_CA.append(T1_dex)
+         T_CA.append(T2_dex)
+
+     elif (typ == 2):              # Active-External
+         ind1 = aa.pop(0)
+         ind2 = vv.pop(0)
+         ind3 = aa.pop(0)
+         ind4 = aa.pop(0)
+         t1_tens =  tensor('t', [ind2,ind1],t1_sym)
+         t2_tens =  tensor('t', [ind2,ind3,ind1,ind4],t2_sym)
+         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+         T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+         T2_dex =  term(-1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+#
+         T_AE.append(T1_ex)
+         T_AE.append(T2_ex)
+         T_AE.append(T1_dex)
+         T_AE.append(T2_dex)
+     else:                           # All types
+         ind1 = cc.pop(0)
+         ind2 = cc.pop(0)
+         ind3 = aa.pop(0)
+         ind4 = aa.pop(0)
+         ind5 = vv.pop(0)
+         ind6 = vv.pop(0)
+# For other type of T2 excitations and de-excitations
+         t2_tens1 =  tensor('t', [ind5,ind6,ind1,ind2],t2_sym)
+         T2_ex = term(1.0, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
+         T_othr.append(T2_ex)
+         t2_tens2 = tensor('t', [ind5,ind3,ind1,ind2],t2_sym)
+         T2_ex = term(1.0, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
+         T_othr.append(T2_ex)
+         t2_tens3 = tensor('t', [ind5,ind6,ind1,ind3],t2_sym)
+         T2_ex = term(1.0, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
+         T_othr.append(T2_ex)
+         t2_tens4 = tensor('t', [ind3,ind4,ind1,ind2],t2_sym)
+         T2_ex = term(1.0, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
+         T_othr.append(T2_ex)
+         t2_tens5 = tensor('t', [ind5,ind6,ind4,ind3],t2_sym)
+         T2_ex = term(1.0, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
+         T_othr.append(T2_ex)
+#
+         T2_dex = term(-1.0, [], [t2_tens1,  creOp(ind1), creOp(ind2), desOp(ind6), desOp(ind5)])
+         T_othr.append(T2_dex)
+         T2_dex = term(-1.0, [], [t2_tens2,  creOp(ind1), creOp(ind2), desOp(ind3), desOp(ind5)])
+         T_othr.append(T2_dex)
+         T2_dex = term(-1.0, [], [t2_tens3,  creOp(ind1), creOp(ind3), desOp(ind6), desOp(ind5)])
+         T_othr.append(T2_dex)
+         T2_dex = term(-1.0, [], [t2_tens4,  creOp(ind1), creOp(ind2), desOp(ind4), desOp(ind3)])
+         T_othr.append(T2_dex)
+         T2_dex = term(-1.0, [], [t2_tens5,  creOp(ind4), creOp(ind3), desOp(ind6), desOp(ind5)])
+         T_othr.append(T2_dex)
+#
+# T = T-T^dag
  if (ttype == 'C-E'):
 # Core-External
-     ind1 = cc.pop(0)
-     ind2 = vv.pop(0)
-     ind3 = aa.pop(0)
-     ind4 = aa.pop(0)
+     T.extend(T_CE)
  elif (ttype == 'C-A'):
 # Core-Active
-     ind1 = cc.pop(0)
-     ind2 = aa.pop(0)
-     ind3 = aa.pop(0)
-     ind4 = aa.pop(0)
+     T.extend(T_CA)
  elif (ttype == 'A-E'):
 # Active-External
-     ind1 = aa.pop(0)
-     ind2 = vv.pop(0)
-     ind3 = aa.pop(0)
-     ind4 = aa.pop(0)
+     T.extend(T_AE)
 #
- t1_tens =  tensor('t', [ind2,ind1],t1_sym)
- t2_tens =  tensor('t', [ind2,ind3,ind1,ind4],t2_sym)
- T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
- T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+ else:
+# Include all type of excitations and de-excitations
+     T.extend(T_CE)
+     T.extend(T_CA)
+     T.extend(T_AE)
+     T.extend(T_othr)
 #
- T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
- T2_dex =  term(-1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-#
- Tex.append(T1_ex)
- Tex.append(T2_ex)
-#
- Tdex.append(T1_dex)
- Tdex.append(T2_dex)
-# T = T-T^dag
- T.append(T1_ex)
- T.append(T2_ex)
- T.append(T1_dex)
- T.append(T2_dex)
-# 
-# for t in T:
-#     print 't ampli=', t
+ for t in T:
+     print 't ampli=', t
+# exit()
  return T
 #
 #####################################

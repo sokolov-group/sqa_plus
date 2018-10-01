@@ -35,7 +35,7 @@ def addon(nterms):
  print "################ Addon ################"
  print ""
 # Dummy indices label upate
-# dummyLbl(nterms)
+ dummyLbl(nterms)
 #
 # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
  filtrVirt(nterms)
@@ -377,7 +377,7 @@ def sortOpscore(unsortedOps, returnPermutation = False):
           temp = sortedOps[i]
           sortedOps[i] = sortedOps[i+1]
           sortedOps[i+1] = temp
-#          print 'km1=',sortedOps[i],sortedOps[i+1],i
+          print 'km1=',sortedOps[i],sortedOps[i+1],i
           if returnPermutation:
             temp = perm[i]
             perm[i] = perm[i+1]
