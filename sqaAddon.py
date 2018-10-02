@@ -64,6 +64,9 @@ def matrixBlock(nterms):
 # Dummy indices label upate
  dummyLabel(fTerms)
 #
+# Contract delta function for both non-dummy indices
+ contractDeltaFuncs_nondummy(fTerms)
+#
 # Print the final results
  print ""
  print "####### Final results:#######"
@@ -344,8 +347,8 @@ def normalOrderCore(inTerm):
     print t
 
   return outTerms
-
-
+#
+#####################################
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 def sortOpsCore(unsortedOps, returnPermutation = False):
@@ -419,5 +422,27 @@ def sortOpsCore(unsortedOps, returnPermutation = False):
   if returnPermutation:
     return (sign,sortedOps,perm)
   return (sign,sortedOps)
-########
-#--------------------------------------------------------------------------------------------------
+#####################################
+#
+def contractDeltaFuncs_nondummy(terms):
+#
+ "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
+#
+ for term in terms:
+    i = 0
+# while i < len(term.tensors):
+    for i in range(len(term.tensors)):
+        t = term.tensors[i]
+#
+        if isinstance(t, kroneckerDelta):
+          i0 = t.indices[0]
+          i1 = t.indices[1]
+          if not (i0.isSummed and i1.isSummed):
+              if not (i0.indType[0][0] == i1.indType[0][0]):
+                   term.numConstant = 0.0
+#
+ termChop(terms)
+#
+ return terms
+#
+#####################################

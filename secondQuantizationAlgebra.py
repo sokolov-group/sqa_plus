@@ -93,7 +93,8 @@ from sqaDecomposition_so import  \
 from sqaAddon import matrixBlock,\
   dummyLabel, filterVirtual,     \
   filterCore, normalOrderCore,   \
-  sortOpsCore
+  sortOpsCore,                   \
+  contractDeltaFuncs_nondummy
 
 from sqaHeff import Heff,        \
   Tamplitude, Vperturbation_type,\
