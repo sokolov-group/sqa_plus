@@ -53,8 +53,13 @@ def Heff(order):
  cor = cc.pop(0)
  vir = vv.pop(0) 
 # core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
- Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
- Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
+ e_core = tensor('e', [cor], [])
+ e_virt = tensor('e', [vir], [])
+# Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
+# Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
+ Hamil.append( term(-1.0, [],[e_core, desOp(cor), creOp(cor)]))
+ Hamil.append( term(1.0, [],[e_virt, creOp(vir), desOp(vir)]))
+#
 # active part : H_act
  Hact = []
  act1 = aa.pop(0)
@@ -154,7 +159,7 @@ def Vperturbation_type(V, cc, aa, vv, vtype):
     V.append( term(-1.0, [], [ten4, desOp(cor2), creOp(cor1), creOp(act1), desOp(act2)]))
 #
     ten5 = ten4
-    ten6 =  tensor('gma', [act2, act1], d1sym)
+    ten6 =  tensor('gamma', [act2, act1], d1sym)
 #    V.append( term(-1.0, [], [ten5, ten6,  creOp(cor1), desOp(cor2)]))
     V.append( term(1.0, [], [ten5, ten6,  desOp(cor2), creOp(cor1)]))
 #
@@ -371,7 +376,7 @@ def Vperturbation(V):
  ten7 =  tensor('V', [cor2, act2, cor1, act1], v2sym)
 # V.append( term(1.0, [], [ten7, desOp(cor1), creOp(cor2), creOp(act2), desOp(act1)]))
 #
- ten8 =  tensor('gma', [act2, act1], d1sym)
+ ten8 =  tensor('gamma', [act2, act1], d1sym)
  V.append( term(1.0, [], [ten7, ten8,  desOp(cor2), creOp(cor1)]))
 #
  ten9 =  tensor('V', [vir2, act2, vir1, act1], v2sym)
