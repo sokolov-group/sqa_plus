@@ -46,12 +46,8 @@ for t in term2:
 #
 #sqa.combineTerms(term2)
 #
-sqa.addon(term2)
+sqa.matrixBlock(term2)
 #
-
-print "V general terms:"
-sqa.pertbV_default()
-
 #
 exit()
 #
