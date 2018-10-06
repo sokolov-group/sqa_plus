@@ -29,7 +29,7 @@ from sqaNormalOrder import normalOrder
 #addon = index()
 
 #####################################
-def matrixBlock(nterms):
+def matrixBlock(nterms, fTerms = []):
  "Construct matrix block."
 #
  print ""
@@ -43,7 +43,7 @@ def matrixBlock(nterms):
  termChop(nterms)
 #
 # Normal ordering with respect to core orbitals
- fTerms = []
+# fTerms = []
  for t in nterms:
 #    print 'Term=', t
     trm = normalOrderCore(t)
@@ -79,6 +79,7 @@ def matrixBlock(nterms):
 #    print index_types
 #
  print ""
+ return
 #
 #####################################
 def dummyLabel(nterms):
@@ -429,7 +430,7 @@ def contractDeltaFuncs_nondummy(terms):
  "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
 #
  for term in terms:
-    i = 0
+#    i = 0
 # while i < len(term.tensors):
     for i in range(len(term.tensors)):
         t = term.tensors[i]

@@ -53,8 +53,8 @@ def Heff(order):
  cor = cc.pop(0)
  vir = vv.pop(0) 
 # core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
- e_core = tensor('e', [cor], [])
- e_virt = tensor('e', [vir], [])
+ e_core = tensor('E', [cor], [])
+ e_virt = tensor('E', [vir], [])
 # Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
 # Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
  Hamil.append( term(-1.0, [],[e_core, desOp(cor), creOp(cor)]))
@@ -488,5 +488,115 @@ def Vperturbation(V):
 # dummyLabel(V)
 # print len(V81)
  return V
+#
+#####################################
+#
+def generateEinsum(terms, ind_str, idn_trans = False, optimize = True):
+#
+# summary: Generate Einsum structures for each term. 
+#          terms   : A list of all terms.
+#          ind_str : Indices of the matrix (string).
+#
+# (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+#
+ ind1 = ''
+ ind2 = ''
+ indList = list(ind_str)
+ for i in range(len(ind_str)):
+     if (i <= float(len(indList)%2)):
+        ind0 = indList.pop(0)
+        ind1 += ind0
+     else:
+        ind0 = indList.pop(0)
+        ind2 += ind0
+#
+ if not (len(ind_str)%2 == 0):
+    idn_trans = True
+#
+ term1st = 0
+ for term in terms:
+     outputS = []
+     outputF = []
+     OpsList = []
+     tens_name = []
+#
+     OpsindStr = 'rdm_'
+     if (idn_trans):
+        OpsindStr = 'trdm_'
+#
+     for i in range(len(term.tensors)):
+         TensStr = ''
+         tens = term.tensors[i]
+         if not (isinstance(tens, creOp) or isinstance(tens,desOp)):
+#
+            tens_name.append(tens.name)
+#
+            if ((tens.name == 'v') or (tens.name == 'V')):
+               indStr = 'v_'
+            elif (tens.name == 'h'):
+               indStr = 'h_'
+            elif (tens.name == 't'):
+               indStr = 't_'
+#
+            for tens_ind in range(len(tens.indices)): 
+               TensStr += str(tens.indices[tens_ind].name)
+#
+               if not (tens.indices[tens_ind].indType[0][0] == 'virtual'):
+                  indStr += str(tens.indices[tens_ind].indType[0][0][0])
+               else:
+                  indStr += 'e'
+#
+               if ((tens.name == 'E') or (tens.name == 'e')):
+                  if (tens.indices[tens_ind].indType[0][0] == 'core'):
+                     indStr = 'e_core_so'
+                  elif (tens.indices[tens_ind].indType[0][0] == 'virtual'):
+                     indStr = 'e_extern_so'
+                  else:
+                     raise Exception('Unknown active orbitals energy.')
+            if not (tens.name == 't'):
+               indStr += '_so'
+#
+            outputF.append(indStr)   
+#
+            outputS.append(TensStr)
+         else:
+               OpsList.append(tens.indices[0].name)
+               if (tens.name == 'cre'): 
+                   OpsindStr += 'c'
+               elif (tens.name == 'des'):
+                   OpsindStr += 'a'
+# 
+     if (len(OpsList)>0):
+            OpsStr = ''
+            for i in OpsList:
+                OpsStr += str(i)
+            outputS.append(OpsStr)
+            OpsindStr += "_so[1,:]"
+            outputF.append(OpsindStr)
+#
+     sign = ''
+     if not (term1st == 0):
+        sign = '+'
+        if (term.numConstant < 0.0):
+           sign = '-'
+        if not (abs(term.numConstant) == 1.0):
+           cons = ' '+str(abs(term.numConstant))+' *'
+        else:
+           cons = ''
+     else:
+        cons = ''
+        if not (term.numConstant == 1.0):
+           if (term.numConstant == -1.0):
+               cons = '-'
+           else:
+               cons = ' '+str(term.numConstant)+' *'
+#
+     IOpt = 'optimize = True'
+     if not (optimize):
+        IOpt = 'optimize = False'
+#
+     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
+#
+     term1st += 1
 #
 #####################################
