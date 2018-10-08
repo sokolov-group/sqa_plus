@@ -79,7 +79,7 @@ def matrixBlock(nterms, fTerms = []):
 #    print index_types
 #
  print ""
- return
+ return fTerms
 #
 #####################################
 def dummyLabel(nterms):
