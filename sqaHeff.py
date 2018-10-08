@@ -53,8 +53,8 @@ def Heff(order):
  cor = cc.pop(0)
  vir = vv.pop(0) 
 # core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
- e_core = tensor('E', [cor], [])
- e_virt = tensor('E', [vir], [])
+ e_core = tensor('e', [cor], [])
+ e_virt = tensor('e', [vir], [])
 # Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
 # Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
  Hamil.append( term(-1.0, [],[e_core, desOp(cor), creOp(cor)]))
@@ -143,18 +143,18 @@ def Vperturbation_type(V, cc, aa, vv, vtype):
     vir3 = vv.pop(0)
     vir4 = vv.pop(0)
 #
-    ten1 =  tensor('V', [cor3, cor4, cor1, cor2], v2sym)
+    ten1 =  tensor('v', [cor3, cor4, cor1, cor2], v2sym)
 #    V.append( term(0.25, [], [ten1, creOp(cor1), creOp(cor2), desOp(cor4), desOp(cor3)]))
     V.append( term(0.25, [], [ten1, desOp(cor4), desOp(cor3),creOp(cor1), creOp(cor2)]))
 #
-    ten2 =  tensor('V', [vir3, vir4, vir1, vir2], v2sym)
+    ten2 =  tensor('v', [vir3, vir4, vir1, vir2], v2sym)
     V.append( term(0.25, [], [ten2, creOp(vir1), creOp(vir2), desOp(vir4), desOp(vir3)]))
 #
-    ten3 =  tensor('V', [vir1, cor2, cor1, vir2], v2sym)
+    ten3 =  tensor('v', [vir1, cor2, cor1, vir2], v2sym)
 #    V.append( term(1.0, [], [ten3, creOp(cor1), creOp(vir2), desOp(cor2), desOp(vir1)]))
     V.append( term(1.0, [], [ten3, desOp(cor2), creOp(cor1), creOp(vir2), desOp(vir1)]))
 #
-    ten4 =  tensor('V', [cor2, act2, cor1, act1], v2sym)
+    ten4 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
 #    V.append( term(1.0, [], [ten4, creOp(cor1), desOp(cor2), creOp(act1), desOp(act2)]))
     V.append( term(-1.0, [], [ten4, desOp(cor2), creOp(cor1), creOp(act1), desOp(act2)]))
 #
@@ -163,7 +163,7 @@ def Vperturbation_type(V, cc, aa, vv, vtype):
 #    V.append( term(-1.0, [], [ten5, ten6,  creOp(cor1), desOp(cor2)]))
     V.append( term(1.0, [], [ten5, ten6,  desOp(cor2), creOp(cor1)]))
 #
-    ten7 =  tensor('V', [vir2, act2, vir1, act1], v2sym)
+    ten7 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
     V.append( term(1.0, [], [ten7, creOp(vir1), desOp(vir2), creOp(act1), desOp(act2)]))
     ten8 = ten7
     ten9 = ten6
@@ -373,13 +373,13 @@ def Vperturbation(V):
 #
 #
 #
- ten7 =  tensor('V', [cor2, act2, cor1, act1], v2sym)
+ ten7 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
 # V.append( term(1.0, [], [ten7, desOp(cor1), creOp(cor2), creOp(act2), desOp(act1)]))
 #
  ten8 =  tensor('gamma', [act2, act1], d1sym)
  V.append( term(1.0, [], [ten7, ten8,  desOp(cor2), creOp(cor1)]))
 #
- ten9 =  tensor('V', [vir2, act2, vir1, act1], v2sym)
+ ten9 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
 # V.append( term(-1.0, [], [ten9, creOp(vir2), desOp(vir1), creOp(act2), desOp(act1)]))
  V.append( term(-1.0, [], [ten9, ten8,  creOp(vir1), desOp(vir2)]))
 #
@@ -445,13 +445,13 @@ def Vperturbation(V):
                              if not (p.indType[0][0]=='active' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='active'):
 #
                                    if (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core'):
-#                                       vTen = tensor('V', [r,s,p,q], v2sym)
-                                       vTen = tensor('V', [r,s,p,q], v2sym)
+#                                       vTen = tensor('v', [r,s,p,q], v2sym)
+                                       vTen = tensor('v', [r,s,p,q], v2sym)
                                        V81.append(term(-0.25, [], [vTen,desOp(r), desOp(s), creOp(p), creOp(q)]))
 #
                                    else:
-                                       vTen = tensor('V', [r,s,p,q], v2sym)
-#                                       vTen = tensor('V', [p,q,r,s], v2sym)
+                                       vTen = tensor('v', [r,s,p,q], v2sym)
+#                                       vTen = tensor('v', [p,q,r,s], v2sym)
                                        V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
 #
  
@@ -459,28 +459,28 @@ def Vperturbation(V):
  q = index(list3.pop(0), [tg_v], dummy)
  s = index(list1.pop(0), [tg_c], dummy)
  r = index(list3.pop(0), [tg_v], dummy)
- vTen = tensor('V', [r,s,p,q], v2sym)
+ vTen = tensor('v', [r,s,p,q], v2sym)
  V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
 
  p = index(list1.pop(0), [tg_c], dummy)
  q = index(list2.pop(0), [tg_a], dummy)
  s = index(list1.pop(0), [tg_c], dummy)
  r = index(list2.pop(0), [tg_a], dummy)
- vTen = tensor('V', [r,s,p,q], v2sym)
+ vTen = tensor('v', [r,s,p,q], v2sym)
  V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
 
  p = index(list1.pop(0), [tg_c], dummy)
  q = index(list3.pop(0), [tg_v], dummy)
  s = index(list1.pop(0), [tg_c], dummy)
  r = index(list3.pop(0), [tg_v], dummy)
- vTen = tensor('V', [r,s,p,q], v2sym)
+ vTen = tensor('v', [r,s,p,q], v2sym)
  V81.append(term(1.0, [], [vTen, creOp(q), desOp(r), desOp(s), creOp(p)]))
 
  p = index(list1.pop(0), [tg_c], dummy)
  q = index(list2.pop(0), [tg_a], dummy)
  s = index(list1.pop(0), [tg_c], dummy)
  r = index(list2.pop(0), [tg_a], dummy)
- vTen = tensor('V', [r,s,p,q], v2sym)
+ vTen = tensor('v', [r,s,p,q], v2sym)
  V81.append(term(1.0, [], [vTen, desOp(s), creOp(p), creOp(q), desOp(r)]))
 
  V.extend(V81)
@@ -491,7 +491,7 @@ def Vperturbation(V):
 #
 #####################################
 #
-def generateEinsum(terms, ind_str, idn_trans = False, optimize = True):
+def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, suffix = None):
 #
 # summary: Generate Einsum structures for each term. 
 #          terms   : A list of all terms.
@@ -520,9 +520,12 @@ def generateEinsum(terms, ind_str, idn_trans = False, optimize = True):
      OpsList = []
      tens_name = []
 #
-     OpsindStr = 'rdm_'
-     if (idn_trans):
-        OpsindStr = 'trdm_'
+     if not (rdm_str):
+        OpsindStr = 'rdm_'
+        if (idn_trans):
+           rdm_str = 'trdm_'
+     else:
+        OpsindStr = rdm_str
 #
      for i in range(len(term.tensors)):
          TensStr = ''
@@ -532,11 +535,23 @@ def generateEinsum(terms, ind_str, idn_trans = False, optimize = True):
             tens_name.append(tens.name)
 #
             if ((tens.name == 'v') or (tens.name == 'V')):
-               indStr = 'v_'
+               if not (v_str):
+#                  indStr = 'v_'
+                  indStr = str(tens.name)+'_'
+               else:
+                  indStr = v_str
             elif (tens.name == 'h'):
-               indStr = 'h_'
+               if not (h_str):
+#                  indStr = 'h_'
+                  indStr = str(tens.name)+'_'
+               else:
+                  indStr = h_str
             elif (tens.name == 't'):
-               indStr = 't_'
+               if not (t_str):
+#                  indStr = 't_'
+                  indStr = str(tens.name)+'_'
+               else:
+                  indStr = t_str
 #
             for tens_ind in range(len(tens.indices)): 
                TensStr += str(tens.indices[tens_ind].name)
@@ -548,13 +563,26 @@ def generateEinsum(terms, ind_str, idn_trans = False, optimize = True):
 #
                if ((tens.name == 'E') or (tens.name == 'e')):
                   if (tens.indices[tens_ind].indType[0][0] == 'core'):
-                     indStr = 'e_core_so'
+                     if not (e_str):
+#                        indStr = 'e_core_so'
+                        indStr = str(tens.name)+'_core'
+                     else:
+                        indStr = e_str
+#
                   elif (tens.indices[tens_ind].indType[0][0] == 'virtual'):
-                     indStr = 'e_extern_so'
+                     if not (e_str):
+#                        indStr = 'e_extern_so'
+                        indStr = str(tens.name)+'_extern'
+                     else:
+                        indStr = e_str
+#
                   else:
                      raise Exception('Unknown active orbitals energy.')
             if not (tens.name == 't'):
-               indStr += '_so'
+               if not (suffix):
+                  indStr += '_so'
+               else:
+                  indStr += suffix
 #
             outputF.append(indStr)   
 #
@@ -567,12 +595,24 @@ def generateEinsum(terms, ind_str, idn_trans = False, optimize = True):
                    OpsindStr += 'a'
 # 
      if (len(OpsList)>0):
-            OpsStr = ''
+            if (idn_trans):
+               OpsStr = ind1
+            else:
+               OpsStr = ''
             for i in OpsList:
                 OpsStr += str(i)
             outputS.append(OpsStr)
-            OpsindStr += "_so[1,:]"
+            if not (suffix):
+               OpsindStr += "_so[1:]"
+            else:
+               OpsindStr += suffix
             outputF.append(OpsindStr)
+#
+#            if not (rdm_str):
+#               rdm_str = 'rdm_'
+#               if (idn_trans):
+#                  rdm_str = 'trdm_'
+#            tens_name.append(rdm_str)
 #
      sign = ''
      if not (term1st == 0):
@@ -595,7 +635,8 @@ def generateEinsum(terms, ind_str, idn_trans = False, optimize = True):
      if not (optimize):
         IOpt = 'optimize = False'
 #
-     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
+#     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
+     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
 #
      term1st += 1
 #
