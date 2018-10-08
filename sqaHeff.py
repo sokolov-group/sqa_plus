@@ -16,7 +16,7 @@
 from sqaIndex import index
 from sqaCommutator import commutator
 from sqaTerm import term, combineTerms
-from sqaTensor import tensor, creOp, desOp
+from sqaTensor import tensor, creOp, desOp, kroneckerDelta
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
@@ -491,7 +491,7 @@ def Vperturbation(V):
 #
 #####################################
 #
-def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, suffix = None):
+def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
 #
 # summary: Generate Einsum structures for each term. 
 #          terms   : A list of all terms.
@@ -530,7 +530,7 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
      for i in range(len(term.tensors)):
          TensStr = ''
          tens = term.tensors[i]
-         if not (isinstance(tens, creOp) or isinstance(tens,desOp)):
+         if not (isinstance(tens, creOp) or isinstance(tens,desOp) or isinstance(tens, kroneckerDelta)):
 #
             tens_name.append(tens.name)
 #
@@ -578,6 +578,7 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
 #
                   else:
                      raise Exception('Unknown active orbitals energy.')
+               
             if not (tens.name == 't'):
                if not (suffix):
                   indStr += '_so'
@@ -587,6 +588,32 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
             outputF.append(indStr)   
 #
             outputS.append(TensStr)
+#
+         elif (isinstance(tens, kroneckerDelta)):
+               tens_name.append(tens.name)
+#
+               indStr = 'np.identity'
+#
+               if not (del_str):
+                  if (tens.indices[0].indType[0][0] == 'core' and (tens.indices[1].indType[0][0] == 'core')):
+                      delstr = 'ncore'
+                  elif (tens.indices[0].indType[0][0] == 'active' and (tens.indices[1].indType[0][0] == 'active')):
+                      delstr = 'ncas'
+                  else:
+                      delstr = 'nextern'
+               else:
+                  delstr = str(del_str)
+#
+               if not (suffix):
+                  delstr += "_so"
+               else:
+                  delstr += suffix
+#
+               indStr += str('(')+delstr+str(')')
+#
+               outputS.append(TensStr)
+               outputF.append(indStr)
+#
          else:
                OpsList.append(tens.indices[0].name)
                if (tens.name == 'cre'): 
@@ -603,7 +630,7 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
                 OpsStr += str(i)
             outputS.append(OpsStr)
             if not (suffix):
-               OpsindStr += "_so[1:]"
+               OpsindStr += "_so"
             else:
                OpsindStr += suffix
             outputF.append(OpsindStr)
@@ -613,6 +640,7 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
 #               if (idn_trans):
 #                  rdm_str = 'trdm_'
 #            tens_name.append(rdm_str)
+#     print  tens_name
 #
      sign = ''
      if not (term1st == 0):
