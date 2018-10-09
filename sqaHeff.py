@@ -20,6 +20,9 @@ from sqaTensor import tensor, creOp, desOp, kroneckerDelta
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
+from sqaAddon import matrixBlock, dummyLabel, filterVirtual, filterCore, normalOrderCore, sortOpsCore, contractDeltaFuncs_nondummy
+
+
 #####################################
 #
 def Heff(order):
@@ -39,11 +42,11 @@ def Heff(order):
  tg_g = tg_c + tg_a + tg_v
  dummy = True
 # Core dummy indices
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(10)]
+ cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
 # Active dummy indices
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(10)]
+ aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
 # Virtual dummy indices
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(10)]
+ vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
 #
  effH = []
  Hamil = []
@@ -87,28 +90,66 @@ def Heff(order):
 #    print 'Hamiltonian(0)=', t
 #
  if (order == 0):
-    effH.extend(Hamil)
+    L0 = []
+    L0.extend(Hamil)
+    effH = L0
+    return effH
 #
- elif (order == 1):
+ elif (order >= 1):
 # L(1) = V + [H(0),T(1) - T'(1)]
+    L1 = []
     V = []
-    T = []
+    T1 = []
 #
 #    vtype = 'V[n=0]'
-    effH.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
+    L1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
 #
 #    ttype = 'full'
 #    ttype = 'C-A'
-    T.extend(Tamplitude(T, cc, aa, vv, ttype = 'full'))
+    T1.extend(Tamplitude(T1, 1, cc, aa, vv, ttype = 'full'))
 #
-    com1 =  commutator(Hamil, T)
+    com1 = commutator(Hamil, T1)
 #
-    effH.extend(com1)
+    L1.extend(com1)
+    if (order == 1):
+#   L(1) = V + [H(0),T(1) - T'(1)]
+       effH = L1
+       return effH
+#####
+    elif (order == 2):
+#   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
+   #
+       L2 = []
+       T2 = []
+       T2.extend(Tamplitude(T2, 2, cc, aa, vv, ttype = 'full'))
+#
+       com2 = commutator(Hamil, T2)
+       L2.extend(com2)
+#
+# (V + L1)
+       VL1 = []
+       VL1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
+       VL1.extend(L1)    
+#
+       com3 = commutator(V, T1)
+       L2.extend(com3)
+#
+       com4 = commutator(L1, T1)
+#
+       L2.extend(com4)
+#
+       effH = L2
+       exit ()
+#
+       return effH
+
+
+#####
 #
 # for t in effH:
 #    print 'Effec. Hamil=', t
 #
- return effH
+# return effH
 #
 #####################################
 #
@@ -176,9 +217,16 @@ def Vperturbation_type(V, cc, aa, vv, vtype):
  return V
 #####################################
 #
-def Tamplitude(T, cc1, aa1, vv1, ttype):
+def Tamplitude(T, order, cc1, aa1, vv1, ttype):
 # Cluster operator : T - T^dag, Where T = T1 + T2
 # Single excitatio : T1
+#
+# Define t amplitude according to their order
+ if (order == 1):
+    tname = 't1'
+ elif (order == 2):
+    tname = 't2'
+#
  t1_sym = [ symmetry((1,0),1)]
  t2_sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
 #
@@ -198,8 +246,8 @@ def Tamplitude(T, cc1, aa1, vv1, ttype):
          ind2 = vv.pop(0)
          ind3 = aa.pop(0)
          ind4 = aa.pop(0)
-         t1_tens =  tensor('t', [ind2,ind1],t1_sym)
-         t2_tens =  tensor('t', [ind2,ind3,ind1,ind4],t2_sym)
+         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
+         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
          T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
          T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
          T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
@@ -214,8 +262,8 @@ def Tamplitude(T, cc1, aa1, vv1, ttype):
          ind2 = aa.pop(0)
          ind3 = aa.pop(0)
          ind4 = aa.pop(0)
-         t1_tens =  tensor('t', [ind2,ind1],t1_sym)
-         t2_tens =  tensor('t', [ind2,ind3,ind1,ind4],t2_sym)
+         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
+         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
          T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
          T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
          T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
@@ -231,8 +279,8 @@ def Tamplitude(T, cc1, aa1, vv1, ttype):
          ind2 = vv.pop(0)
          ind3 = aa.pop(0)
          ind4 = aa.pop(0)
-         t1_tens =  tensor('t', [ind2,ind1],t1_sym)
-         t2_tens =  tensor('t', [ind2,ind3,ind1,ind4],t2_sym)
+         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
+         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
          T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
          T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
          T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
@@ -250,19 +298,19 @@ def Tamplitude(T, cc1, aa1, vv1, ttype):
          ind5 = vv.pop(0)
          ind6 = vv.pop(0)
 # For other type of T2 excitations and de-excitations
-         t2_tens1 =  tensor('t', [ind5,ind6,ind1,ind2],t2_sym)
+         t2_tens1 =  tensor(tname, [ind5,ind6,ind1,ind2],t2_sym)
          T2_ex = term(0.25, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
          T_othr.append(T2_ex)
-         t2_tens2 = tensor('t', [ind5,ind3,ind1,ind2],t2_sym)
+         t2_tens2 = tensor(tname, [ind5,ind3,ind1,ind2],t2_sym)
          T2_ex = term(0.5, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
          T_othr.append(T2_ex)
-         t2_tens3 = tensor('t', [ind5,ind6,ind1,ind3],t2_sym)
+         t2_tens3 = tensor(tname, [ind5,ind6,ind1,ind3],t2_sym)
          T2_ex = term(0.5, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
          T_othr.append(T2_ex)
-         t2_tens4 = tensor('t', [ind3,ind4,ind1,ind2],t2_sym)
+         t2_tens4 = tensor(tname, [ind3,ind4,ind1,ind2],t2_sym)
          T2_ex = term(0.25, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
          T_othr.append(T2_ex)
-         t2_tens5 = tensor('t', [ind5,ind6,ind4,ind3],t2_sym)
+         t2_tens5 = tensor(tname, [ind5,ind6,ind4,ind3],t2_sym)
          T2_ex = term(0.25, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
          T_othr.append(T2_ex)
 #
@@ -546,7 +594,7 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
                   indStr = str(tens.name)+'_'
                else:
                   indStr = h_str
-            elif (tens.name == 't'):
+            elif (tens.name == 't1') or (tens.name == 't2'):
                if not (t_str):
 #                  indStr = 't_'
                   indStr = str(tens.name)+'_'
@@ -579,7 +627,7 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
                   else:
                      raise Exception('Unknown active orbitals energy.')
                
-            if not (tens.name == 't'):
+            if not ((tens.name == 't1') or (tens.name == 't2')) :
                if not (suffix):
                   indStr += '_so'
                else:
@@ -591,6 +639,9 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
 #
          elif (isinstance(tens, kroneckerDelta)):
                tens_name.append(tens.name)
+#
+               for tens_ind in range(len(tens.indices)):
+                   TensStr += str(tens.indices[tens_ind].name)
 #
                indStr = 'np.identity'
 #
