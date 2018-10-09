@@ -61,11 +61,14 @@ def matrixBlock(nterms, fTerms = []):
 #
  combineTerms(fTerms)
 #
-# Dummy indices label upate
- dummyLabel(fTerms)
+## Dummy indices label upate
+# dummyLabel(fTerms)
 #
 # Contract delta function for both non-dummy indices
  contractDeltaFuncs_nondummy(fTerms)
+#
+# Dummy indices label upate
+ dummyLabel(fTerms)
 #
 # Print the final results
  print ""
@@ -91,9 +94,9 @@ def dummyLabel(nterms):
     mymap ={}
     index_types = ()
 #
-    coreInd = list('ijklmn')
-    actvInd = list('xyzwuv')
-    virtInd = list('abcdef')
+    coreInd = list('ijklmnop')
+    actvInd = list('xyzwuvst')
+    virtInd = list('abcdefgh')
 #
     for t_tensor in t.tensors:
 #

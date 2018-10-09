@@ -102,7 +102,9 @@ def Heff(order):
     T1 = []
 #
 #    vtype = 'V[n=0]'
-    L1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
+#    L1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
+    V = Vperturbation_type(V, cc, aa, vv, vtype = 'full')
+    L1.extend(V)
 #
 #    ttype = 'full'
 #    ttype = 'C-A'
@@ -111,6 +113,7 @@ def Heff(order):
     com1 = commutator(Hamil, T1)
 #
     L1.extend(com1)
+#
     if (order == 1):
 #   L(1) = V + [H(0),T(1) - T'(1)]
        effH = L1
@@ -128,18 +131,20 @@ def Heff(order):
 #
 # (V + L1)
        VL1 = []
-       VL1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
+#       VL1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
+       VL1.extend(V)
        VL1.extend(L1)    
 #
-       com3 = commutator(V, T1)
+#       com3 = commutator(V, T1)
+       com3 = commutator(VL1, T1)
        L2.extend(com3)
 #
-       com4 = commutator(L1, T1)
+  #     com4 = commutator(L1, T1)
 #
-       L2.extend(com4)
+  #     L2.extend(com4)
 #
        effH = L2
-       exit ()
+  #     exit ()
 #
        return effH
 
