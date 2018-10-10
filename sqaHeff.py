@@ -98,17 +98,38 @@ def Heff(order):
  elif (order >= 1):
 # L(1) = V + [H(0),T(1) - T'(1)]
     L1 = []
+#
+############################
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(10):
+        cc1.append(cc.pop(0))
+        aa1.append(aa.pop(0))
+        vv1.append(vv.pop(0))
+#
     V = []
-    T1 = []
 #
 #    vtype = 'V[n=0]'
 #    L1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
-    V = Vperturbation_type(V, cc, aa, vv, vtype = 'full')
+    V = Vperturbation_type(V, cc1, aa1, vv1, vtype = 'full')
     L1.extend(V)
 #
+############################
+#
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+        cc1.append(cc.pop(0))
+        aa1.append(aa.pop(0))
+        vv1.append(vv.pop(0))
 #    ttype = 'full'
 #    ttype = 'C-A'
-    T1.extend(Tamplitude(T1, 1, cc, aa, vv, ttype = 'full'))
+    T1 = []
+    T1.extend(Tamplitude(T1, 1, cc1, aa1, vv1, ttype = 'full'))
+#
+############################
 #
     com1 = commutator(Hamil, T1)
 #
@@ -121,22 +142,34 @@ def Heff(order):
 #####
     elif (order == 2):
 #   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
-   #
+#
        L2 = []
+############################
+       cc1 = []
+       aa1 = []
+       vv1 = []
+       for i in range(4):
+           cc1.append(cc.pop(0))
+           aa1.append(aa.pop(0))
+           vv1.append(vv.pop(0))
+#
        T2 = []
-       T2.extend(Tamplitude(T2, 2, cc, aa, vv, ttype = 'full'))
+       T2.extend(Tamplitude(T2, 2, cc1, aa1, vv1, ttype = 'full'))
+#
+############################
 #
        com2 = commutator(Hamil, T2)
        L2.extend(com2)
 #
 # (V + L1)
        VL1 = []
-#       VL1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
        VL1.extend(V)
        VL1.extend(L1)    
 #
 #       com3 = commutator(V, T1)
        com3 = commutator(VL1, T1)
+       for term in com3:
+          term.numConstant = 0.5 * term.numConstant
        L2.extend(com3)
 #
   #     com4 = commutator(L1, T1)
@@ -170,7 +203,7 @@ def Vperturbation_type(V, cc, aa, vv, vtype):
 #   Default V includes all type of perturbation rank.
     print "Perturbation(V) type = All types of V"
     print ""
-    V.extend(Vperturbation(V))
+    V.extend(Vperturbation(V, cc, aa, vv))
 #
  elif (vtype == 'V[n=0]'):
 #
@@ -355,7 +388,7 @@ def Tamplitude(T, order, cc1, aa1, vv1, ttype):
 #
 #####################################
 #
-def Vperturbation(V):
+def Vperturbation(V, cc, aa, vv):
  from sqaAddon import matrixBlock, dummyLabel
 #
  "Construct general perturbation operator V full (default) include all types of V."
@@ -384,9 +417,20 @@ def Vperturbation(V):
 # actvInd = list('xyzwuv')
 # virtInd = list('abcdef')
 #
- list1 = ['c%i' %p for p in range(30)]
- list2 = ['a%i' %p for p in range(30)]
- list3 = ['v%i' %p for p in range(30)]
+############################
+# list1 = ['c%i' %p for p in range(30)]
+# list2 = ['a%i' %p for p in range(30)]
+# list3 = ['v%i' %p for p in range(30)]
+ list1 = []
+ list2 = []
+ list3 = []
+ for i in range(len(cc)):
+    list1.append(cc[i].name)
+ for i in range(len(cc)):
+    list2.append(aa[i].name)
+ for i in range(len(cc)):
+    list3.append(vv[i].name)
+############################
 #
  indc1 = list1.pop(0)
  indc2 = list1.pop(0)
