@@ -29,7 +29,7 @@ from sqaNormalOrder import normalOrder
 #addon = index()
 
 #####################################
-def matrixBlock(nterms, fTerms = []):
+def matrixBlock(nterms, fTerms = [], transRDM = False):
  "Construct matrix block."
 #
  print ""
@@ -66,6 +66,18 @@ def matrixBlock(nterms, fTerms = []):
 #
 # Contract delta function for both non-dummy indices
  contractDeltaFuncs_nondummy(fTerms)
+#
+# If (transRDM = True) =>  Remove those constant terms
+ if (transRDM):
+    for trm in fTerms:
+        iremove = True
+        for i in range(len(trm.tensors)):
+            t = trm.tensors[i]
+            if (isinstance(t, creOp) or isinstance(t, desOp)):
+               iremove = False
+        if (iremove):
+            trm.numConstant = 0.0
+    termChop(fTerms)
 #
 # Dummy indices label upate
  dummyLabel(fTerms)

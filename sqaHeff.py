@@ -20,9 +20,6 @@ from sqaTensor import tensor, creOp, desOp, kroneckerDelta
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
-from sqaAddon import matrixBlock, dummyLabel, filterVirtual, filterCore, normalOrderCore, sortOpsCore, contractDeltaFuncs_nondummy
-
-
 #####################################
 #
 def Heff(order):
@@ -95,11 +92,12 @@ def Heff(order):
     effH = L0
     return effH
 #
+############################
+#
  elif (order >= 1):
 # L(1) = V + [H(0),T(1) - T'(1)]
     L1 = []
 #
-############################
     cc1 = []
     aa1 = []
     vv1 = []
@@ -111,11 +109,9 @@ def Heff(order):
     V = []
 #
 #    vtype = 'V[n=0]'
-#    L1.extend(Vperturbation_type(V, cc, aa, vv, vtype = 'full'))
-    V = Vperturbation_type(V, cc1, aa1, vv1, vtype = 'full')
+#    V = Vperturbation_type(V, cc1, aa1, vv1, vtype = 'V[n=0]')
+    V = Vperturbation_type(V, cc1, aa1, vv1)
     L1.extend(V)
-#
-############################
 #
     cc1 = []
     aa1 = []
@@ -127,9 +123,8 @@ def Heff(order):
 #    ttype = 'full'
 #    ttype = 'C-A'
     T1 = []
-    T1.extend(Tamplitude(T1, 1, cc1, aa1, vv1, ttype = 'full'))
-#
-############################
+#    T1.extend(Tamplitude(T1, 1, cc1, aa1, vv1, ttype = 'full'))
+    T1.extend(Tamplitude(T1, 1, cc1, aa1, vv1))
 #
     com1 = commutator(Hamil, T1)
 #
@@ -139,12 +134,14 @@ def Heff(order):
 #   L(1) = V + [H(0),T(1) - T'(1)]
        effH = L1
        return effH
-#####
+#
+############################
+#
     elif (order == 2):
 #   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
 #
        L2 = []
-############################
+#
        cc1 = []
        aa1 = []
        vv1 = []
@@ -154,9 +151,8 @@ def Heff(order):
            vv1.append(vv.pop(0))
 #
        T2 = []
-       T2.extend(Tamplitude(T2, 2, cc1, aa1, vv1, ttype = 'full'))
-#
-############################
+#       T2.extend(Tamplitude(T2, 2, cc1, aa1, vv1, ttype = 'full'))
+       T2.extend(Tamplitude(T2, 2, cc1, aa1, vv1))
 #
        com2 = commutator(Hamil, T2)
        L2.extend(com2)
@@ -166,32 +162,25 @@ def Heff(order):
        VL1.extend(V)
        VL1.extend(L1)    
 #
-#       com3 = commutator(V, T1)
+       for t in VL1:
+          t.scale(0.5)
+#
        com3 = commutator(VL1, T1)
-       for term in com3:
-          term.numConstant = 0.5 * term.numConstant
+#       for term in com3:
+#          term.numConstant = 0.5 * term.numConstant
        L2.extend(com3)
 #
-  #     com4 = commutator(L1, T1)
-#
-  #     L2.extend(com4)
-#
        effH = L2
-  #     exit ()
 #
        return effH
-
-
-#####
 #
-# for t in effH:
-#    print 'Effec. Hamil=', t
-#
-# return effH
+############################
+    else:
+       raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
 #
 #####################################
 #
-def Vperturbation_type(V, cc, aa, vv, vtype):
+def Vperturbation_type(V, cc, aa, vv, vtype = None):
 #
  "Construct perturbation operator V according to excitation rank."
 #
@@ -199,63 +188,66 @@ def Vperturbation_type(V, cc, aa, vv, vtype):
  v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
  d1sym = [ symmetry((1,0),1)]
 #
- if (vtype == 'full') or (vtype == 'Full') or (vtype == ''):
+# if (vtype == 'full') or (vtype == 'Full') or (vtype == ''):
+ if not (vtype):
 #   Default V includes all type of perturbation rank.
     print "Perturbation(V) type = All types of V"
     print ""
     V.extend(Vperturbation(V, cc, aa, vv))
 #
- elif (vtype == 'V[n=0]'):
-#
-    print "Perturbation(V) type = ",vtype
-#
-    cor1 = cc.pop(0)
-    cor2 = cc.pop(0)
-    cor3 = cc.pop(0)
-    cor4 = cc.pop(0)
-#
-    act1 = aa.pop(0)
-    act2 = aa.pop(0)
-#
-    vir1 = vv.pop(0)
-    vir2 = vv.pop(0)
-    vir3 = vv.pop(0)
-    vir4 = vv.pop(0)
-#
-    ten1 =  tensor('v', [cor3, cor4, cor1, cor2], v2sym)
-#    V.append( term(0.25, [], [ten1, creOp(cor1), creOp(cor2), desOp(cor4), desOp(cor3)]))
-    V.append( term(0.25, [], [ten1, desOp(cor4), desOp(cor3),creOp(cor1), creOp(cor2)]))
-#
-    ten2 =  tensor('v', [vir3, vir4, vir1, vir2], v2sym)
-    V.append( term(0.25, [], [ten2, creOp(vir1), creOp(vir2), desOp(vir4), desOp(vir3)]))
-#
-    ten3 =  tensor('v', [vir1, cor2, cor1, vir2], v2sym)
-#    V.append( term(1.0, [], [ten3, creOp(cor1), creOp(vir2), desOp(cor2), desOp(vir1)]))
-    V.append( term(1.0, [], [ten3, desOp(cor2), creOp(cor1), creOp(vir2), desOp(vir1)]))
-#
-    ten4 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
-#    V.append( term(1.0, [], [ten4, creOp(cor1), desOp(cor2), creOp(act1), desOp(act2)]))
-    V.append( term(-1.0, [], [ten4, desOp(cor2), creOp(cor1), creOp(act1), desOp(act2)]))
-#
-    ten5 = ten4
-    ten6 =  tensor('gamma', [act2, act1], d1sym)
-#    V.append( term(-1.0, [], [ten5, ten6,  creOp(cor1), desOp(cor2)]))
-    V.append( term(1.0, [], [ten5, ten6,  desOp(cor2), creOp(cor1)]))
-#
-    ten7 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
-    V.append( term(1.0, [], [ten7, creOp(vir1), desOp(vir2), creOp(act1), desOp(act2)]))
-    ten8 = ten7
-    ten9 = ten6
-    V.append( term(-1.0, [], [ten8, ten9,  creOp(vir1), desOp(vir2)]))
  else:
-    raise Exception('Unknown type of V..')
+    if (vtype == 'V[n=0]'):
+#   
+       print "Perturbation(V) type = ",vtype
+#   
+       cor1 = cc.pop(0)
+       cor2 = cc.pop(0)
+       cor3 = cc.pop(0)
+       cor4 = cc.pop(0)
+#   
+       act1 = aa.pop(0)
+       act2 = aa.pop(0)
+#   
+       vir1 = vv.pop(0)
+       vir2 = vv.pop(0)
+       vir3 = vv.pop(0)
+       vir4 = vv.pop(0)
+#   
+       ten1 =  tensor('v', [cor3, cor4, cor1, cor2], v2sym)
+#       V.append( term(0.25, [], [ten1, creOp(cor1), creOp(cor2), desOp(cor4), desOp(cor3)]))
+       V.append( term(0.25, [], [ten1, desOp(cor4), desOp(cor3),creOp(cor1), creOp(cor2)]))
+#   
+       ten2 =  tensor('v', [vir3, vir4, vir1, vir2], v2sym)
+       V.append( term(0.25, [], [ten2, creOp(vir1), creOp(vir2), desOp(vir4), desOp(vir3)]))
+#   
+       ten3 =  tensor('v', [vir1, cor2, cor1, vir2], v2sym)
+#       V.append( term(1.0, [], [ten3, creOp(cor1), creOp(vir2), desOp(cor2), desOp(vir1)]))
+       V.append( term(1.0, [], [ten3, desOp(cor2), creOp(cor1), creOp(vir2), desOp(vir1)]))
+#   
+       ten4 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
+#       V.append( term(1.0, [], [ten4, creOp(cor1), desOp(cor2), creOp(act1), desOp(act2)]))
+       V.append( term(-1.0, [], [ten4, desOp(cor2), creOp(cor1), creOp(act1), desOp(act2)]))
+#   
+       ten5 = ten4
+       ten6 =  tensor('gamma', [act2, act1], d1sym)
+#       V.append( term(-1.0, [], [ten5, ten6,  creOp(cor1), desOp(cor2)]))
+       V.append( term(1.0, [], [ten5, ten6,  desOp(cor2), creOp(cor1)]))
+#   
+       ten7 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
+       V.append( term(1.0, [], [ten7, creOp(vir1), desOp(vir2), creOp(act1), desOp(act2)]))
+       ten8 = ten7
+       ten9 = ten6
+       V.append( term(-1.0, [], [ten8, ten9,  creOp(vir1), desOp(vir2)]))
+#   
+    else:
+       raise Exception('Unknown type of V operator ...')
 #
 # for t in V:
 #    print 'perterbative =', t
  return V
 #####################################
 #
-def Tamplitude(T, order, cc1, aa1, vv1, ttype):
+def Tamplitude(T, order, cc1, aa1, vv1, ttype = None):
 # Cluster operator : T - T^dag, Where T = T1 + T2
 # Single excitatio : T1
 #
@@ -364,22 +356,25 @@ def Tamplitude(T, order, cc1, aa1, vv1, ttype):
          T_othr.append(T2_dex)
 #
 # T = T-T^dag
- if (ttype == 'C-E'):
-# Core-External
-     T.extend(T_CE)
- elif (ttype == 'C-A'):
-# Core-Active
-     T.extend(T_CA)
- elif (ttype == 'A-E'):
-# Active-External
-     T.extend(T_AE)
-#
- else:
+ if not (ttype):
 # Include all type of excitations and de-excitations
      T.extend(T_CE)
      T.extend(T_CA)
      T.extend(T_AE)
      T.extend(T_othr)
+ else:
+     if (ttype == 'C-E'):
+# Core-External
+         T.extend(T_CE)
+     elif (ttype == 'C-A'):
+# Core-Active
+         T.extend(T_CA)
+     elif (ttype == 'A-E'):
+# Active-External
+         T.extend(T_AE)
+#
+     else:
+         raise Exception('Unknown type of T operator...')
 #
 # for t in T:
 #     print 't ampli=', t
@@ -412,10 +407,6 @@ def Vperturbation(V, cc, aa, vv):
  q = index('q', [], dummy)
  r = index('r', [], dummy)
  s = index('s', [], dummy)
-#
-# coreInd = list('ijklmn')
-# actvInd = list('xyzwuv')
-# virtInd = list('abcdef')
 #
 ############################
 # list1 = ['c%i' %p for p in range(30)]
@@ -588,13 +579,16 @@ def Vperturbation(V, cc, aa, vv):
 #
 #####################################
 #
-def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
+def generateEinsum(terms, lhs_str, ind_str, transRDM = False, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
 #
 # summary: Generate Einsum structures for each term. 
 #          terms   : A list of all terms.
 #          ind_str : Indices of the matrix (string).
 #
 # (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+#
+ print "################ Construct Einsum ################"
+# print ""
 #
  ind1 = ''
  ind2 = ''
@@ -607,8 +601,8 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
         ind0 = indList.pop(0)
         ind2 += ind0
 #
- if not (len(ind_str)%2 == 0):
-    idn_trans = True
+# if not (len(ind_str)%2 == 0):
+#    transRDM = True
 #
  term1st = 0
  for term in terms:
@@ -619,8 +613,8 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
 #
      if not (rdm_str):
         OpsindStr = 'rdm_'
-        if (idn_trans):
-           rdm_str = 'trdm_'
+        if (transRDM):
+           OpsindStr = 'trdm_'
      else:
         OpsindStr = rdm_str
 #
@@ -722,7 +716,7 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
                    OpsindStr += 'a'
 # 
      if (len(OpsList)>0):
-            if (idn_trans):
+            if (transRDM):
                OpsStr = ind1
             else:
                OpsStr = ''
@@ -737,7 +731,7 @@ def generateEinsum(terms, lhs_str, ind_str, idn_trans = False, optimize = True, 
 #
 #            if not (rdm_str):
 #               rdm_str = 'rdm_'
-#               if (idn_trans):
+#               if (transRDM):
 #                  rdm_str = 'trdm_'
 #            tens_name.append(rdm_str)
 #     print  tens_name
