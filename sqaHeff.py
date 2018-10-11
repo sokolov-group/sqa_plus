@@ -39,11 +39,11 @@ def Heff(order):
  tg_g = tg_c + tg_a + tg_v
  dummy = True
 # Core dummy indices
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
+ cc = [index('c%i' %p, [tg_c], dummy) for p in range(50)]
 # Active dummy indices
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
+ aa = [index('a%i' %p, [tg_a], dummy) for p in range(50)]
 # Virtual dummy indices
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
+ vv = [index('v%i' %p, [tg_v], dummy) for p in range(50)]
 #
  effH = []
  Hamil = []
@@ -101,7 +101,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(10):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
@@ -584,7 +584,7 @@ def Vperturbation(V, cc, aa, vv):
 #
 #####################################
 #
-def generateEinsum(terms, lhs_str, ind_str, transRDM = False, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
+def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
 #
 # summary: Generate Einsum structures for each term. 
 #          terms   : A list of all terms.
@@ -669,6 +669,14 @@ def generateEinsum(terms, lhs_str, ind_str, transRDM = False, optimize = True, h
 #
                   else:
                      raise Exception('Unknown active orbitals energy.')
+#
+#
+               elif (tens.name == 'gamma'):
+#                  if not (g_str):
+                     indStr = 'rdm_ca'
+#                     indStr = str(tens.name)+'_'
+#                  else:
+#                     indStr = g_str
 #
                else:
                   if not (tens.indices[tens_ind].indType[0][0] == 'virtual'):
@@ -763,8 +771,12 @@ def generateEinsum(terms, lhs_str, ind_str, transRDM = False, optimize = True, h
      if not (optimize):
         IOpt = 'optimize = False'
 #
+     Icomnd = ''
+     if (command):
+        Icomnd = command
+#
 #     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
-     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
+     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd
 #
      term1st += 1
 #
