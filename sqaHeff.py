@@ -109,7 +109,7 @@ def Heff(order):
     V = []
 #
 #    vtype = 'V[n=0]'
-#    V = Vperturbation_type(V, cc1, aa1, vv1, vtype = 'V[n=0]')
+#    V = Vperturbation_type(V, cc1, aa1, vv1, vtype = 'V[n=0]')  # Example
     V = Vperturbation_type(V, cc1, aa1, vv1)
     L1.extend(V)
 #
@@ -156,6 +156,11 @@ def Heff(order):
 #
        com2 = commutator(Hamil, T2)
        L2.extend(com2)
+######################
+# for checking purpose for T2
+#       effH = L2
+#       return effH
+######################
 #
 # (V + L1)
        VL1 = []
@@ -647,11 +652,6 @@ def generateEinsum(terms, lhs_str, ind_str, transRDM = False, optimize = True, h
             for tens_ind in range(len(tens.indices)): 
                TensStr += str(tens.indices[tens_ind].name)
 #
-               if not (tens.indices[tens_ind].indType[0][0] == 'virtual'):
-                  indStr += str(tens.indices[tens_ind].indType[0][0][0])
-               else:
-                  indStr += 'e'
-#
                if ((tens.name == 'E') or (tens.name == 'e')):
                   if (tens.indices[tens_ind].indType[0][0] == 'core'):
                      if not (e_str):
@@ -669,7 +669,13 @@ def generateEinsum(terms, lhs_str, ind_str, transRDM = False, optimize = True, h
 #
                   else:
                      raise Exception('Unknown active orbitals energy.')
-               
+#
+               else:
+                  if not (tens.indices[tens_ind].indType[0][0] == 'virtual'):
+                     indStr += str(tens.indices[tens_ind].indType[0][0][0])
+                  else:
+                     indStr += 'e'
+#
             if not ((tens.name == 't1') or (tens.name == 't2')) :
                if not (suffix):
                   indStr += '_so'
