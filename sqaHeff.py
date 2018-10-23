@@ -595,19 +595,19 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
  print "################ Construct Einsum ################"
 # print ""
 #
- ind1 = ''
- ind2 = ''
- indList = list(ind_str)
- for i in range(len(ind_str)):
-     if (i <= float(len(indList)%2)):
-        ind0 = indList.pop(0)
-        ind1 += ind0
-     else:
-        ind0 = indList.pop(0)
-        ind2 += ind0
-#
-# if not (len(ind_str)%2 == 0):
-#    transRDM = True
+# ind1 = ''
+# ind2 = ''
+# indList = list(ind_str)
+# for i in range(len(ind_str)):
+#     if (i <= float(len(indList)%2)):
+#        ind0 = indList.pop(0)
+#        ind1 += ind0
+#     else:
+#        ind0 = indList.pop(0)
+#        ind2 += ind0
+##
+## if not (len(ind_str)%2 == 0):
+##    transRDM = True
 #
  term1st = 0
  for term in terms:
@@ -731,7 +731,8 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
 # 
      if (len(OpsList)>0):
             if (transRDM):
-               OpsStr = ind1
+#               OpsStr = ind1
+               OpsStr = 'I'
             else:
                OpsStr = ''
             for i in OpsList:

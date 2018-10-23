@@ -106,8 +106,8 @@ def dummyLabel(nterms):
     mymap ={}
     index_types = ()
 #
-    coreInd = list('ijklmnop')
-    actvInd = list('xyzwuvst')
+    coreInd = list('ijklmnopq')
+    actvInd = list('xyzwuvstr')
     virtInd = list('abcdefgh')
 #
     for t_tensor in t.tensors:
