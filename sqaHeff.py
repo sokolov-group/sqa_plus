@@ -732,7 +732,7 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
      if (len(OpsList)>0):
             if (transRDM):
 #               OpsStr = ind1
-               OpsStr = 'I'
+               OpsStr = 'T'
             else:
                OpsStr = ''
             for i in OpsList:
@@ -768,9 +768,9 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
            else:
                cons = ' '+str(term.numConstant)+' *'
 #
-     IOpt = 'optimize = True'
+     IOpt = ' optimize = True'
      if not (optimize):
-        IOpt = 'optimize = False'
+        IOpt = ' optimize = False'
 #
      Icomnd = ''
      if (command):
