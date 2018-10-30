@@ -110,7 +110,7 @@ def Heff(order):
 #
 #    vtype = 'V[n=0]'
 #    V = Vperturbation_type(V, cc1, aa1, vv1, vtype = 'V[n=0]')  # Example
-    V = Vperturbation_type(V, cc1, aa1, vv1)
+    V = Vperturbation_type(cc1, aa1, vv1)
     L1.extend(V)
 #
     cc1 = []
@@ -185,7 +185,7 @@ def Heff(order):
 #
 #####################################
 #
-def Vperturbation_type(V, cc, aa, vv, vtype = None):
+def Vperturbation_type(cc, aa, vv, vtype = None):
 #
  "Construct perturbation operator V according to excitation rank."
 #
@@ -198,7 +198,7 @@ def Vperturbation_type(V, cc, aa, vv, vtype = None):
 #   Default V includes all type of perturbation rank.
     print "Perturbation(V) type = All types of V"
     print ""
-    V.extend(Vperturbation(V, cc, aa, vv))
+    V.extend(Vperturbation(cc, aa, vv))
 #
  else:
     if (vtype == 'V[n=0]'):
@@ -388,7 +388,7 @@ def Tamplitude(T, order, cc1, aa1, vv1, ttype = None):
 #
 #####################################
 #
-def Vperturbation(V, cc, aa, vv):
+def Vperturbation(cc, aa, vv):
  from sqaAddon import matrixBlock, dummyLabel
 #
  "Construct general perturbation operator V full (default) include all types of V."
