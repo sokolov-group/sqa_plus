@@ -29,12 +29,13 @@ from sqaNormalOrder import normalOrder
 #addon = index()
 
 #####################################
-def matrixBlock(nterms, fTerms = [], transRDM = False):
+def matrixBlock(nterms, transRDM = False):
  "Construct matrix block."
 #
  print ""
  print "################ Addon ################"
  print ""
+ fTerms = []
 # Dummy indices label upate
 # dummyLabel(nterms)
 #
