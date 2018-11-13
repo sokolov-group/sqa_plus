@@ -616,6 +616,10 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
      OpsList = []
      tens_name = []
 #
+     icopy = '.copy()'
+     if not (len(term.tensors) == 1):
+        icopy = ''
+#
      if not (rdm_str):
         OpsindStr = 'rdm_'
         if (transRDM):
@@ -777,7 +781,7 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
         Icomnd = command
 #
 #     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
-     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd
+     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
 #
      term1st += 1
 #
