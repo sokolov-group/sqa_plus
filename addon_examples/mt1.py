@@ -15,16 +15,11 @@ dummy = True
 i = sqa.index('I', [tg_c], False)
 j = sqa.index('J', [tg_c], False)
 x = sqa.index('X', [tg_a], False)
-a = sqa.index('A', [tg_v], False)
-
-# Dummy indices
-k = sqa.index('K', [tg_c], False)
-l = sqa.index('L', [tg_c], False)
 y = sqa.index('Y', [tg_a], False)
+a = sqa.index('A', [tg_v], False)
 b = sqa.index('B', [tg_v], False)
-
-ijxa_op = [sqa.creOp(i), sqa.creOp(j), sqa.desOp(x), sqa.desOp(a)]
-dum_op = [sqa.creOp(b), sqa.creOp(y), sqa.desOp(l), sqa.desOp(k)]
+c = sqa.index('C', [tg_v], False)
+d = sqa.index('D', [tg_v], False)
 
 #
 effH = []
@@ -32,8 +27,8 @@ effH = sqa.Heff(0)
 for t in effH:
   print t
 #
-term1 = sqa.term(1.0, [], [sqa.creOp(i), sqa.creOp(j), sqa.desOp(x), sqa.desOp(a)])
-term2 = sqa.term(1.0, [], [sqa.creOp(b), sqa.creOp(y), sqa.desOp(l), sqa.desOp(k)])
+term1 = sqa.term(1.0, [], [sqa.creOp(i), sqa.creOp(x), sqa.desOp(b), sqa.desOp(a)])
+term2 = sqa.term(1.0, [], [sqa.creOp(c), sqa.creOp(d), sqa.desOp(y), sqa.desOp(j)])
 print term1, term2
 #
 print "First Commutator"
@@ -54,12 +49,10 @@ for t in term5:
 #
 term6 = sqa.matrixBlock(term5)
 
-#sqa.generateEinsum(term6, 'K[:,:,:,:,:,:,:,:]', 'IJAXKLBY', "")
-sqa.generateEinsum(term6, 'K', 'IJXABYLK', ".reshape(dim, dim)")
+sqa.generateEinsum(term6, 'K[:,:,:,:,:,:,:,:]', 'IXBACDYJ', ".reshape(dim, dim)")
 #
-exit()
+#exit()
 ##################################################################
-#
 # for overlap S[+1]
 termS = sqa.multiplyTerms(term1,term2)
 term7 = []

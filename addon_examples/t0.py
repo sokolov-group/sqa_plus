@@ -14,30 +14,33 @@ dummy = True
 # External indices
 i = sqa.index('I', [tg_c], False)
 j = sqa.index('J', [tg_c], False)
-x = sqa.index('X', [tg_a], False)
 a = sqa.index('A', [tg_v], False)
+b = sqa.index('B', [tg_v], False)
 
 # Dummy indices
 k = sqa.index('K', [tg_c], False)
 l = sqa.index('L', [tg_c], False)
-y = sqa.index('Y', [tg_a], False)
-b = sqa.index('B', [tg_v], False)
+c = sqa.index('C', [tg_v], False)
+d = sqa.index('D', [tg_v], False)
 
-ijxa_op = [sqa.creOp(i), sqa.creOp(j), sqa.desOp(x), sqa.desOp(a)]
-dum_op = [sqa.creOp(b), sqa.creOp(y), sqa.desOp(l), sqa.desOp(k)]
-
+# symmetry
+h1sym = [sqa.symmetry((1,0),1)]
+v2sym = [sqa.symmetry((1,0,2,3),-1), sqa.symmetry((0,1,3,2), -1)]
+#
 #
 effH = []
 effH = sqa.Heff(0)
 for t in effH:
   print t
 #
-term1 = sqa.term(1.0, [], [sqa.creOp(i), sqa.creOp(j), sqa.desOp(x), sqa.desOp(a)])
-term2 = sqa.term(1.0, [], [sqa.creOp(b), sqa.creOp(y), sqa.desOp(l), sqa.desOp(k)])
+term1 = sqa.term(1.0, [], [sqa.creOp(i), sqa.creOp(j), sqa.desOp(b), sqa.desOp(a)])
+term2 = sqa.term(1.0, [], [sqa.creOp(c), sqa.creOp(d), sqa.desOp(l), sqa.desOp(k)])
 print term1, term2
 #
 print "First Commutator"
 term3 = sqa.commutator(effH,term2)
+for t in term3:
+    print t
 #
 print "Multiply ..."
 term4 = []
@@ -46,20 +49,19 @@ for t in term3:
 #
 term5 = []
 for t in term4:
+#
    t_no = sqa.normalOrder(t)
    term5.extend(t_no)
 #
-for t in term5:
- print t
-#
+#for t in term4:
+# print t
+
 term6 = sqa.matrixBlock(term5)
 
-#sqa.generateEinsum(term6, 'K[:,:,:,:,:,:,:,:]', 'IJAXKLBY', "")
-sqa.generateEinsum(term6, 'K', 'IJXABYLK', ".reshape(dim, dim)")
+sqa.generateEinsum(term6, 'M[sia:fia, sia:fia]', 'IAJB', ".reshape(nia_so, nia_so).copy()")
 #
 exit()
 ##################################################################
-#
 # for overlap S[+1]
 termS = sqa.multiplyTerms(term1,term2)
 term7 = []
@@ -68,18 +70,18 @@ term7.extend(tt)
 #
 term8 = sqa.matrixBlock(term7)
 #
-print "overlap S[+1]"
+print "overlap S[0']"
 for t in term8:
    print t
 #
-#exit()
+exit()
 ##################################################################
 print "V"
 #
 dummy = True
-cc = [sqa.index('c%i' %p, [tg_c], dummy) for p in range(50)]
-aa = [sqa.index('a%i' %p, [tg_a], dummy) for p in range(50)]
-vv = [sqa.index('v%i' %p, [tg_v], dummy) for p in range(50)]
+cc = [sqa.index('c%i' %p, [tg_c], False) for p in range(50)]
+aa = [sqa.index('a%i' %p, [tg_a], False) for p in range(50)]
+vv = [sqa.index('v%i' %p, [tg_v], False) for p in range(50)]
 #
 V = []
 #
@@ -94,6 +96,4 @@ for t in V:
 term9 = sqa.matrixBlock(termV)
 #for t in term9:
 #  print t
-sqa.generateEinsum(term9, 'M[sia:fia, sia:fia]', 'IJAXklby', "")
-
 ##################################################################

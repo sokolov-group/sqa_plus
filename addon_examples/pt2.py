@@ -15,16 +15,12 @@ dummy = True
 i = sqa.index('I', [tg_c], False)
 j = sqa.index('J', [tg_c], False)
 x = sqa.index('X', [tg_a], False)
-a = sqa.index('A', [tg_v], False)
+y = sqa.index('Y', [tg_a], False)
 
-# Dummy indices
 k = sqa.index('K', [tg_c], False)
 l = sqa.index('L', [tg_c], False)
-y = sqa.index('Y', [tg_a], False)
-b = sqa.index('B', [tg_v], False)
-
-ijxa_op = [sqa.creOp(i), sqa.creOp(j), sqa.desOp(x), sqa.desOp(a)]
-dum_op = [sqa.creOp(b), sqa.creOp(y), sqa.desOp(l), sqa.desOp(k)]
+z = sqa.index('Z', [tg_a], False)
+w = sqa.index('W', [tg_a], False)
 
 #
 effH = []
@@ -32,9 +28,11 @@ effH = sqa.Heff(0)
 for t in effH:
   print t
 #
-term1 = sqa.term(1.0, [], [sqa.creOp(i), sqa.creOp(j), sqa.desOp(x), sqa.desOp(a)])
-term2 = sqa.term(1.0, [], [sqa.creOp(b), sqa.creOp(y), sqa.desOp(l), sqa.desOp(k)])
+term1 = sqa.term(1.0, [], [sqa.creOp(k), sqa.creOp(l), sqa.desOp(z), sqa.desOp(w)])
+term2 = sqa.term(1.0, [], [sqa.creOp(x), sqa.creOp(y), sqa.desOp(j), sqa.desOp(i)])
+
 print term1, term2
+
 #
 print "First Commutator"
 term3 = sqa.commutator(effH,term2)
@@ -55,16 +53,20 @@ for t in term5:
 term6 = sqa.matrixBlock(term5)
 
 #sqa.generateEinsum(term6, 'K[:,:,:,:,:,:,:,:]', 'IJAXKLBY', "")
-sqa.generateEinsum(term6, 'K', 'IJXABYLK', ".reshape(dim, dim)")
+sqa.generateEinsum(term6, 'K', 'YXWZ', '')
 #
 exit()
-##################################################################
-#
+####################################################################
 # for overlap S[+1]
 termS = sqa.multiplyTerms(term1,term2)
 term7 = []
 tt = sqa.normalOrder(termS)
 term7.extend(tt)
+
+print ''
+for t in term7:
+  print t
+#exit()
 #
 term8 = sqa.matrixBlock(term7)
 #
@@ -72,8 +74,10 @@ print "overlap S[+1]"
 for t in term8:
    print t
 #
+sqa.generateEinsum(term8, 'S_p2', 'YXWZ', '')
+#
 #exit()
-##################################################################
+####################################################################
 print "V"
 #
 dummy = True
@@ -94,6 +98,6 @@ for t in V:
 term9 = sqa.matrixBlock(termV)
 #for t in term9:
 #  print t
-sqa.generateEinsum(term9, 'M[sia:fia, sia:fia]', 'IJAXklby', "")
+sqa.generateEinsum(term9, 'Vp2', 'KLWZ', "")
 
-##################################################################
+####################################################################
