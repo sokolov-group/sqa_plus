@@ -736,7 +736,8 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
      if (len(OpsList)>0):
             if (transRDM):
 #               OpsStr = ind1
-               OpsStr = 'T'
+#               OpsStr = 'T'
+               OpsStr = 'I'
             else:
                OpsStr = ''
             for i in OpsList:
