@@ -584,7 +584,7 @@ def Vperturbation(cc, aa, vv):
 #
 #####################################
 #
-def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
+def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, trans_ind_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
 #
 # summary: Generate Einsum structures for each term. 
 #          terms   : A list of all terms.
@@ -735,9 +735,11 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
 # 
      if (len(OpsList)>0):
             if (transRDM):
-#               OpsStr = ind1
-#               OpsStr = 'T'
-               OpsStr = 'I'
+               if (trans_ind_str == None):
+                  raise Exception("Defined 'trans_ind_str' and run again...")
+               else:
+                  OpsStr = trans_ind_str
+               rhs_ind_str = trans_ind_str+ind_str
             else:
                OpsStr = ''
             for i in OpsList:
@@ -748,13 +750,6 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
             else:
                OpsindStr += suffix
             outputF.append(OpsindStr)
-#
-#            if not (rdm_str):
-#               rdm_str = 'rdm_'
-#               if (transRDM):
-#                  rdm_str = 'trdm_'
-#            tens_name.append(rdm_str)
-#     print  tens_name
 #
      sign = ''
      if not (term1st == 0):
@@ -782,7 +777,7 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, op
         Icomnd = command
 #
 #     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
-     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
+     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+rhs_ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
 #
      term1st += 1
 #
