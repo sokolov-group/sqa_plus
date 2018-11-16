@@ -728,16 +728,8 @@ def generateEinsum(terms, M_str = None, M_ind_str = None, command = None, transR
                   raise Exception("Defined 'trans_ind_str' and run again...")
                else:
                   OpsStr = trans_ind_str
-               if not (M_ind_str):
-                   rhs_ind_str = ''
-               else:
-                   rhs_ind_str = '->'+trans_ind_str+M_ind_str
             else:
                OpsStr = ''
-               if not (M_ind_str):
-                  rhs_ind_str = ''
-               else:
-                  rhs_ind_str = "->"+M_ind_str
             for i in OpsList:
                 OpsStr += str(i)
             outputS.append(OpsStr)
@@ -746,6 +738,14 @@ def generateEinsum(terms, M_str = None, M_ind_str = None, command = None, transR
             else:
                OpsindStr += suffix
             outputF.append(OpsindStr)
+#
+     if not (M_ind_str):
+        rhs_ind_str = ''
+     else:
+        if (transRDM):
+          rhs_ind_str = '->'+trans_ind_str+M_ind_str
+        else:
+          rhs_ind_str = "->"+M_ind_str
 #
      sign = ''
      if not (term1st == 0):
