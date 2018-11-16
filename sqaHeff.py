@@ -584,19 +584,19 @@ def Vperturbation(cc, aa, vv):
 #
 #####################################
 #
-def generateEinsum(terms, M_str = None, M_ind_str = None, command = None, transRDM = False, trans_ind_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
+def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, delta_str = None, suffix = None):
 #
 # summary: Generate Einsum structures for each term. 
 #          terms   : A list of all terms.
-#          M_ind_str : Indices of the matrix (string).
+#          ind_str : Indices of the matrix (string).
 #
 # (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
  print "################ Construct Einsum ################"
 # print ""
 #
- if not (M_str):
-   M_str = 'M'
+ if not (lhs_str):
+   lhs_str = 'M'
 #
  term1st = 0
  for term in terms:
@@ -695,7 +695,7 @@ def generateEinsum(terms, M_str = None, M_ind_str = None, command = None, transR
 #
                indStr = 'np.identity'
 #
-               if not (del_str):
+               if not (delta_str):
                   if (tens.indices[0].indType[0][0] == 'core' and (tens.indices[1].indType[0][0] == 'core')):
                       delstr = 'ncore'
                   elif (tens.indices[0].indType[0][0] == 'active' and (tens.indices[1].indType[0][0] == 'active')):
@@ -703,7 +703,7 @@ def generateEinsum(terms, M_str = None, M_ind_str = None, command = None, transR
                   else:
                       delstr = 'nextern'
                else:
-                  delstr = str(del_str)
+                  delstr = str(delta_str)
 #
                if not (suffix):
                   delstr += "_so"
@@ -739,13 +739,13 @@ def generateEinsum(terms, M_str = None, M_ind_str = None, command = None, transR
                OpsindStr += suffix
             outputF.append(OpsindStr)
 #
-     if not (M_ind_str):
+     if not (ind_str):
         rhs_ind_str = ''
      else:
         if (transRDM):
-          rhs_ind_str = '->'+trans_ind_str+M_ind_str
+          rhs_ind_str = '->'+trans_ind_str+ind_str
         else:
-          rhs_ind_str = "->"+M_ind_str
+          rhs_ind_str = "->"+ind_str
 #
      sign = ''
      if not (term1st == 0):
@@ -769,11 +769,11 @@ def generateEinsum(terms, M_str = None, M_ind_str = None, command = None, transR
         IOpt = ' optimize = False'
 #
      Icomnd = ''
-     if (command):
-        Icomnd = command
+     if (rhs_str):
+        Icomnd = rhs_str
 #
 #     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
-     print M_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+rhs_ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
+     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+rhs_ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
 #
      term1st += 1
 #
