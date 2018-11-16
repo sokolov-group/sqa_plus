@@ -584,30 +584,19 @@ def Vperturbation(cc, aa, vv):
 #
 #####################################
 #
-def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, trans_ind_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
+def generateEinsum(terms, M_str = None, M_ind_str = None, command = None, transRDM = False, trans_ind_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, del_str = None, suffix = None):
 #
 # summary: Generate Einsum structures for each term. 
 #          terms   : A list of all terms.
-#          ind_str : Indices of the matrix (string).
+#          M_ind_str : Indices of the matrix (string).
 #
 # (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
  print "################ Construct Einsum ################"
 # print ""
 #
-# ind1 = ''
-# ind2 = ''
-# indList = list(ind_str)
-# for i in range(len(ind_str)):
-#     if (i <= float(len(indList)%2)):
-#        ind0 = indList.pop(0)
-#        ind1 += ind0
-#     else:
-#        ind0 = indList.pop(0)
-#        ind2 += ind0
-##
-## if not (len(ind_str)%2 == 0):
-##    transRDM = True
+ if not (M_str):
+   M_str = 'M'
 #
  term1st = 0
  for term in terms:
@@ -739,9 +728,16 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, tr
                   raise Exception("Defined 'trans_ind_str' and run again...")
                else:
                   OpsStr = trans_ind_str
-               rhs_ind_str = trans_ind_str+ind_str
+               if not (M_ind_str):
+                   rhs_ind_str = ''
+               else:
+                   rhs_ind_str = '->'+trans_ind_str+M_ind_str
             else:
                OpsStr = ''
+               if not (M_ind_str):
+                  rhs_ind_str = ''
+               else:
+                  rhs_ind_str = "->"+M_ind_str
             for i in OpsList:
                 OpsStr += str(i)
             outputS.append(OpsStr)
@@ -777,7 +773,7 @@ def generateEinsum(terms, lhs_str, ind_str, command = None, transRDM = False, tr
         Icomnd = command
 #
 #     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
-     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+rhs_ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
+     print M_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+rhs_ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
 #
      term1st += 1
 #
