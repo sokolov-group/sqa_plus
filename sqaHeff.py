@@ -48,7 +48,10 @@ def Heff(order):
  effH = []
  Hamil = []
 # E_fc :
- Hamil.append( term(1.0, ['E_fc'], []))
+ c = index('Const.', [], dummy)
+ Efc = tensor('E_fc',[c], [])
+# Hamil.append( term(1.0, ['E_fc'], []))
+ Hamil.append( term(1.0, [], [Efc]))
 #
  cor = cc.pop(0)
  vir = vv.pop(0) 
