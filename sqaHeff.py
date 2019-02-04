@@ -1,14 +1,16 @@
-#    file:  sqaHeff.py
-#  author:  Koushik Chatterjee
-#    date:  September 28, 2018
+# file:  sqaHeff.py
+# author:  Koushik Chatterjee
+# date:  September 28, 2018
 # summary:  
 #           Heff : Construct effective Hamiltonian(L^N) of order 'N'.
 #
-# (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Copyright (C) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# This program is distributed in the hope that it will
+# be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License
+# for more details.
 #
 #
 #import sqa_extra.secondQuantizationAlgebra as sqa
@@ -23,12 +25,20 @@ from sqaSymmetry import symmetry
 #####################################
 #
 def Heff(order):
- "Construct effective Hamiltonian(L)."
+# print_header()
+# "Construct effective Hamiltonian(L)."
+ print("""\n--------------------------------------------------------------
+ Effective Hamiltonian: Construct effective Hamiltonian ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ --------------------------------------------------------------""")
 #   order = 0 : L(0) = H(0)
 #   order = 1 : L(1) = V + [H(0),T(1) - T'(1)]
 #   order = 2 : L(2) = [H(0),(T(2) - T'(2))] + 1/2[(V + L(1)), (T(1) - T'(1))] 
 #
- print "Construct effective Hamiltonian:=>"
+# print "Construct effective Hamiltonian:=>"
 #
  print ''
 #
@@ -50,8 +60,8 @@ def Heff(order):
 # E_fc :
  c = index('Const.', [], dummy)
  Efc = tensor('E_fc',[c], [])
-# Hamil.append( term(1.0, ['E_fc'], []))
- Hamil.append( term(1.0, [], [Efc]))
+ Hamil.append( term(1.0, ['E_fc'], []))
+# Hamil.append( term(1.0, [], [Efc]))
 #
  cor = cc.pop(0)
  vir = vv.pop(0) 
@@ -586,6 +596,22 @@ def Vperturbation(cc, aa, vv):
  return V
 #
 #####################################
+def print_header():
+
+    print("""\n--------------------------------------------------------------
+    SQA_extra: Construct effective Hamiltonian(L)
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------""")
+#
 #
 def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, delta_str = None, suffix = None):
 #
@@ -593,9 +619,24 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #          terms   : A list of all terms.
 #          ind_str : Indices of the matrix (string).
 #
-# (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Copyright (C) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
- print "################ Construct Einsum ################"
+# This program is distributed in the hope that it will
+# be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License
+# for more detai
+#
+# print "################ Construct Einsum ################"
+
+ print("""\n--------------------------------------------------------------
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ --------------------------------------------------------------""")
+
 # print ""
 #
  if not (lhs_str):
@@ -742,13 +783,25 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
                OpsindStr += suffix
             outputF.append(OpsindStr)
 #
+########################
+#     if not (ind_str):
+#        rhs_ind_str = ''
+#     else:
+#        if (transRDM):
+#          rhs_ind_str = '->'+trans_ind_str+ind_str
+#        else:
+#          rhs_ind_str = "->"+ind_str
      if not (ind_str):
-        rhs_ind_str = ''
+        if (transRDM):
+          rhs_ind_str = '->'+trans_ind_str
+        else:
+          rhs_ind_str = ''
      else:
         if (transRDM):
           rhs_ind_str = '->'+trans_ind_str+ind_str
         else:
           rhs_ind_str = "->"+ind_str
+########################
 #
      sign = ''
      if not (term1st == 0):
@@ -760,7 +813,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
         else:
            cons = ''
      else:
-        cons = ''
+        cons = ' '
         if not (term.numConstant == 1.0):
            if (term.numConstant == -1.0):
                cons = '-'
@@ -775,8 +828,21 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
      if (rhs_str):
         Icomnd = rhs_str
 #
-#     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
-     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+rhs_ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
+##     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
+#     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+rhs_ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
+#
+####
+     lhs_ind_str = str(outputS).translate(None, "'")[1:-1]
+     tensList = str(outputF).translate(None, "'")[1:-1]
+     if (len(term.tensors)==0):
+        if (transRDM):
+          print lhs_str+" "+sign+"="+cons+term.constants[0]+" * "+'np.identity('+trans_ind_str+')'
+        else:
+          lhs_ind_str = term.constants[0][0]
+          print lhs_str+" "+sign+"="+cons+term.constants[0]
+     else:
+        print lhs_str+" "+sign+"="+cons+" np.einsum('"+lhs_ind_str+rhs_ind_str+"', "+tensList+","+IOpt+")"+Icomnd+icopy
+####
 #
      term1st += 1
 #

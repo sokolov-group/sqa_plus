@@ -1,6 +1,6 @@
-#    file:  sqaAddon.py
-#  author:  Koushik Chatterjee
-#    date:  August 31, 2018
+# file:  sqaAddon.py
+# author:  Koushik Chatterjee
+# date:  August 31, 2018
 #
 # summary:
 #           matrixBlock: General routine used to construct matrix block.
@@ -9,11 +9,13 @@
 #           filterCore: Calculate expectation value wrt core orbitals.
 #           normalOrderCore: Normal order with respect to core orbitals.
 #
-# (c) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Copyright (C) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# This program is distributed in the hope that it will
+# be useful, but WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE. See the GNU General Public License
+# for more details.
 #
 #
 
@@ -34,6 +36,7 @@ def matrixBlock(nterms, transRDM = False):
 #
  print ""
  print "################ Addon ################"
+ print_header()
  print ""
  fTerms = []
 # Dummy indices label upate
@@ -440,6 +443,22 @@ def sortOpsCore(unsortedOps, returnPermutation = False):
     return (sign,sortedOps,perm)
   return (sign,sortedOps)
 #####################################
+def print_header():
+
+    print("""\n--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------""")
+#
 #
 def contractDeltaFuncs_nondummy(terms):
 #
