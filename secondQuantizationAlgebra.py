@@ -99,6 +99,3 @@ from sqaAddon import matrixBlock,\
 from sqaHeff import Heff,        \
   Tamplitude, Vperturbation_type,\
   Vperturbation, generateEinsum
-
-from sqalatex import latex,      \
-  print_tensor      

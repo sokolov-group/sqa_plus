@@ -664,9 +664,10 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, tens_ext = None, trans
          TensStr = ''
          tens = term.tensors[i]
          tensor_extern_name = None
+         tens_name.append(tens.name)
          if not (isinstance(tens, creOp) or isinstance(tens,desOp) or isinstance(tens, kroneckerDelta)):
 #
-            tens_name.append(tens.name)
+#            tens_name.append(tens.name)
 #
             if ((tens.name == 'v') or (tens.name == 'V')):
                if not (v_str):
@@ -687,12 +688,22 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, tens_ext = None, trans
                else:
                   indStr = t_str
 #
+            elif ((tens.name == 'E') or (tens.name == 'e')):
+                  indStr = tens.name
+#
             else:
                tensor_extern_name = tens.name
                if (tens_ext == None):
-                  raise Exception("Defined external tensor variable name :'tens_ext' and run again...")
+                  indStr = tens.name
                else:
-                  indStr = tens_ext
+                  ii = 0
+                  for i in range(len(tens_name)):
+                     if (tens_name[i] == tens_ext):
+                        ii += 1
+                  if (ii > 0):
+                     indStr = tens_ext+str(ii)
+                  else: 
+                     indStr = tens_ext
 #
             for tens_ind in range(len(tens.indices)): 
                TensStr += str(tens.indices[tens_ind].name)
@@ -741,7 +752,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, tens_ext = None, trans
             outputS.append(TensStr)
 #
          elif (isinstance(tens, kroneckerDelta)):
-               tens_name.append(tens.name)
+#               tens_name.append(tens.name)
 #
                for tens_ind in range(len(tens.indices)):
                    TensStr += str(tens.indices[tens_ind].name)
