@@ -613,7 +613,7 @@ def print_header():
 --------------------------------------------------------------""")
 #
 #
-def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, delta_str = None, suffix = None):
+def generateEinsum(terms, lhs_str = None, ind_str = None, tens_ext = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, delta_str = None, suffix = None):
 #
 # summary: Generate Einsum structures for each term. 
 #          terms   : A list of all terms.
@@ -663,6 +663,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
      for i in range(len(term.tensors)):
          TensStr = ''
          tens = term.tensors[i]
+         tensor_extern_name = None
          if not (isinstance(tens, creOp) or isinstance(tens,desOp) or isinstance(tens, kroneckerDelta)):
 #
             tens_name.append(tens.name)
@@ -685,6 +686,13 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
                   indStr = str(tens.name)+'_'
                else:
                   indStr = t_str
+#
+            else:
+               tensor_extern_name = tens.name
+               if (tens_ext == None):
+                  raise Exception("Defined external tensor variable name :'tens_ext' and run again...")
+               else:
+                  indStr = tens_ext
 #
             for tens_ind in range(len(tens.indices)): 
                TensStr += str(tens.indices[tens_ind].name)
@@ -716,12 +724,13 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #                     indStr = g_str
 #
                else:
-                  if not (tens.indices[tens_ind].indType[0][0] == 'virtual'):
-                     indStr += str(tens.indices[tens_ind].indType[0][0][0])
-                  else:
-                     indStr += 'e'
+                  if not (tens.name == tensor_extern_name):
+                     if not (tens.indices[tens_ind].indType[0][0] == 'virtual'):
+                        indStr += str(tens.indices[tens_ind].indType[0][0][0])
+                     else:
+                        indStr += 'e'
 #
-            if not ((tens.name == 't1') or (tens.name == 't2')) :
+            if not ((tens.name == 't1') or (tens.name == 't2') or (tens.name == tensor_extern_name)) :
                if not (suffix):
                   indStr += '_so'
                else:
