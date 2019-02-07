@@ -696,14 +696,15 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, tens_ext = None, trans
                if (tens_ext == None):
                   indStr = tens.name
                else:
-                  ii = 0
-                  for i in range(len(tens_name)):
-                     if (tens_name[i] == tens_ext):
-                        ii += 1
-                  if (ii > 0):
-                     indStr = tens_ext+str(ii)
-                  else: 
-                     indStr = tens_ext
+                  indStr = tens_ext
+#                  ii = 0
+#                  for i in range(len(tens_name)):
+#                     if (tens_name[i] == tens_ext):
+#                        ii += 1
+#                  if (ii > 0):
+#                     indStr = tens_ext+str(ii)
+#                  else: 
+#                     indStr = tens_ext
 #
             for tens_ind in range(len(tens.indices)): 
                TensStr += str(tens.indices[tens_ind].name)
