@@ -1144,6 +1144,8 @@ def tensor_name_indices(tensr):
 #
      elif (((tensr.name == 'E') or (tensr.name == 'e')) and (len(tensr.indices) == 1)):
        tensr_indtype_str = tensr.indices[0].indType[0][0]
+       if (tensr.indices[ind].indType[0][0] == 'virtual'):
+          tensr_indtype_str = 'extern'     # Change name 'virtual' to 'extern'
      else:
        if (tensr.name == 'gamma'):
           tensr_indtype_str = 'ca'
