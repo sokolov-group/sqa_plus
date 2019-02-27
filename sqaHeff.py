@@ -986,8 +986,9 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
         else:
            key_tensr = tensorlist[i][0]
            value_tensr = tensorlist[i]
-        name_default.update({key_tensr : value_tensr})
-#        name_default.update({tensorlist[i][0] : tensorlist[i]})
+        name_default.setdefault(key_tensr, []).append(value_tensr)
+#        name_default.update({key_tensr : value_tensr})
+##        name_default.update({tensorlist[i][0] : tensorlist[i]})
 #
         if ((tensorlist[i][0] not in internal_tensor) and (tensorlist[i][0] not in external_tensor)):
            external_tensor.append(tensorlist[i][0])
@@ -1003,13 +1004,14 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #
          for key1, value1 in name_default.items():
             if (key0 == key1):
-               list_tuple = list(value1)
-               list_tuple[0] = value0
-               external_tensor.append(value0)
-               value1 = tuple(list_tuple)
-               name_default[key1] = value1
-              # del name_default[key1]
-              # name_default.update({value0 : value1})
+               for i in range(len(value1)):
+                   list_tuple = list(value1[i])
+                   list_tuple[0] = value0
+                   external_tensor.append(value0)
+                   value1[i] = tuple(list_tuple)
+                  # name_default[key1] = value1
+                  ## del name_default[key1]
+                  ## name_default.update({value0 : value1})
 #
      LHS_ind = ''
      RHS_tensr = ''
@@ -1017,18 +1019,19 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
      rhs_ein_ten = []
 
      for key, value in name_default.items():
-         lhs_ein_ind.append(value[1])
+         for i in range(len(value)):
+             lhs_ein_ind.append(value[i][1])
 #
-         if (value[0] in external_tensor):
-            ein_tens_name = value[0]
-         else:
-            if ((value[0] == 't1') or (value[0] == 't2')):
-               ein_tens_name = value[0]+'_'+value[2]
-            else:
-               ein_tens_name = value[0]+'_'+value[2]+'_'+suffix
+             if (value[i][0] in external_tensor):
+                ein_tens_name = value[i][0]
+             else:
+                if ((value[i][0] == 't1') or (value[i][0] == 't2')):
+                   ein_tens_name = value[i][0]+'_'+value[i][2]
+                else:
+                   ein_tens_name = value[i][0]+'_'+value[i][2]+'_'+suffix
 #
-#         rhs_ein_ten.append(value[0]+'_'+value[2])
-         rhs_ein_ten.append(ein_tens_name)
+#             rhs_ein_ten.append(value[0]+'_'+value[2])
+             rhs_ein_ten.append(ein_tens_name)
 
 
 #     for i in range(len(tensorlist)):
