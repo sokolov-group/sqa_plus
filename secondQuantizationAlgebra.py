@@ -94,7 +94,8 @@ from sqaAddon import matrixBlock,\
   dummyLabel, filterVirtual,     \
   filterCore, normalOrderCore,   \
   sortOpsCore,                   \
-  contractDeltaFuncs_nondummy
+  contractDeltaFuncs_nondummy,   \
+  tensorIndex_order
 
 from sqaHeff import Heff,        \
   Tamplitude, Vperturbation_type,\

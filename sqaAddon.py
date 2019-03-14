@@ -86,6 +86,9 @@ def matrixBlock(nterms, transRDM = False):
 # Dummy indices label upate
  dummyLabel(fTerms)
 #
+# Reorder tensor indices: (core < active < virtual) order
+ tensorIndex_order(fTerms)
+#
 # Print the final results
  print ""
  print "####### Final results:#######"
@@ -481,4 +484,52 @@ def contractDeltaFuncs_nondummy(terms):
 #
  return terms
 #
+#####################################
+def tensorIndex_order(terms):
+ print ""
+ print "Reorder tensor indices according to (Core < Active < Virtual): =>"
+ for term in terms:
+     for i in range(len(term.tensors)):
+         t = term.tensors[i]
+         t0 = t.copy()
+         if ((len(t.indices)==2) or (len(t.indices)==4)):
+            ind_list = []
+            ind_rank = []
+            print  term
+            for j in range(len(t.indices)):
+                ind_list.append(t.indices[j].name)
+                if (t.indices[j].indType[0][0][0] == 'c'):
+                   rank = 0
+                elif(t.indices[j].indType[0][0][0] == 'a'):
+                   rank = 1
+                else:
+                   rank = 2
+                ind_rank.append(rank)
+            if (len(t.indices)==2):
+               if (ind_rank[0] > ind_rank[1]):
+                  index_type = t.indices[0].indType
+                  t.indices[0].name = ind_list[1]
+                  t.indices[0].indType = t.indices[1].indType
+                  t.indices[1].name = ind_list[0]
+                  t.indices[1].indType = index_type
+                  print t0,'    --->', t
+            else:
+               if (ind_rank[0] > ind_rank[1]):
+                  index_type = t.indices[0].indType
+                  t.indices[0].name = ind_list[1]
+                  t.indices[0].indType = t.indices[1].indType
+                  t.indices[1].name = ind_list[0]
+                  t.indices[1].indType = index_type
+                  print t0,'    --->', t
+               if (ind_rank[2] > ind_rank[3]):
+                  index_type = t.indices[2].indType
+                  t.indices[2].name = ind_list[3]
+                  t.indices[2].indType = t.indices[3].indType
+                  t.indices[3].name = ind_list[2]
+                  t.indices[3].indType = index_type
+                  term.scale(-1.0)
+                  print t0,'--->', t
+
+ return terms
+
 #####################################
