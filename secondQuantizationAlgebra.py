@@ -99,4 +99,5 @@ from sqaAddon import matrixBlock,\
 
 from sqaHeff import Heff,        \
   Tamplitude, Vperturbation_type,\
-  Vperturbation, generateEinsum  \
+  Vperturbation, generateEinsum,  \
+  generateEinsum_old  \
