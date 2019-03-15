@@ -51,11 +51,11 @@ def Heff(order):
  tg_g = tg_c + tg_a + tg_v
  dummy = True
 # Core dummy indices
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(50)]
+ cc = [index('c%i' %p, [tg_c], dummy) for p in range(100)]
 # Active dummy indices
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(50)]
+ aa = [index('a%i' %p, [tg_a], dummy) for p in range(100)]
 # Virtual dummy indices
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(50)]
+ vv = [index('v%i' %p, [tg_v], dummy) for p in range(100)]
 #
  effH = []
  Hamil = []
@@ -185,7 +185,18 @@ def Heff(order):
        for t in VL1:
           t.scale(0.5)
 #
-       com3 = commutator(VL1, T1)
+# Use new T1
+       cc1 = []
+       aa1 = []
+       vv1 = []
+       for i in range(4):
+           cc1.append(cc.pop(0))
+           aa1.append(aa.pop(0))
+           vv1.append(vv.pop(0))
+       T1_new = []
+       T1_new.extend(Tamplitude(T1_new, 1, cc1, aa1, vv1))
+#
+       com3 = commutator(VL1, T1_new)
 #       for term in com3:
 #          term.numConstant = 0.5 * term.numConstant
        L2.extend(com3)
