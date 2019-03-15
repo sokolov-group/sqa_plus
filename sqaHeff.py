@@ -278,7 +278,9 @@ def Tamplitude(T, order, cc1, aa1, vv1, ttype = None):
     tname = 't2'
 #
  t1_sym = [ symmetry((1,0),1)]
- t2_sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+ t2_sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]  # General antisymmetric relation
+ t2_sym1 = [symmetry((0,1,3,2), -1)] # Antisym: only upper indices when lower indices are different types
+
 #
  T = []
  #Tex = []
@@ -296,8 +298,10 @@ def Tamplitude(T, order, cc1, aa1, vv1, ttype = None):
          ind2 = vv.pop(0)
          ind3 = aa.pop(0)
          ind4 = aa.pop(0)
-         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
-         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
+         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+         t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym1) # t2_sym1: only upper indices
+#         t1_tens =  tensor(tname, [ind2,ind1],t1_sym
+#         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
          T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
          T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
          T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
@@ -312,8 +316,10 @@ def Tamplitude(T, order, cc1, aa1, vv1, ttype = None):
          ind2 = aa.pop(0)
          ind3 = aa.pop(0)
          ind4 = aa.pop(0)
-         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
-         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
+         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+         t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym)
+#         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
+#         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
          T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
          T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
          T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
@@ -329,8 +335,10 @@ def Tamplitude(T, order, cc1, aa1, vv1, ttype = None):
          ind2 = vv.pop(0)
          ind3 = aa.pop(0)
          ind4 = aa.pop(0)
-         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
-         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
+         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+         t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym1) # t2_sym1: only upper indices
+#         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
+#         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
          T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
          T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
          T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
@@ -348,21 +356,31 @@ def Tamplitude(T, order, cc1, aa1, vv1, ttype = None):
          ind5 = vv.pop(0)
          ind6 = vv.pop(0)
 # For other type of T2 excitations and de-excitations
-         t2_tens1 =  tensor(tname, [ind5,ind6,ind1,ind2],t2_sym)
+         t2_tens1 =  tensor(tname, [ind1,ind2,ind5,ind6],t2_sym)
+#         t2_tens1 =  tensor(tname, [ind5,ind6,ind1,ind2],t2_sym)
          T2_ex = term(0.25, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
          T_othr.append(T2_ex)
-         t2_tens2 = tensor(tname, [ind5,ind3,ind1,ind2],t2_sym)
+#
+         t2_tens2 = tensor(tname, [ind1,ind2,ind5,ind3],t2_sym1) # t2_sym1: only upper indices
+#         t2_tens2 = tensor(tname, [ind5,ind3,ind1,ind2],t2_sym)
          T2_ex = term(0.5, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
          T_othr.append(T2_ex)
-         t2_tens3 = tensor(tname, [ind5,ind6,ind1,ind3],t2_sym)
+#
+         t2_tens3 = tensor(tname, [ind1,ind3,ind5,ind6],t2_sym)
+#         t2_tens3 = tensor(tname, [ind5,ind6,ind1,ind3],t2_sym)
          T2_ex = term(0.5, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
          T_othr.append(T2_ex)
-         t2_tens4 = tensor(tname, [ind3,ind4,ind1,ind2],t2_sym)
+#
+         t2_tens4 = tensor(tname, [ind1,ind2,ind3,ind4],t2_sym)
+#         t2_tens4 = tensor(tname, [ind3,ind4,ind1,ind2],t2_sym)
          T2_ex = term(0.25, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
          T_othr.append(T2_ex)
-         t2_tens5 = tensor(tname, [ind5,ind6,ind4,ind3],t2_sym)
+#
+         t2_tens5 = tensor(tname, [ind4,ind3,ind5,ind6],t2_sym)
+#         t2_tens5 = tensor(tname, [ind5,ind6,ind4,ind3],t2_sym)
          T2_ex = term(0.25, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
          T_othr.append(T2_ex)
+#
 #
          T2_dex = term(-0.25, [], [t2_tens1,  creOp(ind1), creOp(ind2), desOp(ind6), desOp(ind5)])
          T_othr.append(T2_dex)
