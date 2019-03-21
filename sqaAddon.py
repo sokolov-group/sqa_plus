@@ -36,7 +36,7 @@ def matrixBlock(nterms, transRDM = False):
  "Construct matrix block."
 #
  print ""
- print "################ Addon ################"
+ print ("------------------------- SQA Addon --------------------------")
  print_header()
  print ""
  fTerms = []
@@ -92,7 +92,7 @@ def matrixBlock(nterms, transRDM = False):
 #
 # Print the final results
  print ""
- print "####### Final results:#######"
+ print ("----------------------- Final results ------------------------")
  for t in fTerms:
     index_types = ()
     for t_tensor in t.tensors:
@@ -536,6 +536,7 @@ def tensorIndex_order(terms):
                      term.scale(-1.0)
                   print t0,'    --->', t
                if (ind_rank[2] > ind_rank[3]):
+                  print  term
                   index_type = t.indices[2].indType
                   t.indices[2].name = ind_list[3]
                   t.indices[2].indType = t.indices[3].indType
