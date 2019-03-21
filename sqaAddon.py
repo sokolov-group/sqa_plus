@@ -24,6 +24,7 @@ from sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp, creDesTensor
 from sqaTerm import term, multiplyTerms, termChop, sortOps, combineTerms
 from sqaOptions import options
 from sqaMisc import makeTuples, allDifferent, makePermutations
+from sqaSymmetry import symmetry
 
 from sqaNormalOrder import normalOrder
 
@@ -488,14 +489,23 @@ def contractDeltaFuncs_nondummy(terms):
 def tensorIndex_order(terms):
  print ""
  print "Reorder tensor indices according to (Core < Active < Virtual): =>"
+ braSym = True
+ ketSym = True
  for term in terms:
      for i in range(len(term.tensors)):
          t = term.tensors[i]
          t0 = t.copy()
          if ((len(t.indices)==2) or (len(t.indices)==4)):
+#
+            if (len(t.symmetries) == 2):
+               if (t.symmetries[0].factor != -1):
+                  braSym = False
+               if (t.symmetries[1].factor != -1):
+                  ketSym = False
+#
             ind_list = []
             ind_rank = []
-            print  term
+          #  print  term
             for j in range(len(t.indices)):
                 ind_list.append(t.indices[j].name)
                 if (t.indices[j].indType[0][0][0] == 'c'):
@@ -503,10 +513,11 @@ def tensorIndex_order(terms):
                 elif(t.indices[j].indType[0][0][0] == 'a'):
                    rank = 1
                 else:
-                   rank = 2
+                   rank = 3
                 ind_rank.append(rank)
             if (len(t.indices)==2):
                if (ind_rank[0] > ind_rank[1]):
+                  print  term
                   index_type = t.indices[0].indType
                   t.indices[0].name = ind_list[1]
                   t.indices[0].indType = t.indices[1].indType
@@ -515,11 +526,14 @@ def tensorIndex_order(terms):
                   print t0,'    --->', t
             else:
                if (ind_rank[0] > ind_rank[1]):
+                  print  term
                   index_type = t.indices[0].indType
                   t.indices[0].name = ind_list[1]
                   t.indices[0].indType = t.indices[1].indType
                   t.indices[1].name = ind_list[0]
                   t.indices[1].indType = index_type
+                  if (braSym):
+                     term.scale(-1.0)
                   print t0,'    --->', t
                if (ind_rank[2] > ind_rank[3]):
                   index_type = t.indices[2].indType
@@ -527,8 +541,20 @@ def tensorIndex_order(terms):
                   t.indices[2].indType = t.indices[3].indType
                   t.indices[3].name = ind_list[2]
                   t.indices[3].indType = index_type
-                  term.scale(-1.0)
-                  print t0,'--->', t
+                  if (ketSym):
+                     term.scale(-1.0)
+                  print t0,'    --->', t
+               if ((ind_rank[0]+ind_rank[1]) > (ind_rank[2]+ind_rank[3])):
+                  print  term
+                  t.indices[0].name = ind_list[2]
+                  t.indices[0].indType = t.indices[2].indType
+                  t.indices[1].name = ind_list[3]
+                  t.indices[1].indType = t.indices[3].indType
+                  t.indices[2].name = ind_list[0]
+                  t.indices[2].indType = t.indices[0].indType
+                  t.indices[3].name = ind_list[1]
+                  t.indices[3].indType = t.indices[1].indType
+                  print t0,'Bra <---> Ket', t
 
  return terms
 
