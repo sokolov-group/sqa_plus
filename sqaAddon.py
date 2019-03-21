@@ -547,14 +547,18 @@ def tensorIndex_order(terms):
                   print t0,'    --->', t
                if ((ind_rank[0]+ind_rank[1]) > (ind_rank[2]+ind_rank[3])):
                   print  term
-                  t.indices[0].name = ind_list[2]
-                  t.indices[0].indType = t.indices[2].indType
-                  t.indices[1].name = ind_list[3]
-                  t.indices[1].indType = t.indices[3].indType
-                  t.indices[2].name = ind_list[0]
-                  t.indices[2].indType = t.indices[0].indType
-                  t.indices[3].name = ind_list[1]
-                  t.indices[3].indType = t.indices[1].indType
+                  tem0 = t.indices[0].copy()
+                  tem1 = t.indices[1].copy()
+                  tem2 = t.indices[2].copy()
+                  tem3 = t.indices[3].copy()
+                  t.indices[0].name = tem2.name
+                  t.indices[0].indType = tem2.indType
+                  t.indices[1].name = tem3.name
+                  t.indices[1].indType = tem3.indType
+                  t.indices[2].name = tem0.name
+                  t.indices[2].indType = tem0.indType
+                  t.indices[3].name = tem1.name
+                  t.indices[3].indType = tem1.indType
                   print t0,'Bra <---> Ket', t
 
  return terms
