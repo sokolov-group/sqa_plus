@@ -489,63 +489,79 @@ def contractDeltaFuncs_nondummy(terms):
 def tensorIndex_order(terms):
  print ""
  print "Reorder tensor indices according to (Core < Active < Virtual): =>"
- braSym = True
- ketSym = True
+
  for term in terms:
      for i in range(len(term.tensors)):
          t = term.tensors[i]
          t0 = t.copy()
          if ((len(t.indices)==2) or (len(t.indices)==4)):
+            braSym = None
+            ketSym = None
+            bSym = (1, 0, 2, 3)
+            kSym = (0, 1, 3, 2)
+            bfac = None
+            kfac = None
 #
-            if (len(t.symmetries) == 2):
-               if (t.symmetries[0].factor != -1):
-                  braSym = False
-               if (t.symmetries[1].factor != -1):
-                  ketSym = False
-#
-            ind_list = []
             ind_rank = []
-          #  print  term
+#
             for j in range(len(t.indices)):
-                ind_list.append(t.indices[j].name)
                 if (t.indices[j].indType[0][0][0] == 'c'):
-                   rank = 0
+                   rank = 3
                 elif(t.indices[j].indType[0][0][0] == 'a'):
                    rank = 1
                 else:
-                   rank = 3
+                   rank = 0
                 ind_rank.append(rank)
-            if (len(t.indices)==2):
-               if (ind_rank[0] > ind_rank[1]):
+
+           # (tup,fac) = t.symPermutes()
+            if (len(t.indices) == 2):
+               if (ind_rank[0] < ind_rank[1]):
+                  print '---------'
                   print  term
-                  index_type = t.indices[0].indType
-                  t.indices[0].name = ind_list[1]
-                  t.indices[0].indType = t.indices[1].indType
-                  t.indices[1].name = ind_list[0]
-                  t.indices[1].indType = index_type
-                  print t0,'    --->', t
+                  factor = +1
+                  tem = t.indices[0]
+                  t.indices[0] = t.indices[1]
+                  t.indices[1] = tem
+                  term.scale(factor)
+                  print t0,'    --->    %s (factor = %s)' % (t, factor)
             else:
-               if (ind_rank[0] > ind_rank[1]):
-                  print  term
-                  index_type = t.indices[0].indType
-                  t.indices[0].name = ind_list[1]
-                  t.indices[0].indType = t.indices[1].indType
-                  t.indices[1].name = ind_list[0]
-                  t.indices[1].indType = index_type
+               braketsym = {}
+               for sym in t.symmetries:
+                  tup1 = sym.pattern
+                  fac = sym.factor
+                  braketsym.update({tup1 : fac})
+               for key,val in braketsym.items():
+                   if (key == bSym):
+                      braSym = True
+                      bfac   = braketsym[key]
+                   if (key == kSym):
+                      ketSym = True
+                      kfac   = braketsym[key]
+
+               if (ind_rank[0] < ind_rank[1]):
                   if (braSym):
-                     term.scale(-1.0)
-                  print t0,'    --->', t
-               if (ind_rank[2] > ind_rank[3]):
-                  print  term
-                  index_type = t.indices[2].indType
-                  t.indices[2].name = ind_list[3]
-                  t.indices[2].indType = t.indices[3].indType
-                  t.indices[3].name = ind_list[2]
-                  t.indices[3].indType = index_type
+                     print '---------'
+                     print  term
+                     term.scale(bfac)
+                     tem = t.indices[0]
+                     t.indices[0] = t.indices[1]
+                     t.indices[1] = tem
+                     term.scale(bfac)
+                     print t0,'    --->    %s (factor = %s)' % (t, bfac)
+
+               if (ind_rank[2] < ind_rank[3]):
                   if (ketSym):
-                     term.scale(-1.0)
-                  print t0,'    --->', t
-               if ((ind_rank[0]+ind_rank[1]) > (ind_rank[2]+ind_rank[3])):
+                     print '---------'
+                     print  term
+                     term.scale(kfac)
+                     tem = t.indices[2]
+                     t.indices[2] = t.indices[3]
+                     t.indices[3] = tem
+                     term.scale(kfac)
+                     print t0,'    --->    %s (factor = %s)' % (t, kfac)
+
+               if ((ind_rank[0]+ind_rank[1]) < (ind_rank[2]+ind_rank[3])):
+                  print '---------'
                   print  term
                   tem0 = t.indices[0].copy()
                   tem1 = t.indices[1].copy()
