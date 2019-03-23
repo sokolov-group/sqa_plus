@@ -542,7 +542,6 @@ def tensorIndex_order(terms):
                   if (braSym):
                      print '---------'
                      print  term
-                     term.scale(bfac)
                      tem = t.indices[0]
                      t.indices[0] = t.indices[1]
                      t.indices[1] = tem
@@ -553,7 +552,6 @@ def tensorIndex_order(terms):
                   if (ketSym):
                      print '---------'
                      print  term
-                     term.scale(kfac)
                      tem = t.indices[2]
                      t.indices[2] = t.indices[3]
                      t.indices[3] = tem
