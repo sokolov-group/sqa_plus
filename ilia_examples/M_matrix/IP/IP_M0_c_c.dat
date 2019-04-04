@@ -1,0 +1,62 @@
+Construct effective Hamiltonian:=>
+
+ (   1.00000) E_fc(Const.) 
+ (  -1.00000) e(c0) des(c0) cre(c0) 
+ (   1.00000) e(v0) cre(v0) des(v0) 
+ (   1.00000) h(a1,a0) cre(a0) des(a1) 
+ (   1.00000) v(a1,c1,a0,c1) cre(a0) des(a1) 
+ (   0.25000) v(a2,a3,a0,a1) cre(a0) cre(a1) des(a3) des(a2) 
+First Commutator
+
+Combining like terms:
+Converting 15 terms to canonical form...
+     0   (   1.00000) E_fc(Const.) cre(J) 
+     1   (  -1.00000) cre(J) E_fc(Const.) 
+     2   (   1.00000) e(c0) cre(J) cre(c0) des(c0) 
+     3   (  -1.00000) e(c0) cre(J) 
+     4   (   1.00000) e(J) cre(J) 
+     5   (  -1.00000) e(c0) cre(J) cre(c0) des(c0) 
+     6   (   1.00000) e(c0) cre(J) 
+     7   (   1.00000) e(v0) cre(J) cre(v0) des(v0) 
+     8   (  -1.00000) cre(J) e(v0) cre(v0) des(v0) 
+     9   (   1.00000) h(a1,a0) cre(J) cre(a0) des(a1) 
+    10   (  -1.00000) cre(J) h(a1,a0) cre(a0) des(a1) 
+    11   (   1.00000) v(a1,c1,a0,c1) cre(J) cre(a0) des(a1) 
+    12   (  -1.00000) cre(J) v(a1,c1,a0,c1) cre(a0) des(a1) 
+    13   (  -0.25000) v(a2,a3,a0,a1) cre(J) cre(a0) cre(a1) des(a2) des(a3) 
+    14   (  -0.25000) cre(J) v(a2,a3,a0,a1) cre(a0) cre(a1) des(a3) des(a2) 
+Finished combining terms in 0.010 seconds
+
+ (   1.00000) e(J) cre(J) 
+Second Commutator
+ (   1.00000) e(J) cre(J) des(I) 
+
+################ Addon ################
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   1.00000) e(J) cre(J) des(I) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) e(J) cre(J) des(I) 
+Terms after normal ordering:
+ (  -1.00000) e(J) des(I) cre(J) 
+ (   1.00000) e(J) kdelta(J,I) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (   0.00000) e(J) des(I) cre(J) 
+ (   1.00000) e(J) kdelta(J,I) 
+
+Combining like terms:
+Converting 1 terms to canonical form...
+     0   (   1.00000) e(J) kdelta(J,I) 
+Finished combining terms in 0.000 seconds
+
+Dummy indices label update:=>
+ (   1.00000) e(J) kdelta(I,J) 
+
+####### Final results:#######
+ (   1.00000) e(J) kdelta(I,J) 
+
+################ Construct Einsum ################
+M[s_c:f_c, s_c:f_c] = np.einsum('J, IJ->IJ', e_core_so, np.identity(ncore_so), optimize = True)
