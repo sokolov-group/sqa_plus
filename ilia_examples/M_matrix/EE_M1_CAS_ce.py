@@ -12,10 +12,10 @@ tg_g = tg_c + tg_a + tg_v
 dummy = True
 
 # External indices
-i = sqa.index('I', [tg_c])
+j = sqa.index('J', [tg_c])
 a = sqa.index('A', [tg_v])
 
-r_op = [sqa.creOp(a), sqa.desOp(i)]
+r_op = [sqa.creOp(a), sqa.desOp(j)]
 
 effH = []
 effH = sqa.Heff(1)
