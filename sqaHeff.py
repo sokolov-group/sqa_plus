@@ -14,7 +14,8 @@
 #
 #
 #import sqa_extra.secondQuantizationAlgebra as sqa
-import sys
+import sys, os, time
+import subprocess
 import collections
 
 from sqaIndex import index
@@ -674,7 +675,7 @@ def generateEinsum_old(terms, lhs_str = None, ind_str = None, tens_ext = None, t
  date:  August 31, 2018
 
  Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
- --------------------------------------------------------------""")
+--------------------------------------------------------------""")
 
 # print ""
 #
@@ -924,7 +925,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #
 # print "################ Construct Einsum ################"
 
- print("""\n--------------------------------------------------------------
+ print("""\n----------------------- SQA EINSUM ---------------------------
  VERSION : 1
  Einsum generator: Transform into einsum ...
  author:  Koushik Chatterjee
@@ -934,7 +935,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 
 
  For Help :: help = True
- --------------------------------------------------------------""")
+--------------------------------------------------------------""")
 
 # print ""
  if help:
@@ -1211,3 +1212,223 @@ def custom_tensor(tname, *tup):
  tname_tensor= tensor(tname, ind, symm)
 
  return tname_tensor
+
+
+def sqalatex(terms, lhs = None, output = None, print_default = False):
+
+ print("""\n----------------------- SQA LATEX -----------------------------
+ VERSION : 1
+ SqaLatex: Transform into Latex format and generate pdf ...
+ author:  Koushik Chatterjee
+ date:  April 28, 2019
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+--------------------------------------------------------------""")
+
+ modifier_tensor = {
+     'bold': lambda s: r'\boldsymbol{'+s+r'}',
+     'hat': lambda s: r'\hat{'+s+r'}',
+     'bra': lambda s: r'\langle\Psi{'+s+r'}\lvert',
+     'ket': lambda s: r'\rvert\Psi{'+s+r'}\rangle',
+     'braket': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi\rangle',
+     'braket_I': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi_{I}\rangle',
+     'I_braket': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi\rangle',
+#     'rdm': lambda s: r'\boldsymbol\Gamma',
+#     'trdm': lambda s: r't\boldsymbol\Gamma'
+     'gamma': lambda s: r't\boldsymbol{\Gamma}',
+     'kdelta': lambda s: r'\boldsymbol{\delta}',
+     'cre': lambda s: r'\boldsymbol{\hat{'+s+r'}^{\dagger}}',
+     'des': lambda s: r'\boldsymbol{\hat{'+s+r'}}',
+ }
+ t_modifier = lambda s: r'\boldsymbol{'+s+r'}'
+
+ if not lhs:
+  lhs = 'M={}'
+ else:
+  lhs = t_modifier(lhs)+r'={}'
+
+ tex = []
+
+ for term in terms:
+
+     constant = ''
+     if (term.numConstant == 1.0):
+        constant = " + "
+     elif (term.numConstant == -1.0):
+        constant = " - "
+     else:
+        constant = " %s " % str(term.numConstant)
+        if (term.numConstant > 0):
+            
+#          constant += " %s " % str(Fraction(Decimal('term.numConstant')))
+          constant = " +%s " % str(term.numConstant)
+#
+     cre_count = 0
+     des_count = 0
+     credes = ''
+     name = ''
+     for i in range(len(term.tensors)):
+
+         tens = term.tensors[i]
+         s = tens.name
+     #    credes = None
+     #    name = ''
+
+         supers = ''
+         subs   = ''
+         index = len(tens.indices)
+         if (index == 1):
+            subs   = tens.indices[0].name
+         elif(index == 2):
+            supers = tens.indices[0].name
+            subs   = tens.indices[1].name
+         elif (index == 4):
+            supers = tens.indices[0].name+tens.indices[1].name
+            subs   = tens.indices[3].name+tens.indices[2].name
+
+         else:
+             raise Exception("Not implemented ...")
+
+#         tens = term.tensors[i]
+#         s = tens.name
+#         credes = None
+
+         if not (isinstance(tens, creOp) or isinstance(tens, desOp)):
+            if s in modifier_tensor:
+               name += modifier_tensor[s](s)
+            else:
+#               name += lambda s: r'\boldsymbol{'+s+r'}'
+               name += t_modifier(s)
+
+            name += "^{%s}" % " ".join(supers)
+            name += "_{%s}" % " ".join(subs)
+
+
+         else:
+            if (isinstance(tens, creOp)):
+               cre_count += 1
+            if (isinstance(tens, desOp)):
+               des_count += 1
+         #   credes = ''
+            credes += modifier_tensor[s](subs)
+  #          name += modifier_tensor[s](subs)
+#            print credes, index
+#            exit()
+     if (len(credes) > 0):
+        if(cre_count > des_count):
+          braket = 'braket_I'
+        elif (des_count > cre_count):
+          braket = 'I_braket'
+        else:
+          braket = 'braket'
+        credes = modifier_tensor[braket](credes)
+        name += credes
+
+     tex.append(constant+r'\:'+name)
+   #  print lhs+'='+ constant+name+"\\break"
+
+
+ print r'\documentclass{article}'
+ print r'\usepackage{amsmath}'
+ print r'\begin{document}'
+ print ''
+ print ''
+# print r"\begin{equation}"
+ print r"\begin{align}"
+ print lhs
+ for i in tex:
+#   print " & "+i+' \\\\'
+   print " & "+i+r'\\'
+ print r"\end{align}"
+# print r"\end{equation}"
+ print ''
+ print ''
+ print r'\end{document}'
+
+
+ ### write to a file ###
+ if not output:
+  # texfile = r'latex_output.tex'
+   texfile = r'latex_output'
+ else:
+   texfile = output
+ output = open(texfile+r'.tex', "w")
+ output.write(r'\documentclass{article}')
+ output.write("\n")
+ output.write(r'\usepackage{amsmath}')
+ output.write("\n")
+ output.write(r'\begin{document}')
+ output.write("\n")
+ output.write('')
+ output.write("\n")
+ output.write('')
+ output.write("\n")
+# output.write(r"\begin{equation*}")
+ output.write(r"\begin{align*}")
+ output.write("\n")
+ output.write(lhs)
+ for i in tex:
+#   output.write(" & "+i+' \\\\')
+   output.write(" & "+i+r'\\')
+   output.write("\n")
+ output.write(r"\end{align*}")
+ output.write("\n")
+# print r"\end{equation*}"
+ output.write('')
+ output.write("\n")
+ output.write('')
+ output.write("\n")
+ output.write(r'\end{document}')
+
+# os.system("pdflatex latex_output.tex")
+ procs = []
+ try:
+     pread, pwrite = os.pipe()
+     cmd = ['pdflatex', texfile+r'.tex']
+#     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+     proc = subprocess.Popen(cmd, stdout=pwrite, stderr=subprocess.STDOUT)
+     procs.append(proc)
+     os.close(pwrite)
+     os.close(pread)
+
+ except OSError as e:
+   #  sys.exit()
+     print 'Latex compilation error ...'
+
+ return
+
+
+def pdf(name = None):
+ #file_ = os.getcwd()+name+r'.pdf'
+ file_ = os.path.join(os.getcwd(), name+r'.pdf')
+ print os.path.isfile(file_), file_
+# if file_:
+#    os.system("okular latex_output.pdf")
+
+ try:
+     pread, pwrite = os.pipe()
+     cmd = ['okular', 'latex_output.pdf']
+     proc = subprocess.Popen(cmd, stdout=pwrite, stderr=subprocess.STDOUT)
+
+ except OSError as e:
+   #  sys.exit()
+     print 'Latex compilation error ...'
+
+ return
+
+
+def proc_cleanup(all_processes):
+ timeout_sec = 5
+ for p in all_processes: # list of your processes
+     p_sec = 0
+     for second in range(timeout_sec):
+         if p.poll() == None:
+             print "LIVE"
+             time.sleep(1)
+             p_sec += 1
+     if p_sec >= timeout_sec:
+         p.kill() # supported from python 2.6
+ print 'cleaned up!'
+ return
+
