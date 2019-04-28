@@ -104,7 +104,7 @@ def matrixBlock(nterms, transRDM = False):
 #
  print ""
 
- sqalatex(fTerms)
+# sqalatex(fTerms)
  return fTerms
 #
 #####################################

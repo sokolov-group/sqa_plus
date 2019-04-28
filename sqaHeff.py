@@ -1214,7 +1214,13 @@ def custom_tensor(tname, *tup):
  return tname_tensor
 
 
-def sqalatex(terms, lhs = None, output = None, print_default = False):
+def sqalatex(terms, lhs = None, output = None, print_default = False, IJstate = False):
+
+ if not output:
+  # texfile = r'latex_output.tex'
+   texfile = r'output_default'
+ else:
+   texfile = output
 
  print("""\n----------------------- SQA LATEX -----------------------------
  VERSION : 1
@@ -1224,7 +1230,11 @@ def sqalatex(terms, lhs = None, output = None, print_default = False):
 
  Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
 
---------------------------------------------------------------""")
+
+ Tex file : %s
+ PDF file : %s
+
+--------------------------------------------------------------""" % (texfile+r'.tex', texfile+r'.pdf'))
 
  modifier_tensor = {
      'bold': lambda s: r'\boldsymbol{'+s+r'}',
@@ -1234,8 +1244,7 @@ def sqalatex(terms, lhs = None, output = None, print_default = False):
      'braket': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi\rangle',
      'braket_I': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi_{I}\rangle',
      'I_braket': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi\rangle',
-#     'rdm': lambda s: r'\boldsymbol\Gamma',
-#     'trdm': lambda s: r't\boldsymbol\Gamma'
+     'I_braket_J': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi_{J}\rangle',
      'gamma': lambda s: r't\boldsymbol{\Gamma}',
      'kdelta': lambda s: r'\boldsymbol{\delta}',
      'cre': lambda s: r'\boldsymbol{\hat{'+s+r'}^{\dagger}}',
@@ -1290,15 +1299,10 @@ def sqalatex(terms, lhs = None, output = None, print_default = False):
          else:
              raise Exception("Not implemented ...")
 
-#         tens = term.tensors[i]
-#         s = tens.name
-#         credes = None
-
          if not (isinstance(tens, creOp) or isinstance(tens, desOp)):
             if s in modifier_tensor:
                name += modifier_tensor[s](s)
             else:
-#               name += lambda s: r'\boldsymbol{'+s+r'}'
                name += t_modifier(s)
 
             name += "^{%s}" % " ".join(supers)
@@ -1310,49 +1314,50 @@ def sqalatex(terms, lhs = None, output = None, print_default = False):
                cre_count += 1
             if (isinstance(tens, desOp)):
                des_count += 1
-         #   credes = ''
             credes += modifier_tensor[s](subs)
-  #          name += modifier_tensor[s](subs)
-#            print credes, index
-#            exit()
      if (len(credes) > 0):
-        if(cre_count > des_count):
-          braket = 'braket_I'
-        elif (des_count > cre_count):
-          braket = 'I_braket'
+        if IJstate:
+           braket = 'I_braket_J'
         else:
-          braket = 'braket'
+            if(cre_count > des_count):
+              braket = 'braket_I'
+            elif (des_count > cre_count):
+              braket = 'I_braket'
+            else:
+              braket = 'braket'
+      #    if IJstate:
+      #       braket = 'I_braket_J'
         credes = modifier_tensor[braket](credes)
         name += credes
 
      tex.append(constant+r'\:'+name)
-   #  print lhs+'='+ constant+name+"\\break"
 
 
- print r'\documentclass{article}'
- print r'\usepackage{amsmath}'
- print r'\begin{document}'
- print ''
- print ''
-# print r"\begin{equation}"
- print r"\begin{align}"
- print lhs
- for i in tex:
-#   print " & "+i+' \\\\'
-   print " & "+i+r'\\'
- print r"\end{align}"
-# print r"\end{equation}"
- print ''
- print ''
- print r'\end{document}'
+ if print_default:
+    print r'\documentclass{article}'
+    print r'\usepackage{amsmath}'
+    print r'\begin{document}'
+    print ''
+    print ''
+#    print r"\begin{equation}"
+    print r"\begin{align}"
+    print lhs
+    for i in tex:
+#      print " & "+i+' \\\\'
+      print " & "+i+r'\\'
+    print r"\end{align}"
+#    print r"\end{equation}"
+    print ''
+    print ''
+    print r'\end{document}'
 
 
  ### write to a file ###
- if not output:
-  # texfile = r'latex_output.tex'
-   texfile = r'latex_output'
- else:
-   texfile = output
+# if not output:
+#  # texfile = r'latex_output.tex'
+#   texfile = r'latex_output'
+# else:
+#   texfile = output
  output = open(texfile+r'.tex', "w")
  output.write(r'\documentclass{article}')
  output.write("\n")
@@ -1396,39 +1401,8 @@ def sqalatex(terms, lhs = None, output = None, print_default = False):
    #  sys.exit()
      print 'Latex compilation error ...'
 
+# pdf()
+# proc_cleanup(procs)
  return
 
-
-def pdf(name = None):
- #file_ = os.getcwd()+name+r'.pdf'
- file_ = os.path.join(os.getcwd(), name+r'.pdf')
- print os.path.isfile(file_), file_
-# if file_:
-#    os.system("okular latex_output.pdf")
-
- try:
-     pread, pwrite = os.pipe()
-     cmd = ['okular', 'latex_output.pdf']
-     proc = subprocess.Popen(cmd, stdout=pwrite, stderr=subprocess.STDOUT)
-
- except OSError as e:
-   #  sys.exit()
-     print 'Latex compilation error ...'
-
- return
-
-
-def proc_cleanup(all_processes):
- timeout_sec = 5
- for p in all_processes: # list of your processes
-     p_sec = 0
-     for second in range(timeout_sec):
-         if p.poll() == None:
-             print "LIVE"
-             time.sleep(1)
-             p_sec += 1
-     if p_sec >= timeout_sec:
-         p.kill() # supported from python 2.6
- print 'cleaned up!'
- return
 
