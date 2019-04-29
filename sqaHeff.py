@@ -1214,7 +1214,7 @@ def custom_tensor(tname, *tup):
  return tname_tensor
 
 
-def sqalatex(terms, lhs = None, output = None, print_default = False, IJstate = False):
+def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = False):
 
  if not output:
   # texfile = r'latex_output.tex'
@@ -1239,18 +1239,19 @@ def sqalatex(terms, lhs = None, output = None, print_default = False, IJstate = 
  modifier_tensor = {
      'bold': lambda s: r'\boldsymbol{'+s+r'}',
      'hat': lambda s: r'\hat{'+s+r'}',
-     'bra': lambda s: r'\langle\Psi{'+s+r'}\lvert',
-     'ket': lambda s: r'\rvert\Psi{'+s+r'}\rangle',
-     'braket': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi\rangle',
-     'braket_I': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi_{I}\rangle',
-     'I_braket': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi\rangle',
-     'I_braket_J': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi_{J}\rangle',
-     'gamma': lambda s: r't\boldsymbol{\Gamma}',
-     'kdelta': lambda s: r'\boldsymbol{\delta}',
-     'cre': lambda s: r'\boldsymbol{\hat{'+s+r'}^{\dagger}}',
-     'des': lambda s: r'\boldsymbol{\hat{'+s+r'}}',
+     'bra': lambda s: r'\langle\Psi_{'+s+r'}\lvert',
+     'ket': lambda s: r'\rvert\Psi_{'+s+r'}\rangle',
+#     'braket': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi\rangle',
+#     'braket_I': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi_{I}\rangle',
+#     'I_braket': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi\rangle',
+#     'I_braket_I': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi_{J}\rangle',
+     'gamma': lambda s: r'\Gamma',
+     'kdelta': lambda s: r'\delta',
+     'cre': lambda s: r'\hat{'+s+r'}^{\dagger}',
+     'des': lambda s: r'\hat{'+s+r'}',
  }
- t_modifier = lambda s: r'\boldsymbol{'+s+r'}'
+# t_modifier = lambda s: r'\boldsymbol{'+s+r'}'
+ t_modifier = lambda s: s
 
  if not lhs:
   lhs = 'M={}'
@@ -1307,7 +1308,7 @@ def sqalatex(terms, lhs = None, output = None, print_default = False, IJstate = 
 
             name += "^{%s}" % " ".join(supers)
             name += "_{%s}" % " ".join(subs)
-
+            name +="\:"
 
          else:
             if (isinstance(tens, creOp)):
@@ -1315,20 +1316,16 @@ def sqalatex(terms, lhs = None, output = None, print_default = False, IJstate = 
             if (isinstance(tens, desOp)):
                des_count += 1
             credes += modifier_tensor[s](subs)
+
      if (len(credes) > 0):
-        if IJstate:
-           braket = 'I_braket_J'
-        else:
-            if(cre_count > des_count):
-              braket = 'braket_I'
-            elif (des_count > cre_count):
-              braket = 'I_braket'
-            else:
-              braket = 'braket'
-      #    if IJstate:
-      #       braket = 'I_braket_J'
-        credes = modifier_tensor[braket](credes)
-        name += credes
+         ind = r'0'
+         if not indbra:
+            indbra = ind
+         if not indket:
+            indket = ind
+         bra = modifier_tensor['bra'](indbra)
+         ket = modifier_tensor['ket'](indket)
+         name += bra+credes+ket
 
      tex.append(constant+r'\:'+name)
 
