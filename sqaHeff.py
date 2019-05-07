@@ -1214,7 +1214,7 @@ def custom_tensor(tname, *tup):
  return tname_tensor
 
 
-def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = False):
+def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = True):
 
  if not output:
   # texfile = r'latex_output.tex'
@@ -1295,7 +1295,7 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
             subs   = tens.indices[1].name
          elif (index == 4):
             supers = tens.indices[0].name+tens.indices[1].name
-            subs   = tens.indices[3].name+tens.indices[2].name
+            subs   = tens.indices[2].name+tens.indices[3].name
 
          else:
              raise Exception("Not implemented ...")
@@ -1337,12 +1337,12 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
     print ''
     print ''
 #    print r"\begin{equation}"
-    print r"\begin{align}"
+    print r"\begin{align*}"
     print lhs
     for i in tex:
 #      print " & "+i+' \\\\'
       print " & "+i+r'\\'
-    print r"\end{align}"
+    print r"\end{align*}"
 #    print r"\end{equation}"
     print ''
     print ''
