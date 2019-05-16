@@ -28,9 +28,7 @@ term1 = sqa.term(1.0, [], r_op)
 print ("First Commutator")
 
 term2 = sqa.commutator(effH, term1)
-for t in term2:
-    print (t)
 
 term3 = sqa.matrixBlock(term2)
 
-sqa.generateEinsum(term3, 'M[s_casci:f_casci, s_ca:f_ca]', 'JX', transRDM=True, trans_ind_str="I")
+sqa.generateEinsum(term3, 'temp', 'JX', transRDM=True, trans_ind_str="I")
