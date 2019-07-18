@@ -1,0 +1,86 @@
+
+--------------------------------------------------------------
+ Effective Hamiltonian: Construct effective Hamiltonian ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ --------------------------------------------------------------
+
+ (   1.00000) E_fc 
+ (  -1.00000) e(c0) des(c0) cre(c0) 
+ (   1.00000) e(v0) cre(v0) des(v0) 
+ (   1.00000) h(a1,a0) cre(a0) des(a1) 
+ (   1.00000) v(a1,c1,a0,c1) cre(a0) des(a1) 
+ (   0.25000) v(a2,a3,a0,a1) cre(a0) cre(a1) des(a3) des(a2) 
+
+Combining like terms:
+Converting 18 terms to canonical form...
+     0   (   1.00000) E_fc cre(A) cre(B) des(K) des(J) 
+     1   (  -1.00000) E_fc cre(A) cre(B) des(K) des(J) 
+     2   (  -1.00000) e(c0) cre(A) cre(B) cre(c0) des(J) des(K) des(c0) 
+     3   (   1.00000) e(c0) cre(A) cre(B) des(J) des(K) 
+     4   (   1.00000) e(c0) cre(A) cre(B) cre(c0) des(J) des(K) des(c0) 
+     5   (   1.00000) e(K) cre(A) cre(B) des(J) des(K) 
+     6   (  -1.00000) e(J) cre(A) cre(B) des(K) des(J) 
+     7   (  -1.00000) e(c0) cre(A) cre(B) des(J) des(K) 
+     8   (  -1.00000) e(v0) cre(A) cre(B) cre(v0) des(J) des(K) des(v0) 
+     9   (   1.00000) e(A) cre(B) cre(A) des(J) des(K) 
+    10   (  -1.00000) e(B) cre(A) cre(B) des(J) des(K) 
+    11   (   1.00000) e(v0) cre(A) cre(B) cre(v0) des(J) des(K) des(v0) 
+    12   (  -1.00000) h(a1,a0) cre(A) cre(B) cre(a0) des(J) des(K) des(a1) 
+    13   (   1.00000) h(a1,a0) cre(A) cre(B) cre(a0) des(J) des(K) des(a1) 
+    14   (  -1.00000) v(a1,c1,a0,c1) cre(A) cre(B) cre(a0) des(J) des(K) des(a1) 
+    15   (   1.00000) v(a1,c1,a0,c1) cre(A) cre(B) cre(a0) des(J) des(K) des(a1) 
+    16   (   0.25000) v(a2,a3,a0,a1) cre(A) cre(B) cre(a0) cre(a1) des(J) des(K) des(a2) des(a3) 
+    17   (  -0.25000) v(a2,a3,a0,a1) cre(A) cre(B) cre(a0) cre(a1) des(J) des(K) des(a2) des(a3) 
+Finished combining terms in 0.011 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   0.00000) e(A) cre(A) cre(B) des(J) des(K) 
+ (   0.00000) e(B) cre(A) cre(B) des(J) des(K) 
+ (   0.00000) e(J) cre(A) cre(B) des(J) des(K) 
+ (   0.00000) e(K) cre(A) cre(B) des(J) des(K) 
+
+Expectation value: Filter zero terms wrt core:=>
+
+Combining like terms:
+Converting 0 terms to canonical form...
+Finished combining terms in 0.000 seconds
+
+Dummy indices label update:=>
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+
+----------------------- Final results ------------------------
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------
