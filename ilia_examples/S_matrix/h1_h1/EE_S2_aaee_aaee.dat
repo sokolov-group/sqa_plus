@@ -1,21 +1,21 @@
 
 Combining like terms:
 Converting 14 terms to canonical form...
-     0   (  -1.00000) cre(A) cre(B) cre(W) cre(Z) des(C) des(D) des(X) des(Y) 
-     1   (  -1.00000) kdelta(Y,Z) cre(A) cre(B) cre(W) des(C) des(D) des(X) 
-     2   (   1.00000) kdelta(Y,W) cre(A) cre(B) cre(Z) des(C) des(D) des(X) 
-     3   (   1.00000) kdelta(X,Z) cre(A) cre(B) cre(W) des(C) des(D) des(Y) 
-     4   (  -1.00000) kdelta(X,W) cre(A) cre(B) cre(Z) des(C) des(D) des(Y) 
-     5   (   1.00000) kdelta(Y,Z) kdelta(X,W) cre(A) cre(B) des(C) des(D) 
-     6   (  -1.00000) kdelta(Y,W) kdelta(X,Z) cre(A) cre(B) des(C) des(D) 
-     7   (   1.00000) cre(A) cre(B) cre(W) cre(Z) des(C) des(D) des(X) des(Y) 
-     8   (  -1.00000) kdelta(D,A) cre(B) cre(W) cre(Z) des(C) des(X) des(Y) 
-     9   (   1.00000) kdelta(D,B) cre(A) cre(W) cre(Z) des(C) des(X) des(Y) 
-    10   (   1.00000) kdelta(C,A) cre(B) cre(W) cre(Z) des(D) des(X) des(Y) 
-    11   (  -1.00000) kdelta(C,B) cre(A) cre(W) cre(Z) des(D) des(X) des(Y) 
-    12   (   1.00000) kdelta(D,A) kdelta(C,B) cre(W) cre(Z) des(X) des(Y) 
-    13   (  -1.00000) kdelta(D,B) kdelta(C,A) cre(W) cre(Z) des(X) des(Y) 
-Finished combining terms in 0.014 seconds
+     0   (  -1.00000) cre(C) cre(D) cre(X) cre(Y) des(A) des(B) des(W) des(Z) 
+     1   (   1.00000) kdelta(B,C) cre(D) cre(X) cre(Y) des(A) des(W) des(Z) 
+     2   (  -1.00000) kdelta(B,D) cre(C) cre(X) cre(Y) des(A) des(W) des(Z) 
+     3   (  -1.00000) kdelta(A,C) cre(D) cre(X) cre(Y) des(B) des(W) des(Z) 
+     4   (   1.00000) kdelta(A,D) cre(C) cre(X) cre(Y) des(B) des(W) des(Z) 
+     5   (  -1.00000) kdelta(B,C) kdelta(A,D) cre(X) cre(Y) des(W) des(Z) 
+     6   (   1.00000) kdelta(B,D) kdelta(A,C) cre(X) cre(Y) des(W) des(Z) 
+     7   (   1.00000) cre(C) cre(D) cre(X) cre(Y) des(A) des(B) des(W) des(Z) 
+     8   (   1.00000) kdelta(W,X) cre(C) cre(D) cre(Y) des(A) des(B) des(Z) 
+     9   (  -1.00000) kdelta(W,Y) cre(C) cre(D) cre(X) des(A) des(B) des(Z) 
+    10   (  -1.00000) kdelta(Z,X) cre(C) cre(D) cre(Y) des(A) des(B) des(W) 
+    11   (   1.00000) kdelta(Z,Y) cre(C) cre(D) cre(X) des(A) des(B) des(W) 
+    12   (  -1.00000) kdelta(W,X) kdelta(Z,Y) cre(C) cre(D) des(A) des(B) 
+    13   (   1.00000) kdelta(W,Y) kdelta(Z,X) cre(C) cre(D) des(A) des(B) 
+Finished combining terms in 0.016 seconds
 
 
 ------------------------- SQA Addon --------------------------
@@ -36,48 +36,48 @@ Finished combining terms in 0.014 seconds
 
 
 Expectation value: Filter zero terms wrt virtual:=>
- (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
- (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
- (   0.00000) kdelta(W,X) kdelta(Y,Z) cre(A) cre(B) des(C) des(D) 
- (   0.00000) kdelta(W,Y) kdelta(X,Z) cre(A) cre(B) des(C) des(D) 
- (   0.00000) kdelta(A,C) cre(B) cre(W) cre(Z) des(D) des(X) des(Y) 
- (   0.00000) kdelta(A,D) cre(B) cre(W) cre(Z) des(C) des(X) des(Y) 
- (   0.00000) kdelta(B,C) cre(A) cre(W) cre(Z) des(D) des(X) des(Y) 
- (   0.00000) kdelta(B,D) cre(A) cre(W) cre(Z) des(C) des(X) des(Y) 
- (   0.00000) kdelta(W,X) cre(A) cre(B) cre(Z) des(C) des(D) des(Y) 
- (   0.00000) kdelta(W,Y) cre(A) cre(B) cre(Z) des(C) des(D) des(X) 
- (   0.00000) kdelta(X,Z) cre(A) cre(B) cre(W) des(C) des(D) des(Y) 
- (   0.00000) kdelta(Y,Z) cre(A) cre(B) cre(W) des(C) des(D) des(X) 
+ (   1.00000) kdelta(A,C) kdelta(B,D) cre(X) cre(Y) des(W) des(Z) 
+ (  -1.00000) kdelta(A,D) kdelta(B,C) cre(X) cre(Y) des(W) des(Z) 
+ (   0.00000) kdelta(W,X) kdelta(Y,Z) cre(C) cre(D) des(A) des(B) 
+ (   0.00000) kdelta(W,Y) kdelta(X,Z) cre(C) cre(D) des(A) des(B) 
+ (   0.00000) kdelta(A,C) cre(D) cre(X) cre(Y) des(B) des(W) des(Z) 
+ (   0.00000) kdelta(A,D) cre(C) cre(X) cre(Y) des(B) des(W) des(Z) 
+ (   0.00000) kdelta(B,C) cre(D) cre(X) cre(Y) des(A) des(W) des(Z) 
+ (   0.00000) kdelta(B,D) cre(C) cre(X) cre(Y) des(A) des(W) des(Z) 
+ (   0.00000) kdelta(W,X) cre(C) cre(D) cre(Y) des(A) des(B) des(Z) 
+ (   0.00000) kdelta(W,Y) cre(C) cre(D) cre(X) des(A) des(B) des(Z) 
+ (   0.00000) kdelta(X,Z) cre(C) cre(D) cre(Y) des(A) des(B) des(W) 
+ (   0.00000) kdelta(Y,Z) cre(C) cre(D) cre(X) des(A) des(B) des(W) 
 
 Normal ordering with respect to core:=>
-Term=  (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+Term=  (   1.00000) kdelta(A,C) kdelta(B,D) cre(X) cre(Y) des(W) des(Z) 
 Terms after normal ordering:
- (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) kdelta(A,C) kdelta(B,D) cre(X) cre(Y) des(W) des(Z) 
 
 Normal ordering with respect to core:=>
-Term=  (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+Term=  (  -1.00000) kdelta(A,D) kdelta(B,C) cre(X) cre(Y) des(W) des(Z) 
 Terms after normal ordering:
- (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+ (  -1.00000) kdelta(A,D) kdelta(B,C) cre(X) cre(Y) des(W) des(Z) 
 
 Expectation value: Filter zero terms wrt core:=>
- (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
- (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) kdelta(A,C) kdelta(B,D) cre(X) cre(Y) des(W) des(Z) 
+ (  -1.00000) kdelta(A,D) kdelta(B,C) cre(X) cre(Y) des(W) des(Z) 
 
 Combining like terms:
 Converting 2 terms to canonical form...
-     0   (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
-     1   (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+     0   (   1.00000) kdelta(A,C) kdelta(B,D) cre(X) cre(Y) des(W) des(Z) 
+     1   (  -1.00000) kdelta(A,D) kdelta(B,C) cre(X) cre(Y) des(W) des(Z) 
 Finished combining terms in 0.003 seconds
 
 Dummy indices label update:=>
- (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
- (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) kdelta(A,C) kdelta(B,D) cre(X) cre(Y) des(W) des(Z) 
+ (  -1.00000) kdelta(A,D) kdelta(B,C) cre(X) cre(Y) des(W) des(Z) 
 
 Reorder tensor indices according to (Core < Active < Virtual): =>
 
 ----------------------- Final results ------------------------
- (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
- (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) kdelta(A,C) kdelta(B,D) cre(X) cre(Y) des(W) des(Z) 
+ (  -1.00000) kdelta(A,D) kdelta(B,C) cre(X) cre(Y) des(W) des(Z) 
 
 
 ----------------------- SQA EINSUM ---------------------------
@@ -91,5 +91,5 @@ Reorder tensor indices according to (Core < Active < Virtual): =>
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =- np.einsum('AC, BD, WZXY->XYABZWCD', np.identity(nextern), np.identity(nextern), rdm_ccaa_so, optimize = True)
-temp += np.einsum('AD, BC, WZXY->XYABZWCD', np.identity(nextern), np.identity(nextern), rdm_ccaa_so, optimize = True)
+temp =  np.einsum('AC, BD, XYWZ->XYABZWCD', np.identity(nextern), np.identity(nextern), rdm_ccaa_so, optimize = True)
+temp -= np.einsum('AD, BC, XYWZ->XYABZWCD', np.identity(nextern), np.identity(nextern), rdm_ccaa_so, optimize = True)

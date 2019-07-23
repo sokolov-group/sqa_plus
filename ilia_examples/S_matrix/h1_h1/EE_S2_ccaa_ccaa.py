@@ -22,8 +22,8 @@ l = sqa.index('L', [tg_c])
 z = sqa.index('Z', [tg_a])
 w = sqa.index('W', [tg_a])
 
-l_op = [sqa.creOp(x), sqa.creOp(y), sqa.desOp(j), sqa.desOp(i)]
-r_op = [sqa.creOp(k), sqa.creOp(l), sqa.desOp(w), sqa.desOp(z)]
+l_op = [sqa.creOp(i), sqa.creOp(j), sqa.desOp(y), sqa.desOp(x)]
+r_op = [sqa.creOp(z), sqa.creOp(w), sqa.desOp(l), sqa.desOp(k)]
 
 
 term1 = sqa.term(1.0, [], l_op)
