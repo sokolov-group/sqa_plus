@@ -13,7 +13,7 @@ dummy = True
 
 # External indices
 j = sqa.index('J', [tg_c])
-x = sqa.index('K', [tg_a])
+x = sqa.index('X', [tg_a])
 a = sqa.index('A', [tg_v])
 b = sqa.index('B', [tg_v])
 

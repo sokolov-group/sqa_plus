@@ -1,0 +1,79 @@
+
+Combining like terms:
+Converting 6 terms to canonical form...
+     0   (   1.00000) cre(A) cre(I) cre(Y) des(J) des(K) des(X) 
+     1   (  -1.00000) kdelta(X,A) cre(I) cre(Y) des(J) des(K) 
+     2   (  -1.00000) kdelta(X,Y) cre(A) cre(I) des(J) des(K) 
+     3   (  -1.00000) cre(A) cre(I) cre(Y) des(J) des(K) des(X) 
+     4   (   1.00000) kdelta(K,I) cre(A) cre(Y) des(J) des(X) 
+     5   (  -1.00000) kdelta(J,I) cre(A) cre(Y) des(K) des(X) 
+Finished combining terms in 0.004 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (  -1.00000) kdelta(A,X) cre(I) cre(Y) des(J) des(K) 
+ (   0.00000) kdelta(I,J) cre(A) cre(Y) des(K) des(X) 
+ (   0.00000) kdelta(I,K) cre(A) cre(Y) des(J) des(X) 
+ (   0.00000) kdelta(X,Y) cre(A) cre(I) des(J) des(K) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) kdelta(A,X) cre(I) cre(Y) des(J) des(K) 
+Terms after normal ordering:
+ (   1.00000) kdelta(A,X) des(J) des(K) cre(Y) cre(I) 
+ (  -1.00000) kdelta(A,X) kdelta(I,J) des(K) cre(Y) 
+ (   1.00000) kdelta(A,X) kdelta(I,K) des(J) cre(Y) 
+ (   1.00000) kdelta(A,X) kdelta(Y,J) des(K) cre(I) 
+ (  -1.00000) kdelta(A,X) kdelta(Y,K) des(J) cre(I) 
+ (   1.00000) kdelta(A,X) kdelta(I,J) kdelta(Y,K) 
+ (  -1.00000) kdelta(A,X) kdelta(I,K) kdelta(Y,J) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (   0.00000) kdelta(A,X) des(J) des(K) cre(Y) cre(I) 
+ (   0.00000) kdelta(A,X) kdelta(I,J) des(K) cre(Y) 
+ (   0.00000) kdelta(A,X) kdelta(I,K) des(J) cre(Y) 
+ (   0.00000) kdelta(A,X) kdelta(Y,J) des(K) cre(I) 
+ (   0.00000) kdelta(A,X) kdelta(Y,K) des(J) cre(I) 
+ (   1.00000) kdelta(A,X) kdelta(I,J) kdelta(Y,K) 
+ (  -1.00000) kdelta(A,X) kdelta(I,K) kdelta(Y,J) 
+
+Combining like terms:
+Converting 2 terms to canonical form...
+     0   (   1.00000) kdelta(A,X) kdelta(I,J) kdelta(Y,K) 
+     1   (  -1.00000) kdelta(A,X) kdelta(I,K) kdelta(Y,J) 
+Finished combining terms in 0.018 seconds
+
+Dummy indices label update:=>
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+
+----------------------- Final results ------------------------
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------
