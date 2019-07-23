@@ -1,0 +1,67 @@
+
+Combining like terms:
+Converting 4 terms to canonical form...
+     0   (   1.00000) cre(B) cre(I) des(A) des(J) 
+     1   (   1.00000) kdelta(A,B) cre(I) des(J) 
+     2   (  -1.00000) cre(B) cre(I) des(A) des(J) 
+     3   (  -1.00000) kdelta(J,I) cre(B) des(A) 
+Finished combining terms in 0.002 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   1.00000) kdelta(A,B) cre(I) des(J) 
+ (   0.00000) kdelta(I,J) cre(B) des(A) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) kdelta(A,B) cre(I) des(J) 
+Terms after normal ordering:
+ (  -1.00000) kdelta(A,B) des(J) cre(I) 
+ (   1.00000) kdelta(A,B) kdelta(I,J) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (   0.00000) kdelta(A,B) des(J) cre(I) 
+ (   1.00000) kdelta(A,B) kdelta(I,J) 
+
+Combining like terms:
+Converting 1 terms to canonical form...
+     0   (   1.00000) kdelta(A,B) kdelta(I,J) 
+Finished combining terms in 0.001 seconds
+
+Dummy indices label update:=>
+ (   1.00000) kdelta(A,B) kdelta(I,J) 
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+
+----------------------- Final results ------------------------
+ (   1.00000) kdelta(A,B) kdelta(I,J) 
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =  np.einsum('AB, IJ->IJAB', np.identity(nextern), np.identity(ncore), optimize = True)

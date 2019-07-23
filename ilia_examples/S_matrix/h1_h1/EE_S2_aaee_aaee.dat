@@ -1,0 +1,95 @@
+
+Combining like terms:
+Converting 14 terms to canonical form...
+     0   (  -1.00000) cre(A) cre(B) cre(W) cre(Z) des(C) des(D) des(X) des(Y) 
+     1   (  -1.00000) kdelta(Y,Z) cre(A) cre(B) cre(W) des(C) des(D) des(X) 
+     2   (   1.00000) kdelta(Y,W) cre(A) cre(B) cre(Z) des(C) des(D) des(X) 
+     3   (   1.00000) kdelta(X,Z) cre(A) cre(B) cre(W) des(C) des(D) des(Y) 
+     4   (  -1.00000) kdelta(X,W) cre(A) cre(B) cre(Z) des(C) des(D) des(Y) 
+     5   (   1.00000) kdelta(Y,Z) kdelta(X,W) cre(A) cre(B) des(C) des(D) 
+     6   (  -1.00000) kdelta(Y,W) kdelta(X,Z) cre(A) cre(B) des(C) des(D) 
+     7   (   1.00000) cre(A) cre(B) cre(W) cre(Z) des(C) des(D) des(X) des(Y) 
+     8   (  -1.00000) kdelta(D,A) cre(B) cre(W) cre(Z) des(C) des(X) des(Y) 
+     9   (   1.00000) kdelta(D,B) cre(A) cre(W) cre(Z) des(C) des(X) des(Y) 
+    10   (   1.00000) kdelta(C,A) cre(B) cre(W) cre(Z) des(D) des(X) des(Y) 
+    11   (  -1.00000) kdelta(C,B) cre(A) cre(W) cre(Z) des(D) des(X) des(Y) 
+    12   (   1.00000) kdelta(D,A) kdelta(C,B) cre(W) cre(Z) des(X) des(Y) 
+    13   (  -1.00000) kdelta(D,B) kdelta(C,A) cre(W) cre(Z) des(X) des(Y) 
+Finished combining terms in 0.014 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+ (   0.00000) kdelta(W,X) kdelta(Y,Z) cre(A) cre(B) des(C) des(D) 
+ (   0.00000) kdelta(W,Y) kdelta(X,Z) cre(A) cre(B) des(C) des(D) 
+ (   0.00000) kdelta(A,C) cre(B) cre(W) cre(Z) des(D) des(X) des(Y) 
+ (   0.00000) kdelta(A,D) cre(B) cre(W) cre(Z) des(C) des(X) des(Y) 
+ (   0.00000) kdelta(B,C) cre(A) cre(W) cre(Z) des(D) des(X) des(Y) 
+ (   0.00000) kdelta(B,D) cre(A) cre(W) cre(Z) des(C) des(X) des(Y) 
+ (   0.00000) kdelta(W,X) cre(A) cre(B) cre(Z) des(C) des(D) des(Y) 
+ (   0.00000) kdelta(W,Y) cre(A) cre(B) cre(Z) des(C) des(D) des(X) 
+ (   0.00000) kdelta(X,Z) cre(A) cre(B) cre(W) des(C) des(D) des(Y) 
+ (   0.00000) kdelta(Y,Z) cre(A) cre(B) cre(W) des(C) des(D) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+Terms after normal ordering:
+ (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+Terms after normal ordering:
+ (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+
+Combining like terms:
+Converting 2 terms to canonical form...
+     0   (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+     1   (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+Finished combining terms in 0.003 seconds
+
+Dummy indices label update:=>
+ (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+
+----------------------- Final results ------------------------
+ (  -1.00000) kdelta(A,C) kdelta(B,D) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) kdelta(A,D) kdelta(B,C) cre(W) cre(Z) des(X) des(Y) 
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =- np.einsum('AC, BD, WZXY->XYABZWCD', np.identity(nextern), np.identity(nextern), rdm_ccaa_so, optimize = True)
+temp += np.einsum('AD, BC, WZXY->XYABZWCD', np.identity(nextern), np.identity(nextern), rdm_ccaa_so, optimize = True)
