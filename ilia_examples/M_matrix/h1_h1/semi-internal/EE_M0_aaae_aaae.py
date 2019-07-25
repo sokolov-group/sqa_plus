@@ -12,16 +12,18 @@ tg_g = tg_c + tg_a + tg_v
 dummy = True
 
 # External indices
-i = sqa.index('I', [tg_c])
-a = sqa.index('A', [tg_v])
-
 x = sqa.index('X', [tg_a])
 y = sqa.index('Y', [tg_a])
-b = sqa.index('B', [tg_v])
-c = sqa.index('C', [tg_v])
+a = sqa.index('A', [tg_v])
+z = sqa.index('Z', [tg_a])
 
-l_op = [sqa.creOp(i), sqa.desOp(a)]
-r_op = [sqa.creOp(b), sqa.creOp(c), sqa.desOp(y), sqa.desOp(x)]
+u = sqa.index('U', [tg_a])
+v = sqa.index('V', [tg_a])
+b = sqa.index('B', [tg_v])
+w = sqa.index('W', [tg_a])
+
+l_op = [sqa.creOp(a), sqa.creOp(z), sqa.desOp(y), sqa.desOp(x)]
+r_op = [sqa.creOp(u), sqa.creOp(v), sqa.desOp(w), sqa.desOp(b)]
 
 effH = []
 effH = sqa.Heff(0)
@@ -31,6 +33,7 @@ term2 = sqa.term(1.0, [], l_op)
 
 term3 = sqa.commutator(effH, term1)
 term4 = sqa.commutator(term2, term3)
+
 term5 = sqa.matrixBlock(term4)
 
-sqa.generateEinsum(term5, 'temp', 'IAXYBC', "")
+sqa.generateEinsum(term5, 'temp', 'XYAZUVBW', "")
