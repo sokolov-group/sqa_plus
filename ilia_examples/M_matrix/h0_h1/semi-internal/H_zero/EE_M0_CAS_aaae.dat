@@ -1,0 +1,98 @@
+
+--------------------------------------------------------------
+ Effective Hamiltonian: Construct effective Hamiltonian ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ --------------------------------------------------------------
+
+
+Combining like terms:
+Converting 29 terms to canonical form...
+     0   (   1.00000) E_fc cre(A) cre(Z) des(Y) des(X) 
+     1   (  -1.00000) E_fc cre(A) cre(Z) des(Y) des(X) 
+     2   (  -1.00000) e(c0) cre(A) cre(Z) cre(c0) des(X) des(Y) des(c0) 
+     3   (   1.00000) e(c0) cre(A) cre(Z) des(X) des(Y) 
+     4   (   1.00000) e(c0) cre(A) cre(Z) cre(c0) des(X) des(Y) des(c0) 
+     5   (  -1.00000) e(c0) cre(A) cre(Z) des(X) des(Y) 
+     6   (  -1.00000) e(v0) cre(A) cre(Z) cre(v0) des(X) des(Y) des(v0) 
+     7   (   1.00000) e(A) cre(Z) cre(A) des(X) des(Y) 
+     8   (   1.00000) e(v0) cre(A) cre(Z) cre(v0) des(X) des(Y) des(v0) 
+     9   (  -1.00000) h(a1,a0) cre(A) cre(Z) cre(a0) des(X) des(Y) des(a1) 
+    10   (  -1.00000) h(Z,a0) cre(A) cre(a0) des(X) des(Y) 
+    11   (   1.00000) h(a1,a0) cre(A) cre(Z) cre(a0) des(X) des(Y) des(a1) 
+    12   (   1.00000) h(a1,Y) cre(A) cre(Z) des(X) des(a1) 
+    13   (  -1.00000) h(a1,X) cre(A) cre(Z) des(Y) des(a1) 
+    14   (  -1.00000) v(a1,c1,a0,c1) cre(A) cre(Z) cre(a0) des(X) des(Y) des(a1) 
+    15   (  -1.00000) v(Z,c1,a0,c1) cre(A) cre(a0) des(X) des(Y) 
+    16   (   1.00000) v(a1,c1,a0,c1) cre(A) cre(Z) cre(a0) des(X) des(Y) des(a1) 
+    17   (   1.00000) v(a1,c1,Y,c1) cre(A) cre(Z) des(X) des(a1) 
+    18   (  -1.00000) v(a1,c1,X,c1) cre(A) cre(Z) des(Y) des(a1) 
+    19   (   0.25000) v(a2,a3,a0,a1) cre(A) cre(Z) cre(a0) cre(a1) des(X) des(Y) des(a2) des(a3) 
+    20   (   0.25000) v(a2,Z,a0,a1) cre(A) cre(a0) cre(a1) des(X) des(Y) des(a2) 
+    21   (  -0.25000) v(Z,a3,a0,a1) cre(A) cre(a0) cre(a1) des(X) des(Y) des(a3) 
+    22   (  -0.25000) v(a2,a3,a0,a1) cre(A) cre(Z) cre(a0) cre(a1) des(X) des(Y) des(a2) des(a3) 
+    23   (   0.25000) v(a2,a3,Y,a1) cre(A) cre(Z) cre(a1) des(X) des(a2) des(a3) 
+    24   (  -0.25000) v(a2,a3,a0,Y) cre(A) cre(Z) cre(a0) des(X) des(a2) des(a3) 
+    25   (  -0.25000) v(a2,a3,X,a1) cre(A) cre(Z) cre(a1) des(Y) des(a2) des(a3) 
+    26   (   0.25000) v(a2,a3,a0,X) cre(A) cre(Z) cre(a0) des(Y) des(a2) des(a3) 
+    27   (  -0.25000) v(a2,a3,Y,X) cre(A) cre(Z) des(a2) des(a3) 
+    28   (   0.25000) v(a2,a3,X,Y) cre(A) cre(Z) des(a2) des(a3) 
+Finished combining terms in 0.023 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   0.00000) e(A) cre(A) cre(Z) des(X) des(Y) 
+ (   0.00000) h(X,a) cre(A) cre(Z) des(Y) des(a) 
+ (   0.00000) h(Y,a) cre(A) cre(Z) des(X) des(a) 
+ (   0.00000) h(Z,a) cre(A) cre(a) des(X) des(Y) 
+ (   0.00000) v(Z,a,a,b) cre(A) cre(b) des(X) des(Y) 
+ (   0.00000) v(a,b,X,Y) cre(A) cre(Z) des(a) des(b) 
+ (   0.00000) v(a,b,X,a) cre(A) cre(Z) des(Y) des(b) 
+ (   0.00000) v(a,b,Y,a) cre(A) cre(Z) des(X) des(b) 
+ (   0.00000) v(Z,a,b,c) cre(A) cre(b) cre(c) des(X) des(Y) des(a) 
+ (   0.00000) v(a,b,X,c) cre(A) cre(Z) cre(c) des(Y) des(a) des(b) 
+ (   0.00000) v(a,b,Y,c) cre(A) cre(Z) cre(c) des(X) des(a) des(b) 
+
+Expectation value: Filter zero terms wrt core:=>
+
+Combining like terms:
+Converting 0 terms to canonical form...
+Finished combining terms in 0.000 seconds
+
+Dummy indices label update:=>
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+
+----------------------- Final results ------------------------
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------

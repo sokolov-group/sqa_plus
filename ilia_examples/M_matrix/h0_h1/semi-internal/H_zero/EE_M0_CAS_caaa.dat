@@ -1,0 +1,228 @@
+
+--------------------------------------------------------------
+ Effective Hamiltonian: Construct effective Hamiltonian ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ --------------------------------------------------------------
+
+
+Combining like terms:
+Converting 29 terms to canonical form...
+     0   (   1.00000) E_fc cre(Y) cre(Z) des(X) des(J) 
+     1   (  -1.00000) E_fc cre(Y) cre(Z) des(X) des(J) 
+     2   (  -1.00000) e(c0) cre(Y) cre(Z) cre(c0) des(J) des(X) des(c0) 
+     3   (   1.00000) e(c0) cre(Y) cre(Z) des(J) des(X) 
+     4   (   1.00000) e(c0) cre(Y) cre(Z) cre(c0) des(J) des(X) des(c0) 
+     5   (  -1.00000) e(J) cre(Y) cre(Z) des(X) des(J) 
+     6   (  -1.00000) e(c0) cre(Y) cre(Z) des(J) des(X) 
+     7   (  -1.00000) e(v0) cre(Y) cre(Z) cre(v0) des(J) des(X) des(v0) 
+     8   (   1.00000) e(v0) cre(Y) cre(Z) cre(v0) des(J) des(X) des(v0) 
+     9   (  -1.00000) h(a1,a0) cre(Y) cre(Z) cre(a0) des(J) des(X) des(a1) 
+    10   (   1.00000) h(Y,a0) cre(Z) cre(a0) des(J) des(X) 
+    11   (  -1.00000) h(Z,a0) cre(Y) cre(a0) des(J) des(X) 
+    12   (   1.00000) h(a1,a0) cre(Y) cre(Z) cre(a0) des(J) des(X) des(a1) 
+    13   (   1.00000) h(a1,X) cre(Y) cre(Z) des(J) des(a1) 
+    14   (  -1.00000) v(a1,c1,a0,c1) cre(Y) cre(Z) cre(a0) des(J) des(X) des(a1) 
+    15   (   1.00000) v(Y,c1,a0,c1) cre(Z) cre(a0) des(J) des(X) 
+    16   (  -1.00000) v(Z,c1,a0,c1) cre(Y) cre(a0) des(J) des(X) 
+    17   (   1.00000) v(a1,c1,a0,c1) cre(Y) cre(Z) cre(a0) des(J) des(X) des(a1) 
+    18   (   1.00000) v(a1,c1,X,c1) cre(Y) cre(Z) des(J) des(a1) 
+    19   (   0.25000) v(a2,a3,a0,a1) cre(Y) cre(Z) cre(a0) cre(a1) des(J) des(X) des(a2) des(a3) 
+    20   (  -0.25000) v(a2,Y,a0,a1) cre(Z) cre(a0) cre(a1) des(J) des(X) des(a2) 
+    21   (   0.25000) v(a2,Z,a0,a1) cre(Y) cre(a0) cre(a1) des(J) des(X) des(a2) 
+    22   (   0.25000) v(Y,a3,a0,a1) cre(Z) cre(a0) cre(a1) des(J) des(X) des(a3) 
+    23   (  -0.25000) v(Z,a3,a0,a1) cre(Y) cre(a0) cre(a1) des(J) des(X) des(a3) 
+    24   (   0.25000) v(Z,Y,a0,a1) cre(a0) cre(a1) des(J) des(X) 
+    25   (  -0.25000) v(Y,Z,a0,a1) cre(a0) cre(a1) des(J) des(X) 
+    26   (  -0.25000) v(a2,a3,a0,a1) cre(Y) cre(Z) cre(a0) cre(a1) des(J) des(X) des(a2) des(a3) 
+    27   (   0.25000) v(a2,a3,X,a1) cre(Y) cre(Z) cre(a1) des(J) des(a2) des(a3) 
+    28   (  -0.25000) v(a2,a3,a0,X) cre(Y) cre(Z) cre(a0) des(J) des(a2) des(a3) 
+Finished combining terms in 0.023 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   1.00000) e(J) cre(Y) cre(Z) des(J) des(X) 
+ (   1.00000) h(X,a) cre(Y) cre(Z) des(J) des(a) 
+ (   1.00000) h(Y,a) cre(Z) cre(a) des(J) des(X) 
+ (  -1.00000) h(Z,a) cre(Y) cre(a) des(J) des(X) 
+ (  -0.50000) v(Y,Z,a,b) cre(a) cre(b) des(J) des(X) 
+ (  -1.00000) v(Y,a,a,b) cre(Z) cre(b) des(J) des(X) 
+ (   1.00000) v(Z,a,a,b) cre(Y) cre(b) des(J) des(X) 
+ (  -1.00000) v(a,b,X,a) cre(Y) cre(Z) des(J) des(b) 
+ (   0.50000) v(Y,a,b,c) cre(Z) cre(b) cre(c) des(J) des(X) des(a) 
+ (  -0.50000) v(Z,a,b,c) cre(Y) cre(b) cre(c) des(J) des(X) des(a) 
+ (   0.50000) v(a,b,X,c) cre(Y) cre(Z) cre(c) des(J) des(a) des(b) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) e(J) cre(Y) cre(Z) des(J) des(X) 
+Terms after normal ordering:
+ (   1.00000) e(J) des(J) cre(Y) cre(Z) des(X) 
+ (  -1.00000) e(J) kdelta(Y,J) cre(Z) des(X) 
+ (   1.00000) e(J) kdelta(Z,J) cre(Y) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) h(X,a) cre(Y) cre(Z) des(J) des(a) 
+Terms after normal ordering:
+ (   1.00000) h(X,a) des(J) cre(Y) cre(Z) des(a) 
+ (  -1.00000) h(X,a) kdelta(Y,J) cre(Z) des(a) 
+ (   1.00000) h(X,a) kdelta(Z,J) cre(Y) des(a) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) h(Y,a) cre(Z) cre(a) des(J) des(X) 
+Terms after normal ordering:
+ (   1.00000) h(Y,a) des(J) cre(Z) cre(a) des(X) 
+ (  -1.00000) h(Y,a) kdelta(Z,J) cre(a) des(X) 
+ (   1.00000) h(Y,a) kdelta(a,J) cre(Z) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) h(Z,a) cre(Y) cre(a) des(J) des(X) 
+Terms after normal ordering:
+ (  -1.00000) h(Z,a) des(J) cre(Y) cre(a) des(X) 
+ (   1.00000) h(Z,a) kdelta(Y,J) cre(a) des(X) 
+ (  -1.00000) h(Z,a) kdelta(a,J) cre(Y) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (  -0.50000) v(Y,Z,a,b) cre(a) cre(b) des(J) des(X) 
+Terms after normal ordering:
+ (  -0.50000) v(Y,Z,a,b) des(J) cre(a) cre(b) des(X) 
+ (   0.50000) v(Y,Z,a,b) kdelta(a,J) cre(b) des(X) 
+ (  -0.50000) v(Y,Z,a,b) kdelta(b,J) cre(a) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) v(Y,a,a,b) cre(Z) cre(b) des(J) des(X) 
+Terms after normal ordering:
+ (  -1.00000) v(Y,a,a,b) des(J) cre(Z) cre(b) des(X) 
+ (   1.00000) v(Y,a,a,b) kdelta(Z,J) cre(b) des(X) 
+ (  -1.00000) v(Y,a,a,b) kdelta(b,J) cre(Z) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) v(Z,a,a,b) cre(Y) cre(b) des(J) des(X) 
+Terms after normal ordering:
+ (   1.00000) v(Z,a,a,b) des(J) cre(Y) cre(b) des(X) 
+ (  -1.00000) v(Z,a,a,b) kdelta(Y,J) cre(b) des(X) 
+ (   1.00000) v(Z,a,a,b) kdelta(b,J) cre(Y) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) v(a,b,X,a) cre(Y) cre(Z) des(J) des(b) 
+Terms after normal ordering:
+ (  -1.00000) v(a,b,X,a) des(J) cre(Y) cre(Z) des(b) 
+ (   1.00000) v(a,b,X,a) kdelta(Y,J) cre(Z) des(b) 
+ (  -1.00000) v(a,b,X,a) kdelta(Z,J) cre(Y) des(b) 
+
+Normal ordering with respect to core:=>
+Term=  (   0.50000) v(Y,a,b,c) cre(Z) cre(b) cre(c) des(J) des(X) des(a) 
+Terms after normal ordering:
+ (  -0.50000) v(Y,a,b,c) cre(Z) cre(b) des(J) cre(c) des(X) des(a) 
+ (   0.50000) v(Y,a,b,c) kdelta(Z,J) cre(b) cre(c) des(X) des(a) 
+ (  -0.50000) v(Y,a,b,c) kdelta(b,J) cre(Z) cre(c) des(X) des(a) 
+ (   0.50000) v(Y,a,b,c) kdelta(c,J) cre(Z) cre(b) des(X) des(a) 
+
+Normal ordering with respect to core:=>
+Term=  (  -0.50000) v(Z,a,b,c) cre(Y) cre(b) cre(c) des(J) des(X) des(a) 
+Terms after normal ordering:
+ (   0.50000) v(Z,a,b,c) cre(Y) cre(b) des(J) cre(c) des(X) des(a) 
+ (  -0.50000) v(Z,a,b,c) kdelta(Y,J) cre(b) cre(c) des(X) des(a) 
+ (   0.50000) v(Z,a,b,c) kdelta(b,J) cre(Y) cre(c) des(X) des(a) 
+ (  -0.50000) v(Z,a,b,c) kdelta(c,J) cre(Y) cre(b) des(X) des(a) 
+
+Normal ordering with respect to core:=>
+Term=  (   0.50000) v(a,b,X,c) cre(Y) cre(Z) cre(c) des(J) des(a) des(b) 
+Terms after normal ordering:
+ (  -0.50000) v(a,b,X,c) cre(Y) cre(Z) des(J) cre(c) des(a) des(b) 
+ (   0.50000) v(a,b,X,c) kdelta(Y,J) cre(Z) cre(c) des(a) des(b) 
+ (  -0.50000) v(a,b,X,c) kdelta(Z,J) cre(Y) cre(c) des(a) des(b) 
+ (   0.50000) v(a,b,X,c) kdelta(c,J) cre(Y) cre(Z) des(a) des(b) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (   0.00000) e(J) des(J) cre(Y) cre(Z) des(X) 
+ (  -1.00000) e(J) kdelta(Y,J) cre(Z) des(X) 
+ (   1.00000) e(J) kdelta(Z,J) cre(Y) des(X) 
+ (   0.00000) h(X,a) des(J) cre(Y) cre(Z) des(a) 
+ (  -1.00000) h(X,a) kdelta(Y,J) cre(Z) des(a) 
+ (   1.00000) h(X,a) kdelta(Z,J) cre(Y) des(a) 
+ (   0.00000) h(Y,a) des(J) cre(Z) cre(a) des(X) 
+ (  -1.00000) h(Y,a) kdelta(Z,J) cre(a) des(X) 
+ (   0.00000) h(Y,a) kdelta(a,J) cre(Z) des(X) 
+ (   0.00000) h(Z,a) des(J) cre(Y) cre(a) des(X) 
+ (   1.00000) h(Z,a) kdelta(Y,J) cre(a) des(X) 
+ (   0.00000) h(Z,a) kdelta(a,J) cre(Y) des(X) 
+ (   0.00000) v(Y,Z,a,b) des(J) cre(a) cre(b) des(X) 
+ (   0.00000) v(Y,Z,a,b) kdelta(a,J) cre(b) des(X) 
+ (   0.00000) v(Y,Z,a,b) kdelta(b,J) cre(a) des(X) 
+ (   0.00000) v(Y,a,a,b) des(J) cre(Z) cre(b) des(X) 
+ (   1.00000) v(Y,a,a,b) kdelta(Z,J) cre(b) des(X) 
+ (   0.00000) v(Y,a,a,b) kdelta(b,J) cre(Z) des(X) 
+ (   0.00000) v(Z,a,a,b) des(J) cre(Y) cre(b) des(X) 
+ (  -1.00000) v(Z,a,a,b) kdelta(Y,J) cre(b) des(X) 
+ (   0.00000) v(Z,a,a,b) kdelta(b,J) cre(Y) des(X) 
+ (   0.00000) v(a,b,X,a) des(J) cre(Y) cre(Z) des(b) 
+ (   1.00000) v(a,b,X,a) kdelta(Y,J) cre(Z) des(b) 
+ (  -1.00000) v(a,b,X,a) kdelta(Z,J) cre(Y) des(b) 
+ (   0.00000) v(Y,a,b,c) cre(Z) cre(b) des(J) cre(c) des(X) des(a) 
+ (   0.50000) v(Y,a,b,c) kdelta(Z,J) cre(b) cre(c) des(X) des(a) 
+ (   0.00000) v(Y,a,b,c) kdelta(b,J) cre(Z) cre(c) des(X) des(a) 
+ (   0.00000) v(Y,a,b,c) kdelta(c,J) cre(Z) cre(b) des(X) des(a) 
+ (   0.00000) v(Z,a,b,c) cre(Y) cre(b) des(J) cre(c) des(X) des(a) 
+ (  -0.50000) v(Z,a,b,c) kdelta(Y,J) cre(b) cre(c) des(X) des(a) 
+ (   0.00000) v(Z,a,b,c) kdelta(b,J) cre(Y) cre(c) des(X) des(a) 
+ (   0.00000) v(Z,a,b,c) kdelta(c,J) cre(Y) cre(b) des(X) des(a) 
+ (   0.00000) v(a,b,X,c) cre(Y) cre(Z) des(J) cre(c) des(a) des(b) 
+ (   0.50000) v(a,b,X,c) kdelta(Y,J) cre(Z) cre(c) des(a) des(b) 
+ (  -0.50000) v(a,b,X,c) kdelta(Z,J) cre(Y) cre(c) des(a) des(b) 
+ (   0.00000) v(a,b,X,c) kdelta(c,J) cre(Y) cre(Z) des(a) des(b) 
+
+Combining like terms:
+Converting 14 terms to canonical form...
+     0   (  -1.00000) e(J) kdelta(Y,J) cre(Z) des(X) 
+     1   (   1.00000) e(J) kdelta(Z,J) cre(Y) des(X) 
+     2   (  -1.00000) h(X,a) kdelta(Y,J) cre(Z) des(a) 
+     3   (   1.00000) h(X,a) kdelta(Z,J) cre(Y) des(a) 
+     4   (  -1.00000) h(Y,a) kdelta(Z,J) cre(a) des(X) 
+     5   (   1.00000) h(Z,a) kdelta(Y,J) cre(a) des(X) 
+     6   (   1.00000) v(Y,a,a,b) kdelta(Z,J) cre(b) des(X) 
+     7   (  -1.00000) v(Z,a,a,b) kdelta(Y,J) cre(b) des(X) 
+     8   (   1.00000) v(a,b,X,a) kdelta(Y,J) cre(Z) des(b) 
+     9   (  -1.00000) v(a,b,X,a) kdelta(Z,J) cre(Y) des(b) 
+    10   (   0.50000) v(Y,a,b,c) kdelta(Z,J) cre(b) cre(c) des(X) des(a) 
+    11   (  -0.50000) v(Z,a,b,c) kdelta(Y,J) cre(b) cre(c) des(X) des(a) 
+    12   (   0.50000) v(a,b,X,c) kdelta(Y,J) cre(Z) cre(c) des(a) des(b) 
+    13   (  -0.50000) v(a,b,X,c) kdelta(Z,J) cre(Y) cre(c) des(a) des(b) 
+Finished combining terms in 0.015 seconds
+
+Dummy indices label update:=>
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+
+----------------------- Final results ------------------------
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------

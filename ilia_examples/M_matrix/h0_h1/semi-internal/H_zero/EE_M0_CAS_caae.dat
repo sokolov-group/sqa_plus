@@ -1,0 +1,96 @@
+
+--------------------------------------------------------------
+ Effective Hamiltonian: Construct effective Hamiltonian ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ --------------------------------------------------------------
+
+ (   1.00000) E_fc 
+ (  -1.00000) e(c0) des(c0) cre(c0) 
+ (   1.00000) e(v0) cre(v0) des(v0) 
+ (   1.00000) h(a1,a0) cre(a0) des(a1) 
+ (   1.00000) v(a1,c1,a0,c1) cre(a0) des(a1) 
+ (   0.25000) v(a2,a3,a0,a1) cre(a0) cre(a1) des(a3) des(a2) 
+
+Combining like terms:
+Converting 24 terms to canonical form...
+     0   (   1.00000) E_fc cre(A) cre(Y) des(X) des(J) 
+     1   (  -1.00000) E_fc cre(A) cre(Y) des(X) des(J) 
+     2   (  -1.00000) e(c0) cre(A) cre(Y) cre(c0) des(J) des(X) des(c0) 
+     3   (   1.00000) e(c0) cre(A) cre(Y) des(J) des(X) 
+     4   (   1.00000) e(c0) cre(A) cre(Y) cre(c0) des(J) des(X) des(c0) 
+     5   (  -1.00000) e(J) cre(A) cre(Y) des(X) des(J) 
+     6   (  -1.00000) e(c0) cre(A) cre(Y) des(J) des(X) 
+     7   (  -1.00000) e(v0) cre(A) cre(Y) cre(v0) des(J) des(X) des(v0) 
+     8   (   1.00000) e(A) cre(Y) cre(A) des(J) des(X) 
+     9   (   1.00000) e(v0) cre(A) cre(Y) cre(v0) des(J) des(X) des(v0) 
+    10   (  -1.00000) h(a1,a0) cre(A) cre(Y) cre(a0) des(J) des(X) des(a1) 
+    11   (  -1.00000) h(Y,a0) cre(A) cre(a0) des(J) des(X) 
+    12   (   1.00000) h(a1,a0) cre(A) cre(Y) cre(a0) des(J) des(X) des(a1) 
+    13   (   1.00000) h(a1,X) cre(A) cre(Y) des(J) des(a1) 
+    14   (  -1.00000) v(a1,c1,a0,c1) cre(A) cre(Y) cre(a0) des(J) des(X) des(a1) 
+    15   (  -1.00000) v(Y,c1,a0,c1) cre(A) cre(a0) des(J) des(X) 
+    16   (   1.00000) v(a1,c1,a0,c1) cre(A) cre(Y) cre(a0) des(J) des(X) des(a1) 
+    17   (   1.00000) v(a1,c1,X,c1) cre(A) cre(Y) des(J) des(a1) 
+    18   (   0.25000) v(a2,a3,a0,a1) cre(A) cre(Y) cre(a0) cre(a1) des(J) des(X) des(a2) des(a3) 
+    19   (   0.25000) v(a2,Y,a0,a1) cre(A) cre(a0) cre(a1) des(J) des(X) des(a2) 
+    20   (  -0.25000) v(Y,a3,a0,a1) cre(A) cre(a0) cre(a1) des(J) des(X) des(a3) 
+    21   (  -0.25000) v(a2,a3,a0,a1) cre(A) cre(Y) cre(a0) cre(a1) des(J) des(X) des(a2) des(a3) 
+    22   (   0.25000) v(a2,a3,X,a1) cre(A) cre(Y) cre(a1) des(J) des(a2) des(a3) 
+    23   (  -0.25000) v(a2,a3,a0,X) cre(A) cre(Y) cre(a0) des(J) des(a2) des(a3) 
+Finished combining terms in 0.017 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   0.00000) e(A) cre(A) cre(Y) des(J) des(X) 
+ (   0.00000) e(J) cre(A) cre(Y) des(J) des(X) 
+ (   0.00000) h(X,a) cre(A) cre(Y) des(J) des(a) 
+ (   0.00000) h(Y,a) cre(A) cre(a) des(J) des(X) 
+ (   0.00000) v(Y,a,a,b) cre(A) cre(b) des(J) des(X) 
+ (   0.00000) v(a,b,X,a) cre(A) cre(Y) des(J) des(b) 
+ (   0.00000) v(Y,a,b,c) cre(A) cre(b) cre(c) des(J) des(X) des(a) 
+ (   0.00000) v(a,b,X,c) cre(A) cre(Y) cre(c) des(J) des(a) des(b) 
+
+Expectation value: Filter zero terms wrt core:=>
+
+Combining like terms:
+Converting 0 terms to canonical form...
+Finished combining terms in 0.000 seconds
+
+Dummy indices label update:=>
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+
+----------------------- Final results ------------------------
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------

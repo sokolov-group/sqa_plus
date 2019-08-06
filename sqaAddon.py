@@ -27,6 +27,7 @@ from sqaMisc import makeTuples, allDifferent, makePermutations
 from sqaSymmetry import symmetry
 
 from sqaNormalOrder import normalOrder
+from sqaHeff import sqalatex
 
 # Create an object of the index class
 #addon = index()
@@ -102,6 +103,8 @@ def matrixBlock(nterms, transRDM = False):
 #    print index_types
 #
  print ""
+
+# sqalatex(fTerms)
  return fTerms
 #
 #####################################
