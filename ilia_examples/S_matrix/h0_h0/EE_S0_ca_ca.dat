@@ -1,0 +1,77 @@
+
+Combining like terms:
+Converting 4 terms to canonical form...
+     0   (   1.00000) cre(I) cre(Y) des(J) des(X) 
+     1   (   1.00000) kdelta(X,Y) cre(I) des(J) 
+     2   (  -1.00000) cre(I) cre(Y) des(J) des(X) 
+     3   (  -1.00000) kdelta(J,I) cre(Y) des(X) 
+Finished combining terms in 0.002 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+ (   1.00000) kdelta(X,Y) cre(I) des(J) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+Terms after normal ordering:
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) kdelta(X,Y) cre(I) des(J) 
+Terms after normal ordering:
+ (  -1.00000) kdelta(X,Y) des(J) cre(I) 
+ (   1.00000) kdelta(X,Y) kdelta(I,J) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+ (   0.00000) kdelta(X,Y) des(J) cre(I) 
+ (   1.00000) kdelta(X,Y) kdelta(I,J) 
+
+Combining like terms:
+Converting 2 terms to canonical form...
+     0   (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+     1   (   1.00000) kdelta(X,Y) kdelta(I,J) 
+Finished combining terms in 0.002 seconds
+
+Dummy indices label update:=>
+ (   1.00000) kdelta(I,J) kdelta(X,Y) 
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+
+----------------------- Final results ------------------------
+ (   1.00000) kdelta(I,J) kdelta(X,Y) 
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =  np.einsum('IJ, XY->IJXY', np.identity(ncore), np.identity(ncas), optimize = True)
+temp -= np.einsum('IJ, YX->IJXY', np.identity(ncore), rdm_ca_so, optimize = True)
