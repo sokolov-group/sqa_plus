@@ -52,11 +52,11 @@ def Heff(order):
  tg_g = tg_c + tg_a + tg_v
  dummy = True
 # Core dummy indices
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(100)]
+ cc = [index('c%i' %p, [tg_c], dummy) for p in range(200)]
 # Active dummy indices
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(100)]
+ aa = [index('a%i' %p, [tg_a], dummy) for p in range(200)]
 # Virtual dummy indices
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(100)]
+ vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
 #
  effH = []
  Hamil = []
@@ -180,6 +180,16 @@ def Heff(order):
 #
 # (V + L1)
        VL1 = []
+# Use new V
+       cc1 = []
+       aa1 = []
+       vv1 = []
+       for i in range(30):
+           cc1.append(cc.pop(0))
+           aa1.append(aa.pop(0))
+           vv1.append(vv.pop(0))
+       V = Vperturbation_type(cc1, aa1, vv1)
+#
        VL1.extend(V)
        VL1.extend(L1)    
 #
