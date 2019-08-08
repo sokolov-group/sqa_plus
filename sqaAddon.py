@@ -118,8 +118,8 @@ def dummyLabel(nterms):
     index_types = ()
 #
     coreInd = list('ijklmnopq')
-#    actvInd = list('xyzwuvstr')
-    actvInd = list('xyzwuvstrXYZWUVSTR')
+    actvInd = list('xyzwuvstr')
+#    actvInd = list('xyzwuvstrXYZWUVSTR')
     virtInd = list('abcdefgh')
 #
     for t_tensor in t.tensors:
