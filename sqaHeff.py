@@ -58,61 +58,32 @@ def Heff(order):
 # Virtual dummy indices
  vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
 #
- effH = []
- Hamil = []
-# E_fc :
- c = index('Const.', [], dummy)
- Efc = tensor('E_fc',[c], [])
- Hamil.append( term(1.0, ['E_fc'], []))
-# Hamil.append( term(1.0, [], [Efc]))
-#
- cor = cc.pop(0)
- vir = vv.pop(0) 
-# core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
- e_core = tensor('e', [cor], [])
- e_virt = tensor('e', [vir], [])
-# Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
-# Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
- Hamil.append( term(-1.0, [],[e_core, desOp(cor), creOp(cor)]))
- Hamil.append( term(1.0, [],[e_virt, creOp(vir), desOp(vir)]))
-#
-# active part : H_act
- Hact = []
- act1 = aa.pop(0)
- act2 = aa.pop(0)
- cor = cc.pop(0)
- act3 = aa.pop(0)
- act4 = aa.pop(0)
-# symmetry
- h1sym = [ symmetry((1,0),1)]
- v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
-#
- h1 =  tensor('h',[act2, act1], h1sym)
- v1 =  tensor('v', [act2, cor, act1, cor], v2sym)
- v2 =  tensor('v', [act3, act4, act1, act2], v2sym)
-#
- Hact.append( term(1.0, [], [h1,  creOp(act1), desOp(act2)]))
- Hact.append( term(1.0, [], [v1,  creOp(act1), desOp(act2)]))
- Hact.append( term(0.25, [], [v2,  creOp(act1), creOp(act2), desOp(act4), desOp(act3)]))
-#
-# for t in Hact:
-#    print 'Hact=', t
-#
- Hamil.extend(Hact)
-# for t in Hamil:
-#    print 'Hamiltonian(0)=', t
+################## TESTING ######################
 #
  if (order == 0):
-    L0 = []
-    L0.extend(Hamil)
-    effH = L0
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+       cc1.append(cc.pop(0))
+       aa1.append(aa.pop(0))
+       vv1.append(vv.pop(0))
+#
+    effH = dyallH(cc1, aa1, vv1)
     return effH
 #
-############################
-#
- elif (order >= 1):
-# L(1) = V + [H(0),T(1) - T'(1)]
+ if (order == 1):   # L(1) = V + [H(0),T(1) - T'(1)]
     L1 = []
+
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+       cc1.append(cc.pop(0))
+       aa1.append(aa.pop(0))
+       vv1.append(vv.pop(0))
+#
+    effH = dyallH(cc1, aa1, vv1)
 #
     cc1 = []
     aa1 = []
@@ -122,11 +93,8 @@ def Heff(order):
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
 #
-    V = []
-#
-#    vtype = 'V[n=0]'
-#    V = Vperturbation_type(V, cc1, aa1, vv1, vtype = 'V[n=0]')  # Example
     V = Vperturbation_type(cc1, aa1, vv1)
+#
     L1.extend(V)
 #
     cc1 = []
@@ -136,90 +104,309 @@ def Heff(order):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
-#    ttype = 'full'
-#    ttype = 'C-A'
-    T1 = []
-#    T1.extend(Tamplitude(T1, 1, cc1, aa1, vv1, ttype = 'full'))
-    T1.extend(Tamplitude(T1, 1, cc1, aa1, vv1))
+    T1 = Tamplitude(1, cc1, aa1, vv1)
 #
-    com1 = commutator(Hamil, T1)
+    com1 = commutator(effH, T1)
 #
     L1.extend(com1)
+
+    return L1
 #
-    if (order == 1):
-#   L(1) = V + [H(0),T(1) - T'(1)]
-       effH = L1
-       return effH
+ if (order == 2):    #   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
+    L2 = []
+
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+       cc1.append(cc.pop(0))
+       aa1.append(aa.pop(0))
+       vv1.append(vv.pop(0))
 #
-############################
+    effH = dyallH(cc1, aa1, vv1)
 #
-    elif (order == 2):
-#   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+        cc1.append(cc.pop(0))
+        aa1.append(aa.pop(0))
+        vv1.append(vv.pop(0))
+    T2 = Tamplitude(2, cc1, aa1, vv1)
+    com1 = commutator(effH, T2)
+
+    L2.extend(com1)              # 1st Commutator
 #
-       L2 = []
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(30):
+        cc1.append(cc.pop(0))
+        aa1.append(aa.pop(0))
+        vv1.append(vv.pop(0))
 #
-       cc1 = []
-       aa1 = []
-       vv1 = []
-       for i in range(4):
-           cc1.append(cc.pop(0))
-           aa1.append(aa.pop(0))
-           vv1.append(vv.pop(0))
+    V = Vperturbation_type(cc1, aa1, vv1)
 #
-       T2 = []
-#       T2.extend(Tamplitude(T2, 2, cc1, aa1, vv1, ttype = 'full'))
-       T2.extend(Tamplitude(T2, 2, cc1, aa1, vv1))
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+        cc1.append(cc.pop(0))
+        aa1.append(aa.pop(0))
+        vv1.append(vv.pop(0))
+    T1 = Tamplitude(1, cc1, aa1, vv1)
+    com2 = commutator(V, T1)
+
+    L2.extend(com2)              # 2nd Commutator
 #
-       com2 = commutator(Hamil, T2)
-       L2.extend(com2)
-######################
-# for checking purpose for T2
-#       effH = L2
-#       return effH
-######################
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+       cc1.append(cc.pop(0))
+       aa1.append(aa.pop(0))
+       vv1.append(vv.pop(0))
 #
-# (V + L1)
-       VL1 = []
-# Use new V
-       cc1 = []
-       aa1 = []
-       vv1 = []
-       for i in range(30):
-           cc1.append(cc.pop(0))
-           aa1.append(aa.pop(0))
-           vv1.append(vv.pop(0))
-       V = Vperturbation_type(cc1, aa1, vv1)
+    effH = dyallH(cc1, aa1, vv1)
 #
-       VL1.extend(V)
-       VL1.extend(L1)    
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+        cc1.append(cc.pop(0))
+        aa1.append(aa.pop(0))
+        vv1.append(vv.pop(0))
+    T1_new1 = Tamplitude(1, cc1, aa1, vv1)
 #
-       for t in VL1:
-          t.scale(0.5)
+    com3 = commutator(effH, T1_new1)
 #
-# Use new T1
-       cc1 = []
-       aa1 = []
-       vv1 = []
-       for i in range(4):
-           cc1.append(cc.pop(0))
-           aa1.append(aa.pop(0))
-           vv1.append(vv.pop(0))
-       T1_new = []
-       T1_new.extend(Tamplitude(T1_new, 1, cc1, aa1, vv1))
+    cc1 = []
+    aa1 = []
+    vv1 = []
+    for i in range(4):
+        cc1.append(cc.pop(0))
+        aa1.append(aa.pop(0))
+        vv1.append(vv.pop(0))
+    T1_new2 = Tamplitude(1, cc1, aa1, vv1)
 #
-       com3 = commutator(VL1, T1_new)
-#       for term in com3:
-#          term.numConstant = 0.5 * term.numConstant
-       L2.extend(com3)
+    com4 = commutator(com3, T1_new2)
 #
-       effH = L2
+
+    for t in com4:
+       t.scale(0.5)
+    L2.extend(com4)              # 3rd Commutator
+
+    for t in L2:
+      print t
+
+    return L2
 #
-       return effH
-#
-############################
-    else:
+    if (order > 2):
        raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
+
+#####
+def dyallH(cc, aa, vv):
+ Hamil = []
+# E_fc :
+ #c = index('Const.', [], dummy = True)
+ c = index('Const.', [], True)
+ Efc = tensor('E_fc',[c], [])
+ Hamil.append( term(1.0, ['E_fc'], []))
+# Hamil.append( term(1.0, [], [Efc]))
 #
+# core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
+ e_core = tensor('e', [cc[0]], [])
+ e_virt = tensor('e', [vv[0]], [])
+# Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
+# Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
+ Hamil.append( term(-1.0, [],[e_core, desOp(cc[0]), creOp(cc[0])]))
+ Hamil.append( term(1.0, [],[e_virt, creOp(vv[0]), desOp(vv[0])]))
+#
+# active part : H_act
+ Hact = []
+# symmetry
+ h1sym = [ symmetry((1,0),1)]
+ v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+#
+ h1 =  tensor('h',[aa[1], aa[0]], h1sym)
+ v1 =  tensor('v', [aa[1], cc[1], aa[0], cc[1]], v2sym)
+ v2 =  tensor('v', [aa[2], aa[3], aa[0], aa[1]], v2sym)
+#
+ Hact.append( term(1.0, [], [h1,  creOp(aa[0]), desOp(aa[1])]))
+ Hact.append( term(1.0, [], [v1,  creOp(aa[0]), desOp(aa[0])]))
+ Hact.append( term(0.25, [], [v2,  creOp(aa[0]), creOp(aa[1]), desOp(aa[3]), desOp(aa[2])]))
+#
+ Hamil.extend(Hact)
+#
+# for t in Hamil:
+#   print t
+#
+ return Hamil
+
+#################################################
+##
+# effH = []
+# Hamil = []
+## E_fc :
+# c = index('Const.', [], dummy)
+# Efc = tensor('E_fc',[c], [])
+# Hamil.append( term(1.0, ['E_fc'], []))
+## Hamil.append( term(1.0, [], [Efc]))
+##
+# cor = cc.pop(0)
+# vir = vv.pop(0) 
+## core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
+# e_core = tensor('e', [cor], [])
+# e_virt = tensor('e', [vir], [])
+## Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
+## Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
+# Hamil.append( term(-1.0, [],[e_core, desOp(cor), creOp(cor)]))
+# Hamil.append( term(1.0, [],[e_virt, creOp(vir), desOp(vir)]))
+##
+## active part : H_act
+# Hact = []
+# act1 = aa.pop(0)
+# act2 = aa.pop(0)
+# cor = cc.pop(0)
+# act3 = aa.pop(0)
+# act4 = aa.pop(0)
+## symmetry
+# h1sym = [ symmetry((1,0),1)]
+# v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+##
+# h1 =  tensor('h',[act2, act1], h1sym)
+# v1 =  tensor('v', [act2, cor, act1, cor], v2sym)
+# v2 =  tensor('v', [act3, act4, act1, act2], v2sym)
+##
+# Hact.append( term(1.0, [], [h1,  creOp(act1), desOp(act2)]))
+# Hact.append( term(1.0, [], [v1,  creOp(act1), desOp(act2)]))
+# Hact.append( term(0.25, [], [v2,  creOp(act1), creOp(act2), desOp(act4), desOp(act3)]))
+##
+## for t in Hact:
+##    print 'Hact=', t
+##
+# Hamil.extend(Hact)
+## for t in Hamil:
+##    print 'Hamiltonian(0)=', t
+##
+# if (order == 0):
+#    L0 = []
+#    L0.extend(Hamil)
+#    effH = L0
+#    return effH
+##
+#############################
+##
+# elif (order >= 1):
+## L(1) = V + [H(0),T(1) - T'(1)]
+#    L1 = []
+##
+#    cc1 = []
+#    aa1 = []
+#    vv1 = []
+#    for i in range(30):
+#        cc1.append(cc.pop(0))
+#        aa1.append(aa.pop(0))
+#        vv1.append(vv.pop(0))
+##
+#    V = []
+##
+##    vtype = 'V[n=0]'
+##    V = Vperturbation_type(V, cc1, aa1, vv1, vtype = 'V[n=0]')  # Example
+#    V = Vperturbation_type(cc1, aa1, vv1)
+#    L1.extend(V)
+##
+#    cc1 = []
+#    aa1 = []
+#    vv1 = []
+#    for i in range(4):
+#        cc1.append(cc.pop(0))
+#        aa1.append(aa.pop(0))
+#        vv1.append(vv.pop(0))
+##    ttype = 'full'
+##    ttype = 'C-A'
+#    T1 = []
+##    T1.extend(Tamplitude(T1, 1, cc1, aa1, vv1, ttype = 'full'))
+#    T1.extend(Tamplitude(T1, 1, cc1, aa1, vv1))
+##
+#    com1 = commutator(Hamil, T1)
+##
+#    L1.extend(com1)
+##
+#    if (order == 1):
+##   L(1) = V + [H(0),T(1) - T'(1)]
+#       effH = L1
+#       return effH
+##
+#############################
+##
+#    elif (order == 2):
+##   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
+##
+#       L2 = []
+##
+#       cc1 = []
+#       aa1 = []
+#       vv1 = []
+#       for i in range(4):
+#           cc1.append(cc.pop(0))
+#           aa1.append(aa.pop(0))
+#           vv1.append(vv.pop(0))
+##
+#       T2 = []
+##       T2.extend(Tamplitude(T2, 2, cc1, aa1, vv1, ttype = 'full'))
+#       T2.extend(Tamplitude(T2, 2, cc1, aa1, vv1))
+##
+#       com2 = commutator(Hamil, T2)
+#       L2.extend(com2)
+#######################
+## for checking purpose for T2
+##       effH = L2
+##       return effH
+#######################
+##
+## (V + L1)
+#       VL1 = []
+## Use new V
+#       cc1 = []
+#       aa1 = []
+#       vv1 = []
+#       for i in range(30):
+#           cc1.append(cc.pop(0))
+#           aa1.append(aa.pop(0))
+#           vv1.append(vv.pop(0))
+#       V = Vperturbation_type(cc1, aa1, vv1)
+##
+#       VL1.extend(V)
+#       VL1.extend(L1)    
+##
+#       for t in VL1:
+#          t.scale(0.5)
+##
+## Use new T1
+#       cc1 = []
+#       aa1 = []
+#       vv1 = []
+#       for i in range(4):
+#           cc1.append(cc.pop(0))
+#           aa1.append(aa.pop(0))
+#           vv1.append(vv.pop(0))
+#       T1_new = []
+#       T1_new.extend(Tamplitude(T1_new, 1, cc1, aa1, vv1))
+##
+#       com3 = commutator(VL1, T1_new)
+##       for term in com3:
+##          term.numConstant = 0.5 * term.numConstant
+#       L2.extend(com3)
+##
+#       effH = L2
+##
+#       return effH
+##
+#############################
+#    else:
+#       raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
+##
 #####################################
 #
 def Vperturbation_type(cc, aa, vv, vtype = None):
@@ -289,7 +476,7 @@ def Vperturbation_type(cc, aa, vv, vtype = None):
  return V
 #####################################
 #
-def Tamplitude(T, order, cc1, aa1, vv1, ttype = None):
+def Tamplitude(order, cc1, aa1, vv1, ttype = None):
 # Cluster operator : T - T^dag, Where T = T1 + T2
 # Single excitatio : T1
 #
