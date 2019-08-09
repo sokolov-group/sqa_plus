@@ -52,11 +52,11 @@ def Heff(order):
  tg_g = tg_c + tg_a + tg_v
  dummy = True
 # Core dummy indices
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(200)]
+ cc = [index('c%i' %p, [tg_c], dummy) for p in range(500)]
 # Active dummy indices
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(200)]
+ aa = [index('a%i' %p, [tg_a], dummy) for p in range(500)]
 # Virtual dummy indices
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
+ vv = [index('v%i' %p, [tg_v], dummy) for p in range(500)]
 #
 ################## TESTING ######################
 #
@@ -100,7 +100,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
@@ -128,7 +128,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
@@ -150,7 +150,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
@@ -172,7 +172,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
@@ -183,7 +183,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
@@ -476,7 +476,7 @@ def Vperturbation_type(cc, aa, vv, vtype = None):
  return V
 #####################################
 #
-def Tamplitude(order, cc1, aa1, vv1, ttype = None):
+def Tamplitude(order, cc1, aa1, vv1):
 # Cluster operator : T - T^dag, Where T = T1 + T2
 # Single excitatio : T1
 #
@@ -485,159 +485,312 @@ def Tamplitude(order, cc1, aa1, vv1, ttype = None):
     tname = 't1'
  elif (order == 2):
     tname = 't2'
-#
+
  t1_sym = [ symmetry((1,0),1)]
- t2_sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]  # General antisymmetric relation
- t2_sym1 = [symmetry((0,1,3,2), -1)] # Antisym: only upper indices when lower indices are different types
 
-#
  T = []
- #Tex = []
- #Tdex = []
- T_CE = []
- T_CA = []
- T_AE = []
- T_othr = []
- for typ in range(4):
-     cc = list(cc1)
-     aa = list(aa1)
-     vv = list(vv1)
-     if (typ == 0):                # Core-External
-         ind1 = cc.pop(0)
-         ind2 = vv.pop(0)
-         ind3 = aa.pop(0)
-         ind4 = aa.pop(0)
-         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
-       #  t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym1) # t2_sym1: only upper indices
-         t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
-#         t1_tens =  tensor(tname, [ind2,ind1],t1_sym            # old
-#         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym) # old
-         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
-         T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
-         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-         T2_dex =  term(-1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-#
-         T_CE.append(T1_ex)
-         T_CE.append(T2_ex)
-         T_CE.append(T1_dex)
-         T_CE.append(T2_dex)
-     elif (typ == 1):              # Core-Active
-         ind1 = cc.pop(0)
-         ind2 = aa.pop(0)
-         ind3 = aa.pop(0)
-         ind4 = aa.pop(0)
-         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
-       #  t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym)
-         t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
-#         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
-#         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
-         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
-         T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
-         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-         T2_dex =  term(-0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-#
-         T_CA.append(T1_ex)
-         T_CA.append(T2_ex)
-         T_CA.append(T1_dex)
-         T_CA.append(T2_dex)
-
-     elif (typ == 2):              # Active-External
-         ind1 = aa.pop(0)
-         ind2 = vv.pop(0)
-         ind3 = aa.pop(0)
-         ind4 = aa.pop(0)
-         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
-      #   t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym1) # t2_sym1: only upper indices
-         t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
-#         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)           # old
-#         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym) # old
-         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
-         T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
-         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-         T2_dex =  term(-0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-#
-         T_AE.append(T1_ex)
-         T_AE.append(T2_ex)
-         T_AE.append(T1_dex)
-         T_AE.append(T2_dex)
-     else:                           # All types
-         ind1 = cc.pop(0)
-         ind2 = cc.pop(0)
-         ind3 = aa.pop(0)
-         ind4 = aa.pop(0)
-         ind5 = vv.pop(0)
-         ind6 = vv.pop(0)
-# For other type of T2 excitations and de-excitations
-      #   t2_tens1 =  tensor(tname, [ind1,ind2,ind5,ind6],t2_sym)
-         t2_tens1 = custom_tensor(tname, ind1,ind2,ind5,ind6)
-#         t2_tens1 =  tensor(tname, [ind5,ind6,ind1,ind2],t2_sym)
-         T2_ex = term(0.25, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
-         T_othr.append(T2_ex)
-#
-       #  t2_tens2 = tensor(tname, [ind1,ind2,ind5,ind3],t2_sym1) # t2_sym1: only upper indices
-         t2_tens2 = custom_tensor(tname, ind1,ind2,ind5,ind3)
-#         t2_tens2 = tensor(tname, [ind5,ind3,ind1,ind2],t2_sym)  # old
-         T2_ex = term(0.5, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
-         T_othr.append(T2_ex)
-#
-      #   t2_tens3 = tensor(tname, [ind1,ind3,ind5,ind6],t2_sym)
-         t2_tens3 = custom_tensor(tname, ind1,ind3,ind5,ind6)
-#         t2_tens3 = tensor(tname, [ind5,ind6,ind1,ind3],t2_sym)
-         T2_ex = term(0.5, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
-         T_othr.append(T2_ex)
-#
-      #   t2_tens4 = tensor(tname, [ind1,ind2,ind3,ind4],t2_sym)
-         t2_tens4 = custom_tensor(tname, ind1,ind2,ind3,ind4)
-#         t2_tens4 = tensor(tname, [ind3,ind4,ind1,ind2],t2_sym)
-         T2_ex = term(0.25, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
-         T_othr.append(T2_ex)
-#
-      #   t2_tens5 = tensor(tname, [ind4,ind3,ind5,ind6],t2_sym)
-         t2_tens5 = custom_tensor(tname, ind4,ind3,ind5,ind6)
-#         t2_tens5 = tensor(tname, [ind5,ind6,ind4,ind3],t2_sym)
-         T2_ex = term(0.25, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
-         T_othr.append(T2_ex)
-#
-#
-         T2_dex = term(-0.25, [], [t2_tens1,  creOp(ind1), creOp(ind2), desOp(ind6), desOp(ind5)])
-         T_othr.append(T2_dex)
-         T2_dex = term(-0.5, [], [t2_tens2,  creOp(ind1), creOp(ind2), desOp(ind3), desOp(ind5)])
-         T_othr.append(T2_dex)
-         T2_dex = term(-0.5, [], [t2_tens3,  creOp(ind1), creOp(ind3), desOp(ind6), desOp(ind5)])
-         T_othr.append(T2_dex)
-         T2_dex = term(-0.25, [], [t2_tens4,  creOp(ind1), creOp(ind2), desOp(ind4), desOp(ind3)])
-         T_othr.append(T2_dex)
-         T2_dex = term(-0.25, [], [t2_tens5,  creOp(ind4), creOp(ind3), desOp(ind6), desOp(ind5)])
-         T_othr.append(T2_dex)
-#
-# T = T-T^dag
- if not (ttype):
-# Include all type of excitations and de-excitations
-     T.extend(T_CE)
-     T.extend(T_CA)
-     T.extend(T_AE)
-     T.extend(T_othr)
- else:
-     if (ttype == 'C-E'):
+ cc = list(cc1)
+ aa = list(aa1)
+ vv = list(vv1)
 # Core-External
-         T.extend(T_CE)
-     elif (ttype == 'C-A'):
+
+ ind1 = cc.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+ T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+ T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+
+ ind1 = cc.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+ T2_dex =  term(-1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+
+ T.append(T1_ex)
+ T.append(T2_ex)
+ T.append(T1_dex)
+ T.append(T2_dex)
+
 # Core-Active
-         T.extend(T_CA)
-     elif (ttype == 'A-E'):
+ ind1 = cc.pop(0)
+ ind2 = aa.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens = tensor(tname, [ind1,ind2],t1_sym)
+ T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+ T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+
+ ind1 = cc.pop(0)
+ ind2 = aa.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+ T2_dex =  term(-0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+
+ T.append(T1_ex)
+ T.append(T2_ex)
+ T.append(T1_dex)
+ T.append(T2_dex)
+
 # Active-External
-         T.extend(T_AE)
-#
-     else:
-         raise Exception('Unknown type of T operator...')
-#
-# for t in T:
-#     print 't ampli=', t
-#
+ ind1 = aa.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+ T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+ T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+
+ ind1 = aa.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+ T2_dex =  term(-0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+
+ T.append(T1_ex)
+ T.append(T2_ex)
+ T.append(T1_dex)
+ T.append(T2_dex)
+
+ # Doubles
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens1 = custom_tensor(tname, ind1,ind2,ind5,ind6)
+ T2_ex = term(0.25, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
+ T2_dex = term(-0.25, [], [t2_tens1,  creOp(ind1), creOp(ind2), desOp(ind6), desOp(ind5)])
+ T.append(T2_ex)
+ T.append(T2_dex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens2 = custom_tensor(tname, ind1,ind2,ind5,ind3)
+ T2_ex = term(0.5, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
+ T2_dex = term(-0.5, [], [t2_tens2,  creOp(ind1), creOp(ind2), desOp(ind3), desOp(ind5)])
+ T.append(T2_ex)
+ T.append(T2_dex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens3 = custom_tensor(tname, ind1,ind3,ind5,ind6)
+ T2_ex = term(0.5, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
+ T2_dex = term(-0.5, [], [t2_tens3,  creOp(ind1), creOp(ind3), desOp(ind6), desOp(ind5)])
+ T.append(T2_ex)
+ T.append(T2_dex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens4 = custom_tensor(tname, ind1,ind2,ind3,ind4)
+ T2_ex = term(0.25, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
+ T2_dex = term(-0.25, [], [t2_tens4,  creOp(ind1), creOp(ind2), desOp(ind4), desOp(ind3)])
+ T.append(T2_ex)
+ T.append(T2_dex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens5 = custom_tensor(tname, ind4,ind3,ind5,ind6)
+ T2_ex = term(0.25, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
+ T2_dex = term(-0.25, [], [t2_tens5,  creOp(ind4), creOp(ind3), desOp(ind6), desOp(ind5)])
+ T.append(T2_ex)
+ T.append(T2_dex)
+
  return T
-#
+
 #####################################
 #
+
+####def Tamplitude(order, cc1, aa1, vv1, ttype = None):
+##### Cluster operator : T - T^dag, Where T = T1 + T2
+##### Single excitatio : T1
+#####
+##### Define t amplitude according to their order
+#### if (order == 1):
+####    tname = 't1'
+#### elif (order == 2):
+####    tname = 't2'
+#####
+#### t1_sym = [ symmetry((1,0),1)]
+#### t2_sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]  # General antisymmetric relation
+#### t2_sym1 = [symmetry((0,1,3,2), -1)] # Antisym: only upper indices when lower indices are different types
+####
+#####
+#### T = []
+#### #Tex = []
+#### #Tdex = []
+#### T_CE = []
+#### T_CA = []
+#### T_AE = []
+#### T_othr = []
+#### for typ in range(4):
+####     cc = list(cc1)
+####     aa = list(aa1)
+####     vv = list(vv1)
+####     if (typ == 0):                # Core-External
+####         ind1 = cc.pop(0)
+####         ind2 = vv.pop(0)
+####         ind3 = aa.pop(0)
+####         ind4 = aa.pop(0)
+####         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+####       #  t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym1) # t2_sym1: only upper indices
+####         t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+#####         t1_tens =  tensor(tname, [ind2,ind1],t1_sym            # old
+#####         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym) # old
+####         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+####         T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+####         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+####         T2_dex =  term(-1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+#####
+####         T_CE.append(T1_ex)
+####         T_CE.append(T2_ex)
+####         T_CE.append(T1_dex)
+####         T_CE.append(T2_dex)
+####     elif (typ == 1):              # Core-Active
+####         ind1 = cc.pop(0)
+####         ind2 = aa.pop(0)
+####         ind3 = aa.pop(0)
+####         ind4 = aa.pop(0)
+####         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+####       #  t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym)
+####         t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+#####         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)
+#####         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym)
+####         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+####         T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+####         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+####         T2_dex =  term(-0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+#####
+####         T_CA.append(T1_ex)
+####         T_CA.append(T2_ex)
+####         T_CA.append(T1_dex)
+####         T_CA.append(T2_dex)
+####
+####     elif (typ == 2):              # Active-External
+####         ind1 = aa.pop(0)
+####         ind2 = vv.pop(0)
+####         ind3 = aa.pop(0)
+####         ind4 = aa.pop(0)
+####         t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+####      #   t2_tens =  tensor(tname, [ind1,ind4,ind2,ind3],t2_sym1) # t2_sym1: only upper indices
+####         t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+#####         t1_tens =  tensor(tname, [ind2,ind1],t1_sym)           # old
+#####         t2_tens =  tensor(tname, [ind2,ind3,ind1,ind4],t2_sym) # old
+####         T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+####         T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+####         T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+####         T2_dex =  term(-0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+#####
+####         T_AE.append(T1_ex)
+####         T_AE.append(T2_ex)
+####         T_AE.append(T1_dex)
+####         T_AE.append(T2_dex)
+####     else:                           # All types
+####         ind1 = cc.pop(0)
+####         ind2 = cc.pop(0)
+####         ind3 = aa.pop(0)
+####         ind4 = aa.pop(0)
+####         ind5 = vv.pop(0)
+####         ind6 = vv.pop(0)
+##### For other type of T2 excitations and de-excitations
+####      #   t2_tens1 =  tensor(tname, [ind1,ind2,ind5,ind6],t2_sym)
+####         t2_tens1 = custom_tensor(tname, ind1,ind2,ind5,ind6)
+#####         t2_tens1 =  tensor(tname, [ind5,ind6,ind1,ind2],t2_sym)
+####         T2_ex = term(0.25, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
+####         T_othr.append(T2_ex)
+#####
+####       #  t2_tens2 = tensor(tname, [ind1,ind2,ind5,ind3],t2_sym1) # t2_sym1: only upper indices
+####         t2_tens2 = custom_tensor(tname, ind1,ind2,ind5,ind3)
+#####         t2_tens2 = tensor(tname, [ind5,ind3,ind1,ind2],t2_sym)  # old
+####         T2_ex = term(0.5, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
+####         T_othr.append(T2_ex)
+#####
+####      #   t2_tens3 = tensor(tname, [ind1,ind3,ind5,ind6],t2_sym)
+####         t2_tens3 = custom_tensor(tname, ind1,ind3,ind5,ind6)
+#####         t2_tens3 = tensor(tname, [ind5,ind6,ind1,ind3],t2_sym)
+####         T2_ex = term(0.5, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
+####         T_othr.append(T2_ex)
+#####
+####      #   t2_tens4 = tensor(tname, [ind1,ind2,ind3,ind4],t2_sym)
+####         t2_tens4 = custom_tensor(tname, ind1,ind2,ind3,ind4)
+#####         t2_tens4 = tensor(tname, [ind3,ind4,ind1,ind2],t2_sym)
+####         T2_ex = term(0.25, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
+####         T_othr.append(T2_ex)
+#####
+####      #   t2_tens5 = tensor(tname, [ind4,ind3,ind5,ind6],t2_sym)
+####         t2_tens5 = custom_tensor(tname, ind4,ind3,ind5,ind6)
+#####         t2_tens5 = tensor(tname, [ind5,ind6,ind4,ind3],t2_sym)
+####         T2_ex = term(0.25, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
+####         T_othr.append(T2_ex)
+#####
+#####
+####         T2_dex = term(-0.25, [], [t2_tens1,  creOp(ind1), creOp(ind2), desOp(ind6), desOp(ind5)])
+####         T_othr.append(T2_dex)
+####         T2_dex = term(-0.5, [], [t2_tens2,  creOp(ind1), creOp(ind2), desOp(ind3), desOp(ind5)])
+####         T_othr.append(T2_dex)
+####         T2_dex = term(-0.5, [], [t2_tens3,  creOp(ind1), creOp(ind3), desOp(ind6), desOp(ind5)])
+####         T_othr.append(T2_dex)
+####         T2_dex = term(-0.25, [], [t2_tens4,  creOp(ind1), creOp(ind2), desOp(ind4), desOp(ind3)])
+####         T_othr.append(T2_dex)
+####         T2_dex = term(-0.25, [], [t2_tens5,  creOp(ind4), creOp(ind3), desOp(ind6), desOp(ind5)])
+####         T_othr.append(T2_dex)
+#####
+##### T = T-T^dag
+#### if not (ttype):
+##### Include all type of excitations and de-excitations
+####     T.extend(T_CE)
+####     T.extend(T_CA)
+####     T.extend(T_AE)
+####     T.extend(T_othr)
+#### else:
+####     if (ttype == 'C-E'):
+##### Core-External
+####         T.extend(T_CE)
+####     elif (ttype == 'C-A'):
+##### Core-Active
+####         T.extend(T_CA)
+####     elif (ttype == 'A-E'):
+##### Active-External
+####         T.extend(T_AE)
+#####
+####     else:
+####         raise Exception('Unknown type of T operator...')
+#####
+##### for t in T:
+#####     print 't ampli=', t
+#####
+#### return T
+#####
+#########################################
+#####
+####
+####
+
+
 def Vperturbation(cc, aa, vv):
  from sqaAddon import matrixBlock, dummyLabel
 #
