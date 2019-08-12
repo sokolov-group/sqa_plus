@@ -52,11 +52,11 @@ def Heff(order):
  tg_g = tg_c + tg_a + tg_v
  dummy = True
 # Core dummy indices
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(500)]
+ cc = [index('c%i' %p, [tg_c], dummy) for p in range(800)]
 # Active dummy indices
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(500)]
+ aa = [index('a%i' %p, [tg_a], dummy) for p in range(800)]
 # Virtual dummy indices
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(500)]
+ vv = [index('v%i' %p, [tg_v], dummy) for p in range(800)]
 #
 ################## TESTING ######################
 #
@@ -88,7 +88,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(30):
+    for i in range(200):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
@@ -140,7 +140,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(30):
+    for i in range(200):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
@@ -874,14 +874,6 @@ def Vperturbation(cc, aa, vv):
  act2 = aa.pop(0)
 
  ten7 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
  ten8 =  tensor('gamma', [act2, act1], d1sym)
  V.append( term(1.0, [], [ten7, ten8,  desOp(cor2), creOp(cor1)]))
 
@@ -892,6 +884,7 @@ def Vperturbation(cc, aa, vv):
  vir2 = vv.pop(0)
  act2 = aa.pop(0)
 
+ ten8 =  tensor('gamma', [act2, act1], d1sym)
  ten9 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
 # V.append( term(-1.0, [], [ten9, creOp(vir2), desOp(vir1), creOp(act2), desOp(act1)]))
  V.append( term(-1.0, [], [ten9, ten8,  creOp(vir1), desOp(vir2)]))
