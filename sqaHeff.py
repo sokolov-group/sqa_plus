@@ -64,7 +64,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(6):
+    for i in range(10):
        cc1.append(cc.pop(0))
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
@@ -78,7 +78,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(6):
+    for i in range(10):
        cc1.append(cc.pop(0))
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
@@ -118,7 +118,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(6):
+    for i in range(10):
        cc1.append(cc.pop(0))
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
@@ -162,7 +162,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(6):
+    for i in range(10):
        cc1.append(cc.pop(0))
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
