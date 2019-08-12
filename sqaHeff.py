@@ -215,8 +215,8 @@ def dyallH(cc, aa, vv):
 # Hamil.append( term(1.0, [], [Efc]))
 #
 # core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
- e_core = tensor('e', [cc[0]], [])
- e_virt = tensor('e', [vv[0]], [])
+ e_core = tensor('e', [cc[1]], [])
+ e_virt = tensor('e', [vv[1]], [])
 # Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
 # Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
  Hamil.append( term(-1.0, [],[e_core, desOp(cc[1]), creOp(cc[1])]))
