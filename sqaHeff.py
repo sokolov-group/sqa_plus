@@ -64,7 +64,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(6):
        cc1.append(cc.pop(0))
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
@@ -78,7 +78,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(6):
        cc1.append(cc.pop(0))
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
@@ -118,7 +118,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(6):
        cc1.append(cc.pop(0))
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
@@ -162,7 +162,7 @@ def Heff(order):
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(6):
        cc1.append(cc.pop(0))
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
@@ -230,11 +230,11 @@ def dyallH(cc, aa, vv):
 #
  h1 =  tensor('h',[aa[1], aa[0]], h1sym)
  v1 =  tensor('v', [aa[1], cc[1], aa[0], cc[1]], v2sym)
- v2 =  tensor('v', [aa[2], aa[3], aa[0], aa[1]], v2sym)
+ v2 =  tensor('v', [aa[4], aa[5], aa[2], aa[3]], v2sym)
 #
  Hact.append( term(1.0, [], [h1,  creOp(aa[0]), desOp(aa[1])]))
  Hact.append( term(1.0, [], [v1,  creOp(aa[0]), desOp(aa[0])]))
- Hact.append( term(0.25, [], [v2,  creOp(aa[0]), creOp(aa[1]), desOp(aa[3]), desOp(aa[2])]))
+ Hact.append( term(0.25, [], [v2,  creOp(aa[2]), creOp(aa[3]), desOp(aa[5]), desOp(aa[4])]))
 #
  Hamil.extend(Hact)
 #
@@ -801,149 +801,138 @@ def Vperturbation(cc, aa, vv):
  v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
  h1sym = [ symmetry((1,0),1)]
  d1sym = [ symmetry((1,0),1)]
-#
-# Define operator types
- tg_c = options.core_type
- tg_a = options.active_type
- tg_v = options.virtual_type
- tg_g = tg_c + tg_a + tg_v
-#
-# Define indices
- dummy = True
-#
- p = index('p', [], dummy)
- q = index('q', [], dummy)
- r = index('r', [], dummy)
- s = index('s', [], dummy)
-#
-############################
-# list1 = ['c%i' %p for p in range(30)]
-# list2 = ['a%i' %p for p in range(30)]
-# list3 = ['v%i' %p for p in range(30)]
- list1 = []
- list2 = []
- list3 = []
- for i in range(len(cc)):
-    list1.append(cc[i].name)
- for i in range(len(cc)):
-    list2.append(aa[i].name)
- for i in range(len(cc)):
-    list3.append(vv[i].name)
-############################
-#
- indc1 = list1.pop(0)
- indc2 = list1.pop(0)
- inda1 = list2.pop(0)
- inda2 = list2.pop(0)
- indv1 = list3.pop(0)
- indv2 = list3.pop(0)
-#
- cor1 = index(indc1, [tg_c], dummy)
- cor2 = index(indc2, [tg_c], dummy)
- act1 = index(inda1, [tg_a], dummy)
- act2 = index(inda2, [tg_a], dummy)
- vir1 = index(indv1, [tg_v], dummy)
- vir2 = index(indv2, [tg_v], dummy)
-#
+
+ cc1 = list(cc)
+ aa1 = list(aa)
+ vv1 = list(vv)
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten1 =  tensor('h', [cor1, act1], h1sym)
  V.append( term(1.0, [], [ten1, creOp(act1), desOp(cor1)]))
-#
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten2 =  tensor('h', [act1, cor1], h1sym)
  V.append( term(1.0, [], [ten2, creOp(cor1), desOp(act1)]))
-#
-#
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten3 =  tensor('h', [act1, vir1], h1sym)
  V.append( term(1.0, [], [ten3, creOp(vir1), desOp(act1)]))
-#
-#
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten4 =  tensor('h', [vir1, act1], h1sym)
  V.append( term(1.0, [], [ten4, creOp(act1), desOp(vir1)]))
-#
-#
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten5 =  tensor('h', [cor1, vir1], h1sym)
  V.append( term(1.0, [], [ten5, creOp(vir1), desOp(cor1)]))
-#
-#
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten6 =  tensor('h', [vir1, cor1], h1sym)
  V.append( term(1.0, [], [ten6, creOp(cor1), desOp(vir1)]))
-#
-#
-#
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten7 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
-# V.append( term(1.0, [], [ten7, desOp(cor1), creOp(cor2), creOp(act2), desOp(act1)]))
-#
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten8 =  tensor('gamma', [act2, act1], d1sym)
  V.append( term(1.0, [], [ten7, ten8,  desOp(cor2), creOp(cor1)]))
-#
+
+ cor1 = cc.pop(0)
+ vir1 = vv.pop(0)
+ act1 = aa.pop(0)
+ cor2 = cc.pop(0)
+ vir2 = vv.pop(0)
+ act2 = aa.pop(0)
+
  ten9 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
 # V.append( term(-1.0, [], [ten9, creOp(vir2), desOp(vir1), creOp(act2), desOp(act1)]))
  V.append( term(-1.0, [], [ten9, ten8,  creOp(vir1), desOp(vir2)]))
 #
  for ityp1 in range(3):
-#        list1 = list(coreInd)
-#        list2 = list(actvInd)
-#        list3 = list(virtInd)
         if (ityp1 == 0):                              # ityp1 = 0 => Core
-               ind = list1.pop(0)
-               p = index(ind, [tg_c], dummy)
-               list1.append(ind)
+               p = cc.pop(0)
         elif (ityp1 == 1):                            #         1 => Active
-               ind = list2.pop(0)
-               p = index(ind, [tg_a], dummy)
-               list2.append(ind)
+               p = aa.pop(0)
         else:                                         #         2 => Virtual
-               ind = list3.pop(0)
-               p = index(ind, [tg_v], dummy)
-               list3.append(ind)
-#
+               p = vv.pop(0)
         for ityp2 in range(3):
                if (ityp2 == 0):
-                      ind = list1.pop(0)
-                      q = index(ind, [tg_c], dummy)
-                      list1.append(ind)
+                      q = cc.pop(0)
                elif (ityp2 == 1):
-                      ind = list2.pop(0)
-                      q = index(ind, [tg_a], dummy)
-                      list2.append(ind)
+                      q = aa.pop(0)
                else:
-                      ind = list3.pop(0)
-                      q = index(ind, [tg_v], dummy)
-                      list3.append(ind)
+                      q = vv.pop(0)
 #
                for ityp3 in range(3):
                       if (ityp3 == 0):
-                             ind = list1.pop(0)
-                             s = index(ind, [tg_c], dummy)
-                             list1.append(ind)
+                             s = cc.pop(0)
                       elif (ityp3 == 1):
-                             ind = list2.pop(0)
-                             s = index(ind, [tg_a], dummy)
-                             list2.append(ind)
+                             s = aa.pop(0)
                       else:
-                             ind = list3.pop(0)
-                             s = index(ind, [tg_v], dummy)
-                             list3.append(ind)
+                             s = vv.pop(0)
 #
                       for ityp4 in range(3):
                              if (ityp4 == 0):
-                                  ind = list1.pop(0)
-                                  r = index(ind, [tg_c], dummy)
-                                  list1.append(ind)
+                                   r = cc.pop(0)
                              elif (ityp4 == 1):
-                                  ind = list2.pop(0)
-                                  r = index(ind, [tg_a], dummy)
-                                  list2.append(ind)
+                                   r = aa.pop(0)
                              else:
-                                  ind = list3.pop(0)
-                                  r = index(ind, [tg_v], dummy)
-                                  list3.append(ind)
+                                   r = vv.pop(0)
 #
                              if not (p.indType[0][0]=='active' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='active'):
 #
                                    if (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core'):
 #                                       vTen = tensor('v', [r,s,p,q], v2sym)
                                        vTen = tensor('v', [r,s,p,q], v2sym)
-                                       V81.append(term(-0.25, [], [vTen,desOp(r), desOp(s), creOp(p), creOp(q)]))
+                                       V81.append(term(-0.25, [], [vTen, desOp(r), desOp(s), creOp(p), creOp(q)]))
 #
                                    else:
                                        vTen = tensor('v', [r,s,p,q], v2sym)
@@ -951,40 +940,231 @@ def Vperturbation(cc, aa, vv):
                                        V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
 #
  
- p = index(list1.pop(0), [tg_c], dummy)
- q = index(list3.pop(0), [tg_v], dummy)
- s = index(list1.pop(0), [tg_c], dummy)
- r = index(list3.pop(0), [tg_v], dummy)
+ p = cc.pop(0)
+ q = vv.pop(0)
+ s = cc.pop(0)
+ r = vv.pop(0)
  vTen = tensor('v', [r,s,p,q], v2sym)
  V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
 
- p = index(list1.pop(0), [tg_c], dummy)
- q = index(list2.pop(0), [tg_a], dummy)
- s = index(list1.pop(0), [tg_c], dummy)
- r = index(list2.pop(0), [tg_a], dummy)
+ p = cc.pop(0)
+ q = aa.pop(0)
+ s = cc.pop(0)
+ r = aa.pop(0)
  vTen = tensor('v', [r,s,p,q], v2sym)
  V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
 
- p = index(list1.pop(0), [tg_c], dummy)
- q = index(list3.pop(0), [tg_v], dummy)
- s = index(list1.pop(0), [tg_c], dummy)
- r = index(list3.pop(0), [tg_v], dummy)
+ p = cc.pop(0)
+ q = vv.pop(0)
+ s = cc.pop(0)
+ r = vv.pop(0)
  vTen = tensor('v', [r,s,p,q], v2sym)
  V81.append(term(1.0, [], [vTen, creOp(q), desOp(r), desOp(s), creOp(p)]))
 
- p = index(list1.pop(0), [tg_c], dummy)
- q = index(list2.pop(0), [tg_a], dummy)
- s = index(list1.pop(0), [tg_c], dummy)
- r = index(list2.pop(0), [tg_a], dummy)
+ p = cc.pop(0)
+ q = aa.pop(0)
+ s = cc.pop(0)
+ r = aa.pop(0)
  vTen = tensor('v', [r,s,p,q], v2sym)
  V81.append(term(1.0, [], [vTen, desOp(s), creOp(p), creOp(q), desOp(r)]))
 
  V.extend(V81)
-# Dummy indices label upate
-# dummyLabel(V)
-# print len(V81)
+
  return V
-#
+####def Vperturbation(cc, aa, vv):
+#### from sqaAddon import matrixBlock, dummyLabel
+#####
+#### "Construct general perturbation operator V full (default) include all types of V."
+#####
+#### V = []
+#### V81 = []
+#### v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+#### h1sym = [ symmetry((1,0),1)]
+#### d1sym = [ symmetry((1,0),1)]
+#####
+##### Define operator types
+#### tg_c = options.core_type
+#### tg_a = options.active_type
+#### tg_v = options.virtual_type
+#### tg_g = tg_c + tg_a + tg_v
+#####
+##### Define indices
+#### dummy = True
+#####
+#### p = index('p', [], dummy)
+#### q = index('q', [], dummy)
+#### r = index('r', [], dummy)
+#### s = index('s', [], dummy)
+#####
+################################
+##### list1 = ['c%i' %p for p in range(30)]
+##### list2 = ['a%i' %p for p in range(30)]
+##### list3 = ['v%i' %p for p in range(30)]
+#### list1 = []
+#### list2 = []
+#### list3 = []
+#### for i in range(len(cc)):
+####    list1.append(cc[i].name)
+#### for i in range(len(cc)):
+####    list2.append(aa[i].name)
+#### for i in range(len(cc)):
+####    list3.append(vv[i].name)
+################################
+#####
+#### indc1 = list1.pop(0)
+#### indc2 = list1.pop(0)
+#### inda1 = list2.pop(0)
+#### inda2 = list2.pop(0)
+#### indv1 = list3.pop(0)
+#### indv2 = list3.pop(0)
+#####
+#### cor1 = index(indc1, [tg_c], dummy)
+#### cor2 = index(indc2, [tg_c], dummy)
+#### act1 = index(inda1, [tg_a], dummy)
+#### act2 = index(inda2, [tg_a], dummy)
+#### vir1 = index(indv1, [tg_v], dummy)
+#### vir2 = index(indv2, [tg_v], dummy)
+#####
+#### ten1 =  tensor('h', [cor1, act1], h1sym)
+#### V.append( term(1.0, [], [ten1, creOp(act1), desOp(cor1)]))
+#####
+#### ten2 =  tensor('h', [act1, cor1], h1sym)
+#### V.append( term(1.0, [], [ten2, creOp(cor1), desOp(act1)]))
+#####
+#####
+#### ten3 =  tensor('h', [act1, vir1], h1sym)
+#### V.append( term(1.0, [], [ten3, creOp(vir1), desOp(act1)]))
+#####
+#####
+#### ten4 =  tensor('h', [vir1, act1], h1sym)
+#### V.append( term(1.0, [], [ten4, creOp(act1), desOp(vir1)]))
+#####
+#####
+#### ten5 =  tensor('h', [cor1, vir1], h1sym)
+#### V.append( term(1.0, [], [ten5, creOp(vir1), desOp(cor1)]))
+#####
+#####
+#### ten6 =  tensor('h', [vir1, cor1], h1sym)
+#### V.append( term(1.0, [], [ten6, creOp(cor1), desOp(vir1)]))
+#####
+#####
+#####
+#### ten7 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
+##### V.append( term(1.0, [], [ten7, desOp(cor1), creOp(cor2), creOp(act2), desOp(act1)]))
+#####
+#### ten8 =  tensor('gamma', [act2, act1], d1sym)
+#### V.append( term(1.0, [], [ten7, ten8,  desOp(cor2), creOp(cor1)]))
+#####
+#### ten9 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
+##### V.append( term(-1.0, [], [ten9, creOp(vir2), desOp(vir1), creOp(act2), desOp(act1)]))
+#### V.append( term(-1.0, [], [ten9, ten8,  creOp(vir1), desOp(vir2)]))
+#####
+#### for ityp1 in range(3):
+#####        list1 = list(coreInd)
+#####        list2 = list(actvInd)
+#####        list3 = list(virtInd)
+####        if (ityp1 == 0):                              # ityp1 = 0 => Core
+####               ind = list1.pop(0)
+####               p = index(ind, [tg_c], dummy)
+####               list1.append(ind)
+####        elif (ityp1 == 1):                            #         1 => Active
+####               ind = list2.pop(0)
+####               p = index(ind, [tg_a], dummy)
+####               list2.append(ind)
+####        else:                                         #         2 => Virtual
+####               ind = list3.pop(0)
+####               p = index(ind, [tg_v], dummy)
+####               list3.append(ind)
+#####
+####        for ityp2 in range(3):
+####               if (ityp2 == 0):
+####                      ind = list1.pop(0)
+####                      q = index(ind, [tg_c], dummy)
+####                      list1.append(ind)
+####               elif (ityp2 == 1):
+####                      ind = list2.pop(0)
+####                      q = index(ind, [tg_a], dummy)
+####                      list2.append(ind)
+####               else:
+####                      ind = list3.pop(0)
+####                      q = index(ind, [tg_v], dummy)
+####                      list3.append(ind)
+#####
+####               for ityp3 in range(3):
+####                      if (ityp3 == 0):
+####                             ind = list1.pop(0)
+####                             s = index(ind, [tg_c], dummy)
+####                             list1.append(ind)
+####                      elif (ityp3 == 1):
+####                             ind = list2.pop(0)
+####                             s = index(ind, [tg_a], dummy)
+####                             list2.append(ind)
+####                      else:
+####                             ind = list3.pop(0)
+####                             s = index(ind, [tg_v], dummy)
+####                             list3.append(ind)
+#####
+####                      for ityp4 in range(3):
+####                             if (ityp4 == 0):
+####                                  ind = list1.pop(0)
+####                                  r = index(ind, [tg_c], dummy)
+####                                  list1.append(ind)
+####                             elif (ityp4 == 1):
+####                                  ind = list2.pop(0)
+####                                  r = index(ind, [tg_a], dummy)
+####                                  list2.append(ind)
+####                             else:
+####                                  ind = list3.pop(0)
+####                                  r = index(ind, [tg_v], dummy)
+####                                  list3.append(ind)
+#####
+####                             if not (p.indType[0][0]=='active' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='active'):
+#####
+####                                   if (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core'):
+#####                                       vTen = tensor('v', [r,s,p,q], v2sym)
+####                                       vTen = tensor('v', [r,s,p,q], v2sym)
+####                                       V81.append(term(-0.25, [], [vTen,desOp(r), desOp(s), creOp(p), creOp(q)]))
+#####
+####                                   else:
+####                                       vTen = tensor('v', [r,s,p,q], v2sym)
+#####                                       vTen = tensor('v', [p,q,r,s], v2sym)
+####                                       V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
+#####
+#### 
+#### p = index(list1.pop(0), [tg_c], dummy)
+#### q = index(list3.pop(0), [tg_v], dummy)
+#### s = index(list1.pop(0), [tg_c], dummy)
+#### r = index(list3.pop(0), [tg_v], dummy)
+#### vTen = tensor('v', [r,s,p,q], v2sym)
+#### V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
+####
+#### p = index(list1.pop(0), [tg_c], dummy)
+#### q = index(list2.pop(0), [tg_a], dummy)
+#### s = index(list1.pop(0), [tg_c], dummy)
+#### r = index(list2.pop(0), [tg_a], dummy)
+#### vTen = tensor('v', [r,s,p,q], v2sym)
+#### V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
+####
+#### p = index(list1.pop(0), [tg_c], dummy)
+#### q = index(list3.pop(0), [tg_v], dummy)
+#### s = index(list1.pop(0), [tg_c], dummy)
+#### r = index(list3.pop(0), [tg_v], dummy)
+#### vTen = tensor('v', [r,s,p,q], v2sym)
+#### V81.append(term(1.0, [], [vTen, creOp(q), desOp(r), desOp(s), creOp(p)]))
+####
+#### p = index(list1.pop(0), [tg_c], dummy)
+#### q = index(list2.pop(0), [tg_a], dummy)
+#### s = index(list1.pop(0), [tg_c], dummy)
+#### r = index(list2.pop(0), [tg_a], dummy)
+#### vTen = tensor('v', [r,s,p,q], v2sym)
+#### V81.append(term(1.0, [], [vTen, desOp(s), creOp(p), creOp(q), desOp(r)]))
+####
+#### V.extend(V81)
+##### Dummy indices label upate
+##### dummyLabel(V)
+##### print len(V81)
+#### return V
+####
 #####################################
 def print_header():
 
