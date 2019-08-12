@@ -219,8 +219,8 @@ def dyallH(cc, aa, vv):
  e_virt = tensor('e', [vv[0]], [])
 # Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
 # Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
- Hamil.append( term(-1.0, [],[e_core, desOp(cc[0]), creOp(cc[0])]))
- Hamil.append( term(1.0, [],[e_virt, creOp(vv[0]), desOp(vv[0])]))
+ Hamil.append( term(-1.0, [],[e_core, desOp(cc[1]), creOp(cc[1])]))
+ Hamil.append( term(1.0, [],[e_virt, creOp(vv[1]), desOp(vv[1])]))
 #
 # active part : H_act
  Hact = []
@@ -229,12 +229,12 @@ def dyallH(cc, aa, vv):
  v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
 #
  h1 =  tensor('h',[aa[1], aa[0]], h1sym)
- v1 =  tensor('v', [aa[1], cc[1], aa[0], cc[1]], v2sym)
- v2 =  tensor('v', [aa[4], aa[5], aa[2], aa[3]], v2sym)
+ v1 =  tensor('v', [aa[3], cc[2], aa[2], cc[2]], v2sym)
+ v2 =  tensor('v', [aa[6], aa[7], aa[4], aa[5]], v2sym)
 #
  Hact.append( term(1.0, [], [h1,  creOp(aa[0]), desOp(aa[1])]))
- Hact.append( term(1.0, [], [v1,  creOp(aa[0]), desOp(aa[0])]))
- Hact.append( term(0.25, [], [v2,  creOp(aa[2]), creOp(aa[3]), desOp(aa[5]), desOp(aa[4])]))
+ Hact.append( term(1.0, [], [v1,  creOp(aa[3]), desOp(aa[2])]))
+ Hact.append( term(0.25, [], [v2,  creOp(aa[4]), creOp(aa[5]), desOp(aa[7]), desOp(aa[6])]))
 #
  Hamil.extend(Hact)
 #
