@@ -22,7 +22,7 @@ l_op = [sqa.creOp(i), sqa.desOp(a)]
 r_op = [sqa.creOp(b), sqa.desOp(j)]
 
 effH = []
-effH = sqa.Heff(1)
+effH = sqa.Heff(0)
 
 term1 = sqa.term(1.0, [], r_op)
 term2 = sqa.term(1.0, [], l_op)

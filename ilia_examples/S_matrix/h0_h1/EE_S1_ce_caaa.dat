@@ -7,7 +7,7 @@ Converting 6 terms to canonical form...
      3   (   1.00000) cre(I) cre(Y) cre(Z) des(A) des(J) des(X) 
      4   (  -1.00000) kdelta(X,I) cre(Y) cre(Z) des(A) des(J) 
      5   (   1.00000) kdelta(J,I) cre(Y) cre(Z) des(A) des(X) 
-Finished combining terms in 0.005 seconds
+Finished combining terms in 0.002 seconds
 
 
 ------------------------- SQA Addon --------------------------
@@ -69,7 +69,7 @@ Converting 4 terms to canonical form...
      1   (  -1.00000) kdelta(A,Y) kdelta(I,X) kdelta(Z,J) 
      2   (  -1.00000) kdelta(A,Z) kdelta(I,J) cre(Y) des(X) 
      3   (   1.00000) kdelta(A,Z) kdelta(I,X) kdelta(Y,J) 
-Finished combining terms in 0.016 seconds
+Finished combining terms in 0.010 seconds
 
 Dummy indices label update:=>
 

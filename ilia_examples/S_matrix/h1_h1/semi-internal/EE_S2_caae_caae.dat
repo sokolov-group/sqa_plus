@@ -15,7 +15,7 @@ Converting 14 terms to canonical form...
     11   (  -1.00000) kdelta(B,Y) cre(A) cre(J) cre(Z) des(I) des(W) des(X) 
     12   (  -1.00000) kdelta(W,A) kdelta(B,Y) cre(J) cre(Z) des(I) des(X) 
     13   (   1.00000) kdelta(W,Y) kdelta(B,A) cre(J) cre(Z) des(I) des(X) 
-Finished combining terms in 0.020 seconds
+Finished combining terms in 0.007 seconds
 
 
 ------------------------- SQA Addon --------------------------
@@ -114,7 +114,7 @@ Converting 9 terms to canonical form...
      6   (   1.00000) kdelta(A,B) kdelta(J,W) kdelta(Z,I) cre(Y) des(X) 
      7   (   1.00000) kdelta(A,B) kdelta(J,X) kdelta(Y,I) cre(Z) des(W) 
      8   (  -1.00000) kdelta(A,B) kdelta(J,X) kdelta(Z,I) cre(Y) des(W) 
-Finished combining terms in 0.333 seconds
+Finished combining terms in 0.124 seconds
 
 Dummy indices label update:=>
  (  -1.00000) kdelta(A,B) kdelta(I,J) kdelta(W,Y) cre(Z) des(X) 
