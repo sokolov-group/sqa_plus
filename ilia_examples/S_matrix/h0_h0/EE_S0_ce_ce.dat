@@ -1,11 +1,11 @@
 
 Combining like terms:
 Converting 4 terms to canonical form...
-     0   (   1.00000) cre(B) cre(I) des(A) des(J) 
-     1   (   1.00000) kdelta(A,B) cre(I) des(J) 
-     2   (  -1.00000) cre(B) cre(I) des(A) des(J) 
-     3   (  -1.00000) kdelta(J,I) cre(B) des(A) 
-Finished combining terms in 0.002 seconds
+     0   (   1.00000) cre(I) cre(Y) des(J) des(X) 
+     1   (   1.00000) kdelta(X,Y) cre(I) des(J) 
+     2   (  -1.00000) cre(I) cre(Y) des(J) des(X) 
+     3   (  -1.00000) kdelta(J,I) cre(Y) des(X) 
+Finished combining terms in 0.001 seconds
 
 
 ------------------------- SQA Addon --------------------------
@@ -26,31 +26,40 @@ Finished combining terms in 0.002 seconds
 
 
 Expectation value: Filter zero terms wrt virtual:=>
- (   1.00000) kdelta(A,B) cre(I) des(J) 
- (   0.00000) kdelta(I,J) cre(B) des(A) 
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+ (   1.00000) kdelta(X,Y) cre(I) des(J) 
 
 Normal ordering with respect to core:=>
-Term=  (   1.00000) kdelta(A,B) cre(I) des(J) 
+Term=  (  -1.00000) kdelta(I,J) cre(Y) des(X) 
 Terms after normal ordering:
- (  -1.00000) kdelta(A,B) des(J) cre(I) 
- (   1.00000) kdelta(A,B) kdelta(I,J) 
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) kdelta(X,Y) cre(I) des(J) 
+Terms after normal ordering:
+ (  -1.00000) kdelta(X,Y) des(J) cre(I) 
+ (   1.00000) kdelta(X,Y) kdelta(I,J) 
 
 Expectation value: Filter zero terms wrt core:=>
- (   0.00000) kdelta(A,B) des(J) cre(I) 
- (   1.00000) kdelta(A,B) kdelta(I,J) 
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+ (   0.00000) kdelta(X,Y) des(J) cre(I) 
+ (   1.00000) kdelta(X,Y) kdelta(I,J) 
 
 Combining like terms:
-Converting 1 terms to canonical form...
-     0   (   1.00000) kdelta(A,B) kdelta(I,J) 
+Converting 2 terms to canonical form...
+     0   (  -1.00000) kdelta(I,J) cre(Y) des(X) 
+     1   (   1.00000) kdelta(X,Y) kdelta(I,J) 
 Finished combining terms in 0.001 seconds
 
 Dummy indices label update:=>
- (   1.00000) kdelta(A,B) kdelta(I,J) 
+ (   1.00000) kdelta(I,J) kdelta(X,Y) 
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
 
 Reorder tensor indices according to (Core < Active < Virtual): =>
 
 ----------------------- Final results ------------------------
- (   1.00000) kdelta(A,B) kdelta(I,J) 
+ (   1.00000) kdelta(I,J) kdelta(X,Y) 
+ (  -1.00000) kdelta(I,J) cre(Y) des(X) 
 
 
 ----------------------- SQA EINSUM ---------------------------
@@ -64,4 +73,5 @@ Reorder tensor indices according to (Core < Active < Virtual): =>
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =  np.einsum('AB, IJ->IJAB', np.identity(nextern), np.identity(ncore), optimize = True)
+temp =  np.einsum('IJ, XY->IXJY', np.identity(ncore), np.identity(ncas), optimize = True)
+temp -= np.einsum('IJ, YX->IXJY', np.identity(ncore), rdm_ca_so, optimize = True)

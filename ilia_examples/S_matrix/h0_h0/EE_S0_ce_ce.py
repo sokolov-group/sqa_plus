@@ -20,11 +20,10 @@ b = sqa.index('B', [tg_v])
 l_op = [sqa.creOp(i), sqa.desOp(a)]
 r_op = [sqa.creOp(b), sqa.desOp(j)]
 
-
 term1 = sqa.term(1.0, [], l_op)
 term2 = sqa.term(1.0, [], r_op)
 
 term3 = sqa.commutator(term1, term2)
 term4 = sqa.matrixBlock(term3)
 
-sqa.generateEinsum(term4, 'temp', 'IJAB',"")
+sqa.generateEinsum(term4, 'temp', 'IAJB',"")

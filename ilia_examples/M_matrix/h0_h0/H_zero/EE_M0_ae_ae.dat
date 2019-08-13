@@ -1,0 +1,150 @@
+
+--------------------------------------------------------------
+ Effective Hamiltonian: Construct effective Hamiltonian ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ --------------------------------------------------------------
+
+
+Combining like terms:
+Converting 19 terms to canonical form...
+     0   (   1.00000) E_fc cre(B) des(Y) 
+     1   (  -1.00000) E_fc cre(B) des(Y) 
+     2   (  -1.00000) e(c1) cre(B) cre(c1) des(Y) des(c1) 
+     3   (  -1.00000) e(c1) cre(B) des(Y) 
+     4   (   1.00000) e(c1) cre(B) cre(c1) des(Y) des(c1) 
+     5   (   1.00000) e(c1) cre(B) des(Y) 
+     6   (  -1.00000) e(v1) cre(B) cre(v1) des(Y) des(v1) 
+     7   (   1.00000) e(B) cre(B) des(Y) 
+     8   (   1.00000) e(v1) cre(B) cre(v1) des(Y) des(v1) 
+     9   (  -1.00000) h(a1,a0) cre(B) cre(a0) des(Y) des(a1) 
+    10   (   1.00000) h(a1,a0) cre(B) cre(a0) des(Y) des(a1) 
+    11   (  -1.00000) h(a1,Y) cre(B) des(a1) 
+    12   (  -1.00000) v(a3,c2,a2,c2) cre(B) cre(a3) des(Y) des(a2) 
+    13   (   1.00000) v(a3,c2,a2,c2) cre(B) cre(a3) des(Y) des(a2) 
+    14   (  -1.00000) v(Y,c2,a2,c2) cre(B) des(a2) 
+    15   (  -0.25000) v(a6,a7,a4,a5) cre(B) cre(a4) cre(a5) des(Y) des(a6) des(a7) 
+    16   (   0.25000) v(a6,a7,a4,a5) cre(B) cre(a4) cre(a5) des(Y) des(a6) des(a7) 
+    17   (   0.25000) v(a6,a7,Y,a5) cre(B) cre(a5) des(a6) des(a7) 
+    18   (  -0.25000) v(a6,a7,a4,Y) cre(B) cre(a4) des(a6) des(a7) 
+Finished combining terms in 0.010 seconds
+
+
+Combining like terms:
+Converting 17 terms to canonical form...
+     0   (   1.00000) e(B) cre(B) cre(X) des(A) des(Y) 
+     1   (   1.00000) e(B) kdelta(A,B) cre(X) des(Y) 
+     2   (  -1.00000) e(B) cre(B) cre(X) des(A) des(Y) 
+     3   (  -1.00000) e(B) kdelta(Y,X) cre(B) des(A) 
+     4   (  -1.00000) h(Y,a) cre(B) cre(X) des(A) des(a) 
+     5   (  -1.00000) h(Y,a) kdelta(A,B) cre(X) des(a) 
+     6   (   1.00000) h(Y,a) cre(B) cre(X) des(A) des(a) 
+     7   (   1.00000) h(Y,X) cre(B) des(A) 
+     8   (   1.00000) v(Y,a,a,b) cre(B) cre(X) des(A) des(b) 
+     9   (   1.00000) v(Y,a,a,b) kdelta(A,B) cre(X) des(b) 
+    10   (  -1.00000) v(Y,a,a,b) cre(B) cre(X) des(A) des(b) 
+    11   (  -1.00000) v(Y,a,a,X) cre(B) des(A) 
+    12   (  -0.50000) v(a,b,Y,c) cre(B) cre(X) cre(c) des(A) des(a) des(b) 
+    13   (   0.50000) v(a,b,Y,c) kdelta(A,B) cre(X) cre(c) des(a) des(b) 
+    14   (   0.50000) v(a,b,Y,c) cre(B) cre(X) cre(c) des(A) des(a) des(b) 
+    15   (  -0.50000) v(X,b,Y,c) cre(B) cre(c) des(A) des(b) 
+    16   (   0.50000) v(a,X,Y,c) cre(B) cre(c) des(A) des(a) 
+Finished combining terms in 0.011 seconds
+
+
+------------------------- SQA Addon --------------------------
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   0.00000) h(X,Y) cre(B) des(A) 
+ (   0.00000) v(Y,a,X,a) cre(B) des(A) 
+ (   1.00000) e(B) kdelta(A,B) cre(X) des(Y) 
+ (   0.00000) e(B) kdelta(X,Y) cre(B) des(A) 
+ (  -1.00000) h(Y,a) kdelta(A,B) cre(X) des(a) 
+ (   1.00000) kdelta(A,B) v(Y,a,a,b) cre(X) des(b) 
+ (   0.00000) v(X,a,Y,b) cre(B) cre(b) des(A) des(a) 
+ (   0.50000) kdelta(A,B) v(a,b,Y,c) cre(X) cre(c) des(a) des(b) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) e(B) kdelta(A,B) cre(X) des(Y) 
+Terms after normal ordering:
+ (   1.00000) e(B) kdelta(A,B) cre(X) des(Y) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) h(Y,a) kdelta(A,B) cre(X) des(a) 
+Terms after normal ordering:
+ (  -1.00000) h(Y,a) kdelta(A,B) cre(X) des(a) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) kdelta(A,B) v(Y,a,a,b) cre(X) des(b) 
+Terms after normal ordering:
+ (   1.00000) kdelta(A,B) v(Y,a,a,b) cre(X) des(b) 
+
+Normal ordering with respect to core:=>
+Term=  (   0.50000) kdelta(A,B) v(a,b,Y,c) cre(X) cre(c) des(a) des(b) 
+Terms after normal ordering:
+ (   0.50000) kdelta(A,B) v(a,b,Y,c) cre(X) cre(c) des(a) des(b) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (   1.00000) e(B) kdelta(A,B) cre(X) des(Y) 
+ (  -1.00000) h(Y,a) kdelta(A,B) cre(X) des(a) 
+ (   1.00000) kdelta(A,B) v(Y,a,a,b) cre(X) des(b) 
+ (   0.50000) kdelta(A,B) v(a,b,Y,c) cre(X) cre(c) des(a) des(b) 
+
+Combining like terms:
+Converting 4 terms to canonical form...
+     0   (   1.00000) e(B) kdelta(A,B) cre(X) des(Y) 
+     1   (  -1.00000) h(Y,a) kdelta(A,B) cre(X) des(a) 
+     2   (   1.00000) kdelta(A,B) v(Y,a,a,b) cre(X) des(b) 
+     3   (   0.50000) kdelta(A,B) v(a,b,Y,c) cre(X) cre(c) des(a) des(b) 
+Finished combining terms in 0.004 seconds
+
+Dummy indices label update:=>
+ (   1.00000) e(B) kdelta(A,B) cre(X) des(Y) 
+ (  -1.00000) h(Y,x) kdelta(A,B) cre(X) des(x) 
+ (   1.00000) kdelta(A,B) v(Y,i,i,x) cre(X) des(x) 
+ (   0.50000) kdelta(A,B) v(x,y,Y,z) cre(X) cre(z) des(x) des(y) 
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+---------
+ (   1.00000) kdelta(A,B) v(Y,i,i,x) cre(X) des(x) 
+v(Y,i,i,x)     --->    v(i,Y,i,x) (factor = -1)
+
+----------------------- Final results ------------------------
+ (   1.00000) e(B) kdelta(A,B) cre(X) des(Y) 
+ (  -1.00000) h(Y,x) kdelta(A,B) cre(X) des(x) 
+ (  -1.00000) kdelta(A,B) v(i,Y,i,x) cre(X) des(x) 
+ (   0.50000) kdelta(A,B) v(x,y,Y,z) cre(X) cre(z) des(x) des(y) 
+
+
+----------------------- SQA EINSUM ---------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+--------------------------------------------------------------
+        temp =  np.einsum('B, AB, XY->XAYB', e_extern_so, np.identity(nextern), rdm_ca_so, optimize = True)
+        temp -= np.einsum('Yx, AB, Xx->XAYB', h_aa_so, np.identity(nextern), rdm_ca_so, optimize = True)
+        temp -= np.einsum('AB, iYix, Xx->XAYB', np.identity(nextern), v_caca_so, rdm_ca_so, optimize = True)
+        temp += 0.5 * np.einsum('AB, xyYz, Xzxy->XAYB', np.identity(nextern), v_aaaa_so, rdm_ccaa_so, optimize = True)
