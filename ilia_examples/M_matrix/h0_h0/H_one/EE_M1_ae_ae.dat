@@ -1,0 +1,2 @@
+        temp =- np.einsum('xy, xByA, XY->XAYB', rdm_ca_so, v_aeae_so, rdm_ca_so, optimize = True)
+        temp -= np.einsum('xByA, XyYx->XAYB', v_aeae_so, rdm_ccaa_so, optimize = True)

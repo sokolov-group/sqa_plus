@@ -1,0 +1,2 @@
+        temp =  np.einsum('IAXx, xY->IXYA', v_ceaa_so, rdm_ca_so, optimize = True)
+        temp += 0.5 * np.einsum('IAxy, xyXY->IXYA', v_ceaa_so, rdm_ccaa_so, optimize = True)

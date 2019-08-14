@@ -8,34 +8,34 @@
  --------------------------------------------------------------
 
  (   1.00000) E_fc 
- (  -1.00000) e(c0) des(c0) cre(c0) 
- (   1.00000) e(v0) cre(v0) des(v0) 
+ (  -1.00000) e(c1) des(c1) cre(c1) 
+ (   1.00000) e(v1) cre(v1) des(v1) 
  (   1.00000) h(a1,a0) cre(a0) des(a1) 
- (   1.00000) v(a1,c1,a0,c1) cre(a0) des(a1) 
- (   0.25000) v(a2,a3,a0,a1) cre(a0) cre(a1) des(a3) des(a2) 
+ (   1.00000) v(a3,c2,a2,c2) cre(a3) des(a2) 
+ (   0.25000) v(a6,a7,a4,a5) cre(a4) cre(a5) des(a7) des(a6) 
 First Commutator
 
 Combining like terms:
 Converting 18 terms to canonical form...
      0   (   1.00000) E_fc cre(C) cre(D) des(L) des(K) 
      1   (  -1.00000) E_fc cre(C) cre(D) des(L) des(K) 
-     2   (  -1.00000) e(c0) cre(C) cre(D) cre(c0) des(K) des(L) des(c0) 
-     3   (   1.00000) e(c0) cre(C) cre(D) des(K) des(L) 
-     4   (   1.00000) e(c0) cre(C) cre(D) cre(c0) des(K) des(L) des(c0) 
+     2   (  -1.00000) e(c1) cre(C) cre(D) cre(c1) des(K) des(L) des(c1) 
+     3   (   1.00000) e(c1) cre(C) cre(D) des(K) des(L) 
+     4   (   1.00000) e(c1) cre(C) cre(D) cre(c1) des(K) des(L) des(c1) 
      5   (   1.00000) e(L) cre(C) cre(D) des(K) des(L) 
      6   (  -1.00000) e(K) cre(C) cre(D) des(L) des(K) 
-     7   (  -1.00000) e(c0) cre(C) cre(D) des(K) des(L) 
-     8   (  -1.00000) e(v0) cre(C) cre(D) cre(v0) des(K) des(L) des(v0) 
+     7   (  -1.00000) e(c1) cre(C) cre(D) des(K) des(L) 
+     8   (  -1.00000) e(v1) cre(C) cre(D) cre(v1) des(K) des(L) des(v1) 
      9   (   1.00000) e(C) cre(D) cre(C) des(K) des(L) 
     10   (  -1.00000) e(D) cre(C) cre(D) des(K) des(L) 
-    11   (   1.00000) e(v0) cre(C) cre(D) cre(v0) des(K) des(L) des(v0) 
+    11   (   1.00000) e(v1) cre(C) cre(D) cre(v1) des(K) des(L) des(v1) 
     12   (  -1.00000) h(a1,a0) cre(C) cre(D) cre(a0) des(K) des(L) des(a1) 
     13   (   1.00000) h(a1,a0) cre(C) cre(D) cre(a0) des(K) des(L) des(a1) 
-    14   (  -1.00000) v(a1,c1,a0,c1) cre(C) cre(D) cre(a0) des(K) des(L) des(a1) 
-    15   (   1.00000) v(a1,c1,a0,c1) cre(C) cre(D) cre(a0) des(K) des(L) des(a1) 
-    16   (   0.25000) v(a2,a3,a0,a1) cre(C) cre(D) cre(a0) cre(a1) des(K) des(L) des(a2) des(a3) 
-    17   (  -0.25000) v(a2,a3,a0,a1) cre(C) cre(D) cre(a0) cre(a1) des(K) des(L) des(a2) des(a3) 
-Finished combining terms in 0.011 seconds
+    14   (  -1.00000) v(a3,c2,a2,c2) cre(C) cre(D) cre(a3) des(K) des(L) des(a2) 
+    15   (   1.00000) v(a3,c2,a2,c2) cre(C) cre(D) cre(a3) des(K) des(L) des(a2) 
+    16   (   0.25000) v(a6,a7,a4,a5) cre(C) cre(D) cre(a4) cre(a5) des(K) des(L) des(a6) des(a7) 
+    17   (  -0.25000) v(a6,a7,a4,a5) cre(C) cre(D) cre(a4) cre(a5) des(K) des(L) des(a6) des(a7) 
+Finished combining terms in 0.008 seconds
 
 
 Combining like terms:
@@ -96,7 +96,7 @@ Converting 56 terms to canonical form...
     53   (   1.00000) e(L) kdelta(L,J) cre(C) cre(D) cre(I) des(A) des(B) des(K) 
     54   (  -1.00000) e(L) kdelta(K,I) kdelta(L,J) cre(C) cre(D) des(A) des(B) 
     55   (   1.00000) e(L) kdelta(K,J) kdelta(L,I) cre(C) cre(D) des(A) des(B) 
-Finished combining terms in 0.037 seconds
+Finished combining terms in 0.038 seconds
 
 
 ------------------------- SQA Addon --------------------------

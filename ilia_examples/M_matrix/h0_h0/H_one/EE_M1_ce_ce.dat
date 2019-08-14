@@ -1,0 +1,5 @@
+        temp =- np.einsum('IBJA->IAJB', v_cece_so, optimize = True).copy()
+        temp += np.einsum('xy, AB, IxJy->IAJB', rdm_ca_so, np.identity(nextern), v_caca_so, optimize = True)
+        temp -= np.einsum('xy, IJ, xByA->IAJB', rdm_ca_so, np.identity(ncore), v_aeae_so, optimize = True)
+        temp -= np.einsum('AB, IxJy, yx->IAJB', np.identity(nextern), v_caca_so, rdm_ca_so, optimize = True)
+        temp += np.einsum('IJ, xByA, yx->IAJB', np.identity(ncore), v_aeae_so, rdm_ca_so, optimize = True)

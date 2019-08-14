@@ -15,7 +15,7 @@ Converting 14 terms to canonical form...
     11   (   1.00000) kdelta(B,Z) cre(A) cre(U) cre(V) des(W) des(X) des(Y) 
     12   (  -1.00000) kdelta(W,A) kdelta(B,Z) cre(U) cre(V) des(X) des(Y) 
     13   (   1.00000) kdelta(W,Z) kdelta(B,A) cre(U) cre(V) des(X) des(Y) 
-Finished combining terms in 0.016 seconds
+Finished combining terms in 0.014 seconds
 
 
 ------------------------- SQA Addon --------------------------

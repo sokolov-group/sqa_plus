@@ -62,4 +62,4 @@ Reorder tensor indices according to (Core < Active < Virtual): =>
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =  np.einsum('AB, XY->XYAB', np.identity(nextern), rdm_ca_so, optimize = True)
+temp =  np.einsum('AB, XY->XAYB', np.identity(nextern), rdm_ca_so, optimize = True)

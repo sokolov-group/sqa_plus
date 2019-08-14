@@ -1,0 +1,4 @@
+        temp =  np.einsum('B, AB, XY->XAYB', e_extern_so, np.identity(nextern), rdm_ca_so, optimize = True)
+        temp -= np.einsum('Yx, AB, Xx->XAYB', h_aa_so, np.identity(nextern), rdm_ca_so, optimize = True)
+        temp -= np.einsum('AB, iYix, Xx->XAYB', np.identity(nextern), v_caca_so, rdm_ca_so, optimize = True)
+        temp += 0.5 * np.einsum('AB, xyYz, Xzxy->XAYB', np.identity(nextern), v_aaaa_so, rdm_ccaa_so, optimize = True)
