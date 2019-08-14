@@ -19,6 +19,7 @@
 #
 #
 
+import sys, time
 from sqaIndex import index
 from sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp, creDesTensor
 from sqaTerm import term, multiplyTerms, termChop, sortOps, combineTerms
@@ -36,24 +37,20 @@ from sqaHeff import sqalatex
 def matrixBlock(nterms, transRDM = False):
  "Construct matrix block."
 #
+ startTime = time.time()
  print ""
- print ("------------------------- SQA Addon --------------------------")
- print_header()
+ print ("------------------------ SQA Automation ----------------------")
+ sys.stdout.flush()
+# print_header()
  print ""
  fTerms = []
-# Dummy indices label upate
-# dummyLabel(nterms)
 #
 # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
  filterVirtual(nterms)
  termChop(nterms)
 #
 # Normal ordering with respect to core orbitals
-# fTerms = []
- for t in nterms:
-#    print 'Term=', t
-    trm = normalOrderCore(t)
-    fTerms.extend(trm)
+ fTerms = normalOrderCore(nterms)
 #
 # Evaluate Kroneker delta
  for t in fTerms:
@@ -66,9 +63,6 @@ def matrixBlock(nterms, transRDM = False):
  termChop(fTerms)
 #
  combineTerms(fTerms)
-#
-## Dummy indices label upate
-# dummyLabel(fTerms)
 #
 # Contract delta function for both non-dummy indices
  contractDeltaFuncs_nondummy(fTerms)
@@ -94,6 +88,7 @@ def matrixBlock(nterms, transRDM = False):
 # Print the final results
  print ""
  print ("----------------------- Final results ------------------------")
+ sys.stdout.flush()
  for t in fTerms:
     index_types = ()
     for t_tensor in t.tensors:
@@ -103,7 +98,10 @@ def matrixBlock(nterms, transRDM = False):
 #    print index_types
 #
  print ""
-
+ print "Total terms : %s" % len(fTerms)
+ print "SQA automation time :  %.3f seconds" %(time.time() - startTime)
+ sys.stdout.flush()
+#
 # sqalatex(fTerms)
  return fTerms
 #
@@ -111,7 +109,8 @@ def matrixBlock(nterms, transRDM = False):
 def dummyLabel(nterms):
  "A function to relabel dummy indices."
 #
- print "Dummy indices label update:=>"
+ print "Dummy indices relabelling:=>"
+ sys.stdout.flush()
 ##
  for t in nterms:
     mymap ={}
@@ -149,17 +148,24 @@ def dummyLabel(nterms):
                     t_tensor.indices[t_tensor_index].name = mymap[index_name]
 #
 #        index_types += t_tensor.indices[t_tensor_index].indType
-    print t
-#    print t.numConstant
-#    print index_types
+    if options.verbose:
+       print t
+#       print t.numConstant
+#       print index_types
+# print ""
+ print "Done ..."
+ print("""--------------------------------------------------------------""")
+ sys.stdout.flush()
+ return
 #
 #####################################
 #
 def filterVirtual(nterms):
  "A function to calculate expectation value wrt virtual: filter zero terms wrt virtual."
 #
- print ""
- print "Expectation value: Filter zero terms wrt virtual:=>"
+# print ""
+ print "Computing expectation value with respect to virtual:=>"
+ sys.stdout.flush()
 ##
  for t in nterms:
     mymap ={}
@@ -187,15 +193,22 @@ def filterVirtual(nterms):
 #                         print 'cond2:',t_tensor, t_tensor.name, t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType[0][0]
 #
 #
-    print t
+    if options.verbose:
+       print t
+# print ""
+ print "Done ..."
+ print("""--------------------------------------------------------------""")
+ sys.stdout.flush()
+ return
 #
 #####################################
 #
 def filterCore(nterms):
  "A function to calculate expectation value wrt core: filter zero terms wrt core."
 #
- print ""
- print "Expectation value: Filter zero terms wrt core:=>"
+# print ""
+ print "Computing expectation value with respect to core:=>"
+ sys.stdout.flush()
 ##
  for t in nterms:
     mymap ={}
@@ -223,15 +236,34 @@ def filterCore(nterms):
 #                         print 'cond2:',t_tensor, t_tensor.name, t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType[0][0]
 #
 #
-    print t
+    if options.verbose:
+       print t
+# print ""
+ print "Done ..."
+ print("""--------------------------------------------------------------""")
+ sys.stdout.flush()
+ return
 #
 #####################################
 #
-def normalOrderCore(inTerm):
+def normalOrderCore(terms):
+ print "Normal ordering with respect to core:=>"
+ sys.stdout.flush()
+ nTerms = []
+ for t in terms:
+   cTerms = normOrderCor(t)
+   nTerms.extend(cTerms)
+ print "Done ..."
+ print("""--------------------------------------------------------------""")
+ sys.stdout.flush()
+ return nTerms
+#
+def normOrderCor(inTerm):
   "Returns a list of terms resulting from normal ordering the operators in inTerm."
-  print ""
-  print "Normal ordering with respect to core:=>"
-  print 'Term=', inTerm
+#  print ""
+#  print "Normal ordering with respect to core:=>"
+  if options.verbose:
+     print 'Term=', inTerm
 #  if options.verbose:
 #    print "converting to normal order:  %s" %(str(inTerm))
 
@@ -370,10 +402,11 @@ def normalOrderCore(inTerm):
 #    return outTerms
 #    raise RuntimeError, "Normal ordering function failed to choose what to do."
 
-  print "Terms after normal ordering:"
-  for t in outTerms:
-    print t
-
+  if options.verbose:
+     print "Terms after normal ordering:"
+     for t in outTerms:
+       print t
+#
   return outTerms
 #
 #####################################
@@ -471,6 +504,9 @@ def print_header():
 def contractDeltaFuncs_nondummy(terms):
 #
  "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
+# print ""
+ print "Contract delta function for non-dummy indices: =>"
+ sys.stdout.flush()
 #
  for term in terms:
 #    i = 0
@@ -487,13 +523,18 @@ def contractDeltaFuncs_nondummy(terms):
 #
  termChop(terms)
 #
+# print ""
+ print "Done ..."
+ print("""--------------------------------------------------------------""")
+ sys.stdout.flush()
  return terms
 #
 #####################################
 def tensorIndex_order(terms):
- print ""
+# print ""
  print "Reorder tensor indices according to (Core < Active < Virtual): =>"
-
+ sys.stdout.flush()
+#
  for term in terms:
      for i in range(len(term.tensors)):
          t = term.tensors[i]
@@ -520,14 +561,16 @@ def tensorIndex_order(terms):
            # (tup,fac) = t.symPermutes()
             if (len(t.indices) == 2):
                if (ind_rank[0] < ind_rank[1]):
-                  print '---------'
-                  print  term
+                  if options.verbose:
+                     print '---------'
+                     print  term
                   factor = +1
                   tem = t.indices[0]
                   t.indices[0] = t.indices[1]
                   t.indices[1] = tem
                   term.scale(factor)
-                  print t0,'    --->    %s (factor = %s)' % (t, factor)
+                  if options.verbose:
+                     print t0,'    --->    %s (factor = %s)' % (t, factor)
             else:
                braketsym = {}
                for sym in t.symmetries:
@@ -544,27 +587,32 @@ def tensorIndex_order(terms):
 
                if (ind_rank[0] < ind_rank[1]):
                   if (braSym):
-                     print '---------'
-                     print  term
+                     if options.verbose:
+                        print '---------'
+                        print  term
                      tem = t.indices[0]
                      t.indices[0] = t.indices[1]
                      t.indices[1] = tem
                      term.scale(bfac)
-                     print t0,'    --->    %s (factor = %s)' % (t, bfac)
+                     if options.verbose:
+                        print t0,'    --->    %s (factor = %s)' % (t, bfac)
 
                if (ind_rank[2] < ind_rank[3]):
                   if (ketSym):
-                     print '---------'
-                     print  term
+                     if options.verbose:
+                        print '---------'
+                        print  term
                      tem = t.indices[2]
                      t.indices[2] = t.indices[3]
                      t.indices[3] = tem
                      term.scale(kfac)
-                     print t0,'    --->    %s (factor = %s)' % (t, kfac)
+                     if options.verbose:
+                        print t0,'    --->    %s (factor = %s)' % (t, kfac)
 
                if ((ind_rank[0]+ind_rank[1]) < (ind_rank[2]+ind_rank[3])):
-                  print '---------'
-                  print  term
+                  if options.verbose:
+                     print '---------'
+                     print  term
                   tem0 = t.indices[0].copy()
                   tem1 = t.indices[1].copy()
                   tem2 = t.indices[2].copy()
@@ -577,8 +625,13 @@ def tensorIndex_order(terms):
                   t.indices[2].indType = tem0.indType
                   t.indices[3].name = tem1.name
                   t.indices[3].indType = tem1.indType
-                  print t0,'Bra <---> Ket', t
+                  if options.verbose:
+                     print t0,'Bra <---> Ket', t
 
+# print ""
+ print "Done ..."
+ print("""--------------------------------------------------------------""")
+ sys.stdout.flush()
  return terms
 
 #####################################

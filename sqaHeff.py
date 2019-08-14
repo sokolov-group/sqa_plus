@@ -29,21 +29,13 @@ from sqaSymmetry import symmetry
 #
 def Heff(order):
 # print_header()
-# "Construct effective Hamiltonian(L)."
- print("""\n--------------------------------------------------------------
- Effective Hamiltonian: Construct effective Hamiltonian ...
- author:  Koushik Chatterjee
- date:  August 31, 2018
-
- Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
- --------------------------------------------------------------""")
+ "Construct effective Hamiltonian(L)."
+#
+ print ("------------------------ Hamiltonian(%s) ----------------------" % order)
+ sys.stdout.flush()
 #   order = 0 : L(0) = H(0)
 #   order = 1 : L(1) = V + [H(0),T(1) - T'(1)]
 #   order = 2 : L(2) = [H(0),(T(2) - T'(2))] + 1/2[(V + L(1)), (T(1) - T'(1))] 
-#
-# print "Construct effective Hamiltonian:=>"
-#
- print ''
 #
 # Define operator types
  tg_c = options.core_type
@@ -58,8 +50,6 @@ def Heff(order):
 # Virtual dummy indices
  vv = [index('v%i' %p, [tg_v], dummy) for p in range(800)]
 #
-################## TESTING ######################
-#
  if (order == 0):
     cc1 = []
     aa1 = []
@@ -69,11 +59,10 @@ def Heff(order):
        aa1.append(aa.pop(0))
        vv1.append(vv.pop(0))
 #
-    effH = dyallH(cc1, aa1, vv1)
-    return effH
+    L = dyallH(cc1, aa1, vv1)
 #
- if (order == 1):   # L(1) = V + [H(0),T(1) - T'(1)]
-    L1 = []
+ elif (order == 1):   # L(1) = V + [H(0),T(1) - T'(1)]
+    L = []
 
     cc1 = []
     aa1 = []
@@ -95,7 +84,7 @@ def Heff(order):
 #
     V = Vperturbation_type(cc1, aa1, vv1)
 #
-    L1.extend(V)
+    L.extend(V)
 #
     cc1 = []
     aa1 = []
@@ -107,14 +96,14 @@ def Heff(order):
     T1 = Tamplitude(1, cc1, aa1, vv1)
 #
     com1 = commutator(effH, T1)
+    print "Commutation: Done ..."
+    sys.stdout.flush()
 #
-    L1.extend(com1)
-
-    return L1
+    L.extend(com1)
 #
- if (order == 2):    #   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
-    L2 = []
-
+ elif (order == 2):    #   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
+    L = []
+#
     cc1 = []
     aa1 = []
     vv1 = []
@@ -134,8 +123,10 @@ def Heff(order):
         vv1.append(vv.pop(0))
     T2 = Tamplitude(2, cc1, aa1, vv1)
     com1 = commutator(effH, T2)
-
-    L2.extend(com1)              # 1st Commutator
+    print "First Commutation: Done ..."
+    sys.stdout.flush()
+#
+    L.extend(com1)              # 1st Commutator
 #
     cc1 = []
     aa1 = []
@@ -156,8 +147,10 @@ def Heff(order):
         vv1.append(vv.pop(0))
     T1 = Tamplitude(1, cc1, aa1, vv1)
     com2 = commutator(V, T1)
-
-    L2.extend(com2)              # 2nd Commutator
+    print "Second Commutation: Done ..."
+    sys.stdout.flush()
+#
+    L.extend(com2)              # 2nd Commutator
 #
     cc1 = []
     aa1 = []
@@ -190,21 +183,21 @@ def Heff(order):
     T1_new2 = Tamplitude(1, cc1, aa1, vv1)
 #
     com4 = commutator(com3, T1_new2)
+    print "Third Commutation: Done ..."
+    sys.stdout.flush()
 #
-
     for t in com4:
        t.scale(0.5)
-    L2.extend(com4)              # 3rd Commutator
-
-    for t in L2:
-      print t
-
-    return L2
+    L.extend(com4)              # 3rd Commutator
 #
-    if (order > 2):
-       raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
-
-#####
+ else:
+    raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
+#
+ print "Done ..."
+ print("""--------------------------------------------------------------""")
+ sys.stdout.flush()
+ return L
+#
 def dyallH(cc, aa, vv):
  Hamil = []
 # E_fc :
@@ -238,11 +231,8 @@ def dyallH(cc, aa, vv):
 #
  Hamil.extend(Hact)
 #
-# for t in Hamil:
-#   print t
-#
  return Hamil
-
+#
 #################################################
 ##
 # effH = []
@@ -420,9 +410,11 @@ def Vperturbation_type(cc, aa, vv, vtype = None):
 # if (vtype == 'full') or (vtype == 'Full') or (vtype == ''):
  if not (vtype):
 #   Default V includes all type of perturbation rank.
-    print "Perturbation(V) type = All types of V"
-    print ""
+    print "Perturbation(V) type = All "
+#    print ""
     V.extend(Vperturbation(cc, aa, vv))
+    print "Done ..."
+    sys.stdout.flush()
 #
  else:
     if (vtype == 'V[n=0]'):
@@ -619,9 +611,9 @@ def Tamplitude(order, cc1, aa1, vv1):
  T2_dex = term(-0.25, [], [t2_tens5,  creOp(ind4), creOp(ind3), desOp(ind6), desOp(ind5)])
  T.append(T2_ex)
  T.append(T2_dex)
-
+#
  return T
-
+#
 #####################################
 #
 
@@ -1449,13 +1441,12 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 # print "################ Construct Einsum ################"
 
  print("""\n----------------------- SQA EINSUM ---------------------------
- VERSION : 1
- Einsum generator: Transform into einsum ...
- author:  Koushik Chatterjee
- date:  August 31, 2018
-
- Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
-
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \\  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
 
  For Help :: help = True
 --------------------------------------------------------------""")
@@ -1745,18 +1736,17 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
  else:
    texfile = output
 
- print("""\n----------------------- SQA LATEX -----------------------------
- VERSION : 1
- SqaLatex: Transform into Latex format and generate pdf ...
- author:  Koushik Chatterjee
- date:  April 28, 2019
-
- Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
-
-
+ print("""\n----------------------- SQA LATEX ----------------------------
+    _____ ____    ___   __
+   / ___// __ \  /   | / /____  _  __
+   \__ \/ / / / / /| |/ __/ _ \| |/_/  Translate to Latex format and generate pdf
+  ___/ / /_/ / / ___ / /_/  __/>  <    author:  Koushik Chatterjee
+ /____/\___\_\/_/  |_\__/\___/_/|_|    date:  April 28, 2019
+                                       VERSION : 1
+ Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ 
  Tex file : %s
  PDF file : %s
-
 --------------------------------------------------------------""" % (texfile+r'.tex', texfile+r'.pdf'))
 
  modifier_tensor = {
@@ -1924,5 +1914,4 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
 # pdf()
 # proc_cleanup(procs)
  return
-
-
+#

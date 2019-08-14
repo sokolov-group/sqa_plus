@@ -21,7 +21,7 @@ class sqaOptions:
 
   def __init__(self):
     # Set default options
-    self.verbose = True
+    self.verbose = False
     self.alpha_type = ('alpha',)
     self.beta_type = ('beta',)
     self.core_type = ('core',)
