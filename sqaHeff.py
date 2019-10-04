@@ -204,8 +204,8 @@ def dyallH(cc, aa, vv):
  #c = index('Const.', [], dummy = True)
  c = index('Const.', [], True)
  Efc = tensor('E_fc',[c], [])
- Hamil.append( term(1.0, ['E_fc'], []))
-# Hamil.append( term(1.0, [], [Efc]))
+# Hamil.append( term(1.0, ['E_fc'], []))
+ Hamil.append( term(1.0, [], [Efc]))
 #
 # core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
  e_core = tensor('e', [cc[1]], [])
@@ -1914,4 +1914,41 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
 # pdf()
 # proc_cleanup(procs)
  return
+
+
+#
+def getT(order = 1):
+ "Get T amplitudes (order)."
+#
+ tg_c = options.core_type
+ tg_a = options.active_type
+ tg_v = options.virtual_type
+ tg_g = tg_c + tg_a + tg_v
+ dummy = True
+#
+ cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
+ aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
+ vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
+#
+ T = Tamplitude(order, cc, aa, vv)
+#
+ return T
+
+
+def getV():
+ "Get V pertubation terms."
+#
+ tg_c = options.core_type
+ tg_a = options.active_type
+ tg_v = options.virtual_type
+ tg_g = tg_c + tg_a + tg_v
+ dummy = True
+#
+ cc = [index('c%i' %p, [tg_c], dummy) for p in range(200)]
+ aa = [index('a%i' %p, [tg_a], dummy) for p in range(200)]
+ vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
+#
+ V = Vperturbation_type(cc, aa, vv)
+#
+ return V
 #
