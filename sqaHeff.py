@@ -1917,7 +1917,7 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
 
 
 #
-def getT(order = 1):
+def getT(order = 1, cc = None, aa = None, vv = None):
  "Get T amplitudes (order)."
 #
  tg_c = options.core_type
@@ -1926,16 +1926,19 @@ def getT(order = 1):
  tg_g = tg_c + tg_a + tg_v
  dummy = True
 #
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
+ if not cc:
+   cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
+ if not aa:
+   aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
+ if not vv:
+   vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
 #
  T = Tamplitude(order, cc, aa, vv)
 #
  return T
 
 
-def getV():
+def getV(cc = None, aa = None, vv = None):
  "Get V pertubation terms."
 #
  tg_c = options.core_type
@@ -1944,9 +1947,12 @@ def getV():
  tg_g = tg_c + tg_a + tg_v
  dummy = True
 #
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(200)]
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(200)]
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
+ if not cc:
+   cc = [index('c%i' %p, [tg_c], dummy) for p in range(200)]
+ if not aa:
+   aa = [index('a%i' %p, [tg_a], dummy) for p in range(200)]
+ if not vv:
+   vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
 #
  V = Vperturbation_type(cc, aa, vv)
 #
