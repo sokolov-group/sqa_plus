@@ -1,0 +1,126 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (  -1.00000) v(I,X,J,A) 
+ (   1.00000) h(X,A) kdelta(I,J) 
+ (   1.00000) kdelta(I,J) v(i,X,i,A) 
+ (   1.00000) e(A) kdelta(I,J) t1(X,A) 
+ (  -1.00000) h(X,x) kdelta(I,J) t1(x,A) 
+ (  -1.00000) kdelta(I,J) t1(x,A) v(i,X,i,x) 
+ (   1.00000) v(I,x,J,A) cre(x) des(X) 
+ (  -1.00000) h(x,A) kdelta(I,J) cre(x) des(X) 
+ (  -1.00000) kdelta(I,J) v(X,y,x,A) cre(y) des(x) 
+ (  -1.00000) kdelta(I,J) v(i,x,i,A) cre(x) des(X) 
+ (  -1.00000) e(A) kdelta(I,J) t1(x,A) cre(x) des(X) 
+ (   1.00000) e(A) kdelta(I,J) t1(X,x,A,y) cre(x) des(y) 
+ (  -1.00000) h(X,x) kdelta(I,J) t1(x,y,A,z) cre(y) des(z) 
+ (   1.00000) h(x,y) kdelta(I,J) t1(x,A) cre(y) des(X) 
+ (  -1.00000) h(x,y) kdelta(I,J) t1(X,x,A,z) cre(y) des(z) 
+ (   1.00000) h(x,y) kdelta(I,J) t1(X,z,A,x) cre(z) des(y) 
+ (  -1.00000) kdelta(I,J) t1(x,A) v(x,y,X,z) cre(z) des(y) 
+ (   1.00000) kdelta(I,J) t1(x,A) v(i,y,i,x) cre(y) des(X) 
+ (   1.00000) kdelta(I,J) t1(X,x,A,y) v(i,y,i,z) cre(x) des(z) 
+ (  -1.00000) kdelta(I,J) t1(X,x,A,y) v(i,z,i,x) cre(z) des(y) 
+ (  -1.00000) kdelta(I,J) t1(x,y,A,z) v(i,X,i,x) cre(y) des(z) 
+ (  -0.50000) kdelta(I,J) t1(x,y,A,z) v(x,y,X,w) cre(w) des(z) 
+ (  -0.50000) kdelta(I,J) v(y,z,x,A) cre(y) cre(z) des(X) des(x) 
+ (   0.50000) e(A) kdelta(I,J) t1(x,y,A,z) cre(x) cre(y) des(X) des(z) 
+ (  -1.00000) h(x,y) kdelta(I,J) t1(x,z,A,w) cre(y) cre(z) des(X) des(w) 
+ (   0.50000) h(x,y) kdelta(I,J) t1(z,w,A,x) cre(z) cre(w) des(X) des(y) 
+ (  -0.50000) kdelta(I,J) t1(x,A) v(x,y,z,w) cre(z) cre(w) des(X) des(y) 
+ (   0.50000) kdelta(I,J) t1(X,x,A,y) v(x,z,w,u) cre(w) cre(u) des(y) des(z) 
+ (  -0.50000) kdelta(I,J) t1(X,x,A,y) v(z,w,y,u) cre(x) cre(u) des(z) des(w) 
+ (  -0.25000) kdelta(I,J) t1(x,y,A,z) v(x,y,w,u) cre(w) cre(u) des(X) des(z) 
+ (   1.00000) kdelta(I,J) t1(x,y,A,z) v(x,w,X,u) cre(y) cre(u) des(z) des(w) 
+ (   0.50000) kdelta(I,J) t1(x,y,A,z) v(i,z,i,w) cre(x) cre(y) des(X) des(w) 
+ (   0.25000) kdelta(I,J) t1(x,y,A,z) v(w,u,X,z) cre(x) cre(y) des(w) des(u) 
+ (   1.00000) kdelta(I,J) t1(x,y,A,z) v(i,w,i,x) cre(y) cre(w) des(X) des(z) 
+ (   0.50000) kdelta(I,J) t1(x,y,A,z) v(x,w,u,v) cre(y) cre(u) cre(v) des(X) des(z) des(w) 
+ (   0.25000) kdelta(I,J) t1(x,y,A,z) v(w,u,z,v) cre(x) cre(y) cre(v) des(X) des(w) des(u) 
+
+Total terms : 36
+SQA automation time :  0.171 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+        temp =- np.einsum('IXJA->JXIA', v_cace_so, optimize = True).copy()
+        temp += np.einsum('XA, IJ->JXIA', h_ae_so, np.identity(ncore), optimize = True)
+        temp += np.einsum('IJ, iXiA->JXIA', np.identity(ncore), v_cace_so, optimize = True)
+        temp += np.einsum('A, IJ, XA->JXIA', e_extern_so, np.identity(ncore), t1_ae, optimize = True)
+        temp -= np.einsum('Xx, IJ, xA->JXIA', h_aa_so, np.identity(ncore), t1_ae, optimize = True)
+        temp -= np.einsum('IJ, xA, iXix->JXIA', np.identity(ncore), t1_ae, v_caca_so, optimize = True)
+        temp += np.einsum('IxJA, xX->JXIA', v_cace_so, rdm_ca_so, optimize = True)
+        temp -= np.einsum('xA, IJ, xX->JXIA', h_ae_so, np.identity(ncore), rdm_ca_so, optimize = True)
+        temp -= np.einsum('IJ, XyxA, yx->JXIA', np.identity(ncore), v_aaae_so, rdm_ca_so, optimize = True)
+        temp -= np.einsum('IJ, ixiA, xX->JXIA', np.identity(ncore), v_cace_so, rdm_ca_so, optimize = True)
+        temp -= np.einsum('A, IJ, xA, xX->JXIA', e_extern_so, np.identity(ncore), t1_ae, rdm_ca_so, optimize = True)
+        temp += np.einsum('A, IJ, XxAy, xy->JXIA', e_extern_so, np.identity(ncore), t1_aaea, rdm_ca_so, optimize = True)
+        temp -= np.einsum('Xx, IJ, xyAz, yz->JXIA', h_aa_so, np.identity(ncore), t1_aaea, rdm_ca_so, optimize = True)
+        temp += np.einsum('xy, IJ, xA, yX->JXIA', h_aa_so, np.identity(ncore), t1_ae, rdm_ca_so, optimize = True)
+        temp -= np.einsum('xy, IJ, XxAz, yz->JXIA', h_aa_so, np.identity(ncore), t1_aaea, rdm_ca_so, optimize = True)
+        temp += np.einsum('xy, IJ, XzAx, zy->JXIA', h_aa_so, np.identity(ncore), t1_aaea, rdm_ca_so, optimize = True)
+        temp -= np.einsum('IJ, xA, xyXz, zy->JXIA', np.identity(ncore), t1_ae, v_aaaa_so, rdm_ca_so, optimize = True)
+        temp += np.einsum('IJ, xA, iyix, yX->JXIA', np.identity(ncore), t1_ae, v_caca_so, rdm_ca_so, optimize = True)
+        temp += np.einsum('IJ, XxAy, iyiz, xz->JXIA', np.identity(ncore), t1_aaea, v_caca_so, rdm_ca_so, optimize = True)
+        temp -= np.einsum('IJ, XxAy, izix, zy->JXIA', np.identity(ncore), t1_aaea, v_caca_so, rdm_ca_so, optimize = True)
+        temp -= np.einsum('IJ, xyAz, iXix, yz->JXIA', np.identity(ncore), t1_aaea, v_caca_so, rdm_ca_so, optimize = True)
+        temp -= 0.5 * np.einsum('IJ, xyAz, xyXw, wz->JXIA', np.identity(ncore), t1_aaea, v_aaaa_so, rdm_ca_so, optimize = True)
+        temp -= 0.5 * np.einsum('IJ, yzxA, yzXx->JXIA', np.identity(ncore), v_aaae_so, rdm_ccaa_so, optimize = True)
+        temp += 0.5 * np.einsum('A, IJ, xyAz, xyXz->JXIA', e_extern_so, np.identity(ncore), t1_aaea, rdm_ccaa_so, optimize = True)
+        temp -= np.einsum('xy, IJ, xzAw, yzXw->JXIA', h_aa_so, np.identity(ncore), t1_aaea, rdm_ccaa_so, optimize = True)
+        temp += 0.5 * np.einsum('xy, IJ, zwAx, zwXy->JXIA', h_aa_so, np.identity(ncore), t1_aaea, rdm_ccaa_so, optimize = True)
+        temp -= 0.5 * np.einsum('IJ, xA, xyzw, zwXy->JXIA', np.identity(ncore), t1_ae, v_aaaa_so, rdm_ccaa_so, optimize = True)
+        temp += 0.5 * np.einsum('IJ, XxAy, xzwu, wuyz->JXIA', np.identity(ncore), t1_aaea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+        temp -= 0.5 * np.einsum('IJ, XxAy, zwyu, xuzw->JXIA', np.identity(ncore), t1_aaea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+        temp -= 0.25 * np.einsum('IJ, xyAz, xywu, wuXz->JXIA', np.identity(ncore), t1_aaea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+        temp += np.einsum('IJ, xyAz, xwXu, yuzw->JXIA', np.identity(ncore), t1_aaea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+        temp += 0.5 * np.einsum('IJ, xyAz, iziw, xyXw->JXIA', np.identity(ncore), t1_aaea, v_caca_so, rdm_ccaa_so, optimize = True)
+        temp += 0.25 * np.einsum('IJ, xyAz, wuXz, xywu->JXIA', np.identity(ncore), t1_aaea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+        temp += np.einsum('IJ, xyAz, iwix, ywXz->JXIA', np.identity(ncore), t1_aaea, v_caca_so, rdm_ccaa_so, optimize = True)
+        temp += 0.5 * np.einsum('IJ, xyAz, xwuv, yuvXzw->JXIA', np.identity(ncore), t1_aaea, v_aaaa_so, rdm_cccaaa_so, optimize = True)
+        temp += 0.25 * np.einsum('IJ, xyAz, wuzv, xyvXwu->JXIA', np.identity(ncore), t1_aaea, v_aaaa_so, rdm_cccaaa_so, optimize = True)

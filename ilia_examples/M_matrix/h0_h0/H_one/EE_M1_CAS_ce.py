@@ -1,6 +1,6 @@
 import sqa_extra.secondQuantizationAlgebra as sqa
 
-sqa.options.verbose = True
+sqa.options.verbose = False
 
 # Define operator types
 tg_c = sqa.options.core_type

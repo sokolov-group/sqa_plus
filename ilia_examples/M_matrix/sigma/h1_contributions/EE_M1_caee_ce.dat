@@ -1,0 +1,60 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (  -1.00000) X(I,a) v(x,a,A,B) cre(X) des(x) 
+ (  -1.00000) X(i,A) v(I,x,i,B) cre(X) des(x) 
+ (   1.00000) X(i,B) v(I,x,i,A) cre(X) des(x) 
+
+Total terms : 3
+SQA automation time :  0.015 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+    temp =- np.einsum('Ia, xaAB, Xx->IXAB', X, v_aeee_so, rdm_ca_so, optimize = True)
+    temp -= np.einsum('iA, IxiB, Xx->IXAB', X, v_cace_so, rdm_ca_so, optimize = True)
+    temp += np.einsum('iB, IxiA, Xx->IXAB', X, v_cace_so, rdm_ca_so, optimize = True)

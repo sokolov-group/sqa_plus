@@ -1,7 +1,3 @@
-        temp =  np.einsum('JA->IJA', h_ce_so, optimize = True).copy()
-        temp -= np.einsum('JiiA->IJA', v_ccce_so, optimize = True).copy()
-        temp += np.einsum('A, JA->IJA', e_extern_so, t1_ce, optimize = True)
-        temp -= np.einsum('J, JA->IJA', e_core_so, t1_ce, optimize = True)
         temp -= np.einsum('JyxA, Iyx->IJA', v_caae_so, trdm_ca_so, optimize = True)
         temp += np.einsum('A, JxAy, Ixy->IJA', e_extern_so, t1_caea, trdm_ca_so, optimize = True)
         temp -= np.einsum('J, JxAy, Ixy->IJA', e_core_so, t1_caea, trdm_ca_so, optimize = True)

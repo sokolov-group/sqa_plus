@@ -1,0 +1,80 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) v(I,W,J,X) cre(Z) des(Y) 
+ (  -1.00000) v(I,Z,J,X) cre(W) des(Y) 
+ (   1.00000) kdelta(W,X) v(I,Z,J,x) cre(x) des(Y) 
+ (  -1.00000) kdelta(X,Z) v(I,W,J,x) cre(x) des(Y) 
+ (  -1.00000) gamma(x,y) kdelta(W,X) v(I,x,J,y) cre(Z) des(Y) 
+ (   1.00000) gamma(x,y) kdelta(X,Z) v(I,x,J,y) cre(W) des(Y) 
+ (  -1.00000) v(I,W,J,x) cre(Z) cre(x) des(X) des(Y) 
+ (   1.00000) v(I,Z,J,x) cre(W) cre(x) des(X) des(Y) 
+ (  -1.00000) v(I,x,J,X) cre(W) cre(Z) des(Y) des(x) 
+ (  -1.00000) gamma(x,y) v(I,x,J,y) cre(W) cre(Z) des(X) des(Y) 
+ (  -1.00000) kdelta(W,X) v(I,x,J,y) cre(Z) cre(y) des(Y) des(x) 
+ (   1.00000) kdelta(X,Z) v(I,x,J,y) cre(W) cre(y) des(Y) des(x) 
+ (   1.00000) v(I,x,J,y) cre(W) cre(Z) cre(y) des(X) des(Y) des(x) 
+
+Total terms : 13
+SQA automation time :  5.489 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+    temp =  np.einsum('IWJX, ZY->IXJYZW', v_caca_so, rdm_ca_so, optimize = True)
+    temp -= np.einsum('IZJX, WY->IXJYZW', v_caca_so, rdm_ca_so, optimize = True)
+    temp += np.einsum('WX, IZJx, xY->IXJYZW', np.identity(ncas), v_caca_so, rdm_ca_so, optimize = True)
+    temp -= np.einsum('XZ, IWJx, xY->IXJYZW', np.identity(ncas), v_caca_so, rdm_ca_so, optimize = True)
+    temp -= np.einsum('xy, WX, IxJy, ZY->IXJYZW', rdm_ca_so, np.identity(ncas), v_caca_so, rdm_ca_so, optimize = True)
+    temp += np.einsum('xy, XZ, IxJy, WY->IXJYZW', rdm_ca_so, np.identity(ncas), v_caca_so, rdm_ca_so, optimize = True)
+    temp -= np.einsum('IWJx, ZxXY->IXJYZW', v_caca_so, rdm_ccaa_so, optimize = True)
+    temp += np.einsum('IZJx, WxXY->IXJYZW', v_caca_so, rdm_ccaa_so, optimize = True)
+    temp -= np.einsum('IxJX, WZYx->IXJYZW', v_caca_so, rdm_ccaa_so, optimize = True)
+    temp -= np.einsum('xy, IxJy, WZXY->IXJYZW', rdm_ca_so, v_caca_so, rdm_ccaa_so, optimize = True)
+    temp -= np.einsum('WX, IxJy, ZyYx->IXJYZW', np.identity(ncas), v_caca_so, rdm_ccaa_so, optimize = True)
+    temp += np.einsum('XZ, IxJy, WyYx->IXJYZW', np.identity(ncas), v_caca_so, rdm_ccaa_so, optimize = True)
+    temp += np.einsum('IxJy, WZyXYx->IXJYZW', v_caca_so, rdm_cccaaa_so, optimize = True)

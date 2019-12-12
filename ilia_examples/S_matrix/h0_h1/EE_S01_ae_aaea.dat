@@ -1,0 +1,76 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+
+Combining like terms:
+Converting 6 terms to canonical form...
+     0   (  -1.00000) cre(B) cre(W) cre(X) des(A) des(Y) des(Z) 
+     1   (   1.00000) kdelta(A,B) cre(W) cre(X) des(Y) des(Z) 
+     2   (  -1.00000) kdelta(A,W) cre(B) cre(X) des(Y) des(Z) 
+     3   (   1.00000) cre(B) cre(W) cre(X) des(A) des(Y) des(Z) 
+     4   (  -1.00000) kdelta(Z,X) cre(B) cre(W) des(A) des(Y) 
+     5   (   1.00000) kdelta(Y,X) cre(B) cre(W) des(A) des(Z) 
+Finished combining terms in 0.004 seconds
+
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+ (   1.00000) kdelta(A,B) cre(W) cre(X) des(Y) des(Z) 
+ (   0.00000) kdelta(A,W) cre(B) cre(X) des(Y) des(Z) 
+ (   0.00000) kdelta(X,Y) cre(B) cre(W) des(A) des(Z) 
+ (   0.00000) kdelta(X,Z) cre(B) cre(W) des(A) des(Y) 
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Term=  (   1.00000) kdelta(A,B) cre(W) cre(X) des(Y) des(Z) 
+Terms after normal ordering:
+ (   1.00000) kdelta(A,B) cre(W) cre(X) des(Y) des(Z) 
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+ (   1.00000) kdelta(A,B) cre(W) cre(X) des(Y) des(Z) 
+Done ...
+--------------------------------------------------------------
+
+Combining like terms:
+Converting 1 terms to canonical form...
+     0   (   1.00000) kdelta(A,B) cre(W) cre(X) des(Y) des(Z) 
+Finished combining terms in 0.001 seconds
+
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+ (   1.00000) kdelta(A,B) cre(W) cre(X) des(Y) des(Z) 
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) kdelta(A,B) cre(W) cre(X) des(Y) des(Z) 
+
+Total terms : 1
+SQA automation time :  0.001 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+        temp =  np.einsum('AB, WXYZ->XAYZBW', np.identity(nextern), rdm_ccaa_so, optimize = True)

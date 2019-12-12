@@ -1,0 +1,78 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (  -0.50000) X(I,i,a,b) v(i,X,a,b) 
+ (   0.50000) X(I,i,a,b) e(i) t1(i,X,a,b) 
+ (  -1.00000) X(I,i,a,b) e(b) t1(i,X,a,b) 
+ (   0.50000) X(I,i,a,b) h(X,x) t1(i,x,a,b) 
+ (   0.50000) X(I,i,a,b) t1(i,x,a,b) v(j,X,j,x) 
+ (   0.50000) X(I,i,a,b) v(i,x,a,b) cre(x) des(X) 
+ (  -0.50000) X(I,i,a,b) e(i) t1(i,x,a,b) cre(x) des(X) 
+ (   1.00000) X(I,i,a,b) e(b) t1(i,x,a,b) cre(x) des(X) 
+ (  -0.50000) X(I,i,a,b) h(x,y) t1(i,x,a,b) cre(y) des(X) 
+ (   0.50000) X(I,i,a,b) t1(i,x,a,b) v(x,y,X,z) cre(z) des(y) 
+ (  -0.50000) X(I,i,a,b) t1(i,x,a,b) v(j,y,j,x) cre(y) des(X) 
+ (   0.25000) X(I,i,a,b) t1(i,x,a,b) v(x,y,z,w) cre(z) cre(w) des(X) des(y) 
+
+Total terms : 12
+SQA automation time :  0.140 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+    temp = -0.5 * np.einsum('Iiab, iXab->IX', X, v_caee_so, optimize = True)
+    temp += 0.5 * np.einsum('Iiab, i, iXab->IX', X, e_core_so, t1_caee, optimize = True)
+    temp -= np.einsum('Iiab, b, iXab->IX', X, e_extern_so, t1_caee, optimize = True)
+    temp += 0.5 * np.einsum('Iiab, Xx, ixab->IX', X, h_aa_so, t1_caee, optimize = True)
+    temp += 0.5 * np.einsum('Iiab, ixab, jXjx->IX', X, t1_caee, v_caca_so, optimize = True)
+    temp += 0.5 * np.einsum('Iiab, ixab, xX->IX', X, v_caee_so, rdm_ca_so, optimize = True)
+    temp -= 0.5 * np.einsum('Iiab, i, ixab, xX->IX', X, e_core_so, t1_caee, rdm_ca_so, optimize = True)
+    temp += np.einsum('Iiab, b, ixab, xX->IX', X, e_extern_so, t1_caee, rdm_ca_so, optimize = True)
+    temp -= 0.5 * np.einsum('Iiab, xy, ixab, yX->IX', X, h_aa_so, t1_caee, rdm_ca_so, optimize = True)
+    temp += 0.5 * np.einsum('Iiab, ixab, xyXz, zy->IX', X, t1_caee, v_aaaa_so, rdm_ca_so, optimize = True)
+    temp -= 0.5 * np.einsum('Iiab, ixab, jyjx, yX->IX', X, t1_caee, v_caca_so, rdm_ca_so, optimize = True)
+    temp += 0.25 * np.einsum('Iiab, ixab, xyzw, zwXy->IX', X, t1_caee, v_aaaa_so, rdm_ccaa_so, optimize = True)

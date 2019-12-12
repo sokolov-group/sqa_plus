@@ -1,0 +1,145 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+
+Combining like terms:
+Converting 14 terms to canonical form...
+     0   (   1.00000) cre(B) cre(I) cre(W) cre(X) des(A) des(J) des(Y) des(Z) 
+     1   (   1.00000) kdelta(Y,B) cre(I) cre(W) cre(X) des(A) des(J) des(Z) 
+     2   (   1.00000) kdelta(Y,W) cre(B) cre(I) cre(X) des(A) des(J) des(Z) 
+     3   (   1.00000) kdelta(A,B) cre(I) cre(W) cre(X) des(J) des(Y) des(Z) 
+     4   (   1.00000) kdelta(A,W) cre(B) cre(I) cre(X) des(J) des(Y) des(Z) 
+     5   (   1.00000) kdelta(Y,B) kdelta(A,W) cre(I) cre(X) des(J) des(Z) 
+     6   (  -1.00000) kdelta(Y,W) kdelta(A,B) cre(I) cre(X) des(J) des(Z) 
+     7   (  -1.00000) cre(B) cre(I) cre(W) cre(X) des(A) des(J) des(Y) des(Z) 
+     8   (  -1.00000) kdelta(Z,I) cre(B) cre(W) cre(X) des(A) des(J) des(Y) 
+     9   (  -1.00000) kdelta(Z,X) cre(B) cre(I) cre(W) des(A) des(J) des(Y) 
+    10   (  -1.00000) kdelta(J,I) cre(B) cre(W) cre(X) des(A) des(Y) des(Z) 
+    11   (  -1.00000) kdelta(J,X) cre(B) cre(I) cre(W) des(A) des(Y) des(Z) 
+    12   (  -1.00000) kdelta(Z,I) kdelta(J,X) cre(B) cre(W) des(A) des(Y) 
+    13   (   1.00000) kdelta(Z,X) kdelta(J,I) cre(B) cre(W) des(A) des(Y) 
+Finished combining terms in 0.016 seconds
+
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+ (  -1.00000) kdelta(A,B) kdelta(W,Y) cre(I) cre(X) des(J) des(Z) 
+ (   1.00000) kdelta(A,W) kdelta(B,Y) cre(I) cre(X) des(J) des(Z) 
+ (   0.00000) kdelta(I,J) kdelta(X,Z) cre(B) cre(W) des(A) des(Y) 
+ (   0.00000) kdelta(I,Z) kdelta(J,X) cre(B) cre(W) des(A) des(Y) 
+ (   1.00000) kdelta(A,B) cre(I) cre(W) cre(X) des(J) des(Y) des(Z) 
+ (   0.00000) kdelta(A,W) cre(B) cre(I) cre(X) des(J) des(Y) des(Z) 
+ (   0.00000) kdelta(B,Y) cre(I) cre(W) cre(X) des(A) des(J) des(Z) 
+ (   0.00000) kdelta(I,J) cre(B) cre(W) cre(X) des(A) des(Y) des(Z) 
+ (   0.00000) kdelta(I,Z) cre(B) cre(W) cre(X) des(A) des(J) des(Y) 
+ (   0.00000) kdelta(J,X) cre(B) cre(I) cre(W) des(A) des(Y) des(Z) 
+ (   0.00000) kdelta(W,Y) cre(B) cre(I) cre(X) des(A) des(J) des(Z) 
+ (   0.00000) kdelta(X,Z) cre(B) cre(I) cre(W) des(A) des(J) des(Y) 
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) kdelta(A,B) kdelta(W,Y) cre(I) cre(X) des(J) des(Z) 
+Terms after normal ordering:
+ (  -1.00000) kdelta(A,B) kdelta(W,Y) des(J) cre(X) des(Z) cre(I) 
+ (   1.00000) kdelta(A,B) kdelta(W,Y) kdelta(I,J) cre(X) des(Z) 
+ (   1.00000) kdelta(A,B) kdelta(W,Y) kdelta(I,Z) des(J) cre(X) 
+ (   1.00000) kdelta(A,B) kdelta(W,Y) kdelta(X,J) des(Z) cre(I) 
+ (  -1.00000) kdelta(A,B) kdelta(W,Y) kdelta(I,Z) kdelta(X,J) 
+Term=  (   1.00000) kdelta(A,W) kdelta(B,Y) cre(I) cre(X) des(J) des(Z) 
+Terms after normal ordering:
+ (   1.00000) kdelta(A,W) kdelta(B,Y) des(J) cre(X) des(Z) cre(I) 
+ (  -1.00000) kdelta(A,W) kdelta(B,Y) kdelta(I,J) cre(X) des(Z) 
+ (  -1.00000) kdelta(A,W) kdelta(B,Y) kdelta(I,Z) des(J) cre(X) 
+ (  -1.00000) kdelta(A,W) kdelta(B,Y) kdelta(X,J) des(Z) cre(I) 
+ (   1.00000) kdelta(A,W) kdelta(B,Y) kdelta(I,Z) kdelta(X,J) 
+Term=  (   1.00000) kdelta(A,B) cre(I) cre(W) cre(X) des(J) des(Y) des(Z) 
+Terms after normal ordering:
+ (  -1.00000) kdelta(A,B) des(J) cre(W) cre(X) des(Y) des(Z) cre(I) 
+ (   1.00000) kdelta(A,B) kdelta(I,J) cre(W) cre(X) des(Y) des(Z) 
+ (  -1.00000) kdelta(A,B) kdelta(I,Y) des(J) cre(W) cre(X) des(Z) 
+ (   1.00000) kdelta(A,B) kdelta(I,Z) des(J) cre(W) cre(X) des(Y) 
+ (   1.00000) kdelta(A,B) kdelta(W,J) cre(X) des(Y) des(Z) cre(I) 
+ (  -1.00000) kdelta(A,B) kdelta(X,J) cre(W) des(Y) des(Z) cre(I) 
+ (   1.00000) kdelta(A,B) kdelta(I,Y) kdelta(W,J) cre(X) des(Z) 
+ (  -1.00000) kdelta(A,B) kdelta(I,Y) kdelta(X,J) cre(W) des(Z) 
+ (  -1.00000) kdelta(A,B) kdelta(I,Z) kdelta(W,J) cre(X) des(Y) 
+ (   1.00000) kdelta(A,B) kdelta(I,Z) kdelta(X,J) cre(W) des(Y) 
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+ (   0.00000) kdelta(A,B) kdelta(W,Y) des(J) cre(X) des(Z) cre(I) 
+ (   1.00000) kdelta(A,B) kdelta(W,Y) kdelta(I,J) cre(X) des(Z) 
+ (   0.00000) kdelta(A,B) kdelta(W,Y) kdelta(I,Z) des(J) cre(X) 
+ (   0.00000) kdelta(A,B) kdelta(W,Y) kdelta(X,J) des(Z) cre(I) 
+ (  -1.00000) kdelta(A,B) kdelta(W,Y) kdelta(I,Z) kdelta(X,J) 
+ (   0.00000) kdelta(A,W) kdelta(B,Y) des(J) cre(X) des(Z) cre(I) 
+ (  -1.00000) kdelta(A,W) kdelta(B,Y) kdelta(I,J) cre(X) des(Z) 
+ (   0.00000) kdelta(A,W) kdelta(B,Y) kdelta(I,Z) des(J) cre(X) 
+ (   0.00000) kdelta(A,W) kdelta(B,Y) kdelta(X,J) des(Z) cre(I) 
+ (   1.00000) kdelta(A,W) kdelta(B,Y) kdelta(I,Z) kdelta(X,J) 
+ (   0.00000) kdelta(A,B) des(J) cre(W) cre(X) des(Y) des(Z) cre(I) 
+ (   1.00000) kdelta(A,B) kdelta(I,J) cre(W) cre(X) des(Y) des(Z) 
+ (   0.00000) kdelta(A,B) kdelta(I,Y) des(J) cre(W) cre(X) des(Z) 
+ (   0.00000) kdelta(A,B) kdelta(I,Z) des(J) cre(W) cre(X) des(Y) 
+ (   0.00000) kdelta(A,B) kdelta(W,J) cre(X) des(Y) des(Z) cre(I) 
+ (   0.00000) kdelta(A,B) kdelta(X,J) cre(W) des(Y) des(Z) cre(I) 
+ (   1.00000) kdelta(A,B) kdelta(I,Y) kdelta(W,J) cre(X) des(Z) 
+ (  -1.00000) kdelta(A,B) kdelta(I,Y) kdelta(X,J) cre(W) des(Z) 
+ (  -1.00000) kdelta(A,B) kdelta(I,Z) kdelta(W,J) cre(X) des(Y) 
+ (   1.00000) kdelta(A,B) kdelta(I,Z) kdelta(X,J) cre(W) des(Y) 
+Done ...
+--------------------------------------------------------------
+
+Combining like terms:
+Converting 9 terms to canonical form...
+     0   (   1.00000) kdelta(A,B) kdelta(W,Y) kdelta(I,J) cre(X) des(Z) 
+     1   (  -1.00000) kdelta(A,B) kdelta(W,Y) kdelta(I,Z) kdelta(X,J) 
+     2   (  -1.00000) kdelta(A,W) kdelta(B,Y) kdelta(I,J) cre(X) des(Z) 
+     3   (   1.00000) kdelta(A,W) kdelta(B,Y) kdelta(I,Z) kdelta(X,J) 
+     4   (   1.00000) kdelta(A,B) kdelta(I,J) cre(W) cre(X) des(Y) des(Z) 
+     5   (   1.00000) kdelta(A,B) kdelta(I,Y) kdelta(W,J) cre(X) des(Z) 
+     6   (  -1.00000) kdelta(A,B) kdelta(I,Y) kdelta(X,J) cre(W) des(Z) 
+     7   (  -1.00000) kdelta(A,B) kdelta(I,Z) kdelta(W,J) cre(X) des(Y) 
+     8   (   1.00000) kdelta(A,B) kdelta(I,Z) kdelta(X,J) cre(W) des(Y) 
+Finished combining terms in 0.126 seconds
+
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+ (   1.00000) kdelta(A,B) kdelta(I,J) kdelta(W,Y) cre(X) des(Z) 
+ (   1.00000) kdelta(A,B) kdelta(I,J) cre(W) cre(X) des(Y) des(Z) 
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) kdelta(A,B) kdelta(I,J) kdelta(W,Y) cre(X) des(Z) 
+ (   1.00000) kdelta(A,B) kdelta(I,J) cre(W) cre(X) des(Y) des(Z) 
+
+Total terms : 2
+SQA automation time :  0.129 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =  np.einsum('AB, IJ, WY, XZ->IXAYJZBW', np.identity(nextern), np.identity(ncore), np.identity(ncas), rdm_ca_so, optimize = True)
+temp += np.einsum('AB, IJ, WXYZ->IXAYJZBW', np.identity(nextern), np.identity(ncore), rdm_ccaa_so, optimize = True)

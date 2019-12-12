@@ -1,3 +1,261 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(2) ----------------------
+First Commutation: Done ...
+Perturbation(V) type = All 
+Done ...
+Second Commutation: Done ...
+Third Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) e(A) t2(x,A) cre(x) des(X) 
+ (  -1.00000) h(i,A) t1(i,x) cre(x) des(X) 
+ (  -1.00000) h(i,x) t1(i,A) cre(x) des(X) 
+ (  -1.00000) h(i,x) t1(i,y,A,x) cre(y) des(X) 
+ (  -1.00000) h(i,a) t1(i,x,A,a) cre(x) des(X) 
+ (  -1.00000) h(x,y) t2(x,A) cre(y) des(X) 
+ (   1.00000) t1(i,A) v(i,j,j,x) cre(x) des(X) 
+ (   1.00000) t1(i,x) v(i,y,x,A) cre(y) des(X) 
+ (   1.00000) t1(i,x) v(i,A,x,y) cre(y) des(X) 
+ (   1.00000) t1(i,x) v(i,j,j,A) cre(x) des(X) 
+ (   1.00000) t1(i,x,A,y) v(i,j,j,y) cre(x) des(X) 
+ (   1.00000) t1(i,x,A,a) v(i,j,j,a) cre(x) des(X) 
+ (   0.50000) t1(i,x,y,z) v(i,A,y,z) cre(x) des(X) 
+ (  -1.00000) t1(i,x,a,y) v(i,A,y,a) cre(x) des(X) 
+ (   0.50000) t1(i,x,a,b) v(i,A,a,b) cre(x) des(X) 
+ (   0.50000) t1(i,j,A,x) v(i,j,x,y) cre(y) des(X) 
+ (  -0.50000) t1(i,j,A,a) v(i,j,x,a) cre(x) des(X) 
+ (  -0.50000) t1(i,j,x,y) v(i,j,x,A) cre(y) des(X) 
+ (   0.50000) t1(i,j,a,x) v(i,j,A,a) cre(x) des(X) 
+ (  -1.00000) t1(i,a) v(i,A,x,a) cre(x) des(X) 
+ (  -1.00000) t1(i,a) v(i,x,A,a) cre(x) des(X) 
+ (  -1.00000) t2(x,A) v(i,y,i,x) cre(y) des(X) 
+ (  -0.50000) e(A) t1(i,A) t1(i,x) cre(x) des(X) 
+ (  -0.50000) e(A) t1(i,x,A,y) t1(i,y) cre(x) des(X) 
+ (  -0.50000) e(A) t1(i,x,A,a) t1(i,a) cre(x) des(X) 
+ (   0.25000) e(A) t1(i,j,A,x) t1(i,j,x,y) cre(y) des(X) 
+ (   0.25000) e(A) t1(i,j,A,a) t1(i,j,a,x) cre(x) des(X) 
+ (   1.00000) e(i) t1(i,x) t1(i,A) cre(x) des(X) 
+ (   0.50000) e(i) t1(i,x) t1(i,y,A,x) cre(y) des(X) 
+ (   0.50000) e(i) t1(i,x,A,y) t1(i,y) cre(x) des(X) 
+ (   0.50000) e(i) t1(i,x,A,a) t1(i,a) cre(x) des(X) 
+ (  -0.50000) e(i) t1(i,j,A,x) t1(i,j,x,y) cre(y) des(X) 
+ (  -0.50000) e(i) t1(i,j,A,a) t1(i,j,a,x) cre(x) des(X) 
+ (  -0.50000) e(i) t1(i,j,x,y) t1(i,j,A,x) cre(y) des(X) 
+ (  -0.50000) e(i) t1(i,j,a,x) t1(i,j,A,a) cre(x) des(X) 
+ (   0.50000) e(i) t1(i,a) t1(i,x,A,a) cre(x) des(X) 
+ (  -1.00000) e(a) t1(i,x,A,a) t1(i,a) cre(x) des(X) 
+ (   0.50000) e(a) t1(i,j,A,a) t1(i,j,a,x) cre(x) des(X) 
+ (  -1.00000) gamma(x,y) t1(z,a) v(x,A,y,a) cre(z) des(X) 
+ (  -0.50000) h(x,y) t1(i,x) t1(i,A) cre(y) des(X) 
+ (  -1.00000) h(x,y) t1(i,x) t1(i,z,A,y) cre(z) des(X) 
+ (   0.50000) h(x,y) t1(i,x,A,z) t1(i,z) cre(y) des(X) 
+ (   0.50000) h(x,y) t1(i,x,A,a) t1(i,a) cre(y) des(X) 
+ (   0.50000) h(x,y) t1(i,j,A,x) t1(i,j,y,z) cre(z) des(X) 
+ (  -0.25000) h(x,y) t1(i,j,x,z) t1(i,j,A,z) cre(y) des(X) 
+ (   0.25000) h(x,y) t1(i,j,a,x) t1(i,j,A,a) cre(y) des(X) 
+ (   0.25000) v(x,y,z,w) t1(i,j,x,y) t1(i,j,A,z) cre(w) des(X) 
+ (  -0.50000) v(i,x,i,y) t1(j,y) t1(j,A) cre(x) des(X) 
+ (   0.50000) v(i,x,i,y) t1(j,y,A,z) t1(j,z) cre(x) des(X) 
+ (   0.50000) v(i,x,i,y) t1(j,y,A,a) t1(j,a) cre(x) des(X) 
+ (  -1.00000) v(i,x,i,y) t1(j,z,A,x) t1(j,y) cre(z) des(X) 
+ (   0.50000) v(i,x,i,y) t1(j,k,A,x) t1(j,k,y,z) cre(z) des(X) 
+ (  -0.25000) v(i,x,i,y) t1(j,k,y,z) t1(j,k,A,z) cre(x) des(X) 
+ (   0.25000) v(i,x,i,y) t1(j,k,a,y) t1(j,k,A,a) cre(x) des(X) 
+ (  -0.50000) e(A) t2(x,y,A,z) cre(x) cre(y) des(X) des(z) 
+ (   0.50000) h(i,A) t1(i,x,y,z) cre(y) cre(z) des(X) des(x) 
+ (   1.00000) h(i,x) t1(i,y,A,z) cre(x) cre(y) des(X) des(z) 
+ (  -0.50000) h(x,a) t1(y,z,A,a) cre(y) cre(z) des(X) des(x) 
+ (   1.00000) h(x,y) t2(x,z,A,w) cre(y) cre(z) des(X) des(w) 
+ (  -0.50000) h(x,y) t2(z,w,A,x) cre(z) cre(w) des(X) des(y) 
+ (   0.50000) t1(i,A) v(i,x,y,z) cre(y) cre(z) des(X) des(x) 
+ (  -0.50000) t1(x,y,A,a) v(i,z,i,a) cre(x) cre(y) des(X) des(z) 
+ (  -0.50000) t1(x,y,a,z) v(w,A,z,a) cre(x) cre(y) des(X) des(w) 
+ (   0.25000) t1(x,y,a,b) v(z,A,a,b) cre(x) cre(y) des(X) des(z) 
+ (  -0.50000) t1(i,x) v(i,A,y,z) cre(y) cre(z) des(X) des(x) 
+ (  -1.00000) t1(i,x) v(i,z,y,A) cre(x) cre(z) des(X) des(y) 
+ (   1.00000) t1(i,x,A,y) v(i,z,y,w) cre(x) cre(w) des(X) des(z) 
+ (   1.00000) t1(i,x,A,y) v(i,j,j,z) cre(x) cre(z) des(X) des(y) 
+ (  -1.00000) t1(i,x,A,a) v(i,y,z,a) cre(x) cre(z) des(X) des(y) 
+ (   1.00000) t1(i,x,y,z) v(i,A,y,w) cre(x) cre(w) des(X) des(z) 
+ (   1.00000) t1(i,x,y,z) v(i,w,y,A) cre(z) cre(w) des(X) des(x) 
+ (  -0.50000) t1(i,x,y,z) v(i,j,j,A) cre(y) cre(z) des(X) des(x) 
+ (  -1.00000) t1(i,x,a,y) v(i,A,z,a) cre(x) cre(z) des(X) des(y) 
+ (  -1.00000) t1(i,x,a,y) v(i,z,A,a) cre(y) cre(z) des(X) des(x) 
+ (  -0.25000) t1(i,j,A,x) v(i,j,y,z) cre(y) cre(z) des(X) des(x) 
+ (   0.25000) t1(i,j,x,y) v(i,j,z,A) cre(x) cre(y) des(X) des(z) 
+ (  -0.50000) t1(x,a) v(y,z,A,a) cre(y) cre(z) des(X) des(x) 
+ (  -1.00000) t1(x,a) v(y,A,z,a) cre(x) cre(z) des(X) des(y) 
+ (   0.50000) t2(x,A) v(x,y,z,w) cre(z) cre(w) des(X) des(y) 
+ (   0.25000) t2(x,y,A,z) v(x,y,w,u) cre(w) cre(u) des(X) des(z) 
+ (  -0.50000) t2(x,y,A,z) v(i,z,i,w) cre(x) cre(y) des(X) des(w) 
+ (  -1.00000) t2(x,y,A,z) v(i,w,i,x) cre(y) cre(w) des(X) des(z) 
+ (   0.25000) e(A) t1(i,A) t1(i,x,y,z) cre(y) cre(z) des(X) des(x) 
+ (  -0.25000) e(A) t1(x,y,A,a) t1(z,a) cre(x) cre(y) des(X) des(z) 
+ (  -0.50000) e(A) t1(i,x,A,y) t1(i,z) cre(x) cre(z) des(X) des(y) 
+ (   0.50000) e(A) t1(i,x,A,y) t1(i,z,y,w) cre(x) cre(w) des(X) des(z) 
+ (   0.50000) e(A) t1(i,x,A,a) t1(i,y,a,z) cre(x) cre(z) des(X) des(y) 
+ (  -0.12500) e(A) t1(i,j,A,x) t1(i,j,y,z) cre(y) cre(z) des(X) des(x) 
+ (  -1.00000) e(i) t1(i,x) t1(i,y,A,z) cre(x) cre(y) des(X) des(z) 
+ (   0.25000) e(i) t1(i,x,A,y) t1(i,x,z,w) cre(z) cre(w) des(X) des(y) 
+ (  -0.50000) e(i) t1(i,x,A,y) t1(i,z,y,w) cre(x) cre(w) des(X) des(z) 
+ (  -0.50000) e(i) t1(i,x,A,a) t1(i,y,a,z) cre(x) cre(z) des(X) des(y) 
+ (  -0.50000) e(i) t1(i,x,y,z) t1(i,A) cre(y) cre(z) des(X) des(x) 
+ (  -0.25000) e(i) t1(i,x,y,z) t1(i,x,A,w) cre(y) cre(z) des(X) des(w) 
+ (   0.50000) e(i) t1(i,x,y,z) t1(i,w,A,y) cre(z) cre(w) des(X) des(x) 
+ (   0.50000) e(i) t1(i,x,a,y) t1(i,z,A,a) cre(y) cre(z) des(X) des(x) 
+ (   0.25000) e(i) t1(i,j,A,x) t1(i,j,y,z) cre(y) cre(z) des(X) des(x) 
+ (   0.25000) e(i) t1(i,j,x,y) t1(i,j,A,z) cre(x) cre(y) des(X) des(z) 
+ (  -0.50000) e(a) t1(x,y,A,a) t1(z,a) cre(x) cre(y) des(X) des(z) 
+ (   1.00000) e(a) t1(i,x,A,a) t1(i,y,a,z) cre(x) cre(z) des(X) des(y) 
+ (   0.50000) gamma(x,y) t1(z,w,a,u) v(x,A,y,a) cre(z) cre(w) des(X) des(u) 
+ (   0.50000) h(x,y) t1(x,z,A,a) t1(w,a) cre(y) cre(z) des(X) des(w) 
+ (   0.50000) h(x,y) t1(i,x) t1(i,z,A,w) cre(y) cre(z) des(X) des(w) 
+ (   0.25000) h(x,y) t1(x,a) t1(z,w,A,a) cre(z) cre(w) des(X) des(y) 
+ (   0.50000) h(x,y) t1(i,x,A,z) t1(i,w) cre(y) cre(w) des(X) des(z) 
+ (  -0.50000) h(x,y) t1(i,x,A,z) t1(i,w,z,u) cre(y) cre(u) des(X) des(w) 
+ (  -0.50000) h(x,y) t1(i,x,A,a) t1(i,z,a,w) cre(y) cre(w) des(X) des(z) 
+ (  -0.25000) h(x,y) t1(i,x,z,w) t1(i,A) cre(z) cre(w) des(X) des(y) 
+ (   0.50000) h(x,y) t1(i,x,z,w) t1(i,u,A,z) cre(w) cre(u) des(X) des(y) 
+ (   0.50000) h(x,y) t1(i,x,a,z) t1(i,w,A,a) cre(z) cre(w) des(X) des(y) 
+ (  -0.50000) h(x,y) t1(i,z,A,x) t1(i,w) cre(z) cre(w) des(X) des(y) 
+ (   1.00000) h(x,y) t1(i,z,A,x) t1(i,w,y,u) cre(z) cre(u) des(X) des(w) 
+ (   0.50000) h(x,y) t1(i,z,x,w) t1(i,A) cre(y) cre(w) des(X) des(z) 
+ (   0.50000) h(x,y) t1(i,z,x,w) t1(i,u,A,w) cre(y) cre(u) des(X) des(z) 
+ (  -0.50000) h(x,y) t1(i,z,a,x) t1(i,w,A,a) cre(y) cre(w) des(X) des(z) 
+ (  -0.12500) h(x,y) t1(i,j,A,x) t1(i,j,z,w) cre(z) cre(w) des(X) des(y) 
+ (  -0.25000) h(x,y) t1(i,j,x,z) t1(i,j,A,w) cre(y) cre(z) des(X) des(w) 
+ (   0.12500) v(x,y,z,w) t1(x,y,A,a) t1(u,a) cre(z) cre(w) des(X) des(u) 
+ (   0.25000) v(x,y,z,w) t1(i,x) t1(i,A) cre(z) cre(w) des(X) des(y) 
+ (  -0.25000) v(x,y,z,w) t1(i,x) t1(i,y,A,u) cre(z) cre(w) des(X) des(u) 
+ (  -1.00000) v(x,y,z,w) t1(i,x) t1(i,u,A,z) cre(w) cre(u) des(X) des(y) 
+ (  -0.25000) v(x,y,z,w) t1(i,x,A,u) t1(i,u) cre(z) cre(w) des(X) des(y) 
+ (   0.25000) v(x,y,z,w) t1(i,x,A,u) t1(i,v,y,u) cre(z) cre(w) des(X) des(v) 
+ (  -0.25000) v(x,y,z,w) t1(i,x,A,a) t1(i,a) cre(z) cre(w) des(X) des(y) 
+ (  -0.25000) v(x,y,z,w) t1(i,x,A,a) t1(i,u,a,y) cre(z) cre(w) des(X) des(u) 
+ (   0.12500) v(x,y,z,w) t1(i,u,x,y) t1(i,A) cre(z) cre(w) des(X) des(u) 
+ (  -0.50000) v(x,y,z,w) t1(i,u,x,y) t1(i,v,A,z) cre(w) cre(v) des(X) des(u) 
+ (  -0.06250) v(x,y,z,w) t1(i,j,x,y) t1(i,j,A,u) cre(z) cre(w) des(X) des(u) 
+ (   0.50000) v(x,y,z,w) t1(i,j,x,u) t1(i,j,A,z) cre(w) cre(u) des(X) des(y) 
+ (   0.12500) v(x,y,z,w) t1(i,j,x,u) t1(i,j,A,u) cre(z) cre(w) des(X) des(y) 
+ (  -0.12500) v(x,y,z,w) t1(i,j,a,x) t1(i,j,A,a) cre(z) cre(w) des(X) des(y) 
+ (   0.25000) v(i,x,i,y) t1(x,a) t1(z,w,A,a) cre(z) cre(w) des(X) des(y) 
+ (   0.50000) v(i,x,i,y) t1(y,z,A,a) t1(w,a) cre(x) cre(z) des(X) des(w) 
+ (   0.50000) v(i,x,i,y) t1(j,y) t1(j,z,A,w) cre(x) cre(z) des(X) des(w) 
+ (  -0.25000) v(i,x,i,y) t1(j,x,z,w) t1(j,A) cre(z) cre(w) des(X) des(y) 
+ (   0.50000) v(i,x,i,y) t1(j,x,z,w) t1(j,u,A,z) cre(w) cre(u) des(X) des(y) 
+ (   0.50000) v(i,x,i,y) t1(j,x,a,z) t1(j,w,A,a) cre(z) cre(w) des(X) des(y) 
+ (   0.50000) v(i,x,i,y) t1(j,y,A,z) t1(j,w) cre(x) cre(w) des(X) des(z) 
+ (  -0.50000) v(i,x,i,y) t1(j,y,A,z) t1(j,w,z,u) cre(x) cre(u) des(X) des(w) 
+ (  -0.50000) v(i,x,i,y) t1(j,y,A,a) t1(j,z,a,w) cre(x) cre(w) des(X) des(z) 
+ (  -0.50000) v(i,x,i,y) t1(j,z,A,x) t1(j,w) cre(z) cre(w) des(X) des(y) 
+ (   1.00000) v(i,x,i,y) t1(j,z,A,x) t1(j,w,y,u) cre(z) cre(u) des(X) des(w) 
+ (   0.50000) v(i,x,i,y) t1(j,z,y,w) t1(j,A) cre(x) cre(w) des(X) des(z) 
+ (   0.50000) v(i,x,i,y) t1(j,z,y,w) t1(j,u,A,w) cre(x) cre(u) des(X) des(z) 
+ (  -0.50000) v(i,x,i,y) t1(j,z,a,y) t1(j,w,A,a) cre(x) cre(w) des(X) des(z) 
+ (  -0.12500) v(i,x,i,y) t1(j,k,A,x) t1(j,k,z,w) cre(z) cre(w) des(X) des(y) 
+ (  -0.25000) v(i,x,i,y) t1(j,k,y,z) t1(j,k,A,w) cre(x) cre(z) des(X) des(w) 
+ (   0.25000) t1(x,y,A,a) v(z,w,u,a) cre(x) cre(y) cre(u) des(X) des(z) des(w) 
+ (  -0.25000) t1(x,y,a,z) v(w,u,A,a) cre(z) cre(w) cre(u) des(X) des(x) des(y) 
+ (  -0.50000) t1(x,y,a,z) v(w,A,u,a) cre(x) cre(y) cre(u) des(X) des(z) des(w) 
+ (  -0.50000) t1(i,x,A,y) v(i,z,w,u) cre(x) cre(w) cre(u) des(X) des(y) des(z) 
+ (  -0.25000) t1(i,x,y,z) v(i,A,w,u) cre(x) cre(w) cre(u) des(X) des(y) des(z) 
+ (  -0.50000) t1(i,x,y,z) v(i,u,w,A) cre(y) cre(z) cre(u) des(X) des(x) des(w) 
+ (  -0.50000) t2(x,y,A,z) v(x,w,u,v) cre(y) cre(u) cre(v) des(X) des(z) des(w) 
+ (  -0.25000) t2(x,y,A,z) v(w,u,z,v) cre(x) cre(y) cre(v) des(X) des(w) des(u) 
+ (  -0.12500) e(A) t1(x,y,A,a) t1(z,w,a,u) cre(x) cre(y) cre(u) des(X) des(z) des(w) 
+ (  -0.25000) e(A) t1(i,x,A,y) t1(i,z,w,u) cre(x) cre(w) cre(u) des(X) des(y) des(z) 
+ (  -0.50000) e(i) t1(i,x,y,z) t1(i,w,A,u) cre(y) cre(z) cre(w) des(X) des(x) des(u) 
+ (  -0.25000) e(a) t1(x,y,A,a) t1(z,w,a,u) cre(x) cre(y) cre(u) des(X) des(z) des(w) 
+ (   0.25000) h(x,y) t1(x,z,A,a) t1(w,u,a,v) cre(y) cre(z) cre(v) des(X) des(w) des(u) 
+ (   0.25000) h(x,y) t1(x,z,a,w) t1(u,v,A,a) cre(w) cre(u) cre(v) des(X) des(y) des(z) 
+ (  -0.12500) h(x,y) t1(z,w,a,x) t1(u,v,A,a) cre(y) cre(u) cre(v) des(X) des(z) des(w) 
+ (   0.25000) h(x,y) t1(i,x,A,z) t1(i,w,u,v) cre(y) cre(u) cre(v) des(X) des(z) des(w) 
+ (  -0.25000) h(x,y) t1(i,x,z,w) t1(i,u,A,v) cre(z) cre(w) cre(u) des(X) des(y) des(v) 
+ (  -0.25000) h(x,y) t1(i,z,A,x) t1(i,w,u,v) cre(z) cre(u) cre(v) des(X) des(y) des(w) 
+ (   0.50000) h(x,y) t1(i,z,x,w) t1(i,u,A,v) cre(y) cre(w) cre(u) des(X) des(z) des(v) 
+ (   0.06250) v(x,y,z,w) t1(x,y,A,a) t1(u,v,a,s) cre(z) cre(w) cre(s) des(X) des(u) des(v) 
+ (   0.25000) v(x,y,z,w) t1(x,u,A,a) t1(v,a) cre(z) cre(w) cre(u) des(X) des(y) des(v) 
+ (  -0.12500) v(x,y,z,w) t1(x,u,A,a) t1(v,s,a,y) cre(z) cre(w) cre(u) des(X) des(v) des(s) 
+ (   0.25000) v(x,y,z,w) t1(i,x) t1(i,u,A,v) cre(z) cre(w) cre(u) des(X) des(y) des(v) 
+ (   0.06250) v(x,y,z,w) t1(z,w,a,u) t1(v,s,A,a) cre(u) cre(v) cre(s) des(X) des(x) des(y) 
+ (   0.12500) v(x,y,z,w) t1(z,a) t1(u,v,A,a) cre(w) cre(u) cre(v) des(X) des(x) des(y) 
+ (   0.25000) v(x,y,z,w) t1(i,x,A,u) t1(i,v) cre(z) cre(w) cre(v) des(X) des(y) des(u) 
+ (   0.25000) v(x,y,z,w) t1(i,x,A,u) t1(i,v,y,s) cre(z) cre(w) cre(s) des(X) des(u) des(v) 
+ (  -0.25000) v(x,y,z,w) t1(i,x,A,u) t1(i,v,u,s) cre(z) cre(w) cre(s) des(X) des(y) des(v) 
+ (  -0.25000) v(x,y,z,w) t1(i,x,A,a) t1(i,u,a,v) cre(z) cre(w) cre(v) des(X) des(y) des(u) 
+ (  -0.12500) v(x,y,z,w) t1(i,z,u,v) t1(i,A) cre(w) cre(u) cre(v) des(X) des(x) des(y) 
+ (  -0.12500) v(x,y,z,w) t1(i,z,u,v) t1(i,s,A,w) cre(u) cre(v) cre(s) des(X) des(x) des(y) 
+ (   0.25000) v(x,y,z,w) t1(i,z,u,v) t1(i,s,A,u) cre(w) cre(v) cre(s) des(X) des(x) des(y) 
+ (   0.25000) v(x,y,z,w) t1(i,z,a,u) t1(i,v,A,a) cre(w) cre(u) cre(v) des(X) des(x) des(y) 
+ (  -0.25000) v(x,y,z,w) t1(i,u,A,z) t1(i,v) cre(w) cre(u) cre(v) des(X) des(x) des(y) 
+ (   0.12500) v(x,y,z,w) t1(i,u,x,y) t1(i,v,A,s) cre(z) cre(w) cre(v) des(X) des(u) des(s) 
+ (   0.25000) v(x,y,z,w) t1(i,u,x,v) t1(i,A) cre(z) cre(w) cre(v) des(X) des(y) des(u) 
+ (   1.00000) v(x,y,z,w) t1(i,u,x,v) t1(i,s,A,z) cre(w) cre(v) cre(s) des(X) des(y) des(u) 
+ (   0.25000) v(x,y,z,w) t1(i,u,x,v) t1(i,s,A,v) cre(z) cre(w) cre(s) des(X) des(y) des(u) 
+ (  -0.25000) v(x,y,z,w) t1(i,u,a,x) t1(i,v,A,a) cre(z) cre(w) cre(v) des(X) des(y) des(u) 
+ (  -0.06250) v(x,y,z,w) t1(i,j,A,z) t1(i,j,u,v) cre(w) cre(u) cre(v) des(X) des(x) des(y) 
+ (  -0.12500) v(x,y,z,w) t1(i,j,x,u) t1(i,j,A,v) cre(z) cre(w) cre(u) des(X) des(y) des(v) 
+ (   0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,A,a) cre(w) cre(u) cre(v) des(X) des(y) des(z) 
+ (   0.25000) v(i,x,i,y) t1(y,z,A,a) t1(w,u,a,v) cre(x) cre(z) cre(v) des(X) des(w) des(u) 
+ (  -0.12500) v(i,x,i,y) t1(z,w,a,y) t1(u,v,A,a) cre(x) cre(u) cre(v) des(X) des(z) des(w) 
+ (  -0.25000) v(i,x,i,y) t1(j,x,z,w) t1(j,u,A,v) cre(z) cre(w) cre(u) des(X) des(y) des(v) 
+ (   0.25000) v(i,x,i,y) t1(j,y,A,z) t1(j,w,u,v) cre(x) cre(u) cre(v) des(X) des(z) des(w) 
+ (  -0.25000) v(i,x,i,y) t1(j,z,A,x) t1(j,w,u,v) cre(z) cre(u) cre(v) des(X) des(y) des(w) 
+ (   0.50000) v(i,x,i,y) t1(j,z,y,w) t1(j,u,A,v) cre(x) cre(w) cre(u) des(X) des(z) des(v) 
+ (  -0.12500) v(x,y,z,w) t1(x,u,A,a) t1(v,s,a,t) cre(z) cre(w) cre(u) cre(t) des(X) des(y) des(v) des(s) 
+ (  -0.12500) v(x,y,z,w) t1(z,u,a,v) t1(s,t,A,a) cre(w) cre(v) cre(s) cre(t) des(X) des(x) des(y) des(u) 
+ (   0.06250) v(x,y,z,w) t1(u,v,a,x) t1(s,t,A,a) cre(z) cre(w) cre(s) cre(t) des(X) des(y) des(u) des(v) 
+ (  -0.12500) v(x,y,z,w) t1(i,x,A,u) t1(i,v,s,t) cre(z) cre(w) cre(s) cre(t) des(X) des(y) des(u) des(v) 
+ (   0.12500) v(x,y,z,w) t1(i,z,u,v) t1(i,s,A,t) cre(w) cre(u) cre(v) cre(s) des(X) des(x) des(y) des(t) 
+ (   0.12500) v(x,y,z,w) t1(i,u,A,z) t1(i,v,s,t) cre(w) cre(u) cre(s) cre(t) des(X) des(x) des(y) des(v) 
+ (  -0.25000) v(x,y,z,w) t1(i,u,x,v) t1(i,s,A,t) cre(z) cre(w) cre(v) cre(s) des(X) des(y) des(u) des(t) 
+
+Total terms : 202
+SQA automation time :  3.776 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
         temp =  np.einsum('A, xA, IxX->IXA', e_extern_so, t2_ae, trdm_ca_so, optimize = True)
         temp -= np.einsum('iA, ix, IxX->IXA', h_ce_so, t1_ca, trdm_ca_so, optimize = True)
         temp -= np.einsum('ix, iA, IxX->IXA', h_ca_so, t1_ce, trdm_ca_so, optimize = True)

@@ -1,7 +1,5 @@
 import sqa_extra.secondQuantizationAlgebra as sqa
 
-sqa.options.verbose = True
-
 # Define operator types
 tg_c = sqa.options.core_type
 tg_a = sqa.options.active_type
@@ -33,4 +31,4 @@ term3 = sqa.commutator(effH, term1)
 term4 = sqa.commutator(term2, term3)
 term5 = sqa.matrixBlock(term4)
 
-sqa.generateEinsum(term5, 'temp', 'IAJKBX', "")
+sqa.generateEinsum(term5, '    temp', 'IAJKBX', "")

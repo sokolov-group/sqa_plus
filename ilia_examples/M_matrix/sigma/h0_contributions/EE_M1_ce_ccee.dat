@@ -1,0 +1,84 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) X(I,i,A,a) h(i,a) 
+ (  -1.00000) X(I,i,A,a) v(i,j,j,a) 
+ (  -0.50000) X(I,i,a,b) v(i,A,a,b) 
+ (  -0.50000) X(i,j,A,a) v(i,j,I,a) 
+ (  -1.00000) X(I,i,A,a) e(i) t1(i,a) 
+ (   1.00000) X(I,i,A,a) e(a) t1(i,a) 
+ (  -1.00000) X(I,i,A,a) v(i,y,x,a) cre(y) des(x) 
+ (  -1.00000) X(I,i,A,a) e(i) t1(i,x,a,y) cre(x) des(y) 
+ (   1.00000) X(I,i,A,a) e(a) t1(i,x,a,y) cre(x) des(y) 
+ (  -1.00000) X(I,i,A,a) h(x,y) t1(i,x,a,z) cre(y) des(z) 
+ (   1.00000) X(I,i,A,a) h(x,y) t1(i,z,a,x) cre(z) des(y) 
+ (   1.00000) X(I,i,A,a) t1(i,x,a,y) v(j,y,j,z) cre(x) des(z) 
+ (  -1.00000) X(I,i,A,a) t1(i,x,a,y) v(j,z,j,x) cre(z) des(y) 
+ (   0.50000) X(I,i,A,a) t1(i,x,a,y) v(x,z,w,u) cre(w) cre(u) des(y) des(z) 
+ (  -0.50000) X(I,i,A,a) t1(i,x,a,y) v(z,w,y,u) cre(x) cre(u) des(z) des(w) 
+
+Total terms : 15
+SQA automation time :  0.305 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+    temp =  np.einsum('IiAa, ia->IA', X, h_ce_so, optimize = True)
+    temp -= np.einsum('IiAa, ijja->IA', X, v_ccce_so, optimize = True)
+    temp -= 0.5 * np.einsum('Iiab, iAab->IA', X, v_ceee_so, optimize = True)
+    temp -= 0.5 * np.einsum('ijAa, ijIa->IA', X, v_ccce_so, optimize = True)
+    temp -= np.einsum('IiAa, i, ia->IA', X, e_core_so, t1_ce, optimize = True)
+    temp += np.einsum('IiAa, a, ia->IA', X, e_extern_so, t1_ce, optimize = True)
+    temp -= np.einsum('IiAa, iyxa, yx->IA', X, v_caae_so, rdm_ca_so, optimize = True)
+    temp -= np.einsum('IiAa, i, ixay, xy->IA', X, e_core_so, t1_caea, rdm_ca_so, optimize = True)
+    temp += np.einsum('IiAa, a, ixay, xy->IA', X, e_extern_so, t1_caea, rdm_ca_so, optimize = True)
+    temp -= np.einsum('IiAa, xy, ixaz, yz->IA', X, h_aa_so, t1_caea, rdm_ca_so, optimize = True)
+    temp += np.einsum('IiAa, xy, izax, zy->IA', X, h_aa_so, t1_caea, rdm_ca_so, optimize = True)
+    temp += np.einsum('IiAa, ixay, jyjz, xz->IA', X, t1_caea, v_caca_so, rdm_ca_so, optimize = True)
+    temp -= np.einsum('IiAa, ixay, jzjx, zy->IA', X, t1_caea, v_caca_so, rdm_ca_so, optimize = True)
+    temp += 0.5 * np.einsum('IiAa, ixay, xzwu, wuyz->IA', X, t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+    temp -= 0.5 * np.einsum('IiAa, ixay, zwyu, xuzw->IA', X, t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)

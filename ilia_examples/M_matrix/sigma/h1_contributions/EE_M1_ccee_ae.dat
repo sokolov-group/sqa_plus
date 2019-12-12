@@ -1,0 +1,82 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (  -1.00000) X(x,A) v(I,J,x,B) 
+ (   1.00000) X(x,B) v(I,J,x,A) 
+ (   1.00000) X(x,A) e(B) t1(I,J,B,x) 
+ (  -1.00000) X(x,A) e(I) t1(I,J,B,x) 
+ (  -1.00000) X(x,A) e(J) t1(I,J,B,x) 
+ (  -1.00000) X(x,B) e(A) t1(I,J,A,x) 
+ (   1.00000) X(x,B) e(I) t1(I,J,A,x) 
+ (   1.00000) X(x,B) e(J) t1(I,J,A,x) 
+ (   1.00000) X(x,A) h(x,y) t1(I,J,B,y) 
+ (  -1.00000) X(x,B) h(x,y) t1(I,J,A,y) 
+ (   1.00000) X(x,A) t1(I,J,B,y) v(i,x,i,y) 
+ (  -1.00000) X(x,B) t1(I,J,A,y) v(i,x,i,y) 
+ (   1.00000) X(x,A) t1(I,J,B,y) v(y,z,x,w) cre(w) des(z) 
+ (  -1.00000) X(x,B) t1(I,J,A,y) v(y,z,x,w) cre(w) des(z) 
+
+Total terms : 14
+SQA automation time :  0.104 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+    temp =- np.einsum('xA, IJxB->IJAB', X, v_ccae_so, optimize = True)
+    temp += np.einsum('xB, IJxA->IJAB', X, v_ccae_so, optimize = True)
+    temp += np.einsum('xA, B, IJBx->IJAB', X, e_extern_so, t1_ccea, optimize = True)
+    temp -= np.einsum('xA, I, IJBx->IJAB', X, e_core_so, t1_ccea, optimize = True)
+    temp -= np.einsum('xA, J, IJBx->IJAB', X, e_core_so, t1_ccea, optimize = True)
+    temp -= np.einsum('xB, A, IJAx->IJAB', X, e_extern_so, t1_ccea, optimize = True)
+    temp += np.einsum('xB, I, IJAx->IJAB', X, e_core_so, t1_ccea, optimize = True)
+    temp += np.einsum('xB, J, IJAx->IJAB', X, e_core_so, t1_ccea, optimize = True)
+    temp += np.einsum('xA, xy, IJBy->IJAB', X, h_aa_so, t1_ccea, optimize = True)
+    temp -= np.einsum('xB, xy, IJAy->IJAB', X, h_aa_so, t1_ccea, optimize = True)
+    temp += np.einsum('xA, IJBy, ixiy->IJAB', X, t1_ccea, v_caca_so, optimize = True)
+    temp -= np.einsum('xB, IJAy, ixiy->IJAB', X, t1_ccea, v_caca_so, optimize = True)
+    temp += np.einsum('xA, IJBy, yzxw, wz->IJAB', X, t1_ccea, v_aaaa_so, rdm_ca_so, optimize = True)
+    temp -= np.einsum('xB, IJAy, yzxw, wz->IJAB', X, t1_ccea, v_aaaa_so, rdm_ca_so, optimize = True)
