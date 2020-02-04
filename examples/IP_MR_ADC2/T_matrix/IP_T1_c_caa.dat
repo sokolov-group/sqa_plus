@@ -1,0 +1,98 @@
+ (   1.00000) des(I) 
+
+################ Addon ################
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   1.00000) cre(J) cre(Y) des(I) des(Z) 
+ (   1.00000) kdelta(I,J) cre(Y) des(Z) 
+ (  -1.00000) kdelta(I,Y) cre(J) des(Z) 
+ (   1.00000) cre(J) cre(Y) des(Z) des(I) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) cre(J) cre(Y) des(I) des(Z) 
+Terms after normal ordering:
+ (   1.00000) des(I) cre(Y) des(Z) cre(J) 
+ (  -1.00000) kdelta(J,I) cre(Y) des(Z) 
+ (  -1.00000) kdelta(J,Z) des(I) cre(Y) 
+ (  -1.00000) kdelta(Y,I) des(Z) cre(J) 
+ (   1.00000) kdelta(J,Z) kdelta(Y,I) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) kdelta(I,J) cre(Y) des(Z) 
+Terms after normal ordering:
+ (   1.00000) kdelta(I,J) cre(Y) des(Z) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) kdelta(I,Y) cre(J) des(Z) 
+Terms after normal ordering:
+ (   1.00000) kdelta(I,Y) des(Z) cre(J) 
+ (  -1.00000) kdelta(I,Y) kdelta(J,Z) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) cre(J) cre(Y) des(Z) des(I) 
+Terms after normal ordering:
+ (  -1.00000) des(I) cre(Y) des(Z) cre(J) 
+ (   1.00000) kdelta(J,Z) des(I) cre(Y) 
+ (   1.00000) kdelta(J,I) cre(Y) des(Z) 
+ (   1.00000) kdelta(Y,I) des(Z) cre(J) 
+ (  -1.00000) kdelta(J,Z) kdelta(Y,I) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (   0.00000) des(I) cre(Y) des(Z) cre(J) 
+ (  -1.00000) kdelta(J,I) cre(Y) des(Z) 
+ (   0.00000) kdelta(J,Z) des(I) cre(Y) 
+ (   0.00000) kdelta(Y,I) des(Z) cre(J) 
+ (   1.00000) kdelta(J,Z) kdelta(Y,I) 
+ (   1.00000) kdelta(I,J) cre(Y) des(Z) 
+ (   0.00000) kdelta(I,Y) des(Z) cre(J) 
+ (  -1.00000) kdelta(I,Y) kdelta(J,Z) 
+ (   0.00000) des(I) cre(Y) des(Z) cre(J) 
+ (   0.00000) kdelta(J,Z) des(I) cre(Y) 
+ (   1.00000) kdelta(J,I) cre(Y) des(Z) 
+ (   0.00000) kdelta(Y,I) des(Z) cre(J) 
+ (  -1.00000) kdelta(J,Z) kdelta(Y,I) 
+
+Combining like terms:
+Converting 6 terms to canonical form...
+     0   (  -1.00000) kdelta(J,I) cre(Y) des(Z) 
+     1   (   1.00000) kdelta(J,Z) kdelta(Y,I) 
+     2   (   1.00000) kdelta(I,J) cre(Y) des(Z) 
+     3   (  -1.00000) kdelta(I,Y) kdelta(J,Z) 
+     4   (   1.00000) kdelta(J,I) cre(Y) des(Z) 
+     5   (  -1.00000) kdelta(J,Z) kdelta(Y,I) 
+Finished combining terms in 0.003 seconds
+
+Dummy indices label update:=>
+ (   1.00000) kdelta(I,J) cre(Y) des(Z) 
+
+####### Final results:#######
+ (   1.00000) kdelta(I,J) cre(Y) des(Z) 
+
+
+--------------------------------------------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+ --------------------------------------------------------------
+T[:ncore_so, s_caa:f_caa] =  np.einsum('IJ, YZ->IJYZ', np.identity(ncore), rdm_ca_so, optimize = True)

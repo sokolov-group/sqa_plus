@@ -1,0 +1,168 @@
+
+Combining like terms:
+Converting 55 terms to canonical form...
+     0   (   1.00000) cre(A) t1(c0,v0) cre(v0) des(c0) 
+     1   (  -1.00000) t1(c0,v0) cre(A) cre(v0) des(c0) 
+     2   (   1.00000) cre(A) t1(c0,a1,v0,a0) cre(v0) cre(a0) des(a1) des(c0) 
+     3   (   1.00000) t1(c0,a1,v0,a0) cre(A) cre(a0) cre(v0) des(a1) des(c0) 
+     4   (  -1.00000) cre(A) t1(c0,v0) cre(c0) des(v0) 
+     5   (   1.00000) t1(c0,v0) cre(A) cre(c0) des(v0) 
+     6   (   1.00000) t1(c0,A) cre(c0) 
+     7   (  -1.00000) cre(A) t1(c0,a1,v0,a0) cre(c0) cre(a1) des(a0) des(v0) 
+     8   (  -1.00000) t1(c0,a1,v0,a0) cre(A) cre(a1) cre(c0) des(a0) des(v0) 
+     9   (  -1.00000) t1(c0,a1,A,a0) cre(a1) cre(c0) des(a0) 
+    10   (   1.00000) cre(A) t1(c0,a0) cre(a0) des(c0) 
+    11   (  -1.00000) t1(c0,a0) cre(A) cre(a0) des(c0) 
+    12   (   0.50000) cre(A) t1(c0,a2,a0,a1) cre(a0) cre(a1) des(a2) des(c0) 
+    13   (  -0.50000) t1(c0,a2,a0,a1) cre(A) cre(a0) cre(a1) des(a2) des(c0) 
+    14   (  -1.00000) cre(A) t1(c0,a0) cre(c0) des(a0) 
+    15   (   1.00000) t1(c0,a0) cre(A) cre(c0) des(a0) 
+    16   (  -0.50000) cre(A) t1(c0,a2,a0,a1) cre(c0) cre(a2) des(a1) des(a0) 
+    17   (   0.50000) t1(c0,a2,a0,a1) cre(A) cre(a2) cre(c0) des(a0) des(a1) 
+    18   (   1.00000) cre(A) t1(a0,v0) cre(v0) des(a0) 
+    19   (  -1.00000) t1(a0,v0) cre(A) cre(v0) des(a0) 
+    20   (   0.50000) cre(A) t1(a0,a2,v0,a1) cre(v0) cre(a1) des(a2) des(a0) 
+    21   (  -0.50000) t1(a0,a2,v0,a1) cre(A) cre(a1) cre(v0) des(a0) des(a2) 
+    22   (  -1.00000) cre(A) t1(a0,v0) cre(a0) des(v0) 
+    23   (   1.00000) t1(a0,v0) cre(A) cre(a0) des(v0) 
+    24   (   1.00000) t1(a0,A) cre(a0) 
+    25   (  -0.50000) cre(A) t1(a0,a2,v0,a1) cre(a0) cre(a2) des(a1) des(v0) 
+    26   (   0.50000) t1(a0,a2,v0,a1) cre(A) cre(a0) cre(a2) des(a1) des(v0) 
+    27   (   0.50000) t1(a0,a2,A,a1) cre(a0) cre(a2) des(a1) 
+    28   (   0.25000) cre(A) t1(c0,c1,v0,v1) cre(v0) cre(v1) des(c1) des(c0) 
+    29   (   0.25000) t1(c0,c1,v0,v1) cre(A) cre(v0) cre(v1) des(c0) des(c1) 
+    30   (   0.50000) cre(A) t1(c0,c1,v0,a0) cre(v0) cre(a0) des(c1) des(c0) 
+    31   (  -0.50000) t1(c0,c1,v0,a0) cre(A) cre(a0) cre(v0) des(c0) des(c1) 
+    32   (   0.50000) cre(A) t1(c0,a0,v0,v1) cre(v0) cre(v1) des(a0) des(c0) 
+    33   (  -0.50000) t1(c0,a0,v0,v1) cre(A) cre(v0) cre(v1) des(a0) des(c0) 
+    34   (   0.25000) cre(A) t1(c0,c1,a0,a1) cre(a0) cre(a1) des(c1) des(c0) 
+    35   (   0.25000) t1(c0,c1,a0,a1) cre(A) cre(a0) cre(a1) des(c0) des(c1) 
+    36   (   0.25000) cre(A) t1(a1,a0,v0,v1) cre(v0) cre(v1) des(a0) des(a1) 
+    37   (  -0.25000) t1(a1,a0,v0,v1) cre(A) cre(v0) cre(v1) des(a0) des(a1) 
+    38   (  -0.25000) cre(A) t1(c0,c1,v0,v1) cre(c0) cre(c1) des(v1) des(v0) 
+    39   (  -0.25000) t1(c0,c1,v0,v1) cre(A) cre(c0) cre(c1) des(v0) des(v1) 
+    40   (  -0.25000) t1(c0,c1,v0,A) cre(c0) cre(c1) des(v0) 
+    41   (   0.25000) t1(c0,c1,A,v1) cre(c0) cre(c1) des(v1) 
+    42   (  -0.50000) cre(A) t1(c0,c1,v0,a0) cre(c0) cre(c1) des(a0) des(v0) 
+    43   (   0.50000) t1(c0,c1,v0,a0) cre(A) cre(c0) cre(c1) des(a0) des(v0) 
+    44   (   0.50000) t1(c0,c1,A,a0) cre(c0) cre(c1) des(a0) 
+    45   (  -0.50000) cre(A) t1(c0,a0,v0,v1) cre(c0) cre(a0) des(v1) des(v0) 
+    46   (   0.50000) t1(c0,a0,v0,v1) cre(A) cre(a0) cre(c0) des(v0) des(v1) 
+    47   (   0.50000) t1(c0,a0,v0,A) cre(a0) cre(c0) des(v0) 
+    48   (  -0.50000) t1(c0,a0,A,v1) cre(a0) cre(c0) des(v1) 
+    49   (  -0.25000) cre(A) t1(c0,c1,a0,a1) cre(c0) cre(c1) des(a1) des(a0) 
+    50   (  -0.25000) t1(c0,c1,a0,a1) cre(A) cre(c0) cre(c1) des(a0) des(a1) 
+    51   (  -0.25000) cre(A) t1(a1,a0,v0,v1) cre(a1) cre(a0) des(v1) des(v0) 
+    52   (   0.25000) t1(a1,a0,v0,v1) cre(A) cre(a0) cre(a1) des(v0) des(v1) 
+    53   (   0.25000) t1(a1,a0,v0,A) cre(a0) cre(a1) des(v0) 
+    54   (  -0.25000) t1(a1,a0,A,v1) cre(a0) cre(a1) des(v1) 
+Finished combining terms in 0.049 seconds
+
+ (   1.00000) t1(A,a) cre(a) 
+ (   1.00000) t1(A,a) cre(a) 
+ (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   1.00000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   1.00000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+
+################ Addon ################
+
+--------------------------------------------------------------
+    SQA_extra: Code geneator for quasi-particle systems.
+    author:  Koushik Chatterjee
+    date:  August 31, 2018
+
+    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+    This program is distributed in the hope that it will
+    be useful, but WITHOUT ANY WARRANTY; without even the
+    implied warranty of MERCHANTABILITY or FITNESS FOR A
+    PARTICULAR PURPOSE. See the GNU General Public License
+    for more details.
+--------------------------------------------------------------
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   1.00000) t1(A,a) cre(a) 
+ (   1.00000) t1(A,a) cre(a) 
+ (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   0.00000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   1.00000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   0.00000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   0.00000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) t1(A,a) cre(a) 
+Terms after normal ordering:
+ (   1.00000) t1(A,a) cre(a) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) t1(A,a) cre(a) 
+Terms after normal ordering:
+ (   1.00000) t1(A,a) cre(a) 
+
+Normal ordering with respect to core:=>
+Term=  (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+Terms after normal ordering:
+ (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+Terms after normal ordering:
+ (   1.00000) t1(a,b,A,c) cre(b) des(c) cre(a) 
+ (  -1.00000) t1(a,b,A,c) kdelta(a,c) cre(b) 
+
+Normal ordering with respect to core:=>
+Term=  (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+Terms after normal ordering:
+ (   0.50000) t1(a,b,A,c) des(c) cre(a) cre(b) 
+ (  -0.50000) t1(a,b,A,c) kdelta(a,c) cre(b) 
+ (   0.50000) t1(a,b,A,c) kdelta(b,c) cre(a) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (   1.00000) t1(A,a) cre(a) 
+ (   0.00000) t1(A,a) cre(a) 
+ (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+ (   0.00000) t1(a,b,A,c) cre(b) des(c) cre(a) 
+ (   0.00000) t1(a,b,A,c) kdelta(a,c) cre(b) 
+ (   0.00000) t1(a,b,A,c) des(c) cre(a) cre(b) 
+ (   0.00000) t1(a,b,A,c) kdelta(a,c) cre(b) 
+ (   0.00000) t1(a,b,A,c) kdelta(b,c) cre(a) 
+
+Combining like terms:
+Converting 2 terms to canonical form...
+     0   (   1.00000) t1(A,a) cre(a) 
+     1   (   0.50000) t1(a,b,A,c) cre(a) cre(b) des(c) 
+Finished combining terms in 0.001 seconds
+
+Dummy indices label update:=>
+ (   1.00000) t1(A,x) cre(x) 
+ (   0.50000) t1(x,y,A,z) cre(x) cre(y) des(z) 
+
+Reorder tensor indices according to (Core < Active < Virtual): =>
+ (   1.00000) t1(A,x) cre(x) 
+t1(A,x)     ---> t1(x,A)
+ (   0.50000) t1(x,y,A,z) cre(x) cre(y) des(z) 
+t1(x,y,A,z) ---> t1(x,y,z,A)
+
+####### Final results:#######
+ (   1.00000) t1(x,A) cre(x) 
+ (  -0.50000) t1(x,y,z,A) cre(x) cre(y) des(z) 
+
+
+--------------------------------------------------------------
+ VERSION : 1
+ Einsum generator: Transform into einsum ...
+ author:  Koushik Chatterjee
+ date:  August 31, 2018
+
+ Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+
+ For Help :: help = True
+ --------------------------------------------------------------
+temp =  np.einsum('xA, Px->PA', t1_ae, trdm_c_so, optimize = True)
+temp -= 0.5 * np.einsum('xyzA, Pxyz->PA', t1_aaae, trdm_cca_so, optimize = True)

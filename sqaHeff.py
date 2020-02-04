@@ -302,7 +302,7 @@ def Vperturbation_type(cc, aa, vv, vtype = None):
  return V
 #####################################
 #
-def Tamplitude(order, cc1, aa1, vv1, internal_excit = False):
+def Tamplitude(order, cc1, aa1, vv1, internal_excit = True):
 # Cluster operator : T - T^dag, Where T = T1 + T2
 # Single excitatio : T1
 #
