@@ -1,0 +1,82 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(0) ----------------------
+Done ...
+--------------------------------------------------------------
+ (   1.00000) E_fc(Const.) 
+ (  -1.00000) e(c1) des(c1) cre(c1) 
+ (   1.00000) e(v1) cre(v1) des(v1) 
+ (   1.00000) h(a1,a0) cre(a0) des(a1) 
+ (   1.00000) v(a3,c2,a2,c2) cre(a3) des(a2) 
+ (   0.25000) v(a6,a7,a4,a5) cre(a4) cre(a5) des(a7) des(a6) 
+First Commutator
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) e(C) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
+ (  -1.00000) e(C) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
+ (   1.00000) e(D) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
+ (  -1.00000) e(D) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
+ (  -1.00000) e(J) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
+ (   1.00000) e(J) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
+ (  -1.00000) h(Y,x) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(x) 
+ (   1.00000) h(Y,x) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(x) 
+ (  -1.00000) v(i,Y,i,x) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(x) 
+ (   1.00000) v(i,Y,i,x) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(x) 
+ (   0.50000) v(x,y,Y,z) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) cre(z) des(x) des(y) 
+ (  -0.50000) v(x,y,Y,z) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) cre(z) des(x) des(y) 
+
+Total terms : 12
+SQA automation time :  0.612 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =  np.einsum('C, AC, BD, IJ, XY->IXABJYCD', e_extern_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp -= np.einsum('C, AD, BC, IJ, XY->IXABJYCD', e_extern_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp += np.einsum('D, AC, BD, IJ, XY->IXABJYCD', e_extern_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp -= np.einsum('D, AD, BC, IJ, XY->IXABJYCD', e_extern_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp -= np.einsum('J, AC, BD, IJ, XY->IXABJYCD', e_core_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp += np.einsum('J, AD, BC, IJ, XY->IXABJYCD', e_core_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp -= np.einsum('Yx, AC, BD, IJ, Xx->IXABJYCD', h_aa_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp += np.einsum('Yx, AD, BC, IJ, Xx->IXABJYCD', h_aa_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp -= np.einsum('iYix, AC, BD, IJ, Xx->IXABJYCD', v_caca_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp += np.einsum('iYix, AD, BC, IJ, Xx->IXABJYCD', v_caca_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('xyYz, AC, BD, IJ, Xzxy->IXABJYCD', v_aaaa_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('xyYz, AD, BC, IJ, Xzxy->IXABJYCD', v_aaaa_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ccaa_so, optimize = True)
