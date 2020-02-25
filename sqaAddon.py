@@ -34,17 +34,22 @@ from sqaHeff import sqalatex
 #addon = index()
 
 #####################################
-def matrixBlock(nterms, transRDM = False):
+def matrixBlock(terms, transRDM = False):
  "Construct matrix block."
 #
  startTime = time.time()
  print ""
  print ("------------------------ SQA Automation ----------------------")
  sys.stdout.flush()
-# print_header()
  print ""
  fTerms = []
-#
+
+# Make sure that input expression is normal-ordered with respect to physical vacuum
+ nterms = []
+ for t in terms:
+     t_no = normalOrder(t)
+     nterms.extend(t_no)
+
 # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
  filterVirtual(nterms)
  termChop(nterms)
