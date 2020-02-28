@@ -1,4 +1,3 @@
-#import sqa_extra_old.secondQuantizationAlgebra as sqa
 import sqa_extra.secondQuantizationAlgebra as sqa
 
 #sqa.options.verbose = True
@@ -39,49 +38,23 @@ a = sqa.index('A', [tg_v], False)
 # Input parameters
 ##########################
 tensor_name = "temp"
-
-# h^(0) operators:
-#h_op = [sqa.creOp(j)]
-# h^(1) operators:
-h_op = [sqa.creOp(j), sqa.creOp(y), sqa.desOp(z)]
-#h_op = [sqa.creOp(j), sqa.creOp(k), sqa.desOp(b)]
-#h_op = [sqa.creOp(j), sqa.creOp(y), sqa.desOp(b)]
-#h_op = [sqa.creOp(y), sqa.creOp(z), sqa.desOp(b)]
-#h_op = [sqa.creOp(j), sqa.creOp(k), sqa.desOp(y)]
+# h^(0) operators
+#h_op = [sqa.creOp(b)]
 
 # q operators
 q_op = [sqa.desOp(i)]
 #q_op = [sqa.desOp(x)]
 #q_op = [sqa.desOp(a)]
+
 q_order = 2
 
-#target_ind = "IJ"
-#target_ind = "XJ"
-#target_ind = "AJ"
-
-target_ind = "IJYZ"
-#target_ind = "XJYZ"
-#target_ind = "AJYZ"
-
-#target_ind = "IJKB"
-#target_ind = "XJKB"
-#target_ind = "AJKB"
-
-#target_ind = "IJYB"
-#target_ind = "XJYB"
-#target_ind = "AJYB"
-
-#target_ind = "IYZB"
-#target_ind = "XYZB"
-#target_ind = "AYZB"
-
-#target_ind = "IJKY"
-#target_ind = "XJKY"
-#target_ind = "AJKY"
+target_ind = "I"
+#target_ind = "X"
+#target_ind = "A"
 ##########################
 
 # Evaluating expression
-h_term = sqa.term(1.0, [], h_op)
+#h_term = sqa.term(1.0, [], h_op)
 q0 = sqa.term(1.0, [], q_op)
 
 # Compute q tilde operators
@@ -161,8 +134,9 @@ for t in q_terms:
 f_terms = []
 
 for t in q_terms:
-    f_terms.append(sqa.multiplyTerms(t,h_term))
-    f_terms.append(sqa.multiplyTerms(h_term,t))
+    f_terms.append(t)
+#    f_terms.append(sqa.multiplyTerms(t,h_term))
+#    f_terms.append(sqa.multiplyTerms(h_term,t))
 
 t_terms = []
 for t in f_terms:
@@ -171,6 +145,6 @@ for t in f_terms:
 
 final_result = sqa.matrixBlock(t_terms)
 
-sqa.generateEinsum(final_result, tensor_name, target_ind)
-#sqa.generateEinsum(final_result, 'T[:ncore_so, si:fi]', 'P', transRDM=True, trans_ind_str='P')
+#sqa.generateEinsum(final_result, tensor_name, target_ind)
+sqa.generateEinsum(final_result, tensor_name, target_ind, transRDM=True, trans_ind_str='P')
 
