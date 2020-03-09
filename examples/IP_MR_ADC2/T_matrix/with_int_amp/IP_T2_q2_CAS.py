@@ -1,6 +1,6 @@
 import sqa_extra.secondQuantizationAlgebra as sqa
 
-sqa.options.verbose = True
+#sqa.options.verbose = True
 
 # Define operator types
 tg_c = sqa.options.core_type
@@ -12,11 +12,11 @@ tg_g = tg_c + tg_a + tg_v
 dummy = True
 
 # Core dummy indices
-cc = [sqa.index('c%i' %p, [tg_c], dummy) for p in range(50)]
+cc = [sqa.index('c%i' %p, [tg_c], dummy) for p in range(500)]
 # Active dummy indices
-aa = [sqa.index('a%i' %p, [tg_a], dummy) for p in range(50)]
+aa = [sqa.index('a%i' %p, [tg_a], dummy) for p in range(500)]
 # Virtual dummy indices
-vv = [sqa.index('v%i' %p, [tg_v], dummy) for p in range(50)]
+vv = [sqa.index('v%i' %p, [tg_v], dummy) for p in range(500)]
 
 # External indices
 b = sqa.index('B', [tg_v], False)
@@ -42,14 +42,14 @@ tensor_name = "temp"
 #h_op = [sqa.creOp(j)]
 
 # q operators
-#q_op = [sqa.creOp(i)]
+q_op = [sqa.creOp(i)]
 #q_op = [sqa.creOp(x)]
-q_op = [sqa.creOp(a)]
+#q_op = [sqa.creOp(a)]
 q_order = 2
 
-#target_ind = "I"
+target_ind = "I"
 #target_ind = "X"
-target_ind = "A"
+#target_ind = "A"
 ##########################
 
 # Evaluating expression
@@ -68,11 +68,11 @@ elif q_order == 1:
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
-    T1.extend(sqa.Tamplitude(T1, 1, cc1, aa1, vv1))
+    T1.extend(sqa.Tamplitude(1, cc1, aa1, vv1))
 
     q1 = []
     q1.extend(sqa.commutator(q0,T1))
@@ -85,11 +85,11 @@ else:
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
-    T1.extend(sqa.Tamplitude(T1, 1, cc1, aa1, vv1))
+    T1.extend(sqa.Tamplitude(1, cc1, aa1, vv1))
 
     q1 = []
     q1.extend(sqa.commutator(q0,T1))
@@ -99,11 +99,11 @@ else:
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
-    T1_.extend(sqa.Tamplitude(T1_, 1, cc1, aa1, vv1))
+    T1_.extend(sqa.Tamplitude(1, cc1, aa1, vv1))
 
     q2 = []
     q2.extend(sqa.commutator(q1,T1_))
@@ -115,11 +115,11 @@ else:
     cc1 = []
     aa1 = []
     vv1 = []
-    for i in range(4):
+    for i in range(30):
         cc1.append(cc.pop(0))
         aa1.append(aa.pop(0))
         vv1.append(vv.pop(0))
-    T2.extend(sqa.Tamplitude(T2, 2, cc1, aa1, vv1))
+    T2.extend(sqa.Tamplitude(2, cc1, aa1, vv1))
 
     q0_T2 = []
     q0_T2.extend(sqa.commutator(q0,T2))

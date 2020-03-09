@@ -1,0 +1,64 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+ (   1.00000) t1(X,a) des(a) 
+ (  -1.00000) t1(X,a) des(a) 
+ (   1.00000) t1(X,a,b,c) cre(a) des(b) des(c) 
+ (   0.50000) t1(X,a,b,c) cre(a) des(b) des(c) 
+ (   0.50000) t1(a,b,c,X) cre(c) des(a) des(b) 
+ (  -0.50000) t1(a,X,b,c) cre(a) des(b) des(c) 
+ (  -1.00000) t1(a,X,b,c) cre(a) des(b) des(c) 
+ (  -0.50000) t1(a,X,b,c) cre(a) des(b) des(c) 
+ (  -1.00000) t1(a,b,X,c) cre(c) des(a) des(b) 
+ (   1.00000) t1(a,b,c,X) cre(c) des(a) des(b) 
+ (  -0.50000) t1(a,b,X,c) cre(c) des(a) des(b) 
+ (   0.50000) t1(a,b,c,X) cre(c) des(a) des(b) 
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) t1(J,X,B,Y) 
+ (  -1.00000) t1(J,X,B,x) cre(Y) des(x) 
+
+Total terms : 2
+SQA automation time :  0.012 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =  np.einsum('JXBY->XJYB', t1_caea, optimize = True).copy()
+temp -= np.einsum('JXBx, Yx->XJYB', t1_caea, rdm_ca_so, optimize = True)
