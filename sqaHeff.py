@@ -962,7 +962,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
      for i in range(len(term.tensors)):
          tens = term.tensors[i]
 #
-         tensor_name, tensr_ind_str, tensr_indtype_str = tensor_name_indices(tens)
+         tensor_name, tensr_ind_str, tensr_indtype_str = tensor_name_indices(tens, suffix)
 #
          if (isinstance(tens, creOp) or isinstance(tens,desOp)):
             credes_list.append(tensor_name)            
@@ -1152,7 +1152,7 @@ def einsum_help():
        exit()
     print("-------------------------------------------------------------- ")
 
-def tensor_name_indices(tensr):
+def tensor_name_indices(tensr, suffix = ''):
 # Return Tensor name and indices as string
  tensr_ind_str = ''
  tensr_indtype_str = ''
@@ -1176,7 +1176,7 @@ def tensor_name_indices(tensr):
           dstr = 'ncas'
        else:
           dstr = 'nextern'
-       tensor_name += str('(')+dstr+str(')')
+       tensor_name += str('(')+dstr+'_'+suffix+str(')')
 #
      elif (((tensr.name == 'E') or (tensr.name == 'e')) and (len(tensr.indices) == 1)):
        tensr_indtype_str = tensr.indices[0].indType[0][0]
