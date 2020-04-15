@@ -48,7 +48,7 @@ f = sqa.index('F', [tg_v])
 #l_ind = 'IXAB'                                                         
                                                                        
 l_op  = [sqa.creOp(x), sqa.creOp(y), sqa.desOp(b), sqa.desOp(a)] # AAEE
-l_ind = 'AAEE'                                                         
+l_ind = 'XYAB'                                                         
                                                                        
 #l_op  = [sqa.creOp(i), sqa.creOp(x), sqa.desOp(z), sqa.desOp(y)] # CAAA
 #l_ind = 'IXYZ'                                                         
@@ -61,8 +61,8 @@ l_ind = 'AAEE'
 
 
 # RHS
-r_op  = [sqa.creOp(u), sqa.creOp(v), sqa.desOp(m), sqa.desOp(l)] # CCAA  
-r_ind = 'LMUV'
+#r_op  = [sqa.creOp(u), sqa.creOp(v), sqa.desOp(m), sqa.desOp(l)] # CCAA  
+#r_ind = 'LMUV'
 
 #r_op  = [sqa.creOp(d), sqa.creOp(u), sqa.desOp(m), sqa.desOp(l)] # CCEA
 #r_ind = 'LMDU'
@@ -79,8 +79,8 @@ r_ind = 'LMUV'
 #r_op  = [sqa.creOp(v), sqa.creOp(w), sqa.desOp(u), sqa.desOp(l)] # CAAA
 #r_ind = 'LUVW'
 
-#r_op  = [sqa.creOp(d), sqa.creOp(v), sqa.desOp(u), sqa.desOp(l)] # CAEA
-#r_ind = 'LUDV'
+r_op  = [sqa.creOp(d), sqa.creOp(v), sqa.desOp(u), sqa.desOp(l)] # CAEA
+r_ind = 'LUDV'
 
 #r_op  = [sqa.creOp(d), sqa.creOp(w), sqa.desOp(v), sqa.desOp(u)] # AAEA
 #r_ind = 'UVDW'

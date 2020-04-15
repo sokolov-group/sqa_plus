@@ -250,7 +250,7 @@ Done ...
  (   0.50000) X(x,y,B,a) v(z,a,w,A) cre(X) cre(Y) cre(w) des(x) des(y) des(z) 
 
 Total terms : 5
-SQA automation time :  0.872 seconds
+SQA automation time :  0.895 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -262,8 +262,8 @@ SQA automation time :  0.872 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp = -0.25 * np.einsum('xyab, abAB, XYxy->AAEE', X, v_eeee_so, rdm_ccaa_so, optimize = True)
-temp += 0.5 * np.einsum('xyAa, zw, zawB, XYxy->AAEE', X, rdm_ca_so, v_aeae_so, rdm_ccaa_so, optimize = True)
-temp -= 0.5 * np.einsum('xyBa, zw, zawA, XYxy->AAEE', X, rdm_ca_so, v_aeae_so, rdm_ccaa_so, optimize = True)
-temp -= 0.5 * np.einsum('xyAa, zawB, XYwxyz->AAEE', X, v_aeae_so, rdm_cccaaa_so, optimize = True)
-temp += 0.5 * np.einsum('xyBa, zawA, XYwxyz->AAEE', X, v_aeae_so, rdm_cccaaa_so, optimize = True)
+temp = -0.25 * np.einsum('xyab, abAB, XYxy->XYAB', X, v_eeee_so, rdm_ccaa_so, optimize = True)
+temp += 0.5 * np.einsum('xyAa, zw, zawB, XYxy->XYAB', X, rdm_ca_so, v_aeae_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('xyBa, zw, zawA, XYxy->XYAB', X, rdm_ca_so, v_aeae_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('xyAa, zawB, XYwxyz->XYAB', X, v_aeae_so, rdm_cccaaa_so, optimize = True)
+temp += 0.5 * np.einsum('xyBa, zawA, XYwxyz->XYAB', X, v_aeae_so, rdm_cccaaa_so, optimize = True)

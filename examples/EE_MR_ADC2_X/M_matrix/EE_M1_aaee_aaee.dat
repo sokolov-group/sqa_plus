@@ -254,7 +254,7 @@ Done ...
  (  -1.00000) kdelta(B,E) v(x,D,y,A) cre(X) cre(Y) cre(y) des(U) des(V) des(x) 
 
 Total terms : 9
-SQA automation time :  1.951 seconds
+SQA automation time :  1.974 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -266,12 +266,12 @@ SQA automation time :  1.951 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =- np.einsum('DEAB, XYUV->AAEEUVDE', v_eeee_so, rdm_ccaa_so, optimize = True)
-temp += np.einsum('xy, AD, xEyB, XYUV->AAEEUVDE', rdm_ca_so, np.identity(nextern_so), v_aeae_so, rdm_ccaa_so, optimize = True)
-temp -= np.einsum('xy, AE, xDyB, XYUV->AAEEUVDE', rdm_ca_so, np.identity(nextern_so), v_aeae_so, rdm_ccaa_so, optimize = True)
-temp -= np.einsum('xy, BD, xEyA, XYUV->AAEEUVDE', rdm_ca_so, np.identity(nextern_so), v_aeae_so, rdm_ccaa_so, optimize = True)
-temp += np.einsum('xy, BE, xDyA, XYUV->AAEEUVDE', rdm_ca_so, np.identity(nextern_so), v_aeae_so, rdm_ccaa_so, optimize = True)
-temp -= np.einsum('AD, xEyB, XYyUVx->AAEEUVDE', np.identity(nextern_so), v_aeae_so, rdm_cccaaa_so, optimize = True)
-temp += np.einsum('AE, xDyB, XYyUVx->AAEEUVDE', np.identity(nextern_so), v_aeae_so, rdm_cccaaa_so, optimize = True)
-temp += np.einsum('BD, xEyA, XYyUVx->AAEEUVDE', np.identity(nextern_so), v_aeae_so, rdm_cccaaa_so, optimize = True)
-temp -= np.einsum('BE, xDyA, XYyUVx->AAEEUVDE', np.identity(nextern_so), v_aeae_so, rdm_cccaaa_so, optimize = True)
+temp =- np.einsum('DEAB, XYUV->XYABUVDE', v_eeee_so, rdm_ccaa_so, optimize = True)
+temp += np.einsum('xy, AD, xEyB, XYUV->XYABUVDE', rdm_ca_so, np.identity(nextern_so), v_aeae_so, rdm_ccaa_so, optimize = True)
+temp -= np.einsum('xy, AE, xDyB, XYUV->XYABUVDE', rdm_ca_so, np.identity(nextern_so), v_aeae_so, rdm_ccaa_so, optimize = True)
+temp -= np.einsum('xy, BD, xEyA, XYUV->XYABUVDE', rdm_ca_so, np.identity(nextern_so), v_aeae_so, rdm_ccaa_so, optimize = True)
+temp += np.einsum('xy, BE, xDyA, XYUV->XYABUVDE', rdm_ca_so, np.identity(nextern_so), v_aeae_so, rdm_ccaa_so, optimize = True)
+temp -= np.einsum('AD, xEyB, XYyUVx->XYABUVDE', np.identity(nextern_so), v_aeae_so, rdm_cccaaa_so, optimize = True)
+temp += np.einsum('AE, xDyB, XYyUVx->XYABUVDE', np.identity(nextern_so), v_aeae_so, rdm_cccaaa_so, optimize = True)
+temp += np.einsum('BD, xEyA, XYyUVx->XYABUVDE', np.identity(nextern_so), v_aeae_so, rdm_cccaaa_so, optimize = True)
+temp -= np.einsum('BE, xDyA, XYyUVx->XYABUVDE', np.identity(nextern_so), v_aeae_so, rdm_cccaaa_so, optimize = True)

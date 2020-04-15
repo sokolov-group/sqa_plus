@@ -270,7 +270,7 @@ Done ...
  (  -0.50000) X(I,i,A,a) t1(i,x,a,y) v(z,w,y,u) cre(X) cre(x) cre(u) des(Y) des(z) des(w) 
 
 Total terms : 25
-SQA automation time :  1.914 seconds
+SQA automation time :  1.945 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -282,28 +282,28 @@ SQA automation time :  1.914 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =  np.einsum('IiAa, ia, XY->LMDE', X, h_ce_so, rdm_ca_so, optimize = True)
-temp -= np.einsum('IiAa, iYxa, Xx->LMDE', X, v_caae_so, rdm_ca_so, optimize = True)
-temp -= np.einsum('IiAa, ijja, XY->LMDE', X, v_ccce_so, rdm_ca_so, optimize = True)
-temp -= 0.5 * np.einsum('Iiab, iAab, XY->LMDE', X, v_ceee_so, rdm_ca_so, optimize = True)
-temp -= 0.5 * np.einsum('ijAa, ijIa, XY->LMDE', X, v_ccce_so, rdm_ca_so, optimize = True)
-temp -= np.einsum('IiAa, i, iYax, Xx->LMDE', X, e_core_so, t1_caea, rdm_ca_so, optimize = True)
-temp -= np.einsum('IiAa, i, ia, XY->LMDE', X, e_core_so, t1_ce, rdm_ca_so, optimize = True)
-temp += np.einsum('IiAa, a, iYax, Xx->LMDE', X, e_extern_so, t1_caea, rdm_ca_so, optimize = True)
-temp += np.einsum('IiAa, a, ia, XY->LMDE', X, e_extern_so, t1_ce, rdm_ca_so, optimize = True)
-temp -= np.einsum('IiAa, Yx, ixay, Xy->LMDE', X, h_aa_so, t1_caea, rdm_ca_so, optimize = True)
-temp += np.einsum('IiAa, xy, iYax, Xy->LMDE', X, h_aa_so, t1_caea, rdm_ca_so, optimize = True)
-temp += np.einsum('IiAa, iYax, jxjy, Xy->LMDE', X, t1_caea, v_caca_so, rdm_ca_so, optimize = True)
-temp -= np.einsum('IiAa, ixay, jYjx, Xy->LMDE', X, t1_caea, v_caca_so, rdm_ca_so, optimize = True)
-temp += np.einsum('IiAa, iyxa, XyYx->LMDE', X, v_caae_so, rdm_ccaa_so, optimize = True)
-temp += np.einsum('IiAa, i, ixay, XxYy->LMDE', X, e_core_so, t1_caea, rdm_ccaa_so, optimize = True)
-temp -= np.einsum('IiAa, a, ixay, XxYy->LMDE', X, e_extern_so, t1_caea, rdm_ccaa_so, optimize = True)
-temp += np.einsum('IiAa, xy, ixaz, XyYz->LMDE', X, h_aa_so, t1_caea, rdm_ccaa_so, optimize = True)
-temp -= np.einsum('IiAa, xy, izax, XzYy->LMDE', X, h_aa_so, t1_caea, rdm_ccaa_so, optimize = True)
-temp -= 0.5 * np.einsum('IiAa, iYax, yzxw, Xwyz->LMDE', X, t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
-temp += np.einsum('IiAa, ixay, xzYw, Xwyz->LMDE', X, t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
-temp -= np.einsum('IiAa, ixay, jyjz, XxYz->LMDE', X, t1_caea, v_caca_so, rdm_ccaa_so, optimize = True)
-temp -= 0.5 * np.einsum('IiAa, ixay, zwYy, Xxzw->LMDE', X, t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
-temp += np.einsum('IiAa, ixay, jzjx, XzYy->LMDE', X, t1_caea, v_caca_so, rdm_ccaa_so, optimize = True)
-temp += 0.5 * np.einsum('IiAa, ixay, xzwu, XwuYyz->LMDE', X, t1_caea, v_aaaa_so, rdm_cccaaa_so, optimize = True)
-temp -= 0.5 * np.einsum('IiAa, ixay, zwyu, XxuYzw->LMDE', X, t1_caea, v_aaaa_so, rdm_cccaaa_so, optimize = True)
+temp =  np.einsum('IiAa, ia, XY->IXAY', X, h_ce_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('IiAa, iYxa, Xx->IXAY', X, v_caae_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('IiAa, ijja, XY->IXAY', X, v_ccce_so, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('Iiab, iAab, XY->IXAY', X, v_ceee_so, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('ijAa, ijIa, XY->IXAY', X, v_ccce_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('IiAa, i, iYax, Xx->IXAY', X, e_core_so, t1_caea, rdm_ca_so, optimize = True)
+temp -= np.einsum('IiAa, i, ia, XY->IXAY', X, e_core_so, t1_ce, rdm_ca_so, optimize = True)
+temp += np.einsum('IiAa, a, iYax, Xx->IXAY', X, e_extern_so, t1_caea, rdm_ca_so, optimize = True)
+temp += np.einsum('IiAa, a, ia, XY->IXAY', X, e_extern_so, t1_ce, rdm_ca_so, optimize = True)
+temp -= np.einsum('IiAa, Yx, ixay, Xy->IXAY', X, h_aa_so, t1_caea, rdm_ca_so, optimize = True)
+temp += np.einsum('IiAa, xy, iYax, Xy->IXAY', X, h_aa_so, t1_caea, rdm_ca_so, optimize = True)
+temp += np.einsum('IiAa, iYax, jxjy, Xy->IXAY', X, t1_caea, v_caca_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('IiAa, ixay, jYjx, Xy->IXAY', X, t1_caea, v_caca_so, rdm_ca_so, optimize = True)
+temp += np.einsum('IiAa, iyxa, XyYx->IXAY', X, v_caae_so, rdm_ccaa_so, optimize = True)
+temp += np.einsum('IiAa, i, ixay, XxYy->IXAY', X, e_core_so, t1_caea, rdm_ccaa_so, optimize = True)
+temp -= np.einsum('IiAa, a, ixay, XxYy->IXAY', X, e_extern_so, t1_caea, rdm_ccaa_so, optimize = True)
+temp += np.einsum('IiAa, xy, ixaz, XyYz->IXAY', X, h_aa_so, t1_caea, rdm_ccaa_so, optimize = True)
+temp -= np.einsum('IiAa, xy, izax, XzYy->IXAY', X, h_aa_so, t1_caea, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('IiAa, iYax, yzxw, Xwyz->IXAY', X, t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp += np.einsum('IiAa, ixay, xzYw, Xwyz->IXAY', X, t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp -= np.einsum('IiAa, ixay, jyjz, XxYz->IXAY', X, t1_caea, v_caca_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('IiAa, ixay, zwYy, Xxzw->IXAY', X, t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp += np.einsum('IiAa, ixay, jzjx, XzYy->IXAY', X, t1_caea, v_caca_so, rdm_ccaa_so, optimize = True)
+temp += 0.5 * np.einsum('IiAa, ixay, xzwu, XwuYyz->IXAY', X, t1_caea, v_aaaa_so, rdm_cccaaa_so, optimize = True)
+temp -= 0.5 * np.einsum('IiAa, ixay, zwyu, XxuYzw->IXAY', X, t1_caea, v_aaaa_so, rdm_cccaaa_so, optimize = True)
