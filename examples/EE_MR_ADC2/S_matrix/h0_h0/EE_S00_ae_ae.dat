@@ -10,43 +10,21 @@
  See the GNU General Public License for more details.
 --------------------------------------------------------------
 
-Combining like terms:
-Converting 4 terms to canonical form...
-     0   (   1.00000) cre(B) cre(X) des(A) des(Y) 
-     1   (   1.00000) kdelta(A,B) cre(X) des(Y) 
-     2   (  -1.00000) cre(B) cre(X) des(A) des(Y) 
-     3   (  -1.00000) kdelta(Y,X) cre(B) des(A) 
-Finished combining terms in 0.002 seconds
-
-
 ------------------------ SQA Automation ----------------------
 
 Computing expectation value with respect to virtual:=>
- (   1.00000) kdelta(A,B) cre(X) des(Y) 
- (   0.00000) kdelta(X,Y) cre(B) des(A) 
 Done ...
 --------------------------------------------------------------
 Normal ordering with respect to core:=>
-Term=  (   1.00000) kdelta(A,B) cre(X) des(Y) 
-Terms after normal ordering:
- (   1.00000) kdelta(A,B) cre(X) des(Y) 
 Done ...
 --------------------------------------------------------------
 Computing expectation value with respect to core:=>
- (   1.00000) kdelta(A,B) cre(X) des(Y) 
 Done ...
 --------------------------------------------------------------
-
-Combining like terms:
-Converting 1 terms to canonical form...
-     0   (   1.00000) kdelta(A,B) cre(X) des(Y) 
-Finished combining terms in 0.000 seconds
-
 Contract delta function for non-dummy indices: =>
 Done ...
 --------------------------------------------------------------
 Dummy indices relabelling:=>
- (   1.00000) kdelta(A,B) cre(X) des(Y) 
 Done ...
 --------------------------------------------------------------
 Reorder tensor indices according to (Core < Active < Virtual): =>
@@ -69,4 +47,4 @@ SQA automation time :  0.001 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =  np.einsum('AB, XY->XAYB', np.identity(nextern), rdm_ca_so, optimize = True)
+temp =  np.einsum('AB, XY->XAYB', np.identity(nextern_so), rdm_ca_so, optimize = True)

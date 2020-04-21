@@ -32,12 +32,12 @@ Done ...
 --------------------------------------------------------------
 
 ----------------------- Final results ------------------------
- (  -1.00000) kdelta(I,J) kdelta(W,X) cre(Z) des(Y) 
- (   1.00000) kdelta(I,J) kdelta(X,Z) cre(W) des(Y) 
- (  -1.00000) kdelta(I,J) cre(W) cre(Z) des(X) des(Y) 
+ (  -1.00000) kdelta(I,J) kdelta(U,X) cre(Z) des(Y) 
+ (   1.00000) kdelta(I,J) kdelta(X,Z) cre(U) des(Y) 
+ (  -1.00000) kdelta(I,J) cre(U) cre(Z) des(X) des(Y) 
 
 Total terms : 3
-SQA automation time :  0.022 seconds
+SQA automation time :  0.096 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -49,6 +49,6 @@ SQA automation time :  0.022 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-        temp =- np.einsum('IJ, WX, ZY->IXJYZW', np.identity(ncore), np.identity(ncas), rdm_ca_so, optimize = True)
-        temp += np.einsum('IJ, XZ, WY->IXJYZW', np.identity(ncore), np.identity(ncas), rdm_ca_so, optimize = True)
-        temp -= np.einsum('IJ, WZXY->IXJYZW', np.identity(ncore), rdm_ccaa_so, optimize = True)
+temp =- np.einsum('IJ, UX, ZY->IXJYZU', np.identity(ncore_so), np.identity(ncas_so), rdm_ca_so, optimize = True)
+temp += np.einsum('IJ, XZ, UY->IXJYZU', np.identity(ncore_so), np.identity(ncas_so), rdm_ca_so, optimize = True)
+temp -= np.einsum('IJ, UZXY->IXJYZU', np.identity(ncore_so), rdm_ccaa_so, optimize = True)

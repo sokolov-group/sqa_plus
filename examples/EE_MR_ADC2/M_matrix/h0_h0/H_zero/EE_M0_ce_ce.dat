@@ -1,2 +1,0 @@
-        temp =  np.einsum('B, AB, IJ->IAJB', e_extern_so, np.identity(nextern), np.identity(ncore), optimize = True)
-        temp -= np.einsum('J, AB, IJ->IAJB', e_core_so, np.identity(nextern), np.identity(ncore), optimize = True)

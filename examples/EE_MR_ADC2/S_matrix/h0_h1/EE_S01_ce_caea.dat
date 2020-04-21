@@ -10,56 +10,21 @@
  See the GNU General Public License for more details.
 --------------------------------------------------------------
 
-Combining like terms:
-Converting 6 terms to canonical form...
-     0   (   1.00000) cre(B) cre(I) cre(Y) des(A) des(J) des(X) 
-     1   (  -1.00000) kdelta(A,B) cre(I) cre(Y) des(J) des(X) 
-     2   (  -1.00000) kdelta(A,Y) cre(B) cre(I) des(J) des(X) 
-     3   (  -1.00000) cre(B) cre(I) cre(Y) des(A) des(J) des(X) 
-     4   (  -1.00000) kdelta(X,I) cre(B) cre(Y) des(A) des(J) 
-     5   (   1.00000) kdelta(J,I) cre(B) cre(Y) des(A) des(X) 
-Finished combining terms in 0.004 seconds
-
-
 ------------------------ SQA Automation ----------------------
 
 Computing expectation value with respect to virtual:=>
- (  -1.00000) kdelta(A,B) cre(I) cre(Y) des(J) des(X) 
- (   0.00000) kdelta(A,Y) cre(B) cre(I) des(J) des(X) 
- (   0.00000) kdelta(I,J) cre(B) cre(Y) des(A) des(X) 
- (   0.00000) kdelta(I,X) cre(B) cre(Y) des(A) des(J) 
 Done ...
 --------------------------------------------------------------
 Normal ordering with respect to core:=>
-Term=  (  -1.00000) kdelta(A,B) cre(I) cre(Y) des(J) des(X) 
-Terms after normal ordering:
- (  -1.00000) kdelta(A,B) des(J) cre(Y) des(X) cre(I) 
- (   1.00000) kdelta(A,B) kdelta(I,J) cre(Y) des(X) 
- (   1.00000) kdelta(A,B) kdelta(I,X) des(J) cre(Y) 
- (   1.00000) kdelta(A,B) kdelta(Y,J) des(X) cre(I) 
- (  -1.00000) kdelta(A,B) kdelta(I,X) kdelta(Y,J) 
 Done ...
 --------------------------------------------------------------
 Computing expectation value with respect to core:=>
- (   0.00000) kdelta(A,B) des(J) cre(Y) des(X) cre(I) 
- (   1.00000) kdelta(A,B) kdelta(I,J) cre(Y) des(X) 
- (   0.00000) kdelta(A,B) kdelta(I,X) des(J) cre(Y) 
- (   0.00000) kdelta(A,B) kdelta(Y,J) des(X) cre(I) 
- (  -1.00000) kdelta(A,B) kdelta(I,X) kdelta(Y,J) 
 Done ...
 --------------------------------------------------------------
-
-Combining like terms:
-Converting 2 terms to canonical form...
-     0   (   1.00000) kdelta(A,B) kdelta(I,J) cre(Y) des(X) 
-     1   (  -1.00000) kdelta(A,B) kdelta(I,X) kdelta(Y,J) 
-Finished combining terms in 0.011 seconds
-
 Contract delta function for non-dummy indices: =>
 Done ...
 --------------------------------------------------------------
 Dummy indices relabelling:=>
- (   1.00000) kdelta(A,B) kdelta(I,J) cre(Y) des(X) 
 Done ...
 --------------------------------------------------------------
 Reorder tensor indices according to (Core < Active < Virtual): =>
@@ -67,10 +32,10 @@ Done ...
 --------------------------------------------------------------
 
 ----------------------- Final results ------------------------
- (   1.00000) kdelta(A,B) kdelta(I,J) cre(Y) des(X) 
+ (   1.00000) kdelta(A,B) kdelta(I,J) cre(Z) des(Y) 
 
 Total terms : 1
-SQA automation time :  0.012 seconds
+SQA automation time :  0.023 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -82,4 +47,4 @@ SQA automation time :  0.012 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-        temp =  np.einsum('AB, IJ, YX->IAJXBY', np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp =  np.einsum('AB, IJ, ZY->IAJYBZ', np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
