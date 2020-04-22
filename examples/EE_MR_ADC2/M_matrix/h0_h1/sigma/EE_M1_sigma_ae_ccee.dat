@@ -245,15 +245,15 @@ Done ...
 --------------------------------------------------------------
 
 ----------------------- Final results ------------------------
- (  -2.00000) X(i,j,A,a) v(i,j,x,a) cre(X) des(x) 
- (  -4.00000) X(i,j,A,a) e(j) t1(i,j,a,x) cre(X) des(x) 
- (   2.00000) X(i,j,A,a) e(a) t1(i,j,a,x) cre(X) des(x) 
- (   2.00000) X(i,j,A,a) h(x,y) t1(i,j,a,x) cre(X) des(y) 
- (   2.00000) X(i,j,A,a) t1(i,j,a,x) v(k,x,k,y) cre(X) des(y) 
- (  -1.00000) X(i,j,A,a) t1(i,j,a,x) v(y,z,x,w) cre(X) cre(w) des(y) des(z) 
+ (  -0.50000) X(i,j,A,a) v(i,j,x,a) cre(X) des(x) 
+ (  -1.00000) X(i,j,A,a) e(j) t1(i,j,a,x) cre(X) des(x) 
+ (   0.50000) X(i,j,A,a) e(a) t1(i,j,a,x) cre(X) des(x) 
+ (   0.50000) X(i,j,A,a) h(x,y) t1(i,j,a,x) cre(X) des(y) 
+ (   0.50000) X(i,j,A,a) t1(i,j,a,x) v(k,x,k,y) cre(X) des(y) 
+ (  -0.25000) X(i,j,A,a) t1(i,j,a,x) v(y,z,x,w) cre(X) cre(w) des(y) des(z) 
 
 Total terms : 6
-SQA automation time :  1.069 seconds
+SQA automation time :  0.577 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -265,9 +265,9 @@ SQA automation time :  1.069 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp = -2.0 * np.einsum('ijAa, ijxa, Xx->XA', X, v_ccae_so, rdm_ca_so, optimize = True)
-temp -= 4.0 * np.einsum('ijAa, j, ijax, Xx->XA', X, e_core_so, t1_ccea, rdm_ca_so, optimize = True)
-temp += 2.0 * np.einsum('ijAa, a, ijax, Xx->XA', X, e_extern_so, t1_ccea, rdm_ca_so, optimize = True)
-temp += 2.0 * np.einsum('ijAa, xy, ijax, Xy->XA', X, h_aa_so, t1_ccea, rdm_ca_so, optimize = True)
-temp += 2.0 * np.einsum('ijAa, ijax, kxky, Xy->XA', X, t1_ccea, v_caca_so, rdm_ca_so, optimize = True)
-temp -= np.einsum('ijAa, ijax, yzxw, Xwyz->XA', X, t1_ccea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp = -0.5 * np.einsum('ijAa, ijxa, Xx->XA', X, v_ccae_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('ijAa, j, ijax, Xx->XA', X, e_core_so, t1_ccea, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('ijAa, a, ijax, Xx->XA', X, e_extern_so, t1_ccea, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('ijAa, xy, ijax, Xy->XA', X, h_aa_so, t1_ccea, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('ijAa, ijax, kxky, Xy->XA', X, t1_ccea, v_caca_so, rdm_ca_so, optimize = True)
+temp -= 0.25 * np.einsum('ijAa, ijax, yzxw, Xwyz->XA', X, t1_ccea, v_aaaa_so, rdm_ccaa_so, optimize = True)

@@ -41,8 +41,8 @@ f = sqa.index('F', [tg_v])
 #l_op  = [sqa.creOp(i), sqa.desOp(a)] # CE
 #l_ind = 'IA'                                                         
 
-#l_op  = [sqa.creOp(x), sqa.desOp(a)] # AE
-#l_ind = 'XA'                                                         
+l_op  = [sqa.creOp(x), sqa.desOp(a)] # AE
+l_ind = 'XA'                                                         
 
 #l_op  = [sqa.creOp(j), sqa.creOp(k), sqa.desOp(z), sqa.desOp(y)] # CCAA
 #l_ind = 'JKYZ'                                                         
@@ -65,8 +65,8 @@ f = sqa.index('F', [tg_v])
 #l_op  = [sqa.creOp(j), sqa.creOp(y), sqa.desOp(z), sqa.desOp(b)] # CAEA
 #l_ind = 'JYBZ'                                                         
                                                                       
-l_op  = [sqa.creOp(y), sqa.creOp(z), sqa.desOp(u), sqa.desOp(b)] # AAEA
-l_ind = 'YZBU'
+#l_op  = [sqa.creOp(y), sqa.creOp(z), sqa.desOp(u), sqa.desOp(b)] # AAEA
+#l_ind = 'YZBU'
 
 
 # RHS
@@ -82,11 +82,11 @@ l_ind = 'YZBU'
 #r_op  = [sqa.creOp(a), sqa.desOp(i)] # CE
 #r_ind = 'IA'                                                         
 
-x = sqa.index('x', [tg_a], dummy)
-a = sqa.index('aa', [tg_v], dummy)
-X = [sqa.tensor('X', [x,a])]
-r_op  = [sqa.creOp(a), sqa.desOp(x)] # AE
-r_ind = 'XA'                                                         
+#x = sqa.index('x', [tg_a], dummy)
+#a = sqa.index('aa', [tg_v], dummy)
+#X = [sqa.tensor('X', [x,a])]
+#r_op  = [sqa.creOp(a), sqa.desOp(x)] # AE
+#r_ind = 'XA'                                                         
 
 #j = sqa.index('j', [tg_c], dummy)
 #k = sqa.index('k', [tg_c], dummy)
@@ -97,6 +97,7 @@ r_ind = 'XA'
 #X = [sqa.tensor('X', [j,k,y,z], [Xsym_1, Xsym_2])]
 #r_op  = [sqa.creOp(y), sqa.creOp(z), sqa.desOp(k), sqa.desOp(j)] # CCAA
 #r_ind = 'JKYZ'                                                         
+#scaling_factor = 0.25                                  
                                                                      
 #j = sqa.index('j', [tg_c], dummy)
 #k = sqa.index('k', [tg_c], dummy)
@@ -106,6 +107,7 @@ r_ind = 'XA'
 #X = [sqa.tensor('X', [j,k,b,y], [Xsym_1])]
 #r_op  = [sqa.creOp(b), sqa.creOp(y), sqa.desOp(k), sqa.desOp(j)] # CCEA
 #r_ind = 'JKBY'                                                         
+#scaling_factor = 0.5                                  
                                                                      
 #j = sqa.index('j', [tg_c], dummy)
 #k = sqa.index('k', [tg_c], dummy)
@@ -116,6 +118,7 @@ r_ind = 'XA'
 #X = [sqa.tensor('X', [j,k,b,c], [Xsym_1, Xsym_2])]
 #r_op  = [sqa.creOp(b), sqa.creOp(c), sqa.desOp(k), sqa.desOp(j)] # CCEE
 #r_ind = 'JKBC'                                                         
+#scaling_factor = 0.25                                  
                                                               
 #j = sqa.index('j', [tg_c], dummy)
 #y = sqa.index('y', [tg_a], dummy)
@@ -125,6 +128,7 @@ r_ind = 'XA'
 #X = [sqa.tensor('X', [j,y,b,c], [Xsym_2])]
 #r_op  = [sqa.creOp(b), sqa.creOp(c), sqa.desOp(y), sqa.desOp(j)] # CAEE
 #r_ind = 'JYBC'                                                         
+#scaling_factor = 0.5                                  
                                                                      
 #y = sqa.index('y', [tg_a], dummy)
 #z = sqa.index('z', [tg_a], dummy)
@@ -135,7 +139,8 @@ r_ind = 'XA'
 #X = [sqa.tensor('X', [y,z,b,c], [Xsym_1, Xsym_2])]
 #r_op  = [sqa.creOp(b), sqa.creOp(c), sqa.desOp(z), sqa.desOp(y)] # AAEE
 #r_ind = 'YZBC'                                                         
-                                                                     
+#scaling_factor = 0.25                                  
+                                   
 #j = sqa.index('j', [tg_c], dummy)
 #y = sqa.index('y', [tg_a], dummy)
 #z = sqa.index('z', [tg_a], dummy)
@@ -144,6 +149,7 @@ r_ind = 'XA'
 #X = [sqa.tensor('X', [j,y,z,u], [Xsym_2])]
 #r_op  = [sqa.creOp(z), sqa.creOp(u), sqa.desOp(y), sqa.desOp(j)] # CAAA
 #r_ind = 'JYZU'                                                         
+#scaling_factor = 0.5                                  
                                                                     
 #j = sqa.index('j', [tg_c], dummy)
 #y = sqa.index('y', [tg_a], dummy)
@@ -152,26 +158,28 @@ r_ind = 'XA'
 #X = [sqa.tensor('X', [j,y,b,z])]
 #r_op  = [sqa.creOp(b), sqa.creOp(z), sqa.desOp(y), sqa.desOp(j)] # CAEA
 #r_ind = 'JYBZ'                                                         
+#scaling_factor = 1.00                                  
                                                                     
-#y = sqa.index('y', [tg_a], dummy)
-#z = sqa.index('z', [tg_a], dummy)
-#b = sqa.index('bb', [tg_v], dummy)
-#u = sqa.index('u', [tg_a], dummy)
-#Xsym_1 = sqa.symmetry((1,0,2,3),-1)
-#X = [sqa.tensor('X', [y,z,b,u], [Xsym_1])]
-#r_op  = [sqa.creOp(b), sqa.creOp(u), sqa.desOp(z), sqa.desOp(y)] # AAEA
-#r_ind = 'YZBU'
+y = sqa.index('y', [tg_a], dummy)
+z = sqa.index('z', [tg_a], dummy)
+b = sqa.index('bb', [tg_v], dummy)
+u = sqa.index('u', [tg_a], dummy)
+Xsym_1 = sqa.symmetry((1,0,2,3),-1)
+X = [sqa.tensor('X', [y,z,b,u], [Xsym_1])]
+r_op  = [sqa.creOp(b), sqa.creOp(u), sqa.desOp(z), sqa.desOp(y)] # AAEA
+r_ind = 'YZBU'
+scaling_factor = 0.5                                
 
 
 # Define Hamiltonian
 effH = []
-effH = sqa.Heff(0)
+effH = sqa.Heff(1)
 
 print ("Terms of Hamiltonian")
 for t in effH:
   print (t)
 
-term1 = sqa.term(1.0, [], X + r_op)
+term1 = sqa.term(scaling_factor * 1.0, [], X + r_op)
 term2 = sqa.term(1.0, [], l_op)
 
 print ("First Commutator")

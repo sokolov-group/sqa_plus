@@ -245,10 +245,10 @@ Done ...
 --------------------------------------------------------------
 
 ----------------------- Final results ------------------------
- (   1.00000) X(x,y,A,a) v(I,a,z,w) cre(z) cre(w) des(x) des(y) 
+ (   0.25000) X(x,y,A,a) v(I,a,z,w) cre(z) cre(w) des(x) des(y) 
 
 Total terms : 1
-SQA automation time :  0.589 seconds
+SQA automation time :  0.529 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -260,4 +260,4 @@ SQA automation time :  0.589 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =  np.einsum('xyAa, Iazw, zwxy->IA', X, v_ceaa_so, rdm_ccaa_so, optimize = True)
+temp = 0.25 * np.einsum('xyAa, Iazw, zwxy->IA', X, v_ceaa_so, rdm_ccaa_so, optimize = True)

@@ -245,12 +245,12 @@ Done ...
 --------------------------------------------------------------
 
 ----------------------- Final results ------------------------
- (  -2.00000) X(I,i,x,y) v(i,A,x,y) 
- (   4.00000) X(I,i,x,y) v(i,A,x,z) cre(y) des(z) 
- (   1.00000) X(I,i,x,y) v(i,A,z,w) cre(x) cre(y) des(z) des(w) 
+ (  -0.50000) X(I,i,x,y) v(i,A,x,y) 
+ (   1.00000) X(I,i,x,y) v(i,A,x,z) cre(y) des(z) 
+ (   0.25000) X(I,i,x,y) v(i,A,z,w) cre(x) cre(y) des(z) des(w) 
 
 Total terms : 3
-SQA automation time :  1.688 seconds
+SQA automation time :  1.253 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -262,6 +262,6 @@ SQA automation time :  1.688 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp = -2.0 * np.einsum('Iixy, iAxy->IA', X, v_ceaa_so, optimize = True)
-temp += 4.0 * np.einsum('Iixy, iAxz, yz->IA', X, v_ceaa_so, rdm_ca_so, optimize = True)
-temp += np.einsum('Iixy, iAzw, xyzw->IA', X, v_ceaa_so, rdm_ccaa_so, optimize = True)
+temp = -0.5 * np.einsum('Iixy, iAxy->IA', X, v_ceaa_so, optimize = True)
+temp += np.einsum('Iixy, iAxz, yz->IA', X, v_ceaa_so, rdm_ca_so, optimize = True)
+temp += 0.25 * np.einsum('Iixy, iAzw, xyzw->IA', X, v_ceaa_so, rdm_ccaa_so, optimize = True)

@@ -44,17 +44,17 @@ Done ...
 --------------------------------------------------------------
 
 ----------------------- Final results ------------------------
- (  -1.00000) X(x,y,A,z) e(A) cre(X) cre(z) des(x) des(y) 
- (  -2.00000) X(x,y,A,z) h(x,w) cre(X) cre(z) des(y) des(w) 
- (  -1.00000) X(x,y,A,z) h(z,w) cre(X) cre(w) des(x) des(y) 
- (  -2.00000) X(x,y,A,z) v(i,x,i,w) cre(X) cre(z) des(y) des(w) 
- (   0.50000) X(x,y,A,z) v(w,u,x,y) cre(X) cre(z) des(w) des(u) 
- (  -1.00000) X(x,y,A,z) v(i,w,i,z) cre(X) cre(w) des(x) des(y) 
- (  -0.50000) X(x,y,A,z) v(z,w,u,v) cre(X) cre(u) cre(v) des(x) des(y) des(w) 
- (  -1.00000) X(x,y,A,z) v(w,u,x,v) cre(X) cre(z) cre(v) des(y) des(w) des(u) 
+ (  -0.50000) X(x,y,A,z) e(A) cre(X) cre(z) des(x) des(y) 
+ (  -1.00000) X(x,y,A,z) h(x,w) cre(X) cre(z) des(y) des(w) 
+ (  -0.50000) X(x,y,A,z) h(z,w) cre(X) cre(w) des(x) des(y) 
+ (  -1.00000) X(x,y,A,z) v(i,x,i,w) cre(X) cre(z) des(y) des(w) 
+ (   0.25000) X(x,y,A,z) v(w,u,x,y) cre(X) cre(z) des(w) des(u) 
+ (  -0.50000) X(x,y,A,z) v(i,w,i,z) cre(X) cre(w) des(x) des(y) 
+ (  -0.25000) X(x,y,A,z) v(z,w,u,v) cre(X) cre(u) cre(v) des(x) des(y) des(w) 
+ (  -0.50000) X(x,y,A,z) v(w,u,x,v) cre(X) cre(z) cre(v) des(y) des(w) des(u) 
 
 Total terms : 8
-SQA automation time :  0.037 seconds
+SQA automation time :  0.093 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -66,11 +66,11 @@ SQA automation time :  0.037 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =- np.einsum('xyAz, A, Xzxy->XA', X, e_extern_so, rdm_ccaa_so, optimize = True)
-temp -= 2.0 * np.einsum('xyAz, xw, Xzyw->XA', X, h_aa_so, rdm_ccaa_so, optimize = True)
-temp -= np.einsum('xyAz, zw, Xwxy->XA', X, h_aa_so, rdm_ccaa_so, optimize = True)
-temp -= 2.0 * np.einsum('xyAz, ixiw, Xzyw->XA', X, v_caca_so, rdm_ccaa_so, optimize = True)
-temp += 0.5 * np.einsum('xyAz, wuxy, Xzwu->XA', X, v_aaaa_so, rdm_ccaa_so, optimize = True)
-temp -= np.einsum('xyAz, iwiz, Xwxy->XA', X, v_caca_so, rdm_ccaa_so, optimize = True)
-temp -= 0.5 * np.einsum('xyAz, zwuv, Xuvxyw->XA', X, v_aaaa_so, rdm_cccaaa_so, optimize = True)
-temp -= np.einsum('xyAz, wuxv, Xzvywu->XA', X, v_aaaa_so, rdm_cccaaa_so, optimize = True)
+temp = -0.5 * np.einsum('xyAz, A, Xzxy->XA', X, e_extern_so, rdm_ccaa_so, optimize = True)
+temp -= np.einsum('xyAz, xw, Xzyw->XA', X, h_aa_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('xyAz, zw, Xwxy->XA', X, h_aa_so, rdm_ccaa_so, optimize = True)
+temp -= np.einsum('xyAz, ixiw, Xzyw->XA', X, v_caca_so, rdm_ccaa_so, optimize = True)
+temp += 0.25 * np.einsum('xyAz, wuxy, Xzwu->XA', X, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('xyAz, iwiz, Xwxy->XA', X, v_caca_so, rdm_ccaa_so, optimize = True)
+temp -= 0.25 * np.einsum('xyAz, zwuv, Xuvxyw->XA', X, v_aaaa_so, rdm_cccaaa_so, optimize = True)
+temp -= 0.5 * np.einsum('xyAz, wuxv, Xzvywu->XA', X, v_aaaa_so, rdm_cccaaa_so, optimize = True)
