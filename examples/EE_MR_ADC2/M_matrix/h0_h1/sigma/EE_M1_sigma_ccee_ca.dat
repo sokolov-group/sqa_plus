@@ -261,7 +261,7 @@ Done ...
  (  -1.00000) X(K,x) t1(J,y,B,C) v(x,z,y,w) cre(w) des(z) 
 
 Total terms : 14
-SQA automation time :  0.400 seconds
+SQA automation time :  0.106 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 

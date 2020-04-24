@@ -250,7 +250,7 @@ Done ...
  (   0.50000) X(i,x) v(i,B,y,z) cre(Y) cre(Z) cre(x) des(U) des(y) des(z) 
 
 Total terms : 3
-SQA automation time :  0.504 seconds
+SQA automation time :  0.149 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 

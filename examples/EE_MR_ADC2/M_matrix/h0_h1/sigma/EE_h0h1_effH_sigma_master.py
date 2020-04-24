@@ -75,18 +75,21 @@ l_ind = 'XA'
 #X = [sqa.tensor('X', [i,x])]
 #r_op  = [sqa.creOp(x), sqa.desOp(i)] # CA
 #r_ind = 'IX'                                                         
+#scaling_factor = 1.0                                  
 
 #i = sqa.index('i', [tg_c], dummy)
 #a = sqa.index('aa', [tg_v], dummy)
 #X = [sqa.tensor('X', [i,a])]
 #r_op  = [sqa.creOp(a), sqa.desOp(i)] # CE
 #r_ind = 'IA'                                                         
+#scaling_factor = 1.0                                  
 
 #x = sqa.index('x', [tg_a], dummy)
 #a = sqa.index('aa', [tg_v], dummy)
 #X = [sqa.tensor('X', [x,a])]
 #r_op  = [sqa.creOp(a), sqa.desOp(x)] # AE
 #r_ind = 'XA'                                                         
+#scaling_factor = 1.0                                  
 
 #j = sqa.index('j', [tg_c], dummy)
 #k = sqa.index('k', [tg_c], dummy)
@@ -173,13 +176,13 @@ scaling_factor = 0.5
 
 # Define Hamiltonian
 effH = []
-effH = sqa.Heff(1)
+effH = sqa.Heff(0)
 
 print ("Terms of Hamiltonian")
 for t in effH:
   print (t)
 
-term1 = sqa.term(scaling_factor * 1.0, [], X + r_op)
+term1 = sqa.term(scaling_factor * 1.0, [], r_op + X)
 term2 = sqa.term(1.0, [], l_op)
 
 print ("First Commutator")
