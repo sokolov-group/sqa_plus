@@ -1,0 +1,76 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(0) ----------------------
+Done ...
+--------------------------------------------------------------
+Terms of Hamiltonian
+ (   1.00000) E_fc(Const.) 
+ (  -1.00000) e(c1) des(c1) cre(c1) 
+ (   1.00000) e(v1) cre(v1) des(v1) 
+ (   1.00000) h(a1,a0) cre(a0) des(a1) 
+ (   1.00000) v(a3,c2,a2,c2) cre(a3) des(a2) 
+ (   0.25000) v(a6,a7,a4,a5) cre(a4) cre(a5) des(a7) des(a6) 
+First Commutator
+Second Commutator
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) X(I,x,A,y) e(A) cre(y) des(x) 
+ (  -1.00000) X(I,x,A,y) e(I) cre(y) des(x) 
+ (  -1.00000) X(I,x,A,y) h(x,z) cre(y) des(z) 
+ (   1.00000) X(I,x,A,y) h(y,z) cre(z) des(x) 
+ (  -1.00000) X(I,x,A,y) v(i,x,i,z) cre(y) des(z) 
+ (   1.00000) X(I,x,A,y) v(i,z,i,y) cre(z) des(x) 
+ (  -0.50000) X(I,x,A,y) v(y,z,w,u) cre(w) cre(u) des(x) des(z) 
+ (   0.50000) X(I,x,A,y) v(z,w,x,u) cre(y) cre(u) des(z) des(w) 
+
+Total terms : 8
+SQA automation time :  0.010 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =  np.einsum('IxAy, A, yx->IA', X, e_extern_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('IxAy, I, yx->IA', X, e_core_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('IxAy, xz, yz->IA', X, h_aa_so, rdm_ca_so, optimize = True)
+temp += np.einsum('IxAy, yz, zx->IA', X, h_aa_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('IxAy, ixiz, yz->IA', X, v_caca_so, rdm_ca_so, optimize = True)
+temp += np.einsum('IxAy, iziy, zx->IA', X, v_caca_so, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('IxAy, yzwu, wuxz->IA', X, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp += 0.5 * np.einsum('IxAy, zwxu, yuzw->IA', X, v_aaaa_so, rdm_ccaa_so, optimize = True)

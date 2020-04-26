@@ -42,21 +42,21 @@ Done ...
 --------------------------------------------------------------
 
 ----------------------- Final results ------------------------
- (   1.00000) e(C) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
- (  -1.00000) e(C) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
- (   1.00000) e(D) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
- (  -1.00000) e(D) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
- (  -1.00000) e(J) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
- (   1.00000) e(J) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
- (  -1.00000) h(Y,x) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(x) 
- (   1.00000) h(Y,x) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(x) 
- (  -1.00000) v(i,Y,i,x) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(x) 
- (   1.00000) v(i,Y,i,x) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(x) 
- (   0.50000) v(x,y,Y,z) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) cre(z) des(x) des(y) 
- (  -0.50000) v(x,y,Y,z) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) cre(z) des(x) des(y) 
+ (   1.00000) e(D) kdelta(A,D) kdelta(B,E) kdelta(I,L) cre(X) des(U) 
+ (  -1.00000) e(D) kdelta(A,E) kdelta(B,D) kdelta(I,L) cre(X) des(U) 
+ (   1.00000) e(E) kdelta(A,D) kdelta(B,E) kdelta(I,L) cre(X) des(U) 
+ (  -1.00000) e(E) kdelta(A,E) kdelta(B,D) kdelta(I,L) cre(X) des(U) 
+ (  -1.00000) e(L) kdelta(A,D) kdelta(B,E) kdelta(I,L) cre(X) des(U) 
+ (   1.00000) e(L) kdelta(A,E) kdelta(B,D) kdelta(I,L) cre(X) des(U) 
+ (  -1.00000) h(U,x) kdelta(A,D) kdelta(B,E) kdelta(I,L) cre(X) des(x) 
+ (   1.00000) h(U,x) kdelta(A,E) kdelta(B,D) kdelta(I,L) cre(X) des(x) 
+ (  -1.00000) v(i,U,i,x) kdelta(A,D) kdelta(B,E) kdelta(I,L) cre(X) des(x) 
+ (   1.00000) v(i,U,i,x) kdelta(A,E) kdelta(B,D) kdelta(I,L) cre(X) des(x) 
+ (   0.50000) v(x,y,U,z) kdelta(A,D) kdelta(B,E) kdelta(I,L) cre(X) cre(z) des(x) des(y) 
+ (  -0.50000) v(x,y,U,z) kdelta(A,E) kdelta(B,D) kdelta(I,L) cre(X) cre(z) des(x) des(y) 
 
 Total terms : 12
-SQA automation time :  0.612 seconds
+SQA automation time :  2.562 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -68,15 +68,15 @@ SQA automation time :  0.612 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =  np.einsum('C, AC, BD, IJ, XY->IXABJYCD', e_extern_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp -= np.einsum('C, AD, BC, IJ, XY->IXABJYCD', e_extern_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp += np.einsum('D, AC, BD, IJ, XY->IXABJYCD', e_extern_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp -= np.einsum('D, AD, BC, IJ, XY->IXABJYCD', e_extern_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp -= np.einsum('J, AC, BD, IJ, XY->IXABJYCD', e_core_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp += np.einsum('J, AD, BC, IJ, XY->IXABJYCD', e_core_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp -= np.einsum('Yx, AC, BD, IJ, Xx->IXABJYCD', h_aa_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp += np.einsum('Yx, AD, BC, IJ, Xx->IXABJYCD', h_aa_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp -= np.einsum('iYix, AC, BD, IJ, Xx->IXABJYCD', v_caca_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp += np.einsum('iYix, AD, BC, IJ, Xx->IXABJYCD', v_caca_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp += 0.5 * np.einsum('xyYz, AC, BD, IJ, Xzxy->IXABJYCD', v_aaaa_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ccaa_so, optimize = True)
-temp -= 0.5 * np.einsum('xyYz, AD, BC, IJ, Xzxy->IXABJYCD', v_aaaa_so, np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ccaa_so, optimize = True)
+temp =  np.einsum('D, AD, BE, IL, XU->IXABLUDE', e_extern_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp -= np.einsum('D, AE, BD, IL, XU->IXABLUDE', e_extern_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp += np.einsum('E, AD, BE, IL, XU->IXABLUDE', e_extern_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp -= np.einsum('E, AE, BD, IL, XU->IXABLUDE', e_extern_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp -= np.einsum('L, AD, BE, IL, XU->IXABLUDE', e_core_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp += np.einsum('L, AE, BD, IL, XU->IXABLUDE', e_core_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp -= np.einsum('Ux, AD, BE, IL, Xx->IXABLUDE', h_aa_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp += np.einsum('Ux, AE, BD, IL, Xx->IXABLUDE', h_aa_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp -= np.einsum('iUix, AD, BE, IL, Xx->IXABLUDE', v_caca_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp += np.einsum('iUix, AE, BD, IL, Xx->IXABLUDE', v_caca_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('xyUz, AD, BE, IL, Xzxy->IXABLUDE', v_aaaa_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('xyUz, AE, BD, IL, Xzxy->IXABLUDE', v_aaaa_so, np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ccaa_so, optimize = True)

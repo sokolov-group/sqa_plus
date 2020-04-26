@@ -10,87 +10,21 @@
  See the GNU General Public License for more details.
 --------------------------------------------------------------
 
-Combining like terms:
-Converting 14 terms to canonical form...
-     0   (   1.00000) cre(C) cre(D) cre(I) cre(X) des(A) des(B) des(J) des(Y) 
-     1   (  -1.00000) kdelta(B,C) cre(D) cre(I) cre(X) des(A) des(J) des(Y) 
-     2   (   1.00000) kdelta(B,D) cre(C) cre(I) cre(X) des(A) des(J) des(Y) 
-     3   (   1.00000) kdelta(A,C) cre(D) cre(I) cre(X) des(B) des(J) des(Y) 
-     4   (  -1.00000) kdelta(A,D) cre(C) cre(I) cre(X) des(B) des(J) des(Y) 
-     5   (   1.00000) kdelta(B,C) kdelta(A,D) cre(I) cre(X) des(J) des(Y) 
-     6   (  -1.00000) kdelta(B,D) kdelta(A,C) cre(I) cre(X) des(J) des(Y) 
-     7   (  -1.00000) cre(C) cre(D) cre(I) cre(X) des(A) des(B) des(J) des(Y) 
-     8   (   1.00000) kdelta(Y,I) cre(C) cre(D) cre(X) des(A) des(B) des(J) 
-     9   (  -1.00000) kdelta(Y,X) cre(C) cre(D) cre(I) des(A) des(B) des(J) 
-    10   (  -1.00000) kdelta(J,I) cre(C) cre(D) cre(X) des(A) des(B) des(Y) 
-    11   (   1.00000) kdelta(J,X) cre(C) cre(D) cre(I) des(A) des(B) des(Y) 
-    12   (  -1.00000) kdelta(Y,I) kdelta(J,X) cre(C) cre(D) des(A) des(B) 
-    13   (   1.00000) kdelta(Y,X) kdelta(J,I) cre(C) cre(D) des(A) des(B) 
-Finished combining terms in 0.017 seconds
-
-
 ------------------------ SQA Automation ----------------------
 
 Computing expectation value with respect to virtual:=>
- (  -1.00000) kdelta(A,C) kdelta(B,D) cre(I) cre(X) des(J) des(Y) 
- (   1.00000) kdelta(A,D) kdelta(B,C) cre(I) cre(X) des(J) des(Y) 
- (   0.00000) kdelta(I,J) kdelta(X,Y) cre(C) cre(D) des(A) des(B) 
- (   0.00000) kdelta(I,Y) kdelta(J,X) cre(C) cre(D) des(A) des(B) 
- (   0.00000) kdelta(A,C) cre(D) cre(I) cre(X) des(B) des(J) des(Y) 
- (   0.00000) kdelta(A,D) cre(C) cre(I) cre(X) des(B) des(J) des(Y) 
- (   0.00000) kdelta(B,C) cre(D) cre(I) cre(X) des(A) des(J) des(Y) 
- (   0.00000) kdelta(B,D) cre(C) cre(I) cre(X) des(A) des(J) des(Y) 
- (   0.00000) kdelta(I,J) cre(C) cre(D) cre(X) des(A) des(B) des(Y) 
- (   0.00000) kdelta(I,Y) cre(C) cre(D) cre(X) des(A) des(B) des(J) 
- (   0.00000) kdelta(J,X) cre(C) cre(D) cre(I) des(A) des(B) des(Y) 
- (   0.00000) kdelta(X,Y) cre(C) cre(D) cre(I) des(A) des(B) des(J) 
 Done ...
 --------------------------------------------------------------
 Normal ordering with respect to core:=>
-Term=  (  -1.00000) kdelta(A,C) kdelta(B,D) cre(I) cre(X) des(J) des(Y) 
-Terms after normal ordering:
- (  -1.00000) kdelta(A,C) kdelta(B,D) des(J) cre(X) des(Y) cre(I) 
- (   1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
- (   1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,Y) des(J) cre(X) 
- (   1.00000) kdelta(A,C) kdelta(B,D) kdelta(X,J) des(Y) cre(I) 
- (  -1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,Y) kdelta(X,J) 
-Term=  (   1.00000) kdelta(A,D) kdelta(B,C) cre(I) cre(X) des(J) des(Y) 
-Terms after normal ordering:
- (   1.00000) kdelta(A,D) kdelta(B,C) des(J) cre(X) des(Y) cre(I) 
- (  -1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
- (  -1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,Y) des(J) cre(X) 
- (  -1.00000) kdelta(A,D) kdelta(B,C) kdelta(X,J) des(Y) cre(I) 
- (   1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,Y) kdelta(X,J) 
 Done ...
 --------------------------------------------------------------
 Computing expectation value with respect to core:=>
- (   0.00000) kdelta(A,C) kdelta(B,D) des(J) cre(X) des(Y) cre(I) 
- (   1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
- (   0.00000) kdelta(A,C) kdelta(B,D) kdelta(I,Y) des(J) cre(X) 
- (   0.00000) kdelta(A,C) kdelta(B,D) kdelta(X,J) des(Y) cre(I) 
- (  -1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,Y) kdelta(X,J) 
- (   0.00000) kdelta(A,D) kdelta(B,C) des(J) cre(X) des(Y) cre(I) 
- (  -1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
- (   0.00000) kdelta(A,D) kdelta(B,C) kdelta(I,Y) des(J) cre(X) 
- (   0.00000) kdelta(A,D) kdelta(B,C) kdelta(X,J) des(Y) cre(I) 
- (   1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,Y) kdelta(X,J) 
 Done ...
 --------------------------------------------------------------
-
-Combining like terms:
-Converting 4 terms to canonical form...
-     0   (   1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
-     1   (  -1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,Y) kdelta(X,J) 
-     2   (  -1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
-     3   (   1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,Y) kdelta(X,J) 
-Finished combining terms in 0.103 seconds
-
 Contract delta function for non-dummy indices: =>
 Done ...
 --------------------------------------------------------------
 Dummy indices relabelling:=>
- (   1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
- (  -1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
 Done ...
 --------------------------------------------------------------
 Reorder tensor indices according to (Core < Active < Virtual): =>
@@ -98,11 +32,11 @@ Done ...
 --------------------------------------------------------------
 
 ----------------------- Final results ------------------------
- (   1.00000) kdelta(A,C) kdelta(B,D) kdelta(I,J) cre(X) des(Y) 
- (  -1.00000) kdelta(A,D) kdelta(B,C) kdelta(I,J) cre(X) des(Y) 
+ (   1.00000) kdelta(A,D) kdelta(B,E) kdelta(I,L) cre(X) des(U) 
+ (  -1.00000) kdelta(A,E) kdelta(B,D) kdelta(I,L) cre(X) des(U) 
 
 Total terms : 2
-SQA automation time :  0.104 seconds
+SQA automation time :  0.248 seconds
 
 ----------------------- SQA EINSUM ---------------------------
   ___  _  _  _  __  _ _  _   _ 
@@ -114,5 +48,5 @@ SQA automation time :  0.104 seconds
 
  For Help :: help = True
 --------------------------------------------------------------
-temp =  np.einsum('AC, BD, IJ, XY->IXABJYCD', np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
-temp -= np.einsum('AD, BC, IJ, XY->IXABJYCD', np.identity(nextern), np.identity(nextern), np.identity(ncore), rdm_ca_so, optimize = True)
+temp =  np.einsum('AD, BE, IL, XU->IXABLUDE', np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)
+temp -= np.einsum('AE, BD, IL, XU->IXABLUDE', np.identity(nextern_so), np.identity(nextern_so), np.identity(ncore_so), rdm_ca_so, optimize = True)

@@ -1,8 +1,0 @@
-        temp =  np.einsum('XY, IJ->IXJY', h_aa_so, np.identity(ncore), optimize = True)
-        temp += np.einsum('IJ, iXiY->IXJY', np.identity(ncore), v_caca_so, optimize = True)
-        temp -= np.einsum('J, IJ, XY->IXJY', e_core_so, np.identity(ncore), np.identity(ncas), optimize = True)
-        temp += np.einsum('J, IJ, YX->IXJY', e_core_so, np.identity(ncore), rdm_ca_so, optimize = True)
-        temp -= np.einsum('Yx, IJ, xX->IXJY', h_aa_so, np.identity(ncore), rdm_ca_so, optimize = True)
-        temp += np.einsum('IJ, YxXy, yx->IXJY', np.identity(ncore), v_aaaa_so, rdm_ca_so, optimize = True)
-        temp -= np.einsum('IJ, ixiY, xX->IXJY', np.identity(ncore), v_caca_so, rdm_ca_so, optimize = True)
-        temp += 0.5 * np.einsum('IJ, Yxyz, yzXx->IXJY', np.identity(ncore), v_aaaa_so, rdm_ccaa_so, optimize = True)
