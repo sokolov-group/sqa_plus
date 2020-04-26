@@ -30,8 +30,8 @@ z = sqa.index('zz', [tg_a], dummy)
 #
 # L.h.s.
 #
-#l_op = [sqa.creOp(x), sqa.desOp(y), sqa.desOp(a)] # XYA
-#ext_indices = "XYA"
+l_op = [sqa.creOp(x), sqa.desOp(y), sqa.desOp(a)] # XYA
+ext_indices = "XYA"
 
 #l_op = [sqa.creOp(i), sqa.desOp(a), sqa.desOp(b)] # IAB
 #ext_indices = "IAB"
@@ -39,8 +39,11 @@ z = sqa.index('zz', [tg_a], dummy)
 #l_op = [sqa.creOp(i), sqa.desOp(x), sqa.desOp(a)] # IXA
 #ext_indices = "IXA"
 
-l_op = [sqa.creOp(x), sqa.desOp(a), sqa.desOp(b)] # XAB
-ext_indices = "XAB"
+#l_op = [sqa.creOp(x), sqa.desOp(a), sqa.desOp(b)] # XAB
+#ext_indices = "XAB"
+
+#l_op = [sqa.creOp(i), sqa.desOp(x), sqa.desOp(y)] # IXY
+#ext_indices = "IXY"
 
 #
 # R.h.s.
@@ -54,15 +57,19 @@ ext_indices = "XAB"
 #X = [sqa.tensor('X', [j, c, d], Xsym)]
 #prefactor = 0.5
 
-#r_op = [sqa.creOp(c), sqa.creOp(w), sqa.desOp(j)] # JWC
-#X = [sqa.tensor('X', [j, w, c], [])]
-#prefactor = 1.0
+r_op = [sqa.creOp(c), sqa.creOp(w), sqa.desOp(j)] # JWC
+X = [sqa.tensor('X', [j, w, c], [])]
+prefactor = 1.0
 
-r_op = [sqa.creOp(d), sqa.creOp(c), sqa.desOp(w)] # WCD
-Xsym = [sqa.symmetry((0,2,1),-1)]
-X = [sqa.tensor('X', [w, c, d], Xsym)]
-prefactor = 0.5
+#r_op = [sqa.creOp(d), sqa.creOp(c), sqa.desOp(w)] # WCD
+#Xsym = [sqa.symmetry((0,2,1),-1)]
+#X = [sqa.tensor('X', [w, c, d], Xsym)]
+#prefactor = 0.5
 
+#r_op = [sqa.creOp(z), sqa.creOp(w), sqa.desOp(j)] # JWZ
+#Xsym = [sqa.symmetry((0,2,1),-1)]
+#X = [sqa.tensor('X', [j, w, z], Xsym)]
+#prefactor = 0.5
 
 effH = []
 effH = sqa.Heff(1)
