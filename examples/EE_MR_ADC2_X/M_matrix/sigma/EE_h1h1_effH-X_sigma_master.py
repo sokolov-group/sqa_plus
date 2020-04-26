@@ -35,8 +35,8 @@ f = sqa.index('F', [tg_v])
 
 
 # LHS
-#l_op  = [sqa.creOp(i), sqa.creOp(j), sqa.desOp(y), sqa.desOp(x)] # CCAA
-#l_ind = 'IJXY'                                                         
+l_op  = [sqa.creOp(i), sqa.creOp(j), sqa.desOp(y), sqa.desOp(x)] # CCAA
+l_ind = 'IJXY'                                                         
                                                                        
 #l_op  = [sqa.creOp(i), sqa.creOp(j), sqa.desOp(x), sqa.desOp(a)] # CCEA
 #l_ind = 'IJAX'                                                         
@@ -50,8 +50,8 @@ f = sqa.index('F', [tg_v])
 #l_op  = [sqa.creOp(x), sqa.creOp(y), sqa.desOp(b), sqa.desOp(a)] # AAEE
 #l_ind = 'XYAB'                                                         
                                                                        
-l_op  = [sqa.creOp(i), sqa.creOp(x), sqa.desOp(z), sqa.desOp(y)] # CAAA
-l_ind = 'IXYZ'                                                         
+#l_op  = [sqa.creOp(i), sqa.creOp(x), sqa.desOp(z), sqa.desOp(y)] # CAAA
+#l_ind = 'IXYZ'                                                         
                                                                        
 #l_op  = [sqa.creOp(i), sqa.creOp(x), sqa.desOp(y), sqa.desOp(a)] # CAEA
 #l_ind = 'IXAY'                                                         
@@ -61,15 +61,15 @@ l_ind = 'IXYZ'
 
 
 # RHS
-l = sqa.index('l', [tg_c], dummy)
-m = sqa.index('m', [tg_c], dummy)
-u = sqa.index('u', [tg_a], dummy)
-v = sqa.index('v', [tg_a], dummy)
-Xsym_1 = sqa.symmetry((1,0,2,3),-1)
-Xsym_2 = sqa.symmetry((0,1,3,2),-1)
-X = [sqa.tensor('X', [l,m,u,v], [Xsym_1, Xsym_2])]
-r_op  = [sqa.creOp(u), sqa.creOp(v), sqa.desOp(m), sqa.desOp(l)] # CCAA  
-term1 = sqa.term(0.25, [], X + r_op)
+#l = sqa.index('l', [tg_c], dummy)
+#m = sqa.index('m', [tg_c], dummy)
+#u = sqa.index('u', [tg_a], dummy)
+#v = sqa.index('v', [tg_a], dummy)
+#Xsym_1 = sqa.symmetry((1,0,2,3),-1)
+#Xsym_2 = sqa.symmetry((0,1,3,2),-1)
+#X = [sqa.tensor('X', [l,m,u,v], [Xsym_1, Xsym_2])]
+#r_op  = [sqa.creOp(u), sqa.creOp(v), sqa.desOp(m), sqa.desOp(l)] # CCAA  
+#term1 = sqa.term(0.25, [], X + r_op)
 
 
 #l = sqa.index('l', [tg_c], dummy)
@@ -93,14 +93,14 @@ term1 = sqa.term(0.25, [], X + r_op)
 #term1 = sqa.term(0.25, [], X + r_op)
 
 
-#l = sqa.index('l', [tg_c], dummy)
-#u = sqa.index('u', [tg_a], dummy)
-#d = sqa.index('dd', [tg_v], dummy)
-#e = sqa.index('ee', [tg_v], dummy)
-#Xsym_2 = sqa.symmetry((0,1,3,2),-1)
-#X = [sqa.tensor('X', [l,u,d,e], [Xsym_2])]
-#r_op  = [sqa.creOp(d), sqa.creOp(e), sqa.desOp(u), sqa.desOp(l)] # CAEE
-#term1 = sqa.term(0.50, [], X + r_op)
+l = sqa.index('l', [tg_c], dummy)
+u = sqa.index('u', [tg_a], dummy)
+d = sqa.index('dd', [tg_v], dummy)
+e = sqa.index('ee', [tg_v], dummy)
+Xsym_2 = sqa.symmetry((0,1,3,2),-1)
+X = [sqa.tensor('X', [l,u,d,e], [Xsym_2])]
+r_op  = [sqa.creOp(d), sqa.creOp(e), sqa.desOp(u), sqa.desOp(l)] # CAEE
+term1 = sqa.term(0.50, [], X + r_op)
 
 
 #u = sqa.index('u', [tg_a], dummy)
