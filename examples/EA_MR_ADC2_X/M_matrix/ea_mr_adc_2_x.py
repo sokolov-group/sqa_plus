@@ -30,8 +30,8 @@ z = sqa.index('zz', [tg_a], dummy)
 #
 # L.h.s.
 #
-l_op = [sqa.creOp(x), sqa.desOp(y), sqa.desOp(a)] # XYA
-ext_indices = "XYA"
+#l_op = [sqa.creOp(x), sqa.desOp(y), sqa.desOp(a)] # XYA
+#ext_indices = "XYA"
 
 #l_op = [sqa.creOp(i), sqa.desOp(a), sqa.desOp(b)] # IAB
 #ext_indices = "IAB"
@@ -42,8 +42,8 @@ ext_indices = "XYA"
 #l_op = [sqa.creOp(x), sqa.desOp(a), sqa.desOp(b)] # XAB
 #ext_indices = "XAB"
 
-#l_op = [sqa.creOp(i), sqa.desOp(x), sqa.desOp(y)] # IXY
-#ext_indices = "IXY"
+l_op = [sqa.creOp(i), sqa.desOp(x), sqa.desOp(y)] # IXY
+ext_indices = "IXY"
 
 #
 # R.h.s.
