@@ -39,14 +39,19 @@ z = sqa.index('zz', [tg_a], dummy)
 #X = [sqa.tensor('X', [j, c, d], Xsym)]
 #prefactor = 0.5
 
-#l_op = [sqa.creOp(j), sqa.desOp(w), sqa.desOp(c)] # JWC (CAE)
-#X = [sqa.tensor('X', [j, w, c], [])]
-#prefactor = 1.0
+l_op = [sqa.creOp(j), sqa.desOp(w), sqa.desOp(c)] # JWC (CAE)
+X = [sqa.tensor('X', [j, w, c], [])]
+prefactor = 1.0
 
-l_op = [sqa.creOp(w), sqa.desOp(c), sqa.desOp(d)] # WCD (AEE)
-Xsym = [sqa.symmetry((0,2,1),-1)]
-X = [sqa.tensor('X', [w, c, d], Xsym)]
-prefactor = 0.5
+#l_op = [sqa.creOp(w), sqa.desOp(c), sqa.desOp(d)] # WCD (AEE)
+#Xsym = [sqa.symmetry((0,2,1),-1)]
+#X = [sqa.tensor('X', [w, c, d], Xsym)]
+#prefactor = 0.5
+
+#l_op = [sqa.creOp(j), sqa.desOp(w), sqa.desOp(z)] # JWZ (CAA)
+#Xsym = [sqa.symmetry((0,2,1),-1)]
+#X = [sqa.tensor('X', [j, w, z], Xsym)]
+#prefactor = 0.5
 
 #
 # R.h.s.
@@ -57,18 +62,20 @@ prefactor = 0.5
 #r_op = [sqa.creOp(b), sqa.creOp(a), sqa.desOp(i)] # IAB (CEE)
 #ext_indices = "IAB"
 
-r_op = [sqa.creOp(a), sqa.creOp(x), sqa.desOp(i)] # IXA (CAE)
-ext_indices = "IXA"
+#r_op = [sqa.creOp(a), sqa.creOp(x), sqa.desOp(i)] # IXA (CAE)
+#ext_indices = "IXA"
 
 #r_op = [sqa.creOp(b), sqa.creOp(a), sqa.desOp(x)] # XAB (AEE)
 #ext_indices = "XAB"
 
+r_op = [sqa.creOp(y), sqa.creOp(x), sqa.desOp(i)] # IXY (CAA)
+ext_indices = "IXY"
 
 effH = []
 effH = sqa.Heff(1)
 
-term1 = sqa.term(1.0, [], X + l_op)
-term2 = sqa.term(prefactor, [], r_op)
+term1 = sqa.term(prefactor, [], X + l_op)
+term2 = sqa.term(1.0, [], r_op)
 
 print "First Commutator"
 term3 = sqa.commutator(effH,term2)
