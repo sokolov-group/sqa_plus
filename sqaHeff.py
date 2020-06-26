@@ -1239,7 +1239,7 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
 #     'braket_I': lambda s: r'\langle\Psi\lvert{'+s+r'}\rvert\Psi_{I}\rangle',
 #     'I_braket': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi\rangle',
 #     'I_braket_I': lambda s: r'\langle\Psi_{I}\lvert{'+s+r'}\rvert\Psi_{J}\rangle',
-     'gamma': lambda s: r'\Gamma',
+#     'gamma': lambda s: r'\Gamma',
      'kdelta': lambda s: r'\delta',
      'cre': lambda s: r'\hat{'+s+r'}^{\dagger}',
      'des': lambda s: r'\hat{'+s+r'}',
@@ -1272,6 +1272,7 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
      des_count = 0
      credes = ''
      name = ''
+     gamma = ''
      for i in range(len(term.tensors)):
 
          tens = term.tensors[i]
@@ -1295,15 +1296,21 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
              raise Exception("Not implemented ...")
 
          if not (isinstance(tens, creOp) or isinstance(tens, desOp)):
-            if s in modifier_tensor:
-               name += modifier_tensor[s](s)
+            if (s == 'gamma'):
+               bra = modifier_tensor['bra']('0')
+               ket = modifier_tensor['ket']('0')
+               ind1 = modifier_tensor['cre'](supers)
+               ind2 = modifier_tensor['des'](subs)
+               gamma += bra+ind1+ind2+ket+"\:"
             else:
-               name += t_modifier(s)
+               if s in modifier_tensor:
+                  name += modifier_tensor[s](s)
+               else:
+                  name += t_modifier(s)
 
-            name += "^{%s}" % " ".join(supers)
-            name += "_{%s}" % " ".join(subs)
-            name +="\:"
-
+               name += "^{%s}" % " ".join(supers)
+               name += "_{%s}" % " ".join(subs)
+               name +="\:"
          else:
             if (isinstance(tens, creOp)):
                cre_count += 1
@@ -1311,6 +1318,8 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
                des_count += 1
             credes += modifier_tensor[s](subs)
 
+     if(len(gamma) > 0):
+        name += gamma
      if (len(credes) > 0):
          ind = r'0'
          if not indbra:
