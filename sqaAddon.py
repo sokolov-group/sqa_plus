@@ -9,7 +9,7 @@
 #           filterCore: Calculate expectation value wrt core orbitals.
 #           normalOrderCore: Normal order with respect to core orbitals.
 #
-# Copyright (C) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Copyright (C) 2018-2020 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
 # This program is distributed in the hope that it will
 # be useful, but WITHOUT ANY WARRANTY; without even the
@@ -492,11 +492,11 @@ def sortOpsCore(unsortedOps, returnPermutation = False):
 def print_header():
 
     print("""\n--------------------------------------------------------------
-    SQA_extra: Code geneator for quasi-particle systems.
+    SQA_extra: Code generator for quasi-particle systems.
     author:  Koushik Chatterjee
     date:  August 31, 2018
 
-    Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+    Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
 
     This program is distributed in the hope that it will
     be useful, but WITHOUT ANY WARRANTY; without even the

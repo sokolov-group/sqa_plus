@@ -4,7 +4,7 @@
 # summary:  
 #           Heff : Construct effective Hamiltonian(L^N) of order 'N'.
 #
-# Copyright (C) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Copyright (C) 2018-2020 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
 # This program is distributed in the hope that it will
 # be useful, but WITHOUT ANY WARRANTY; without even the
@@ -639,7 +639,7 @@ def print_header():
     author:  Koushik Chatterjee
     date:  August 31, 2018
 
-    Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+    Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
 
     This program is distributed in the hope that it will
     be useful, but WITHOUT ANY WARRANTY; without even the
@@ -655,7 +655,7 @@ def generateEinsum_old(terms, lhs_str = None, ind_str = None, tens_ext = None, t
 #          terms   : A list of all terms.
 #          ind_str : Indices of the matrix (string).
 #
-# Copyright (C) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Copyright (C) 2018-2020 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
 # This program is distributed in the hope that it will
 # be useful, but WITHOUT ANY WARRANTY; without even the
@@ -670,7 +670,7 @@ def generateEinsum_old(terms, lhs_str = None, ind_str = None, tens_ext = None, t
  author:  Koushik Chatterjee
  date:  August 31, 2018
 
- Copyright (C) 2018  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
 --------------------------------------------------------------""")
 
 # print ""
@@ -911,7 +911,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #          terms   : A list of all terms.
 #          ind_str : Indices of the matrix (string).
 #
-# Copyright (C) 2018-2019 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Copyright (C) 2018-2020 Koushik Chatterjee (koushikchatterjee7@gmail.com)
 #
 # This program is distributed in the hope that it will
 # be useful, but WITHOUT ANY WARRANTY; without even the
@@ -927,7 +927,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
  | _| | || \\  |\_ \| U || \_/ | author:  Koushik Chatterjee
  |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
                                 VERSION : 1
- Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
 
  For Help :: help = True
 --------------------------------------------------------------""")
@@ -1224,7 +1224,7 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
   ___/ / /_/ / / ___ / /_/  __/>  <    author:  Koushik Chatterjee
  /____/\___\_\/_/  |_\__/\___/_/|_|    date:  April 28, 2019
                                        VERSION : 1
- Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+ Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
  
  Tex file : %s
  PDF file : %s
