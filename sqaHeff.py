@@ -1440,7 +1440,7 @@ def getV(cc = None, aa = None, vv = None):
  if not vv:
    vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
 #
- V = Vperturbation_type(cc, aa, vv)
+ V = Vperturbation(cc, aa, vv)
 #
  return V
 #
