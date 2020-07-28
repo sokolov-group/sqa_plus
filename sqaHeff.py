@@ -1413,11 +1413,11 @@ def getT(order = 1, cc = None, aa = None, vv = None):
  dummy = True
 #
  if not cc:
-   cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
+   cc = [index('c%i' %p, [tg_c], dummy) for p in range(200,230)]
  if not aa:
-   aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
+   aa = [index('a%i' %p, [tg_a], dummy) for p in range(200,230)]
  if not vv:
-   vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
+   vv = [index('v%i' %p, [tg_v], dummy) for p in range(200,230)]
 #
  T = Tamplitude(order, cc, aa, vv)
 #
