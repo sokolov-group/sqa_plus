@@ -101,4 +101,5 @@ from sqaHeff import Heff,        \
   Tamplitude, Vperturbation_type,\
   Vperturbation, generateEinsum, \
   generateEinsum_old, sqalatex,  \
-  getT, getV
+  getT, getT_excitation,          \
+  getT_deexcitation, getV

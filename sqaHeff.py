@@ -457,6 +457,256 @@ def Tamplitude(order, cc1, aa1, vv1, internal_excit = True):
  return T
 
 
+def Tamplitude_excitation(order, cc1, aa1, vv1):
+# Cluster operator : T - T^dag, Where T = T1 + T2
+# Single excitatio : T1
+#
+# Define t amplitude according to their order
+ if (order == 1):
+     tname = 't1'
+ elif (order == 2):
+     tname = 't2'
+
+ t1_sym = [ symmetry((1,0),1)]
+
+ T = []
+ cc = list(cc1)
+ aa = list(aa1)
+ vv = list(vv1)
+# Core-External
+
+ ind1 = cc.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+ T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+
+ ind1 = cc.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+
+ T.append(T1_ex)
+ T.append(T2_ex)
+
+# Core-Active
+ ind1 = cc.pop(0)
+ ind2 = aa.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens = tensor(tname, [ind1,ind2],t1_sym)
+ T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+
+ ind1 = cc.pop(0)
+ ind2 = aa.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+
+ T.append(T1_ex)
+ T.append(T2_ex)
+
+# Active-External
+ ind1 = aa.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+ T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
+
+ ind1 = aa.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
+
+ T.append(T1_ex)
+ T.append(T2_ex)
+
+ # Doubles
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens1 = custom_tensor(tname, ind1,ind2,ind5,ind6)
+ T2_ex = term(0.25, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
+ T.append(T2_ex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens2 = custom_tensor(tname, ind1,ind2,ind5,ind3)
+ T2_ex = term(0.5, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
+ T.append(T2_ex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens3 = custom_tensor(tname, ind1,ind3,ind5,ind6)
+ T2_ex = term(0.5, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
+ T.append(T2_ex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens4 = custom_tensor(tname, ind1,ind2,ind3,ind4)
+ T2_ex = term(0.25, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
+ T.append(T2_ex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens5 = custom_tensor(tname, ind4,ind3,ind5,ind6)
+ T2_ex = term(0.25, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
+ T.append(T2_ex)
+
+ return T
+
+
+def Tamplitude_deexcitation(order, cc1, aa1, vv1, internal_excit = True):
+# Cluster operator : T - T^dag, Where T = T1 + T2
+# Single excitatio : T1
+#
+# Define t amplitude according to their order
+ if (order == 1):
+     tname = 't1'
+ elif (order == 2):
+     tname = 't2'
+
+ t1_sym = [ symmetry((1,0),1)]
+
+ T = []
+ cc = list(cc1)
+ aa = list(aa1)
+ vv = list(vv1)
+# Core-External
+
+ ind1 = cc.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+ T1_dex =  term(1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+
+ ind1 = cc.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_dex =  term(1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+
+ T.append(T1_dex)
+ T.append(T2_dex)
+
+# Core-Active
+ ind1 = cc.pop(0)
+ ind2 = aa.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens = tensor(tname, [ind1,ind2],t1_sym)
+ T1_dex =  term(1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+
+ ind1 = cc.pop(0)
+ ind2 = aa.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_dex =  term(0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+
+ T.append(T1_dex)
+ T.append(T2_dex)
+
+# Active-External
+ ind1 = aa.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
+ T1_dex =  term(1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
+
+ ind1 = aa.pop(0)
+ ind2 = vv.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
+ T2_dex =  term(0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
+
+ T.append(T1_dex)
+ T.append(T2_dex)
+
+ # Doubles
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens1 = custom_tensor(tname, ind1,ind2,ind5,ind6)
+ T2_dex = term(0.25, [], [t2_tens1,  creOp(ind1), creOp(ind2), desOp(ind6), desOp(ind5)])
+ T.append(T2_dex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens2 = custom_tensor(tname, ind1,ind2,ind5,ind3)
+ T2_dex = term(0.5, [], [t2_tens2,  creOp(ind1), creOp(ind2), desOp(ind3), desOp(ind5)])
+ T.append(T2_dex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens3 = custom_tensor(tname, ind1,ind3,ind5,ind6)
+ T2_dex = term(0.5, [], [t2_tens3,  creOp(ind1), creOp(ind3), desOp(ind6), desOp(ind5)])
+ T.append(T2_dex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens4 = custom_tensor(tname, ind1,ind2,ind3,ind4)
+ T2_dex = term(0.25, [], [t2_tens4,  creOp(ind1), creOp(ind2), desOp(ind4), desOp(ind3)])
+ T.append(T2_dex)
+
+ ind1 = cc.pop(0)
+ ind2 = cc.pop(0)
+ ind3 = aa.pop(0)
+ ind4 = aa.pop(0)
+ ind5 = vv.pop(0)
+ ind6 = vv.pop(0)
+ t2_tens5 = custom_tensor(tname, ind4,ind3,ind5,ind6)
+ T2_dex = term(0.25, [], [t2_tens5,  creOp(ind4), creOp(ind3), desOp(ind6), desOp(ind5)])
+ T.append(T2_dex)
+
+ return T
+
+
 def Vperturbation(cc, aa, vv):
  from sqaAddon import matrixBlock, dummyLabel
 #
@@ -1420,6 +1670,48 @@ def getT(order = 1, cc = None, aa = None, vv = None):
    vv = [index('v%i' %p, [tg_v], dummy) for p in range(200,230)]
 #
  T = Tamplitude(order, cc, aa, vv)
+#
+ return T
+
+
+def getT_excitation(order = 1, cc = None, aa = None, vv = None):
+ "Get T amplitudes (order)."
+#
+ tg_c = options.core_type
+ tg_a = options.active_type
+ tg_v = options.virtual_type
+ tg_g = tg_c + tg_a + tg_v
+ dummy = True
+#
+ if not cc:
+   cc = [index('c%i' %p, [tg_c], dummy) for p in range(200,230)]
+ if not aa:
+   aa = [index('a%i' %p, [tg_a], dummy) for p in range(200,230)]
+ if not vv:
+   vv = [index('v%i' %p, [tg_v], dummy) for p in range(200,230)]
+#
+ T = Tamplitude_excitation(order, cc, aa, vv)
+#
+ return T
+
+
+def getT_deexcitation(order = 1, cc = None, aa = None, vv = None):
+ "Get T amplitudes (order)."
+#
+ tg_c = options.core_type
+ tg_a = options.active_type
+ tg_v = options.virtual_type
+ tg_g = tg_c + tg_a + tg_v
+ dummy = True
+#
+ if not cc:
+   cc = [index('c%i' %p, [tg_c], dummy) for p in range(200,230)]
+ if not aa:
+   aa = [index('a%i' %p, [tg_a], dummy) for p in range(200,230)]
+ if not vv:
+   vv = [index('v%i' %p, [tg_v], dummy) for p in range(200,230)]
+#
+ T = Tamplitude_deexcitation(order, cc, aa, vv)
 #
  return T
 
