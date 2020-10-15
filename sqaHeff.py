@@ -921,16 +921,16 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #
 # print "################ Construct Einsum ################"
 
- print("""\n----------------------- SQA EINSUM ---------------------------
-  ___  _  _  _  __  _ _  _   _ 
- | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
- | _| | || \\  |\_ \| U || \_/ | author:  Koushik Chatterjee
- |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
-                                VERSION : 1
- Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
-
- For Help :: help = True
---------------------------------------------------------------""")
+# print("""\n----------------------- SQA EINSUM ---------------------------
+#  ___  _  _  _  __  _ _  _   _ 
+# | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+# | _| | || \\  |\_ \| U || \_/ | author:  Koushik Chatterjee
+# |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+#                                VERSION : 1
+# Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+#
+# For Help :: help = True
+#--------------------------------------------------------------""")
 
 # print ""
  if help:
