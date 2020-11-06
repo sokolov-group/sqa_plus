@@ -27,8 +27,10 @@ from sqaIndex import \
 from sqaSymmetry import \
   symmetry
 
+from sqaTensor2 import \
+  creDesTensor        \
+
 from sqaTensor import \
-  creDesTensor,       \
   creOp,              \
   desOp,              \
   kroneckerDelta,     \
@@ -47,6 +49,9 @@ from sqaTerm import  \
 
 from sqaNormalOrder import \
   normalOrder
+
+from sqaIntermediates import \
+  findIntermediates
 
 from sqaCommutator import \
   commutator

@@ -16,6 +16,9 @@ class creDesTensor(tensor):
         # Initialize name
         self.name = name
   
+        # Initialize list of cre/des operators
+        self.ops = ops
+
         # Initialize permutations and factors
         (self.permutations, self.factors) = (None, None)
   
@@ -62,13 +65,16 @@ class creDesTensor(tensor):
 
             self.symmetries.append(symmetry(temp_tup, -1))
 
-        if len(self.indices) == 4:
-            self.symmetries.append(symmetry((2,3,0,1), 1))
+        if len(self.indices) == 4 and transRDM == False:
+            self.symmetries.append(symmetry((3,2,1,0), 1))
 
-        if len(self.indices) == 6:
-                self.symmetries.append(symmetry((3,4,5,0,1,2), 1))
+        if len(self.indices) == 6 and transRDM == False:
+                self.symmetries.append(symmetry((5,4,3,2,1,0), 1))
    
+        if len(self.indices) == 8 and transRDM == False:
+                self.symmetries.append(symmetry((7,6,5,4,3,2,1,0), 1))
  
+
     def __cmp__(self,other):
   
         # comparison to another creDesTensor
