@@ -113,11 +113,8 @@ def findIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = 
 
                 int_term = term(1.0, [], new_tensors)
                 int_tensor = tensor(tensor_name, def_indices, [])
-                print (int_tensor)
                
                 # Canonicalize term and tensor representation of intermediate
-                print ('\n')
-                print (int_term)
                 int_term, scale_factor = make_canonical(int_term, transRDM)
                 scale_factor_total *= scale_factor                
 
@@ -133,6 +130,10 @@ def findIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = 
                         intermediates.append([int_term, int_tensor])
                         interm_name_list = interm_name_list[1:]
              
+                print (int_tensor)
+                print (int_term)
+                print ('')
+                
                 # Modify 'tensorlist' for einsum's contract_path function
                 tensorlist = [tens for tens in tensorlist if tens not in tens_contract]
 
@@ -153,75 +154,56 @@ def findIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = 
 
 def make_canonical(int_term, transRDM):
 
+    print (int_term)
+
+    # Additional canonicalization for RDM tensors
+    for tens in [ten for ten in int_term.tensors]:
+
+        if isinstance(tens, creDesTensor):
+            int_term = canonicalize_RDM(int_term, transRDM)
+            break
+
+    print (int_term)
+
     # Create ranking of indices based on the contraction path
     path_rank  = assign_path_rank(int_term)
     space_rank = assign_space_rank(int_term) 
-    print ('path')
     print (path_rank)
-    print ('space')
-    print (space_rank)
 
     # Store list of tensors that are in canonical order to create a canonicalized term
     canonTensorList = []
     scale_factor    = int_term.numConstant
 
     ### RE-ARRANGE THE INDICES WITHIN EACH TENSOR IN THE TERM
+    # Continue canonicalizing after modifying RDM tensors    
     for t_ind, t in enumerate(int_term.tensors):
 
-        print (t)
-        # Additional canonicalization for RDM tensors
+        # Keep track of path rank for each tensor
+        loop_path_rank  = path_rank[:len(t.indices)]
+        loop_space_rank = space_rank[:len(t.indices)]
+
+        # Modify path rank for RDM des operators
         if isinstance(t, creDesTensor):
-            
-            # Extract cre/des operators from creDesTensor
-            rdm_ops = [op for op in t.ops]
+           print ('rdm: ', loop_path_rank)
+           for i, op in enumerate(t.ops):
+               print (loop_path_rank[i], op)
+               if isinstance(op, desOp):
+                   loop_path_rank[i] += 100
 
-            # Count how many cre/des operators have dummy indices
-            cre_dum = 0
-            des_dum = 0
+        print ('desOp check: ', loop_path_rank)
 
-            for op in rdm_ops:
-                if isinstance(op, creOp) and rank < 50:
-                    cre_dum += 1
-                
-                if isinstance(op, desOp) and rank < 50:
-                    des_dum += 1
-
-            # Reverse order of indices if there are more dummy des operators
-            if (cre_dum < des_dum) and (not transRDM):
-                rdm_ops.reverse()
-                reversed_rdm_ops = []
-
-                for op in rdm_ops:
-                   if isinstance(op, desOp):
-                       reversed_rdm_ops.append(creOp(op.indices))
-
-                   elif isinstance(op, creOp):
-                       reversed_rdm_ops.append(desOp(op.indices))
-
-                int_term.tensors[t_ind] = make_rdm(reversed_rdm_ops, transRDM)
-                path_rank = assign_path_rank(int_term)                
-                print ('new path')
-                print (path_rank)
-
-                # Determine amount of des operators after reversal
-                des_op_count = sum(isinstance(op, desOp) for op in reversed_rdm_ops)
-                
-                # Modify path_rank for des operators
-                for i in (range(des_op_count)[1:]):
-                    path_rank[-i] += 100
-
-        # Account for contraction path order
+        # Create final ranking for tensor
         final_rank = []
 
         for i in range(len(t.indices)):
-            final_rank.append(space_rank[i] + path_rank[i])
-
-        print ('final')
-        print (final_rank)
+            final_rank.append(loop_path_rank[i] + loop_space_rank[i])
 
         # Cut used elements of rank lists
         path_rank  = path_rank[len(t.indices):]
         space_rank = space_rank[len(t.indices):]
+
+        print ('final')
+        print (final_rank)
 
         # Generate permutation of indices to canonical order
         canon_rank = np.argsort(final_rank)         
@@ -244,7 +226,7 @@ def make_canonical(int_term, transRDM):
  
             # Append tensor w/ sorted indices
             canonTensorList.append(sorted_tensor)
-
+    
         # Append tensor w/ unpermuted indices
         else:
             canonTensorList.append(t)
@@ -266,6 +248,66 @@ def make_canonical(int_term, transRDM):
     print (canon_term)
 
     return canon_term, scale_factor
+
+
+def canonicalize_RDM(sqa_term, transRDM):
+
+
+    print ('### CANON RDM ###')
+    # Find path rank of indices in term
+    path_rank  = assign_path_rank(sqa_term)
+
+    # Check all tensors in term to find RDM
+    for t_ind, t in enumerate(sqa_term.tensors):
+
+        # Keep track of the path rank for each tensor
+        loop_path_rank = path_rank[:len(t.indices)]
+        print ('loop path: ', loop_path_rank)
+
+        ## IF TENSOR IS AN RDM ##
+        if isinstance(t, creDesTensor):
+
+            # Extract cre/des operators from creDesTensor
+            rdm_ops = [op for op in t.ops]
+
+            # Initialize count variables
+            cre_dum = 0
+            des_dum = 0
+    
+            # Count how many cre/des operators have dummy indices
+            for op, rank in zip(rdm_ops, loop_path_rank):
+                if isinstance(op, creOp) and rank < 50:
+                    cre_dum += 1
+                
+                elif isinstance(op, desOp) and rank < 50:
+                    des_dum += 1
+    
+            print ('cre_dum', cre_dum)
+            print ('des_dum', des_dum)
+    
+            # Reverse order of indices if there are more dummy des operators
+            if (cre_dum < des_dum) and (not transRDM):
+                rdm_ops.reverse()
+                reversed_rdm_ops = []
+    
+                for op in rdm_ops:
+                   if isinstance(op, desOp):
+                       reversed_rdm_ops.append(creOp(op.indices))
+    
+                   elif isinstance(op, creOp):
+                       reversed_rdm_ops.append(desOp(op.indices))
+    
+                print (sqa_term.tensors[t_ind])
+                sqa_term.tensors.pop(t_ind)
+                print (sqa_term.tensors)
+                sqa_term.tensors.append(make_rdm(reversed_rdm_ops, transRDM))
+                print (sqa_term.tensors)
+                print (sqa_term.tensors[t_ind])
+    
+        # Remove used path ranks elements
+        path_rank = path_rank[len(t.indices):]
+
+    return sqa_term
 
 
 def assign_path_rank(sqa_term):
@@ -365,85 +407,52 @@ def check_intermediates(interm_list, int_term, int_tensor):
 
 def get_int_indices(sqa_tensor_list, ext_string):
 
-    # Define sub-space indices
-    core     = list('ijklmnopqIJKLMNOPQ')
-    active   = list('xyzwuvstrXYZWUVSTR')
-    external = list('abcdefghABCDEFGH')
+    print (ext_string)
 
-    # Define index types
-    tg_c = options.core_type
-    tg_a = options.active_type
-    tg_v = options.virtual_type
-    
+    # Make copy of tensor list to modify
+    new_tensor_list = sqa_tensor_list[:]
+
     # Create list for index objects that are used in INT tensor definition
     ext_ind_list  = []
     loop_ind_list = []
 
-    # Form new list of tensors that differ by type (dummy/external) of indices
-    new_tensor_list = []
+    # Iterate through tensors
+    for tens_ind, t in enumerate(new_tensor_list):
 
-    # Determine dummy/external indices specific to the definition of the intermediate
-    for i in ext_string:
-          
-        if i in core:
-            ext_ind_list.append(index(i, [tg_c], False))
+        # Iterate through indices
+        for ind_ind, i in enumerate(t.indices):
 
-            if i.islower():
-                loop_ind_list.append(index(i, [tg_c], True))
-    
-            elif i.isupper():
-                loop_ind_list.append(index(i, [tg_c], False))
-    
-        elif i in active:
-            ext_ind_list.append(index(i, [tg_a], False))
-        
-            if i.islower():
-                loop_ind_list.append(index(i, [tg_a], True))
-    
-            elif i.isupper():
-                loop_ind_list.append(index(i, [tg_a], False))
-    
-        elif i in external:
-            ext_ind_list.append(index(i, [tg_v], False))
+            # Find index objects in tensors that are external wrt intermediate definition
+            if i.name in ext_string:
 
-            if i.islower():
-                loop_ind_list.append(index(i, [tg_v], True))
-    
-            elif i.isupper():
-                loop_ind_list.append(index(i, [tg_v], False))
-    
-    # Save tensors involved in definition of intermediate with modified indices
-    for t in sqa_tensor_list:
+                # Create index list to define a tensor object wrt overall contraction
+                if not loop_ind_list:
+                    loop_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
 
-        # Iterate through all indices in tensor and make modified list of indices
-        upd_ind = []
-        for ind in t.indices:
+                # If there are indices in the list, ensure there are no duplicates
+                else:
+                    exist_ind = [ind.name for ind in loop_ind_list]
 
-            # If the name of the index is part of the provided external index,
-            # append index object with dummyFlag = False
-            if ind.name in ext_string:
-                if ind.indType[0][0][0] == 'c':
-                    upd_ind.append(index(ind.name, [tg_c], False))
+                    if i.name not in exist_ind:
+                        loop_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
 
-                elif ind.indType[0][0][0] == 'a':
-                    upd_ind.append(index(ind.name, [tg_a], False))
+                # Define index as an external index
+                new_tensor_list[tens_ind].indices[ind_ind].isSummed = False
 
-                elif ind.indType[0][0][0] == 'v':
-                    upd_ind.append(index(ind.name, [tg_v], False))
+                # Create index list to define a tensor object wrt intermediate definition
+                if not ext_ind_list:
+                    ext_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
 
-            # Otherwise, index is a dummy index for the contraction
+                # If there are indices in the list, ensure there are no duplicates
+                else:
+                    exist_ind = [ind.name for ind in ext_ind_list]
+
+                    if i.name not in exist_ind:
+                        ext_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
+
+            # If the index is not external, ensure it is a dummy index
             else:
-                if ind.indType[0][0][0] == 'c':
-                    upd_ind.append(index(ind.name, [tg_c], True))
-
-                elif ind.indType[0][0][0] == 'a':
-                    upd_ind.append(index(ind.name, [tg_a], True))
-
-                elif ind.indType[0][0][0] == 'v':
-                    upd_ind.append(index(ind.name, [tg_v], True))
-
-        # Append definition of tensor with updated indices to new tensor list
-        new_tensor_list.append(tensor(t.name, upd_ind, t.symmetries))
+                new_tensor_list[tens_ind].indices[ind_ind].isSummed = True
 
     return new_tensor_list, ext_ind_list, loop_ind_list
 
