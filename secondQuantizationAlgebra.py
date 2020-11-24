@@ -51,7 +51,7 @@ from sqaNormalOrder import \
   normalOrder
 
 from sqaIntermediates import \
-  findIntermediates
+  genIntermediates
 
 from sqaCommutator import \
   commutator

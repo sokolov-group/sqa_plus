@@ -219,7 +219,9 @@ def dyallH(cc, aa, vv):
  Hact = []
 # symmetry
  h1sym = [ symmetry((1,0),1)]
- v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+# v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+##### ADDED BRAKET SYMMETRY FOR 2e INTEGRALS
+ v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1),  symmetry((2,3,0,1), 1)]
 #
  h1 =  tensor('h',[aa[1], aa[0]], h1sym)
  v1 =  tensor('v', [aa[3], cc[2], aa[2], cc[2]], v2sym)
@@ -647,262 +649,13 @@ def print_header():
     PARTICULAR PURPOSE. See the GNU General Public License
     for more details.
 --------------------------------------------------------------""")
-#
-#
-def generateEinsum_old(terms, lhs_str = None, ind_str = None, tens_ext = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, h_str = None, v_str = None, e_str = None, t_str = None, rdm_str = None, delta_str = None, suffix = None):
-#
-# summary: Generate Einsum structures for each term. 
-#          terms   : A list of all terms.
-#          ind_str : Indices of the matrix (string).
-#
-# Copyright (C) 2018-2020 Koushik Chatterjee (koushikchatterjee7@gmail.com)
-#
-# This program is distributed in the hope that it will
-# be useful, but WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A
-# PARTICULAR PURPOSE. See the GNU General Public License
-# for more detai
-#
-# print "################ Construct Einsum ################"
 
- print("""\n--------------------------------------------------------------
- Einsum generator: Transform into einsum ...
- author:  Koushik Chatterjee
- date:  August 31, 2018
+#####################################
 
- Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
---------------------------------------------------------------""")
+#def genEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, suffix = None, rdm_str = None, help = False, **tensor_rename):
 
-# print ""
-#
- if not (lhs_str):
-   lhs_str = 'M'
-#
- term1st = 0
- for term in terms:
-     outputS = []
-     outputF = []
-     OpsList = []
-     tens_name = []
-#
-     icopy = '.copy()'
-     if not (len(term.tensors) == 1):
-        icopy = ''
-#
-     if not (rdm_str):
-        OpsindStr = 'rdm_'
-        if (transRDM):
-           OpsindStr = 'trdm_'
-     else:
-        OpsindStr = rdm_str
-#
-     for i in range(len(term.tensors)):
-         TensStr = ''
-         tens = term.tensors[i]
-         tensor_extern_name = None
-         tens_name.append(tens.name)
-         if not (isinstance(tens, creOp) or isinstance(tens,desOp) or isinstance(tens, kroneckerDelta)):
-#
-#            tens_name.append(tens.name)
-#
-            if ((tens.name == 'v') or (tens.name == 'V')):
-               if not (v_str):
-#                  indStr = 'v_'
-                  indStr = str(tens.name)+'_'
-               else:
-                  indStr = v_str
-            elif (tens.name == 'h'):
-               if not (h_str):
-#                  indStr = 'h_'
-                  indStr = str(tens.name)+'_'
-               else:
-                  indStr = h_str
-            elif (tens.name == 't1') or (tens.name == 't2'):
-               if not (t_str):
-#                  indStr = 't_'
-                  indStr = str(tens.name)+'_'
-               else:
-                  indStr = t_str
-#
-            elif ((tens.name == 'E') or (tens.name == 'e')):
-                  indStr = tens.name
-#
-            else:
-               tensor_extern_name = tens.name
-               if (tens_ext == None):
-                  indStr = tens.name
-               else:
-                  indStr = tens_ext
-#                  ii = 0
-#                  for i in range(len(tens_name)):
-#                     if (tens_name[i] == tens_ext):
-#                        ii += 1
-#                  if (ii > 0):
-#                     indStr = tens_ext+str(ii)
-#                  else: 
-#                     indStr = tens_ext
-#
-            for tens_ind in range(len(tens.indices)): 
-               TensStr += str(tens.indices[tens_ind].name)
-#
-               if ((tens.name == 'E') or (tens.name == 'e')):
-                  if (tens.indices[tens_ind].indType[0][0] == 'core'):
-                     if not (e_str):
-#                        indStr = 'e_core_so'
-                        indStr = str(tens.name)+'_core'
-                     else:
-                        indStr = e_str
-#
-                  elif (tens.indices[tens_ind].indType[0][0] == 'virtual'):
-                     if not (e_str):
-#                        indStr = 'e_extern_so'
-                        indStr = str(tens.name)+'_extern'
-                     else:
-                        indStr = e_str
-#
-                  else:
-                     raise Exception('Unknown active orbitals energy.')
-#
-#
-               elif (tens.name == 'gamma'):
-#                  if not (g_str):
-                     indStr = 'rdm_ca'
-#                     indStr = str(tens.name)+'_'
-#                  else:
-#                     indStr = g_str
-#
-               else:
-                  if not (tens.name == tensor_extern_name):
-                     if not (tens.indices[tens_ind].indType[0][0] == 'virtual'):
-                        indStr += str(tens.indices[tens_ind].indType[0][0][0])
-                     else:
-                        indStr += 'e'
-#
-            if not ((tens.name == 't1') or (tens.name == 't2') or (tens.name == tensor_extern_name)) :
-               if not (suffix):
-                  indStr += '_so'
-               else:
-                  indStr += suffix
-#
-            outputF.append(indStr)   
-#
-            outputS.append(TensStr)
-#
-         elif (isinstance(tens, kroneckerDelta)):
-#               tens_name.append(tens.name)
-#
-               for tens_ind in range(len(tens.indices)):
-                   TensStr += str(tens.indices[tens_ind].name)
-#
-               indStr = 'np.identity'
-#
-               if not (delta_str):
-                  if (tens.indices[0].indType[0][0] == 'core' and (tens.indices[1].indType[0][0] == 'core')):
-                      delstr = 'ncore'
-                  elif (tens.indices[0].indType[0][0] == 'active' and (tens.indices[1].indType[0][0] == 'active')):
-                      delstr = 'ncas'
-                  else:
-                      delstr = 'nextern'
-               else:
-                  delstr = str(delta_str)
-#
-               if not (suffix):
-                  delstr += "_so"
-               else:
-                  delstr += suffix
-#
-               indStr += str('(')+delstr+str(')')
-#
-               outputS.append(TensStr)
-               outputF.append(indStr)
-#
-         else:
-               OpsList.append(tens.indices[0].name)
-               if (tens.name == 'cre'): 
-                   OpsindStr += 'c'
-               elif (tens.name == 'des'):
-                   OpsindStr += 'a'
-# 
-     if (len(OpsList)>0):
-            if (transRDM):
-               if (trans_ind_str == None):
-                  raise Exception("Defined 'trans_ind_str' and run again...")
-               else:
-                  OpsStr = trans_ind_str
-            else:
-               OpsStr = ''
-            for i in OpsList:
-                OpsStr += str(i)
-            outputS.append(OpsStr)
-            if not (suffix):
-               OpsindStr += "_so"
-            else:
-               OpsindStr += suffix
-            outputF.append(OpsindStr)
-#
-########################
-#     if not (ind_str):
-#        rhs_ind_str = ''
-#     else:
-#        if (transRDM):
-#          rhs_ind_str = '->'+trans_ind_str+ind_str
-#        else:
-#          rhs_ind_str = "->"+ind_str
-     if not (ind_str):
-        if (transRDM):
-          rhs_ind_str = '->'+trans_ind_str
-        else:
-          rhs_ind_str = ''
-     else:
-        if (transRDM):
-          rhs_ind_str = '->'+trans_ind_str+ind_str
-        else:
-          rhs_ind_str = "->"+ind_str
-########################
-#
-     sign = ''
-     if not (term1st == 0):
-        sign = '+'
-        if (term.numConstant < 0.0):
-           sign = '-'
-        if not (abs(term.numConstant) == 1.0):
-           cons = ' '+str(abs(term.numConstant))+' *'
-        else:
-           cons = ''
-     else:
-        cons = ' '
-        if not (term.numConstant == 1.0):
-           if (term.numConstant == -1.0):
-               cons = '-'
-           else:
-               cons = ' '+str(term.numConstant)+' *'
-#
-     IOpt = ' optimize = True'
-     if not (optimize):
-        IOpt = ' optimize = False'
-#
-     Icomnd = ''
-     if (rhs_str):
-        Icomnd = rhs_str
-#
-##     print "M[s"+ind1+":f"+ind1+", s"+ind2+":f"+ind2+"] "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+"->"+ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"
-#     print lhs_str+" "+sign+"="+cons+" np.einsum('"+str(outputS).translate(None, "'")[1:-1]+rhs_ind_str+"', "+str(outputF).translate(None, "'")[1:-1]+","+IOpt+")"+Icomnd+icopy
-#
-####
-     lhs_ind_str = str(outputS).translate(None, "'")[1:-1]
-     tensList = str(outputF).translate(None, "'")[1:-1]
-     if (len(term.tensors)==0):
-        if (transRDM):
-          print lhs_str+" "+sign+"="+cons+term.constants[0]+" * "+'np.identity('+trans_ind_str+')'
-        else:
-          lhs_ind_str = term.constants[0][0]
-          print lhs_str+" "+sign+"="+cons+term.constants[0]
-     else:
-        print lhs_str+" "+sign+"="+cons+" np.einsum('"+lhs_ind_str+rhs_ind_str+"', "+tensList+","+IOpt+")"+Icomnd+icopy
-####
-#
-     term1st += 1
-#
+#    return
+
 #####################################
 
 def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, suffix = None, rdm_str = None, help = False, **tensor_rename):
@@ -924,7 +677,7 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 # print("""\n----------------------- SQA EINSUM ---------------------------
 #  ___  _  _  _  __  _ _  _   _ 
 # | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
-# | _| | || \\  |\_ \| U || \_/ | author:  Koushik Chatterjee
+# | _| | || \\  |\_ \ | || \_/ | author:  Koushik Chatterjee
 # |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
 #                                VERSION : 1
 # Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
@@ -946,12 +699,27 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
     suffix = 'so'       # suffix by default
 #
  term1st = 0
+
+# # Remove terms without tRDM in expression
+# if transRDM:
+#     new_terms = []
+#     for term_ind, term in enumerate(terms):
+#         credes = False
+#         for tensor in term.tensors:
+#             if isinstance(tensor, creOp) or isinstance(tensor, desOp):
+#                 credes = True
+#                 break
+#         if credes:
+#             new_terms.append(terms[term_ind])
+#     terms = new_terms
+
  for term in terms:
+
      tensorlist = []
      tensor_indices_list = []
      credes_list = []
      credes_indices_list = []
-#
+
 #     name_default = {}                        # Regular Dictonary
      name_default = collections.OrderedDict()  # Ordered dictionary
 #
@@ -964,13 +732,16 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #
          tensor_name, tensr_ind_str, tensr_indtype_str = tensor_name_indices(tens, suffix)
 #
+         # TODO: MAKE INTO TENSOR
          if (isinstance(tens, creOp) or isinstance(tens,desOp)):
             credes_list.append(tensor_name)            
             credes_indices_list.append(tensr_ind_str)
+
          else:
             tensorlist.append((tensor_name, tensr_ind_str, tensr_indtype_str))
             tensor_indices_list.append(tensr_ind_str)
-#
+
+
      if (len(credes_list) > 0) :
         cre_count = credes_list.count('cre')
         des_count = credes_list.count('des')
@@ -1000,13 +771,14 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #
         if (transRDM):
            if (trans_ind_str == None):
-              raise Exception("Defined 'trans_ind_str' and run again...")
+              raise Exception("Define 'trans_ind_str' and run again...")
            else:
               rdm_ind_str = trans_ind_str+rdm_ind_str
 #
         tensorlist.append((set_rdm, rdm_ind_str, rdm_indtype_str))
 #
      for i in range(len(tensorlist)):
+        # TODO: CREDESTENSOR
         if (tensorlist[i][0] == 'gamma'):
            key_tensr = tensorlist[i][0]
            value_tensr = tensorlist[i]

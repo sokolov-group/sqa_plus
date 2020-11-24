@@ -1,12 +1,13 @@
 from sqaIndex import index
 from sqaTensor import tensor, creOp, desOp, kroneckerDelta
 from sqaSymmetry import symmetry
+from sqaOptions import options
 
 class creDesTensor(tensor):
   
     freelyCommutes = False
-    name = "creDesTensor"
-  
+    name = 'rdm'
+ 
     def __init__(self, name, ops, transRDM = False):
       
         TypeErrorMessage = "ops must be a normal ordered list of creOp and desOp objects"
@@ -19,20 +20,30 @@ class creDesTensor(tensor):
         # Initialize list of cre/des operators
         self.ops = ops
 
+        # Initialize name
+        self.transRDM = transRDM
+  
+        # Initialize list of cre/des operators
+        self.ops = ops
         # Initialize permutations and factors
         (self.permutations, self.factors) = (None, None)
   
-        # Build the index list and count the number of creation operators
+        # Count the number of creation/destruction operators
         self.nCre = 0
+        self.nDes = 0
+
+        # Build the index list
         self.indices = []
         desFlag = False
 
         for op in ops:
 
+            # Ensure normal-ordering
             if (not isinstance(op, creOp)) and (not isinstance(op, desOp)):
                 raise TypeError, TypeErrorMessage
 
             if isinstance(op, desOp):
+                self.nDes += 1
                 desFlag = True
 
             if isinstance(op, creOp):
@@ -41,7 +52,10 @@ class creDesTensor(tensor):
                     raise TypeError, TypeErrorMessage
 
             self.indices.append(op.indices[0].copy())
-  
+
+        # Create count of total indices
+        self.nInd = self.nCre + self.nDes
+
         # Initialize symmetries
         self.symmetries = []
         swapValues = range(len(self.indices)-1)
@@ -65,15 +79,16 @@ class creDesTensor(tensor):
 
             self.symmetries.append(symmetry(temp_tup, -1))
 
-        if len(self.indices) == 4 and transRDM == False:
-            self.symmetries.append(symmetry((3,2,1,0), 1))
+        # Add bra/ket symmetries for ground-state RDMs
+        if (len(self.indices) % 2 == 0) and self.transRDM == False:
+            reversed_range = tuple(range(len(self.indices))[::-1])
+            self.symmetries.append(symmetry(reversed_range, 1))
 
-        if len(self.indices) == 6 and transRDM == False:
-                self.symmetries.append(symmetry((5,4,3,2,1,0), 1))
-   
-        if len(self.indices) == 8 and transRDM == False:
-                self.symmetries.append(symmetry((7,6,5,4,3,2,1,0), 1))
- 
+        # Add bra/ket symmetries for ground-state RDMs
+        if (len(self.indices) % 2 != 0) and self.transRDM == False:
+            print ('transRDM flag is set to True, but an ODD number of cre/des operators are present. Switching transRDM flag to TRUE !!')
+            self.transRDM == True
+
 
     def __cmp__(self,other):
   
@@ -102,9 +117,10 @@ class creDesTensor(tensor):
         else:
             raise TypeError, "A creDesTensor object may only be compared to another tensor"
         return 0
-  
-  
+ 
+ 
     def copy(self):
+
         ops = []
 
         for i in range(self.nCre):
@@ -113,4 +129,5 @@ class creDesTensor(tensor):
         for i in range(self.nCre,len(self.indices)):
             ops.append(desOp(self.indices[i]))
 
-        return creDesTensor(self.name, ops)
+        print (ops)
+        return creDesTensor(self.name, list(ops))
