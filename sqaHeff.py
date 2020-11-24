@@ -202,8 +202,9 @@ def dyallH(cc, aa, vv):
  Hamil = []
 # E_fc :
  #c = index('Const.', [], dummy = True)
- c = index('Const.', [], True)
- Efc = tensor('E_fc',[c], [])
+# c = index('Const.', [], True)
+# Efc = tensor('E_fc',[c], [])
+ Efc = tensor('E_fc', [], [])
 # Hamil.append( term(1.0, ['E_fc'], []))
  Hamil.append( term(1.0, [], [Efc]))
 #

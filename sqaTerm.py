@@ -437,6 +437,9 @@ class term:
     alphabet = self.generateAlphabet()
 
     # Determine the best ordering and index mapping
+    best_tensor_list = None
+    best_factor = None
+    bestMap = None
     bestScore = [-1]
     nTopScore = 0
     # job format:  (map, gCount, tCount, aCount, gPerms)
@@ -680,11 +683,17 @@ class term:
 #      #raise RuntimeError, "%i candidates tied for the top score." %nTopScore
 #      print "WARNING: %i candidates tied for the top score." %nTopScore
 
+
     # Set the tensor list as the list with the 'best' index naming and ordering
-    self.tensors = best_tensor_list 
+    if best_tensor_list is not None:
+        self.tensors = best_tensor_list 
 
     # Apply the factor produced from the canonical ordering
-    self.scale(best_factor)
+    if best_factor is not None:
+        self.scale(best_factor)
+
+    if bestMap is None:
+        bestMap = map
 
     # Create an index mapping that converts to a canonical alphabet, i.e. a-z
     alphabet = list('abcdefghijklmnopqrstuvwxyz')
