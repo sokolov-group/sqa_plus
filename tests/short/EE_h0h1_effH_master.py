@@ -118,7 +118,6 @@ term4 = sqa.commutator(term2, term3)
 term5 = sqa.matrixBlock(term4)
 
 einsumlist = sqa.generateEinsum(term5, 'temp', str(l_ind + r_ind), "")
-exit()
 
 ## Read the reference file:
 
