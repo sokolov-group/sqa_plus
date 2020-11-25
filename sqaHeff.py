@@ -1193,6 +1193,8 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
  internal_tensor = ['e', 'E', 't1', 't2', 'h', 'v', 'cre', 'des', 'rdm', 'trdm', 'gamma']
  external_tensor = []
 #
+ einsum_list = []
+#
  if not (suffix):
     suffix = 'so'       # suffix by default
 #
@@ -1364,18 +1366,22 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
      lhs_ind_str = str(lhs_ein_ind).translate(None, "'")[1:-1]
      rhs_ten_str = str(rhs_ein_ten).translate(None, "'")[1:-1]
 
+## Changes made by Rajat to change print statement to list:
      if (len(term.tensors)==0):
         if (transRDM):
           print lhs_str+" "+sign+"="+cons+term.constants[0]+" * "+'np.identity('+trans_ind_str+')'
+          einsum_list.append(lhs_str+" "+sign+"="+cons+term.constants[0]+" * "+'np.identity('+trans_ind_str+')\n')
         else:
           lhs_ind_str = term.constants[0][0]
           print lhs_str+" "+sign+"="+cons+term.constants[0]
+          einsum_list.append(lhs_str+" "+sign+"="+cons+term.constants[0]+"\n") 
      else:
         print lhs_str+" "+sign+"="+cons+" np.einsum('"+lhs_ind_str+rhs_ind_str+"', "+rhs_ten_str+","+IOpt+")"+Icomnd+icopy
-#
+        einsum_list.append(lhs_str+" "+sign+"="+cons+" np.einsum('"+lhs_ind_str+rhs_ind_str+"', "+rhs_ten_str+","+IOpt+")"+Icomnd+icopy+"\n")
+          
      term1st += 1
 # 
- return
+ return einsum_list             ## Changes made by Rajat
 
 def einsum_help():
     print("""\n        HELP :: 
