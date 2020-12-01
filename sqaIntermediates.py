@@ -31,8 +31,6 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
     # Iterate through every term in list of terms
     for in_term in input_terms:
 
-        print (in_term)
-
         # Create lists for all tensors
         tensorlist          = []
         tensor_indices_list = []
@@ -52,8 +50,7 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
 
         # Turn cre/des operators into RDM, if they exist
         if (len(credes_list) > 0):
-            rdm_tensor = creDesTensor('rdm', credes_list, transRDM)
-#            rdm_tensor = make_rdm(credes_list, transRDM)
+            rdm_tensor = creDesTensor(credes_list, transRDM)
             tensorlist.append(rdm_tensor)
             tensor_indices_list.append([ind for ind in rdm_tensor.indices])
 
@@ -112,8 +109,6 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
                 # Determine which tensors from tensorlist are being contracted
                 tens_contract = [tensorlist[i] for i in contract]
                
-                print (tens_contract)
-
                 # Use the external string to modify indexType of the indices in tensors wrt the intermediate term
                 new_tensors, def_indices, loop_indices = get_int_indices(tens_contract, int_indices[num])
 
@@ -144,10 +139,6 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
                         intermediates.append([int_term, int_tensor])
                         interm_name_list = interm_name_list[1:]
              
-                print (int_tensor)
-                print (int_term)
-                print ('')
-                
                 # Modify 'tensorlist' for einsum's contract_path function
                 tensorlist = [tens for tens in tensorlist if tens not in tens_contract]
                 
@@ -167,8 +158,6 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
 
 def make_canonical(int_term, transRDM):
 
-    print (int_term)
-
     # Additional canonicalization for RDM tensors
     for tens in [ten for ten in int_term.tensors]:
 
@@ -176,12 +165,9 @@ def make_canonical(int_term, transRDM):
             int_term = canonicalize_RDM(int_term, transRDM)
             break
 
-    print (int_term)
-
     # Create ranking of indices based on the contraction path
     path_rank  = assign_path_rank(int_term)
     space_rank = assign_space_rank(int_term) 
-    print (path_rank)
 
     # Store list of tensors that are in canonical order to create a canonicalized term
     canonTensorList = []
@@ -197,9 +183,7 @@ def make_canonical(int_term, transRDM):
 
         # Modify path rank for RDM des operators
         if isinstance(t, creDesTensor):
-           print ('rdm: ', loop_path_rank)
            for i, op in enumerate(t.ops):
-               print (loop_path_rank[i], op)
                if isinstance(op, desOp):
                    loop_path_rank[i] += 100
 
@@ -209,18 +193,12 @@ def make_canonical(int_term, transRDM):
         for i in range(len(t.indices)):
             final_rank.append(loop_path_rank[i] + loop_space_rank[i])
         
-        print (t)
-        print ('final')
-        print (final_rank)
-
         # Cut used elements of rank lists
         path_rank  = path_rank[len(t.indices):]
         space_rank = space_rank[len(t.indices):]
 
         # Generate permutation of indices to canonical order
         canon_order = np.argsort(final_rank)         
-        print ('canon sort')
-        print (canon_order)
         
         # Get symmetry information from sqa_tensor
         allowed_sym  = t.symPermutes()
@@ -245,26 +223,19 @@ def make_canonical(int_term, transRDM):
 
     # Form term with tensors w/ canonicalized indices
     canon_index_term = term(1.0, [], canonTensorList)
-    print ('canon_index')
-    print (canon_index_term)
 
     ### RE-ARRANGE TENSORS THAT MAKE UP THE TERM
     ## SORT BY RANK
     ranked_term, rank_list = rank_sort_term(canon_index_term)
-    print ('ranked')
-    print (ranked_term)
    
     ## SORT BY NAME
     canon_term = name_sort_term(ranked_term, rank_list)
-    print ('canon')
-    print (canon_term)
 
     return canon_term, scale_factor
 
 
 def canonicalize_RDM(sqa_term, transRDM):
 
-    print ('### CANON RDM ###')
     # Find path rank of indices in term
     path_rank  = assign_path_rank(sqa_term)
 
@@ -273,7 +244,6 @@ def canonicalize_RDM(sqa_term, transRDM):
 
         # Keep track of the path rank for each tensor
         loop_path_rank = path_rank[:len(t.indices)]
-        print ('loop path: ', loop_path_rank)
 
         ## IF TENSOR IS AN RDM ##
         if isinstance(t, creDesTensor):
@@ -293,9 +263,6 @@ def canonicalize_RDM(sqa_term, transRDM):
                 elif isinstance(op, desOp) and rank >= 50:
                     des_ext += 1
     
-            print ('cre_ext', cre_ext)
-            print ('des_ext', des_ext)
-    
             # Reverse order of indices if there are more dummy des operators
             if (cre_ext < des_ext) and (not transRDM):
                 rdm_ops.reverse()
@@ -308,13 +275,8 @@ def canonicalize_RDM(sqa_term, transRDM):
                    elif isinstance(op, creOp):
                        reversed_rdm_ops.append(desOp(op.indices))
     
-                print (sqa_term.tensors[t_ind])
                 sqa_term.tensors.pop(t_ind)
-                print (sqa_term.tensors)
-                sqa_term.tensors.append(creDesTensor(t.name, reversed_rdm_ops, transRDM))
-#                sqa_term.tensors.append(make_rdm(reversed_rdm_ops, transRDM))
-                print (sqa_term.tensors)
-                print (sqa_term.tensors[t_ind])
+                sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, transRDM))
     
         # Remove used path ranks elements
         path_rank = path_rank[len(t.indices):]

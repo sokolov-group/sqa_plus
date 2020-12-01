@@ -102,8 +102,9 @@ from sqaAddon import matrixBlock,\
   contractDeltaFuncs_nondummy,   \
   tensorIndex_order
 
-from sqaHeff import Heff,        \
-  Tamplitude, Vperturbation_type,\
-  Vperturbation, generateEinsum, \
-  generateEinsum_old, sqalatex,  \
-  getT, getV
+from sqaHeff import Heff,           \
+  Tamplitude, Vperturbation_type,   \
+  Vperturbation, generateEinsum,    \
+  genEinsum, remove_trdm_const,     \
+  remove_core_int, sqalatex, getT,  \
+  getV

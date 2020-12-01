@@ -22,6 +22,7 @@ from sqaIndex import index
 from sqaCommutator import commutator
 from sqaTerm import term, combineTerms
 from sqaTensor import tensor, creOp, desOp, kroneckerDelta
+from sqaTensor2 import creDesTensor
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
@@ -652,11 +653,295 @@ def print_header():
 
 #####################################
 
-#def genEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, suffix = None, rdm_str = None, help = False, **tensor_rename):
+def genEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, suffix = None, rm_trdm_const = True, rm_core_int = True, opt_einsum_terms = True, optimize = True, help = False, **tensor_rename):
 
-#    return
+    # Constants terms in CAS blocks are removed by default, print warning
+    if transRDM and rm_trdm_const:
+        terms, const_terms = remove_trdm_const(terms)
 
-#####################################
+    # If using effective Hamiltonian, remove double-counted contributions to core terms
+    if rm_core_int:
+        terms, core_terms = remove_core_int(terms)
+    
+###########################################    
+
+    # Default to 'temp' as name of matrix being created w/ einsum function
+    if not lhs_str:
+        lhs_str = 'temp'
+
+    # Default to spin-orbital suffix if not defined by user
+    if not suffix:
+        suffix = 'so'
+
+    # Create empty list for storing einsums
+    einsumList = []
+
+    # Iterate through terms and create einsum expressions
+    for term_ind, term in enumerate(terms):
+
+        ## CONVERT ALL CRE/DES OBJECTS to CREDESTENSOR OBJECT
+        # List for storing cre/des operators
+        credes_ops = []
+
+        # Append all cre/des operators to list
+        for tens in term.tensors:
+            if isinstance(tens, creOp) or isinstance(tens, desOp):
+                credes_ops.append(tens)
+
+        # Modify term in list to use creDesTensor object instead of cre/des objects
+        if credes_ops:
+            terms[term_ind].tensors = [ten for ten in terms[term_ind].tensors if ten not in credes_ops]
+            terms[term_ind].tensors.append(creDesTensor(credes_ops, transRDM))
+
+        ## PROCEED WITH GENERATING EINSUMS
+        # Start to define einsum string
+        einsum = lhs_str + ' '
+
+        # Determine sign of term
+        pos = True
+        if term.numConstant < 0:
+            pos = False
+
+        # Set up equals sign for first term and rest of terms
+        if term_ind == 0 and pos:
+            einsum += ' = '
+        elif term_ind == 0 and not pos:
+            einsum += '=- '
+        elif term_ind != 0 and pos:
+            einsum += '+= '
+        elif term_ind != 0 and not pos:
+            einsum += '-= '
+
+        # Add appropriate scaling factor
+        if abs(term.numConstant) != 1:
+            einsum = einsum + str(abs(term.numConstant)) + ' * '
+
+        # Define term for either optEinsum or built-in Numpy 'einsum' function
+        if opt_einsum_terms:
+            einsum += 'einsum('
+        else:
+            einsum += 'np.einsum('
+
+        # Pass tensors of term to function to create string representation of contraction indices and tensor names
+        tensor_inds, tensor_names = get_tensor_info(term.tensors, transRDM, trans_ind_str, ind_str, suffix)
+
+        # Add contraction and tensor info
+        tensor_info = (', '.join([str("'") + tensor_inds + str("'")] + tensor_names))
+        einsum += tensor_info
+
+        # Add optimize flag to einsum if enabled
+        if optimize and opt_einsum_terms:
+            einsum += ', optimize = einsum_type)'
+        elif optimize and not opt_einsum_terms:
+            einsum += ', optimize = True)'
+        else:
+            einsum += ')'
+
+        # Append a '.copy()' function call if the term is made up of only one tensor
+        if len(term.tensors) == 1:
+            einsum += '.copy()'
+
+        print (einsum)
+        # Append completed einsum to list
+        einsumList.append(einsum)
+
+    return einsumList
+
+
+def get_tensor_info(sqa_tensors, transRDM, trans_ind_str, ind_str, suffix):
+
+    # Pre-define list of names of tensors used in SQA and make list to store any new tensor 'types'
+    tensor_names = []
+    tensor_inds  = []
+
+    # Iterate through all the provided tensors
+    for tens in sqa_tensors:
+
+        # Handle special case of kroneckerDelta (kdelta) object
+        if isinstance(tens, kroneckerDelta):
+
+            tensor_name = 'np.identity('
+
+            # Determine orbital space of kdelta
+            if (tens.indices[0].indType[0][0][0] and tens.indices[1].indType[0][0][0]) == 'c':
+                orb_space = 'ncore'
+
+            elif (tens.indices[0].indType[0][0][0] and tens.indices[1].indType[0][0][0]) == 'a':
+                orb_space = 'ncas'
+
+            elif (tens.indices[0].indType[0][0][0] and tens.indices[1].indType[0][0][0]) == 'v':
+                orb_space = 'nextern'
+
+            else:
+                raise TypeError('WARNING: The indices of the kronecker delta term do not belong to the same orbital sub-space')
+
+            if suffix:
+                orb_space += '_' + suffix
+            tensor_name += orb_space + ')'
+
+        # Handle special case of orbital energy vector
+        elif len(tens.indices) == 1 and (tens.name == 'e' or tens.name == 'E'):
+
+            tensor_name = str(tens.name).lower() + '_'
+
+            # Determine orbital space of energies
+            if (tens.indices[0].indType[0][0][0]) == 'c':
+                orb_space = 'core'
+
+            elif (tens.indices[0].indType[0][0][0]) == 'v':
+                orb_space = 'extern'
+
+            if suffix:
+                orb_space += '_' + suffix
+            tensor_name += orb_space
+
+
+        # Handle special case of RDM tensor
+        elif isinstance(tens, creDesTensor):
+
+            tensor_name = tens.name + '_'
+            
+            # Modify name of RDM to reflect particle number
+            for op in tens.ops:
+                if isinstance(op, creOp):
+                    tensor_name += 'c'
+                elif isinstance(op, desOp):
+                    tensor_name += 'a'
+
+            # Append suffix
+            if suffix:
+                tensor_name += '_' + suffix
+
+        # Account for intermediate tensors, leave unmodified
+        elif tens.name[0:3] == 'INT':
+
+            # Make copy of intermediate tensor name
+            tensor_name = '%s' % tens.name
+
+        # Name remaining tensors w/ same convention of orbital space and suffix
+        else:
+
+            tensor_name = tens.name + '_'
+
+            # Append letter representing orbital subspace of indices
+            # Replace 'v' from 'virtual' w/ 'e' for 'external'
+            for i in range(len(tens.indices)):
+                if tens.indices[i].indType[0][0][0] != 'v':
+                    tensor_name += tens.indices[i].indType[0][0][0]
+                else:
+                    tensor_name += 'e'
+
+            # Append suffix
+            if suffix and tens.name[0] != 't':
+                tensor_name += '_' + suffix
+
+
+        # Append name of tensor (after and modifications due to special cases)
+        tensor_names.append(tensor_name)
+
+        # Create indices of tensor as string
+        indices = (''.join([i.name for i in tens.indices]))
+
+        # Append transition state index to appropriate set of indices
+        if isinstance(tens, creDesTensor) and transRDM:
+            indices = trans_ind_str + indices
+
+        # Append completed index string to list
+        tensor_inds.append(indices)
+
+    # Convert list of indices into one comma-separated string and prepare to append external index string
+    tensor_inds = ','.join(tensor_inds)
+    tensor_inds += '->'
+
+    # Append transition RDM index to front of external rhs indices
+    if transRDM:
+        tensor_inds += trans_ind_str
+    tensor_inds += ind_str
+
+    return tensor_inds, tensor_names
+
+
+def remove_core_int(terms):
+
+    print ('--------------------------------- WARNING ---------------------------------')
+    print ('Terms with a contraction over repeating dummy core indices of 2e- integrals')
+    print ('will be removed. Set "rm_core_int" flag to FALSE to preserve terms')
+
+    # Create lists to split up SQA terms
+    kept_terms = []
+    core_terms = []
+
+    # Separate out the terms that have redundant 2e- integral contractions over core space
+    for term_ind, term in enumerate(terms):
+        coreTerm = False
+        for tens_ind, tens in enumerate(term.tensors):
+            if tens.name == 'v':
+                if (
+                    (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
+                    or (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
+                    or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
+                    or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
+                ):
+                    coreTerm = True
+                    break
+       
+        # Append to either list based on coreTerm flag
+        if not coreTerm:
+            kept_terms.append(terms[term_ind])
+
+        else:
+            core_terms.append(terms[term_ind])
+
+    print ('')
+    print (str(len(core_terms)) + ' terms removed:')
+    for term in core_terms:
+        print (term)
+    
+    print ('---------------------------------------------------------------------------')
+    print ('Remaining terms: ' + str(len(kept_terms)))
+    print ('')
+
+    return kept_terms, core_terms
+
+
+
+def remove_trdm_const(terms):
+
+    print ('--------------------------------- WARNING ---------------------------------')
+    print ('tRDM constant terms are removed by default, controlled by "rm_trdm_const"')
+    print ('Switch flag to FALSE to preserve terms')
+
+    # Create lists to split up SQA terms
+    const_terms     = []
+    trans_rdm_terms = []
+
+    # Remove terms without tRDM tensors in r.h.s.
+    for term_ind, term in enumerate(terms):
+        creDes = False
+
+        for tensor in term.tensors:
+            if isinstance(tensor, creOp) or isinstance(tensor, desOp) or isinstance(tensor, creDesTensor):
+                creDes = True
+                break       
+ 
+        # Append to either list based on creDes flag
+        if not creDes:
+            const_terms.append(terms[term_ind])
+
+        else:
+            trans_rdm_terms.append(terms[term_ind])
+
+    print ('')
+    print (str(len(const_terms)) + ' terms removed:')
+    for term in const_terms:
+        print (term)
+    
+    print ('---------------------------------------------------------------------------')
+    print ('Remaining terms: ' + str(len(trans_rdm_terms)))
+    print ('')
+
+    return trans_rdm_terms, const_terms
+
 
 def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, suffix = None, rdm_str = None, help = False, **tensor_rename):
 #
@@ -700,19 +985,6 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #
  term1st = 0
 
-# # Remove terms without tRDM in expression
-# if transRDM:
-#     new_terms = []
-#     for term_ind, term in enumerate(terms):
-#         credes = False
-#         for tensor in term.tensors:
-#             if isinstance(tensor, creOp) or isinstance(tensor, desOp):
-#                 credes = True
-#                 break
-#         if credes:
-#             new_terms.append(terms[term_ind])
-#     terms = new_terms
-
  for term in terms:
 
      tensorlist = []
@@ -732,7 +1004,6 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
 #
          tensor_name, tensr_ind_str, tensr_indtype_str = tensor_name_indices(tens, suffix)
 #
-         # TODO: MAKE INTO TENSOR
          if (isinstance(tens, creOp) or isinstance(tens,desOp)):
             credes_list.append(tensor_name)            
             credes_indices_list.append(tensr_ind_str)
@@ -778,7 +1049,6 @@ def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, tran
         tensorlist.append((set_rdm, rdm_ind_str, rdm_indtype_str))
 #
      for i in range(len(tensorlist)):
-        # TODO: CREDESTENSOR
         if (tensorlist[i][0] == 'gamma'):
            key_tensr = tensorlist[i][0]
            value_tensr = tensorlist[i]

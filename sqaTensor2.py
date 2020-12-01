@@ -5,17 +5,13 @@ from sqaOptions import options
 
 class creDesTensor(tensor):
   
-    freelyCommutes = False
-    name = 'rdm'
- 
-    def __init__(self, name, ops, transRDM = False):
+    freelyCommutes = False 
+
+    def __init__(self, ops, transRDM = False):
       
         TypeErrorMessage = "ops must be a normal ordered list of creOp and desOp objects"
         if not type(ops) == type([]):
             raise TypeError, TypeErrorMessage
-  
-        # Initialize name
-        self.name = name
   
         # Initialize list of cre/des operators
         self.ops = ops
@@ -25,6 +21,7 @@ class creDesTensor(tensor):
   
         # Initialize list of cre/des operators
         self.ops = ops
+
         # Initialize permutations and factors
         (self.permutations, self.factors) = (None, None)
   
@@ -84,11 +81,17 @@ class creDesTensor(tensor):
             reversed_range = tuple(range(len(self.indices))[::-1])
             self.symmetries.append(symmetry(reversed_range, 1))
 
-        # Add bra/ket symmetries for ground-state RDMs
+        # Print warning if number of indices is odd and transRDM is False
         if (len(self.indices) % 2 != 0) and self.transRDM == False:
             print ('transRDM flag is set to True, but an ODD number of cre/des operators are present. Switching transRDM flag to TRUE !!')
             self.transRDM == True
 
+        # Initialize name
+        if transRDM:
+            self.name = 'trdm'
+        else:
+            self.name = 'rdm'
+  
 
     def __cmp__(self,other):
   
@@ -129,5 +132,4 @@ class creDesTensor(tensor):
         for i in range(self.nCre,len(self.indices)):
             ops.append(desOp(self.indices[i]))
 
-        print (ops)
-        return creDesTensor(self.name, list(ops))
+        return creDesTensor(list(ops), self.transRDM)
