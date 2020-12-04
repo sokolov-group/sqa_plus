@@ -7,7 +7,7 @@ class creDesTensor(tensor):
   
     freelyCommutes = False 
 
-    def __init__(self, ops, transRDM = False):
+    def __init__(self, ops, trans_rdm = False):
       
         TypeErrorMessage = "ops must be a normal ordered list of creOp and desOp objects"
         if not type(ops) == type([]):
@@ -17,7 +17,7 @@ class creDesTensor(tensor):
         self.ops = ops
 
         # Initialize name
-        self.transRDM = transRDM
+        self.trans_rdm = trans_rdm
   
         # Initialize list of cre/des operators
         self.ops = ops
@@ -77,17 +77,17 @@ class creDesTensor(tensor):
             self.symmetries.append(symmetry(temp_tup, -1))
 
         # Add bra/ket symmetries for ground-state RDMs
-        if (len(self.indices) % 2 == 0) and self.transRDM == False:
+        if (len(self.indices) % 2 == 0) and self.trans_rdm == False:
             reversed_range = tuple(range(len(self.indices))[::-1])
             self.symmetries.append(symmetry(reversed_range, 1))
 
-        # Print warning if number of indices is odd and transRDM is False
-        if (len(self.indices) % 2 != 0) and self.transRDM == False:
-            print ('transRDM flag is set to True, but an ODD number of cre/des operators are present. Switching transRDM flag to TRUE !!')
-            self.transRDM == True
+        # Print warning if number of indices is odd and trans_rdm is False
+        if (len(self.indices) % 2 != 0) and self.trans_rdm == False:
+            print ('trans_rdm flag is set to True, but an ODD number of cre/des operators are present. Switching trans_rdm flag to TRUE !!')
+            self.trans_rdm == True
 
         # Initialize name
-        if transRDM:
+        if trans_rdm:
             self.name = 'trdm'
         else:
             self.name = 'rdm'
@@ -132,4 +132,4 @@ class creDesTensor(tensor):
         for i in range(self.nCre,len(self.indices)):
             ops.append(desOp(self.indices[i]))
 
-        return creDesTensor(list(ops), self.transRDM)
+        return creDesTensor(list(ops), self.trans_rdm)

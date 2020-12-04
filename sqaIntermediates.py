@@ -14,7 +14,7 @@ from sqaSymmetry import symmetry
 from sqaCommutator import commutator
 
 
-def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = False):
+def genIntermediates(input_terms, ind_str = None, factor_depth = 1, trans_rdm = False):
 
     if factor_depth < 0 or not isinstance(factor_depth, int):
         raise ValueError('Invalid factor depth provided -- provide integer value that is >= 0') 
@@ -50,7 +50,7 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
 
         # Turn cre/des operators into RDM, if they exist
         if (len(credes_list) > 0):
-            rdm_tensor = creDesTensor(credes_list, transRDM)
+            rdm_tensor = creDesTensor(credes_list, trans_rdm)
             tensorlist.append(rdm_tensor)
             tensor_indices_list.append([ind for ind in rdm_tensor.indices])
 
@@ -116,17 +116,24 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
                 int_term = term(1.0, [], new_tensors)
                
                 # Canonicalize term and tensor representation of intermediate and update scale factor
-                int_term, scale_factor = make_canonical(int_term, transRDM)
+                print (tensor_name)
+                print (int_term)
+                print ('CANONICALIZING...')
+
+                int_term, scale_factor = make_canonical(int_term, trans_rdm)
                 scale_factor_total *= scale_factor                
 
                 # Update indices after canonicalizing term
                 new_tensors, def_indices, loop_indices = get_int_indices(int_term.tensors, int_indices[num])
 
                 # Define intermediate tensor wrt to definition
-                int_tensor  = tensor(tensor_name, def_indices, [])
+                int_tensor = tensor(tensor_name, def_indices, [])
 
-                # Append the first intermeidate automatically
+                # Append the first intermediate automatically
                 if not intermediates:
+                    print (int_tensor.name)
+                    print (int_term)
+                    print ('')
                     intermediates.append([int_term, int_tensor])
                     interm_name_list = interm_name_list[1:]
                
@@ -136,6 +143,11 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
 
                     # Only append unique intermediate terms to the list of intermediates
                     if not isRedundant:
+                        print ('FOUND UNIQUE INTERMEDIATE')
+                        print (int_tensor.name)
+                        print (int_term)
+                        print ('')
+                      
                         intermediates.append([int_term, int_tensor])
                         interm_name_list = interm_name_list[1:]
              
@@ -156,13 +168,13 @@ def genIntermediates(input_terms, ind_str = None, factor_depth = 1, transRDM = F
     return mod_term_list, intermediates
 
 
-def make_canonical(int_term, transRDM):
+def make_canonical(int_term, trans_rdm):
 
     # Additional canonicalization for RDM tensors
     for tens in [ten for ten in int_term.tensors]:
 
         if isinstance(tens, creDesTensor):
-            int_term = canonicalize_RDM(int_term, transRDM)
+            int_term = canonicalize_rdm(int_term, trans_rdm)
             break
 
     # Create ranking of indices based on the contraction path
@@ -170,8 +182,8 @@ def make_canonical(int_term, transRDM):
     space_rank = assign_space_rank(int_term) 
 
     # Store list of tensors that are in canonical order to create a canonicalized term
-    canonTensorList = []
-    scale_factor    = int_term.numConstant
+    canon_tensor_list = []
+    scale_factor      = int_term.numConstant
 
     ### RE-ARRANGE THE INDICES WITHIN EACH TENSOR IN THE TERM
     # Continue canonicalizing after modifying RDM tensors    
@@ -211,30 +223,42 @@ def make_canonical(int_term, transRDM):
 
             # Keep track of pre_factor
             scale_factor  *= float(allowed_sym[1][ind_sym])                
-            sorted_indices = [t.indices[i] for i in canon_order]
-            sorted_tensor  = tensor(t.name, sorted_indices, t.symmetries)
+
+            # If modifying RDM tensor, create the sorted tensor correctly
+            if isinstance(t, creDesTensor):
+                sorted_ops    = [t.ops[i] for i in canon_order]
+                sorted_tensor = creDesTensor(sorted_ops, trans_rdm)
+            else:
+                sorted_indices = [t.indices[i] for i in canon_order]
+                sorted_tensor  = tensor(t.name, sorted_indices, t.symmetries)
  
             # Append tensor w/ sorted indices
-            canonTensorList.append(sorted_tensor)
+            canon_tensor_list.append(sorted_tensor)
     
         # Append tensor w/ unpermuted indices
         else:
-            canonTensorList.append(t)
+            canon_tensor_list.append(t)
 
     # Form term with tensors w/ canonicalized indices
-    canon_index_term = term(1.0, [], canonTensorList)
+    canon_index_term = term(1.0, [], canon_tensor_list)
+    print ('----- WRT INDICES IN TENSORS OF TERM -----')
+    print (canon_index_term)
 
     ### RE-ARRANGE TENSORS THAT MAKE UP THE TERM
     ## SORT BY RANK
     ranked_term, rank_list = rank_sort_term(canon_index_term)
-   
+    print ('----- WRT TENSORS IN TERM BY RANK -----')
+    print (ranked_term)
+
     ## SORT BY NAME
     canon_term = name_sort_term(ranked_term, rank_list)
+    print ('----- WRT TENSORS IN TERM BY NAME -----')
+    print (canon_term)
 
     return canon_term, scale_factor
 
 
-def canonicalize_RDM(sqa_term, transRDM):
+def canonicalize_rdm(sqa_term, trans_rdm):
 
     # Find path rank of indices in term
     path_rank  = assign_path_rank(sqa_term)
@@ -264,7 +288,7 @@ def canonicalize_RDM(sqa_term, transRDM):
                     des_ext += 1
     
             # Reverse order of indices if there are more dummy des operators
-            if (cre_ext < des_ext) and (not transRDM):
+            if (cre_ext < des_ext) and (not trans_rdm):
                 rdm_ops.reverse()
                 reversed_rdm_ops = []
     
@@ -276,7 +300,7 @@ def canonicalize_RDM(sqa_term, transRDM):
                        reversed_rdm_ops.append(desOp(op.indices))
     
                 sqa_term.tensors.pop(t_ind)
-                sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, transRDM))
+                sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, trans_rdm))
     
         # Remove used path ranks elements
         path_rank = path_rank[len(t.indices):]
@@ -317,10 +341,9 @@ def assign_path_rank(sqa_term):
 
 def assign_space_rank(sqa_term):
 
-    space_rank_list = []
-
     # Store subspace information for all tensors in term
-    space_indices = []
+    space_indices   = []
+    space_rank_list = []
 
     for t in sqa_term.tensors:
          space_indices.extend(''.join([i.indType[0][0][0] for i in t.indices]))
@@ -347,6 +370,7 @@ def assign_space_rank(sqa_term):
 def check_intermediates(interm_list, int_term, int_tensor):
 
     isRedundant = False
+    print ('CHECKING ' + str(int_tensor.name) + '...')
 
     # Check every intermediate in the existing list
     for i, (list_term, list_tensor) in enumerate(interm_list):
@@ -372,6 +396,14 @@ def check_intermediates(interm_list, int_term, int_tensor):
                 
                    # Modify input term and return existing stored intermediate
                    isRedundant     = True
+                   print ('------------------------------')
+                   print (str(int_tensor.name) + ' IS REDUNDANT. NEXT INT CHECKED WILL HAVE THE SAME NAME')
+                   print ('STORED INTERMEDIATE TERM')
+                   print (list_tensor.name)
+                   print (list_term)
+                   print ('------------------------------')
+                   print ('')
+
                    int_term        = list_term.copy()
                    int_tensor.name = list_tensor.name
                    break
@@ -380,7 +412,6 @@ def check_intermediates(interm_list, int_term, int_tensor):
 
 
 def get_int_indices(sqa_tensor_list, ext_string):
-
 
     # Make copy of tensor list to modify
     new_tensor_list = sqa_tensor_list[:]
@@ -430,19 +461,6 @@ def get_int_indices(sqa_tensor_list, ext_string):
     return new_tensor_list, ext_ind_list, loop_ind_list
 
 
-def sort_terms(sorting_list, in_names, in_indices, in_symmetries):
-
-    zipped_info  = zip(sorting_list, in_names, in_indices, in_symmetries)
-    sorted_terms = sorted(zipped_info)
-
-    # Create sorted lists
-    out_names      = [name for _, name, _, _ in sorted_terms]
-    out_indices    = [indices for _, _, indices, _ in sorted_terms]
-    out_symmetries = [symmetries for _, _, _, symmetries in sorted_terms]
-
-    return out_names, out_indices, out_symmetries    
-
-
 def rank_sort_term(sqa_term):
 
     # Determine rank of tensors in term
@@ -452,59 +470,41 @@ def rank_sort_term(sqa_term):
         rank_sorted_term = sqa_term.copy()
 
     else:    
-        names       = [t.name for t in sqa_term.tensors]
-        indices     = [t.indices for t in sqa_term.tensors]
-        symmetries  = [t.symmetries for t in sqa_term.tensors]
-
         # Make unique value for each name
         rank_order = np.argsort(rank_list)[::-1]
-   
-        # Sort tensors in descending order by rank
-        rank_names, rank_indices, rank_symmetries = sort_terms(rank_order, names, indices, symmetries)
-    
-        # Make list of sqa tensors to create new term sorted by rank
-        rank_sorted_tensors = []
-    
-        for name, index, symmetry in zip(rank_names, rank_indices, rank_symmetries):
-            rank_sorted_tensors.append(tensor(name, index, symmetry))
-    
-        rank_sorted_term = term(1.0, [], rank_sorted_tensors)
+        rank_sorted_term = term(1.0, [], [sqa_term.tensors[i] for i in rank_order])    
 
     return rank_sorted_term, rank_list
 
 
 def name_sort_term(sqa_term, rank_list):
     
-    names       = [t.name for t in sqa_term.tensors]
-    indices     = [t.indices for t in sqa_term.tensors]
-    symmetries  = [t.symmetries for t in sqa_term.tensors]
-
     # Make list of sqa tensors to create new term sorted by name within each rank
     sorted_tensors = []
     unique_ranks   = set(rank_list)
 
     # Preserve descending rank
     while unique_ranks:
-        rank_names   = []
-        rank_indices = []
-        rank_syms    = []
-        max_rank     = max(unique_ranks)
 
-        for n, i, s in zip(names, indices, symmetries):
-            if int(len(i)) == int(max_rank):
-                rank_names.append(n)
-                rank_indices.append(i)
-                rank_syms.append(s)
+        # Make list for tensors with current maximum rank
+        max_rank_tensors = []
 
-        unicode_names = make_names(rank_names)
+        # Iterate through tensors
+        for tens in sqa_term.tensors:
 
-        # Sort tensors using unicode representation of their names
-        uni_names, uni_indices, uni_symmetries = sort_terms(unicode_names, rank_names, rank_indices, rank_syms)
+            # Append tensors with the largest rank to a list
+            if len(tens.indices) == max(unique_ranks):
+                max_rank_tensors.append(tens)
+
+        # Sort the tensors of max rank by name
+        names_to_sort = make_names([tens.name for tens in max_rank_tensors])
+        name_sort     = np.argsort(names_to_sort)[::-1]
  
-        for n, i, s in zip(uni_names, uni_indices, uni_symmetries):
-            sorted_tensors.append(tensor(n, i, s))
+        max_rank_tensors = [max_rank_tensors[i] for i in name_sort]
+        sorted_tensors.extend(max_rank_tensors)
 
-        unique_ranks.remove(max_rank)
+        # Remove maximum rank in this loop
+        unique_ranks.remove(max(unique_ranks))
 
     name_sorted_term = term(1.0, [], sorted_tensors)
 
