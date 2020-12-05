@@ -655,6 +655,16 @@ def print_header():
 
 def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_ind_str = None, suffix = None, rm_trans_rdm_const = False, rm_core_int = False, intermediate_list = None, opt_einsum_terms = True, optimize = True, help = False, **tensor_rename):
 
+    # Store custom names if provided by user
+    custom_names = []
+    if tensor_rename:
+        for old_name, new_name in tensor_rename.items():
+            custom_names.append((old_name, new_name))
+
+    # Default to 'temp' as name of matrix being created w/ einsum function
+    if not lhs_str:
+        lhs_str = 'temp'
+
     # Default to spin-orbital suffix if not defined by user
     if not suffix:
         suffix = 'so'
@@ -664,63 +674,72 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
     ################################################    
     if intermediate_list:
 
-        # Cannot currently rename the INT tensor, WIP
-        if 'INT' in [x for x,y in tensor_rename.items()]:
-            raise TypeError('Function does not currently support renaming intermediates')
+        # Create empty to list to store einsum expressions for provided intermediate terms
+        int_einsum_list = []
 
-        # Otherwise...
-        else:
+        # Determined which intermediates are defined w/ trans_rdm contraction
+        trans_int = []
+        if trans_rdm:
+            trans_int = get_trans_intermediates(intermediate_list)
 
-            # Create empty to list to store einsum expressions for provided intermediate terms
-            int_einsum_list = []
+        # If using effective Hamiltonian, remove double-counted contributions to core terms
+        if rm_core_int:
+            intermediate_list, removed_int = remove_core_int(intermediate_list, int_terms = True)
 
-            # TODO: INT TERMS GENERATED BEFORE CORE AND TRDM TERMS REMOVED. CHECK AND RENAME?
-            # Iterate through the list of provided intermediates
-            for int_ind, (int_term, int_tensor) in enumerate(intermediate_list):
+        # Iterate through the list of provided intermediates
+        for int_ind, (int_term, int_tensor) in enumerate(intermediate_list):
+ 
+            # Pass tensors of term to function to create string representation of contraction indices and tensor names
+            int_tensor_inds, int_tensor_names = get_tensor_info(intermediate_list[int_ind][0].tensors, trans_rdm, trans_ind_str, ''.join([i.name for i in intermediate_list[int_ind][1].indices]), suffix, trans_int, custom_names)
 
-                # Pass tensors of term to function to create string representation of contraction indices and tensor names
-                int_tensor_inds, int_tensor_names = get_tensor_info(intermediate_list[int_ind][0].tensors, trans_rdm, trans_ind_str, ''.join([i.name for i in intermediate_list[int_ind][1].indices]), suffix, **tensor_rename)
+            # Rename intermediates in tensor definitions
+            if custom_names:
+                if 'INT' in [x for x,y in custom_names]:
+                    new_name = make_custom_name(int_tensor, custom_names)
+                    int_einsum = new_name + ' = '
 
+            else:
                 int_einsum = int_tensor.name + ' = '
-
-                # Define term for either optEinsum or built-in Numpy 'einsum' function
-                if opt_einsum_terms:
-                    int_einsum += 'einsum('
-                else:
-                    int_einsum += 'np.einsum('
-
-                # Add contraction and tensor info
-                int_tensor_info = (', '.join([str("'") + int_tensor_inds + str("'")] + int_tensor_names))
-                int_einsum += int_tensor_info
-
-                # Add optimize flag to einsum if enabled
-                if optimize and opt_einsum_terms:
-                    int_einsum += ', optimize = einsum_type)'
-                elif optimize and not opt_einsum_terms:
-                    int_einsum += ', optimize = True)'
-                else:
-                    int_einsum += ')'
-   
-                # Append einsum definition to list, returned at the end of function
-                int_einsum_list.append(int_einsum)
-
+ 
+            # Define term for either optEinsum or built-in Numpy 'einsum' function
+            if opt_einsum_terms:
+                int_einsum += 'einsum('
+            else:
+                int_einsum += 'np.einsum('
+ 
+            # Add contraction and tensor info
+            int_tensor_info = (', '.join([str("'") + int_tensor_inds + str("'")] + int_tensor_names))
+            int_einsum += int_tensor_info
+ 
+            # Add optimize flag to einsum if enabled
+            if optimize and opt_einsum_terms:
+                int_einsum += ', optimize = einsum_type)'
+            elif optimize and not opt_einsum_terms:
+                int_einsum += ', optimize = True)'
+            else:
+                int_einsum += ')'
+ 
+            # Append einsum definition to list, returned at the end of function
+            int_einsum_list.append(int_einsum)
 
     ################################################    
     # GENERATE EINSUM EXPRESSIONS FOR PROVIDED TERMS
     ################################################    
 
     # Constants terms in CAS blocks are removed by default, print warning
-    if trans_rdm and rm_trans_rdm_const:
+    if trans_rdm and rm_trans_rdm_const and intermediate_list and trans_int:
+        terms, const_terms = remove_trans_rdm_const(terms, trans_int)
+
+    elif trans_rdm and rm_trans_rdm_const:
         terms, const_terms = remove_trans_rdm_const(terms)
 
     # If using effective Hamiltonian, remove double-counted contributions to core terms
-    if rm_core_int:
+    if intermediate_list and rm_core_int and removed_int:
+        terms, core_terms = remove_core_int(terms, removed_int)
+
+    elif rm_core_int:
         terms, core_terms = remove_core_int(terms)
     
-    # Default to 'temp' as name of matrix being created w/ einsum function
-    if not lhs_str:
-        lhs_str = 'temp'
-
     # Create empty list for storing einsums
     einsum_list = []
 
@@ -771,7 +790,10 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
             einsum += 'np.einsum('
 
         # Pass tensors of term to function to create string representation of contraction indices and tensor names
-        tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, **tensor_rename)
+        if trans_rdm and intermediate_list:
+            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, trans_int, custom_names)
+        else:
+            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, custom_names)
 
         # Add contraction and tensor info
         tensor_info = (', '.join([str("'") + tensor_inds + str("'")] + tensor_names))
@@ -799,7 +821,7 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
         return einsum_list
 
 
-def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, **tensor_rename):
+def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, trans_int = None, custom_names = None):
 
     # Pre-define list of names of tensors used in SQA and make list to store any new tensor 'types'
     tensor_names = []
@@ -830,6 +852,12 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, **te
                 orb_space += '_' + suffix
             tensor_name += orb_space + ')'
 
+            # Rename if custom name is provided
+            if custom_names:
+                if ('kdelta') in [x for x,y in custom_names]:
+                    new_name = make_custom_name(tens, custom_names)
+                    tensor_name = new_name + '_'
+
         # Handle special case of orbital energy vector
         elif len(tens.indices) == 1 and (tens.name == 'e' or tens.name == 'E'):
 
@@ -845,6 +873,11 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, **te
             if suffix:
                 orb_space += '_' + suffix
             tensor_name += orb_space
+
+            # Rename if custom name is provided
+            if custom_names:
+                if ('e' or 'E') in [x for x,y in custom_names]:
+                    tensor_name = make_custom_name(tens, custom_names)
 
         # Handle special case of RDM tensor
         elif isinstance(tens, creDesTensor):
@@ -862,6 +895,11 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, **te
             if suffix:
                 tensor_name += '_' + suffix
 
+            # Rename if custom name is provided
+            if custom_names:
+                if ('rdm') in [x for x,y in custom_names]:
+                    tensor_name = make_custom_name(tens, custom_names)
+
         # Name remaining tensors w/ same convention of orbital space and suffix
         elif tens.name == 'h' or tens.name == 'v' or tens.name == 't1' or tens.name == 't2':
             
@@ -878,10 +916,20 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, **te
             if suffix and tens.name != ('t1' or 't2'):
                 tensor_name += '_' + suffix
 
+            # Rename if custom name is provided
+            if custom_names:
+                if tens.name in [x for x,y in custom_names]:
+                    tensor_name = make_custom_name(tens, custom_names)
+
         # Account for intermediate tensors and any custom tensors
         else:
             # Make copy of tensor name
             tensor_name = '%s' % tens.name
+
+            # Allow to rename intermediate tensors in term definitions             
+            if custom_names:
+                if tens.name[:3] == 'INT' and 'INT' in [x for x,y in custom_names]:
+                    tensor_name = make_custom_name(tens, custom_names)
 
         # Append name of tensor (after and modifications due to special cases)
         tensor_names.append(tensor_name)
@@ -891,6 +939,9 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, **te
 
         # Append transition state index to appropriate set of indices
         if isinstance(tens, creDesTensor) and trans_rdm:
+            indices = trans_ind_str + indices
+
+        elif trans_int and tens.name in trans_int:
             indices = trans_ind_str + indices
 
         # Append completed index string to list
@@ -908,54 +959,107 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, **te
     return tensor_inds, tensor_names
 
 
-def remove_core_int(terms):
+def remove_core_int(terms, removed_int = None, int_terms = False):
 
-    print ('--------------------------------- WARNING ---------------------------------')
-    print ('Terms with a contraction over repeating dummy core indices of 2e- integrals')
-    print ('will be removed. Set "rm_core_int" flag to FALSE to preserve terms')
+    # Remove terms from standard term list
+    if not int_terms:
+        print ('--------------------------------- WARNING ---------------------------------')
+        print ('Terms with a contraction over repeating dummy core indices of 2e- integrals')
+        print ('will be removed. Set "rm_core_int" flag to FALSE to preserve terms')
+    
+        # Create lists to split up SQA terms
+        kept_terms = []
+        core_terms = []
+    
+        # Separate out the terms that have redundant 2e- integral contractions over core space
+        for term_ind, term in enumerate(terms):
+            coreTerm = False
+            for tens_ind, tens in enumerate(term.tensors):
+                if tens.name == 'v':
+                    if (
+                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
+                        or (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
+                        or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
+                        or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
+                    ):
+                        coreTerm = True
+                        break
 
-    # Create lists to split up SQA terms
-    kept_terms = []
-    core_terms = []
-
-    # Separate out the terms that have redundant 2e- integral contractions over core space
-    for term_ind, term in enumerate(terms):
-        coreTerm = False
-        for tens_ind, tens in enumerate(term.tensors):
-            if tens.name == 'v':
-                if (
-                    (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
-                    or (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
-                    or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
-                    or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
-                ):
+                elif removed_int and (tens.name in removed_int):
                     coreTerm = True
                     break
-       
-        # Append to either list based on coreTerm flag
-        if not coreTerm:
-            kept_terms.append(terms[term_ind])
-
-        else:
-            core_terms.append(terms[term_ind])
-
-    print ('')
-    print (str(len(core_terms)) + ' terms removed:')
-    for term in core_terms:
-        print (term)
+           
+            # Append to either list based on coreTerm flag
+            if not coreTerm:
+                kept_terms.append(terms[term_ind])
     
-    print ('---------------------------------------------------------------------------')
-    print ('Remaining terms: ' + str(len(kept_terms)))
-    print ('')
+            else:
+                core_terms.append(terms[term_ind])
+    
+        print ('')
+        print (str(len(core_terms)) + ' terms removed:')
+        for term in core_terms:
+            print (term)
+        
+        print ('---------------------------------------------------------------------------')
+        print ('Remaining terms: ' + str(len(kept_terms)))
+        print ('')
+    
+        return kept_terms, core_terms
 
-    return kept_terms, core_terms
+    # Filter through intermediate definitions
+    else:
+        print ('--------------------------------- WARNING ---------------------------------')
+        print ('Intermediate tensors defined w/ contractions over repeating dummy core indices of')
+        print ('2e- integrals will be removed. Set "rm_core_int" flag to FALSE to preserve definitions')
+
+        # Track which tensor definitions are removed and kept
+        removed_int   = []
+        removed_terms = []
+
+        # Determine which intermediate definitions to remove
+        for int_ind, (int_term, int_tensor) in enumerate(terms):
+            for tens in int_term.tensors:
+
+                # If intermediate is defined w/ 2e- integral
+                if tens.name == 'v':
+                    if (
+                        (tens.indices[0].name) == (tens.indices[2].name)
+                        or (tens.indices[0].name) == (tens.indices[3].name)
+                        or (tens.indices[1].name) == (tens.indices[2].name)
+                        or (tens.indices[1].name) == (tens.indices[3].name)
+                    ):
+                        removed_int.append(int_tensor.name)
+                        removed_terms.append(terms[int_ind])
+                        break
+
+                # If intermediate is defined in terms of one of the intermediates to be removed
+                elif tens.name in removed_int:
+                    removed_int.append(int_tensor.name)
+                    removed_terms.append(terms[int_ind])
+                    break
+
+        # If some intermediate definitions were removed
+        if removed_int:
+            print ('')
+            print (str(len(removed_int)) + ' definitions removed:')
+            for tens, term in zip(removed_int, removed_terms):
+                print (tens + ": " + str(term[0])) 
+        
+        print ('---------------------------------------------------------------------------')
+        print ('')
+
+        # Returned shortened intermediate list
+        terms = [t for t in terms if t not in removed_terms]
+
+        return terms, removed_int
 
 
-def remove_trans_rdm_const(terms):
+def remove_trans_rdm_const(terms, trans_int = None):
 
     print ('--------------------------------- WARNING ---------------------------------')
-    print ('tRDM constant terms are removed by default, this flag is "rm_trans_rdm_const"')
-    print ('Switch flag to FALSE to preserve terms')
+    print ('Terms w/o transRDM tensor in the expression will be removed. Set "rm_trans_rdm_const"')
+    print ('flag to FALSE to preserve terms')
 
     # Create lists to split up SQA terms
     const_terms     = []
@@ -969,6 +1073,9 @@ def remove_trans_rdm_const(terms):
             if isinstance(tensor, creOp) or isinstance(tensor, desOp) or isinstance(tensor, creDesTensor):
                 creDes = True
                 break       
+            elif trans_int and tensor.name in trans_int:
+                creDes = True
+                break
  
         # Append to either list based on creDes flag
         if not creDes:
@@ -987,6 +1094,35 @@ def remove_trans_rdm_const(terms):
     print ('')
 
     return trans_rdm_terms, const_terms
+
+
+def get_trans_intermediates(intermediate_list):
+
+    # Store which intermediates are contracted over transition index
+    trans_int = []
+
+    for int_term, int_tensor in intermediate_list:
+        if 'trdm' in [t.name for t in int_term.tensors]:
+             trans_int.append(int_tensor.name)
+        elif trans_int and int_tensor.name in trans_int:
+             trans_int.append(int_tensor.name)
+
+    return trans_int
+
+
+def make_custom_name(sqa_tensor, rename_tuple):
+
+    old_name = [old for old, new in rename_tuple]
+
+    if sqa_tensor.name[:3] == 'INT':
+        rename_index = old_name.index('INT')
+        new_name = rename_tuple[rename_index][1] + sqa_tensor.name[3:]
+
+    else:
+        rename_index = old_name.index(sqa_tensor.name)
+        new_name = rename_tuple[rename_index][1]
+
+    return new_name
 
 
 def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, suffix = None, rdm_str = None, help = False, **tensor_rename):

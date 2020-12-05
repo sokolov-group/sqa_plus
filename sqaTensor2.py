@@ -55,26 +55,27 @@ class creDesTensor(tensor):
 
         # Initialize symmetries
         self.symmetries = []
-        swapValues = range(len(self.indices)-1)
-        
-        if self.nCre > 0:
-            del(swapValues[self.nCre-1])
-        
-        for i in swapValues:
-            if i == 0:
-              temp_tup = (1,)
-            else:
-              temp_tup = (0,)
-
-            for j in range(1,len(self.indices)):
-                if j == i:
-                  temp_tup = temp_tup + (i+1,)
-                elif j == i+1:
-                  temp_tup = temp_tup + (i,)
+        if len(self.indices) > 1:
+            swapValues = range(len(self.indices)-1)
+            
+            if self.nCre > 0:
+                del(swapValues[self.nCre-1])
+            
+            for i in swapValues:
+                if i == 0:
+                  temp_tup = (1,)
                 else:
-                  temp_tup = temp_tup + (j,)
-
-            self.symmetries.append(symmetry(temp_tup, -1))
+                  temp_tup = (0,)
+    
+                for j in range(1,len(self.indices)):
+                    if j == i:
+                      temp_tup = temp_tup + (i+1,)
+                    elif j == i+1:
+                      temp_tup = temp_tup + (i,)
+                    else:
+                      temp_tup = temp_tup + (j,)
+    
+                self.symmetries.append(symmetry(temp_tup, -1))
 
         # Add bra/ket symmetries for ground-state RDMs
         if (len(self.indices) % 2 == 0) and self.trans_rdm == False:
