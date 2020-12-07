@@ -228,6 +228,9 @@ def make_canonical(int_term, trans_rdm):
             if isinstance(t, creDesTensor):
                 sorted_ops    = [t.ops[i] for i in canon_order]
                 sorted_tensor = creDesTensor(sorted_ops, trans_rdm)
+            elif isinstance(t, kroneckerDelta):
+                sorted_indices = [t.indices[i] for i in canon_order]
+                sorted_tensor  = kroneckerDelta(t.name, sorted_indices, t.symmetries)
             else:
                 sorted_indices = [t.indices[i] for i in canon_order]
                 sorted_tensor  = tensor(t.name, sorted_indices, t.symmetries)
