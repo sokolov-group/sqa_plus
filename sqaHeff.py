@@ -221,7 +221,6 @@ def dyallH(cc, aa, vv):
 # symmetry
  h1sym = [ symmetry((1,0),1)]
 # v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
-##### ADDED BRAKET SYMMETRY FOR 2e INTEGRALS
  v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1),  symmetry((2,3,0,1), 1)]
 #
  h1 =  tensor('h',[aa[1], aa[0]], h1sym)
@@ -287,7 +286,8 @@ def Vperturbation_type(cc, aa, vv, vtype = None):
        V.append( term(-1.0, [], [ten4, desOp(cor2), creOp(cor1), creOp(act1), desOp(act2)]))
 #   
        ten5 = ten4
-       ten6 =  tensor('gamma', [act2, act1], d1sym)
+       ten6 = creDesTensor([creOp(act2), desOp(act1)])
+#       ten6 =  tensor('gamma', [act2, act1], d1sym)
 #       V.append( term(-1.0, [], [ten5, ten6,  creOp(cor1), desOp(cor2)]))
        V.append( term(1.0, [], [ten5, ten6,  desOp(cor2), creOp(cor1)]))
 #   
@@ -468,6 +468,7 @@ def Vperturbation(cc, aa, vv):
  V = []
  V81 = []
  v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+ v2sym_braket = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1),  symmetry((2,3,0,1), 1)]
  h1sym = [ symmetry((1,0),1)]
  d1sym = [ symmetry((1,0),1)]
 
@@ -543,7 +544,8 @@ def Vperturbation(cc, aa, vv):
  act2 = aa.pop(0)
 
  ten7 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
- ten8 =  tensor('gamma', [act2, act1], d1sym)
+ ten8 =  creDesTensor([creOp(act2), desOp(act1)])
+ #ten8 =  tensor('gamma', [act2, act1], d1sym)
  V.append( term(1.0, [], [ten7, ten8,  desOp(cor2), creOp(cor1)]))
 
  cor1 = cc.pop(0)
@@ -553,7 +555,8 @@ def Vperturbation(cc, aa, vv):
  vir2 = vv.pop(0)
  act2 = aa.pop(0)
 
- ten8 =  tensor('gamma', [act2, act1], d1sym)
+ #ten8 =  tensor('gamma', [act2, act1], d1sym)
+ ten8 =  creDesTensor([creOp(act2), desOp(act1)])
  ten9 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
 # V.append( term(-1.0, [], [ten9, creOp(vir2), desOp(vir1), creOp(act2), desOp(act1)]))
  V.append( term(-1.0, [], [ten9, ten8,  creOp(vir1), desOp(vir2)]))
@@ -593,14 +596,16 @@ def Vperturbation(cc, aa, vv):
 #
                                    if (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core'):
 #                                       vTen = tensor('v', [r,s,p,q], v2sym)
-                                       vTen = tensor('v', [r,s,p,q], v2sym)
+                                       vTen = tensor('v', [r,s,p,q], v2sym_braket)
                                        V81.append(term(-0.25, [], [vTen, desOp(r), desOp(s), creOp(p), creOp(q)]))
+#
+                                   elif (p.indType[0][0]=='virtual' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='virtual'):
+                                       vTen = tensor('v', [r,s,p,q], v2sym_braket)
+                                       V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
 #
                                    else:
                                        vTen = tensor('v', [r,s,p,q], v2sym)
-#                                       vTen = tensor('v', [p,q,r,s], v2sym)
                                        V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
-#
  
  p = cc.pop(0)
  q = vv.pop(0)
@@ -913,7 +918,7 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, tran
                     tensor_name += 'e'
 
             # Append suffix
-            if suffix and tens.name != ('t1' or 't2'):
+            if not (tens.name == 't1' or tens.name == 't2') and suffix:
                 tensor_name += '_' + suffix
 
             # Rename if custom name is provided
