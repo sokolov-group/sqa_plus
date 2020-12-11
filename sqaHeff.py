@@ -947,7 +947,7 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, tran
             indices = trans_ind_str + indices
             ind_str = trans_ind_str + ind_str            
 
-        elif trans_int and tens.name in trans_int:
+        elif trans_int and (tens.name in trans_int):
             indices = trans_ind_str + indices
             ind_str = trans_ind_str + ind_str            
 
@@ -1076,7 +1076,7 @@ def remove_trans_rdm_const(terms, trans_int = None):
             if isinstance(tensor, creOp) or isinstance(tensor, desOp) or isinstance(tensor, creDesTensor):
                 creDes = True
                 break       
-            elif trans_int and tensor.name in trans_int:
+            elif trans_int and tensor.name not in trans_int:
                 creDes = True
                 break
  
@@ -1102,15 +1102,26 @@ def remove_trans_rdm_const(terms, trans_int = None):
 def get_trans_intermediates(intermediate_list):
 
     # Store which intermediates are contracted over transition index
-    trans_int = []
+    trans_int_list = []
 
+    # Iterate through list of intermediates
     for int_term, int_tensor in intermediate_list:
-        if 'trdm' in [t.name for t in int_term.tensors]:
-             trans_int.append(int_tensor.name)
-        elif trans_int and int_tensor.name in trans_int:
-             trans_int.append(int_tensor.name)
 
-    return trans_int
+        # Make list of tensors that define intermediates
+        ten_list = [t.name for t in int_term.tensors]
+
+        # Check if one of the tensors is a tRDM
+        if 'trdm' in ten_list:
+             trans_int_list.append(int_tensor.name)
+
+        # If an intermediate is defined in terms of another intermediate, make sure that intermediate
+        # isn't defined w/ a tRDM
+        elif trans_int_list:
+             for trans_int in trans_int_list:
+                 if trans_int in ten_list:
+                     trans_int_list.append(int_tensor.name)
+
+    return trans_int_list
 
 
 def make_custom_name(sqa_tensor, rename_tuple):
