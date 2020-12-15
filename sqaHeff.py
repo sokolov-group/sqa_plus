@@ -1058,7 +1058,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
         return terms, removed_int
 
 
-def remove_trans_rdm_const(terms, trans_int = None):
+def remove_trans_rdm_const(terms, trans_int_list = None):
 
     print ('--------------------------------- WARNING ---------------------------------')
     print ('Terms w/o transRDM tensor in the expression will be removed. Set "rm_trans_rdm_const"')
@@ -1076,9 +1076,13 @@ def remove_trans_rdm_const(terms, trans_int = None):
             if isinstance(tensor, creOp) or isinstance(tensor, desOp) or isinstance(tensor, creDesTensor):
                 creDes = True
                 break       
-            elif trans_int and tensor.name not in trans_int:
-                creDes = True
-                break
+
+            elif trans_int_list:
+                tens_list = [tns.name for tns in term.tensors]
+                for trans_int in trans_int_list:
+                    if trans_int in tens_list:
+                        creDes = True
+                        break
  
         # Append to either list based on creDes flag
         if not creDes:
