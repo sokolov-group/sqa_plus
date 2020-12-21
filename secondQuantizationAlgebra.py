@@ -104,7 +104,6 @@ from sqaAddon import matrixBlock,\
 
 from sqaHeff import Heff,           \
   Tamplitude, Vperturbation_type,   \
-  Vperturbation, generateEinsum,    \
-  genEinsum, remove_trans_rdm_const,\
-  remove_core_int, sqalatex, getT,  \
-  getV
+  Vperturbation, genEinsum,         \
+  remove_trans_rdm_const, sqalatex, \
+  remove_core_int, getT, getV

@@ -1127,6 +1127,28 @@ def make_custom_name(sqa_tensor, rename_tuple):
     return new_name
 
 
+def custom_tensor(tname, *tup):
+
+# Switch symmetry either one of (bra / ket) or both
+# Implemented only for T2 tensors
+ ind = list(tup)
+ if (len(ind) != 4):
+    raise Exception("Implemented only for 4 indices, not for %s ." % (len(ind)))
+ else:
+    if (ind[0].indType == ind[1].indType) and (ind[2].indType == ind[3].indType):
+       symm  =  [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
+    elif (ind[0].indType == ind[1].indType) and (ind[2].indType != ind[3].indType):
+       symm  =  [ symmetry((1,0,2,3),-1)]
+    elif (ind[0].indType != ind[1].indType) and (ind[2].indType == ind[3].indType):
+       symm  =  [ symmetry((0,1,3,2), -1)]
+    else:
+       symm  = []
+
+ tname_tensor= tensor(tname, ind, symm)
+
+ return tname_tensor
+
+
 def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = True):
 
  if not output:
