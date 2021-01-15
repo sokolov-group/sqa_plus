@@ -14,7 +14,7 @@ from sqaSymmetry import symmetry
 from sqaCommutator import commutator
 
 
-def genIntermediates(input_terms, ind_str = None, trans_rdm = False, factor_depth = 1, print_level = 4):
+def genIntermediates(input_terms, ind_str = None, trans_rdm = False, custom_path = None, factor_depth = 1, print_level = 4):
 
     if factor_depth < 0 or not isinstance(factor_depth, int):
         raise ValueError('Invalid factor depth provided -- provide integer value that is >= 0') 
@@ -83,9 +83,8 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, factor_dept
                     # Add key/value pair
                     sizes_dict[i.name] = size
 
-        lhs_str = ','.join(lhs_str)            
-        rhs_str = '->' + ind_str
-        einsum_string = lhs_str + rhs_str
+        # Make einsum string
+        einsum_string = str(','.join(lhs_str) + '->' + ind_str)
 
         # Construct dummy tensors for term in order to assess contraction path
         dummy_tens = []
@@ -109,12 +108,43 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, factor_dept
         # Determine if opt_einsum will improve scaling of contraction
         if naive > opt:
 
-            # Save tuples that indicate optimized order of contracting tensors
-            contract_order = [contract for contract in path_info[0][1:1 + factor_depth]]
-            
-            # Determine contraction path and indices of intermediates
-            split_path     = path_info[1].split('\n')[10:10 + factor_depth]
-            int_indices    = [str(line).split()[1].split('->')[1] for line in split_path]
+            # If an order of contracting tensors is specified
+            if custom_path:
+
+                # Make copy of user-defined contraction order
+                contract_order = custom_path[:]
+
+                # Make list of indices for all intermediates
+                int_indices = []
+               
+                # Get all indices involved in contraction
+                for contract in contract_order:
+                    tens_inds       = [lhs_str[i] for i in contract]
+                    contracted_inds = ''.join([lhs_str[i] for i in contract])
+
+                    # Construct string out of indices not contracted over
+                    int_ind = ''
+                    
+                    for i in contracted_inds:
+                        if contracted_inds.count(i) == 1:
+                            int_ind += i
+
+                    # Append to list of intermediate indices
+                    int_indices.append(int_ind)
+                   
+                    # Modify lhs_string to include intermediate indices
+                    lhs_str = [inds for inds in lhs_str if inds not in tens_inds]
+                    lhs_str.append(int_ind)
+
+            # Standard procedure for generating contraction path
+            else:
+
+                # Save tuples that indicate optimized order of contracting tensors
+                contract_order = [contract for contract in path_info[0][1:1 + factor_depth]]
+                
+                # Determine contraction path and indices of intermediates
+                split_path     = path_info[1].split('\n')[10:10 + factor_depth]
+                int_indices    = [str(line).split()[1].split('->')[1] for line in split_path]
 
             # Define scale outside of loop
             scale_factor_total = 1.0
