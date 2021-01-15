@@ -54,19 +54,38 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, factor_dept
             tensorlist.append(rdm_tensor)
             tensor_indices_list.append([ind for ind in rdm_tensor.indices])
 
-        ## Create einsum string
+        # Create einsum string and dictionary of index sizes
         lhs_str = []
-        for ten in tensor_indices_list:
-            lhs_str.append(''.join([i.name for i in ten]))
+        sizes_dict = dict()
+
+        # Loop through lists of indices for each tensor in term
+        for ind_list in tensor_indices_list:
+
+            # Make LHS string
+            lhs_str.append(''.join([i.name for i in ind_list]))
+
+            # Define lengths of unique indices
+            for i in ind_list:
+
+                # Only add new indices to dictionary of index sizes
+                if i.name not in sizes_dict.keys():
+                
+                    size = None
+
+                    # Weigh size of index by subspace
+                    if i.indType[0][0][0] == 'a':
+                        size = 2
+                    elif i.indType[0][0][0] == 'c':
+                        size = 4
+                    else:
+                        size = 6
+
+                    # Add key/value pair
+                    sizes_dict[i.name] = size
 
         lhs_str = ','.join(lhs_str)            
         rhs_str = '->' + ind_str
         einsum_string = lhs_str + rhs_str
-
-        # Create dictionary w/ indices as keys and value corresponding to dimension of that index
-        unique_inds = set(einsum_string) - {',', '-', '>'}
-        index_size = [2] * len(unique_inds)
-        sizes_dict = dict(zip(unique_inds, index_size))
 
         # Construct dummy tensors for term in order to assess contraction path
         dummy_tens = []
@@ -75,7 +94,7 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, factor_dept
             dims = []
             
             for index in t.indices:
-                dims.append(sizes_dict[str(index.name)])
+                dims.append(sizes_dict[index.name])
 
             dummy_tens.append(np.empty(tuple(dims)))
 
