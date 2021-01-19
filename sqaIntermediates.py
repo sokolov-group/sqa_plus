@@ -114,11 +114,26 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, custom_path
                 # Make copy of user-defined contraction order
                 contract_order = custom_path[:]
 
+                ################
+                # Check that requested contractions are in-range
+                for con, contract in enumerate(contract_order):
+
+                    # Check that contraction path can be performed
+                    i_ind, j_ind = contract
+
+                    if j_ind >= len(lhs_str):
+                         print ("###################################################################")
+                         print ("WARNING: Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
+                         print ("###################################################################\n")
+                         contract_order.pop(con)
+                ################
+
                 # Make list of indices for all intermediates
                 int_indices = []
-               
+
                 # Get all indices involved in contraction
                 for contract in contract_order:
+
                     tens_inds       = [lhs_str[i] for i in contract]
                     contracted_inds = ''.join([lhs_str[i] for i in contract])
 
