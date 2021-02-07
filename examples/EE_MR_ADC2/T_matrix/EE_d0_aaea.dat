@@ -1,0 +1,36 @@
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) d_ae_so(x,A) cre(Z) cre(x) des(X) des(Y) 
+
+Total terms : 1
+SQA automation time :  0.001 seconds
+--------------------------------- WARNING ---------------------------------
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+
+0 terms removed:
+---------------------------------------------------------------------------
+Remaining terms: 1
+
+temp  = einsum('xA,ZxXY->XYAZ', d_ae_so, rdm_ccaa_so, optimize = einsum_type)
