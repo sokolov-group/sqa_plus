@@ -40,27 +40,41 @@ l_ind = 'IX'
 
 
 # RHS
-r_op  = [sqa.creOp(y), sqa.desOp(j)] # CA
-r_ind = 'JY'                                                         
+#r_op  = [sqa.creOp(y), sqa.desOp(j)] # CA
+#r_ind = 'JY'                                                         
 
 #r_op  = [sqa.creOp(b), sqa.desOp(j)] # CE
 #r_ind = 'JB'                                                         
 
-#r_op  = [sqa.creOp(b), sqa.desOp(y)] # AE
-#r_ind = 'YB'                                                         
+r_op  = [sqa.creOp(b), sqa.desOp(y)] # AE
+r_ind = 'YB'                                                         
 
+
+l_op_term = sqa.term(1.0, [], l_op)
+r_op_term = sqa.term(1.0, [], r_op)
 
 # Define Hamiltonian
 effH = []
 effH = sqa.Heff(2)
 
-sym_tens = []
-sym_tens.extend(l_op)
-sym_tens.extend(effH)
-sym_tens.extend(r_op)
+term1 = []
+for t in effH:
+    tt = sqa.multiplyTerms(l_op_term, t)
+    term1.append(tt)
 
-term1 = sqa.term(1.0, [], sym_tens)
+term2 = []
+for t in term1:
+    tt = sqa.multiplyTerms(t, r_op_term)
+    term2.append(tt)
 
-term2 = sqa.matrixBlock(term1)
+sym_term = []
+for t in term2:
+    tt = sqa.normalOrder(t)
+    sym_term.extend(tt)
 
-sqa.generateEinsum(term2, 'temp', str(l_ind + r_ind), "")
+term4 = sqa.matrixBlock(sym_term)
+
+einsum_list = sqa.genEinsum(term4, 'temp', l_ind + r_ind, rm_core_int = True)
+for einsum in einsum_list:
+    print (einsum)
+
