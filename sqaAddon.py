@@ -127,13 +127,14 @@ def dummyLabel(nterms):
     virtInd = list('abcdefgh')
 #
     for t_tensor in t.tensors:
-#
+
         for t_tensor_index in range(len(t_tensor.indices)):
 #
             # Decide which new label to assign
             index_type = t_tensor.indices[t_tensor_index].indType
             index_name = t_tensor.indices[t_tensor_index].name
             index_summed = t_tensor.indices[t_tensor_index].isSummed
+
             if index_summed:
                 if len(index_type) > 1:
                     raise Exception('This code does not support general indices for now')
