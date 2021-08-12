@@ -106,4 +106,5 @@ from sqaHeff import Heff,           \
   Tamplitude, Vperturbation_type,   \
   Vperturbation, genEinsum,         \
   remove_trans_rdm_const, sqalatex, \
-  remove_core_int, getT, getV
+  remove_core_int, getT, getV,      \
+  analyzeTerm

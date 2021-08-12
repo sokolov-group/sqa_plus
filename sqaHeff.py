@@ -1384,3 +1384,95 @@ def getV(cc = None, aa = None, vv = None):
 #
  return V
 #
+
+
+#############################
+def analyzeTerm(input_terms, max_act_ind):
+
+    # Initialize counters
+    max_dim = 0
+    max_dim_term = 0
+    removed_terms = []
+
+    for t_num, term in enumerate(input_terms, 1):
+        print ('##### Term #{} #####'.format(t_num))
+        print (term)
+        print ('num of tensors: ', len(term.tensors))
+
+        core_cre = 0
+        core_des = 0
+        act_cre = 0
+        act_des = 0
+        ext_cre = 0
+        ext_des = 0
+
+
+        # Iterate through every tensor in term's contraction
+        for tensor in term.tensors:
+
+            # Track largest contraction
+            if max_dim < len(term.tensors):
+                max_dim = len(term.tensors)
+                max_dim_term = int(t_num)
+
+            # Counting particle and hole operators in subspaces
+            if isinstance(tensor, creOp):
+
+                index = tensor.indices[0]  
+
+                if index.indType[0][0][0] == 'c':
+                    core_cre += 1
+
+                if index.indType[0][0][0] == 'a':
+                    act_cre += 1
+
+                if index.indType[0][0][0] == 'v':
+                    ext_cre += 1
+
+            elif isinstance(tensor, desOp):
+                
+                index = tensor.indices[0]  
+                
+                if index.indType[0][0][0] == 'c':
+                    core_des += 1
+
+                if index.indType[0][0][0] == 'a':
+                    act_des += 1
+
+                if index.indType[0][0][0] == 'v':
+                    ext_des += 1
+
+            else:
+
+                 print (tensor)
+
+        print ('core_cre: ', core_cre)
+        print ('core_des: ', core_des)
+        print ('act_cre: ' , act_cre)
+        print ('act_des: ' , act_des)
+        print ('ext_cre: ' , ext_cre)
+        print ('ext_des: ' , ext_des)
+
+        # Filter out terms with more than request active indices
+        if (act_cre + act_des) > max_act_ind:
+
+            print ('####################################') 
+	    print ('Term exceeds the maximum amount of active indices requested. Removing...') 
+            print ('####################################') 
+
+            removed_terms.append(input_terms[t_num])
+            input_terms.pop(t_num)
+
+        print ('\n')
+
+    print ('Term #{} has largest tensor contraction'.format(max_dim_term))
+    print (input_terms[max_dim_term - 1])
+    print (str(max_dim) + ' tensors in contraction')
+
+    print (str(len(removed_terms)) + ' terms removed')
+
+
+    return input_terms, removed_terms
+
+
+
