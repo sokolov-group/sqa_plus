@@ -149,55 +149,55 @@ def Heff(order, internal_excit = True):
     T1 = Tamplitude(1, cc1, aa1, vv1)
     com2 = commutator(V, T1)
 
-##### APPROX H(2) ##
-########
-###    for t in com2:
-###       t.scale(0.5)
-########
+## APPROX H(2) ##
+#####
+    for t in com2:
+       t.scale(0.5)
+#####
 
     print "Second Commutation: Done ..."
     sys.stdout.flush()
 #
     L.extend(com2)              # 2nd Commutator
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(10):
-       cc1.append(cc.pop(0))
-       aa1.append(aa.pop(0))
-       vv1.append(vv.pop(0))
-#
-    effH = dyallH(cc1, aa1, vv1)
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(30):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-    T1_new1 = Tamplitude(1, cc1, aa1, vv1)
-#
-    com3 = commutator(effH, T1_new1)
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(30):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-    T1_new2 = Tamplitude(1, cc1, aa1, vv1)
-#
-    com4 = commutator(com3, T1_new2)
-    print "Third Commutation: Done ..."
-    sys.stdout.flush()
-#
-    for t in com4:
-       t.scale(0.5)
-    L.extend(com4)              # 3rd Commutator
-#
+####
+###    cc1 = []
+###    aa1 = []
+###    vv1 = []
+###    for i in range(10):
+###       cc1.append(cc.pop(0))
+###       aa1.append(aa.pop(0))
+###       vv1.append(vv.pop(0))
+####
+###    effH = dyallH(cc1, aa1, vv1)
+####
+###    cc1 = []
+###    aa1 = []
+###    vv1 = []
+###    for i in range(30):
+###        cc1.append(cc.pop(0))
+###        aa1.append(aa.pop(0))
+###        vv1.append(vv.pop(0))
+###    T1_new1 = Tamplitude(1, cc1, aa1, vv1)
+####
+###    com3 = commutator(effH, T1_new1)
+####
+###    cc1 = []
+###    aa1 = []
+###    vv1 = []
+###    for i in range(30):
+###        cc1.append(cc.pop(0))
+###        aa1.append(aa.pop(0))
+###        vv1.append(vv.pop(0))
+###    T1_new2 = Tamplitude(1, cc1, aa1, vv1)
+####
+###    com4 = commutator(com3, T1_new2)
+###    print "Third Commutation: Done ..."
+###    sys.stdout.flush()
+####
+###    for t in com4:
+###       t.scale(0.5)
+###    L.extend(com4)              # 3rd Commutator
+####
  else:
     raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
 #
