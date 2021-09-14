@@ -721,6 +721,21 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
     ################################################    
     # GENERATE EINSUM EXPRESSIONS FOR PROVIDED TERMS
     ################################################    
+    ## CONVERT ALL CRE/DES OBJECTS to CREDESTENSOR OBJECT
+    for term_ind, term in enumerate(terms):
+
+        # List for storing cre/des operators
+        credes_ops = []
+
+        # Append all cre/des operators to list
+        for tens in term.tensors:
+            if isinstance(tens, creOp) or isinstance(tens, desOp):
+                credes_ops.append(tens)
+
+        # Modify term in list to use creDesTensor object instead of cre/des objects
+        if credes_ops:
+            terms[term_ind].tensors = [ten for ten in terms[term_ind].tensors if ten not in credes_ops]
+            terms[term_ind].tensors.append(creDesTensor(credes_ops, trans_rdm))
 
     # Constants terms in CAS blocks are removed by default, print warning
     if trans_rdm and rm_trans_rdm_const and intermediate_list and trans_int:
@@ -741,20 +756,6 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
 
     # Iterate through terms and create einsum expressions
     for term_ind, term in enumerate(terms):
-
-        ## CONVERT ALL CRE/DES OBJECTS to CREDESTENSOR OBJECT
-        # List for storing cre/des operators
-        credes_ops = []
-
-        # Append all cre/des operators to list
-        for tens in term.tensors:
-            if isinstance(tens, creOp) or isinstance(tens, desOp):
-                credes_ops.append(tens)
-
-        # Modify term in list to use creDesTensor object instead of cre/des objects
-        if credes_ops:
-            terms[term_ind].tensors = [ten for ten in terms[term_ind].tensors if ten not in credes_ops]
-            terms[term_ind].tensors.append(creDesTensor(credes_ops, trans_rdm))
 
         ## PROCEED WITH GENERATING EINSUMS
         # Start to define einsum string
@@ -1064,7 +1065,8 @@ def remove_trans_rdm_const(terms, trans_int_list = None):
         creDes = False
 
         for tensor in term.tensors:
-            if isinstance(tensor, creOp) or isinstance(tensor, desOp) or isinstance(tensor, creDesTensor):
+#            if isinstance(tensor, creOp) or isinstance(tensor, desOp) or isinstance(tensor, creDesTensor):
+            if isinstance(tensor, creDesTensor) and tensor.trans_rdm:
                 creDes = True
                 break       
 
