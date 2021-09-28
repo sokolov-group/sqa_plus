@@ -107,4 +107,4 @@ from sqaHeff import Heff,           \
   Vperturbation, genEinsum,         \
   remove_trans_rdm_const, sqalatex, \
   remove_core_int, getT, getV,      \
-  analyzeTerm
+  analyzeTerm, generateEinsum
