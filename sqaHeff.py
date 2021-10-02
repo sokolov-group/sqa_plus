@@ -649,7 +649,7 @@ def Vperturbation(cc, aa, vv):
 
 #####################################
 
-def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_ind_str = None, suffix = None, rm_trans_rdm_const = False, rm_core_int = False, intermediate_list = None, opt_einsum_terms = True, optimize = True, help = False, **tensor_rename):
+def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_ind_str = None, suffix = None, cvs_ind = None, rm_trans_rdm_const = False, rm_core_int = False, intermediate_list = None, opt_einsum_terms = True, optimize = True, help = False, **tensor_rename):
 
     # Store custom names if provided by user
     custom_names = []
@@ -818,7 +818,7 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
         return einsum_list
 
 
-def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, trans_int = None, custom_names = None):
+def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, trans_int = None, cvs_ind = None, custom_names = None):
 
     # Pre-define list of names of tensors used in SQA and make list to store any new tensor 'types'
     tensor_names = []
@@ -1135,6 +1135,33 @@ def make_custom_name(sqa_tensor, rename_tuple):
 
     return new_name
 
+
+def make_CVS_names(input_tensor, cvs_ind):
+
+    if len(cvs_ind) != 1:
+        raise Exception("Implemented only for one CVS index, not for %s ." % len(cvs_ind))
+    
+
+    # Make a list out of the user-provided external indices
+    ext_ind = list(ind_str)
+
+    # Iterate through terms
+    for t_num, term in enumerate(input_terms):
+
+        # Iterate through every tensor in term's contraction
+        for tt_num, tensor in enumerate(term.tensors):
+
+            # Make a list out of the indices of the tensor
+            tens_inds = [i.name for i in tensor.indices]
+
+            # Check if tensor has external index
+            if 
+
+
+            exit()
+
+
+    return mod_terms
 
 def custom_tensor(tname, *tup):
 
