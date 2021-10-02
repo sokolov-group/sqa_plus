@@ -646,8 +646,49 @@ def Vperturbation(cc, aa, vv):
 
  return V
 
+#
+def getT(order = 1, cc = None, aa = None, vv = None):
+ "Get T amplitudes (order)."
+#
+ tg_c = options.core_type
+ tg_a = options.active_type
+ tg_v = options.virtual_type
+ tg_g = tg_c + tg_a + tg_v
+ dummy = True
+#
+ if not cc:
+   cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
+ if not aa:
+   aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
+ if not vv:
+   vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
+#
+ T = Tamplitude(order, cc, aa, vv)
+#
+ return T
 
-#####################################
+
+def getV(cc = None, aa = None, vv = None):
+ "Get V pertubation terms."
+#
+ tg_c = options.core_type
+ tg_a = options.active_type
+ tg_v = options.virtual_type
+ tg_g = tg_c + tg_a + tg_v
+ dummy = True
+#
+ if not cc:
+   cc = [index('c%i' %p, [tg_c], dummy) for p in range(200)]
+ if not aa:
+   aa = [index('a%i' %p, [tg_a], dummy) for p in range(200)]
+ if not vv:
+   vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
+#
+ V = Vperturbation(cc, aa, vv)
+#
+ return V
+#
+
 
 def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_ind_str = None, suffix = None, cvs_ind = None, rm_trans_rdm_const = False, rm_core_int = False, intermediate_list = None, opt_einsum_terms = True, optimize = True, help = False, **tensor_rename):
 
@@ -686,7 +727,7 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
         for int_ind, (int_term, int_tensor) in enumerate(intermediate_list):
  
             # Pass tensors of term to function to create string representation of contraction indices and tensor names
-            int_tensor_inds, int_tensor_names = get_tensor_info(intermediate_list[int_ind][0].tensors, trans_rdm, trans_ind_str, ''.join([i.name for i in intermediate_list[int_ind][1].indices]), suffix, trans_int, custom_names)
+            int_tensor_inds, int_tensor_names = get_tensor_info(intermediate_list[int_ind][0].tensors, trans_rdm, trans_ind_str, ''.join([i.name for i in intermediate_list[int_ind][1].indices]), suffix, cvs_ind, trans_int, custom_names)
 
             # Rename intermediates in tensor definitions
             if custom_names:
@@ -788,9 +829,9 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
 
         # Pass tensors of term to function to create string representation of contraction indices and tensor names
         if trans_rdm and intermediate_list:
-            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, trans_int, custom_names)
+            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_ind, trans_int, custom_names)
         else:
-            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, custom_names)
+            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_ind, custom_names)
 
         # Add contraction and tensor info
         tensor_info = (', '.join([str("'") + tensor_inds + str("'")] + tensor_names))
@@ -818,7 +859,7 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
         return einsum_list
 
 
-def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, trans_int = None, cvs_ind = None, custom_names = None):
+def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_ind = None, trans_int = None, custom_names = None):
 
     # Pre-define list of names of tensors used in SQA and make list to store any new tensor 'types'
     tensor_names = []
@@ -1138,9 +1179,8 @@ def make_custom_name(sqa_tensor, rename_tuple):
 
 def make_CVS_names(input_tensor, cvs_ind):
 
-    if len(cvs_ind) != 1:
-        raise Exception("Implemented only for one CVS index, not for %s ." % len(cvs_ind))
-    
+#    if len(cvs_ind) != 1:
+#        raise Exception("Implemented only for one CVS index, not for %s ." % len(cvs_ind))
 
     # Make a list out of the user-provided external indices
     ext_ind = list(ind_str)
@@ -1163,6 +1203,66 @@ def make_CVS_names(input_tensor, cvs_ind):
 
     return mod_terms
 
+
+def analyzeTerm(input_terms, max_act_ind):
+
+    # Make empty list for removed terms
+    kept_terms    = []
+    removed_terms = []
+
+    for t_num, term in enumerate(input_terms):
+
+        core_cre = 0
+        core_des = 0
+        act_cre = 0
+        act_des = 0
+        ext_cre = 0
+        ext_des = 0
+
+        # Iterate through every tensor in term's contraction
+        for tensor in term.tensors:
+
+            # Counting particle and hole operators in subspaces
+            if isinstance(tensor, creOp):
+
+                index = tensor.indices[0]  
+
+                if index.indType[0][0][0] == 'c':
+                    core_cre += 1
+
+                if index.indType[0][0][0] == 'a':
+                    act_cre += 1
+
+                if index.indType[0][0][0] == 'v':
+                    ext_cre += 1
+
+            elif isinstance(tensor, desOp):
+                
+                index = tensor.indices[0]  
+                
+                if index.indType[0][0][0] == 'c':
+                    core_des += 1
+
+                if index.indType[0][0][0] == 'a':
+                    act_des += 1
+
+                if index.indType[0][0][0] == 'v':
+                    ext_des += 1
+
+
+        # Filter out terms with more than request active indices
+        if (act_cre + act_des) > max_act_ind:
+            removed_terms.append(input_terms[t_num])
+
+        else:
+            kept_terms.append(input_terms[t_num])
+
+    return kept_terms, removed_terms
+
+
+###########################################################
+############### KOUSHIK OLD EINSUM CODE ###################
+###########################################################
 def custom_tensor(tname, *tup):
 
 # Switch symmetry either one of (bra / ket) or both
@@ -1674,104 +1774,3 @@ def custom_tensor(tname, *tup):
  tname_tensor= tensor(tname, ind, symm)
 
  return tname_tensor
-
-
-#
-def getT(order = 1, cc = None, aa = None, vv = None):
- "Get T amplitudes (order)."
-#
- tg_c = options.core_type
- tg_a = options.active_type
- tg_v = options.virtual_type
- tg_g = tg_c + tg_a + tg_v
- dummy = True
-#
- if not cc:
-   cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
- if not aa:
-   aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
- if not vv:
-   vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
-#
- T = Tamplitude(order, cc, aa, vv)
-#
- return T
-
-
-def getV(cc = None, aa = None, vv = None):
- "Get V pertubation terms."
-#
- tg_c = options.core_type
- tg_a = options.active_type
- tg_v = options.virtual_type
- tg_g = tg_c + tg_a + tg_v
- dummy = True
-#
- if not cc:
-   cc = [index('c%i' %p, [tg_c], dummy) for p in range(200)]
- if not aa:
-   aa = [index('a%i' %p, [tg_a], dummy) for p in range(200)]
- if not vv:
-   vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
-#
- V = Vperturbation(cc, aa, vv)
-#
- return V
-#
-
-
-#############################
-def analyzeTerm(input_terms, max_act_ind):
-
-    # Make empty list for removed terms
-    kept_terms    = []
-    removed_terms = []
-
-    for t_num, term in enumerate(input_terms):
-
-        core_cre = 0
-        core_des = 0
-        act_cre = 0
-        act_des = 0
-        ext_cre = 0
-        ext_des = 0
-
-        # Iterate through every tensor in term's contraction
-        for tensor in term.tensors:
-
-            # Counting particle and hole operators in subspaces
-            if isinstance(tensor, creOp):
-
-                index = tensor.indices[0]  
-
-                if index.indType[0][0][0] == 'c':
-                    core_cre += 1
-
-                if index.indType[0][0][0] == 'a':
-                    act_cre += 1
-
-                if index.indType[0][0][0] == 'v':
-                    ext_cre += 1
-
-            elif isinstance(tensor, desOp):
-                
-                index = tensor.indices[0]  
-                
-                if index.indType[0][0][0] == 'c':
-                    core_des += 1
-
-                if index.indType[0][0][0] == 'a':
-                    act_des += 1
-
-                if index.indType[0][0][0] == 'v':
-                    ext_des += 1
-
-
-        # Filter out terms with more than request active indices
-        if (act_cre + act_des) > max_act_ind:
-            removed_terms.append(input_terms[t_num])
-
-        else:
-            kept_terms.append(input_terms[t_num])
-
-    return kept_terms, removed_terms
