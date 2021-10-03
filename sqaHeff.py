@@ -969,11 +969,15 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                 if tens.name[:3] == 'INT' and 'INT' in [x for x,y in custom_names]:
                     tensor_name = make_custom_name(tens, custom_names)
 
-        # Append name of tensor (after and modifications due to special cases)
-        tensor_names.append(tensor_name)
-
         # Create indices of tensor as string
         indices = ''.join([i.name for i in tens.indices])
+
+        # Append 'slices' to appropiate dimensions of tensors w/ CVS core indices
+        if cvs_ind is not None:
+            tensor_name = append_CVS_slice(tensor_name, indices, cvs_ind)
+        
+        # Append name of tensor (after and modifications due to special cases)
+        tensor_names.append(tensor_name)
 
         # Append transition state index to appropriate set of indices
         if isinstance(tens, creDesTensor) and tens.trans_rdm:
@@ -1177,31 +1181,38 @@ def make_custom_name(sqa_tensor, rename_tuple):
     return new_name
 
 
-def make_CVS_names(input_tensor, cvs_ind):
-
-#    if len(cvs_ind) != 1:
-#        raise Exception("Implemented only for one CVS index, not for %s ." % len(cvs_ind))
+def append_CVS_slice(tens_name, tens_indices, cvs_ind):
 
     # Make a list out of the user-provided external indices
-    ext_ind = list(ind_str)
+    cvs_ind      = list(cvs_ind)
+    tens_indices = list(tens_indices)
 
-    # Iterate through terms
-    for t_num, term in enumerate(input_terms):
+    # Check whether tensor name needs an additional slice 
+    num_cvs = len([ind for ind in tens_indices if ind in cvs_ind])
 
-        # Iterate through every tensor in term's contraction
-        for tt_num, tensor in enumerate(term.tensors):
+    if num_cvs > 0:
 
-            # Make a list out of the indices of the tensor
-            tens_inds = [i.name for i in tensor.indices]
+        # Make 'starting' string to append to appropriate tensors
+        to_append = '['
+    
+        # Iterate through all indices of tensor
+        for ind in tens_indices:
+    
+            # Append slice through CVS indices
+            if ind in cvs_ind:
+                to_append += ':ncvs_so,'
+    
+            # Ignore non-CVS indices
+            else:
+                to_append += ':,'
+    
+        # Remove extra comma and append end bracket
+        to_append = to_append[:-1] + ']'
 
-            # Check if tensor has external index
-            if 
+        # Append slices to tensor name
+        tens_name += to_append
 
-
-            exit()
-
-
-    return mod_terms
+    return tens_name
 
 
 def analyzeTerm(input_terms, max_act_ind):

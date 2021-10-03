@@ -108,4 +108,4 @@ from sqaHeff import Heff,           \
   remove_trans_rdm_const, sqalatex, \
   remove_core_int, getT, getV,      \
   analyzeTerm, generateEinsum,      \
-  makeCVS
+  append_CVS_slice
