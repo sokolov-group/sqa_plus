@@ -1192,25 +1192,33 @@ def append_CVS_slice(tens_name, tens_indices, cvs_ind):
 
     if num_cvs > 0:
 
-        # Make 'starting' string to append to appropriate tensors
-        to_append = '['
-    
-        # Iterate through all indices of tensor
-        for ind in tens_indices:
-    
-            # Append slice through CVS indices
-            if ind in cvs_ind:
-                to_append += ':ncvs_so,'
-    
-            # Ignore non-CVS indices
-            else:
-                to_append += ':,'
-    
-        # Remove extra comma and append end bracket
-        to_append = to_append[:-1] + ']'
+        # Special condition for Kronecker delta
+        if isinstance(tens, kroneckerDelta):
 
-        # Append slices to tensor name
-        tens_name += to_append
+            tens_name = 'np.identity(ncvs_so)'
+
+        # Add slices
+        else:
+
+            # Make 'starting' string to append to appropriate tensors
+            to_append = '['
+        
+            # Iterate through all indices of tensor
+            for ind in tens_indices:
+        
+                # Append slice through CVS indices
+                if ind in cvs_ind:
+                    to_append += ':ncvs_so,'
+        
+                # Ignore non-CVS indices
+                else:
+                    to_append += ':,'
+        
+            # Remove extra comma and append end bracket
+            to_append = to_append[:-1] + ']'
+    
+            # Append slices to tensor name
+            tens_name += to_append
 
     return tens_name
 
