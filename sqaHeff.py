@@ -974,7 +974,7 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
 
         # Append 'slices' to appropiate dimensions of tensors w/ CVS core indices
         if cvs_ind is not None:
-            tensor_name = append_CVS_slice(tensor_name, indices, cvs_ind)
+            tensor_name = append_CVS_slice(tens, tensor_name, indices, cvs_ind)
         
         # Append name of tensor (after and modifications due to special cases)
         tensor_names.append(tensor_name)
@@ -1181,7 +1181,7 @@ def make_custom_name(sqa_tensor, rename_tuple):
     return new_name
 
 
-def append_CVS_slice(tens_name, tens_indices, cvs_ind):
+def append_CVS_slice(tens, tens_name, tens_indices, cvs_ind):
 
     # Make a list out of the user-provided external indices
     cvs_ind      = list(cvs_ind)
