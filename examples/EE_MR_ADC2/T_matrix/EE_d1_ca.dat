@@ -1,0 +1,86 @@
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) d_aa_so(X,x) t1(I,x) 
+ (   1.00000) d_ae_so(X,a) t1(I,a) 
+ (   1.00000) d_ca_so(i,x) t1(I,i,X,x) 
+ (  -1.00000) d_cc_so(I,i) t1(i,X) 
+ (   1.00000) d_ce_so(I,a) t1(X,a) 
+ (  -1.00000) d_ce_so(i,a) t1(I,i,a,X) 
+ (   1.00000) d_aa_so(X,x) t1(I,y,x,z) cre(y) des(z) 
+ (  -1.00000) d_aa_so(x,y) t1(I,x) cre(X) des(y) 
+ (  -1.00000) d_aa_so(x,y) t1(I,x,X,z) cre(y) des(z) 
+ (   1.00000) d_aa_so(x,y) t1(I,z,X,x) cre(z) des(y) 
+ (   1.00000) d_ae_so(X,a) t1(I,x,a,y) cre(x) des(y) 
+ (  -1.00000) d_ae_so(x,a) t1(I,a) cre(X) des(x) 
+ (  -1.00000) d_ae_so(x,a) t1(I,y,a,X) cre(y) des(x) 
+ (  -1.00000) d_ca_so(i,x) t1(I,i,X,y) cre(x) des(y) 
+ (   1.00000) d_ca_so(i,x) t1(I,i,x,y) cre(X) des(y) 
+ (   1.00000) d_cc_so(I,i) t1(i,x) cre(X) des(x) 
+ (  -1.00000) d_cc_so(I,i) t1(i,x,X,y) cre(x) des(y) 
+ (   1.00000) d_ce_so(I,a) t1(X,x,a,y) cre(y) des(x) 
+ (  -1.00000) d_ce_so(I,a) t1(x,a) cre(X) des(x) 
+ (   1.00000) d_ce_so(i,a) t1(I,i,a,x) cre(X) des(x) 
+ (  -0.50000) d_aa_so(x,y) t1(I,x,z,w) cre(X) cre(y) des(z) des(w) 
+ (   1.00000) d_aa_so(x,y) t1(I,z,x,w) cre(X) cre(z) des(y) des(w) 
+ (   1.00000) d_ae_so(x,a) t1(I,y,a,z) cre(X) cre(y) des(x) des(z) 
+ (  -0.50000) d_ca_so(i,x) t1(I,i,y,z) cre(X) cre(x) des(y) des(z) 
+ (  -0.50000) d_cc_so(I,i) t1(i,x,y,z) cre(X) cre(x) des(y) des(z) 
+ (   0.50000) d_ce_so(I,a) t1(x,y,a,z) cre(X) cre(z) des(x) des(y) 
+
+Total terms : 26
+SQA automation time :  0.056 seconds
+--------------------------------- WARNING ---------------------------------
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+
+0 terms removed:
+---------------------------------------------------------------------------
+Remaining terms: 26
+
+temp  = einsum('Xx,Ix->IX', d_aa_so, t1_ca, optimize = einsum_type)
+temp += einsum('Xa,Ia->IX', d_ae_so, t1_ce, optimize = einsum_type)
+temp += einsum('ix,IiXx->IX', d_ca_so, t1_ccaa, optimize = einsum_type)
+temp -= einsum('Ii,iX->IX', d_cc_so, t1_ca, optimize = einsum_type)
+temp += einsum('Ia,Xa->IX', d_ce_so, t1_ae, optimize = einsum_type)
+temp -= einsum('ia,IiaX->IX', d_ce_so, t1_ccea, optimize = einsum_type)
+temp += einsum('Xx,Iyxz,yz->IX', d_aa_so, t1_caaa, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('xy,Ix,Xy->IX', d_aa_so, t1_ca, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('xy,IxXz,yz->IX', d_aa_so, t1_caaa, rdm_ca_so, optimize = einsum_type)
+temp += einsum('xy,IzXx,zy->IX', d_aa_so, t1_caaa, rdm_ca_so, optimize = einsum_type)
+temp += einsum('Xa,Ixay,xy->IX', d_ae_so, t1_caea, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('xa,Ia,Xx->IX', d_ae_so, t1_ce, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('xa,IyaX,yx->IX', d_ae_so, t1_caea, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('ix,IiXy,xy->IX', d_ca_so, t1_ccaa, rdm_ca_so, optimize = einsum_type)
+temp += einsum('ix,Iixy,Xy->IX', d_ca_so, t1_ccaa, rdm_ca_so, optimize = einsum_type)
+temp += einsum('Ii,ix,Xx->IX', d_cc_so, t1_ca, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('Ii,ixXy,xy->IX', d_cc_so, t1_caaa, rdm_ca_so, optimize = einsum_type)
+temp += einsum('Ia,Xxay,yx->IX', d_ce_so, t1_aaea, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('Ia,xa,Xx->IX', d_ce_so, t1_ae, rdm_ca_so, optimize = einsum_type)
+temp += einsum('ia,Iiax,Xx->IX', d_ce_so, t1_ccea, rdm_ca_so, optimize = einsum_type)
+temp -= 0.5 * einsum('xy,Ixzw,Xyzw->IX', d_aa_so, t1_caaa, rdm_ccaa_so, optimize = einsum_type)
+temp += einsum('xy,Izxw,Xzyw->IX', d_aa_so, t1_caaa, rdm_ccaa_so, optimize = einsum_type)
+temp += einsum('xa,Iyaz,Xyxz->IX', d_ae_so, t1_caea, rdm_ccaa_so, optimize = einsum_type)
+temp -= 0.5 * einsum('ix,Iiyz,Xxyz->IX', d_ca_so, t1_ccaa, rdm_ccaa_so, optimize = einsum_type)
+temp -= 0.5 * einsum('Ii,ixyz,Xxyz->IX', d_cc_so, t1_caaa, rdm_ccaa_so, optimize = einsum_type)
+temp += 0.5 * einsum('Ia,xyaz,Xzxy->IX', d_ce_so, t1_aaea, rdm_ccaa_so, optimize = einsum_type)

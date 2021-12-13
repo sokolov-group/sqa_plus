@@ -418,6 +418,7 @@ class term:
       else:
         ncList.append(t)
     fcList.sort(lambda x,y: cmp(x.name,y.name))
+
     nameGroups = []
     uniqueNames = []
     for t in fcList:
@@ -609,7 +610,7 @@ class term:
         for i in range(len(indexList)-1):
           score.append(0)
           for j in range(i+1,len(indexList)):
-            if indexList[i] < indexList[j]:
+            if str(indexList[i].name) < str(indexList[j].name):
               score[-1] += 1
 
         # If the current score is the best score, save the result
@@ -865,7 +866,7 @@ def combineTerms(termList, maxThreads = 1):
 
   # Sort the terms
   termList.sort()
-
+  
   # Combine any terms with the same canonical form
   i = 0
   while i < len(termList)-1:
@@ -874,26 +875,27 @@ def combineTerms(termList, maxThreads = 1):
       del(termList[i])
     else:
       i += 1
+
 #  i = 0
 #  while i < len(termList)-1:
 #    j = i + 1
 #    while j < len(termList):
 #      if termList[j].sameForm(termList[i]):
 #        termList[i] += termList[j]
-#        del(termList[j])
+#        del(termList[j#      else:
 #      else:
 #        j += 1
 #    i += 1
 
   # Remove terms with coefficients of zero
   termChop(termList)
-
+  
   if options.verbose:
     print "Finished combining terms in %.3f seconds" %(time.time() - startTime)
     print ""
 
-#  # Sort the terms
-#  termList.sort()
+  # Sort the terms
+  termList.sort()
 
 
 #--------------------------------------------------------------------------------------------------
@@ -1485,5 +1487,15 @@ def removeVirtOps_sf(inList):
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
+def count_ind(x):
+    num_ind = 0
+    for tensor in x.tensors:
+        num_ind += len(tensor.indices)
+    return num_ind  
 
-
+def make_str(x):
+    ind_str = ''
+    for tensor in x.tensors:
+        for ind in tensor.indices:
+            ind_str += ind.name
+    return ind_str 

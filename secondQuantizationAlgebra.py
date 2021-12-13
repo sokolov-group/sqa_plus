@@ -27,8 +27,10 @@ from sqaIndex import \
 from sqaSymmetry import \
   symmetry
 
+from sqaTensor2 import \
+  creDesTensor        \
+
 from sqaTensor import \
-  creDesTensor,       \
   creOp,              \
   desOp,              \
   kroneckerDelta,     \
@@ -47,6 +49,9 @@ from sqaTerm import  \
 
 from sqaNormalOrder import \
   normalOrder
+
+from sqaIntermediates import \
+  genIntermediates
 
 from sqaCommutator import \
   commutator
@@ -97,9 +102,11 @@ from sqaAddon import matrixBlock,\
   contractDeltaFuncs_nondummy,   \
   tensorIndex_order
 
-from sqaHeff import Heff,        \
-  Tamplitude, Vperturbation_type,\
-  Vperturbation, generateEinsum, \
-  generateEinsum_old, sqalatex,  \
-  getT, getT_excitation,          \
-  getT_deexcitation, getV
+from sqaHeff import Heff,             \
+  Tamplitude, Vperturbation_type,     \
+  Vperturbation, genEinsum,           \
+  remove_trans_rdm_const, sqalatex,   \
+  remove_core_int, getT, getV,        \
+  getT_excitation, getT_deexcitation, \
+  analyzeTerm, generateEinsum,        \
+  append_CVS_slice
