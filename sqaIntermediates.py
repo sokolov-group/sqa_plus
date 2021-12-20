@@ -5,8 +5,7 @@ import collections
 import math
 import numpy as np
 
-from sqaTensor import tensor, creOp, desOp, kroneckerDelta
-from sqaTensor2 import creDesTensor
+from sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from sqaTerm import term, combineTerms
 from sqaIndex import index
 from sqaOptions import options

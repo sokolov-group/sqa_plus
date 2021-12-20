@@ -27,14 +27,12 @@ from sqaIndex import \
 from sqaSymmetry import \
   symmetry
 
-from sqaTensor2 import \
-  creDesTensor        \
-
 from sqaTensor import \
   creOp,              \
   desOp,              \
   kroneckerDelta,     \
-  sfExOp,             \
+  sfExOp,
+  creDesTensor,       \
   tensor
 
 from sqaTerm import  \

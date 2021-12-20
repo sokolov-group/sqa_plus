@@ -11,9 +11,8 @@
 # implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE. See the GNU General Public License
 # for more details.
-#
-#
-#import sqa_extra.secondQuantizationAlgebra as sqa
+
+
 import sys, os, time
 import subprocess
 import collections
@@ -21,8 +20,7 @@ import collections
 from sqaIndex import index
 from sqaCommutator import commutator
 from sqaTerm import term, combineTerms
-from sqaTensor import tensor, creOp, desOp, kroneckerDelta
-from sqaTensor2 import creDesTensor
+from sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
