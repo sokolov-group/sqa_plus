@@ -31,7 +31,7 @@ from sqaTensor import \
   creOp,              \
   desOp,              \
   kroneckerDelta,     \
-  sfExOp,
+  sfExOp,             \
   creDesTensor,       \
   tensor
 
@@ -105,6 +105,5 @@ from sqaHeff import Heff,             \
   Vperturbation, genEinsum,           \
   remove_trans_rdm_const, sqalatex,   \
   remove_core_int, getT, getV,        \
-  getT_excitation, getT_deexcitation, \
   analyzeTerm, generateEinsum,        \
   append_CVS_slice

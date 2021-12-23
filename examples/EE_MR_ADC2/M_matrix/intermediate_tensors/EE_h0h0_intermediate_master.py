@@ -54,7 +54,7 @@ r_op_term = sqa.term(1.0, [], r_op)
 
 # Define Hamiltonian
 effH = []
-effH = sqa.Heff(2)
+effH = sqa.Heff(1)
 
 # Perform multiplication of terms and normal-ordering
 term1 = []
@@ -79,7 +79,7 @@ for term in term3:
     for tens in term.tensors:
         if isinstance(tens, sqa.creOp) or isinstance(tens, sqa.desOp):
             cre_des += 1 
-    if cre_des == 8:
+    if cre_des == 2:
         term4.append(term)
 
 term5 = sqa.matrixBlock(term4)
@@ -99,7 +99,7 @@ term6, intermediates = sqa.genIntermediates(term5, l_ind + r_ind, factor_depth =
 # Generate einsum for intermediates and new terms
 int_einsum_list, einsum_list_2 = sqa.genEinsum(term6, 'temp', l_ind + r_ind, rm_core_int = True, intermediate_list = intermediates)
 
-# Print einsum definitions
+# Print intermediate term definitions
 for int_def in int_einsum_list:
     print (int_def)
 print ('')
@@ -116,7 +116,7 @@ term6, intermediates = sqa.genIntermediates(term5, l_ind + r_ind, factor_depth =
 # Generate einsum for intermediates and new terms
 int_einsum_list, einsum_list_2 = sqa.genEinsum(term6, 'temp', l_ind + r_ind, rm_core_int = True, intermediate_list = intermediates)
 
-# Print einsum definitions
+# Print intermediate term definitions
 for int_def in int_einsum_list:
     print (int_def)
 print ('')
