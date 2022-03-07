@@ -1231,19 +1231,29 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
         # Append transition state index to appropriate set of indices
         if isinstance(tens, creDesTensor) and tens.trans_rdm:
             indices = trans_ind_str + indices
-            ind_str = trans_ind_str + ind_str            
+##            ind_str = trans_ind_str + ind_str            
 
         elif trans_int and (tens.name in trans_int):
             indices = trans_ind_str + indices
-            ind_str = trans_ind_str + ind_str            
+##            ind_str = trans_ind_str + ind_str            
 
         # Append completed index string to list
         tensor_inds.append(indices)
 
     # Convert list of indices into one comma-separated string and prepare to append external index string
     tensor_inds = ','.join(tensor_inds)
-    tensor_inds += '->'
-    tensor_inds += ind_str
+
+    # Check if rhs string or transition index is provided before adding arrow
+    if trans_ind_str or ind_str:
+        tensor_inds += '->'
+
+    # Append transition index first, if present
+    if trans_ind_str:
+        tensor_inds += trans_ind_str
+
+    # Append rhs string, if provided
+    if ind_str:
+        tensor_inds += ind_str
 
     return tensor_inds, tensor_names
 
