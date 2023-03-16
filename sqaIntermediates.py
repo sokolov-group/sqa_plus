@@ -600,3 +600,59 @@ def make_names(name_list):
         unicode_names.append(p)
 
     return unicode_names
+
+def analyzeTerm(input_terms, max_act_ind):
+
+    # Make empty list for removed terms
+    kept_terms    = []
+    removed_terms = []
+
+    for t_num, term in enumerate(input_terms):
+
+        core_cre = 0
+        core_des = 0
+        act_cre = 0
+        act_des = 0
+        ext_cre = 0
+        ext_des = 0
+
+        # Iterate through every tensor in term's contraction
+        for tensor in term.tensors:
+
+            # Counting particle and hole operators in subspaces
+            if isinstance(tensor, creOp):
+
+                index = tensor.indices[0]
+
+                if isCoreIndType(index.indType):
+                    core_cre += 1
+
+                if isActiveIndType(index.indType):
+                    act_cre += 1
+
+                if isVirtualIndType(index.indType):
+                    ext_cre += 1
+
+            elif isinstance(tensor, desOp):
+
+                index = tensor.indices[0]
+
+                if isCoreIndType(index.indType):
+                    core_des += 1
+
+                if isActiveIndType(index.indType):
+                    act_des += 1
+
+                if isVirtualIndType(index.indType):
+                    ext_des += 1
+
+
+        # Filter out terms with more than request active indices
+        if (act_cre + act_des) > max_act_ind:
+            removed_terms.append(input_terms[t_num])
+
+        else:
+            kept_terms.append(input_terms[t_num])
+
+    return kept_terms, removed_terms
+
