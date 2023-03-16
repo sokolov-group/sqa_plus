@@ -14,10 +14,7 @@
 #
 #   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
 #   J. Chem. Phys. 130, 124102 (2009)
-
-
-
-
+#
 # The index class is used to represent a tensor index.
 #
 # An index consists of three parts:  a name, a list of types, and a bool.
@@ -92,3 +89,58 @@ class index:
   def copy(self):
     "Returns a deep copy of the index"
     return index(self.name, self.indType, self.isSummed)
+
+# Useful tools for indices
+
+def isSpinIntegratedIndType(indTypes):
+    spinIntegrated = False
+
+    for indType in indTypes:
+        if indType in (options.alpha_type, options.beta_type):
+            spinIntegrated = True
+
+    return spinIntegrated
+
+def getSpinIndType(indTypes):
+    spinIndTypes = ""
+
+    for indType in indTypes:
+        if indType in (options.alpha_type, options.beta_type):
+            spinIndTypes = indType
+    return spinIndTypes
+
+def getSpatialIndType(indTypes):
+    spatialIndTypes = ""
+
+    for indType in indTypes:
+        if not indType in (options.alpha_type, options.beta_type):
+            spatialIndTypes = indType
+    return spatialIndTypes
+
+def isIndType(indTypes, sqaIndType):
+    isType = False
+
+    for indType in indTypes:
+      if indType in sqaIndType:
+          isType = True
+    return isType
+
+def isCoreIndType(indType):
+    spatialIndType = getSpatialIndType(indType)
+    return isIndType(spatialIndType, options.core_type)
+
+def isActiveIndType(indType):
+    spatialIndType = getSpatialIndType(indType)
+    return isIndType(spatialIndType, options.active_type)
+
+def isVirtualIndType(indType):
+    spatialIndType = getSpatialIndType(indType)
+    return isIndType(spatialIndType, options.virtual_type)
+
+def isAlphaIndType(indType):
+    spinIndType = getSpinIndType(indType)
+    return isIndType(spinIndType, options.alpha_type)
+
+def isBetaIndType(indType):
+    spinIndType = getSpinIndType(indType)
+    return isIndType(spinIndType, options.beta_type)
