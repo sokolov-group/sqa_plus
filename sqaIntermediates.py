@@ -1,3 +1,17 @@
+# Copyright 2018-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+#
+# Licensed under the GNU General Public License v3.0;
+# you may not use this file except in compliance with the License.
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Author: Ilia Mazin <ilia.mazin@gmail.com>
+#
+
 import string
 import sys, os, time
 import subprocess
