@@ -93,17 +93,26 @@ from sqaDecomposition_so import  \
   decomp_4rdms_to_2rdms_so,      \
   decomp_4rdms_to_3rdms_so
 
-from sqaAddon import matrixBlock,\
-  dummyLabel, filterVirtual,     \
-  filterCore, normalOrderCore,   \
-  sortOpsCore,                   \
-  contractDeltaFuncs_nondummy,   \
+from sqaAddon import matrixBlock, \
+  dummyLabel,                     \
+  filterVirtual,                  \
+  filterCore,                     \
+  normalOrderCore,                \
+  sortOpsCore,                    \
+  contractDeltaFuncs_nondummy,    \
   tensorIndex_order
 
-from sqaHeff import Heff,             \
-  Tamplitude, Vperturbation_type,     \
-  Vperturbation, genEinsum,           \
-  remove_trans_rdm_const, sqalatex,   \
-  remove_core_int, getT, getV,        \
-  analyzeTerm, generateEinsum,        \
-  append_CVS_slice
+from sqaHeff import Heff,          \
+  dyallH,                          \
+  dyallH_act,                      \
+  Tamplitude,                      \
+  Tamplitude_excitation,           \
+  Tamplitude_deexcitation,         \
+  Vperturbation,                   \
+  getT,                            \
+  getV                             \
+
+from sqaEinsum import genEinsum
+
+from sqaIndexList import indexList,   \
+  create_dummy_indices_list
