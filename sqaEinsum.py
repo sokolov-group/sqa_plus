@@ -1126,23 +1126,6 @@ def Vperturbation_type(indices_lists, spin_integrated = False, vtype = None):
 
     return V
 
-def custom_tensor(tensor_name, *tup):
-
-    # Switch symmetry either one of (bra / ket) or both
-
-    tensor_indices = list(tup)
-    tensor_indices_type = [getSpatialIndType(tensor_index.indType) for tensor_index in tensor_indices]
-
-    if (len(tensor_indices) == 4):
-        symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
-
-    elif (len(tensor_indices) == 2):
-        symm = [symmetry((1,0), 1)]
-
-    tensor_object = tensor(tensor_name, tensor_indices, symm)
-
-    return tensor_object
-
 def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = True):
 
  if not output:

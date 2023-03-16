@@ -23,6 +23,22 @@ from sqaSymmetry import symmetry
 from sqaCommutator import commutator
 from sqaIndexList import create_dummy_indices_list
 
+def custom_tensor(tensor_name, *tup):
+    'Create a custom tensor defining symmetry according to the number of indices.'
+
+    tensor_indices = list(tup)
+    tensor_indices_type = [getSpatialIndType(tensor_index.indType) for tensor_index in tensor_indices]
+
+    if (len(tensor_indices) == 4):
+        symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
+    elif (len(tensor_indices) == 2):
+        symm = [symmetry((1,0), 1)]
+
+    tensor_object = tensor(tensor_name, tensor_indices, symm)
+
+    return tensor_object
+
 def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
     "Construct effective Hamiltonian(L)."
 
