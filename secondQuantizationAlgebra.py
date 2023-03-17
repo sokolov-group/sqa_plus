@@ -21,7 +21,7 @@
 from sqaOptions import \
   options
 
-from sqaIndex import \
+from sqaIndex import        \
   index
 
 from sqaSymmetry import \

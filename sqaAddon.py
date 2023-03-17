@@ -28,7 +28,6 @@ from sqaMisc import makeTuples, allDifferent, makePermutations
 from sqaSymmetry import symmetry
 
 from sqaNormalOrder import normalOrder
-from sqaHeff import sqalatex
 
 # Create an object of the index class
 #addon = index()
