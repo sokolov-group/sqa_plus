@@ -333,3 +333,68 @@ if test5_string_output == test5_correct_answer:
 else:
   print "Test 5 failed",
 print " (%.3f seconds)\n" %(time.time()-startTime)
+
+# Test 6: Test of removeCoreOpPairs function, was previously its own file, added to sqaTest.py
+
+# Define short names for type groups
+ta = sqa.options.alpha_type
+tb = sqa.options.beta_type
+tc = sqa.options.core_type
+tt = sqa.options.active_type
+tv = sqa.options.virtual_type
+
+# Define core indices
+ac = [sqa.index('c%i' %i, [ta,tc], False) for i in range(10)]
+bc = [sqa.index('c%i' %i, [tb,tc], False) for i in range(10)]
+
+# Define active indices
+at = [sqa.index('a%i' %i, [ta,tt], True) for i in range(10)]
+bt = [sqa.index('a%i' %i, [tb,tt], True) for i in range(10)]
+
+print ""
+print "Starting test 6"
+print ""
+print "Core indices labeled with c."
+print "Active indices labeled with a."
+
+startTime = time.time()
+test6_terms = []
+test6_terms.append(sqa.term(1.0, [], [sqa.creOp(ac[0]), sqa.desOp(ac[0])]))
+test6_terms.append(sqa.term(1.0, [], [sqa.creOp(ac[0]), sqa.creOp(ac[1]), sqa.desOp(ac[1])]))
+test6_terms.append(sqa.term(1.0, [], [sqa.creOp(at[0]), sqa.creOp(ac[0]), sqa.tensor('r0', [at[0], at[1]], []), sqa.creOp(ac[1]), \
+                                      sqa.desOp(ac[0]), sqa.desOp(at[1])]))
+test6_terms.append(sqa.term(1.0, [], [sqa.creOp(at[0]), sqa.creOp(ac[0]), sqa.creOp(ac[1]), \
+                                      sqa.desOp(ac[0]), sqa.desOp(at[1]), sqa.desOp(ac[1])]))
+test6_terms.append(sqa.term(1.0, [], [sqa.creOp(ac[0]), sqa.creOp(ac[1]), sqa.creOp(ac[0]), \
+                                      sqa.desOp(ac[0]), sqa.desOp(at[1]), sqa.desOp(ac[1])]))
+test6_terms.append(sqa.term(1.0, [], [sqa.creOp(at[0]), sqa.creOp(ac[1]), sqa.creOp(ac[0]), \
+                                      sqa.desOp(ac[1]), sqa.desOp(ac[0]), sqa.desOp(ac[1])]))
+
+print ""
+print "Test 6 output:"
+for t in test6_terms:
+  print t
+
+sqa.removeCoreOpPairs(test6_terms)
+
+test6_string_output = ""
+for t in test6_terms:
+  test6_string_output += str(t) + "\n"
+
+test6_correct_answer = \
+" (   1.00000) \n" + \
+" (  -1.00000) cre(c0) \n" + \
+" (   1.00000) cre(a0) r0(a0,a1) cre(c1) des(a1) \n" + \
+" (   1.00000) cre(a0) des(a1) \n" + \
+" (  -1.00000) cre(c0) cre(c0) des(c0) des(a1) \n" + \
+" (  -1.00000) cre(a0) cre(c1) des(c1) des(c1) \n"
+
+print ""
+print "Terms after core operator pair removal:"
+print test6_string_output
+
+if test6_string_output == test6_correct_answer:
+  print "Test 6 passed",
+else:
+  print "Test 6 failed",
+print " (%.3f seconds)\n" %(time.time()-startTime)
