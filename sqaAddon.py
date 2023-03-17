@@ -19,15 +19,12 @@
 #
 
 import sys, time
-from sqaIndex import index
-from sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp, creDesTensor
-from sqaTerm import term, multiplyTerms, termChop, sortOps, combineTerms
+from sqaTensor import kroneckerDelta, sfExOp, creOp, desOp
+from sqaTerm import term, termChop, combineTerms
 from sqaOptions import options
-from sqaMisc import makeTuples, allDifferent, makePermutations
-from sqaSymmetry import symmetry
+from sqaMisc import makeTuples, allDifferent
 
 from sqaNormalOrder import normalOrder
-from sqaEinsum import sqalatex
 
 from sqaIndex import get_spatial_index_type, get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type

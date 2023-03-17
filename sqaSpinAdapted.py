@@ -20,6 +20,7 @@
 
 import sys, time
 import itertools
+
 from sqaAddon import dummyLabel, reorder_tensor_indices
 from sqaIndex import get_spatial_index_type, get_spin_index_type, is_alpha_index_type, is_beta_index_type
 from sqaTerm import combineTerms, termChop
