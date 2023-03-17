@@ -12,6 +12,16 @@ import secondQuantizationAlgebra as sqa
 
 To see how to use core SecondQuantizationAlgebra capabilities, such as the definition of indexes, operators and terms, and algebraic functions, such as Normal Ordering, please visit the [original README file](original_SQA/README.md).
 
+## Multireference Algebraic Diagrammatic Construction (MR-ADC) Theory Automation
+
+## Intermediates Generator
+### `sqa.genIntermediates`: Intermediates function
+
+## Spin-Adapted Equation Generator
+### Spin-Integrated Effective Hamiltonian and Operators
+
+### `sqa.ConvertSpinIntegratedToSpinAdapted`: Spin-Adaptation Automation from Spin-Integrated Equations
+
 # Credits
 ## SecondQuantizationAlgebra
 SecondQuantizationAlgebra was originally developed by Eric Neuscamman <eric.neuscamman@gmail.com>
