@@ -135,6 +135,10 @@ print "(%.3f seconds) \n" % (time.time() - startTime)
 
 # Test 3: Multiply perturbation operator by single excitation operators from either side
 #
+print ""
+print "Starting test 3"
+print ""
+startTime = time.time()
 
 # Create left hand side operator list
 x = sqa.index('X', [tg_a])
@@ -169,3 +173,22 @@ for t in term3:
 
 term5 = []
 term5 = sqa.matrixBlock(term4)
+
+test3_string_output = ''
+for t in term5:
+    test3_string_output += str(t) + '\n'
+
+test3_correct_answer = " (  -1.00000) v(x,B,J,A) cre(X) des(x) \n" + \
+                       " (  -1.00000) h(J,x) kdelta(A,B) cre(X) des(x) \n" + \
+                       " (   1.00000) kdelta(A,B) v(i,x,J,i) cre(X) des(x) \n" + \
+                       " (   0.50000) kdelta(A,B) v(x,y,J,z) cre(X) cre(z) des(x) des(y) \n"
+
+print "Test 3 output:"
+print test3_string_output
+
+if test3_string_output == test3_correct_answer:
+    print "Test 3 passed",
+else:
+    print "Test 3 failed",
+
+print "(%.3f seconds) \n" % (time.time() - startTime)
