@@ -38,13 +38,13 @@ startTime = time.time()
 i = sqa.index('I', [tg_c])
 x = sqa.index('X', [tg_a])
 
-l_op  = [sqa.creOp(i), sqa.desOp(x)] # CA
+l_op  = [sqa.creOp(i), sqa.desOp(x)]
 
 # Create right hand side operator list
 j = sqa.index('J', [tg_c])
 y = sqa.index('Y', [tg_a])
 
-r_op  = [sqa.creOp(y), sqa.desOp(j)] # CA
+r_op  = [sqa.creOp(y), sqa.desOp(j)]
 
 # Define order of the effective Hamiltonian
 effH = []
@@ -133,5 +133,62 @@ else:
 print "(%.3f seconds) \n" % (time.time() - startTime)
 
 
-# Test 3:
+# Test 3: Multiply perturbation operator by single excitation operators from either side
 #
+print ""
+print "Starting test 3"
+print ""
+startTime = time.time()
+
+# Create left hand side operator list
+x = sqa.index('X', [tg_a])
+a = sqa.index('A', [tg_v])
+
+l_op = [sqa.creOp(x), sqa.desOp(a)]
+
+# Create right hand side operator list
+j = sqa.index('J', [tg_c])
+b = sqa.index('B', [tg_v])
+
+r_op = [sqa.creOp(b), sqa.desOp(j)]
+
+# Define terms from operator lists
+term1 = sqa.term(1.0, [], r_op)
+term2 = sqa.term(1.0, [], l_op)
+
+# Create empty lists to store products
+term3 = []
+term4 = []
+
+# Get perturbation operator
+V = sqa.getV()
+
+# Multiply every term in V by the operators in term2, store as term3
+for v in V:
+    term3.append(sqa.multiplyTerms(term2, v))
+
+# Multiply every product stored in term3 by the operators in term1
+for t in term3:
+    term4.append(sqa.multiplyTerms(t, term1))
+
+term5 = []
+term5 = sqa.matrixBlock(term4)
+
+test3_string_output = ''
+for t in term5:
+    test3_string_output += str(t) + '\n'
+
+test3_correct_answer = " (  -1.00000) v(x,B,J,A) cre(X) des(x) \n" + \
+                       " (  -1.00000) h(J,x) kdelta(A,B) cre(X) des(x) \n" + \
+                       " (   1.00000) kdelta(A,B) v(i,x,J,i) cre(X) des(x) \n" + \
+                       " (   0.50000) kdelta(A,B) v(x,y,J,z) cre(X) cre(z) des(x) des(y) \n"
+
+print "Test 3 output:"
+print test3_string_output
+
+if test3_string_output == test3_correct_answer:
+    print "Test 3 passed",
+else:
+    print "Test 3 failed",
+
+print "(%.3f seconds) \n" % (time.time() - startTime)
