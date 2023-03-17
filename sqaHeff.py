@@ -32,7 +32,7 @@ from sqaIndexList import create_dummy_indices_list
 def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
     "Construct effective Hamiltonian(L)."
 
-    print ("------------------------ Hamiltonian(%s) ----------------------" % order)
+    print("--------------------------------- Hamiltonian({:}) ---------------------------------".format(order))
     sys.stdout.flush()
     #   order = 0 : L(0) = H(0)
     #   order = 1 : L(1) = V + [H(0),T(1) - T'(1)]
@@ -57,7 +57,7 @@ def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_ex
         T1 = Tamplitude(1, indices_lists, spin_integrated, explicit_spin_cases)
 
         com1 = commutator(effH, T1)
-        print ("Commutation: Done ...")
+        print("Commutation: Done ...")
         sys.stdout.flush()
 
         L.extend(com1)
@@ -71,7 +71,7 @@ def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_ex
         T2 = Tamplitude(2, indices_lists, spin_integrated, explicit_spin_cases, internal_excit)
 
         com1 = commutator(effH, T2)
-        print ("First Commutation: Done ...")
+        print("First Commutation: Done ...")
         sys.stdout.flush()
 
         L.extend(com1)
@@ -81,7 +81,7 @@ def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_ex
         T1 = Tamplitude(1, indices_lists, spin_integrated, explicit_spin_cases)
 
         com2 = commutator(V, T1)
-        print ("Second Commutation: Done ...")
+        print("Second Commutation: Done ...")
         sys.stdout.flush()
 
         L.extend(com2)
@@ -95,7 +95,7 @@ def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_ex
         T1_2 = Tamplitude(1, indices_lists, spin_integrated, explicit_spin_cases)
 
         com4 = commutator(com3, T1_2)
-        print ("Third Commutation: Done ...")
+        print("Third Commutation: Done ...")
         sys.stdout.flush()
 
         for t in com4:
@@ -105,8 +105,8 @@ def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_ex
     else:
         raise Exception ('Unknown type of effective Hamiltonian of order = %s' % (order))
 
-    print ("Done ...")
-    print ("""--------------------------------------------------------------""")
+    print("Done ...")
+    print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return L
 

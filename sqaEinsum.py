@@ -448,7 +448,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
     # Remove terms from standard term list
     if not int_terms:
-        print ('\n--------------------------------- WARNING ---------------------------------')
+        print ('\n------------------------------------ WARNING -------------------------------------')
         print ('Terms with a contraction over repeating dummy core indices of 2e- integrals')
         print ('will be removed. Set "rm_core_int" flag to FALSE to preserve terms')
 
@@ -486,7 +486,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
         for term in core_terms:
             print (term)
 
-        print ('---------------------------------------------------------------------------')
+        print ('----------------------------------------------------------------------------------')
         print ('Remaining terms: ' + str(len(kept_terms)))
         print ('')
 
@@ -494,7 +494,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
     # Filter through intermediate definitions
     else:
-        print ('--------------------------------- WARNING ---------------------------------')
+        print ('------------------------------------- WARNING ------------------------------------')
         print ('Intermediate tensors defined w/ contractions over repeating dummy core indices of')
         print ('2e- integrals will be removed. Set "rm_core_int" flag to FALSE to preserve definitions')
 
@@ -531,7 +531,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
             for tens, term in zip(removed_int, removed_terms):
                 print (tens + ": " + str(term[0]))
 
-        print ('---------------------------------------------------------------------------')
+        print ('----------------------------------------------------------------------------------')
         print ('')
 
         # Returned shortened intermediate list

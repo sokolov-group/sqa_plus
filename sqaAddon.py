@@ -38,7 +38,7 @@ def matrixBlock(terms, transRDM = False):
 
     startTime = time.time()
     print ("")
-    print ("------------------------ SQA Automation ----------------------")
+    print ("---------------------------------- SQA Automation --------------------------------")
     sys.stdout.flush()
     print ("")
     fTerms = []
@@ -88,7 +88,7 @@ def matrixBlock(terms, transRDM = False):
 
     # Print the final results
     print ("")
-    print ("----------------------- Final results ------------------------")
+    print ("--------------------------------- Final results ----------------------------------\n")
     sys.stdout.flush()
     for t in fTerms:
         index_types = ()
@@ -158,11 +158,14 @@ def dummyLabel(_terms):
                     # Update the label
                         t_tensor.indices[t_tensor_index].name = mymap[index_name]
 
-        if options.verbose:
-           print (t)
+    if options.verbose:
+        print("")
+        for _term in nterms:
+            print (_term)
+        print("")
 
-    print ("Done ...")
-    print ("""--------------------------------------------------------------""")
+    print ("Done!")
+    print ("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return nterms
 
@@ -185,11 +188,14 @@ def filterVirtual(_terms):
                     if is_virtual_index_type(index_type):
                         t_term.numConstant = 0.0
 
-        if options.verbose:
+    if options.verbose:
+        print("")
+        for t_term in _terms:
             print (t_term)
+        print("")
 
-    print ("Done ...")
-    print ("""--------------------------------------------------------------""")
+    print ("Done!")
+    print ("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return
 
@@ -212,11 +218,14 @@ def filterCore(_terms):
                     if is_core_index_type(index_type):
                         t_term.numConstant = 0.0
 
-        if options.verbose:
-            print (t_term)
+    if options.verbose:
+        print("")
+        for _term in _terms:
+            print (_term)
+        print("")
 
-    print ("Done ...")
-    print ("""--------------------------------------------------------------""")
+    print ("Done!")
+    print ("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return
 
@@ -229,8 +238,8 @@ def normalOrderCore(_terms):
         ordered_term = normOrderCor(_term)
         ordered_terms.extend(ordered_term)
 
-    print ("Done ...")
-    print ("""--------------------------------------------------------------""")
+    print ("Done!")
+    print ("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return ordered_terms
 
@@ -451,8 +460,8 @@ def contractDeltaFuncs_nondummy(_terms):
 
     termChop(_terms)
 
-    print ("Done ...")
-    print ("""--------------------------------------------------------------""")
+    print ("Done!")
+    print ("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return _terms
 
@@ -510,13 +519,12 @@ def reorder_tensor_indices(_terms, reorder_t = True):
                 _terms[ind_unordered_term].numConstant *= order_factor
 
                 if options.verbose:
-                    print ('---------')
-                    print (unordered_term)
-                    print ('%s    --->    %s (factor = %s)' % (unordered_tensor, ordered_tensor, order_factor))
-                    print (_terms[ind_unordered_term])
+                    print("")
+                    print(unordered_term)
+                    print(' %s    --->    %s (factor = %s)' % (unordered_tensor, ordered_tensor, order_factor))
 
-    print ("Done ...")
-    print ("""--------------------------------------------------------------""")
+    print ("Done!")
+    print ("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return _terms
 
