@@ -103,8 +103,7 @@ from sqaAddon import matrixBlock, \
   filterCore,                     \
   normalOrderCore,                \
   sortOpsCore,                    \
-  contractDeltaFuncs_nondummy,    \
-  tensorIndex_order
+  contractDeltaFuncs_nondummy
 
 from sqaHeff import Heff,          \
   dyallH,                          \
@@ -120,3 +119,5 @@ from sqaEinsum import genEinsum
 
 from sqaIndexList import indexList,   \
   create_dummy_indices_list
+
+from sqaSpinAdapted import convertSpinIntegratedToAdapted

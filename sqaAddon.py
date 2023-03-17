@@ -29,614 +29,494 @@ from sqaSymmetry import symmetry
 from sqaNormalOrder import normalOrder
 from sqaEinsum import sqalatex
 
-# Create an object of the index class
-#addon = index()
+from sqaIndex import get_spatial_index_type, get_spin_index_type, \
+                     is_core_index_type, is_active_index_type, is_virtual_index_type
 
 #####################################
 def matrixBlock(terms, transRDM = False):
- "Construct matrix block."
-#
- startTime = time.time()
- print ""
- print ("------------------------ SQA Automation ----------------------")
- sys.stdout.flush()
- print ""
- fTerms = []
+    "Construct matrix block."
 
-# Make sure that input expression is normal-ordered with respect to physical vacuum
- nterms = []
- for t in terms:
-     t_no = normalOrder(t)
-     nterms.extend(t_no)
+    startTime = time.time()
+    print ("")
+    print ("------------------------ SQA Automation ----------------------")
+    sys.stdout.flush()
+    print ("")
+    fTerms = []
 
-# Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
- filterVirtual(nterms)
- termChop(nterms)
-#
-# Normal ordering with respect to core orbitals
- fTerms = normalOrderCore(nterms)
-#
-# Evaluate Kroneker delta
- for t in fTerms:
-    t.contractDeltaFuncs()
-#
-# termChop(fTerms)
-#
-# Filter zero terms wrt core (note: after filtering virtual, then do for core)
- filterCore(fTerms)
- termChop(fTerms)
-#
- combineTerms(fTerms)
-#
-# Contract delta function for both non-dummy indices
- contractDeltaFuncs_nondummy(fTerms)
-#
-# If (transRDM = True) =>  Remove those constant terms
- if (transRDM):
-    for trm in fTerms:
-        iremove = True
-        for i in range(len(trm.tensors)):
-            t = trm.tensors[i]
-            if (isinstance(t, creOp) or isinstance(t, desOp)):
-               iremove = False
-        if (iremove):
-            trm.numConstant = 0.0
+    # Make sure that input expression is normal-ordered with respect to physical vacuum
+    nterms = []
+    for t in terms:
+        t_no = normalOrder(t)
+        nterms.extend(t_no)
+
+    # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
+    filterVirtual(nterms)
+    termChop(nterms)
+
+    # Normal ordering with respect to core orbitals
+    fTerms = normalOrderCore(nterms)
+
+    # Evaluate Kroneker delta
+    for t in fTerms:
+        t.contractDeltaFuncs()
+
+    # Filter zero terms wrt core (note: after filtering virtual, then do for core)
+    filterCore(fTerms)
     termChop(fTerms)
-#
-# Dummy indices label upate
- dummyLabel(fTerms)
-#
-# Reorder tensor indices: (core < active < virtual) order
- tensorIndex_order(fTerms)
-#
-# Print the final results
- print ""
- print ("----------------------- Final results ------------------------")
- sys.stdout.flush()
- for t in fTerms:
-    index_types = ()
-    for t_tensor in t.tensors:
-        for t_tensor_index in t_tensor.indices:
-            index_types += t_tensor_index.indType[0]
-    print t
-#    print index_types
-#
- print ""
- print "Total terms : %s" % len(fTerms)
- print "SQA automation time :  %.3f seconds" %(time.time() - startTime)
- sys.stdout.flush()
-#
-# sqalatex(fTerms)
- return fTerms
-#
-#####################################
-def dummyLabel(nterms):
- "A function to relabel dummy indices."
-#
- print "Dummy indices relabelling:=>"
- sys.stdout.flush()
-##
- for t in nterms:
-    mymap ={}
-    index_types = ()
-#
-    coreInd = list('ijklmnopq')
-    actvInd = list('xyzwuvstr')
-#    actvInd = list('xyzwuvstrXYZWUVSTR')
-    virtInd = list('abcdefgh')
-#
-    for t_tensor in t.tensors:
+    combineTerms(fTerms)
 
-        for t_tensor_index in range(len(t_tensor.indices)):
-#
-            # Decide which new label to assign
-            index_type = t_tensor.indices[t_tensor_index].indType
-            index_name = t_tensor.indices[t_tensor_index].name
-            index_summed = t_tensor.indices[t_tensor_index].isSummed
+    # Contract delta function for both non-dummy indices
+    contractDeltaFuncs_nondummy(fTerms)
 
-            if index_summed:
-                if len(index_type) > 1:
-                    raise Exception('This code does not support general indices for now')
-                else:
-                    if index_name not in mymap.keys():
-                        if (index_type[0][0] == 'core'):
-                            mymap[index_name] = coreInd[0]
-                            coreInd.pop(0)
-                        elif (index_type[0][0] == 'active'):
-                            mymap[index_name] = actvInd[0]
-                            actvInd.pop(0)
-                        else:
-                            mymap[index_name] = virtInd[0]
-                            virtInd.pop(0)
+    # If (transRDM = True) =>  Remove those constant terms
+    if (transRDM):
+        for trm in fTerms:
+            iremove = True
+            for i in range(len(trm.tensors)):
+                t = trm.tensors[i]
+                if (isinstance(t, creOp) or isinstance(t, desOp)):
+                   iremove = False
+            if (iremove):
+                trm.numConstant = 0.0
+        termChop(fTerms)
+
+    # Dummy indices label upate
+    fTerms = dummyLabel(fTerms)
+
+    # Reorder tensor indices: (core < active < virtual) order
+    reorder_tensor_indices(fTerms, reorder_t = True)
+
+    # Print the final results
+    print ("")
+    print ("----------------------- Final results ------------------------")
+    sys.stdout.flush()
+    for t in fTerms:
+        index_types = ()
+        for t_tensor in t.tensors:
+            for t_tensor_index in t_tensor.indices:
+                index_types += t_tensor_index.indType[0]
+        print (t)
+
+    print ("")
+    print ("Total terms : %s" % len(fTerms))
+    print ("SQA automation time :  %.3f seconds" % (time.time() - startTime))
+    sys.stdout.flush()
+
+    return fTerms
+
+def dummyLabel(_terms):
+    "A function to relabel dummy indices."
+
+    print ("Dummy indices relabelling...")
+    sys.stdout.flush()
+
+    nterms = list(_terms)
+    for t in nterms:
+        mymap = {}
+
+        coreInd = list('ijklmnopq')
+        actvInd = list('xyzwuvstr')
+        virtInd = list('abcdefgh')
+
+        reservedInd = []
+        for t_tensor in t.tensors:
+            for t_tensor_index in range(len(t_tensor.indices)):
+                index_name = t_tensor.indices[t_tensor_index].name
+                index_summed = t_tensor.indices[t_tensor_index].isSummed
+
+                if index_name not in reservedInd and not index_summed:
+                    reservedInd.append(index_name.lower())
+
+        for reserved_index_name in reservedInd:
+            if reserved_index_name in coreInd:
+                coreInd.remove(reserved_index_name)
+            elif reserved_index_name in actvInd:
+                actvInd.remove(reserved_index_name)
+            elif reserved_index_name in virtInd:
+                virtInd.remove(reserved_index_name)
+
+        for t_tensor in t.tensors:
+            for t_tensor_index in range(len(t_tensor.indices)):
+
+                # Decide which new label to assign
+                index_type = t_tensor.indices[t_tensor_index].indType
+                index_name = t_tensor.indices[t_tensor_index].name
+                index_summed = t_tensor.indices[t_tensor_index].isSummed
+
+                if index_summed:
+                        if index_name not in mymap.keys():
+                            if is_core_index_type(index_type):
+                                mymap[index_name] = coreInd[0]
+                                coreInd.pop(0)
+                            elif is_active_index_type(index_type):
+                                mymap[index_name] = actvInd[0]
+                                actvInd.pop(0)
+                            elif is_virtual_index_type(index_type):
+                                mymap[index_name] = virtInd[0]
+                                virtInd.pop(0)
 
                     # Update the label
-                    t_tensor.indices[t_tensor_index].name = mymap[index_name]
-#
-#        index_types += t_tensor.indices[t_tensor_index].indType
+                        t_tensor.indices[t_tensor_index].name = mymap[index_name]
+
+        if options.verbose:
+           print (t)
+
+    print ("Done ...")
+    print ("""--------------------------------------------------------------""")
+    sys.stdout.flush()
+    return nterms
+
+def filterVirtual(_terms):
+    "A function to calculate expectation value wrt virtual: filter zero terms wrt virtual."
+
+    print ("Computing expectation value with respect to virtual:=>")
+    sys.stdout.flush()
+
+    for t_term in _terms:
+        for t_tensor in t_term.tensors:
+            for t_tensor_index in range(len(t_tensor.indices)):
+
+                index_type = t_tensor.indices[t_tensor_index].indType
+
+                if isinstance(t_tensor, desOp):
+                    if is_virtual_index_type(index_type):
+                        t_term.numConstant = 0.0
+                elif isinstance(t_tensor, creOp):
+                    if is_virtual_index_type(index_type):
+                        t_term.numConstant = 0.0
+
+        if options.verbose:
+            print (t_term)
+
+    print ("Done ...")
+    print ("""--------------------------------------------------------------""")
+    sys.stdout.flush()
+    return
+
+def filterCore(_terms):
+    "A function to calculate expectation value wrt core: filter zero terms wrt core."
+
+    print ("Computing expectation value with respect to core:=>")
+    sys.stdout.flush()
+
+    for t_term in _terms:
+        for t_tensor in t_term.tensors:
+            for t_tensor_index in range(len(t_tensor.indices)):
+
+                index_type = t_tensor.indices[t_tensor_index].indType
+
+                if isinstance(t_tensor, desOp):
+                    if is_core_index_type(index_type):
+                        t_term.numConstant = 0.0
+                elif isinstance(t_tensor, creOp):
+                    if is_core_index_type(index_type):
+                        t_term.numConstant = 0.0
+
+        if options.verbose:
+            print (t_term)
+
+    print ("Done ...")
+    print ("""--------------------------------------------------------------""")
+    sys.stdout.flush()
+    return
+
+def normalOrderCore(_terms):
+    print ("Normal ordering with respect to core:=>")
+    sys.stdout.flush()
+    ordered_terms = []
+
+    for _term in _terms:
+        ordered_term = normOrderCor(_term)
+        ordered_terms.extend(ordered_term)
+
+    print ("Done ...")
+    print ("""--------------------------------------------------------------""")
+    sys.stdout.flush()
+    return ordered_terms
+
+def normOrderCor(_term):
+    "Returns a list of terms resulting from normal ordering the operators in inTerm."
     if options.verbose:
-       print t
-#       print t.numConstant
-#       print index_types
-# print ""
- print "Done ..."
- print("""--------------------------------------------------------------""")
- sys.stdout.flush()
- return
-#
-#####################################
-#
-def filterVirtual(nterms):
- "A function to calculate expectation value wrt virtual: filter zero terms wrt virtual."
-#
-# print ""
- print "Computing expectation value with respect to virtual:=>"
- sys.stdout.flush()
-##
- for t in nterms:
-    mymap ={}
-    index_types = ()
-#
-    for t_tensor in t.tensors:
-    #     print t_tensor, t_tensor.name, t_tensor.indices
-         for t_tensor_index in range(len(t_tensor.indices)):
-#
-              index_type = t_tensor.indices[t_tensor_index].indType
-              index_name = t_tensor.indices[t_tensor_index].name
-              tensor_name = t_tensor.name
-#
-              if len(index_type) > 1:
-                 raise Exception('This code does not support general indices for now')
-              else:
-#
-                 if (tensor_name == 'des'):
-                      if (index_type[0][0] == 'virtual'):
-                         t.numConstant = 0.0
-#                         print 'cond1:',t_tensor, t_tensor.name, t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType[0][0]
-                 elif (tensor_name == 'cre'):
-                      if (index_type[0][0] == 'virtual'):
-                        t.numConstant = 0.0
-#                         print 'cond2:',t_tensor, t_tensor.name, t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType[0][0]
-#
-#
-    if options.verbose:
-       print t
-# print ""
- print "Done ..."
- print("""--------------------------------------------------------------""")
- sys.stdout.flush()
- return
-#
-#####################################
-#
-def filterCore(nterms):
- "A function to calculate expectation value wrt core: filter zero terms wrt core."
-#
-# print ""
- print "Computing expectation value with respect to core:=>"
- sys.stdout.flush()
-##
- for t in nterms:
-    mymap ={}
-    index_types = ()
-#
-    for t_tensor in t.tensors:
-    #     print t_tensor, t_tensor.name, t_tensor.indices
-         for t_tensor_index in range(len(t_tensor.indices)):
-#
-              index_type = t_tensor.indices[t_tensor_index].indType
-              index_name = t_tensor.indices[t_tensor_index].name
-              tensor_name = t_tensor.name
-#
-              if len(index_type) > 1:
-                 raise Exception('This code does not support general indices for now')
-              else:
-#
-                 if (tensor_name == 'des'):
-                      if (index_type[0][0] == 'core'):
-                         t.numConstant = 0.0
-#                         print 'cond1:',t_tensor, t_tensor.name, t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType[0][0]
-                 elif (tensor_name == 'cre'):
-                      if (index_type[0][0] == 'core'):
-                        t.numConstant = 0.0
-#                         print 'cond2:',t_tensor, t_tensor.name, t_tensor.indices[t_tensor_index].name,t_tensor.indices[t_tensor_index].indType[0][0]
-#
-#
-    if options.verbose:
-       print t
-# print ""
- print "Done ..."
- print("""--------------------------------------------------------------""")
- sys.stdout.flush()
- return
-#
-#####################################
-#
-def normalOrderCore(terms):
- print "Normal ordering with respect to core:=>"
- sys.stdout.flush()
- nTerms = []
- for t in terms:
-   cTerms = normOrderCor(t)
-   nTerms.extend(cTerms)
- print "Done ..."
- print("""--------------------------------------------------------------""")
- sys.stdout.flush()
- return nTerms
-#
-def normOrderCor(inTerm):
-  "Returns a list of terms resulting from normal ordering the operators in inTerm."
-#  print ""
-#  print "Normal ordering with respect to core:=>"
-  if options.verbose:
-     print 'Term=', inTerm
-#  if options.verbose:
-#    print "converting to normal order:  %s" %(str(inTerm))
+        print ('Term = %s' % _term)
 
-  # check that inTerm is a term
-  if not isinstance(inTerm, term):
-    raise TypeError, "inTerm must be of class term"
+    # check if is a term
+    if not isinstance(_term, term):
+        raise TypeError ("Input term must be of class term")
 
-  # determine what types of operators the term contains
-  has_creDesOps = False
-  has_sfExOps = False
-  for t in inTerm.tensors:
-    if isinstance(t, creOp) or isinstance(t, desOp):
-      has_creDesOps = True
-    elif isinstance(t, sfExOp):
-      has_sfExOps = True
+    # determine what types of operators the term contains
+    has_creDesOps = False
+    has_sfExOps = False
+    for _tensor in _term.tensors:
+        if isinstance(_tensor, creOp) or isinstance(_tensor, desOp):
+            has_creDesOps = True
+        elif isinstance(_tensor, sfExOp):
+            has_sfExOps = True
 
-  # If term has both creation/destruction operators and spin free excitation operators,
-  # raise an error
-  if has_creDesOps and has_sfExOps:
-    raise RuntimeError, "Normal ordering not implemented when both creOp/desOp and sfExOp " + \
-                        "tensors are present"
+    # If term has both creation/destruction operators and spin free excitation operators raise an error
+    if has_creDesOps and has_sfExOps:
+        raise RuntimeError ("Normal ordering not implemented when both creOp/desOp and sfExOp tensors are present")
 
-  # if the term is already normal ordered, return it unchanged
- # elif inTerm.isNormalOrdered():
- #   print "koushik ordering"
- #   outTerms = [inTerm.copy()]
+    # Normal ordering for creOp/desOp
+    elif has_creDesOps:
 
-  # Normal ordering for creOp/desOp
-  elif has_creDesOps:
-
-    # Separate the cre/des operators from other tensors
-    ops = []
-    nonOps = []
-    for t in inTerm.tensors:
-      if isinstance(t, creOp) or isinstance(t, desOp):
-        ops.append(t.copy())
-      else:
-        nonOps.append(t.copy())
-
-    # Generate all contraction pairs
-##koushik
-    contractionPairs = []
-    for i in range(len(ops)):
-       iTerm = ops[i]
-       iType = iTerm.indices[0].indType
-       for j in range(i+1,len(ops)):
-#         if (jTerm.indices[j].indType[0][0] == 'core'):
-            jTerm = ops[j]
-            jType = jTerm.indices[0].indType
-#            if isinstance(iTerm, desOp) and isinstance(jTerm, creOp):
-            if isinstance(iTerm, creOp) and isinstance(jTerm, desOp):
-#                 print 'kterm=',iTerm,jTerm,iType[0][0],jType[0][0]
-#                 exit()
-                 if iType[0][0] == 'core' or jType[0][0] == 'core':
-##koushik
-                    contractionPairs.append((i,j));
-#    print "contractionPairs\n", contractionPairs
-
-    # Determine maximum contraction order
-    creCount = 0
-    maxConOrder = 0
-    for i in range(len(ops)-1,-1,-1):
-      iTerm = ops[i]
-#      if isinstance(iTerm, creOp):
-      if isinstance(iTerm, desOp):
-        creCount +=1
-#      elif isinstance(iTerm, desOp) and creCount > 0:
-      elif isinstance(iTerm, creOp) and creCount > 0:
-        maxConOrder += 1
-        creCount -= 1
-    del(creCount,iTerm)
-
-    # Generate all contractions
-    contractions = []
-    for i in range(maxConOrder+1):
-      subCons = makeTuples(i,contractionPairs)
-      j = 0
-      while j < len(subCons):
-        creOpTags = []
-        desOpTags = []
-        for k in range(i):
-          creOpTags.append(subCons[j][k][1])
-          desOpTags.append(subCons[j][k][0])
-#          creOpTags.append(subCons[j][k][0])
-#          desOpTags.append(subCons[j][k][1])
-        if allDifferent(creOpTags) and allDifferent(desOpTags):
-          j += 1
-        else:
-          del(subCons[j])
-      for j in range(len(subCons)):
-        contractions.append(subCons[j])
-    del(subCons,creOpTags,desOpTags,contractionPairs)
-#    print "contractions:\n", contractions
-
-    # For each contraction, generate the resulting term
-    outTerms = []
-    for contraction in contractions:
-      conSign = 1
-      deltaFuncs = []
-      conIndeces = []
-      subOpString = []
-      subOpString.extend(ops)
-      for conPair in contraction:
-        index1 = ops[conPair[0]].indices[0]
-        index2 = ops[conPair[1]].indices[0]
-        deltaFuncs.append(kroneckerDelta([index1,index2]))
-        subOpString[conPair[0]] = 'contracted'
-        subOpString[conPair[1]] = 'contracted'
-        for q in subOpString[conPair[0]+1:conPair[1]]:
-          if not (q is 'contracted'):
-            conSign *= -1
-      i = 0
-      while i < len(subOpString):
-        if subOpString[i] is 'contracted':
-          del(subOpString[i])
-        else:
-          i += 1
-      (sortSign,sortedOps) = sortOpsCore(subOpString)
-      totalSign = conSign * sortSign
-      outTensors = []
-      outTensors.extend(nonOps)
-      outTensors.extend(deltaFuncs)
-      outTensors.extend(sortedOps)
-      outTerms.append( term(totalSign * inTerm.numConstant, inTerm.constants, outTensors) )
-
-
-  # Normal ordering for sfExOps
-  elif has_sfExOps:
-
-    # Make separate lists of the spin free excitation operators and other tensors
-    raise Exception('This code does not support for now')
-
-  else:
-    outTerms = []
-    outTerms = [inTerm]
-#    return outTerms
-#    raise RuntimeError, "Normal ordering function failed to choose what to do."
-
-  if options.verbose:
-     print "Terms after normal ordering:"
-     for t in outTerms:
-       print t
-#
-  return outTerms
-#
-#####################################
-#--------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------
-def sortOpsCore(unsortedOps, returnPermutation = False):
-  """
-  Sorts a list of creation/destruction operators into normal order and alphebetically.
-  Performs no contractions.  Returns the overall sign resulting from the sort and the sorted operator list.
-  """
-  sortedOps = unsortedOps + []
-  i = 0
-  sign = 1
-#  print 'kperm=',len(unsortedOps),len(sortedOps)
-#  for i in sortedOps:
-#    print i
-#  exit()
-#  print 'ki=',i
-  if returnPermutation:
-    perm = range(len(unsortedOps))
-#  print 'kperm=',len(unsortedOps),len(sortedOps)
-  while i < len(sortedOps)-1:
-####
-#    if (sortedOps[i].name == 'cre') and (sortedOps[i].indices[0].indType[0][0]=='core'):
-    if (sortedOps[i].name == 'cre') and (sortedOps[i].indices[0].indType[0][0]=='core'):
-   #    if sortedOps[i] <= sortedOps[i+1]:
-     #     if (sortedOps[i+1].name == sortedOps[i].name):
-##########
-          j = i
-          for k in range(i,(len(sortedOps)-1)):
-            if (sortedOps[k+1].name == 'cre') and (sortedOps[k+1].indices[0].indType[0][0]=='core'):
-               i += 1
-               j = i
+        # Separate the cre/des operators from other tensors
+        ops = []
+        nonOps = []
+        for _tensor in _term.tensors:
+            if isinstance(_tensor, creOp) or isinstance(_tensor, desOp):
+                ops.append(_tensor.copy())
             else:
-               i = j 
-               break
-          if ((i+1) > (len(sortedOps)-1)):
-              break     
-#
-#          if (sortedOps[i+1].name == 'cre') and (sortedOps[i+1].indices[0].indType[0][0]=='core'):
-##            print 'km0=',sortedOps[i],sortedOps[i+1],i,i+1,len(sortedOps)
-#            i +=1
-#            if ((i+1) > (len(sortedOps)-1)):
-#               break
-##########
-          temp = sortedOps[i]
-          sortedOps[i] = sortedOps[i+1]
-          sortedOps[i+1] = temp
-#          print 'km1=',sortedOps[i],sortedOps[i+1],i
-          if returnPermutation:
-            temp = perm[i]
-            perm[i] = perm[i+1]
-            perm[i+1] = temp
-          i = 0
-          sign *= -1
-     #     if (sortedOps[i+1].name == sortedOps[i].name):
-     #       break
-    elif (sortedOps[i+1].name == 'des') and (sortedOps[i+1].indices[0].indType[0][0]=='core'):
-          temp = sortedOps[i]
-          sortedOps[i] = sortedOps[i+1]
-          sortedOps[i+1] = temp
-#          print 'km2=',sortedOps[i-1],sortedOps[i],i
-          if returnPermutation:
-            temp = perm[i+1]
-            perm[i+1] = perm[i]
-            perm[i] = temp
-          i = 0
-          sign *= -1
-          if (sortedOps[i+1].name == sortedOps[i].name):
-            break
+                nonOps.append(_tensor.copy())
+
+        # Generate all contraction pairs
+        contractionPairs = []
+        for i in range(len(ops)):
+            iTerm = ops[i]
+            iType = iTerm.indices[0].indType
+
+            for j in range(i+1,len(ops)):
+                jTerm = ops[j]
+                jType = jTerm.indices[0].indType
+
+                if isinstance(iTerm, creOp) and isinstance(jTerm, desOp):
+                    if is_core_index_type(iType) or is_core_index_type(jType):
+                        contractionPairs.append((i,j));
+
+        # Determine maximum contraction order
+        creCount = 0
+        maxConOrder = 0
+        for i in range(len(ops)-1,-1,-1):
+            iTerm = ops[i]
+            if isinstance(iTerm, desOp):
+                creCount +=1
+            elif isinstance(iTerm, creOp) and creCount > 0:
+                maxConOrder += 1
+                creCount -= 1
+        del(creCount,iTerm)
+
+        # Generate all contractions
+        contractions = []
+        for i in range(maxConOrder+1):
+            subCons = makeTuples(i,contractionPairs)
+            j = 0
+            while j < len(subCons):
+                creOpTags = []
+                desOpTags = []
+                for k in range(i):
+                    creOpTags.append(subCons[j][k][1])
+                    desOpTags.append(subCons[j][k][0])
+                if allDifferent(creOpTags) and allDifferent(desOpTags):
+                    j += 1
+                else:
+                    del(subCons[j])
+            for j in range(len(subCons)):
+                contractions.append(subCons[j])
+        del(subCons,creOpTags,desOpTags,contractionPairs)
+
+        # For each contraction, generate the resulting term
+        ordered_terms = []
+        for contraction in contractions:
+            conSign = 1
+            deltaFuncs = []
+            subOpString = []
+            subOpString.extend(ops)
+            for conPair in contraction:
+                index1 = ops[conPair[0]].indices[0]
+                index2 = ops[conPair[1]].indices[0]
+                deltaFuncs.append(kroneckerDelta([index1,index2]))
+                subOpString[conPair[0]] = 'contracted'
+                subOpString[conPair[1]] = 'contracted'
+                for q in subOpString[conPair[0]+1:conPair[1]]:
+                    if not (q is 'contracted'):
+                        conSign *= -1
+            i = 0
+            while i < len(subOpString):
+                if subOpString[i] is 'contracted':
+                    del(subOpString[i])
+                else:
+                    i += 1
+            (sortSign, sortedOps) = sortOpsCore(subOpString)
+            totalSign = conSign * sortSign
+
+            ordered_tensors = []
+            ordered_tensors.extend(nonOps)
+            ordered_tensors.extend(deltaFuncs)
+            ordered_tensors.extend(sortedOps)
+            ordered_terms.append(term(totalSign * _term.numConstant, _term.constants, ordered_tensors))
+
+    # Normal ordering for sfExOps
+    elif has_sfExOps:
+        # Make separate lists of the spin free excitation operators and other tensors
+        raise Exception ('This code does not support for now')
+
     else:
-#       print "koushik check3",i
-       i += 1
-  if returnPermutation:
-    return (sign,sortedOps,perm)
-  return (sign,sortedOps)
-#####################################
+        ordered_terms = []
+        ordered_terms = [_term]
+
+    if options.verbose:
+        print ("Terms after normal ordering:")
+        for ordered_term in ordered_terms:
+            print (ordered_term)
+
+    return ordered_terms
+
+def sortOpsCore(_unsorted_ops, returnPermutation = False):
+    """
+    Sorts a list of creation/destruction operators into normal order and alphabetically.
+    Performs no contractions.  Returns the overall sign resulting from the sort and the sorted operator list.
+    """
+    sorted_ops = _unsorted_ops + []
+    i = 0
+    sign = 1
+
+    if returnPermutation:
+        perm = range(len(_unsorted_ops))
+
+    while i < len(sorted_ops)-1:
+        if isinstance(sorted_ops[i], creOp) and is_core_index_type(sorted_ops[i].indices[0]):
+            j = i
+            for k in range(i,(len(sorted_ops)-1)):
+                if isinstance(sorted_ops[k+1], creOp) and is_core_index_type(sorted_ops[k+1].indices[0]):
+                    i += 1
+                    j = i
+                else:
+                    i = j
+                    break
+            if ((i+1) > (len(sorted_ops)-1)):
+                break
+
+            temp = sorted_ops[i]
+            sorted_ops[i] = sorted_ops[i+1]
+            sorted_ops[i+1] = temp
+
+            if returnPermutation:
+                temp = perm[i]
+                perm[i] = perm[i+1]
+                perm[i+1] = temp
+            i = 0
+            sign *= -1
+
+        elif isinstance(sorted_ops[i+1], desOp) and is_core_index_type(sorted_ops[i+1].indices[0]):
+            temp = sorted_ops[i]
+            sorted_ops[i] = sorted_ops[i+1]
+            sorted_ops[i+1] = temp
+
+            if returnPermutation:
+                temp = perm[i+1]
+                perm[i+1] = perm[i]
+                perm[i] = temp
+            i = 0
+            sign *= -1
+            if (sorted_ops[i+1].name == sorted_ops[i].name):
+                break
+        else:
+            i += 1
+
+    if returnPermutation:
+        return (sign, sorted_ops, perm)
+    return (sign, sorted_ops)
+
 def print_header():
 
-    print("""\n--------------------------------------------------------------
-    SQA_extra: Code generator for quasi-particle systems.
-    author:  Koushik Chatterjee
-    date:  August 31, 2018
+    print("""
+    \n----------------------------------------------------------------------------------
+    sqa_plus: Code generator for quasi-particle systems.
+    Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 
-    Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+    Licensed under the GNU General Public License v3.0;
 
-    This program is distributed in the hope that it will
-    be useful, but WITHOUT ANY WARRANTY; without even the
-    implied warranty of MERCHANTABILITY or FITNESS FOR A
-    PARTICULAR PURPOSE. See the GNU General Public License
-    for more details.
---------------------------------------------------------------""")
-#
-#
-def contractDeltaFuncs_nondummy(terms):
-#
- "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
-# print ""
- print "Contract delta function for non-dummy indices: =>"
- sys.stdout.flush()
-#
- for term in terms:
-#    i = 0
-# while i < len(term.tensors):
-    for i in range(len(term.tensors)):
-        t = term.tensors[i]
-#
-        if isinstance(t, kroneckerDelta):
-          i0 = t.indices[0]
-          i1 = t.indices[1]
-          if not (i0.isSummed and i1.isSummed):
-              if not (i0.indType[0][0] == i1.indType[0][0]):
-                   term.numConstant = 0.0
-#
- termChop(terms)
-#
-# print ""
- print "Done ..."
- print("""--------------------------------------------------------------""")
- sys.stdout.flush()
- return terms
-#
-#####################################
-def tensorIndex_order(terms):
-# print ""
- print "Reorder tensor indices according to (Core < Active < Virtual): =>"
- sys.stdout.flush()
-#
- for term in terms:
-     for i in range(len(term.tensors)):
-         t = term.tensors[i]
-         t0 = t.copy()
-         if ((len(t.indices)==2) or (len(t.indices)==4)):
-            braSym = None
-            ketSym = None
-            bSym = (1, 0, 2, 3)
-            kSym = (0, 1, 3, 2)
-            bfac = None
-            kfac = None
-#
-            ind_rank = []
-#
-            for j in range(len(t.indices)):
-                if (t.indices[j].indType[0][0][0] == 'c'):
-                   rank = 3
-                elif(t.indices[j].indType[0][0][0] == 'a'):
-                   rank = 1
-                else:
-                   rank = 0
-                ind_rank.append(rank)
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-           # (tup,fac) = t.symPermutes()
-            if (len(t.indices) == 2):
-               if (ind_rank[0] < ind_rank[1]):
-                  if options.verbose:
-                     print '---------'
-                     print  term
-                  factor = +1
-                  tem = t.indices[0]
-                  t.indices[0] = t.indices[1]
-                  t.indices[1] = tem
-                  term.scale(factor)
-                  if options.verbose:
-                     print t0,'    --->    %s (factor = %s)' % (t, factor)
+    ----------------------------------------------------------------------------------""")
+
+def contractDeltaFuncs_nondummy(_terms):
+    "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
+
+    print ("Contract delta function for non-dummy indices: =>")
+    sys.stdout.flush()
+
+    for term in _terms:
+        for i in range(len(term.tensors)):
+            t = term.tensors[i]
+
+            if isinstance(t, kroneckerDelta):
+                i0 = t.indices[0]
+                i1 = t.indices[1]
+                if not (i0.isSummed and i1.isSummed):
+                    if not ((get_spatial_index_type(i0) == get_spatial_index_type(i1)) and
+                            (get_spin_index_type(i0) == get_spin_index_type(i1))):
+                        term.numConstant = 0.0
+
+    termChop(_terms)
+
+    print ("Done ...")
+    print ("""--------------------------------------------------------------""")
+    sys.stdout.flush()
+    return _terms
+
+def reorder_tensor_indices(_terms, reorder_t = True):
+    print ("Reordering indices according to core < active < virtual...")
+    sys.stdout.flush()
+
+    for ind_unordered_term, unordered_term in enumerate(_terms):
+        for ind_unordered_tensor, unordered_tensor in enumerate(unordered_term.tensors):
+            if reorder_t:
+                reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
+                                  (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4) or
+                                  ((unordered_tensor.name[0] == 't') and
+                                   ((len(unordered_tensor.indices) == 2) or len(unordered_tensor.indices) == 4)))
             else:
-               braketsym = {}
-               for sym in t.symmetries:
-                  tup1 = sym.pattern
-                  fac = sym.factor
-                  braketsym.update({tup1 : fac})
-               for key,val in braketsym.items():
-                   if (key == bSym):
-                      braSym = True
-                      bfac   = braketsym[key]
-                   if (key == kSym):
-                      ketSym = True
-                      kfac   = braketsym[key]
+                reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
+                                  (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4))
 
-               if (ind_rank[0] < ind_rank[1]):
-                  if (braSym):
-                     if options.verbose:
-                        print '---------'
-                        print  term
-                     tem = t.indices[0]
-                     t.indices[0] = t.indices[1]
-                     t.indices[1] = tem
-                     term.scale(bfac)
-                     if options.verbose:
-                        print t0,'    --->    %s (factor = %s)' % (t, bfac)
+            if reorder_tensor:
+                original_rank = []
+                for ind in unordered_tensor.indices:
+                    if is_core_index_type(ind):
+                        original_rank.append(3)
+                    elif is_active_index_type(ind):
+                        original_rank.append(1)
+                    elif is_virtual_index_type(ind):
+                        original_rank.append(0)
 
-               if (ind_rank[2] < ind_rank[3]):
-                  if (ketSym):
-                     if options.verbose:
-                        print '---------'
-                        print  term
-                     tem = t.indices[2]
-                     t.indices[2] = t.indices[3]
-                     t.indices[3] = tem
-                     term.scale(kfac)
-                     if options.verbose:
-                        print t0,'    --->    %s (factor = %s)' % (t, kfac)
+                permutes_indices, permutes_factors = unordered_tensor.symPermutes()
+                permutes_rank = []
 
-               if ((ind_rank[0]+ind_rank[1]) < (ind_rank[2]+ind_rank[3])):
-                  if options.verbose:
-                     print '---------'
-                     print  term
-                  tem0 = t.indices[0].copy()
-                  tem1 = t.indices[1].copy()
-                  tem2 = t.indices[2].copy()
-                  tem3 = t.indices[3].copy()
-                  t.indices[0].name = tem2.name
-                  t.indices[0].indType = tem2.indType
-                  t.indices[1].name = tem3.name
-                  t.indices[1].indType = tem3.indType
-                  t.indices[2].name = tem0.name
-                  t.indices[2].indType = tem0.indType
-                  t.indices[3].name = tem1.name
-                  t.indices[3].indType = tem1.indType
-                  if options.verbose:
-                     print t0,'Bra <---> Ket', t
+                for permute_indices in permutes_indices:
+                    permute_rank = []
 
-# print ""
- print "Done ..."
- print("""--------------------------------------------------------------""")
- sys.stdout.flush()
- return terms
+                    permuted_indices = [unordered_tensor.indices[ind] for ind in permute_indices]
+                    for ind in permuted_indices:
+                        if is_core_index_type(ind):
+                            permute_rank.append(3)
+                        elif is_active_index_type(ind):
+                            permute_rank.append(1)
+                        elif is_virtual_index_type(ind):
+                            permute_rank.append(0)
+                    permutes_rank.append(permute_rank)
 
-#####################################
+                permutes_rank, permutes_indices, permutes_factors = zip(*sorted(zip(permutes_rank, permutes_indices, permutes_factors), reverse=True))
+                permutes_rank_ind = [ind for ind, rank in enumerate(permutes_rank) if rank == permutes_rank[0]][-1]
+
+                permuted_indices = [unordered_tensor.indices[ind] for ind in permutes_indices[permutes_rank_ind]]
+                ordered_tensor = unordered_tensor.copy()
+                ordered_tensor.indices = permuted_indices
+
+                _terms[ind_unordered_term].tensors[ind_unordered_tensor] = ordered_tensor.copy()
+
+                order_factor = permutes_factors[permutes_rank_ind]
+                _terms[ind_unordered_term].numConstant *= order_factor
+
+                if options.verbose:
+                    print ('---------')
+                    print (unordered_term)
+                    print ('%s    --->    %s (factor = %s)' % (unordered_tensor, ordered_tensor, order_factor))
+                    print (_terms[ind_unordered_term])
+
+    print ("Done ...")
+    print ("""--------------------------------------------------------------""")
+    sys.stdout.flush()
+    return _terms
+
