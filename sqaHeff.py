@@ -1,4 +1,4 @@
-# Copyright 2018-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+# Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 #
 # Licensed under the GNU General Public License v3.0;
 # you may not use this file except in compliance with the License.
@@ -9,8 +9,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Author: Koushik Chatterjee <koushikchatterjee7@gmail.com>
-#         Carlos E. V. de Moura <carlosevmoura@gmail.com>
+# In addition, any modification or use of this software should
+# cite the following paper:
+#
+#   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
+#   J. Chem. Phys. 130, 124102 (2009)
+#
+# Authors: Koushik Chatterjee <koushikchatterjee7@gmail.com>
+#          Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
 import sys

@@ -1,20 +1,29 @@
-#    file:  sqaTerm.py
-#  author:  Eric Neuscamman
-#    date:  March 30, 2009
-# summary:  Defines the term class and some functions that use it.
+# Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 #
-# (c) 2008-2009 Eric Neuscamman (eric.neuscamman@gmail.com)
+# Licensed under the GNU General Public License v3.0;
+# you may not use this file except in compliance with the License.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
 # In addition, any modification or use of this software should
 # cite the following paper:
 #
 #   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
 #   J. Chem. Phys. 130, 124102 (2009)
-
+#
+# Author: Eric Neuscamman <eric.neuscamman@gmail.com>
+#
+# The term class represents a set of constants and tensors that have been multiplied together.
+# The class consists of a numerical constant factor, a list of named constants, and a list
+# of tensors.
+#
+# It is common to encounter a list of term objects, which is often used to represent an expression.
+# For example, the Hamiltonian in second quantization can be written as a list of terms.
+#
 
 import threading
 from sqaIndex import index
@@ -22,14 +31,6 @@ from sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp, creDesTensor
 from sqaMisc import makePermutations
 from sqaOptions import options
 import time
-
-# The term class represents a set of constants and tensors that have been multiplied together.
-# The class consists of a numerical constant factor, a list of named constants, and a list
-# of tensors.
-#
-# It is common to encounter a list of term objects, which is often used to represent an expression.
-# For example, the Hamiltonian in second quantization can be written as a list of terms.
-
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------

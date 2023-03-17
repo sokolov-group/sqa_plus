@@ -678,7 +678,7 @@ def append_CVS_slice(tens, tens_name, tens_indices, cvs_ind, val_ind, suffix):
 def append_spin_integrated_slice(tens, tens_name, tens_indices):
 
     # List of spin index types
-    spin_ind_types = [get_spin_indType(ind.indType) for ind in tens.indices]
+    spin_ind_types = [get_spin_index_type(ind) for ind in tens.indices]
 
     to_append = '['
 

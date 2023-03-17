@@ -1,22 +1,21 @@
-# file:  sqaAddon.py
-# author:  Koushik Chatterjee
-# date:  August 31, 2018
+# Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 #
-# summary:
-#           matrixBlock: General routine used to construct matrix block.
-#           dummyLabel: Relabel dummy indices according to core, active, external.
-#           filterVirtual: Calculate expectation value wrt virtual orbitals.
-#           filterCore: Calculate expectation value wrt core orbitals.
-#           normalOrderCore: Normal order with respect to core orbitals.
+# Licensed under the GNU General Public License v3.0;
+# you may not use this file except in compliance with the License.
 #
-# Copyright (C) 2018-2020 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
-# This program is distributed in the hope that it will
-# be useful, but WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A
-# PARTICULAR PURPOSE. See the GNU General Public License
-# for more details.
+# In addition, any modification or use of this software should
+# cite the following paper:
 #
+#   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
+#   J. Chem. Phys. 130, 124102 (2009)
+#
+# Author: Koushik Chatterjee <koushikchatterjee7@gmail.com>
 #
 
 import sys, time
