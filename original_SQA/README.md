@@ -1,19 +1,16 @@
-#    file:  README.txt
-#  author:  Eric Neuscamman
-#    date:  March 31, 2009
-# summary:  Provides instruction for using the operator algebra program.
-#
-# (c) 2008-2009 Eric Neuscamman (eric.neuscamman@gmail.com)
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# In addition, any modification or use of this software should
-# cite the following paper:
-#
-#   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
-#   J. Chem. Phys. 130, 124102 (2009)
+# sqa_extra: SecondQuantizationAlgebra Plus
+##  author:  Eric Neuscamman
+###    date:  March 31, 2009
+### summary:  Provides instruction for using the operator algebra program.
+
+(c) 2008-2009 Eric Neuscamman (eric.neuscamman@gmail.com)
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+In addition, any modification or use of this software should cite the following paper:
+
+  E. Neuscamman, T. Yanai, and G. K.-L. Chan.
+  J. Chem. Phys. 130, 124102 (2009)
 
 This program is intended to automate many of the tedious manipulations that one encounters when working in second quantization.
 To use it, be sure that your Python path includes this directory. Then, in the Python2 interpreter or in a Python2 script, use a command such as:
