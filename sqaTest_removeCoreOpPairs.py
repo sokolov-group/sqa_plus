@@ -77,8 +77,8 @@ print "terms after core operator pair removal:"
 print output
 
 if output == correctOutput:
-  print "Test passed!"
+    print "Test passed!"
 else:
-  print "Test failed.  Correct output is:"
-  print correctOutput
+    print "Test failed.  Correct output is:"
+    print correctOutput
 print ""

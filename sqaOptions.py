@@ -19,16 +19,16 @@
 #
 
 class sqaOptions:
-  "A class to hold options for the second quantization algebra program."
+    "A class to hold options for the second quantization algebra program."
 
-  def __init__(self):
-    # Set default options
-    self.verbose = False
-    self.alpha_type = ('alpha',)
-    self.beta_type = ('beta',)
-    self.core_type = ('core',)
-    self.active_type = ('active',)
-    self.virtual_type = ('virtual',)
+    def __init__(self):
+        # Set default options
+        self.verbose = False
+        self.alpha_type = ('alpha',)
+        self.beta_type = ('beta',)
+        self.core_type = ('core',)
+        self.active_type = ('active',)
+        self.virtual_type = ('virtual',)
 
 # Create an object of the options class
 options = sqaOptions()

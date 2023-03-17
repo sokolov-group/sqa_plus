@@ -84,7 +84,7 @@ class index:
 		return cmp(self.indType, other.indType)
 
 	def tup(self):
-		"Returns a tuple representation of the index.  The return object in unmutable and thus can be used as a dictionary key."
+		"Returns a tuple representation of the index. The return object in unmutable and thus can be used as a dictionary key."
 		return (self.name, self.indType, self.isSummed)
 
 	def copy(self):

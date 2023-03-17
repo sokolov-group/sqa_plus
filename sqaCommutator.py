@@ -26,53 +26,53 @@ from sqaNormalOrder import normalOrder
 
 def commutator(leftInput, rightInput, contract = True, combine = True):
 
-  # Convert inputs that are terms into lists of terms
-  if isinstance(leftInput,term):
-    leftTerms = [leftInput]
-  else:
-    leftTerms = leftInput
-  if isinstance(rightInput,term):
-    rightTerms = [rightInput]
-  else:
-    rightTerms = rightInput
+    # Convert inputs that are terms into lists of terms
+    if isinstance(leftInput,term):
+        leftTerms = [leftInput]
+    else:
+        leftTerms = leftInput
+    if isinstance(rightInput,term):
+        rightTerms = [rightInput]
+    else:
+        rightTerms = rightInput
 
-  # Check input integrity
-  TypeErrorMessage = "commutator inputs must be terms or lists of terms"
-  if type(leftTerms) != type([]) or type(rightTerms) != type([]):
-      raise TypeError, TypeErrorMessage
-  for t in rightTerms:
-    if not isinstance(t, term):
-      raise TypeError, TypeErrorMessage
-  for t in leftTerms:
-    if not isinstance(t, term):
-      raise TypeError, TypeErrorMessage
+    # Check input integrity
+    TypeErrorMessage = "commutator inputs must be terms or lists of terms"
+    if type(leftTerms) != type([]) or type(rightTerms) != type([]):
+            raise TypeError, TypeErrorMessage
+    for t in rightTerms:
+        if not isinstance(t, term):
+            raise TypeError, TypeErrorMessage
+    for t in leftTerms:
+        if not isinstance(t, term):
+            raise TypeError, TypeErrorMessage
 
-  # Construct terms resulting from the commutator
-  preNOTerms = [] #terms before normal ordering
-  for lterm in leftTerms:
-    for rterm in rightTerms:
-      preNOTerms.append( multiplyTerms(lterm,rterm) )
-      preNOTerms.append( multiplyTerms(rterm,lterm) )
-      preNOTerms[-1].scale(-1)
+    # Construct terms resulting from the commutator
+    preNOTerms = [] #terms before normal ordering
+    for lterm in leftTerms:
+        for rterm in rightTerms:
+            preNOTerms.append( multiplyTerms(lterm,rterm) )
+            preNOTerms.append( multiplyTerms(rterm,lterm) )
+            preNOTerms[-1].scale(-1)
 
-  # For each term, apply Wick's theorem to convert it to normal order
-  noTerms = [] #terms after normal ordering
-  for t in preNOTerms:
-    noTerms.extend(normalOrder(t))
-  del(preNOTerms)
+    # For each term, apply Wick's theorem to convert it to normal order
+    noTerms = [] #terms after normal ordering
+    for t in preNOTerms:
+        noTerms.extend(normalOrder(t))
+    del(preNOTerms)
 
-  # Contract any delta functions resulting from the normal ordering,
-  # unless told not to
-  if contract:
-    for t in noTerms:
-      t.contractDeltaFuncs()
+    # Contract any delta functions resulting from the normal ordering,
+    # unless told not to
+    if contract:
+        for t in noTerms:
+            t.contractDeltaFuncs()
 
-  # Remove any terms that are zero 
-  termChop(noTerms)
+    # Remove any terms that are zero
+    termChop(noTerms)
 
-  # Combine any like terms unless told not to
-  if combine:
-    combineTerms(noTerms)
+    # Combine any like terms unless told not to
+    if combine:
+        combineTerms(noTerms)
 
-  # Return result
-  return noTerms
+    # Return result
+    return noTerms
