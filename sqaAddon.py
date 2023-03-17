@@ -37,10 +37,10 @@ def matrixBlock(terms, transRDM = False):
     "Construct matrix block."
 
     startTime = time.time()
-    print ("")
-    print ("---------------------------------- SQA Automation --------------------------------")
+    print("")
+    print("---------------------------------- SQA Automation --------------------------------")
     sys.stdout.flush()
-    print ("")
+    print("")
     fTerms = []
 
     # Make sure that input expression is normal-ordered with respect to physical vacuum
@@ -87,19 +87,19 @@ def matrixBlock(terms, transRDM = False):
     reorder_tensor_indices(fTerms, reorder_t = True)
 
     # Print the final results
-    print ("")
-    print ("--------------------------------- Final results ----------------------------------\n")
+    print("")
+    print("--------------------------------- Final results ----------------------------------\n")
     sys.stdout.flush()
     for t in fTerms:
         index_types = ()
         for t_tensor in t.tensors:
             for t_tensor_index in t_tensor.indices:
                 index_types += t_tensor_index.indType[0]
-        print (t)
+        print(t)
 
-    print ("")
-    print ("Total terms : %s" % len(fTerms))
-    print ("SQA automation time :  %.3f seconds" % (time.time() - startTime))
+    print("")
+    print("Total terms : %s" % len(fTerms))
+    print("SQA automation time :  %.3f seconds" % (time.time() - startTime))
     sys.stdout.flush()
 
     return fTerms
@@ -107,7 +107,7 @@ def matrixBlock(terms, transRDM = False):
 def dummyLabel(_terms):
     "A function to relabel dummy indices."
 
-    print ("Dummy indices relabelling...")
+    print("Dummy indices relabelling...")
     sys.stdout.flush()
 
     nterms = list(_terms)
@@ -161,18 +161,18 @@ def dummyLabel(_terms):
     if options.verbose:
         print("")
         for _term in nterms:
-            print (_term)
+            print(_term)
         print("")
 
-    print ("Done!")
-    print ("----------------------------------------------------------------------------------")
+    print("Done!")
+    print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return nterms
 
 def filterVirtual(_terms):
     "A function to calculate expectation value wrt virtual: filter zero terms wrt virtual."
 
-    print ("Computing expectation value with respect to virtual:=>")
+    print("Computing expectation value with respect to virtual:=>")
     sys.stdout.flush()
 
     for t_term in _terms:
@@ -191,18 +191,18 @@ def filterVirtual(_terms):
     if options.verbose:
         print("")
         for t_term in _terms:
-            print (t_term)
+            print(t_term)
         print("")
 
-    print ("Done!")
-    print ("----------------------------------------------------------------------------------")
+    print("Done!")
+    print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return
 
 def filterCore(_terms):
     "A function to calculate expectation value wrt core: filter zero terms wrt core."
 
-    print ("Computing expectation value with respect to core:=>")
+    print("Computing expectation value with respect to core:=>")
     sys.stdout.flush()
 
     for t_term in _terms:
@@ -221,16 +221,16 @@ def filterCore(_terms):
     if options.verbose:
         print("")
         for _term in _terms:
-            print (_term)
+            print(_term)
         print("")
 
-    print ("Done!")
-    print ("----------------------------------------------------------------------------------")
+    print("Done!")
+    print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return
 
 def normalOrderCore(_terms):
-    print ("Normal ordering with respect to core:=>")
+    print("Normal ordering with respect to core:=>")
     sys.stdout.flush()
     ordered_terms = []
 
@@ -238,15 +238,15 @@ def normalOrderCore(_terms):
         ordered_term = normOrderCor(_term)
         ordered_terms.extend(ordered_term)
 
-    print ("Done!")
-    print ("----------------------------------------------------------------------------------")
+    print("Done!")
+    print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return ordered_terms
 
 def normOrderCor(_term):
     "Returns a list of terms resulting from normal ordering the operators in inTerm."
     if options.verbose:
-        print ('Term = %s' % _term)
+        print('Term = %s' % _term)
 
     # check if is a term
     if not isinstance(_term, term):
@@ -363,9 +363,9 @@ def normOrderCor(_term):
         ordered_terms = [_term]
 
     if options.verbose:
-        print ("Terms after normal ordering:")
+        print("Terms after normal ordering:")
         for ordered_term in ordered_terms:
-            print (ordered_term)
+            print(ordered_term)
 
     return ordered_terms
 
@@ -443,7 +443,7 @@ def print_header():
 def contractDeltaFuncs_nondummy(_terms):
     "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
 
-    print ("Contract delta function for non-dummy indices: =>")
+    print("Contract delta function for non-dummy indices: =>")
     sys.stdout.flush()
 
     for term in _terms:
@@ -460,13 +460,13 @@ def contractDeltaFuncs_nondummy(_terms):
 
     termChop(_terms)
 
-    print ("Done!")
-    print ("----------------------------------------------------------------------------------")
+    print("Done!")
+    print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return _terms
 
 def reorder_tensor_indices(_terms, reorder_t = True):
-    print ("Reordering indices according to core < active < virtual...")
+    print("Reordering indices according to core < active < virtual...")
     sys.stdout.flush()
 
     for ind_unordered_term, unordered_term in enumerate(_terms):
@@ -523,8 +523,8 @@ def reorder_tensor_indices(_terms, reorder_t = True):
                     print(unordered_term)
                     print(' %s    --->    %s (factor = %s)' % (unordered_tensor, ordered_tensor, order_factor))
 
-    print ("Done!")
-    print ("----------------------------------------------------------------------------------")
+    print("Done!")
+    print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
     return _terms
 

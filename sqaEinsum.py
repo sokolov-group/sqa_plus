@@ -448,9 +448,9 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
     # Remove terms from standard term list
     if not int_terms:
-        print ('\n------------------------------------ WARNING -------------------------------------')
-        print ('Terms with a contraction over repeating dummy core indices of 2e- integrals')
-        print ('will be removed. Set "rm_core_int" flag to FALSE to preserve terms')
+        print('\n------------------------------------ WARNING -------------------------------------')
+        print('Terms with a contraction over repeating dummy core indices of 2e- integrals')
+        print('will be removed. Set "rm_core_int" flag to FALSE to preserve terms')
 
         # Create lists to split up SQA terms
         kept_terms = []
@@ -481,22 +481,22 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
             else:
                 core_terms.append(terms[term_ind])
 
-        print ('')
-        print (str(len(core_terms)) + ' terms removed:')
+        print('')
+        print(str(len(core_terms)) + ' terms removed:')
         for term in core_terms:
-            print (term)
+            print(term)
 
-        print ('----------------------------------------------------------------------------------')
-        print ('Remaining terms: ' + str(len(kept_terms)))
-        print ('')
+        print('----------------------------------------------------------------------------------')
+        print('Remaining terms: ' + str(len(kept_terms)))
+        print('')
 
         return kept_terms, core_terms
 
     # Filter through intermediate definitions
     else:
-        print ('------------------------------------- WARNING ------------------------------------')
-        print ('Intermediate tensors defined w/ contractions over repeating dummy core indices of')
-        print ('2e- integrals will be removed. Set "rm_core_int" flag to FALSE to preserve definitions')
+        print('------------------------------------- WARNING ------------------------------------')
+        print('Intermediate tensors defined w/ contractions over repeating dummy core indices of')
+        print('2e- integrals will be removed. Set "rm_core_int" flag to FALSE to preserve definitions')
 
         # Track which tensor definitions are removed and kept
         removed_int   = []
@@ -526,13 +526,13 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
         # If some intermediate definitions were removed
         if removed_int:
-            print ('')
-            print (str(len(removed_int)) + ' definitions removed:')
+            print('')
+            print(str(len(removed_int)) + ' definitions removed:')
             for tens, term in zip(removed_int, removed_terms):
-                print (tens + ": " + str(term[0]))
+                print(tens + ": " + str(term[0]))
 
-        print ('----------------------------------------------------------------------------------')
-        print ('')
+        print('----------------------------------------------------------------------------------')
+        print('')
 
         # Returned shortened intermediate list
         terms = [t for t in terms if t not in removed_terms]
@@ -541,9 +541,9 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
 def remove_trans_rdm_const(terms, trans_int_list = None):
 
-    print ('--------------------------------- WARNING ---------------------------------')
-    print ('Terms w/o transRDM tensor in the expression will be removed. Set "rm_trans_rdm_const"')
-    print ('flag to FALSE to preserve terms')
+    print('--------------------------------- WARNING ---------------------------------')
+    print('Terms w/o transRDM tensor in the expression will be removed. Set "rm_trans_rdm_const"')
+    print('flag to FALSE to preserve terms')
 
     # Create lists to split up SQA terms
     const_terms     = []
@@ -573,14 +573,14 @@ def remove_trans_rdm_const(terms, trans_int_list = None):
         else:
             trans_rdm_terms.append(terms[term_ind])
 
-    print ('')
-    print (str(len(const_terms)) + ' terms removed:')
+    print('')
+    print(str(len(const_terms)) + ' terms removed:')
     for term in const_terms:
-        print (term)
+        print(term)
 
-    print ('---------------------------------------------------------------------------')
-    print ('Remaining terms: ' + str(len(trans_rdm_terms)))
-    print ('')
+    print('---------------------------------------------------------------------------')
+    print('Remaining terms: ' + str(len(trans_rdm_terms)))
+    print('')
 
     return trans_rdm_terms, const_terms
 
@@ -828,7 +828,7 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
     print lhs
     for i in tex:
 #      print " & "+i+' \\\\'
-      print " & "+i+r'\\'
+      print(" & "+i+r'\\')
     print r"\end{align*}"
 #    print r"\end{equation}"
     print ''

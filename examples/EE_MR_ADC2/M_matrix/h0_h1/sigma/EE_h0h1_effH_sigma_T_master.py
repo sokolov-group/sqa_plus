@@ -178,12 +178,12 @@ effH = []
 effH = sqa.Heff(1)
 
 for t in effH:
-  print (t)
+  print(t)
 
 term1 = sqa.term(1.0, [], r_op)
 term2 = sqa.term(scaling_factor * 1.0, [], l_op + X)
 
-print ("First Commutator")
+print("First Commutator")
 
 term3 = sqa.commutator(effH, term1)
 term4 = sqa.commutator(term2, term3)

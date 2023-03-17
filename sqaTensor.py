@@ -221,7 +221,7 @@ class tensor:
                 if not unique:
                     break
             if not unique:
-                print "No unique winner produced when sorting the indices of tensor %s" %(str(self))
+                print("No unique winner produced when sorting the indices of tensor %s" %(str(self)))
                 raise RuntimeError, "Scoring system did not produce unique winner."
 
         # Sort indices in the uniquely determined order and return the resulting factor
@@ -489,7 +489,7 @@ class creDesTensor(tensor):
 
                 # Print warning if number of indices is odd and trans_rdm is False
                 if (len(self.indices) % 2 != 0) and self.trans_rdm == False:
-                        print ('trans_rdm flag is set to True, but an ODD number of cre/des operators are present. Switching trans_rdm flag to TRUE !!')
+                        print('trans_rdm flag is set to True, but an ODD number of cre/des operators are present. Switching trans_rdm flag to TRUE !!')
                         self.trans_rdm == True
 
                 # Initialize name

@@ -200,4 +200,4 @@ tensor_name = 'temp'
 einsum_list = sqa.genEinsum(final_result, tensor_name, '', trans_rdm = True, trans_ind_str = 'P', rm_trans_rdm_const = True, rm_core_int = True)
 
 for einsum in einsum_list:
-    print (einsum)
+    print(einsum)

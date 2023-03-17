@@ -150,7 +150,7 @@ effH = sqa.Heff(1)
 
 term2 = sqa.term(1.0, [], r_op)
 
-print ("First Commutator")
+print("First Commutator")
 
 term3 = sqa.commutator(effH, term2)
 term4 = sqa.commutator(term1, term3)
