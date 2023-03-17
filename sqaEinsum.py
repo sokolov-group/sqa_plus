@@ -14,9 +14,11 @@
 #         Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
-from sqaIndex import getSpatialIndType, getSpinIndType, \
-                     isCoreIndType, isActiveIndType, isVirtualIndType, \
-                     isAlphaIndType, isBetaIndType
+from sqaIndex import get_spatial_index_type, get_spin_index_type, \
+                     is_core_index_type, is_active_index_type, is_virtual_index_type, \
+                     is_alpha_index_type, is_beta_index_type
+
+from sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 
 def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_ind_str = None, suffix = None,
               cvs_ind = None, val_ind = None, use_cvs_tensors = False, rm_trans_rdm_const = False, rm_core_int = False,
@@ -218,7 +220,7 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
             tensor_name = 'np.identity('
 
             # Determine orbital space of kdelta
-            if (isCoreIndType(tens.indices[0].indType) and isCoreIndType(tens.indices[1].indType)):
+            if (is_core_index_type(tens.indices[0]) and is_core_index_type(tens.indices[1])):
                 if use_cvs_tensors:
                     if cvs_ind and val_ind:
                         if (tens.indices[0].name in cvs_ind) and (tens.indices[1].name in cvs_ind):
@@ -249,10 +251,10 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                 else:
                     orb_space = 'ncore'
 
-            elif (isActiveIndType(tens.indices[0].indType) and isActiveIndType(tens.indices[1].indType)):
+            elif (is_active_index_type(tens.indices[0]) and is_active_index_type(tens.indices[1])):
                 orb_space = 'ncas'
 
-            elif (isVirtualIndType(tens.indices[0].indType) and isVirtualIndType(tens.indices[1].indType)):
+            elif (is_virtual_index_type(tens.indices[0]) and is_virtual_index_type(tens.indices[1])):
                 orb_space = 'nextern'
 
             else:
@@ -274,7 +276,7 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
             tensor_name = str(tens.name).lower() + '_'
 
             # Determine orbital space of energies
-            if isCoreIndType(tens.indices[0].indType):
+            if is_core_index_type(tens.indices[0]):
                 if use_cvs_tensors:
                     if cvs_ind and val_ind:
                         if tens.indices[0].name in cvs_ind:
@@ -298,7 +300,7 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                 else:
                     orb_space = 'core'
 
-            elif isVirtualIndType(tens.indices[0].indType):
+            elif is_virtual_index_type(tens.indices[0]):
                 orb_space = 'extern'
 
             if suffix:
@@ -336,9 +338,9 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
 
             # Append letter representing orbital subspace of indices
             for i in range(len(tens.indices)):
-                if isActiveIndType(tens.indices[i].indType):
+                if is_active_index_type(tens.indices[i]):
                     tensor_name += 'a'
-                elif isCoreIndType(tens.indices[i].indType):
+                elif is_core_index_type(tens.indices[i]):
                     if use_cvs_tensors:
                         if cvs_ind and val_ind:
                             if (tens.indices[i].name in cvs_ind):
@@ -366,9 +368,9 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
             if use_spin_integrated_tensors:
                 spin_suffix = '_'
                 for i in range(len(tens.indices)):
-                    if isAlphaIndType(tens.indices[i].indType):
+                    if is_alpha_index_type(tens.indices[i]):
                         spin_suffix += 'a'
-                    elif isBetaIndType(tens.indices[i].indType):
+                    elif is_beta_index_type(tens.indices[i]):
                         spin_suffix += 'b'
                 tensor_name += spin_suffix
 
@@ -390,9 +392,9 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
             if use_spin_integrated_tensors:
                 spin_suffix = '_'
                 for i in range(len(tens.indices)):
-                    if isAlphaIndType(tens.indices[i].indType):
+                    if is_alpha_index_type(tens.indices[i]):
                         spin_suffix += 'a'
-                    elif isBetaIndType(tens.indices[i].indType):
+                    elif is_beta_index_type(tens.indices[i]):
                         spin_suffix += 'b'
                 tensor_name += spin_suffix
 
@@ -673,10 +675,68 @@ def append_CVS_slice(tens, tens_name, tens_indices, cvs_ind, val_ind, suffix):
 
     return tens_name
 
+<<<<<<< Updated upstream
+=======
+def analyzeTerm(input_terms, max_act_ind):
+
+    # Make empty list for removed terms
+    kept_terms    = []
+    removed_terms = []
+
+    for t_num, term in enumerate(input_terms):
+
+        core_cre = 0
+        core_des = 0
+        act_cre = 0
+        act_des = 0
+        ext_cre = 0
+        ext_des = 0
+
+        # Iterate through every tensor in term's contraction
+        for tensor in term.tensors:
+
+            # Counting particle and hole operators in subspaces
+            if isinstance(tensor, creOp):
+
+                index = tensor.indices[0]
+
+                if is_core_index_type(index):
+                    core_cre += 1
+
+                if is_active_index_type(index):
+                    act_cre += 1
+
+                if is_virtual_index_type(index):
+                    ext_cre += 1
+
+            elif isinstance(tensor, desOp):
+
+                index = tensor.indices[0]
+
+                if is_core_index_type(index):
+                    core_des += 1
+
+                if is_active_index_type(index):
+                    act_des += 1
+
+                if is_virtual_index_type(index):
+                    ext_des += 1
+
+
+        # Filter out terms with more than request active indices
+        if (act_cre + act_des) > max_act_ind:
+            removed_terms.append(input_terms[t_num])
+
+        else:
+            kept_terms.append(input_terms[t_num])
+
+    return kept_terms, removed_terms
+
+>>>>>>> Stashed changes
 def append_spin_integrated_slice(tens, tens_name, tens_indices):
 
     # List of spin index types
-    spin_ind_types = [getSpinIndType(ind.indType) for ind in tens.indices]
+    spin_ind_types = [get_spin_indType(ind.indType) for ind in tens.indices]
 
     to_append = '['
 
