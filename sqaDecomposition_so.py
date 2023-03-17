@@ -21,8 +21,7 @@
 from sqaIndex import index
 from sqaTensor import tensor, creOp, desOp
 from sqaTerm import term, multiplyTerms, termChop
-from sqaMisc import makePermutations, get_num_perms
-from sqaMisc2 import assign_rdm_types
+from sqaMisc import makePermutations, get_num_perms, assign_rdm_types
 from sqaOptions import options
 
 

@@ -58,13 +58,11 @@ from sqaIntermediates import \
 from sqaCommutator import \
   commutator
 
-from sqaMisc import \
-  allDifferent,     \
-  get_num_perms,    \
-  makePermutations, \
-  makeTuples
-
-from sqaMisc2 import      \
+from sqaMisc import       \
+  allDifferent,           \
+  get_num_perms,          \
+  makePermutations,       \
+  makeTuples,             \
   assign_rdm_types,       \
   combine_transpose,      \
   convert_ops_to_rdms_so
