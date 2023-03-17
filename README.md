@@ -1,4 +1,4 @@
-# sqa_extra: SecondQuantizationAlgebra Plus
+# sqa_plus: SecondQuantizationAlgebra Plus
 
 This program is intended to automate many of the tedious manipulations that one encounters when working in second quantization.
 To use it, be sure that your ```$PYTHONPATH``` variable includes this directory.
@@ -10,7 +10,7 @@ import secondQuantizationAlgebra as sqa
 
 # SecondQuantizationAlgebra Plus Capabilities
 
-To see how to use core SecondQuantizationAlgebra capabilities, such as the definition of indexes, operators and terms, and algebraic functions, such as Normal Ordering, please visit the [original README file](original_SQA/README.md).
+To see how to use core SecondQuantizationAlgebra capabilities, such as the definition of indexes, operators and terms, and algebraic functions, such as Normal Ordering, please visit the [original README file](sqa_original/README.md).
 
 ## Multireference Algebraic Diagrammatic Construction (MR-ADC) Theory Automation
 

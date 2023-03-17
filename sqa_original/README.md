@@ -1,4 +1,4 @@
-# sqa_extra: SecondQuantizationAlgebra Plus
+# sqa: SecondQuantizationAlgebra
 ##  author:  Eric Neuscamman
 ###    date:  March 31, 2009
 ### summary:  Provides instruction for using the operator algebra program.
