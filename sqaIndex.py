@@ -45,7 +45,7 @@ from sqaOptions import options
 class index:
 	"A class for tensor and operator indices."
 
-	def __init__(self, name, indexType = (), isSummed = False):
+	def __init__(self, name, indexType = (), isSummed = False, userDefined = True):
 		# Initialize index name
 		self.name = str(name)
 
@@ -72,6 +72,10 @@ class index:
 			raise TypeError, "isSummed must be True or False"
 		self.isSummed = isSummed
 
+		if type(userDefined) != type(True):
+			raise TypeError, "userDefined must be True or False"
+		self.userDefined = userDefined
+
 	def __cmp__(self,other):
 		if (not isinstance(other,index)):
 			raise ValueError, "can only compare index class with other index class objects."
@@ -81,15 +85,18 @@ class index:
 		retval = cmp(self.name, other.name)
 		if retval != 0:
 			return retval
+		retval = cmp(self.userDefined, other.userDefined)
+		if retval != 0:
+			return retval
 		return cmp(self.indType, other.indType)
 
 	def tup(self):
 		"Returns a tuple representation of the index. The return object in unmutable and thus can be used as a dictionary key."
-		return (self.name, self.indType, self.isSummed)
+		return (self.name, self.indType, self.isSummed, self.userDefined)
 
 	def copy(self):
 		"Returns a deep copy of the index"
-		return index(self.name, self.indType, self.isSummed)
+		return index(self.name, self.indType, self.isSummed, self.userDefined)
 
 # SecondQuantizationAlgebra Plus
 #

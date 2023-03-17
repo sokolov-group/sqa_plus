@@ -247,9 +247,9 @@ class term:
 
                 # Create the new index
                 if not i0.isSummed:
-                    newIndex = index(i0.name, typeOverlap, i0.isSummed)
+                    newIndex = index(i0.name, typeOverlap, i0.isSummed, i0.userDefined)
                 else:
-                    newIndex = index(i1.name, typeOverlap, i1.isSummed)
+                    newIndex = index(i1.name, typeOverlap, i1.isSummed, i1.userDefined)
 
                 # Remove the delta function
                 del(self.tensors[i])
@@ -505,7 +505,7 @@ class term:
                     for j in range(len(nameGroups[i])):
                         tenList.append(nameGroups[i][gPerms[i][j]].copy())
                         for k in range(len(tenList[-1].indices)):
-                            if tenList[-1].indices[k].isSummed:
+                            if tenList[-1].indices[k].isSummed and not tenList[-1].indices[k].userDefined:
                                 tenList[-1].indices[k] = map[tenList[-1].indices[k].tup()]
                         factor *= tenList[-1].sortIndeces()
                         for ind in tenList[-1].indices:
@@ -518,8 +518,8 @@ class term:
                 for op in opList:
                     if op.indices[0].tup() in map:
                         op.indices[0] = map[op.indices[0].tup()]
-                    elif op.indices[0].isSummed:
-                        map[op.indices[0].tup()] = index(alphabet[aCount+nNewMaps], op.indices[0].indType, op.indices[0].isSummed)
+                    elif op.indices[0].isSummed and not op.indices[0].userDefined:
+                        map[op.indices[0].tup()] = index(alphabet[aCount+nNewMaps], op.indices[0].indType, op.indices[0].isSummed, op.indices[0].userDefined)
                         nNewMaps += 1
                         op.indices[0] = map[op.indices[0].tup()]
 
@@ -581,7 +581,7 @@ class term:
                     if t.indices[i].tup() in map:
                         t.indices[i] = map[t.indices[i].tup()]
                     elif t.indices[i].isSummed:
-                        map[t.indices[i].tup()] = index(alphabet[aCount+nNewMaps], t.indices[i].indType, t.indices[i].isSummed)
+                        map[t.indices[i].tup()] = index(alphabet[aCount+nNewMaps], t.indices[i].indType, t.indices[i].isSummed, t.indices[i].userDefined)
                         nNewMaps += 1
                         t.indices[i] = map[t.indices[i].tup()]
 
@@ -676,7 +676,7 @@ class term:
                     newMap.update(map)
                     for ind in [t.indices[perm[i]] for i in range(len(t.indices))]:
                         if ind.isSummed and ind.tup() not in newMap:
-                            newMap[ind.tup()] = index(alphabet[aCount+nNewMaps], ind.indType, ind.isSummed)
+                            newMap[ind.tup()] = index(alphabet[aCount+nNewMaps], ind.indType, ind.isSummed, ind.userDefined)
                             nNewMaps += 1
                     jobStack.append((newMap,next_gCount,next_tCount,aCount+nNewMaps,gPerms))
 
@@ -990,7 +990,7 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
                 op.indices[0] = map[op.indices[0].tup()].copy()
             elif op.indices[0].isSummed:
                 # Create new mapping
-                map[op.indices[0].tup()] = index(alphabet[alphaCount+nNewMaps], op.indices[0].indType, op.indices[0].isSummed)
+                map[op.indices[0].tup()] = index(alphabet[alphaCount+nNewMaps], op.indices[0].indType, op.indices[0].isSummed, op.indices[0].userDefined)
                 nNewMaps += 1
                 op.indices[0] = map[op.indices[0].tup()].copy()
 
@@ -1016,7 +1016,7 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
                 t.indices[i] = map[t.indices[i].tup()].copy()
             elif t.indices[i].isSummed:
                 # Create new mapping
-                map[t.indices[i].tup()] = index(alphabet[alphaCount+nNewMaps], t.indices[i].indType, t.indices[i].isSummed)
+                map[t.indices[i].tup()] = index(alphabet[alphaCount+nNewMaps], t.indices[i].indType, t.indices[i].isSummed, t.indices[i].userDefined)
                 nNewMaps += 1
                 t.indices[i] = map[t.indices[i].tup()].copy()
 
@@ -1104,7 +1104,7 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
             for i in range(len(t.indices)):
                 p = symPerms[k][i]
                 if t.indices[p].isSummed and ( not (t.indices[p].tup() in map) ):
-                    map[t.indices[p].tup()] = index(alphabet[alphaCount+nNewMaps], t.indices[p].indType, t.indices[p].isSummed)
+                    map[t.indices[p].tup()] = index(alphabet[alphaCount+nNewMaps], t.indices[p].indType, t.indices[p].isSummed, t.indices[p].userDefined)
                     nNewMaps += 1
             (score,map,sign,newTensorList) = getcim(tenList, alphabet, tenCount+1, alphaCount+nNewMaps, map)
             if score > bestScore: #is it possible to have multiple top scores here? I think so.    Does it matter?

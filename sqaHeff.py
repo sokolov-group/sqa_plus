@@ -21,7 +21,7 @@
 
 import sys
 
-from sqaIndex import index
+from sqaIndex import index, get_spatial_index_type
 from sqaTensor import tensor, creOp, desOp, creDesTensor
 from sqaTerm import term
 from sqaOptions import options
@@ -628,7 +628,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_inds.new_index()
         act_3 = act_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
@@ -3689,7 +3689,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_inds, act_inds, vir_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -3907,7 +3907,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -3933,7 +3933,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -3959,7 +3959,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4261,7 +4261,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4287,7 +4287,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4314,7 +4314,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4344,7 +4344,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if (tens_ind_type[0] != tens_ind_type[1]) and (tens_ind_type[2] != tens_ind_type[3]):
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
@@ -4639,7 +4639,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4665,7 +4665,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4691,7 +4691,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4717,7 +4717,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4743,7 +4743,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4769,7 +4769,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
