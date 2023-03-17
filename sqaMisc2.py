@@ -45,13 +45,13 @@ def combine_transpose(termList):
     for t in termList:
         if not t.isInCanonicalForm:
             if options.verbose:
-                print "making canonical...  %s" %(str(t))
+                print("making canonical...  %s" %(str(t)))
             t.makeCanonical()
 
     # if requested, print a greeting
     if options.verbose:
-        print ""
-        print "Checking for transpose equivalencies and combining..."
+        print("")
+        print("Checking for transpose equivalencies and combining...")
 
     # initialize counter variable
     count = 0

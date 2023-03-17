@@ -135,9 +135,9 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, custom_path
                     i_ind, j_ind = contract
 
                     if j_ind >= len(lhs_str):
-                         print ("###################################################################")
-                         print ("WARNING: Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
-                         print ("###################################################################\n")
+                         print("###################################################################")
+                         print("WARNING: Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
+                         print("###################################################################\n")
                          contract_order.pop(con)
                 ################
 
@@ -194,9 +194,9 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, custom_path
                
                 # Canonicalize term and tensor representation of intermediate and update scale factor
                 if print_level > 4:
-                    print (tensor_name)
-                    print (int_term)
-                    print ('CANONICALIZING...')
+                    print(tensor_name)
+                    print(int_term)
+                    print('CANONICALIZING...')
 
                 int_term, scale_factor = make_canonical(int_term, trans_rdm, print_level)
                 scale_factor_total *= scale_factor                
@@ -210,9 +210,9 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, custom_path
                 # Append the first intermediate automatically
                 if not intermediates:
                     if print_level > 4:
-                        print (int_tensor.name)
-                        print (int_term)
-                        print ('')
+                        print(int_tensor.name)
+                        print(int_term)
+                        print('')
                     intermediates.append([int_term, int_tensor])
                     interm_name_list = interm_name_list[1:]
                
@@ -223,10 +223,10 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, custom_path
                     # Only append unique intermediate terms to the list of intermediates
                     if not isRedundant:
                         if print_level > 4:
-                            print ('FOUND UNIQUE INTERMEDIATE')
-                            print (int_tensor.name)
-                            print (int_term)
-                            print ('')
+                            print('FOUND UNIQUE INTERMEDIATE')
+                            print(int_tensor.name)
+                            print(int_term)
+                            print('')
                       
                         intermediates.append([int_term, int_tensor])
                         interm_name_list = interm_name_list[1:]
@@ -325,21 +325,21 @@ def make_canonical(int_term, trans_rdm, print_level):
     # Form term with tensors w/ canonicalized indices
     canon_index_term = term(1.0, [], canon_tensor_list)
     if print_level > 4:
-        print ('----- WRT INDICES IN TENSORS OF TERM -----')
-        print (canon_index_term)
+        print('----- WRT INDICES IN TENSORS OF TERM -----')
+        print(canon_index_term)
 
     ### RE-ARRANGE TENSORS THAT MAKE UP THE TERM
     ## SORT BY RANK
     ranked_term, rank_list = rank_sort_term(canon_index_term)
     if print_level > 4:
-        print ('----- WRT TENSORS IN TERM BY RANK -----')
-        print (ranked_term)
+        print('----- WRT TENSORS IN TERM BY RANK -----')
+        print(ranked_term)
 
     ## SORT BY NAME
     canon_term = name_sort_term(ranked_term, rank_list)
     if print_level > 4:
-        print ('----- WRT TENSORS IN TERM BY NAME -----')
-        print (canon_term)
+        print('----- WRT TENSORS IN TERM BY NAME -----')
+        print(canon_term)
 
     return canon_term, scale_factor
 
@@ -458,7 +458,7 @@ def check_intermediates(interm_list, int_term, int_tensor, print_level):
     isRedundant = False
 
     if print_level > 4:
-        print ('CHECKING ' + str(int_tensor.name) + '...')
+        print('CHECKING ' + str(int_tensor.name) + '...')
 
     # Check every intermediate in the existing list
     for i, (list_term, list_tensor) in enumerate(interm_list):
@@ -485,13 +485,13 @@ def check_intermediates(interm_list, int_term, int_tensor, print_level):
                    # Modify input term and return existing stored intermediate
                    isRedundant     = True
                    if print_level > 4:
-                       print ('------------------------------')
-                       print (str(int_tensor.name) + ' IS REDUNDANT. NEXT INT CHECKED WILL HAVE THE SAME NAME')
-                       print ('STORED INTERMEDIATE TERM')
-                       print (list_tensor.name)
-                       print (list_term)
-                       print ('------------------------------')
-                       print ('')
+                       print('------------------------------')
+                       print(str(int_tensor.name) + ' IS REDUNDANT. NEXT INT CHECKED WILL HAVE THE SAME NAME')
+                       print('STORED INTERMEDIATE TERM')
+                       print(list_tensor.name)
+                       print(list_term)
+                       print('------------------------------')
+                       print('')
 
                    int_term        = list_term.copy()
                    int_tensor.name = list_tensor.name

@@ -88,8 +88,8 @@ term5 = sqa.matrixBlock(term4)
 einsum_list_1 = sqa.genEinsum(term5, 'temp', l_ind + r_ind, rm_core_int = True)
 
 for einsum in einsum_list_1:
-    print (einsum)
-print ('')
+    print(einsum)
+print('')
 
 ##############################################
 # Scan for intermediates w/ factor_depth = 1
@@ -101,12 +101,12 @@ int_einsum_list, einsum_list_2 = sqa.genEinsum(term6, 'temp', l_ind + r_ind, rm_
 
 # Print intermediate term definitions
 for int_def in int_einsum_list:
-    print (int_def)
-print ('')
+    print(int_def)
+print('')
 
 # Print terms w/ INT terms substitution
 for einsum in einsum_list_2:
-    print (einsum)
+    print(einsum)
 
 ##############################################
 # Scan for intermediates w/ factor_depth = 2
@@ -118,9 +118,9 @@ int_einsum_list, einsum_list_2 = sqa.genEinsum(term6, 'temp', l_ind + r_ind, rm_
 
 # Print intermediate term definitions
 for int_def in int_einsum_list:
-    print (int_def)
-print ('')
+    print(int_def)
+print('')
 
 # Print terms w/ INT terms substitution
 for einsum in einsum_list_2:
-    print (einsum)
+    print(einsum)

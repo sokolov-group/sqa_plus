@@ -892,8 +892,8 @@ def combineTerms(termList, maxThreads = 1):
     termChop(termList)
     
     if options.verbose:
-        print "Finished combining terms in %.3f seconds" %(time.time() - startTime)
-        print ""
+        print("Finished combining terms in %.3f seconds" %(time.time() - startTime))
+        print("")
 
     # Sort the terms
     termList.sort()
@@ -1271,8 +1271,8 @@ def removeCoreOps_sf(inList):
     """
 
     if options.verbose:
-        print "removing core creation and destruction operators in preperation for conversion to RDMs by an expectation value..."
-        print ""
+        print("removing core creation and destruction operators in preperation for conversion to RDMs by an expectation value...")
+        print("")
 
     # loop repeatedly through the terms until no core indices are left
     hasCore = True
@@ -1357,7 +1357,7 @@ def removeCoreOps_sf(inList):
 
             # print out the initial term
             if options.verbose:
-                print "    initial term: ", t
+                print("    initial term: ", t)
 #                print "verticle pairs: ",
 #                for p in pairs:
 #                    print " [%s,%s]" %(p[0].name, p[1].name),
@@ -1421,7 +1421,7 @@ def removeCoreOps_sf(inList):
 #                for p in botUnmatched:
 #                    print " %s" %(p.name),
 #                print ""
-                print "        final term: ", t
+                print("        final term: ", t)
 
             # for the special case of two unmatched pairs, the result is a sum of two different operators.
             # the first replaced the original operator, and the second is added here.
@@ -1433,11 +1433,11 @@ def removeCoreOps_sf(inList):
                 inList[-1].tensors[opPos] = sfExOp(newIndices)
                 # print out the additional final term
                 if options.verbose:
-                    print "2nd final term: ", inList[-1]
+                    print("2nd final term: ", inList[-1])
 
             # print a blank line
             if options.verbose:
-                print ""
+                print("")
 
             # increment the index to the next term
             t_num += 1
@@ -1453,8 +1453,8 @@ def removeVirtOps_sf(inList):
     """
 
     if options.verbose:
-        print "removing terms containing a spin-free operator with a virtual index..."
-        print ""
+        print("removing terms containing a spin-free operator with a virtual index...")
+        print("")
 
     # loop over the terms in inList
     i = 0
@@ -1475,7 +1475,7 @@ def removeVirtOps_sf(inList):
         # remove the term if a spin-free excitation operator had a virtual index
         if hasVirtual:
             if options.verbose:
-                print " removing term: ", inList[i]
+                print(" removing term: ", inList[i])
             del inList[i]
 
         # otherwise, move to the next term
@@ -1483,7 +1483,7 @@ def removeVirtOps_sf(inList):
             i += 1
 
     if options.verbose:
-        print ""
+        print("")
 
 
 #--------------------------------------------------------------------------------------------------
