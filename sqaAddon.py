@@ -119,10 +119,10 @@ def dummyLabel(_terms):
         for t_tensor in t.tensors:
             for t_tensor_index in range(len(t_tensor.indices)):
                 index_name = t_tensor.indices[t_tensor_index].name
-                index_summed = t_tensor.indices[t_tensor_index].isSummed
+                index_user_defined = t_tensor.indices[t_tensor_index].userDefined
 
-                if index_name not in reservedInd and not index_summed:
-                    reservedInd.append(index_name.lower())
+                if index_name not in reservedInd and index_user_defined:
+                    reservedInd.append(index_name)
 
         for reserved_index_name in reservedInd:
             if reserved_index_name in coreInd:
@@ -138,9 +138,9 @@ def dummyLabel(_terms):
                 # Decide which new label to assign
                 index_type = t_tensor.indices[t_tensor_index].indType
                 index_name = t_tensor.indices[t_tensor_index].name
-                index_summed = t_tensor.indices[t_tensor_index].isSummed
+                index_user_defined = t_tensor.indices[t_tensor_index].userDefined
 
-                if index_summed:
+                if not index_user_defined:
                         if index_name not in mymap.keys():
                             if is_core_index_type(index_type):
                                 mymap[index_name] = coreInd[0]

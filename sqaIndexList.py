@@ -29,11 +29,12 @@ class indexList:
         self.index_type = index_type
         self.index_reserved = 0
         self.dummy = dummy
+        self.user_defined = False
 
     def new_indices(self, index_external):
         new_index_list = []
         for index_number in range(self.index_reserved, self.index_reserved + index_external):
-            new_index_list.append(index(self.index_name % index_number, self.index_type, self.dummy))
+            new_index_list.append(index(self.index_name % index_number, self.index_type, self.dummy, self.user_defined))
         self.index_reserved += index_external
 
         return new_index_list
@@ -42,7 +43,7 @@ class indexList:
         index_number = self.index_reserved
         self.index_reserved += 1
 
-        return index(self.index_name % index_number, self.index_type, self.dummy)
+        return index(self.index_name % index_number, self.index_type, self.dummy, self.user_defined)
 
 def create_dummy_indices_list(spin_integrated = False):
     "A function which returns lists of dummy indices of all classes."
@@ -76,6 +77,7 @@ def create_dummy_indices_list(spin_integrated = False):
         tg_beta = options.beta_type
 
         dummy = True
+        user_defined = False
 
         # Core dummy indices
         cor_alpha_inds = indexList('c%ia', [tg_alpha, tg_cor], dummy)
