@@ -1,4 +1,4 @@
-# Copyright 2018-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+# Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 #
 # Licensed under the GNU General Public License v3.0;
 # you may not use this file except in compliance with the License.
@@ -9,8 +9,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Author: Koushik Chatterjee <koushikchatterjee7@gmail.com>
-#         Carlos E. V. de Moura <carlosevmoura@gmail.com>
+# In addition, any modification or use of this software should
+# cite the following paper:
+#
+#   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
+#   J. Chem. Phys. 130, 124102 (2009)
+#
+# Authors: Koushik Chatterjee <koushikchatterjee7@gmail.com>
+#          Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
 import sys
@@ -22,22 +28,6 @@ from sqaOptions import options
 from sqaSymmetry import symmetry
 from sqaCommutator import commutator
 from sqaIndexList import create_dummy_indices_list
-
-def custom_tensor(tensor_name, *tup):
-    'Create a custom tensor defining symmetry according to the number of indices.'
-
-    tensor_indices = list(tup)
-    tensor_indices_type = [getSpatialIndType(tensor_index.indType) for tensor_index in tensor_indices]
-
-    if (len(tensor_indices) == 4):
-        symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
-
-    elif (len(tensor_indices) == 2):
-        symm = [symmetry((1,0), 1)]
-
-    tensor_object = tensor(tensor_name, tensor_indices, symm)
-
-    return tensor_object
 
 def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
     "Construct effective Hamiltonian(L)."
@@ -600,10 +590,14 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
         T = []
 
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_inds.new_index()
         vir_2 = vir_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -614,16 +608,16 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         # Core-Active: t_i^x
         cor_1 = cor_inds.new_index()
         act_2 = act_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_ex)
@@ -634,16 +628,16 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_inds.new_index()
         act_3 = act_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, cor_1, act_2, act_3, act_4)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         # Active-External: t_x^a
         act_1 = act_inds.new_index()
         vir_2 = vir_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -654,9 +648,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -666,9 +660,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -677,9 +671,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -688,9 +682,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -699,9 +693,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_inds.new_index()
         act_3 = act_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -710,18 +704,17 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         if (order == 2 and internal_excit):
-            t1_asym = [symmetry((1,0), -1)]
             act_1 = act_inds.new_index()
             act_2 = act_inds.new_index()
-            t1_ten =  tensor(tname, [act_1, act_2], t1_asym)
-            T1_ex =  term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            T1_ex  = term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
             T.append(T1_ex)
 
         return T
@@ -737,10 +730,15 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
             tname = 't2'
 
         T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -748,7 +746,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
         cor_1 = cor_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -759,9 +757,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -769,9 +767,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -779,16 +777,16 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 4.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 4.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         # Core-Active: t_i^x
         cor_1 = cor_alpha_inds.new_index()
         act_2 = act_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_ex)
@@ -796,7 +794,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
         cor_1 = cor_beta_inds.new_index()
         act_2 = act_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_ex)
@@ -807,9 +805,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -817,9 +815,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -827,9 +825,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 4.0, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 4.0, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -838,9 +836,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -848,9 +846,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -858,9 +856,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-2.0, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -870,9 +868,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -880,9 +878,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -890,9 +888,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -901,9 +899,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -911,9 +909,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -921,9 +919,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -932,9 +930,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -942,9 +940,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -952,9 +950,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -963,9 +961,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -973,9 +971,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -983,9 +981,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 1.00, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -994,9 +992,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1004,9 +1002,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1014,24 +1012,23 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-1.00, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         if (order == 2 and internal_excit):
-            t1_asym = [symmetry((1,0), -1)]
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
-            t1_ten =  tensor(tname, [act_1, act_2], t1_asym)
-            T1_ex =  term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            T1_ex  = term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
             T.append(T1_ex)
 
             act_1 = act_beta_inds.new_index()
             act_2 = act_beta_inds.new_index()
-            t1_ten =  tensor(tname, [act_1, act_2], t1_asym)
-            T1_ex =  term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            T1_ex  = term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
             T.append(T1_ex)
 
         return T
@@ -1047,10 +1044,15 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
             tname = 't2'
 
         T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -1058,7 +1060,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
         cor_1 = cor_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -1069,9 +1071,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1079,9 +1081,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1089,9 +1091,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1099,16 +1101,16 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         # Core-Active: t_i^x
         cor_1 = cor_alpha_inds.new_index()
         act_2 = act_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_ex)
@@ -1116,7 +1118,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
         cor_1 = cor_beta_inds.new_index()
         act_2 = act_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_ex)
@@ -1127,9 +1129,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1137,9 +1139,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1147,9 +1149,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 4.0, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 4.0, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1158,9 +1160,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1168,9 +1170,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1178,9 +1180,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-2.0, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1190,9 +1192,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1200,9 +1202,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1210,9 +1212,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1221,9 +1223,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1231,9 +1233,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1241,9 +1243,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1252,9 +1254,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1262,9 +1264,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1272,9 +1274,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1283,9 +1285,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1293,9 +1295,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1303,9 +1305,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 1.00, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1314,9 +1316,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1324,9 +1326,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1334,24 +1336,23 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-1.00, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         if (order == 2 and internal_excit):
-            t1_asym = [symmetry((1,0), -1)]
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
-            t1_ten =  tensor(tname, [act_1, act_2], t1_asym)
-            T1_ex =  term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            T1_ex  = term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
             T.append(T1_ex)
 
             act_1 = act_beta_inds.new_index()
             act_2 = act_beta_inds.new_index()
-            t1_ten =  tensor(tname, [act_1, act_2], t1_asym)
-            T1_ex =  term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            T1_ex  = term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
             T.append(T1_ex)
 
         return T
@@ -1367,10 +1368,15 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
             tname = 't2'
 
         T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, cor_1, vir_2, t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -1378,7 +1384,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
         cor_1 = cor_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -1389,9 +1395,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1399,9 +1405,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1409,9 +1415,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1419,9 +1425,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1429,9 +1435,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1439,16 +1445,16 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
-        T2_ex   = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         # Core-Active: t_i^x
         cor_1 = cor_alpha_inds.new_index()
         act_2 = act_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_ex)
@@ -1456,7 +1462,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
         cor_1 = cor_beta_inds.new_index()
         act_2 = act_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_ex)
@@ -1467,9 +1473,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1477,9 +1483,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1487,9 +1493,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1497,9 +1503,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1507,9 +1513,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1517,16 +1523,16 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
         # Active-External: t_x^a
         act_1 = act_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -1534,7 +1540,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
         act_1 = act_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -1545,9 +1551,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1555,9 +1561,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1565,9 +1571,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1575,9 +1581,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1585,9 +1591,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1595,9 +1601,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1607,9 +1613,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1617,9 +1623,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1627,9 +1633,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1637,9 +1643,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1647,9 +1653,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1657,9 +1663,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1668,9 +1674,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1678,9 +1684,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1688,9 +1694,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1698,9 +1704,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1708,9 +1714,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1718,9 +1724,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1729,9 +1735,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1739,9 +1745,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1749,9 +1755,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1759,9 +1765,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1769,9 +1775,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1779,9 +1785,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-        T2_dex  = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1790,9 +1796,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1800,9 +1806,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1810,9 +1816,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1820,9 +1826,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1830,9 +1836,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1840,9 +1846,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1851,9 +1857,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1861,9 +1867,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1871,9 +1877,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1881,9 +1887,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1891,9 +1897,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1901,9 +1907,9 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
-        T2_ex   = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
-        T2_dex  = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_ex)
         T.append(T2_dex)
 
@@ -1947,10 +1953,14 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
 
         T = []
 
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_inds.new_index()
         vir_2 = vir_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T.append(T1_ex)
 
@@ -1959,14 +1969,14 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
         # Core-Active: t_i^x
         cor_1 = cor_inds.new_index()
         act_2 = act_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T.append(T1_ex)
 
@@ -1975,14 +1985,14 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_inds.new_index()
         act_3 = act_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
         # Active-External: t_x^a
         act_1 = act_inds.new_index()
         vir_2 = vir_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
         T.append(T1_ex)
 
@@ -1991,7 +2001,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2001,7 +2011,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2010,7 +2020,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2019,7 +2029,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2028,7 +2038,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_inds.new_index()
         act_3 = act_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2037,7 +2047,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2054,16 +2064,21 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
             tname = 't2'
 
         T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T.append(T1_ex)
 
         cor_1 = cor_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T.append(T1_ex)
 
@@ -2072,7 +2087,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2080,7 +2095,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2088,20 +2103,20 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 4.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
         # Core-Active: t_i^x
         cor_1 = cor_alpha_inds.new_index()
         act_2 = act_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T.append(T1_ex)
 
         cor_1 = cor_beta_inds.new_index()
         act_2 = act_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T.append(T1_ex)
 
@@ -2110,7 +2125,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2118,7 +2133,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2126,20 +2141,20 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 2.0, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
         # Active-External: t_x^a
         act_1 = act_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
         T.append(T1_ex)
 
         act_1 = act_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
         T.append(T1_ex)
 
@@ -2148,7 +2163,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2156,7 +2171,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2164,7 +2179,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2174,7 +2189,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2182,7 +2197,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2190,7 +2205,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2199,7 +2214,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2207,7 +2222,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2215,7 +2230,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2224,7 +2239,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2232,7 +2247,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2240,7 +2255,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2249,7 +2264,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2257,7 +2272,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2265,7 +2280,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.00, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2274,7 +2289,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2282,7 +2297,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2290,7 +2305,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2307,16 +2322,21 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
             tname = 't2'
 
         T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T.append(T1_ex)
 
         cor_1 = cor_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T.append(T1_ex)
 
@@ -2325,7 +2345,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2333,7 +2353,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2341,7 +2361,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2349,7 +2369,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2357,7 +2377,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2365,20 +2385,20 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
         # Core-Active: t_i^x
         cor_1 = cor_alpha_inds.new_index()
         act_2 = act_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T.append(T1_ex)
 
         cor_1 = cor_beta_inds.new_index()
         act_2 = act_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
         T.append(T1_ex)
 
@@ -2387,7 +2407,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2395,7 +2415,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2403,7 +2423,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2411,7 +2431,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2419,7 +2439,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2427,20 +2447,20 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
         # Active-External: t_x^a
         act_1 = act_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
         T.append(T1_ex)
 
         act_1 = act_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
         T.append(T1_ex)
 
@@ -2449,7 +2469,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2457,7 +2477,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2465,7 +2485,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2473,7 +2493,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2481,7 +2501,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2489,7 +2509,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2499,7 +2519,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2507,7 +2527,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2515,7 +2535,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2523,7 +2543,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2531,7 +2551,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2539,7 +2559,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2548,7 +2568,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2556,7 +2576,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2564,7 +2584,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2572,7 +2592,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2580,7 +2600,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2588,7 +2608,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2597,7 +2617,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2605,7 +2625,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2613,7 +2633,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2621,7 +2641,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2629,7 +2649,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2637,7 +2657,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2646,7 +2666,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2654,7 +2674,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2662,7 +2682,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2670,7 +2690,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2678,7 +2698,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2686,7 +2706,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
         T.append(T2_ex)
 
@@ -2695,7 +2715,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2703,7 +2723,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2711,7 +2731,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2719,7 +2739,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2727,7 +2747,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2735,7 +2755,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
@@ -2765,10 +2785,14 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
 
         T = []
 
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_inds.new_index()
         vir_2 = vir_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_dex)
 
@@ -2777,14 +2801,14 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
         # Core-Active: t_i^x
         cor_1 = cor_inds.new_index()
         act_2 = act_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_dex)
 
@@ -2793,14 +2817,14 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_inds.new_index()
         act_3 = act_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
         # Active-External: t_x^a
         act_1 = act_inds.new_index()
         vir_2 = vir_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
         T.append(T1_dex)
 
@@ -2809,7 +2833,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2819,7 +2843,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2828,7 +2852,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_inds.new_index()
         vir_3 = vir_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2837,7 +2861,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2846,7 +2870,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_inds.new_index()
         act_3 = act_inds.new_index()
         act_4 = act_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -2855,7 +2879,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_inds.new_index()
         vir_3 = vir_inds.new_index()
         vir_4 = vir_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2873,16 +2897,20 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
 
         T = []
 
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_dex)
 
         cor_1 = cor_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_dex)
 
@@ -2891,7 +2919,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4])
         T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2899,7 +2927,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4])
         T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2907,20 +2935,20 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4])
         T2_dex = term(4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
         # Core-Active: t_i^x
         cor_1 = cor_alpha_inds.new_index()
         act_2 = act_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_dex)
 
         cor_1 = cor_beta_inds.new_index()
         act_2 = act_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_dex)
 
@@ -2929,7 +2957,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4])
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -2937,7 +2965,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4])
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -2945,20 +2973,20 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4])
         T2_dex = term(2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
         # Active-External: t_x^a
         act_1 = act_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
         T.append(T1_dex)
 
         act_1 = act_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
         T.append(T1_dex)
 
@@ -2967,7 +2995,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2975,7 +3003,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -2983,8 +3011,8 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_dex  = term(2.0, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_dex = term(2.0, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
         # Doubles
@@ -2993,7 +3021,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3001,7 +3029,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3009,7 +3037,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3018,7 +3046,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3026,7 +3054,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3034,7 +3062,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(2.0, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3043,7 +3071,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3051,7 +3079,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3059,7 +3087,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3068,7 +3096,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3076,7 +3104,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3084,7 +3112,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3093,7 +3121,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3101,7 +3129,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3109,7 +3137,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(1.00, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3127,16 +3155,20 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
 
         T = []
 
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+
         # Core-External: t_i^a
         cor_1 = cor_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_dex)
 
         cor_1 = cor_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, vir_2)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_dex)
 
@@ -3145,7 +3177,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3153,7 +3185,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3161,7 +3193,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3169,7 +3201,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3177,7 +3209,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3185,20 +3217,20 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
         # Core-Active: t_i^x
         cor_1 = cor_alpha_inds.new_index()
         act_2 = act_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_dex)
 
         cor_1 = cor_beta_inds.new_index()
         act_2 = act_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, cor_1, act_2)
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
         T.append(T1_dex)
 
@@ -3207,7 +3239,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3215,7 +3247,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3223,7 +3255,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3231,7 +3263,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3239,28 +3271,28 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_dex  = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
         cor_1 = cor_beta_inds.new_index()
         act_2 = act_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, act_3, act_4)
-        T2_dex  = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
         # Active-External: t_x^a
         act_1 = act_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
         T.append(T1_dex)
 
         act_1 = act_beta_inds.new_index()
         vir_2 = vir_beta_inds.new_index()
-        t1_ten = custom_tensor(tname, act_1, vir_2)
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
         T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
         T.append(T1_dex)
 
@@ -3269,7 +3301,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3277,7 +3309,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3285,15 +3317,15 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
-        T2_dex  = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
         act_1 = act_alpha_inds.new_index()
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3301,7 +3333,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3309,7 +3341,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, act_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3319,7 +3351,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3327,7 +3359,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3335,7 +3367,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3343,7 +3375,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3351,7 +3383,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3359,7 +3391,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3368,7 +3400,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3376,7 +3408,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3384,7 +3416,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3392,7 +3424,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3400,7 +3432,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3408,7 +3440,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, vir_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3417,7 +3449,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3425,7 +3457,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3433,7 +3465,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3441,7 +3473,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3449,7 +3481,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3457,7 +3489,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3466,7 +3498,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3474,7 +3506,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3482,7 +3514,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3490,7 +3522,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_beta_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3498,7 +3530,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_beta_inds.new_index()
         act_4 = act_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3506,7 +3538,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         cor_2 = cor_alpha_inds.new_index()
         act_3 = act_alpha_inds.new_index()
         act_4 = act_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, cor_1, cor_2, act_3, act_4)
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
         T.append(T2_dex)
 
@@ -3515,7 +3547,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3523,7 +3555,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3531,7 +3563,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3539,7 +3571,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_beta_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3547,7 +3579,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_beta_inds.new_index()
         vir_4 = vir_alpha_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3555,7 +3587,7 @@ def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, expli
         act_2 = act_alpha_inds.new_index()
         vir_3 = vir_alpha_inds.new_index()
         vir_4 = vir_beta_inds.new_index()
-        t2_ten = custom_tensor(tname, act_1, act_2, vir_3, vir_4)
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm)
         T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
         T.append(T2_dex)
 
@@ -3657,7 +3689,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_inds, act_inds, vir_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -3875,7 +3907,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -3901,7 +3933,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -3927,7 +3959,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4229,7 +4261,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4255,7 +4287,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4282,7 +4314,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4312,7 +4344,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if (tens_ind_type[0] != tens_ind_type[1]) and (tens_ind_type[2] != tens_ind_type[3]):
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
@@ -4607,7 +4639,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4633,7 +4665,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4659,7 +4691,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4685,7 +4717,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4711,7 +4743,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
@@ -4737,7 +4769,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                     for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                         ind_4 = ind_type_4.new_index()
 
-                        tens_ind_type = [getSpatialIndType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+                        tens_ind_type = [get_spatial_indType(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
                         if tens_ind_type == tens_ind_cor:
                             v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
