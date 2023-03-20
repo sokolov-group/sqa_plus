@@ -5,7 +5,7 @@ To use it, be sure that your ```$PYTHONPATH``` variable includes this directory.
 Then, in the Python2 interpreter or in a Python2 script, use a command such as:
 
 ```python
-import secondQuantizationAlgebra as sqa
+import sqa_plus
 ```
 
 # SecondQuantizationAlgebra Plus Capabilities

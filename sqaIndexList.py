@@ -55,6 +55,7 @@ def create_dummy_indices_list(spin_integrated = False):
         tg_vir = options.virtual_type
 
         dummy = True
+        user_defined = False
 
         # Core dummy indices
         cor_inds = indexList('c%ia', [tg_cor], dummy)

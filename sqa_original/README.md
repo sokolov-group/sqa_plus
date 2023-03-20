@@ -8,15 +8,16 @@
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 In addition, any modification or use of this software should cite the following paper:
-
+```
   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
   J. Chem. Phys. 130, 124102 (2009)
+```
 
 This program is intended to automate many of the tedious manipulations that one encounters when working in second quantization.
 To use it, be sure that your Python path includes this directory. Then, in the Python2 interpreter or in a Python2 script, use a command such as:
 
 ```python
-import secondQuantizationAlgebra as sqa
+import sqa_plus
 ```
 
 # SecondQuantizationAlgebra Capabilities
@@ -26,26 +27,26 @@ One of the most common tasks in second quantization is to convert a set of creat
 Before we do, we need to define the operators, and to do that we need to define some indices.  Let's use p, q, r, and s.
 
 ```python
-p = sqa.index('p')
-q = sqa.index('q')
-r = sqa.index('r')
-s = sqa.index('s')
+p = sqa_plus.index('p')
+q = sqa_plus.index('q')
+r = sqa_plus.index('r')
+s = sqa_plus.index('s')
 ```
 
 Now that we have our indices, let's define two creation and two destruction operators with them.
 
 ```python
-p_cre = sqa.creOp(p)
-q_cre = sqa.creOp(q)
-r_des = sqa.desOp(r)
-s_des = sqa.desOp(s)
+p_cre = sqa_plus.creOp(p)
+q_cre = sqa_plus.creOp(q)
+r_des = sqa_plus.desOp(r)
+s_des = sqa_plus.desOp(s)
 ```
 
 Note that the creOp and desOp classes represent the creation and destruction operators, and that each takes an index as its argument.
 We are now ready to define a term, which will represent a non-normal-ordered multiplication of the four operators.
 
 ```python
-unordered = sqa.term(1.0, [], [r_des, s_des, p_cre, q_cre])
+unordered = sqa_plus.term(1.0, [], [r_des, s_des, p_cre, q_cre])
 ```
 
 In order to build the term, we have grouped the operators into a list and passed them as the third argument.
@@ -67,7 +68,7 @@ You should see the following output:
 Now let's put the operators in normal order.
 
 ```python
-ordered_terms = sqa.normalOrder(unordered)
+ordered_terms = sqa_plus.normalOrder(unordered)
 ```
 
 The result of normal ordering, which consists of more than one term, is stored as a list of term objects.
@@ -104,7 +105,7 @@ By default, indices in the program are created as non-dummy indices, i.e. their 
 If you wish to create a dummy index instead, additional arguments are used as shown.
 
 ```python
-my_dummy = sqa.index('d', [], True)
+my_dummy = sqa_plus.index('d', [], True)
 ```
 
 As before, the first argument is the index's name, d in this case.
@@ -116,7 +117,7 @@ These symmetries are represented in the program by the symmetry class.
 For example:
 
 ```python
-my_symmetry = sqa.symmetry((1,0),1)
+my_symmetry = sqa_plus.symmetry((1,0),1)
 ```
 
 This object represents a symmetry in a 2-index tensor.
@@ -126,7 +127,7 @@ We may swap the two indices and the value of the element is the same.
 A more complicated symmetry is:
 
 ```python
-my_symmetry_2 = sqa.symmetry((0,1,3,2),-1)
+my_symmetry_2 = sqa_plus.symmetry((0,1,3,2),-1)
 ```
 
 This symmetry corresponds to a four index tensor in which swapping the last two indices changes the sign of the element.
@@ -135,7 +136,7 @@ Let's use this density matrix as an example of how to construct a tensor with sy
 First we'll need its four indices, for which we'll create a list of non-dummy indices.
 
 ```python
-rdm_index_list = [sqa.index('p%i' %j, [], False) for j in range(4)]
+rdm_index_list = [sqa_plus.index('p%i' %j, [], False) for j in range(4)]
 ```
 
 This command uses a handy Python syntax for constructing lists to create a list of non-dummy indices with names 'p0', 'p1', 'p2', and 'p3'.
@@ -143,22 +144,22 @@ Now lets create the symmetry objects to describe the RDM's symmetry.
 Even though the 2-body all-alpha-spin RDM has 8-fold symmetry, we only need the following two symmetry objects to create it:
 
 ```python
-rdm_sym_1 = sqa.symmetry((0,1,3,2),-1)
-rdm_sym_2 = sqa.symmetry((2,3,0,1),1)
+rdm_sym_1 = sqa_plus.symmetry((0,1,3,2),-1)
+rdm_sym_2 = sqa_plus.symmetry((2,3,0,1),1)
 ```
 
 The reason we don't need the others is that they can all be created by repeated applications of the above two, and the program will do exactly that when exploring the possible arrangements of the tensor's indices.
 Now we are ready to build our first tensor.
 
 ```python
-rdm_2_aaaa = sqa.tensor('d2aaaa', rdm_index_list, [rdm_sym_1, rdm_sym_2])
+rdm_2_aaaa = sqa_plus.tensor('d2aaaa', rdm_index_list, [rdm_sym_1, rdm_sym_2])
 ```
 
 This creates a tensor with name 'd2aaaa', the indices in the list we created earlier, and the two symmetries.  Note that both indices and symmetries are passed as lists.
 To see what we've made lets create a term that is just this tensor and print it out.
 
 ```python
-rdm_term = sqa.term(1.0, [], [rdm_2_aaaa])
+rdm_term = sqa_plus.term(1.0, [], [rdm_2_aaaa])
 print(rdm_term)
 ```
 
@@ -186,21 +187,21 @@ Lets consider a term involving the all-alpha-spin 2-body RDM and the all-alpha-s
 Note that the symmetries of the two tensors involved happen to be the same.
 
 ```python
-p0 = sqa.index('p0', [], True)   # dummy
-p1 = sqa.index('p1', [], True)   # dummy
-p2 = sqa.index('p2', [], True)   # dummy
-p3 = sqa.index('p3', [], True)   # dummy
-q0 = sqa.index('q0', [], False)  # non-dummy
-q1 = sqa.index('q1', [], False)  # non-dummy
-p0_cre = sqa.creOp(p0)
-p1_cre = sqa.creOp(p1)
-p2_des = sqa.desOp(p2)
-p3_des = sqa.desOp(p3)
-sym_1 = sqa.symmetry((0,1,3,2),-1)
-sym_2 = sqa.symmetry((2,3,0,1),1)
-rdm_2_aaaa = sqa.tensor('d2aaaa', [p0, q0, p1, q1], [sym_1, sym_2])
-h_2_aaaa   = sqa.tensor('h2aaaa', [p0, p1, p2, p3], [sym_1, sym_2])
-my_term = sqa.term(1.0, [], [rdm_2_aaaa, h_2_aaaa, p0_cre, p1_cre, p3_des, p2_des])
+p0 = sqa_plus.index('p0', [], True)   # dummy
+p1 = sqa_plus.index('p1', [], True)   # dummy
+p2 = sqa_plus.index('p2', [], True)   # dummy
+p3 = sqa_plus.index('p3', [], True)   # dummy
+q0 = sqa_plus.index('q0', [], False)  # non-dummy
+q1 = sqa_plus.index('q1', [], False)  # non-dummy
+p0_cre = sqa_plus.creOp(p0)
+p1_cre = sqa_plus.creOp(p1)
+p2_des = sqa_plus.desOp(p2)
+p3_des = sqa_plus.desOp(p3)
+sym_1 = sqa_plus.symmetry((0,1,3,2),-1)
+sym_2 = sqa_plus.symmetry((2,3,0,1),1)
+rdm_2_aaaa = sqa_plus.tensor('d2aaaa', [p0, q0, p1, q1], [sym_1, sym_2])
+h_2_aaaa   = sqa_plus.tensor('h2aaaa', [p0, p1, p2, p3], [sym_1, sym_2])
+my_term = sqa_plus.term(1.0, [], [rdm_2_aaaa, h_2_aaaa, p0_cre, p1_cre, p3_des, p2_des])
 print(my_term)
 ```
 
@@ -243,17 +244,17 @@ Now that we've seen how a term is converted to canonical form, let's put this to
 First we'll create a copy of the term we just used, but with different dummy index names and index orderings.
 
 ```python
-i0 = sqa.index('i0', [], True)
-i1 = sqa.index('i1', [], True)
-i2 = sqa.index('i2', [], True)
-i3 = sqa.index('i3', [], True)
-i0_cre = sqa.creOp(i0)
-i1_cre = sqa.creOp(i1)
-i2_des = sqa.desOp(i2)
-i3_des = sqa.desOp(i3)
-rdm_2_aaaa_other = sqa.tensor('d2aaaa', [q0, i0, q1, i1], [sym_1, sym_2])
-h_2_aaaa_other   = sqa.tensor('h2aaaa', [i2, i3, i0, i1], [sym_1, sym_2])
-my_other_term = sqa.term(1.0, [], [rdm_2_aaaa_other, h_2_aaaa_other, i0_cre, i1_cre, i3_des, i2_des])
+i0 = sqa_plus.index('i0', [], True)
+i1 = sqa_plus.index('i1', [], True)
+i2 = sqa_plus.index('i2', [], True)
+i3 = sqa_plus.index('i3', [], True)
+i0_cre = sqa_plus.creOp(i0)
+i1_cre = sqa_plus.creOp(i1)
+i2_des = sqa_plus.desOp(i2)
+i3_des = sqa_plus.desOp(i3)
+rdm_2_aaaa_other = sqa_plus.tensor('d2aaaa', [q0, i0, q1, i1], [sym_1, sym_2])
+h_2_aaaa_other   = sqa_plus.tensor('h2aaaa', [i2, i3, i0, i1], [sym_1, sym_2])
+my_other_term = sqa_plus.term(1.0, [], [rdm_2_aaaa_other, h_2_aaaa_other, i0_cre, i1_cre, i3_des, i2_des])
 ```
 
 Now lets create a list containing our two terms and print them out.
@@ -273,10 +274,10 @@ The result should be:
 These two terms certainly don't look the same at first glance, but we have constructed them so that they are.  To attempt to combine them, we use the following command.
 
 ```python
-sqa.combineTerms(term_list)
+sqa_plus.combineTerms(term_list)
 ```
 
-The combineTerms function will print out its progress in converting terms to canonical form if the variable sqa.options.verbose is set to True.
+The combineTerms function will print out its progress in converting terms to canonical form if the variable sqa_plus.options.verbose is set to True.
 This is the default, so the printout should show as:
 
 ```python
@@ -317,45 +318,45 @@ To start, we define some short names for the type groups we'll need using the bu
 One can certainly define new type groups, but the defaults are provided for consistency and because some of the program's advanced functions rely on them.
 
 ```python
-tg_a = sqa.options.alpha_type
-tg_b = sqa.options.beta_type
-tg_c = sqa.options.core_type
-tg_v = sqa.options.virtual_type
-tg_h = sqa.options.core_type + sqa.options.virtual_type
+tg_a = sqa_plus.options.alpha_type
+tg_b = sqa_plus.options.beta_type
+tg_c = sqa_plus.options.core_type
+tg_v = sqa_plus.options.virtual_type
+tg_h = sqa_plus.options.core_type + sqa_plus.options.virtual_type
 ```
 
 The last type group, tg_h, is formed using Python's ability to add tuples.
 Now let's define the indices we'll need, using p as the base name for the Hamiltonian's indices and q as the base name for the cluster operator's indices.
 
 ```python
-p0 = sqa.index('p0', [tg_a, tg_h], True)
-p1 = sqa.index('p1', [tg_b, tg_h], True)
-p2 = sqa.index('p2', [tg_a, tg_h], True)
-p3 = sqa.index('p3', [tg_b, tg_h], True)
-q0 = sqa.index('q0', [tg_a, tg_v], True)
-q1 = sqa.index('q1', [tg_a, tg_c], True)
+p0 = sqa_plus.index('p0', [tg_a, tg_h], True)
+p1 = sqa_plus.index('p1', [tg_b, tg_h], True)
+p2 = sqa_plus.index('p2', [tg_a, tg_h], True)
+p3 = sqa_plus.index('p3', [tg_b, tg_h], True)
+q0 = sqa_plus.index('q0', [tg_a, tg_v], True)
+q1 = sqa_plus.index('q1', [tg_a, tg_c], True)
 ```
 
 Note that the Hamiltonian's indices range over both core and virtual orbitals, while the cluster operator has one virtual index and one core index.
 Now let's define the tensors, remembering the Hamiltonian's transpose symmetry.
 
 ```python
-sym_h2abab = sqa.symmetry((2,3,0,1),1)
-h2abab = sqa.tensor('h2abab', [p0, p1, p2, p3], [sym_h2abab])
-p0_c = sqa.creOp(p0)
-p1_c = sqa.creOp(p1)
-p2_d = sqa.desOp(p2)
-p3_d = sqa.desOp(p3)
-t1aa = sqa.tensor('t1aa', [q0, q1], [])
-q0_c = sqa.creOp(q0)
-q1_d = sqa.desOp(q1)
+sym_h2abab = sqa_plus.symmetry((2,3,0,1),1)
+h2abab = sqa_plus.tensor('h2abab', [p0, p1, p2, p3], [sym_h2abab])
+p0_c = sqa_plus.creOp(p0)
+p1_c = sqa_plus.creOp(p1)
+p2_d = sqa_plus.desOp(p2)
+p3_d = sqa_plus.desOp(p3)
+t1aa = sqa_plus.tensor('t1aa', [q0, q1], [])
+q0_c = sqa_plus.creOp(q0)
+q1_d = sqa_plus.desOp(q1)
 ```
 
 Now let's define a term that represents the multiplication of the abab part of the Hamiltonian by the cluster operator.
 Remember that all the indices are dummy and summed over.
 
 ```python
-term = sqa.term(1.0, [], [t1aa, q0_c, q1_d, h2abab, p0_c, p1_c, p3_d, p2_d])
+term = sqa_plus.term(1.0, [], [t1aa, q0_c, q1_d, h2abab, p0_c, p1_c, p3_d, p2_d])
 print(term)
 ```
 
@@ -367,7 +368,7 @@ We should see the term:
 Let's now put the term in normal order, which should produce a couple of delta functions, one of which will be zero due to alpha-beta orthogonality.
 
 ```python
-result = sqa.normalOrder(term)
+result = sqa_plus.normalOrder(term)
 for t in result:
   print(t)
 ```
@@ -429,7 +430,7 @@ Finally, we can automatically remove the zero term using the termChop
 function, which deletes terms with very small numerical coefficients.
 
 ```python
-sqa.termChop(result)
+sqa_plus.termChop(result)
 for t in result:
   print(t)
 ```
@@ -446,37 +447,37 @@ Now let's put everything together to compute something relevant to Canonical Tra
 As usual, the first step is to define some indices, which we do by creating a list of indices called p.
 
 ```python
-p = [sqa.index('p%i' %j, [sqa.options.alpha_type], True) for j in range(8)]
+p = [sqa_plus.index('p%i' %j, [sqa_plus.options.alpha_type], True) for j in range(8)]
 ```
 
 Next define the amplitude and Hamiltonian tensors (remembering symmetries).
 
 ```python
-a2aaaa_syms = [sqa.symmetry((1,0,2,3),-1), sqa.symmetry((0,1,3,2), -1)]
-a2aaaa = sqa.tensor('a2aaaa', p[0:4], a2aaaa_syms)
-h2aaaa_syms = [sqa.symmetry((2,3,0,1),1), sqa.symmetry((0,1,3,2), -1)]
-h2aaaa = sqa.tensor('h2aaaa', p[4:8], h2aaaa_syms)
+a2aaaa_syms = [sqa_plus.symmetry((1,0,2,3),-1), sqa_plus.symmetry((0,1,3,2), -1)]
+a2aaaa = sqa_plus.tensor('a2aaaa', p[0:4], a2aaaa_syms)
+h2aaaa_syms = [sqa_plus.symmetry((2,3,0,1),1), sqa_plus.symmetry((0,1,3,2), -1)]
+h2aaaa = sqa_plus.tensor('h2aaaa', p[4:8], h2aaaa_syms)
 ```
 
 Now define the creation and destruction operator strings for the amplitude and Hamiltonian operators.
 
 ```python
-a_ops1 = [sqa.creOp(p[0]), sqa.creOp(p[1]), sqa.desOp(p[3]), sqa.desOp(p[2])]
-a_ops2 = [sqa.creOp(p[2]), sqa.creOp(p[3]), sqa.desOp(p[1]), sqa.desOp(p[0])]
-h_ops  = [sqa.creOp(p[4]), sqa.creOp(p[5]), sqa.desOp(p[7]), sqa.desOp(p[6])]
+a_ops1 = [sqa_plus.creOp(p[0]), sqa_plus.creOp(p[1]), sqa_plus.desOp(p[3]), sqa_plus.desOp(p[2])]
+a_ops2 = [sqa_plus.creOp(p[2]), sqa_plus.creOp(p[3]), sqa_plus.desOp(p[1]), sqa_plus.desOp(p[0])]
+h_ops  = [sqa_plus.creOp(p[4]), sqa_plus.creOp(p[5]), sqa_plus.desOp(p[7]), sqa_plus.desOp(p[6])]
 ```
 
 In CT the amplitude operator is anti-symmetric, so we must write it as the sum of two terms, which are the negative transposes of each other.
 In the program, sums of terms are stored as a list of the terms.
 
 ```python
-ampOp = [sqa.term(1.0, [], [a2aaaa] + a_ops1), sqa.term(-1.0, [], [a2aaaa] + a_ops2)]
+ampOp = [sqa_plus.term(1.0, [], [a2aaaa] + a_ops1), sqa_plus.term(-1.0, [], [a2aaaa] + a_ops2)]
 ```
 
 Finally, we define the sum of terms (actually just a single term, but in list form) for the Hamiltonian.
 
 ```python
-hamOp = [sqa.term(1.0, [], [h2aaaa] + h_ops)]
+hamOp = [sqa_plus.term(1.0, [], [h2aaaa] + h_ops)]
 ```
 
 Taking the commutator of the amplitude and Hamiltonian operators can now be done automatically using the commutator function.
@@ -484,10 +485,10 @@ This function expands all the terms of the commutator, normal orders them, contr
 Now that's automation!
 
 ```python
-result = sqa.commutator(hamOp, ampOp)
+result = sqa_plus.commutator(hamOp, ampOp)
 ```
 
-If sqa.options.verbose is set to True, we will see a printout as the program converts the resulting terms to canonical form:
+If sqa_plus.options.verbose is set to True, we will see a printout as the program converts the resulting terms to canonical form:
 
 ```python
 Combining like terms:
@@ -570,7 +571,7 @@ These take a list of terms and various RDM tensors (again depending on the funct
 These functions act similarly to the RDM decompositions, although here the operators are detected automatically rather than by name.
 As a consequence, only normal ordered operators will be decomposed.
 
-The decomposition functions require all indices of the RDMs, creation operators, and destruction operators to have either the sqa.options.alpha_type or sqa.options.beta_type as one of their type groups.
+The decomposition functions require all indices of the RDMs, creation operators, and destruction operators to have either the sqa_plus.options.alpha_type or sqa_plus.options.beta_type as one of their type groups.
 This is so that the correct RDM tensors can be chosen during decomposition.
 
 As an example of using the decomposition, lets create a term that involves the 3-body all-alpha-spin RDM and then decompose it.
@@ -579,19 +580,19 @@ This does not matter, because those of the 1- and 2-body RDMs will be overwritte
 What is important is that the 1- and 2-body RDMs have the correct alpha and beta index combinations.
 
 ```python
-p = [sqa.index('p%i' %j, [sqa.options.alpha_type], False) for j in range(8)]
-q = [sqa.index('q%i' %j, [sqa.options.beta_type],  False) for j in range(8)]
-d1_sym = [sqa.symmetry((1,0),1)]
-d2_sym_aaaa = [sqa.symmetry((1,0,2,3),-1), sqa.symmetry((2,3,0,1),1)]
-d2_sym_abab = [sqa.symmetry((2,3,0,1),1)]
-d3_sym_aaaaaa = [sqa.symmetry((1,0,2,3,4,5),-1), sqa.symmetry((0,2,1,3,4,5),-1), sqa.symmetry((3,4,5,0,1,2),1)]
-d1aa = sqa.tensor('d1aa', p[0:2], d1_sym)
-d1bb = sqa.tensor('d1bb', q[0:2], d1_sym)
-d2aaaa = sqa.tensor('d2aaaa', p[0:4], d2_sym_aaaa)
-d2bbbb = sqa.tensor('d2bbbb', q[0:4], d2_sym_aaaa)
-d2abab = sqa.tensor('d2abab', [p[0],q[0],p[1],q[1]], d2_sym_abab)
-d3aaaaaa = sqa.tensor('d3aaaaaa', p[0:6], d3_sym_aaaaaa)
-term = sqa.term(1.0, [], [d3aaaaaa, sqa.creOp(p[6]), sqa.desOp(p[7])])
+p = [sqa_plus.index('p%i' %j, [sqa_plus.options.alpha_type], False) for j in range(8)]
+q = [sqa_plus.index('q%i' %j, [sqa_plus.options.beta_type],  False) for j in range(8)]
+d1_sym = [sqa_plus.symmetry((1,0),1)]
+d2_sym_aaaa = [sqa_plus.symmetry((1,0,2,3),-1), sqa_plus.symmetry((2,3,0,1),1)]
+d2_sym_abab = [sqa_plus.symmetry((2,3,0,1),1)]
+d3_sym_aaaaaa = [sqa_plus.symmetry((1,0,2,3,4,5),-1), sqa_plus.symmetry((0,2,1,3,4,5),-1), sqa_plus.symmetry((3,4,5,0,1,2),1)]
+d1aa = sqa_plus.tensor('d1aa', p[0:2], d1_sym)
+d1bb = sqa_plus.tensor('d1bb', q[0:2], d1_sym)
+d2aaaa = sqa_plus.tensor('d2aaaa', p[0:4], d2_sym_aaaa)
+d2bbbb = sqa_plus.tensor('d2bbbb', q[0:4], d2_sym_aaaa)
+d2abab = sqa_plus.tensor('d2abab', [p[0],q[0],p[1],q[1]], d2_sym_abab)
+d3aaaaaa = sqa_plus.tensor('d3aaaaaa', p[0:6], d3_sym_aaaaaa)
+term = sqa_plus.term(1.0, [], [d3aaaaaa, sqa_plus.creOp(p[6]), sqa_plus.desOp(p[7])])
 print(term)
 ```
 
@@ -604,10 +605,10 @@ Now put the term in a list and pass the list to the decomposition function to re
 
 ```python
 term_list = [term]
-sqa.decomp_3rdms_to_2rdms_so(term_list, 'd3aaaaaa', d1aa, d1bb, d2aaaa, d2bbbb, d2abab)
+sqa_plus.decomp_3rdms_to_2rdms_so(term_list, 'd3aaaaaa', d1aa, d1bb, d2aaaa, d2bbbb, d2abab)
 ```
 
-If sqa.options.verbose is set to true, you should see a printout telling you how many decompositions were performed.  In this case there should be just 1:
+If sqa_plus.options.verbose is set to true, you should see a printout telling you how many decompositions were performed.  In this case there should be just 1:
 
 decomposed 1 3-body RDMs
 

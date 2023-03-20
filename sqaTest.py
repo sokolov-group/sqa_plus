@@ -15,7 +15,7 @@
 #          Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
-import secondQuantizationAlgebra as sqa
+import sqa_plus as sqa
 import time
 
 # Define operator types

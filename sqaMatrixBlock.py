@@ -15,7 +15,8 @@
 #   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
 #   J. Chem. Phys. 130, 124102 (2009)
 #
-# Author: Koushik Chatterjee <koushikchatterjee7@gmail.com>
+# Author: Alexander Yu. Sokolov <alexander.y.sokolov@gmail.com>
+# .       Koushik Chatterjee <koushikchatterjee7@gmail.com>
 #
 
 import sys, time
@@ -421,21 +422,6 @@ def sortOpsCore(_unsorted_ops, returnPermutation = False):
     if returnPermutation:
         return (sign, sorted_ops, perm)
     return (sign, sorted_ops)
-
-def print_header():
-
-    print("""
-    \n----------------------------------------------------------------------------------
-    sqa_plus: Code generator for quasi-particle systems.
-    Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
-
-    Licensed under the GNU General Public License v3.0;
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
-    ----------------------------------------------------------------------------------""")
 
 def contractDeltaFuncs_nondummy(_terms):
     "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
