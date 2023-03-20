@@ -14,6 +14,7 @@ To see how to use core SecondQuantizationAlgebra capabilities, such as the defin
 
 ## Multireference Algebraic Diagrammatic Construction (MR-ADC) Theory Automation
 ### Spin-Orbital Effective Hamiltonian and Operators
+Dyall Hamiltonian (`sqa_plus.dyallH`), Effective Hamiltonians up to second-order (`sqa_plus.Heff`), T amplitudes operators (`sqa_plus.getT`) and V perturbation operators (`sqa_plus.getV`) can be obtained automatically.
 
 ### Matrix Block Evaluation
 
@@ -23,7 +24,7 @@ Intermediates code requires [NumPy](https://numpy.org/) scientific computation p
 
 ## Spin-Adapted Equation Generator
 ### Spin-Integrated Effective Hamiltonian and Operators
-Spin-orbital and spin-integrated effective Hamiltonians and operators can now be obtained by functions implemented in `sqaHeff.py`.
+Spin-integrated effective Hamiltonians and operators can now be obtained by functions implemented in `sqaHeff.py`.
 Dyall Hamiltonian (`sqa_plus.dyallH`), Effective Hamiltonians up to second-order (`sqa_plus.Heff`), T amplitudes operators (`sqa_plus.getT`) and V perturbation operators (`sqa_plus.getV`) are included.
 
 ```python
