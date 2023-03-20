@@ -95,7 +95,7 @@ from sqaDecomposition_so import  \
   decomp_4rdms_to_2rdms_so,      \
   decomp_4rdms_to_3rdms_so
 
-from sqaAddon import matrixBlock, \
+from sqaMatrixBlock import matrixBlock, \
   dummyLabel,                     \
   filterVirtual,                  \
   filterCore,                     \
