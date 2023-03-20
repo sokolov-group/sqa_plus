@@ -27,12 +27,14 @@ To see how to use core SecondQuantizationAlgebra capabilities, such as the defin
 SecondQuantizationAlgebra was originally developed by Eric Neuscamman <eric.neuscamman@gmail.com>
 
 In addition, any modification or use of this software should cite the following paper:
+```
   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
   J. Chem. Phys. 130, 124102 (2009)
+```
 
 ## SecondQuantizationAlgebra Plus
 ### MR-ADC Automation
-- Alexander Sokolov <alexander.y.sokolov@gmail.com>
+- Alexander Yu. Sokolov <alexander.y.sokolov@gmail.com>
 - Koushik Chatterjee <koushikchatterjee7@gmail.com>
 
 ### Intermediates Generator

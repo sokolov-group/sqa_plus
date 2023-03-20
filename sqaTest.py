@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Authors: Alexander Yu. Sokolov <sokolov.8@osu.edu>
+# Authors: Alexander Yu. Sokolov <alexander.y.sokolov@gmail.com>
 #          Koushik Chatterjee <koushikchatterjee7@gmail.com>
 #          Ilia Mazin <ilia.mazin@gmail.com>
 #          Carlos E. V. de Moura <carlosevmoura@gmail.com>
