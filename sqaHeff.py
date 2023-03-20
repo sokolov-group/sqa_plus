@@ -29,7 +29,7 @@ from sqaSymmetry import symmetry
 from sqaCommutator import commutator
 from sqaIndexList import create_dummy_indices_list
 
-def Heff(order, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
+def Heff(order = 0, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
     "Construct effective Hamiltonian(L)."
 
     print("--------------------------------- Hamiltonian({:}) ---------------------------------".format(order))
@@ -574,7 +574,7 @@ def dyallH_act(indices_lists, spin_integrated = False, explicit_spin_cases = Tru
 
     return dyallH_act
 
-def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
+def Tamplitude(order = 1, indices_lists, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
     # Cluster operator  : T - T^dag, Where T = T1 + T2
     # Single excitation : T1
 
@@ -1939,7 +1939,7 @@ def Tamplitude(order, indices_lists, spin_integrated = False, explicit_spin_case
 
     return T
 
-def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explicit_spin_cases = True):
+def Tamplitude_excitation(order = 1, indices_lists, spin_integrated = False, explicit_spin_cases = True):
 
     def Tamplitude_excitation_spin_orbital(order, indices_lists):
 
@@ -2771,7 +2771,7 @@ def Tamplitude_excitation(order, indices_lists, spin_integrated = False, explici
 
     return T
 
-def Tamplitude_deexcitation(order, indices_lists, spin_integrated = False, explicit_spin_cases = True):
+def Tamplitude_deexcitation(order = 1, indices_lists, spin_integrated = False, explicit_spin_cases = True):
 
     def Tamplitude_deexcitation_spin_orbital(order, indices_lists):
 

@@ -29,7 +29,7 @@ from sqaOptions import options
 from sqaSymmetry import symmetry
 
 def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True):
-    "Construct matrix block."
+    "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
     startTime = time.time()
     print("\n--------------- Converting Spin-Integrated Tensors to Spin-Adapted ---------------\n")
