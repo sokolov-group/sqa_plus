@@ -18,9 +18,7 @@
 # Author: Eric Neuscamman <eric.neuscamman@gmail.com>
 #
 
-from sqaIndex import index
 from sqaTensor import tensor, sfExOp, creOp, desOp
-from sqaTerm import term, combineTerms, multiplyTerms, termChop
 from sqaOptions import options
 import time
 
@@ -295,6 +293,8 @@ def assign_rdm_types(inTerms, rdm_name, rdms):
     of terms inTerms with name rdm_name.    rdms is a list of tensors representing the
     rdm types available for assignment.
     """
+
+    from sqaTerm import termChop
 
     # Prepare lists for the number of top and bottom alpha and beta indices in the supplied density matrices
     rdm_topACounts = [0]*len(rdms)

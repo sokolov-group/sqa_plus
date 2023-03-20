@@ -27,7 +27,7 @@
 
 import threading
 from sqaIndex import index
-from sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp, creDesTensor
+from sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
 from sqaMisc import makePermutations
 from sqaOptions import options
 import time
