@@ -15,12 +15,16 @@
 #   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
 #   J. Chem. Phys. 130, 124102 (2009)
 #
-# Author: Carlos E. V. de Moura <carlosevmoura@gmail.com>
+# Authors: Eric Neuscamman <eric.neuscamman@gmail.com>
+#          Alexander Yu. Sokolov <alexander.y.sokolov@gmail.com>
+#  .       Koushik Chatterjee <koushikchatterjee7@gmail.com>
+#          Illia Mazin <ilia.mazin@gmail.com>
+#          Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
 import sys
 print("""
-\n----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -30,7 +34,6 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
 ----------------------------------------------------------------------------------""")
 sys.stdout.flush()
 

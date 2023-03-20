@@ -27,11 +27,8 @@ tg_g = tg_c + tg_a + tg_v
 # Define indices
 dummy = True
 
-# Test 1: Double commutator evaluation for a first order contribution to the  M_00 block of the effective Hamiltonian matrix
-#
-print ""
-print "Starting test 1"
-print ""
+# Test 1: Double commutator evaluation for a first order contribution to the M_00 block of the effective Hamiltonian matrix
+print("\n# Starting Test 1:\n")
 startTime = time.time()
 
 # Create left hand side operator list
@@ -54,10 +51,10 @@ effH = sqa.Heff(1)
 term1 = sqa.term(1.0, [], r_op)
 term2 = sqa.term(1.0, [], l_op)
 
-print ("First Commutator")
+print("> First Commutator...")
 term3 = sqa.commutator(effH, term1)
 
-print ("Second Commutator")
+print("> Second Commutator...")
 term4 = sqa.commutator(term2, term3)
 
 term5 = sqa.matrixBlock(term4)
@@ -74,22 +71,18 @@ test1_correct_answer = " (  -1.00000) v(I,Y,J,X) \n" + \
                        " (  -1.00000) v(I,x,J,y) rdm(x,y) cre(Y) des(X) \n" + \
                        " (  -1.00000) v(I,x,J,y) cre(Y) cre(y) des(X) des(x) \n"
 
-print "Test 1 output:"
-print test1_string_output
+print("\n> Test 1 output:\n")
+print(test1_string_output)
 
 if test1_string_output == test1_correct_answer:
-    print "Test 1 passed",
+    print(">> Test 1 passed!\n")
 else:
-    print "Test 1 failed",
+    print(">> Test 1 failed!\n")
 
-print "(%.3f seconds) \n" % (time.time() - startTime)
-
+print("({:.3f} seconds) \n".format(time.time() - startTime))
 
 # Test 2: Construction of the overlap matrix for an M_01 sector of the effective Hamiltonian matrix
-#
-print ""
-print "Starting test 2"
-print ""
+print("\n# Starting Test 2:\n")
 startTime = time.time()
 
 # Create left hand side operator list
@@ -122,22 +115,18 @@ test2_correct_answer = " (  -1.00000) kdelta(I,J) kdelta(U,X) cre(Z) des(Y) \n" 
                        " (   1.00000) kdelta(I,J) kdelta(X,Z) cre(U) des(Y) \n" + \
                        " (  -1.00000) kdelta(I,J) cre(U) cre(Z) des(X) des(Y) \n"
 
-print "Test 2 output:"
-print test2_string_output
+print("\n> Test 2 output:\n")
+print(test2_string_output)
 
 if test2_string_output == test2_correct_answer:
-    print "Test 2 passed",
+    print(">> Test 2 passed!\n")
 else:
-    print "Test 2 failed",
+    print(">> Test 2 failed!\n")
 
-print "(%.3f seconds) \n" % (time.time() - startTime)
-
+print("({:.3f} seconds) \n".format(time.time() - startTime))
 
 # Test 3: Multiply perturbation operator by single excitation operators from either side
-#
-print ""
-print "Starting test 3"
-print ""
+print("\n# Starting Test 3:\n")
 startTime = time.time()
 
 # Create left hand side operator list
@@ -183,12 +172,12 @@ test3_correct_answer = " (  -1.00000) v(x,B,J,A) cre(X) des(x) \n" + \
                        " (   1.00000) kdelta(A,B) v(i,x,J,i) cre(X) des(x) \n" + \
                        " (   0.50000) kdelta(A,B) v(x,y,J,z) cre(X) cre(z) des(x) des(y) \n"
 
-print "Test 3 output:"
-print test3_string_output
+print("\n> Test 3 output:\n")
+print(test3_string_output)
 
 if test3_string_output == test3_correct_answer:
-    print "Test 3 passed",
+    print(">> Test 3 passed!\n")
 else:
-    print "Test 3 failed",
+     print(">> Test 3 failed!\n")
 
-print "(%.3f seconds) \n" % (time.time() - startTime)
+print("({:.3f} seconds) \n".format(time.time() - startTime))

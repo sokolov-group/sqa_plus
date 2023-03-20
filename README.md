@@ -40,5 +40,7 @@ In addition, any modification or use of this software should cite the following 
 ### Intermediates Generator
 - Ilia Mazin <ilia.mazin@gmail.com>
 
+Intermediates code requires [NumPy](https://numpy.org/) scientific computation package installed.
+
 ### Spin-Adaptation Automation
 - Carlos E. V. de Moura <carlosevmoura@gmail.com>
