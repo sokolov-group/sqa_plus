@@ -1,0 +1,163 @@
+Construct effective Hamiltonian:=>
+
+ (   1.00000) E_fc(Const.) 
+ (  -1.00000) e(c0) des(c0) cre(c0) 
+ (   1.00000) e(v0) cre(v0) des(v0) 
+ (   1.00000) h(a1,a0) cre(a0) des(a1) 
+ (   1.00000) v(a1,c1,a0,c1) cre(a0) des(a1) 
+ (   0.25000) v(a2,a3,a0,a1) cre(a0) cre(a1) des(a3) des(a2) 
+First Commutator
+
+Combining like terms:
+Converting 17 terms to canonical form...
+     0   (   1.00000) E_fc(Const.) cre(K) cre(L) des(B) 
+     1   (  -1.00000) cre(K) cre(L) des(B) E_fc(Const.) 
+     2   (  -1.00000) e(c0) cre(K) cre(L) cre(c0) des(B) des(c0) 
+     3   (  -1.00000) e(c0) cre(K) cre(L) des(B) 
+     4   (  -1.00000) e(K) cre(L) cre(K) des(B) 
+     5   (   1.00000) e(L) cre(K) cre(L) des(B) 
+     6   (   1.00000) e(c0) cre(K) cre(L) cre(c0) des(B) des(c0) 
+     7   (   1.00000) e(c0) cre(K) cre(L) des(B) 
+     8   (  -1.00000) e(v0) cre(K) cre(L) cre(v0) des(B) des(v0) 
+     9   (   1.00000) e(v0) cre(K) cre(L) cre(v0) des(B) des(v0) 
+    10   (  -1.00000) e(B) cre(K) cre(L) des(B) 
+    11   (  -1.00000) h(a1,a0) cre(K) cre(L) cre(a0) des(B) des(a1) 
+    12   (   1.00000) h(a1,a0) cre(K) cre(L) cre(a0) des(B) des(a1) 
+    13   (  -1.00000) v(a1,c1,a0,c1) cre(K) cre(L) cre(a0) des(B) des(a1) 
+    14   (   1.00000) v(a1,c1,a0,c1) cre(K) cre(L) cre(a0) des(B) des(a1) 
+    15   (  -0.25000) v(a2,a3,a0,a1) cre(K) cre(L) cre(a0) cre(a1) des(B) des(a2) des(a3) 
+    16   (   0.25000) v(a2,a3,a0,a1) cre(K) cre(L) cre(a0) cre(a1) des(B) des(a2) des(a3) 
+Finished combining terms in 0.009 seconds
+
+ (  -1.00000) e(B) cre(K) cre(L) des(B) 
+ (   1.00000) e(K) cre(K) cre(L) des(B) 
+ (   1.00000) e(L) cre(K) cre(L) des(B) 
+Second Commutator
+ (  -1.00000) e(B) cre(K) cre(L) des(B) cre(A) des(J) des(I) 
+ (  -1.00000) cre(A) des(J) des(I) e(B) cre(K) cre(L) des(B) 
+ (   1.00000) e(K) cre(K) cre(L) des(B) cre(A) des(J) des(I) 
+ (   1.00000) cre(A) des(J) des(I) e(K) cre(K) cre(L) des(B) 
+ (   1.00000) e(L) cre(K) cre(L) des(B) cre(A) des(J) des(I) 
+ (   1.00000) cre(A) des(J) des(I) e(L) cre(K) cre(L) des(B) 
+
+################ Addon ################
+
+
+Expectation value: Filter zero terms wrt virtual:=>
+ (   0.00000) e(B) cre(A) cre(K) cre(L) des(B) des(I) des(J) 
+ (   1.00000) e(B) kdelta(B,A) cre(K) cre(L) des(I) des(J) 
+ (   0.00000) e(B) cre(A) cre(K) cre(L) des(B) des(I) des(J) 
+ (   0.00000) e(B) kdelta(J,K) cre(A) cre(L) des(B) des(I) 
+ (   0.00000) e(B) kdelta(J,L) cre(A) cre(K) des(B) des(I) 
+ (   0.00000) e(B) kdelta(I,K) cre(A) cre(L) des(B) des(J) 
+ (   0.00000) e(B) kdelta(I,L) cre(A) cre(K) des(B) des(J) 
+ (   0.00000) e(B) kdelta(J,K) kdelta(I,L) cre(A) des(B) 
+ (   0.00000) e(B) kdelta(J,L) kdelta(I,K) cre(A) des(B) 
+ (   0.00000) e(K) cre(A) cre(K) cre(L) des(B) des(I) des(J) 
+ (  -1.00000) e(K) kdelta(B,A) cre(K) cre(L) des(I) des(J) 
+ (   0.00000) e(K) cre(A) cre(K) cre(L) des(B) des(I) des(J) 
+ (   0.00000) e(K) kdelta(J,K) cre(A) cre(L) des(B) des(I) 
+ (   0.00000) e(K) kdelta(J,L) cre(A) cre(K) des(B) des(I) 
+ (   0.00000) e(K) kdelta(I,K) cre(A) cre(L) des(B) des(J) 
+ (   0.00000) e(K) kdelta(I,L) cre(A) cre(K) des(B) des(J) 
+ (   0.00000) e(K) kdelta(J,K) kdelta(I,L) cre(A) des(B) 
+ (   0.00000) e(K) kdelta(J,L) kdelta(I,K) cre(A) des(B) 
+ (   0.00000) e(L) cre(A) cre(K) cre(L) des(B) des(I) des(J) 
+ (  -1.00000) e(L) kdelta(B,A) cre(K) cre(L) des(I) des(J) 
+ (   0.00000) e(L) cre(A) cre(K) cre(L) des(B) des(I) des(J) 
+ (   0.00000) e(L) kdelta(J,K) cre(A) cre(L) des(B) des(I) 
+ (   0.00000) e(L) kdelta(J,L) cre(A) cre(K) des(B) des(I) 
+ (   0.00000) e(L) kdelta(I,K) cre(A) cre(L) des(B) des(J) 
+ (   0.00000) e(L) kdelta(I,L) cre(A) cre(K) des(B) des(J) 
+ (   0.00000) e(L) kdelta(J,K) kdelta(I,L) cre(A) des(B) 
+ (   0.00000) e(L) kdelta(J,L) kdelta(I,K) cre(A) des(B) 
+
+Normal ordering with respect to core:=>
+Term=  (   1.00000) e(B) kdelta(B,A) cre(K) cre(L) des(I) des(J) 
+Terms after normal ordering:
+ (  -1.00000) e(B) kdelta(B,A) des(J) des(I) cre(K) cre(L) 
+ (   1.00000) e(B) kdelta(B,A) kdelta(K,I) des(J) cre(L) 
+ (  -1.00000) e(B) kdelta(B,A) kdelta(K,J) des(I) cre(L) 
+ (  -1.00000) e(B) kdelta(B,A) kdelta(L,I) des(J) cre(K) 
+ (   1.00000) e(B) kdelta(B,A) kdelta(L,J) des(I) cre(K) 
+ (  -1.00000) e(B) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+ (   1.00000) e(B) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) e(K) kdelta(B,A) cre(K) cre(L) des(I) des(J) 
+Terms after normal ordering:
+ (   1.00000) e(K) kdelta(B,A) des(J) des(I) cre(K) cre(L) 
+ (  -1.00000) e(K) kdelta(B,A) kdelta(K,I) des(J) cre(L) 
+ (   1.00000) e(K) kdelta(B,A) kdelta(K,J) des(I) cre(L) 
+ (   1.00000) e(K) kdelta(B,A) kdelta(L,I) des(J) cre(K) 
+ (  -1.00000) e(K) kdelta(B,A) kdelta(L,J) des(I) cre(K) 
+ (   1.00000) e(K) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+ (  -1.00000) e(K) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+
+Normal ordering with respect to core:=>
+Term=  (  -1.00000) e(L) kdelta(B,A) cre(K) cre(L) des(I) des(J) 
+Terms after normal ordering:
+ (   1.00000) e(L) kdelta(B,A) des(J) des(I) cre(K) cre(L) 
+ (  -1.00000) e(L) kdelta(B,A) kdelta(K,I) des(J) cre(L) 
+ (   1.00000) e(L) kdelta(B,A) kdelta(K,J) des(I) cre(L) 
+ (   1.00000) e(L) kdelta(B,A) kdelta(L,I) des(J) cre(K) 
+ (  -1.00000) e(L) kdelta(B,A) kdelta(L,J) des(I) cre(K) 
+ (   1.00000) e(L) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+ (  -1.00000) e(L) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+
+Expectation value: Filter zero terms wrt core:=>
+ (   0.00000) e(B) kdelta(B,A) des(J) des(I) cre(K) cre(L) 
+ (   0.00000) e(B) kdelta(B,A) kdelta(K,I) des(J) cre(L) 
+ (   0.00000) e(B) kdelta(B,A) kdelta(K,J) des(I) cre(L) 
+ (   0.00000) e(B) kdelta(B,A) kdelta(L,I) des(J) cre(K) 
+ (   0.00000) e(B) kdelta(B,A) kdelta(L,J) des(I) cre(K) 
+ (  -1.00000) e(B) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+ (   1.00000) e(B) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+ (   0.00000) e(K) kdelta(B,A) des(J) des(I) cre(K) cre(L) 
+ (   0.00000) e(K) kdelta(B,A) kdelta(K,I) des(J) cre(L) 
+ (   0.00000) e(K) kdelta(B,A) kdelta(K,J) des(I) cre(L) 
+ (   0.00000) e(K) kdelta(B,A) kdelta(L,I) des(J) cre(K) 
+ (   0.00000) e(K) kdelta(B,A) kdelta(L,J) des(I) cre(K) 
+ (   1.00000) e(K) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+ (  -1.00000) e(K) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+ (   0.00000) e(L) kdelta(B,A) des(J) des(I) cre(K) cre(L) 
+ (   0.00000) e(L) kdelta(B,A) kdelta(K,I) des(J) cre(L) 
+ (   0.00000) e(L) kdelta(B,A) kdelta(K,J) des(I) cre(L) 
+ (   0.00000) e(L) kdelta(B,A) kdelta(L,I) des(J) cre(K) 
+ (   0.00000) e(L) kdelta(B,A) kdelta(L,J) des(I) cre(K) 
+ (   1.00000) e(L) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+ (  -1.00000) e(L) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+
+Combining like terms:
+Converting 6 terms to canonical form...
+     0   (  -1.00000) e(B) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+     1   (   1.00000) e(B) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+     2   (   1.00000) e(K) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+     3   (  -1.00000) e(K) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+     4   (   1.00000) e(L) kdelta(B,A) kdelta(K,I) kdelta(L,J) 
+     5   (  -1.00000) e(L) kdelta(B,A) kdelta(K,J) kdelta(L,I) 
+Finished combining terms in 0.041 seconds
+
+Dummy indices label update:=>
+ (  -1.00000) e(B) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
+ (   1.00000) e(B) kdelta(A,B) kdelta(I,L) kdelta(J,K) 
+ (   1.00000) e(K) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
+ (  -1.00000) e(K) kdelta(A,B) kdelta(I,L) kdelta(J,K) 
+ (   1.00000) e(L) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
+ (  -1.00000) e(L) kdelta(A,B) kdelta(I,L) kdelta(J,K) 
+
+####### Final results:#######
+ (  -1.00000) e(B) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
+ (   1.00000) e(B) kdelta(A,B) kdelta(I,L) kdelta(J,K) 
+ (   1.00000) e(K) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
+ (  -1.00000) e(K) kdelta(A,B) kdelta(I,L) kdelta(J,K) 
+ (   1.00000) e(L) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
+ (  -1.00000) e(L) kdelta(A,B) kdelta(I,L) kdelta(J,K) 
+
+################ Construct Einsum ################
+M[s_cce:f_cce, s_cce:f_cce] =- np.einsum('B, AB, IK, JL->IJAKLB', e_extern_so, np.identity(nextern_so), np.identity(ncore_so), np.identity(ncore_so), optimize = True)
+M[s_cce:f_cce, s_cce:f_cce] += np.einsum('B, AB, IL, JK->IJAKLB', e_extern_so, np.identity(nextern_so), np.identity(ncore_so), np.identity(ncore_so), optimize = True)
+M[s_cce:f_cce, s_cce:f_cce] += np.einsum('K, AB, IK, JL->IJAKLB', e_core_so, np.identity(nextern_so), np.identity(ncore_so), np.identity(ncore_so), optimize = True)
+M[s_cce:f_cce, s_cce:f_cce] -= np.einsum('K, AB, IL, JK->IJAKLB', e_core_so, np.identity(nextern_so), np.identity(ncore_so), np.identity(ncore_so), optimize = True)
+M[s_cce:f_cce, s_cce:f_cce] += np.einsum('L, AB, IK, JL->IJAKLB', e_core_so, np.identity(nextern_so), np.identity(ncore_so), np.identity(ncore_so), optimize = True)
+M[s_cce:f_cce, s_cce:f_cce] -= np.einsum('L, AB, IL, JK->IJAKLB', e_core_so, np.identity(nextern_so), np.identity(ncore_so), np.identity(ncore_so), optimize = True)

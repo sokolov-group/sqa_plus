@@ -1,0 +1,72 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+First Commutator
+Second Commutator
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) v(J,A,W,Z) cre(X) des(Y) 
+ (   1.00000) kdelta(W,Y) v(J,A,Z,x) cre(X) des(x) 
+ (  -1.00000) kdelta(Y,Z) v(J,A,W,x) cre(X) des(x) 
+ (   1.00000) v(J,A,W,x) cre(X) cre(Z) des(Y) des(x) 
+ (   1.00000) v(J,A,Z,x) cre(W) cre(X) des(Y) des(x) 
+ (  -0.50000) kdelta(W,Y) v(J,A,x,y) cre(X) cre(Z) des(x) des(y) 
+ (  -0.50000) kdelta(Y,Z) v(J,A,x,y) cre(W) cre(X) des(x) des(y) 
+ (   0.50000) v(J,A,x,y) cre(W) cre(X) cre(Z) des(Y) des(x) des(y) 
+
+Total terms : 8
+SQA automation time :  6.382 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =  np.einsum('JAWZ, XY->XYAJWZ', v_ceaa_so, rdm_ca_so, optimize = True)
+temp += np.einsum('WY, JAZx, Xx->XYAJWZ', np.identity(ncas), v_ceaa_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('YZ, JAWx, Xx->XYAJWZ', np.identity(ncas), v_ceaa_so, rdm_ca_so, optimize = True)
+temp += np.einsum('JAWx, XZYx->XYAJWZ', v_ceaa_so, rdm_ccaa_so, optimize = True)
+temp += np.einsum('JAZx, WXYx->XYAJWZ', v_ceaa_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('WY, JAxy, XZxy->XYAJWZ', np.identity(ncas), v_ceaa_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('YZ, JAxy, WXxy->XYAJWZ', np.identity(ncas), v_ceaa_so, rdm_ccaa_so, optimize = True)
+temp += 0.5 * np.einsum('JAxy, WXZYxy->XYAJWZ', v_ceaa_so, rdm_cccaaa_so, optimize = True)

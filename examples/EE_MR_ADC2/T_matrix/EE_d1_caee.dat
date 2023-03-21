@@ -1,0 +1,50 @@
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (  -1.00000) d_aa_so(x,y) t1(I,x,A,B) cre(y) des(X) 
+ (  -1.00000) d_ae_so(x,A) t1(I,y,B,x) cre(y) des(X) 
+ (   1.00000) d_ae_so(x,B) t1(I,y,A,x) cre(y) des(X) 
+ (  -1.00000) d_ca_so(I,x) t1(x,y,A,B) cre(y) des(X) 
+ (  -1.00000) d_ca_so(i,x) t1(I,i,A,B) cre(x) des(X) 
+ (  -1.00000) d_cc_so(I,i) t1(i,x,A,B) cre(x) des(X) 
+ (  -1.00000) d_ee_so(A,a) t1(I,x,B,a) cre(x) des(X) 
+ (   1.00000) d_ee_so(B,a) t1(I,x,A,a) cre(x) des(X) 
+
+Total terms : 8
+SQA automation time :  0.041 seconds
+--------------------------------- WARNING ---------------------------------
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+
+0 terms removed:
+---------------------------------------------------------------------------
+Remaining terms: 8
+
+temp =- einsum('xy,IxAB,yX->IXAB', d_aa_so, t1_caee, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('xA,IyBx,yX->IXAB', d_ae_so, t1_caea, rdm_ca_so, optimize = einsum_type)
+temp += einsum('xB,IyAx,yX->IXAB', d_ae_so, t1_caea, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('Ix,xyAB,yX->IXAB', d_ca_so, t1_aaee, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('ix,IiAB,xX->IXAB', d_ca_so, t1_ccee, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('Ii,ixAB,xX->IXAB', d_cc_so, t1_caee, rdm_ca_so, optimize = einsum_type)
+temp -= einsum('Aa,IxBa,xX->IXAB', d_ee_so, t1_caee, rdm_ca_so, optimize = einsum_type)
+temp += einsum('Ba,IxAa,xX->IXAB', d_ee_so, t1_caee, rdm_ca_so, optimize = einsum_type)

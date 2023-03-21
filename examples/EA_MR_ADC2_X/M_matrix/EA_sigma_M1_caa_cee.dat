@@ -1,0 +1,124 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+First Commutator
+Second Commutator
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   0.50000) X(I,a,b) v(X,Y,a,b) 
+ (   1.00000) X(I,a,b) e(b) t1(X,Y,a,b) 
+ (   0.50000) X(I,a,b) h(X,x) t1(Y,x,a,b) 
+ (  -0.50000) X(I,a,b) h(Y,x) t1(X,x,a,b) 
+ (  -0.50000) X(I,a,b) t1(X,x,a,b) v(i,Y,i,x) 
+ (   0.50000) X(I,a,b) t1(Y,x,a,b) v(i,X,i,x) 
+ (  -0.25000) X(I,a,b) t1(x,y,a,b) v(x,y,X,Y) 
+ (  -0.50000) X(I,a,b) v(X,x,a,b) cre(x) des(Y) 
+ (   0.50000) X(I,a,b) v(Y,x,a,b) cre(x) des(X) 
+ (  -1.00000) X(I,a,b) e(b) t1(X,x,a,b) cre(x) des(Y) 
+ (   1.00000) X(I,a,b) e(b) t1(Y,x,a,b) cre(x) des(X) 
+ (   0.50000) X(I,a,b) h(X,x) t1(x,y,a,b) cre(y) des(Y) 
+ (  -0.50000) X(I,a,b) h(Y,x) t1(x,y,a,b) cre(y) des(X) 
+ (   0.50000) X(I,a,b) h(x,y) t1(X,x,a,b) cre(y) des(Y) 
+ (  -0.50000) X(I,a,b) h(x,y) t1(Y,x,a,b) cre(y) des(X) 
+ (  -0.50000) X(I,a,b) t1(X,x,a,b) v(x,y,Y,z) cre(z) des(y) 
+ (   0.50000) X(I,a,b) t1(X,x,a,b) v(i,y,i,x) cre(y) des(Y) 
+ (   0.50000) X(I,a,b) t1(Y,x,a,b) v(x,y,X,z) cre(z) des(y) 
+ (  -0.50000) X(I,a,b) t1(Y,x,a,b) v(i,y,i,x) cre(y) des(X) 
+ (   0.50000) X(I,a,b) t1(x,y,a,b) v(i,X,i,x) cre(y) des(Y) 
+ (  -0.50000) X(I,a,b) t1(x,y,a,b) v(i,Y,i,x) cre(y) des(X) 
+ (   0.25000) X(I,a,b) t1(x,y,a,b) v(x,y,X,z) cre(z) des(Y) 
+ (  -0.25000) X(I,a,b) t1(x,y,a,b) v(x,y,Y,z) cre(z) des(X) 
+ (   0.50000) X(I,a,b) t1(x,y,a,b) v(x,z,X,Y) cre(y) des(z) 
+ (  -0.25000) X(I,a,b) v(x,y,a,b) cre(x) cre(y) des(X) des(Y) 
+ (  -0.50000) X(I,a,b) e(b) t1(x,y,a,b) cre(x) cre(y) des(X) des(Y) 
+ (   0.50000) X(I,a,b) h(x,y) t1(x,z,a,b) cre(y) cre(z) des(X) des(Y) 
+ (  -0.25000) X(I,a,b) t1(X,x,a,b) v(x,y,z,w) cre(z) cre(w) des(Y) des(y) 
+ (   0.25000) X(I,a,b) t1(Y,x,a,b) v(x,y,z,w) cre(z) cre(w) des(X) des(y) 
+ (   0.12500) X(I,a,b) t1(x,y,a,b) v(x,y,z,w) cre(z) cre(w) des(X) des(Y) 
+ (  -0.50000) X(I,a,b) t1(x,y,a,b) v(x,z,X,w) cre(y) cre(w) des(Y) des(z) 
+ (   0.50000) X(I,a,b) t1(x,y,a,b) v(x,z,Y,w) cre(y) cre(w) des(X) des(z) 
+ (  -0.50000) X(I,a,b) t1(x,y,a,b) v(i,z,i,x) cre(y) cre(z) des(X) des(Y) 
+ (  -0.25000) X(I,a,b) t1(x,y,a,b) v(x,z,w,u) cre(y) cre(w) cre(u) des(X) des(Y) des(z) 
+
+Total terms : 34
+SQA automation time :  2.200 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp = 0.5 * np.einsum('Iab, XYab->IXY', X, v_aaee_so, optimize = True)
+temp += np.einsum('Iab, b, XYab->IXY', X, e_extern_so, t1_aaee, optimize = True)
+temp += 0.5 * np.einsum('Iab, Xx, Yxab->IXY', X, h_aa_so, t1_aaee, optimize = True)
+temp -= 0.5 * np.einsum('Iab, Yx, Xxab->IXY', X, h_aa_so, t1_aaee, optimize = True)
+temp -= 0.5 * np.einsum('Iab, Xxab, iYix->IXY', X, t1_aaee, v_caca_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, Yxab, iXix->IXY', X, t1_aaee, v_caca_so, optimize = True)
+temp -= 0.25 * np.einsum('Iab, xyab, xyXY->IXY', X, t1_aaee, v_aaaa_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, Xxab, xY->IXY', X, v_aaee_so, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, Yxab, xX->IXY', X, v_aaee_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('Iab, b, Xxab, xY->IXY', X, e_extern_so, t1_aaee, rdm_ca_so, optimize = True)
+temp += np.einsum('Iab, b, Yxab, xX->IXY', X, e_extern_so, t1_aaee, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, Xx, xyab, yY->IXY', X, h_aa_so, t1_aaee, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, Yx, xyab, yX->IXY', X, h_aa_so, t1_aaee, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, xy, Xxab, yY->IXY', X, h_aa_so, t1_aaee, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, xy, Yxab, yX->IXY', X, h_aa_so, t1_aaee, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, Xxab, xyYz, zy->IXY', X, t1_aaee, v_aaaa_so, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, Xxab, iyix, yY->IXY', X, t1_aaee, v_caca_so, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, Yxab, xyXz, zy->IXY', X, t1_aaee, v_aaaa_so, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, Yxab, iyix, yX->IXY', X, t1_aaee, v_caca_so, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, xyab, iXix, yY->IXY', X, t1_aaee, v_caca_so, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, xyab, iYix, yX->IXY', X, t1_aaee, v_caca_so, rdm_ca_so, optimize = True)
+temp += 0.25 * np.einsum('Iab, xyab, xyXz, zY->IXY', X, t1_aaee, v_aaaa_so, rdm_ca_so, optimize = True)
+temp -= 0.25 * np.einsum('Iab, xyab, xyYz, zX->IXY', X, t1_aaee, v_aaaa_so, rdm_ca_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, xyab, xzXY, yz->IXY', X, t1_aaee, v_aaaa_so, rdm_ca_so, optimize = True)
+temp -= 0.25 * np.einsum('Iab, xyab, xyXY->IXY', X, v_aaee_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, b, xyab, xyXY->IXY', X, e_extern_so, t1_aaee, rdm_ccaa_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, xy, xzab, yzXY->IXY', X, h_aa_so, t1_aaee, rdm_ccaa_so, optimize = True)
+temp -= 0.25 * np.einsum('Iab, Xxab, xyzw, zwYy->IXY', X, t1_aaee, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp += 0.25 * np.einsum('Iab, Yxab, xyzw, zwXy->IXY', X, t1_aaee, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp += 0.125 * np.einsum('Iab, xyab, xyzw, zwXY->IXY', X, t1_aaee, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, xyab, xzXw, ywYz->IXY', X, t1_aaee, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp += 0.5 * np.einsum('Iab, xyab, xzYw, ywXz->IXY', X, t1_aaee, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('Iab, xyab, izix, yzXY->IXY', X, t1_aaee, v_caca_so, rdm_ccaa_so, optimize = True)
+temp -= 0.25 * np.einsum('Iab, xyab, xzwu, ywuXYz->IXY', X, t1_aaee, v_aaaa_so, rdm_cccaaa_so, optimize = True)

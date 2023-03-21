@@ -1,0 +1,7 @@
+temp =- np.einsum('IYJX->IXJY', v_caca_so, optimize = True).copy()
+temp += np.einsum('xy, XY, IxJy->IXJY', rdm_ca_so, np.identity(ncas_so), v_caca_so, optimize = True)
+temp += np.einsum('IYJx, xX->IXJY', v_caca_so, rdm_ca_so, optimize = True)
+temp += np.einsum('IxJX, Yx->IXJY', v_caca_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('xy, IxJy, YX->IXJY', rdm_ca_so, v_caca_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('XY, IxJy, yx->IXJY', np.identity(ncas_so), v_caca_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('IxJy, YyXx->IXJY', v_caca_so, rdm_ccaa_so, optimize = True)

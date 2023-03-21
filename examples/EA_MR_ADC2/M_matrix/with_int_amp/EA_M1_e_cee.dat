@@ -1,0 +1,110 @@
+
+    _____ ____    ___ 
+   / ___// __ \  /   |SQA Code geneator for quasi-particle systems (Extention).
+   \__ \/ / / / / /| |author:  Koushik Chatterjee
+  ___/ / /_/ / / ___ |date:  August 31, 2018
+ /____/\___\_\/_/  |_|Copyright (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+                      
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+--------------------------------------------------------------
+------------------------ Hamiltonian(1) ----------------------
+Perturbation(V) type = All 
+Done ...
+Commutation: Done ...
+Done ...
+--------------------------------------------------------------
+First Commutator
+Second Commutator
+
+------------------------ SQA Automation ----------------------
+
+Computing expectation value with respect to virtual:=>
+Done ...
+--------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done ...
+--------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done ...
+--------------------------------------------------------------
+Dummy indices relabelling:=>
+Done ...
+--------------------------------------------------------------
+Reorder tensor indices according to (Core < Active < Virtual): =>
+Done ...
+--------------------------------------------------------------
+
+----------------------- Final results ------------------------
+ (   1.00000) v(J,A,C,D) 
+ (   1.00000) h(J,C) kdelta(A,D) 
+ (  -1.00000) h(J,D) kdelta(A,C) 
+ (   1.00000) kdelta(A,C) v(J,i,i,D) 
+ (  -1.00000) kdelta(A,D) v(J,i,i,C) 
+ (   1.00000) e(C) kdelta(A,D) t1(J,C) 
+ (  -1.00000) e(D) kdelta(A,C) t1(J,D) 
+ (   1.00000) e(J) kdelta(A,C) t1(J,D) 
+ (  -1.00000) e(J) kdelta(A,D) t1(J,C) 
+ (   1.00000) kdelta(A,C) v(J,y,x,D) cre(y) des(x) 
+ (  -1.00000) kdelta(A,D) v(J,y,x,C) cre(y) des(x) 
+ (   1.00000) e(C) kdelta(A,D) t1(J,x,C,y) cre(x) des(y) 
+ (  -1.00000) e(D) kdelta(A,C) t1(J,x,D,y) cre(x) des(y) 
+ (   1.00000) e(J) kdelta(A,C) t1(J,x,D,y) cre(x) des(y) 
+ (  -1.00000) e(J) kdelta(A,D) t1(J,x,C,y) cre(x) des(y) 
+ (   1.00000) h(x,y) kdelta(A,C) t1(J,x,D,z) cre(y) des(z) 
+ (  -1.00000) h(x,y) kdelta(A,C) t1(J,z,D,x) cre(z) des(y) 
+ (  -1.00000) h(x,y) kdelta(A,D) t1(J,x,C,z) cre(y) des(z) 
+ (   1.00000) h(x,y) kdelta(A,D) t1(J,z,C,x) cre(z) des(y) 
+ (  -1.00000) kdelta(A,C) t1(J,x,D,y) v(i,y,i,z) cre(x) des(z) 
+ (   1.00000) kdelta(A,C) t1(J,x,D,y) v(i,z,i,x) cre(z) des(y) 
+ (   1.00000) kdelta(A,D) t1(J,x,C,y) v(i,y,i,z) cre(x) des(z) 
+ (  -1.00000) kdelta(A,D) t1(J,x,C,y) v(i,z,i,x) cre(z) des(y) 
+ (  -0.50000) kdelta(A,C) t1(J,x,D,y) v(x,z,w,u) cre(w) cre(u) des(y) des(z) 
+ (   0.50000) kdelta(A,C) t1(J,x,D,y) v(z,w,y,u) cre(x) cre(u) des(z) des(w) 
+ (   0.50000) kdelta(A,D) t1(J,x,C,y) v(x,z,w,u) cre(w) cre(u) des(y) des(z) 
+ (  -0.50000) kdelta(A,D) t1(J,x,C,y) v(z,w,y,u) cre(x) cre(u) des(z) des(w) 
+
+Total terms : 27
+SQA automation time :  0.257 seconds
+
+----------------------- SQA EINSUM ---------------------------
+  ___  _  _  _  __  _ _  _   _ 
+ | __|| || \| |/ _|| | || \_/ | Einsum generator: Transform into einsum.
+ | _| | || \  |\_ \| U || \_/ | author:  Koushik Chatterjee
+ |___||_||_|\_||__/|___||_| |_| date:  August 31, 2018
+                                VERSION : 1
+ Copywight (C) 2018-2019  Koushik Chatterjee (koushikchatterjee7@gmail.com)
+
+ For Help :: help = True
+--------------------------------------------------------------
+temp =  np.einsum('JACD->AJCD', v_ceee_so, optimize = True).copy()
+temp += np.einsum('JC, AD->AJCD', h_ce_so, np.identity(nextern), optimize = True)
+temp -= np.einsum('JD, AC->AJCD', h_ce_so, np.identity(nextern), optimize = True)
+temp += np.einsum('AC, JiiD->AJCD', np.identity(nextern), v_ccce_so, optimize = True)
+temp -= np.einsum('AD, JiiC->AJCD', np.identity(nextern), v_ccce_so, optimize = True)
+temp += np.einsum('C, AD, JC->AJCD', e_extern_so, np.identity(nextern), t1_ce, optimize = True)
+temp -= np.einsum('D, AC, JD->AJCD', e_extern_so, np.identity(nextern), t1_ce, optimize = True)
+temp += np.einsum('J, AC, JD->AJCD', e_core_so, np.identity(nextern), t1_ce, optimize = True)
+temp -= np.einsum('J, AD, JC->AJCD', e_core_so, np.identity(nextern), t1_ce, optimize = True)
+temp += np.einsum('AC, JyxD, yx->AJCD', np.identity(nextern), v_caae_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('AD, JyxC, yx->AJCD', np.identity(nextern), v_caae_so, rdm_ca_so, optimize = True)
+temp += np.einsum('C, AD, JxCy, xy->AJCD', e_extern_so, np.identity(nextern), t1_caea, rdm_ca_so, optimize = True)
+temp -= np.einsum('D, AC, JxDy, xy->AJCD', e_extern_so, np.identity(nextern), t1_caea, rdm_ca_so, optimize = True)
+temp += np.einsum('J, AC, JxDy, xy->AJCD', e_core_so, np.identity(nextern), t1_caea, rdm_ca_so, optimize = True)
+temp -= np.einsum('J, AD, JxCy, xy->AJCD', e_core_so, np.identity(nextern), t1_caea, rdm_ca_so, optimize = True)
+temp += np.einsum('xy, AC, JxDz, yz->AJCD', h_aa_so, np.identity(nextern), t1_caea, rdm_ca_so, optimize = True)
+temp -= np.einsum('xy, AC, JzDx, zy->AJCD', h_aa_so, np.identity(nextern), t1_caea, rdm_ca_so, optimize = True)
+temp -= np.einsum('xy, AD, JxCz, yz->AJCD', h_aa_so, np.identity(nextern), t1_caea, rdm_ca_so, optimize = True)
+temp += np.einsum('xy, AD, JzCx, zy->AJCD', h_aa_so, np.identity(nextern), t1_caea, rdm_ca_so, optimize = True)
+temp -= np.einsum('AC, JxDy, iyiz, xz->AJCD', np.identity(nextern), t1_caea, v_caca_so, rdm_ca_so, optimize = True)
+temp += np.einsum('AC, JxDy, izix, zy->AJCD', np.identity(nextern), t1_caea, v_caca_so, rdm_ca_so, optimize = True)
+temp += np.einsum('AD, JxCy, iyiz, xz->AJCD', np.identity(nextern), t1_caea, v_caca_so, rdm_ca_so, optimize = True)
+temp -= np.einsum('AD, JxCy, izix, zy->AJCD', np.identity(nextern), t1_caea, v_caca_so, rdm_ca_so, optimize = True)
+temp -= 0.5 * np.einsum('AC, JxDy, xzwu, wuyz->AJCD', np.identity(nextern), t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp += 0.5 * np.einsum('AC, JxDy, zwyu, xuzw->AJCD', np.identity(nextern), t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp += 0.5 * np.einsum('AD, JxCy, xzwu, wuyz->AJCD', np.identity(nextern), t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
+temp -= 0.5 * np.einsum('AD, JxCy, zwyu, xuzw->AJCD', np.identity(nextern), t1_caea, v_aaaa_so, rdm_ccaa_so, optimize = True)
