@@ -38,7 +38,8 @@ def Heff(order = 0, spin_integrated = False, explicit_spin_cases = True, interna
     #   order = 1 : L(1) = V + [H(0),T(1) - T'(1)]
     #   order = 2 : L(2) = [H(0),(T(2) - T'(2))] + 1/2[(V + L(1)), (T(1) - T'(1))]
 
-    indices_lists = create_dummy_indices_list(spin_integrated)
+    user_defined = False
+    indices_lists = create_dummy_indices_list(spin_integrated, user_defined)
 
     if (order == 0):
         # L(0) = H(0)
@@ -574,7 +575,7 @@ def dyallH_act(indices_lists, spin_integrated = False, explicit_spin_cases = Tru
 
     return dyallH_act
 
-def Tamplitude(order = 1, indices_lists, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
+def Tamplitude(indices_lists, order = 1, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
     # Cluster operator  : T - T^dag, Where T = T1 + T2
     # Single excitation : T1
 
@@ -1376,7 +1377,7 @@ def Tamplitude(order = 1, indices_lists, spin_integrated = False, explicit_spin_
         # Core-External: t_i^a
         cor_1 = cor_alpha_inds.new_index()
         vir_2 = vir_alpha_inds.new_index()
-        t1_ten = tensor(tname, cor_1, vir_2, t1_ten_symm)
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
         T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
         T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
         T.append(T1_ex)
@@ -1939,7 +1940,7 @@ def Tamplitude(order = 1, indices_lists, spin_integrated = False, explicit_spin_
 
     return T
 
-def Tamplitude_excitation(order = 1, indices_lists, spin_integrated = False, explicit_spin_cases = True):
+def Tamplitude_excitation(indices_lists, order = 1, spin_integrated = False, explicit_spin_cases = True):
 
     def Tamplitude_excitation_spin_orbital(order, indices_lists):
 
@@ -2771,7 +2772,7 @@ def Tamplitude_excitation(order = 1, indices_lists, spin_integrated = False, exp
 
     return T
 
-def Tamplitude_deexcitation(order = 1, indices_lists, spin_integrated = False, explicit_spin_cases = True):
+def Tamplitude_deexcitation(indices_lists, order = 1, spin_integrated = False, explicit_spin_cases = True):
 
     def Tamplitude_deexcitation_spin_orbital(order, indices_lists):
 
@@ -4972,7 +4973,8 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
 def getT(order = 1, spin_integrated = False, explicit_spin_cases = True):
     "Get T amplitudes (order)."
 
-    indices_lists = create_dummy_indices_list(spin_integrated)
+    user_defined = False
+    indices_lists = create_dummy_indices_list(spin_integrated, user_defined)
 
     T = Tamplitude(order, indices_lists, spin_integrated, explicit_spin_cases)
 
@@ -4981,7 +4983,8 @@ def getT(order = 1, spin_integrated = False, explicit_spin_cases = True):
 def getV(spin_integrated = False, explicit_spin_cases = True):
     "Get V pertubation terms."
 
-    indices_lists = create_dummy_indices_list(spin_integrated)
+    user_defined = False
+    indices_lists = create_dummy_indices_list(spin_integrated, user_defined)
 
     V = Vperturbation(indices_lists, spin_integrated, explicit_spin_cases)
 
