@@ -14,15 +14,17 @@
 #         Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
-from sqaIndex import get_spatial_index_type, get_spin_index_type, \
+from sqaIndex import get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type, \
                      is_alpha_index_type, is_beta_index_type
 
-from sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
+from sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
+from sqaOptions import options
 
 def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_ind_str = None, suffix = None,
               cvs_ind = None, val_ind = None, use_cvs_tensors = False, rm_trans_rdm_const = False, rm_core_int = False,
-              intermediate_list = None, opt_einsum_terms = True, optimize = True, spin_integrated = False, use_spin_integrated_tensors = False,
+              intermediate_list = None, opt_einsum_terms = True, optimize = True,
+              spin_integrated = False, use_spin_integrated_tensors = False,
               help = False, **tensor_rename):
 
     # Store custom names if provided by user
