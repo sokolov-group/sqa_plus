@@ -65,6 +65,8 @@ def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True
 
     # Combine Spin-Adapted Terms
     print("----------------------------------------------------------------------------------")
+    for term_sa in terms_sa:
+        term_sa.isInCanonicalForm = False
 
     num_terms_sa = len(terms_sa)
     print("\nCombining {:} spin-adapted terms...\n".format(num_terms_sa))

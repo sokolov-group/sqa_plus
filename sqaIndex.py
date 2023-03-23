@@ -72,9 +72,13 @@ class index:
 			raise TypeError, "isSummed must be True or False"
 		self.isSummed = isSummed
 
-		if type(userDefined) != type(True):
+		if (type(userDefined) != type(True)) and not isinstance(userDefined, str):
 			raise TypeError, "userDefined must be True or False"
-		self.userDefined = userDefined
+
+		if userDefined is True:
+			self.userDefined = str(name)
+		else:
+			self.userDefined = userDefined
 
 	def __cmp__(self,other):
 		if (not isinstance(other,index)):
@@ -83,9 +87,6 @@ class index:
 		if retval != 0:
 			return retval
 		retval = cmp(self.name, other.name)
-		if retval != 0:
-			return retval
-		retval = cmp(self.userDefined, other.userDefined)
 		if retval != 0:
 			return retval
 		return cmp(self.indType, other.indType)
@@ -97,6 +98,11 @@ class index:
 	def copy(self):
 		"Returns a deep copy of the index"
 		return index(self.name, self.indType, self.isSummed, self.userDefined)
+
+	def rename(self):
+		"Rename index according to user defined name."
+		if isinstance(self.userDefined, str):
+			self.name = self.userDefined
 
 # SecondQuantizationAlgebra Plus
 #

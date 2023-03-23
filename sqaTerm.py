@@ -505,7 +505,7 @@ class term:
                     for j in range(len(nameGroups[i])):
                         tenList.append(nameGroups[i][gPerms[i][j]].copy())
                         for k in range(len(tenList[-1].indices)):
-                            if tenList[-1].indices[k].isSummed and not tenList[-1].indices[k].userDefined:
+                            if tenList[-1].indices[k].isSummed:
                                 tenList[-1].indices[k] = map[tenList[-1].indices[k].tup()]
                         factor *= tenList[-1].sortIndeces()
                         for ind in tenList[-1].indices:
@@ -518,7 +518,7 @@ class term:
                 for op in opList:
                     if op.indices[0].tup() in map:
                         op.indices[0] = map[op.indices[0].tup()]
-                    elif op.indices[0].isSummed and not op.indices[0].userDefined:
+                    elif op.indices[0].isSummed:
                         map[op.indices[0].tup()] = index(alphabet[aCount+nNewMaps], op.indices[0].indType, op.indices[0].isSummed, op.indices[0].userDefined)
                         nNewMaps += 1
                         op.indices[0] = map[op.indices[0].tup()]
@@ -890,7 +890,12 @@ def combineTerms(termList, maxThreads = 1):
 
     # Remove terms with coefficients of zero
     termChop(termList)
-    
+
+    for _term in termList:
+        for _tensor in _term.tensors:
+            for _index in _tensor.indices:
+                _index.rename()
+
     if options.verbose:
         print("Finished combining terms in %.3f seconds" %(time.time() - startTime))
         print("")

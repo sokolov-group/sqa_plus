@@ -30,7 +30,6 @@ from sqaNormalOrder import normalOrder
 from sqaIndex import get_spatial_index_type, get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type
 
-#####################################
 def matrixBlock(terms, transRDM = False):
     "Construct matrix block."
 
