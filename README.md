@@ -16,7 +16,41 @@ To see how to use core SecondQuantizationAlgebra capabilities, such as the defin
 ### Spin-Orbital Effective Hamiltonian and Operators
 Dyall Hamiltonian (`sqa_plus.dyallH`), Effective Hamiltonians up to second-order (`sqa_plus.Heff`), T amplitudes operators (`sqa_plus.getT`) and V perturbation operators (`sqa_plus.getV`) can be obtained automatically.
 
-### Matrix Block Evaluation
+### Matrix Block Evaluation: `sqa_plus.matrixBlock`
+Automates the evaluation of terms applying normal-order to all active-space creation ahd annihilation operators with respect to physical vacuum, normal-order core creation and annihilation operators relative to the Fermi vaccum, and evaluate expectation values with respect to the active-space states.
+
+```python
+# Define spin-orbital Zeroth-order Heff
+terms_Heff0 = sqa_plus.Heff(0)
+
+# Evaluate terms
+terms_Heff0 = matrixBlock(terms_Heff0)
+```
+
+### Export terms in NumPy's Einsum Notation: `sqa_plus.genEinsum`
+Translates terms and SQA objects to [Numpy's Einsum](https://numpy.org/doc/stable/reference/generated/numpy.einsum.html) notation, ready to be used in Python codes.
+The `sqa_plus.genEinsum` function has options setted by positional arguments.
+
+```python
+sqa_plus.genEinsum(terms, lhs_str, ind_str, trans_rdm, trans_ind_str, suffix,
+                          cvs_ind, val_ind, use_cvs_tensors, rm_trans_rdm_const, rm_core_int,
+                          intermediate_list, opt_einsum_terms, optimize,
+                          spin_integrated, use_spin_integrated_tensors,
+                          help, **tensor_rename):
+```
+
+- `lhs_str`: Variable name to store the results of `np.einsum` operations;
+- `ind_str`: String containing external indices of the summation;
+- `suffix`: Add suffix to variables;
+- `cvs_ind`: List of core indices to be included in Core-Valence Separation (CVS) space;
+- `val_ind`: List of core indices not included in Core-Valence Separation (CVS) space;
+- `use_cvs_tensors`: Generate expressions using CVS-ready variables;
+- `rm_core_int`: Remove double-counted contributions to core terms when using the effective Hamiltonian;
+- `opt_einsum_terms`: Select `optEinsum` or built-in Numpy `einsum` function;
+- `optimize`: Configure `optimize` flag in `einsum`;
+- `spin_integrated`: Express spin-integrated quantities by slices of spin-orbital objects;
+- `use_spin_integrated_tensors`: Uses spin-integrated defined quantities instead, adding the spin cases as a suffix;
+
 
 ## Intermediates Generator
 ### Intermediates function: `sqa_plus.genIntermediates`
