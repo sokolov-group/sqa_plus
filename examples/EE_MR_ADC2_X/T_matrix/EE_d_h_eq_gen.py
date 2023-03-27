@@ -262,8 +262,8 @@ for term in final_result:
 
 einsum_list_1 = sqa.genEinsum(rdm_terms, 'temp', target_ind, rm_core_int = True)
 for einsum in einsum_list_1:
-    print (einsum)
-print ('')
+    print(einsum)
+print('')
 
 # Scan for intermediates
 term7, intermediates = sqa.genIntermediates(rdm_terms, target_ind, factor_depth = 1)
@@ -272,11 +272,11 @@ term7, intermediates = sqa.genIntermediates(rdm_terms, target_ind, factor_depth 
 int_einsum_list, einsum_list_2 = sqa.genEinsum(term7, 'temp', target_ind, rm_core_int = True, intermediate_list = intermediates)
 
 for int_def in int_einsum_list:
-    print (int_def)
-print ('')
+    print(int_def)
+print('')
 
 for einsum in einsum_list_2:
-    print (einsum)
+    print(einsum)
 
 # Scan for intermediates
 term7, intermediates = sqa.genIntermediates(rdm_terms, target_ind, custom_path = [(2,3),(1,2)])
@@ -285,8 +285,8 @@ term7, intermediates = sqa.genIntermediates(rdm_terms, target_ind, custom_path =
 int_einsum_list, einsum_list_2 = sqa.genEinsum(term7, 'temp', target_ind, rm_core_int = True, intermediate_list = intermediates)
 
 for int_def in int_einsum_list:
-    print (int_def)
-print ('')
+    print(int_def)
+print('')
 
 for einsum in einsum_list_2:
-    print (einsum)
+    print(einsum)

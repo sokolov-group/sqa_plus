@@ -27,7 +27,6 @@ b = sqa.index('B', [tg_v])
 c = sqa.index('C', [tg_v])
 d = sqa.index('D', [tg_v])
 
-
 # LHS
 #l_op  = [sqa.creOp(i), sqa.desOp(x)] # CA
 #l_ind = 'IX'                                                         
@@ -49,14 +48,15 @@ l_ind = 'XA'
 r_op  = [sqa.creOp(b), sqa.desOp(y)] # AE
 r_ind = 'YB'                                                         
 
-
+# Define terms w/ desired operators
 l_op_term = sqa.term(1.0, [], l_op)
 r_op_term = sqa.term(1.0, [], r_op)
 
 # Define Hamiltonian
 effH = []
-effH = sqa.Heff(2)
+effH = sqa.Heff(1)
 
+# Perform multiplication of terms and normal-ordering
 term1 = []
 for t in effH:
     tt = sqa.multiplyTerms(l_op_term, t)
@@ -72,14 +72,14 @@ for t in term2:
     tt = sqa.normalOrder(t)
     term3.extend(tt)
 
-# Keep only 4-rdm
+# Filter through all terms keep only terms that involve 4-rdm
 term4 = []
 for term in term3:
     cre_des = 0
     for tens in term.tensors:
         if isinstance(tens, sqa.creOp) or isinstance(tens, sqa.desOp):
             cre_des += 1 
-    if cre_des == 8:
+    if cre_des == 2:
         term4.append(term)
 
 term5 = sqa.matrixBlock(term4)
@@ -88,31 +88,39 @@ term5 = sqa.matrixBlock(term4)
 einsum_list_1 = sqa.genEinsum(term5, 'temp', l_ind + r_ind, rm_core_int = True)
 
 for einsum in einsum_list_1:
-    print (einsum)
-print ('')
+    print(einsum)
+print('')
 
-# Scan for intermediates
+##############################################
+# Scan for intermediates w/ factor_depth = 1
+# INT terms will only be defined in terms of tensors in original equations
 term6, intermediates = sqa.genIntermediates(term5, l_ind + r_ind, factor_depth = 1)
 
 # Generate einsum for intermediates and new terms
 int_einsum_list, einsum_list_2 = sqa.genEinsum(term6, 'temp', l_ind + r_ind, rm_core_int = True, intermediate_list = intermediates)
 
+# Print intermediate term definitions
 for int_def in int_einsum_list:
-    print (int_def)
-print ('')
+    print(int_def)
+print('')
 
+# Print terms w/ INT terms substitution
 for einsum in einsum_list_2:
-    print (einsum)
+    print(einsum)
 
-# Scan for intermediates
+##############################################
+# Scan for intermediates w/ factor_depth = 2
+# INT terms can be defined in terms of one other INT terms
 term6, intermediates = sqa.genIntermediates(term5, l_ind + r_ind, factor_depth = 2)
 
 # Generate einsum for intermediates and new terms
 int_einsum_list, einsum_list_2 = sqa.genEinsum(term6, 'temp', l_ind + r_ind, rm_core_int = True, intermediate_list = intermediates)
 
+# Print intermediate term definitions
 for int_def in int_einsum_list:
-    print (int_def)
-print ('')
+    print(int_def)
+print('')
 
+# Print terms w/ INT terms substitution
 for einsum in einsum_list_2:
-    print (einsum)
+    print(einsum)

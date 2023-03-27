@@ -178,17 +178,17 @@ scaling_factor = 0.5
 effH = []
 effH = sqa.Heff(0)
 
-print ("Terms of Hamiltonian")
+print("Terms of Hamiltonian")
 for t in effH:
-  print (t)
+  print(t)
 
 term1 = sqa.term(scaling_factor * 1.0, [], r_op + X)
 term2 = sqa.term(1.0, [], l_op)
 
-print ("First Commutator")
+print("First Commutator")
 term3 = sqa.commutator(effH, term1)
 
-print ("Second Commutator")
+print("Second Commutator")
 term4 = sqa.commutator(term2, term3)
 
 term5 = sqa.matrixBlock(term4)

@@ -1,2046 +1,4701 @@
-# file:  sqaHeff.py
-# author:  Koushik Chatterjee
-# date:  September 28, 2018
-# summary:  
-#           Heff : Construct effective Hamiltonian(L^N) of order 'N'.
+# Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 #
-# Copyright (C) 2018-2020 Koushik Chatterjee (koushikchatterjee7@gmail.com)
+# Licensed under the GNU General Public License v3.0;
+# you may not use this file except in compliance with the License.
 #
-# This program is distributed in the hope that it will
-# be useful, but WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A
-# PARTICULAR PURPOSE. See the GNU General Public License
-# for more details.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 #
+# In addition, any modification or use of this software should
+# cite the following paper:
 #
-#import sqa_extra.secondQuantizationAlgebra as sqa
-import sys, os, time
-import subprocess
-import collections
+#   E. Neuscamman, T. Yanai, and G. K.-L. Chan.
+#   J. Chem. Phys. 130, 124102 (2009)
+#
+# Authors: Koushik Chatterjee <koushikchatterjee7@gmail.com>
+#          Carlos E. V. de Moura <carlosevmoura@gmail.com>
+#
 
-from sqaIndex import index
-from sqaCommutator import commutator
-from sqaTerm import term, combineTerms
-from sqaTensor import tensor, creOp, desOp, kroneckerDelta
-from sqaTensor2 import creDesTensor
+import sys
+
+from sqaIndex import index, get_spatial_index_type
+from sqaTensor import tensor, creOp, desOp, creDesTensor
+from sqaTerm import term
 from sqaOptions import options
 from sqaSymmetry import symmetry
+from sqaCommutator import commutator
+from sqaIndexList import create_dummy_indices_list
 
-#####################################
-#
-def Heff(order, internal_excit = True):
-# print_header()
- "Construct effective Hamiltonian(L)."
-#
- print ("------------------------ Hamiltonian(%s) ----------------------" % order)
- sys.stdout.flush()
-#   order = 0 : L(0) = H(0)
-#   order = 1 : L(1) = V + [H(0),T(1) - T'(1)]
-#   order = 2 : L(2) = [H(0),(T(2) - T'(2))] + 1/2[(V + L(1)), (T(1) - T'(1))] 
-#
-# Define operator types
- tg_c = options.core_type
- tg_a = options.active_type
- tg_v = options.virtual_type
- tg_g = tg_c + tg_a + tg_v
- dummy = True
-# Core dummy indices
- cc = [index('c%i' %p, [tg_c], dummy) for p in range(800)]
-# Active dummy indices
- aa = [index('a%i' %p, [tg_a], dummy) for p in range(800)]
-# Virtual dummy indices
- vv = [index('v%i' %p, [tg_v], dummy) for p in range(800)]
-#
- if (order == 0):
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(10):
-       cc1.append(cc.pop(0))
-       aa1.append(aa.pop(0))
-       vv1.append(vv.pop(0))
-#
-    L = dyallH(cc1, aa1, vv1)
-#
- elif (order == 1):   # L(1) = V + [H(0),T(1) - T'(1)]
-    L = []
+def Heff(order = 0, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
+    "Construct effective Hamiltonian(L)."
 
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(10):
-       cc1.append(cc.pop(0))
-       aa1.append(aa.pop(0))
-       vv1.append(vv.pop(0))
-#
-    effH = dyallH(cc1, aa1, vv1)
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(200):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-#
-    V = Vperturbation_type(cc1, aa1, vv1)
-#
-    L.extend(V)
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(30):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-    T1 = Tamplitude(1, cc1, aa1, vv1)
-#
-    com1 = commutator(effH, T1)
-    print "Commutation: Done ..."
+    print("--------------------------------- Hamiltonian({:}) ---------------------------------".format(order))
     sys.stdout.flush()
-#
-    L.extend(com1)
-#
- elif (order == 2):    #   L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
-    L = []
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(10):
-       cc1.append(cc.pop(0))
-       aa1.append(aa.pop(0))
-       vv1.append(vv.pop(0))
-#
-    effH = dyallH(cc1, aa1, vv1)
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(30):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-    T2 = Tamplitude(2, cc1, aa1, vv1, internal_excit)
-    com1 = commutator(effH, T2)
-    print "First Commutation: Done ..."
+    #   order = 0 : L(0) = H(0)
+    #   order = 1 : L(1) = V + [H(0),T(1) - T'(1)]
+    #   order = 2 : L(2) = [H(0),(T(2) - T'(2))] + 1/2[(V + L(1)), (T(1) - T'(1))]
+
+    indices_lists = create_dummy_indices_list(spin_integrated)
+
+    if (order == 0):
+        # L(0) = H(0)
+        L = dyallH(indices_lists, spin_integrated, explicit_spin_cases)
+
+    elif (order == 1):
+        # L(1) = V + [H(0),T(1) - T'(1)]
+        L = []
+
+        effH = dyallH(indices_lists, spin_integrated, explicit_spin_cases)
+
+        V = Vperturbation(indices_lists, spin_integrated, explicit_spin_cases)
+
+        L.extend(V)
+
+        T1 = Tamplitude(1, indices_lists, spin_integrated, explicit_spin_cases)
+
+        com1 = commutator(effH, T1)
+        print("Commutation: Done ...")
+        sys.stdout.flush()
+
+        L.extend(com1)
+
+    elif (order == 2):
+        # L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
+        L = []
+
+        effH = dyallH(indices_lists, spin_integrated, explicit_spin_cases)
+
+        T2 = Tamplitude(2, indices_lists, spin_integrated, explicit_spin_cases, internal_excit)
+
+        com1 = commutator(effH, T2)
+        print("First Commutation: Done ...")
+        sys.stdout.flush()
+
+        L.extend(com1)
+
+        V = Vperturbation(indices_lists, spin_integrated, explicit_spin_cases)
+
+        T1 = Tamplitude(1, indices_lists, spin_integrated, explicit_spin_cases)
+
+        com2 = commutator(V, T1)
+        print("Second Commutation: Done ...")
+        sys.stdout.flush()
+
+        L.extend(com2)
+
+        effH = dyallH(indices_lists, spin_integrated, explicit_spin_cases)
+
+        T1_1 = Tamplitude(1, indices_lists, spin_integrated, explicit_spin_cases)
+
+        com3 = commutator(effH, T1_1)
+
+        T1_2 = Tamplitude(1, indices_lists, spin_integrated, explicit_spin_cases)
+
+        com4 = commutator(com3, T1_2)
+        print("Third Commutation: Done ...")
+        sys.stdout.flush()
+
+        for t in com4:
+            t.scale(0.5)
+        L.extend(com4)
+
+    else:
+        raise Exception ('Unknown type of effective Hamiltonian of order = %s' % (order))
+
+    print("Done ...")
+    print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
-#
-    L.extend(com1)              # 1st Commutator
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(200):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-#
-    V = Vperturbation_type(cc1, aa1, vv1)
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(30):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-    T1 = Tamplitude(1, cc1, aa1, vv1)
-    com2 = commutator(V, T1)
+    return L
 
-## APPROX H(2) ##
-#####
-#    for t in com2:
-#       t.scale(0.5)
-#####
+def dyallH(indices_lists, spin_integrated = False, explicit_spin_cases = True):
 
-    print "Second Commutation: Done ..."
-    sys.stdout.flush()
-#
-    L.extend(com2)              # 2nd Commutator
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(10):
-       cc1.append(cc.pop(0))
-       aa1.append(aa.pop(0))
-       vv1.append(vv.pop(0))
-#
-    effH = dyallH(cc1, aa1, vv1)
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(30):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-    T1_new1 = Tamplitude(1, cc1, aa1, vv1)
-#
-    com3 = commutator(effH, T1_new1)
-#
-    cc1 = []
-    aa1 = []
-    vv1 = []
-    for i in range(30):
-        cc1.append(cc.pop(0))
-        aa1.append(aa.pop(0))
-        vv1.append(vv.pop(0))
-    T1_new2 = Tamplitude(1, cc1, aa1, vv1)
-#
-    com4 = commutator(com3, T1_new2)
-    print "Third Commutation: Done ..."
-    sys.stdout.flush()
-#
-    for t in com4:
-       t.scale(0.5)
-    L.extend(com4)              # 3rd Commutator
-#
- else:
-    raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
-#
- print "Done ..."
- print("""--------------------------------------------------------------""")
- sys.stdout.flush()
- return L
-#
-def dyallH(cc, aa, vv):
- Hamil = []
-# E_fc :
- #c = index('Const.', [], dummy = True)
-# c = index('Const.', [], True)
-# Efc = tensor('E_fc',[c], [])
- Efc = tensor('E_fc', [], [])
-# Hamil.append( term(1.0, ['E_fc'], []))
- Hamil.append( term(1.0, [], [Efc]))
-#
-# core and vitual part : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
- e_core = tensor('e', [cc[1]], [])
- e_virt = tensor('e', [vv[1]], [])
-# Hamil.append( term(-1.0, ['e_i'],[ desOp(cor), creOp(cor)]))
-# Hamil.append( term(1.0, ['e_v'],[ creOp(vir), desOp(vir)])) 
- Hamil.append( term(-1.0, [],[e_core, desOp(cc[1]), creOp(cc[1])]))
- Hamil.append( term(1.0, [],[e_virt, creOp(vv[1]), desOp(vv[1])]))
-#
-# active part : H_act
- Hact = []
-# symmetry
- h1sym = [ symmetry((1,0),1)]
-# v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
- v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1),  symmetry((2,3,0,1), 1)]
-#
- h1 =  tensor('h',[aa[1], aa[0]], h1sym)
- v1 =  tensor('v', [aa[3], cc[2], aa[2], cc[2]], v2sym)
- v2 =  tensor('v', [aa[6], aa[7], aa[4], aa[5]], v2sym)
-#
- Hact.append( term(1.0, [], [h1,  creOp(aa[0]), desOp(aa[1])]))
- Hact.append( term(1.0, [], [v1,  creOp(aa[3]), desOp(aa[2])]))
- Hact.append( term(0.25, [], [v2,  creOp(aa[4]), creOp(aa[5]), desOp(aa[7]), desOp(aa[6])]))
-#
- Hamil.extend(Hact)
-#
- return Hamil
+    def dyallH_spin_orbital(indices_lists):
+        "Construct spin-integrated Dyall Hamiltonian operator."
 
-def Vperturbation_type(cc, aa, vv, vtype = None):
-#
- "Construct perturbation operator V according to excitation rank."
-#
- V = []
- v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
- d1sym = [ symmetry((1,0),1)]
-#
-# if (vtype == 'full') or (vtype == 'Full') or (vtype == ''):
- if not (vtype):
-#   Default V includes all type of perturbation rank.
-    print "Perturbation(V) type = All "
-#    print ""
-    V.extend(Vperturbation(cc, aa, vv))
-    print "Done ..."
-    sys.stdout.flush()
-#
- else:
-    if (vtype == 'V[n=0]'):
-#   
-       print "Perturbation(V) type = ",vtype
-#   
-       cor1 = cc.pop(0)
-       cor2 = cc.pop(0)
-       cor3 = cc.pop(0)
-       cor4 = cc.pop(0)
-#   
-       act1 = aa.pop(0)
-       act2 = aa.pop(0)
-#   
-       vir1 = vv.pop(0)
-       vir2 = vv.pop(0)
-       vir3 = vv.pop(0)
-       vir4 = vv.pop(0)
-#   
-       ten1 =  tensor('v', [cor3, cor4, cor1, cor2], v2sym)
-#       V.append( term(0.25, [], [ten1, creOp(cor1), creOp(cor2), desOp(cor4), desOp(cor3)]))
-       V.append( term(0.25, [], [ten1, desOp(cor4), desOp(cor3),creOp(cor1), creOp(cor2)]))
-#   
-       ten2 =  tensor('v', [vir3, vir4, vir1, vir2], v2sym)
-       V.append( term(0.25, [], [ten2, creOp(vir1), creOp(vir2), desOp(vir4), desOp(vir3)]))
-#   
-       ten3 =  tensor('v', [vir1, cor2, cor1, vir2], v2sym)
-#       V.append( term(1.0, [], [ten3, creOp(cor1), creOp(vir2), desOp(cor2), desOp(vir1)]))
-       V.append( term(1.0, [], [ten3, desOp(cor2), creOp(cor1), creOp(vir2), desOp(vir1)]))
-#   
-       ten4 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
-#       V.append( term(1.0, [], [ten4, creOp(cor1), desOp(cor2), creOp(act1), desOp(act2)]))
-       V.append( term(-1.0, [], [ten4, desOp(cor2), creOp(cor1), creOp(act1), desOp(act2)]))
-#   
-       ten5 = ten4
-       ten6 = creDesTensor([creOp(act2), desOp(act1)])
-#       ten6 =  tensor('gamma', [act2, act1], d1sym)
-#       V.append( term(-1.0, [], [ten5, ten6,  creOp(cor1), desOp(cor2)]))
-       V.append( term(1.0, [], [ten5, ten6,  desOp(cor2), creOp(cor1)]))
-#   
-       ten7 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
-       V.append( term(1.0, [], [ten7, creOp(vir1), desOp(vir2), creOp(act1), desOp(act2)]))
-       ten8 = ten7
-       ten9 = ten6
-       V.append( term(-1.0, [], [ten8, ten9,  creOp(vir1), desOp(vir2)]))
-#   
+        cor_inds, act_inds, vir_inds = indices_lists
+
+        DyallH = []
+        # E_fc
+        c = index('Const.', [], True)
+        Efc = tensor('E_fc',[c], [])
+        DyallH.append(term(1.0, [], [Efc]))
+
+        # Core and vitual parts : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
+        cor_1 = cor_inds.new_index()
+        e_cor_ten = tensor('e', [cor_1], [])
+        DyallH.append(term(-1.0, [],[e_cor_ten, desOp(cor_1), creOp(cor_1)]))
+
+        vir_1 = vir_inds.new_index()
+        e_vir_ten = tensor('e', [vir_1], [])
+        DyallH.append(term( 1.0, [],[e_vir_ten, creOp(vir_1), desOp(vir_1)]))
+
+        # Active part : DyallH_act
+        DyallH_act = []
+
+        h1e_sym = [symmetry((1,0), 1)]
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        act_3 = act_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        act_3 = act_inds.new_index()
+        act_4 = act_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        DyallH.extend(DyallH_act)
+
+        return DyallH
+
+    def dyallH_spin_integrated(indices_lists):
+        "Construct spin-integrated Dyall Hamiltonian operator."
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        DyallH = []
+        # E_fc
+        c = index('Const.', [], True)
+        Efc = tensor('E_fc',[c], [])
+        DyallH.append(term(1.0, [], [Efc]))
+
+        # Core and vitual parts : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
+        cor_1 = cor_alpha_inds.new_index()
+        e_cor_ten = tensor('e', [cor_1], [])
+        DyallH.append(term(-1.0, [],[e_cor_ten, desOp(cor_1), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        e_cor_ten = tensor('e', [cor_1], [])
+        DyallH.append(term(-1.0, [],[e_cor_ten, desOp(cor_1), creOp(cor_1)]))
+
+        vir_1 = vir_alpha_inds.new_index()
+        e_vir_ten = tensor('e', [vir_1], [])
+        DyallH.append(term( 1.0, [],[e_vir_ten, creOp(vir_1), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        e_vir_ten = tensor('e', [vir_1], [])
+        DyallH.append(term( 1.0, [],[e_vir_ten, creOp(vir_1), desOp(vir_1)]))
+
+        # Active part : DyallH_act
+        DyallH_act = []
+
+        h1e_sym = [symmetry((1,0), 1)]
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(1.00, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        DyallH.extend(DyallH_act)
+
+        return DyallH
+
+    def dyallH_spin_integrated_explicit_cases(indices_lists):
+        "Construct spin-integrated Dyall Hamiltonian operator."
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        DyallH = []
+        # E_fc
+        c = index('Const.', [], True)
+        Efc = tensor('E_fc',[c], [])
+        DyallH.append(term(1.0, [], [Efc]))
+
+        # Core and vitual parts : SUM_i E_i {a_i a^+_i} + SUM_a E_a {a^+_a a_a}
+        cor_1 = cor_alpha_inds.new_index()
+        e_cor_ten = tensor('e', [cor_1], [])
+        DyallH.append(term(-1.0, [],[e_cor_ten, desOp(cor_1), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        e_cor_ten = tensor('e', [cor_1], [])
+        DyallH.append(term(-1.0, [],[e_cor_ten, desOp(cor_1), creOp(cor_1)]))
+
+        vir_1 = vir_alpha_inds.new_index()
+        e_vir_ten = tensor('e', [vir_1], [])
+        DyallH.append(term( 1.0, [],[e_vir_ten, creOp(vir_1), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        e_vir_ten = tensor('e', [vir_1], [])
+        DyallH.append(term( 1.0, [],[e_vir_ten, creOp(vir_1), desOp(vir_1)]))
+
+        # Active part : DyallH_act
+        DyallH_act = []
+
+        h1e_sym = [symmetry((1,0), 1)]
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        DyallH.extend(DyallH_act)
+
+        return DyallH
+
+    if spin_integrated:
+        if explicit_spin_cases:
+            dyallH = dyallH_spin_integrated_explicit_cases(indices_lists)
+        else:
+            dyallH = dyallH_spin_integrated(indices_lists)
     else:
-       raise Exception('Unknown type of V operator ...')
-#
-# for t in V:
-#    print 'perterbative =', t
- return V
-#####################################
-#
-def Tamplitude(order, cc1, aa1, vv1, internal_excit = True):
-# Cluster operator : T - T^dag, Where T = T1 + T2
-# Single excitatio : T1
-#
-# Define t amplitude according to their order
- if (order == 1):
-     tname = 't1'
- elif (order == 2):
-     tname = 't2'
-
- t1_sym = [ symmetry((1,0),1)]
-
- T = []
- cc = list(cc1)
- aa = list(aa1)
- vv = list(vv1)
-# Core-External
-
- ind1 = cc.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
- T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
- T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-
- ind1 = cc.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
- T2_dex =  term(-1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-
- T.append(T1_ex)
- T.append(T2_ex)
- T.append(T1_dex)
- T.append(T2_dex)
-
-# Core-Active
- ind1 = cc.pop(0)
- ind2 = aa.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens = tensor(tname, [ind1,ind2],t1_sym)
- T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
- T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-
- ind1 = cc.pop(0)
- ind2 = aa.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
- T2_dex =  term(-0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-
- T.append(T1_ex)
- T.append(T2_ex)
- T.append(T1_dex)
- T.append(T2_dex)
-
-# Active-External
- ind1 = aa.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
- T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
- T1_dex =  term(-1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-
- ind1 = aa.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
- T2_dex =  term(-0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-
- T.append(T1_ex)
- T.append(T2_ex)
- T.append(T1_dex)
- T.append(T2_dex)
-
- # Doubles
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens1 = custom_tensor(tname, ind1,ind2,ind5,ind6)
- T2_ex = term(0.25, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
- T2_dex = term(-0.25, [], [t2_tens1,  creOp(ind1), creOp(ind2), desOp(ind6), desOp(ind5)])
- T.append(T2_ex)
- T.append(T2_dex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens2 = custom_tensor(tname, ind1,ind2,ind5,ind3)
- T2_ex = term(0.5, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
- T2_dex = term(-0.5, [], [t2_tens2,  creOp(ind1), creOp(ind2), desOp(ind3), desOp(ind5)])
- T.append(T2_ex)
- T.append(T2_dex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens3 = custom_tensor(tname, ind1,ind3,ind5,ind6)
- T2_ex = term(0.5, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
- T2_dex = term(-0.5, [], [t2_tens3,  creOp(ind1), creOp(ind3), desOp(ind6), desOp(ind5)])
- T.append(T2_ex)
- T.append(T2_dex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens4 = custom_tensor(tname, ind1,ind2,ind3,ind4)
- T2_ex = term(0.25, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
- T2_dex = term(-0.25, [], [t2_tens4,  creOp(ind1), creOp(ind2), desOp(ind4), desOp(ind3)])
- T.append(T2_ex)
- T.append(T2_dex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens5 = custom_tensor(tname, ind4,ind3,ind5,ind6)
- T2_ex = term(0.25, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
- T2_dex = term(-0.25, [], [t2_tens5,  creOp(ind4), creOp(ind3), desOp(ind6), desOp(ind5)])
- T.append(T2_ex)
- T.append(T2_dex)
-
- if (order == 2 and internal_excit):
-     t1_asym = [ symmetry((1,0), -1)]
-     ind1 = aa.pop(0)
-     ind2 = aa.pop(0)
-     t1_tens =  tensor(tname, [ind1,ind2],t1_asym)
-     T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
-     T.append(T1_ex)
-
- return T
-
-
-def Tamplitude_excitation(order, cc1, aa1, vv1):
-# Cluster operator : T - T^dag, Where T = T1 + T2
-# Single excitatio : T1
-#
-# Define t amplitude according to their order
- if (order == 1):
-     tname = 't1'
- elif (order == 2):
-     tname = 't2'
-
- t1_sym = [ symmetry((1,0),1)]
-
- T = []
- cc = list(cc1)
- aa = list(aa1)
- vv = list(vv1)
-# Core-External
-
- ind1 = cc.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
- T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
-
- ind1 = cc.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_ex =  term(1.0, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
-
- T.append(T1_ex)
- T.append(T2_ex)
-
-# Core-Active
- ind1 = cc.pop(0)
- ind2 = aa.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens = tensor(tname, [ind1,ind2],t1_sym)
- T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
-
- ind1 = cc.pop(0)
- ind2 = aa.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
-
- T.append(T1_ex)
- T.append(T2_ex)
-
-# Active-External
- ind1 = aa.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
- T1_ex =  term(1.0, [], [t1_tens,  creOp(ind2), desOp(ind1)])
-
- ind1 = aa.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_ex =  term(0.5, [], [t2_tens,  creOp(ind2), creOp(ind3), desOp(ind4), desOp(ind1)])
-
- T.append(T1_ex)
- T.append(T2_ex)
-
- # Doubles
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens1 = custom_tensor(tname, ind1,ind2,ind5,ind6)
- T2_ex = term(0.25, [], [t2_tens1,  creOp(ind5), creOp(ind6), desOp(ind2), desOp(ind1)])
- T.append(T2_ex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens2 = custom_tensor(tname, ind1,ind2,ind5,ind3)
- T2_ex = term(0.5, [], [t2_tens2,  creOp(ind5), creOp(ind3), desOp(ind2), desOp(ind1)])
- T.append(T2_ex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens3 = custom_tensor(tname, ind1,ind3,ind5,ind6)
- T2_ex = term(0.5, [], [t2_tens3,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind1)])
- T.append(T2_ex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens4 = custom_tensor(tname, ind1,ind2,ind3,ind4)
- T2_ex = term(0.25, [], [t2_tens4,  creOp(ind3), creOp(ind4), desOp(ind2), desOp(ind1)])
- T.append(T2_ex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens5 = custom_tensor(tname, ind4,ind3,ind5,ind6)
- T2_ex = term(0.25, [], [t2_tens5,  creOp(ind5), creOp(ind6), desOp(ind3), desOp(ind4)])
- T.append(T2_ex)
-
- return T
-
-
-def Tamplitude_deexcitation(order, cc1, aa1, vv1, internal_excit = True):
-# Cluster operator : T - T^dag, Where T = T1 + T2
-# Single excitatio : T1
-#
-# Define t amplitude according to their order
- if (order == 1):
-     tname = 't1'
- elif (order == 2):
-     tname = 't2'
-
- t1_sym = [ symmetry((1,0),1)]
-
- T = []
- cc = list(cc1)
- aa = list(aa1)
- vv = list(vv1)
-# Core-External
-
- ind1 = cc.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
- T1_dex =  term(1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-
- ind1 = cc.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_dex =  term(1.0, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-
- T.append(T1_dex)
- T.append(T2_dex)
-
-# Core-Active
- ind1 = cc.pop(0)
- ind2 = aa.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens = tensor(tname, [ind1,ind2],t1_sym)
- T1_dex =  term(1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-
- ind1 = cc.pop(0)
- ind2 = aa.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_dex =  term(0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-
- T.append(T1_dex)
- T.append(T2_dex)
-
-# Active-External
- ind1 = aa.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t1_tens =  tensor(tname, [ind1,ind2],t1_sym)
- T1_dex =  term(1.0, [], [t1_tens,  creOp(ind1), desOp(ind2)])
-
- ind1 = aa.pop(0)
- ind2 = vv.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- t2_tens = custom_tensor(tname, ind1,ind4,ind2,ind3)
- T2_dex =  term(0.5, [], [t2_tens,  creOp(ind1), creOp(ind4), desOp(ind3), desOp(ind2)])
-
- T.append(T1_dex)
- T.append(T2_dex)
-
- # Doubles
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens1 = custom_tensor(tname, ind1,ind2,ind5,ind6)
- T2_dex = term(0.25, [], [t2_tens1,  creOp(ind1), creOp(ind2), desOp(ind6), desOp(ind5)])
- T.append(T2_dex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens2 = custom_tensor(tname, ind1,ind2,ind5,ind3)
- T2_dex = term(0.5, [], [t2_tens2,  creOp(ind1), creOp(ind2), desOp(ind3), desOp(ind5)])
- T.append(T2_dex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens3 = custom_tensor(tname, ind1,ind3,ind5,ind6)
- T2_dex = term(0.5, [], [t2_tens3,  creOp(ind1), creOp(ind3), desOp(ind6), desOp(ind5)])
- T.append(T2_dex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens4 = custom_tensor(tname, ind1,ind2,ind3,ind4)
- T2_dex = term(0.25, [], [t2_tens4,  creOp(ind1), creOp(ind2), desOp(ind4), desOp(ind3)])
- T.append(T2_dex)
-
- ind1 = cc.pop(0)
- ind2 = cc.pop(0)
- ind3 = aa.pop(0)
- ind4 = aa.pop(0)
- ind5 = vv.pop(0)
- ind6 = vv.pop(0)
- t2_tens5 = custom_tensor(tname, ind4,ind3,ind5,ind6)
- T2_dex = term(0.25, [], [t2_tens5,  creOp(ind4), creOp(ind3), desOp(ind6), desOp(ind5)])
- T.append(T2_dex)
-
- return T
-
-
-def Vperturbation(cc, aa, vv):
- from sqaAddon import matrixBlock, dummyLabel
-#
- "Construct general perturbation operator V full (default) include all types of V."
-#
- V = []
- V81 = []
- v2sym = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
- v2sym_braket = [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1),  symmetry((2,3,0,1), 1)]
- h1sym = [ symmetry((1,0),1)]
- d1sym = [ symmetry((1,0),1)]
-
- cc1 = list(cc)
- aa1 = list(aa)
- vv1 = list(vv)
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
- ten1 =  tensor('h', [cor1, act1], h1sym)
- V.append( term(1.0, [], [ten1, creOp(act1), desOp(cor1)]))
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
- ten2 =  tensor('h', [act1, cor1], h1sym)
- V.append( term(1.0, [], [ten2, creOp(cor1), desOp(act1)]))
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
- ten3 =  tensor('h', [act1, vir1], h1sym)
- V.append( term(1.0, [], [ten3, creOp(vir1), desOp(act1)]))
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
- ten4 =  tensor('h', [vir1, act1], h1sym)
- V.append( term(1.0, [], [ten4, creOp(act1), desOp(vir1)]))
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
- ten5 =  tensor('h', [cor1, vir1], h1sym)
- V.append( term(1.0, [], [ten5, creOp(vir1), desOp(cor1)]))
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
- ten6 =  tensor('h', [vir1, cor1], h1sym)
- V.append( term(1.0, [], [ten6, creOp(cor1), desOp(vir1)]))
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
- ten7 =  tensor('v', [cor2, act2, cor1, act1], v2sym)
- ten8 =  creDesTensor([creOp(act2), desOp(act1)])
- #ten8 =  tensor('gamma', [act2, act1], d1sym)
- V.append( term(1.0, [], [ten7, ten8,  desOp(cor2), creOp(cor1)]))
-
- cor1 = cc.pop(0)
- vir1 = vv.pop(0)
- act1 = aa.pop(0)
- cor2 = cc.pop(0)
- vir2 = vv.pop(0)
- act2 = aa.pop(0)
-
- #ten8 =  tensor('gamma', [act2, act1], d1sym)
- ten8 =  creDesTensor([creOp(act2), desOp(act1)])
- ten9 =  tensor('v', [vir2, act2, vir1, act1], v2sym)
-# V.append( term(-1.0, [], [ten9, creOp(vir2), desOp(vir1), creOp(act2), desOp(act1)]))
- V.append( term(-1.0, [], [ten9, ten8,  creOp(vir1), desOp(vir2)]))
-#
- for ityp1 in range(3):
-        if (ityp1 == 0):                              # ityp1 = 0 => Core
-               p = cc.pop(0)
-        elif (ityp1 == 1):                            #         1 => Active
-               p = aa.pop(0)
-        else:                                         #         2 => Virtual
-               p = vv.pop(0)
-        for ityp2 in range(3):
-               if (ityp2 == 0):
-                      q = cc.pop(0)
-               elif (ityp2 == 1):
-                      q = aa.pop(0)
-               else:
-                      q = vv.pop(0)
-#
-               for ityp3 in range(3):
-                      if (ityp3 == 0):
-                             s = cc.pop(0)
-                      elif (ityp3 == 1):
-                             s = aa.pop(0)
-                      else:
-                             s = vv.pop(0)
-#
-                      for ityp4 in range(3):
-                             if (ityp4 == 0):
-                                   r = cc.pop(0)
-                             elif (ityp4 == 1):
-                                   r = aa.pop(0)
-                             else:
-                                   r = vv.pop(0)
-#
-                             if not (p.indType[0][0]=='active' and q.indType[0][0]=='active' and r.indType[0][0]=='active' and s.indType[0][0]=='active'):
-#
-                                   if (p.indType[0][0]=='core' and q.indType[0][0]=='core' and r.indType[0][0]=='core' and s.indType[0][0]=='core'):
-#                                       vTen = tensor('v', [r,s,p,q], v2sym)
-                                       vTen = tensor('v', [r,s,p,q], v2sym_braket)
-                                       V81.append(term(-0.25, [], [vTen, desOp(r), desOp(s), creOp(p), creOp(q)]))
-#
-                                   elif (p.indType[0][0]=='virtual' and q.indType[0][0]=='virtual' and r.indType[0][0]=='virtual' and s.indType[0][0]=='virtual'):
-                                       vTen = tensor('v', [r,s,p,q], v2sym_braket)
-                                       V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
-#
-                                   else:
-                                       vTen = tensor('v', [r,s,p,q], v2sym)
-                                       V81.append(term(0.25, [], [vTen, creOp(p), creOp(q),desOp(s), desOp(r)]))
- 
- p = cc.pop(0)
- q = vv.pop(0)
- s = cc.pop(0)
- r = vv.pop(0)
- vTen = tensor('v', [r,s,p,q], v2sym)
- V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
-
- p = cc.pop(0)
- q = aa.pop(0)
- s = cc.pop(0)
- r = aa.pop(0)
- vTen = tensor('v', [r,s,p,q], v2sym)
- V81.append(term(-1.0, [], [vTen, creOp(p), creOp(q), desOp(s), desOp(r)]))
-
- p = cc.pop(0)
- q = vv.pop(0)
- s = cc.pop(0)
- r = vv.pop(0)
- vTen = tensor('v', [r,s,p,q], v2sym)
- V81.append(term(1.0, [], [vTen, creOp(q), desOp(r), desOp(s), creOp(p)]))
-
- p = cc.pop(0)
- q = aa.pop(0)
- s = cc.pop(0)
- r = aa.pop(0)
- vTen = tensor('v', [r,s,p,q], v2sym)
- V81.append(term(1.0, [], [vTen, desOp(s), creOp(p), creOp(q), desOp(r)]))
-
- V.extend(V81)
-
- return V
-
-#
-def getT(order = 1, cc = None, aa = None, vv = None):
- "Get T amplitudes (order)."
-#
- tg_c = options.core_type
- tg_a = options.active_type
- tg_v = options.virtual_type
- tg_g = tg_c + tg_a + tg_v
- dummy = True
-#
- if not cc:
-   cc = [index('c%i' %p, [tg_c], dummy) for p in range(30)]
- if not aa:
-   aa = [index('a%i' %p, [tg_a], dummy) for p in range(30)]
- if not vv:
-   vv = [index('v%i' %p, [tg_v], dummy) for p in range(30)]
-#
- T = Tamplitude(order, cc, aa, vv)
-#
- return T
-
-
-def getV(cc = None, aa = None, vv = None):
- "Get V pertubation terms."
-#
- tg_c = options.core_type
- tg_a = options.active_type
- tg_v = options.virtual_type
- tg_g = tg_c + tg_a + tg_v
- dummy = True
-#
- if not cc:
-   cc = [index('c%i' %p, [tg_c], dummy) for p in range(200)]
- if not aa:
-   aa = [index('a%i' %p, [tg_a], dummy) for p in range(200)]
- if not vv:
-   vv = [index('v%i' %p, [tg_v], dummy) for p in range(200)]
-#
- V = Vperturbation(cc, aa, vv)
-#
- return V
-#
-
-
-def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_ind_str = None, suffix = None, cvs_ind = None, rm_trans_rdm_const = False, rm_core_int = False, intermediate_list = None, opt_einsum_terms = True, optimize = True, help = False, **tensor_rename):
-
-    # Store custom names if provided by user
-    custom_names = []
-    if tensor_rename:
-        for old_name, new_name in tensor_rename.items():
-            custom_names.append((old_name, new_name))
-
-    # Default to 'temp' as name of matrix being created w/ einsum function
-    if not lhs_str:
-        lhs_str = 'temp'
-
-    # Default to spin-orbital suffix if not defined by user
-    if not suffix:
-        suffix = 'so'
-
-    ################################################    
-    # IF PROVIDED, PRINT EINSUMS FOR INT TERMS
-    ################################################    
-    if intermediate_list:
-
-        # Create empty to list to store einsum expressions for provided intermediate terms
-        int_einsum_list = []
-
-        # Determined which intermediates are defined w/ trans_rdm contraction
-        trans_int = []
-        if trans_rdm:
-            trans_int = get_trans_intermediates(intermediate_list)
-
-        # If using effective Hamiltonian, remove double-counted contributions to core terms
-        if rm_core_int:
-            intermediate_list, removed_int = remove_core_int(intermediate_list, int_terms = True)
-
-        # Iterate through the list of provided intermediates
-        for int_ind, (int_term, int_tensor) in enumerate(intermediate_list):
- 
-            # Pass tensors of term to function to create string representation of contraction indices and tensor names
-            int_tensor_inds, int_tensor_names = get_tensor_info(intermediate_list[int_ind][0].tensors, trans_rdm, trans_ind_str, ''.join([i.name for i in intermediate_list[int_ind][1].indices]), suffix, cvs_ind, trans_int, custom_names)
-
-            # Rename intermediates in tensor definitions
-            if custom_names:
-                if 'INT' in [x for x,y in custom_names]:
-                    new_name = make_custom_name(int_tensor, custom_names)
-                    int_einsum = new_name + ' = '
-
-            else:
-                int_einsum = int_tensor.name + ' = '
- 
-            # Define term for either optEinsum or built-in Numpy 'einsum' function
-            if opt_einsum_terms:
-                int_einsum += 'einsum('
-            else:
-                int_einsum += 'np.einsum('
- 
-            # Add contraction and tensor info
-            int_tensor_info = (', '.join([str("'") + int_tensor_inds + str("'")] + int_tensor_names))
-            int_einsum += int_tensor_info
- 
-            # Add optimize flag to einsum if enabled
-            if optimize and opt_einsum_terms:
-                int_einsum += ', optimize = einsum_type)'
-            elif optimize and not opt_einsum_terms:
-                int_einsum += ', optimize = True)'
-            else:
-                int_einsum += ')'
- 
-            # Append einsum definition to list, returned at the end of function
-            int_einsum_list.append(int_einsum)
-
-    ################################################    
-    # GENERATE EINSUM EXPRESSIONS FOR PROVIDED TERMS
-    ################################################    
-    ## CONVERT ALL CRE/DES OBJECTS to CREDESTENSOR OBJECT
-    for term_ind, term in enumerate(terms):
-
-        # List for storing cre/des operators
-        credes_ops = []
-
-        # Append all cre/des operators to list
-        for tens in term.tensors:
-            if isinstance(tens, creOp) or isinstance(tens, desOp):
-                credes_ops.append(tens)
-
-        # Modify term in list to use creDesTensor object instead of cre/des objects
-        if credes_ops:
-            terms[term_ind].tensors = [ten for ten in terms[term_ind].tensors if ten not in credes_ops]
-            terms[term_ind].tensors.append(creDesTensor(credes_ops, trans_rdm))
-
-    # Constants terms in CAS blocks are removed by default, print warning
-    if trans_rdm and rm_trans_rdm_const and intermediate_list and trans_int:
-        terms, const_terms = remove_trans_rdm_const(terms, trans_int)
-
-    elif trans_rdm and rm_trans_rdm_const:
-        terms, const_terms = remove_trans_rdm_const(terms)
-
-    # If using effective Hamiltonian, remove double-counted contributions to core terms
-    if intermediate_list and rm_core_int and removed_int:
-        terms, core_terms = remove_core_int(terms, removed_int)
-
-    elif rm_core_int:
-        terms, core_terms = remove_core_int(terms)
-    
-    # Create empty list for storing einsums
-    einsum_list = []
-
-    # Iterate through terms and create einsum expressions
-    for term_ind, term in enumerate(terms):
-
-        ## PROCEED WITH GENERATING EINSUMS
-        # Start to define einsum string
-        einsum = lhs_str + ' '
-
-        # Determine sign of term
-        pos = True
-        if term.numConstant < 0:
-            pos = False
-
-        # Set up equals sign for first term and rest of terms
-        if term_ind == 0 and pos:
-            einsum += ' = '
-        elif term_ind == 0 and not pos:
-            einsum += '=- '
-        elif term_ind != 0 and pos:
-            einsum += '+= '
-        elif term_ind != 0 and not pos:
-            einsum += '-= '
-
-        # Add appropriate scaling factor
-        if abs(term.numConstant) != 1:
-            einsum = einsum + str(abs(term.numConstant)) + ' * '
-
-        # Define term for either optEinsum or built-in Numpy 'einsum' function
-        if opt_einsum_terms:
-            einsum += 'einsum('
+        dyallH = dyallH_spin_orbital(indices_lists)
+
+    return dyallH
+
+def dyallH_act(indices_lists, spin_integrated = False, explicit_spin_cases = True):
+
+    def dyallH_act_spin_orbital(indices_lists):
+        "Construct spin-integrated Dyall Hamiltonian operator."
+
+        cor_inds, act_inds, vir_inds = indices_lists
+
+        DyallH_act = []
+
+        h1e_sym = [symmetry((1,0), 1)]
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        act_3 = act_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        act_3 = act_inds.new_index()
+        act_4 = act_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        return DyallH_act
+
+    def dyallH_act_spin_integrated(indices_lists):
+        "Construct spin-integrated Dyall Hamiltonian operator."
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        DyallH_act = []
+
+        h1e_sym = [symmetry((1,0), 1)]
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(1.00, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        return DyallH_act
+
+    def dyallH_act_spin_integrated_explicit_cases(indices_lists):
+        "Construct spin-integrated Dyall Hamiltonian operator."
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        DyallH_act = []
+
+        h1e_sym = [symmetry((1,0), 1)]
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        h1e_ten = tensor('h', [act_2, act_1], h1e_sym)
+        DyallH_act.append(term(1.0, [], [h1e_ten, creOp(act_1), desOp(act_2)]))
+
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, cor_2, act_1, cor_2], v2e_sym)
+        DyallH_act.append(term(1.0, [], [v2e_ten, creOp(act_3), desOp(act_1)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        v2e_ten = tensor('v', [act_3, act_4, act_1, act_2], v2e_sym)
+        DyallH_act.append(term(0.25, [], [v2e_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(act_3)]))
+
+        return DyallH_act
+
+    if spin_integrated:
+        if explicit_spin_cases:
+            dyallH_act = dyallH_act_spin_integrated_explicit_cases(indices_lists)
         else:
-            einsum += 'np.einsum('
-
-        # Pass tensors of term to function to create string representation of contraction indices and tensor names
-        if trans_rdm and intermediate_list:
-            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_ind, trans_int, custom_names)
-        else:
-            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_ind, custom_names)
-
-        # Add contraction and tensor info
-        tensor_info = (', '.join([str("'") + tensor_inds + str("'")] + tensor_names))
-        einsum += tensor_info
-
-        # Add optimize flag to einsum if enabled
-        if optimize and opt_einsum_terms:
-            einsum += ', optimize = einsum_type)'
-        elif optimize and not opt_einsum_terms:
-            einsum += ', optimize = True)'
-        else:
-            einsum += ')'
-
-        # Append a '.copy()' function call if the term is made up of only one tensor
-        if len(term.tensors) == 1:
-            einsum += '.copy()'
-
-        # Append completed einsum to list
-        einsum_list.append(einsum)
-
-    # Modify return for intermediate term definition
-    if intermediate_list:
-        return int_einsum_list, einsum_list
+            dyallH_act = dyallH_act_spin_integrated(indices_lists)
     else:
-        return einsum_list
+        dyallH_act = dyallH_act_spin_orbital(indices_lists)
 
+    return dyallH_act
 
-def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_ind = None, trans_int = None, custom_names = None):
+def Tamplitude(order = 1, indices_lists = None, spin_integrated = False, explicit_spin_cases = True, internal_excit = True):
+    # Cluster operator  : T - T^dag, Where T = T1 + T2
+    # Single excitation : T1
 
-    # Pre-define list of names of tensors used in SQA and make list to store any new tensor 'types'
-    tensor_names = []
-    tensor_inds  = []
+    def Tamplitude_spin_orbital(order, indices_lists, internal_excit):
 
-    # Iterate through all the provided tensors
-    for tens in sqa_tensors:
+        cor_inds, act_inds, vir_inds = indices_lists
 
-        # Handle special case of kroneckerDelta (kdelta) object
-        if isinstance(tens, kroneckerDelta):
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
 
-            tensor_name = 'np.identity('
+        T = []
 
-            # Determine orbital space of kdelta
-            if (tens.indices[0].indType[0][0][0] and tens.indices[1].indType[0][0][0]) == 'c':
-                orb_space = 'ncore'
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
 
-            elif (tens.indices[0].indType[0][0][0] and tens.indices[1].indType[0][0][0]) == 'a':
-                orb_space = 'ncas'
+        # Core-External: t_i^a
+        cor_1 = cor_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
 
-            elif (tens.indices[0].indType[0][0][0] and tens.indices[1].indType[0][0][0]) == 'v':
-                orb_space = 'nextern'
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
 
-            else:
-                raise TypeError('WARNING: The indices of the kronecker delta term do not belong to the same orbital sub-space')
+        # Core-Active: t_i^x
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
 
-            if suffix:
-                orb_space += '_' + suffix
-            tensor_name += orb_space + ')'
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        act_3 = act_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
 
-            # Rename if custom name is provided
-            if custom_names:
-                if ('kdelta') in [x for x,y in custom_names]:
-                    new_name = make_custom_name(tens, custom_names)
-                    tensor_name = new_name + '_'
+        # Active-External: t_x^a
+        act_1 = act_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
 
-        # Handle special case of orbital energy vector
-        elif len(tens.indices) == 1 and (tens.name == 'e' or tens.name == 'E'):
+        # Active-External: t_{xy}^{az}
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
 
-            tensor_name = str(tens.name).lower() + '_'
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
 
-            # Determine orbital space of energies
-            if (tens.indices[0].indType[0][0][0]) == 'c':
-                orb_space = 'core'
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
 
-            elif (tens.indices[0].indType[0][0][0]) == 'v':
-                orb_space = 'extern'
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
 
-            if suffix:
-                orb_space += '_' + suffix
-            tensor_name += orb_space
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        act_3 = act_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
 
-            # Rename if custom name is provided
-            if custom_names:
-                if ('e' or 'E') in [x for x,y in custom_names]:
-                    tensor_name = make_custom_name(tens, custom_names)
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
 
-        # Handle special case of RDM tensor
-        elif isinstance(tens, creDesTensor):
+        if (order == 2 and internal_excit):
+            act_1 = act_inds.new_index()
+            act_2 = act_inds.new_index()
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            T1_ex  = term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            T.append(T1_ex)
 
-            tensor_name = tens.name + '_'
-            
-            # Modify name of RDM to reflect particle number
-            for op in tens.ops:
-                if isinstance(op, creOp):
-                    tensor_name += 'c'
-                elif isinstance(op, desOp):
-                    tensor_name += 'a'
+        return T
 
-            # Append suffix
-            if suffix:
-                tensor_name += '_' + suffix
+    def Tamplitude_spin_integrated(order, indices_lists, internal_excit):
 
-            # Rename if custom name is provided
-            if custom_names:
-                if ('rdm') in [x for x,y in custom_names]:
-                    tensor_name = make_custom_name(tens, custom_names)
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
 
-        # Name remaining tensors w/ same convention of orbital space and suffix
-        elif tens.name == 'h' or tens.name == 'v' or tens.name == 't1' or tens.name == 't2':
-            
-            tensor_name = tens.name + '_'
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
 
-            # Append letter representing orbital subspace of indices
-            for i in range(len(tens.indices)):
-                if tens.indices[i].indType[0][0][0] != 'v':
-                    tensor_name += tens.indices[i].indType[0][0][0]
-                else:
-                    tensor_name += 'e'
+        T = []
 
-            # Append suffix
-            if not (tens.name == 't1' or tens.name == 't2') and suffix:
-                tensor_name += '_' + suffix
+        # Define tensors symmetries
+        t1_ten_symm  = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
 
-            # Rename if custom name is provided
-            if custom_names:
-                if tens.name in [x for x,y in custom_names]:
-                    tensor_name = make_custom_name(tens, custom_names)
+        # Core-External: t_i^a
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
 
-        # Account for intermediate tensors and any custom tensors
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        # Core-Active: t_i^x
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 4.0, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        # Active-External: t_{xy}^{az}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-1.00, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        if (order == 2 and internal_excit):
+            act_1 = act_alpha_inds.new_index()
+            act_2 = act_alpha_inds.new_index()
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            T1_ex  = term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            T.append(T1_ex)
+
+            act_1 = act_beta_inds.new_index()
+            act_2 = act_beta_inds.new_index()
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            T1_ex  = term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            T.append(T1_ex)
+
+        return T
+
+    def Tamplitude_spin_integrated_explicit_cases(order, indices_lists, internal_excit):
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
+
+        T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
+
+        # Core-External: t_i^a
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        # Core-Active: t_i^x
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        # Active-External: t_x^a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        # Active-External: t_{xy}^{az}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T2_dex = term(-0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_ex)
+        T.append(T2_dex)
+
+        if (order == 2 and internal_excit):
+            t1_asym = [symmetry((1,0), -1)]
+            act_1 = act_alpha_inds.new_index()
+            act_2 = act_alpha_inds.new_index()
+            t1_ten =  tensor(tname, [act_1, act_2], t1_asym)
+            T1_ex =  term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            T.append(T1_ex)
+
+            act_1 = act_beta_inds.new_index()
+            act_2 = act_beta_inds.new_index()
+            t1_ten =  tensor(tname, [act_1, act_2], t1_asym)
+            T1_ex =  term(1.0, [], [t1_ten,  creOp(act_2), desOp(act_1)])
+            T.append(T1_ex)
+
+        return T
+
+    if indices_lists is None:
+        raise Exception("List of dummy indices should be specified.")
+
+    if spin_integrated:
+        if explicit_spin_cases:
+            T = Tamplitude_spin_integrated_explicit_cases(order, indices_lists, internal_excit)
         else:
-            # Make copy of tensor name
-            tensor_name = '%s' % tens.name
-
-            # Allow to rename intermediate tensors in term definitions             
-            if custom_names:
-                if tens.name[:3] == 'INT' and 'INT' in [x for x,y in custom_names]:
-                    tensor_name = make_custom_name(tens, custom_names)
-
-        # Create indices of tensor as string
-        indices = ''.join([i.name for i in tens.indices])
-
-        # Append 'slices' to appropiate dimensions of tensors w/ CVS core indices
-        if cvs_ind is not None:
-            tensor_name = append_CVS_slice(tens, tensor_name, indices, cvs_ind)
-        
-        # Append name of tensor (after and modifications due to special cases)
-        tensor_names.append(tensor_name)
-
-        # Append transition state index to appropriate set of indices
-        if isinstance(tens, creDesTensor) and tens.trans_rdm:
-            indices = trans_ind_str + indices
-            ind_str = trans_ind_str + ind_str            
-
-        elif trans_int and (tens.name in trans_int):
-            indices = trans_ind_str + indices
-            ind_str = trans_ind_str + ind_str            
-
-        # Append completed index string to list
-        tensor_inds.append(indices)
-
-    # Convert list of indices into one comma-separated string and prepare to append external index string
-    tensor_inds = ','.join(tensor_inds)
-    tensor_inds += '->'
-    tensor_inds += ind_str
-
-    return tensor_inds, tensor_names
-
-
-def remove_core_int(terms, removed_int = None, int_terms = False):
-
-    # Remove terms from standard term list
-    if not int_terms:
-        print ('--------------------------------- WARNING ---------------------------------')
-        print ('Terms with a contraction over repeating dummy core indices of 2e- integrals')
-        print ('will be removed. Set "rm_core_int" flag to FALSE to preserve terms')
-    
-        # Create lists to split up SQA terms
-        kept_terms = []
-        core_terms = []
-    
-        # Separate out the terms that have redundant 2e- integral contractions over core space
-        for term_ind, term in enumerate(terms):
-            coreTerm = False
-            for tens_ind, tens in enumerate(term.tensors):
-                if tens.name == 'v':
-                    if (
-                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
-                        or (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
-                        or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
-                        or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
-                    ):
-                        coreTerm = True
-                        break
-
-                elif removed_int and (tens.name in removed_int):
-                    coreTerm = True
-                    break
-           
-            # Append to either list based on coreTerm flag
-            if not coreTerm:
-                kept_terms.append(terms[term_ind])
-    
-            else:
-                core_terms.append(terms[term_ind])
-    
-        print ('')
-        print (str(len(core_terms)) + ' terms removed:')
-        for term in core_terms:
-            print (term)
-        
-        print ('---------------------------------------------------------------------------')
-        print ('Remaining terms: ' + str(len(kept_terms)))
-        print ('')
-    
-        return kept_terms, core_terms
-
-    # Filter through intermediate definitions
+            T = Tamplitude_spin_integrated(order, indices_lists, internal_excit)
     else:
-        print ('--------------------------------- WARNING ---------------------------------')
-        print ('Intermediate tensors defined w/ contractions over repeating dummy core indices of')
-        print ('2e- integrals will be removed. Set "rm_core_int" flag to FALSE to preserve definitions')
+        T = Tamplitude_spin_orbital(order, indices_lists, internal_excit)
 
-        # Track which tensor definitions are removed and kept
-        removed_int   = []
-        removed_terms = []
+    return T
 
-        # Determine which intermediate definitions to remove
-        for int_ind, (int_term, int_tensor) in enumerate(terms):
-            for tens in int_term.tensors:
+def Tamplitude_excitation(order = 1, indices_lists = None, spin_integrated = False, explicit_spin_cases = True):
 
-                # If intermediate is defined w/ 2e- integral
-                if tens.name == 'v':
-                    if (
-                        (tens.indices[0].name) == (tens.indices[2].name)
-                        or (tens.indices[0].name) == (tens.indices[3].name)
-                        or (tens.indices[1].name) == (tens.indices[2].name)
-                        or (tens.indices[1].name) == (tens.indices[3].name)
-                    ):
-                        removed_int.append(int_tensor.name)
-                        removed_terms.append(terms[int_ind])
-                        break
+    def Tamplitude_excitation_spin_orbital(order, indices_lists):
 
-                # If intermediate is defined in terms of one of the intermediates to be removed
-                elif tens.name in removed_int:
-                    removed_int.append(int_tensor.name)
-                    removed_terms.append(terms[int_ind])
-                    break
+        cor_inds, act_inds, vir_inds = indices_lists
 
-        # If some intermediate definitions were removed
-        if removed_int:
-            print ('')
-            print (str(len(removed_int)) + ' definitions removed:')
-            for tens, term in zip(removed_int, removed_terms):
-                print (tens + ": " + str(term[0])) 
-        
-        print ('---------------------------------------------------------------------------')
-        print ('')
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
 
-        # Returned shortened intermediate list
-        terms = [t for t in terms if t not in removed_terms]
+        T = []
 
-        return terms, removed_int
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
 
+        # Core-External: t_i^a
+        cor_1 = cor_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T.append(T1_ex)
 
-def remove_trans_rdm_const(terms, trans_int_list = None):
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
 
-    print ('--------------------------------- WARNING ---------------------------------')
-    print ('Terms w/o transRDM tensor in the expression will be removed. Set "rm_trans_rdm_const"')
-    print ('flag to FALSE to preserve terms')
+        # Core-Active: t_i^x
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T.append(T1_ex)
 
-    # Create lists to split up SQA terms
-    const_terms     = []
-    trans_rdm_terms = []
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        act_3 = act_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
 
-    # Remove terms without tRDM tensors in r.h.s.
-    for term_ind, term in enumerate(terms):
-        creDes = False
+        # Active-External: t_x^a
+        act_1 = act_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T.append(T1_ex)
 
-        for tensor in term.tensors:
-#            if isinstance(tensor, creOp) or isinstance(tensor, desOp) or isinstance(tensor, creDesTensor):
-            if isinstance(tensor, creDesTensor) and tensor.trans_rdm:
-                creDes = True
-                break       
+        # Active-External: t_{xy}^{az}
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
 
-            elif trans_int_list:
-                tens_list = [tns.name for tns in term.tensors]
-                for trans_int in trans_int_list:
-                    if trans_int in tens_list:
-                        creDes = True
-                        break
- 
-        # Append to either list based on creDes flag
-        if not creDes:
-            const_terms.append(terms[term_ind])
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
 
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        act_3 = act_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        return T
+
+    def Tamplitude_excitation_spin_integrated(order, indices_lists):
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
+
+        T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
+
+        # Core-External: t_i^a
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T.append(T1_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T.append(T1_ex)
+
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 4.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        # Core-Active: t_i^x
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T.append(T1_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T.append(T1_ex)
+
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        # Active-External: t_x^a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T.append(T1_ex)
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T.append(T1_ex)
+
+        # Active-External: t_{xy}^{az}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 2.0, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        return T
+
+    def Tamplitude_excitation_spin_integrated_explicit_cases(order, indices_lists):
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
+
+        T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
+
+        # Core-External: t_i^a
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T.append(T1_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(cor_1)])
+        T.append(T1_ex)
+
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        # Core-Active: t_i^x
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T.append(T1_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(act_2), desOp(cor_1)])
+        T.append(T1_ex)
+
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        # Active-External: t_x^a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T.append(T1_ex)
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T.append(T1_ex)
+
+        # Active-External: t_{xy}^{az}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(act_3), creOp(act_4), desOp(cor_2), desOp(cor_1)])
+        T.append(T2_ex)
+
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
+        T.append(T2_ex)
+
+        return T
+
+    if indices_lists is None:
+        raise Exception("List of dummy indices should be specified.")
+
+    if spin_integrated:
+        if explicit_spin_cases:
+            T = Tamplitude_excitation_spin_integrated_explicit_cases(order, indices_lists)
         else:
-            trans_rdm_terms.append(terms[term_ind])
-
-    print ('')
-    print (str(len(const_terms)) + ' terms removed:')
-    for term in const_terms:
-        print (term)
-    
-    print ('---------------------------------------------------------------------------')
-    print ('Remaining terms: ' + str(len(trans_rdm_terms)))
-    print ('')
-
-    return trans_rdm_terms, const_terms
-
-
-def get_trans_intermediates(intermediate_list):
-
-    # Store which intermediates are contracted over transition index
-    trans_int_list = []
-
-    # Iterate through list of intermediates
-    for int_term, int_tensor in intermediate_list:
-
-        # Make list of tensors that define intermediates
-        ten_list = [t.name for t in int_term.tensors]
-
-        # Check if one of the tensors is a tRDM
-        if 'trdm' in ten_list:
-             trans_int_list.append(int_tensor.name)
-
-        # If an intermediate is defined in terms of another intermediate, make sure that intermediate
-        # isn't defined w/ a tRDM
-        elif trans_int_list:
-             for trans_int in trans_int_list:
-                 if trans_int in ten_list:
-                     trans_int_list.append(int_tensor.name)
-
-    return trans_int_list
-
-
-def make_custom_name(sqa_tensor, rename_tuple):
-
-    old_name = [old for old, new in rename_tuple]
-
-    if sqa_tensor.name[:3] == 'INT':
-        rename_index = old_name.index('INT')
-        new_name = rename_tuple[rename_index][1] + sqa_tensor.name[3:]
-
+            T = Tamplitude_excitation_spin_integrated(order, indices_lists)
     else:
-        rename_index = old_name.index(sqa_tensor.name)
-        new_name = rename_tuple[rename_index][1]
+        T = Tamplitude_excitation_spin_orbital(order, indices_lists)
 
-    return new_name
+    return T
 
+def Tamplitude_deexcitation(order = 1, indices_lists = None, spin_integrated = False, explicit_spin_cases = True):
 
-def append_CVS_slice(tens, tens_name, tens_indices, cvs_ind):
+    def Tamplitude_deexcitation_spin_orbital(order, indices_lists):
 
-    # Make a list out of the user-provided external indices
-    cvs_ind      = list(cvs_ind)
-    tens_indices = list(tens_indices)
+        cor_inds, act_inds, vir_inds = indices_lists
 
-    # Check whether tensor name needs an additional slice 
-    num_cvs = len([ind for ind in tens_indices if ind in cvs_ind])
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
 
-    if num_cvs > 0:
+        T = []
 
-        # Special condition for Kronecker delta
-        if isinstance(tens, kroneckerDelta):
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
 
-            tens_name = 'np.identity(ncvs_so)'
+        # Core-External: t_i^a
+        cor_1 = cor_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_dex)
 
-        # Add slices
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        # Core-Active: t_i^x
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_dex)
+
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        act_3 = act_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        # Active-External: t_x^a
+        act_1 = act_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        # Active-External: t_{xy}^{az}
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        act_3 = act_inds.new_index()
+        act_4 = act_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        vir_4 = vir_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        return T
+
+    def Tamplitude_deexcitation_spin_integrated(order, indices_lists):
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
+
+        T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
+
+        # Core-External: t_i^a
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(4.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        # Core-Active: t_i^x
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_dex)
+
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        # Active-External: t_x^a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        # Active-External: t_{xy}^{az}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(2.0, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(2.0, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(2.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(1.00, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(1.00, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        return T
+
+    def Tamplitude_deexcitation_spin_integrated_explicit_cases(order, indices_lists):
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        # Define t amplitude according to their order
+        if (order == 1):
+            tname = 't1'
+        elif (order == 2):
+            tname = 't2'
+
+        T = []
+
+        # Define tensors symmetries
+        t1_ten_symm = [symmetry((1,0), -1)]
+        t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
+        t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
+
+        # Core-External: t_i^a
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        # Core-External: t_{ix}^{ay}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, act_4], [])
+        T2_dex = term(1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        # Core-Active: t_i^x
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        t1_ten = tensor(tname, [cor_1, act_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(cor_1), desOp(act_2)])
+        T.append(T1_dex)
+
+        # Core-Active: t_{ix}^{yz}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, act_3, act_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        # Active-External: t_x^a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_dex = term(1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_dex)
+
+        # Active-External: t_{xy}^{az}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        # Doubles
+        ## Core-External-Core-External: t_{ij}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-External-Core-Active: t_{ij}^{ax}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, vir_3, act_4], t2_ten_symm_ppqr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-External-Active-External: t_{ix}^{ab}
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
+        T2_dex = term(0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        ## Core-Active-Core-Active: t_{ij}^{xy}
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_alpha_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        cor_1 = cor_beta_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+        t2_ten = tensor(tname, [cor_1, cor_2, act_3, act_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(cor_1), creOp(cor_2), desOp(act_4), desOp(act_3)])
+        T.append(T2_dex)
+
+        ## Active-External-Active-External: t_{xy}^{ab}
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        vir_4 = vir_alpha_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        act_1 = act_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        vir_4 = vir_beta_inds.new_index()
+        t2_ten = tensor(tname, [act_1, act_2, vir_3, vir_4], t2_ten_symm_ppqq)
+        T2_dex = term(0.25, [], [t2_ten, creOp(act_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+        T.append(T2_dex)
+
+        return T
+
+    if indices_lists is None:
+        raise Exception("List of dummy indices should be specified.")
+
+    if spin_integrated:
+        if explicit_spin_cases:
+            T = Tamplitude_deexcitation_spin_integrated_explicit_cases(order, indices_lists)
         else:
-
-            # Make 'starting' string to append to appropriate tensors
-            to_append = '['
-        
-            # Iterate through all indices of tensor
-            for ind in tens_indices:
-        
-                # Append slice through CVS indices
-                if ind in cvs_ind:
-                    to_append += ':ncvs_so,'
-        
-                # Ignore non-CVS indices
-                else:
-                    to_append += ':,'
-        
-            # Remove extra comma and append end bracket
-            to_append = to_append[:-1] + ']'
-    
-            # Append slices to tensor name
-            tens_name += to_append
-
-    return tens_name
-
-
-def analyzeTerm(input_terms, max_act_ind):
-
-    # Make empty list for removed terms
-    kept_terms    = []
-    removed_terms = []
-
-    for t_num, term in enumerate(input_terms):
-
-        core_cre = 0
-        core_des = 0
-        act_cre = 0
-        act_des = 0
-        ext_cre = 0
-        ext_des = 0
-
-        # Iterate through every tensor in term's contraction
-        for tensor in term.tensors:
-
-            # Counting particle and hole operators in subspaces
-            if isinstance(tensor, creOp):
-
-                index = tensor.indices[0]  
-
-                if index.indType[0][0][0] == 'c':
-                    core_cre += 1
-
-                if index.indType[0][0][0] == 'a':
-                    act_cre += 1
-
-                if index.indType[0][0][0] == 'v':
-                    ext_cre += 1
-
-            elif isinstance(tensor, desOp):
-                
-                index = tensor.indices[0]  
-                
-                if index.indType[0][0][0] == 'c':
-                    core_des += 1
-
-                if index.indType[0][0][0] == 'a':
-                    act_des += 1
-
-                if index.indType[0][0][0] == 'v':
-                    ext_des += 1
-
-
-        # Filter out terms with more than request active indices
-        if (act_cre + act_des) > max_act_ind:
-            removed_terms.append(input_terms[t_num])
-
-        else:
-            kept_terms.append(input_terms[t_num])
-
-    return kept_terms, removed_terms
-
-
-###########################################################
-############### KOUSHIK OLD EINSUM CODE ###################
-###########################################################
-def custom_tensor(tname, *tup):
-
-# Switch symmetry either one of (bra / ket) or both
-# Implemented only for T2 tensors
- ind = list(tup)
- if (len(ind) != 4):
-    raise Exception("Implemented only for 4 indices, not for %s ." % (len(ind)))
- else:
-    if (ind[0].indType == ind[1].indType) and (ind[2].indType == ind[3].indType):
-       symm  =  [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
-    elif (ind[0].indType == ind[1].indType) and (ind[2].indType != ind[3].indType):
-       symm  =  [ symmetry((1,0,2,3),-1)]
-    elif (ind[0].indType != ind[1].indType) and (ind[2].indType == ind[3].indType):
-       symm  =  [ symmetry((0,1,3,2), -1)]
+            T = Tamplitude_deexcitation_spin_integrated(order, indices_lists)
     else:
-       symm  = []
+        T = Tamplitude_deexcitation_spin_orbital(order, indices_lists)
 
- tname_tensor= tensor(tname, ind, symm)
+    return T
 
- return tname_tensor
+def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = True):
 
+    def Vperturbation_spin_orbital(indices_lists):
+        "Construct spin-orbital perturbation operator V."
 
-def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = True):
+        cor_inds, act_inds, vir_inds = indices_lists
 
- if not output:
-  # texfile = r'latex_output.tex'
-   texfile = r'output_default'
- else:
-   texfile = output
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        v2e_sym_braket = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+        h1e_sym = [symmetry((1,0), 1)]
 
- print("""\n----------------------- SQA LATEX ----------------------------
-    _____ ____    ___   __
-   / ___// __ \  /   | / /____  _  __
-   \__ \/ / / / / /| |/ __/ _ \| |/_/  Translate to Latex format and generate pdf
-  ___/ / /_/ / / ___ / /_/  __/>  <    author:  Koushik Chatterjee
- /____/\___\_\/_/  |_\__/\___/_/|_|    date:  April 28, 2019
-                                       VERSION : 1
- Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
- 
- Tex file : %s
- PDF file : %s
---------------------------------------------------------------""" % (texfile+r'.tex', texfile+r'.pdf'))
+        V = []
 
- modifier_tensor = {
-     'bold': lambda s: r'\boldsymbol{'+s+r'}',
-     'hat': lambda s: r'\hat{'+s+r'}',
-     'bra': lambda s: r'\langle\Psi_{'+s+r'}\lvert',
-     'ket': lambda s: r'\rvert\Psi_{'+s+r'}\rangle',
-#     'gamma': lambda s: r'\Gamma',
-     'kdelta': lambda s: r'\delta',
-     'cre': lambda s: r'\hat{'+s+r'}^{\dagger}',
-     'des': lambda s: r'\hat{'+s+r'}',
- }
-# t_modifier = lambda s: r'\boldsymbol{'+s+r'}'
- t_modifier = lambda s: s
+        # Active-Core: <x|h|i> a^{\dag}_x a_i
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        v_ten = tensor('h', [cor_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(cor_1)]))
 
- if not lhs:
-  lhs = 'M={}'
- else:
-  lhs = t_modifier(lhs)+r'={}'
+        # Core-Active: <i|h|x> a^{\dag}_i a_x
+        act_1 = act_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        v_ten = tensor('h', [act_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(act_1)]))
 
- tex = []
+        # Active-External: <x|h|a> a^{\dag}_x a_a
+        act_1 = act_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        v_ten = tensor('h', [act_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(act_1)]))
 
- for term in terms:
+        # External-Active: <a|h|x> a^{\dag}_a a_x
+        vir_1 = vir_inds.new_index()
+        act_2 = act_inds.new_index()
+        v_ten = tensor('h', [vir_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(vir_1)]))
 
-     constant = ''
-     if (term.numConstant == 1.0):
-        constant = " + "
-     elif (term.numConstant == -1.0):
-        constant = " - "
-     else:
-        constant = " %s " % str(term.numConstant)
-        if (term.numConstant > 0):
-            
-#          constant += " %s " % str(Fraction(Decimal('term.numConstant')))
-          constant = " +%s " % str(term.numConstant)
-#
-     cre_count = 0
-     des_count = 0
-     credes = ''
-     name = ''
-     gamma = ''
-     for i in range(len(term.tensors)):
+        # External-Core: <a|h|i> a^{\dag}_a a_i
+        cor_1 = cor_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        v_ten = tensor('h', [cor_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(cor_1)]))
 
-         tens = term.tensors[i]
-         s = tens.name
-     #    credes = None
-     #    name = ''
+        # Core-External: <i|h|a> a^{\dag}_i a_a
+        vir_1 = vir_inds.new_index()
+        cor_2 = cor_inds.new_index()
+        v_ten = tensor('h', [vir_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(vir_1)]))
 
-         supers = ''
-         subs   = ''
-         index = len(tens.indices)
-         if (index == 1):
-            subs   = tens.indices[0].name
-         elif(index == 2):
-            supers = tens.indices[0].name
-            subs   = tens.indices[1].name
-         elif (index == 4):
-            supers = tens.indices[0].name+tens.indices[1].name
-            subs   = tens.indices[2].name+tens.indices[3].name
+        # Core-Active-Core-Active: <ix||jy> \gamma^x_y a^{\dag}_i a_j
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        cor_3 = cor_inds.new_index()
+        act_4 = act_inds.new_index()
 
-         else:
-             raise Exception("Not implemented ...")
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
 
-         if not (isinstance(tens, creOp) or isinstance(tens, desOp)):
-            if (s == 'gamma'):
-               bra = modifier_tensor['bra']('0')
-               ket = modifier_tensor['ket']('0')
-               ind1 = modifier_tensor['cre'](supers)
-               ind2 = modifier_tensor['des'](subs)
-               gamma += bra+ind1+ind2+ket+"\:"
-            else:
-               if s in modifier_tensor:
-                  name += modifier_tensor[s](s)
-               else:
-                  name += t_modifier(s)
+        # External-Active-External-Active: <ax||by> \gamma^x_y a^{\dag}_a a_b
+        vir_1 = vir_inds.new_index()
+        act_2 = act_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        act_4 = act_inds.new_index()
 
-               name += "^{%s}" % " ".join(supers)
-               name += "_{%s}" % " ".join(subs)
-               name +="\:"
-         else:
-            if (isinstance(tens, creOp)):
-               cre_count += 1
-            if (isinstance(tens, desOp)):
-               des_count += 1
-            credes += modifier_tensor[s](subs)
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
 
-     if(len(gamma) > 0):
-        name += gamma
-     if (len(credes) > 0):
-         ind = r'0'
-         if not indbra:
-            indbra = ind
-         if not indket:
-            indket = ind
-         bra = modifier_tensor['bra'](indbra)
-         ket = modifier_tensor['ket'](indket)
-         name += bra+credes+ket
+        # <rs||pq> a^{\dag}_p a^{\dag}_q a_s a_r
+        tens_ind_cor = [options.core_type,    options.core_type,    options.core_type,    options.core_type]
+        tens_ind_act = [options.active_type,  options.active_type,  options.active_type,  options.active_type]
+        tens_ind_vir = [options.virtual_type, options.virtual_type, options.virtual_type, options.virtual_type]
 
-     tex.append(constant+r'\:'+name)
+        for ind_type_1 in (cor_inds, act_inds, vir_inds):
+            ind_1 = ind_type_1.new_index()
 
+            for ind_type_2 in (cor_inds, act_inds, vir_inds):
+                ind_2 = ind_type_2.new_index()
 
- if print_default:
-    print r'\documentclass{article}'
-    print r'\usepackage{amsmath}'
-    print r'\begin{document}'
-    print ''
-    print ''
-#    print r"\begin{equation}"
-    print r"\begin{align*}"
-    print lhs
-    for i in tex:
-#      print " & "+i+' \\\\'
-      print " & "+i+r'\\'
-    print r"\end{align*}"
-#    print r"\end{equation}"
-    print ''
-    print ''
-    print r'\end{document}'
+                for ind_type_3 in (cor_inds, act_inds, vir_inds):
+                    ind_3 = ind_type_3.new_index()
 
+                    for ind_type_4 in (cor_inds, act_inds, vir_inds):
+                        ind_4 = ind_type_4.new_index()
 
- ### write to a file ###
-# if not output:
-#  # texfile = r'latex_output.tex'
-#   texfile = r'latex_output'
-# else:
-#   texfile = output
- output = open(texfile+r'.tex', "w")
- output.write(r'\documentclass{article}')
- output.write("\n")
- output.write(r'\usepackage{amsmath}')
- output.write("\n")
- output.write(r'\begin{document}')
- output.write("\n")
- output.write('')
- output.write("\n")
- output.write('')
- output.write("\n")
-# output.write(r"\begin{equation*}")
- output.write(r"\begin{align*}")
- output.write("\n")
- output.write(lhs)
- for i in tex:
-#   output.write(" & "+i+' \\\\')
-   output.write(" & "+i+r'\\')
-   output.write("\n")
- output.write(r"\end{align*}")
- output.write("\n")
-# print r"\end{equation*}"
- output.write('')
- output.write("\n")
- output.write('')
- output.write("\n")
- output.write(r'\end{document}')
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
 
-# os.system("pdflatex latex_output.tex")
- procs = []
- try:
-     pread, pwrite = os.pipe()
-     cmd = ['pdflatex', texfile+r'.tex']
-#     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-     proc = subprocess.Popen(cmd, stdout=pwrite, stderr=subprocess.STDOUT)
-     procs.append(proc)
-     os.close(pwrite)
-     os.close(pread)
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
 
- except OSError as e:
-   #  sys.exit()
-     print 'Latex compilation error ...'
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
-# pdf()
-# proc_cleanup(procs)
- return
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
+        # External-Core-Core-External: <bj||ia> a^{\dag}_i a^{\dag}_a a_j a_b
+        cor_1 = cor_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        cor_4 = cor_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
 
-def generateEinsum(terms, lhs_str = None, ind_str = None, transRDM = False, trans_ind_str = None, rhs_str = None, optimize = True, suffix = None, rdm_str = None, help = False, **tensor_rename):
-#
-# summary: Generate Einsum structures for each term. 
-#          terms   : A list of all terms.
-#          ind_str : Indices of the matrix (string).
-#
-# Copyright (C) 2018-2020 Koushik Chatterjee (koushikchatterjee7@gmail.com)
-#
-# This program is distributed in the hope that it will
-# be useful, but WITHOUT ANY WARRANTY; without even the
-# implied warranty of MERCHANTABILITY or FITNESS FOR A
-# PARTICULAR PURPOSE. See the GNU General Public License
-# for more detai
-#
-# print "################ Construct Einsum ################"
+        # Active-Core-Core-Active: <yj||ix> a^{\dag}_i a^{\dag}_x a_j a_y
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        act_3 = act_inds.new_index()
+        cor_4 = cor_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
 
- if help:
-   einsum_help()
-#
- if not (lhs_str):
-   lhs_str = 'Matrix'
-#
- internal_tensor = ['e', 'E', 't1', 't2', 'h', 'v', 'cre', 'des', 'rdm', 'trdm', 'gamma']
- external_tensor = []
-#
- einsum_list = []
-#
- if not (suffix):
-    suffix = 'so'       # suffix by default
-#
- term1st = 0
- for term in terms:
-     tensorlist = []
-     tensor_indices_list = []
-     credes_list = []
-     credes_indices_list = []
-#
-#     name_default = {}                        # Regular Dictonary
-     name_default = collections.OrderedDict()  # Ordered dictionary
-#
-     icopy = '.copy()'
-     if not (len(term.tensors) == 1):
-        icopy = ''
-#
-     for i in range(len(term.tensors)):
-         tens = term.tensors[i]
-#
-         tensor_name, tensr_ind_str, tensr_indtype_str = tensor_name_indices(tens, suffix)
-#
-         if (isinstance(tens, creOp) or isinstance(tens,desOp)):
-            credes_list.append(tensor_name)            
-            credes_indices_list.append(tensr_ind_str)
-         else:
-            tensorlist.append((tensor_name, tensr_ind_str, tensr_indtype_str))
-            tensor_indices_list.append(tensr_ind_str)
-#
-     if (len(credes_list) > 0) :
-        cre_count = credes_list.count('cre')
-        des_count = credes_list.count('des')
-        if not (rdm_str):
-           set_rdm = 'rdm'
-           if (transRDM):
-              set_rdm = 'trdm'
- #          for i in range(cre_count):
- #              set_rdm += 'c'
- #          for i in range(des_count):
- #              set_rdm += 'a'
+        # External-Core-Core-External: <bj||ia> a^{\dag}_a a_b a_j a^{\dag}_i
+        cor_1 = cor_inds.new_index()
+        vir_2 = vir_inds.new_index()
+        vir_3 = vir_inds.new_index()
+        cor_4 = cor_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        # Active-Core-Core-Active: <yj||ix> a_j a^{\dag}_i a^{\dag}_x a_y
+        cor_1 = cor_inds.new_index()
+        act_2 = act_inds.new_index()
+        act_3 = act_inds.new_index()
+        cor_4 = cor_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        sys.stdout.flush()
+
+        return V
+
+    def Vperturbation_spin_integrated(indices_lists):
+        "Construct spin-integrated perturbation operator V."
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        v2e_sym_braket = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+        h1e_sym = [symmetry((1,0), 1)]
+
+        V = []
+
+        # Active-Core: <x|h|i> a^{\dag}_x a_i
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        v_ten = tensor('h', [cor_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        v_ten = tensor('h', [cor_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(cor_1)]))
+
+        # Core-Active: <i|h|x> a^{\dag}_i a_x
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        v_ten = tensor('h', [act_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        v_ten = tensor('h', [act_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(act_1)]))
+
+        # Active-External: <x|h|a> a^{\dag}_x a_a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        v_ten = tensor('h', [act_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        v_ten = tensor('h', [act_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(act_1)]))
+
+        # External-Active: <a|h|x> a^{\dag}_a a_x
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        v_ten = tensor('h', [vir_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        v_ten = tensor('h', [vir_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(vir_1)]))
+
+        # External-Core: <a|h|i> a^{\dag}_a a_i
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        v_ten = tensor('h', [cor_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        v_ten = tensor('h', [cor_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(cor_1)]))
+
+        # Core-External: <i|h|a> a^{\dag}_i a_a
+        vir_1 = vir_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        v_ten = tensor('h', [vir_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        v_ten = tensor('h', [vir_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(vir_1)]))
+
+        # Core-Active-Core-Active: <ix||jy> \gamma^x_y a^{\dag}_i a_j
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        cor_3 = cor_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        cor_3 = cor_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        cor_3 = cor_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        cor_3 = cor_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        # External-Active-External-Active: <ax||by> \gamma^x_y a^{\dag}_a a_b
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        # <rs||pq> a^{\dag}_p a^{\dag}_q a_s a_r
+        tens_ind_cor = [options.core_type,    options.core_type,    options.core_type,    options.core_type]
+        tens_ind_act = [options.active_type,  options.active_type,  options.active_type,  options.active_type]
+        tens_ind_vir = [options.virtual_type, options.virtual_type, options.virtual_type, options.virtual_type]
+
+        for ind_type_1 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-1.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(1.00, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(1.00, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        # External-Core-Core-External: <bj||ia> a^{\dag}_i a^{\dag}_a a_j a_b
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        # Active-Core-Core-Active: <yj||ix> a^{\dag}_i a^{\dag}_x a_j a_y
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        # External-Core-Core-External: <bj||ia> a^{\dag}_a a_b a_j a^{\dag}_i
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        # Active-Core-Core-Active: <yj||ix> a_j a^{\dag}_i a^{\dag}_x a_y
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        sys.stdout.flush()
+
+        return V
+
+    def Vperturbation_spin_integrated_in_test(indices_lists):
+        "Construct spin-integrated perturbation operator V."
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        v2e_sym_braket = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+        h1e_sym = [symmetry((1,0), 1)]
+
+        V = []
+
+        # Active-Core: <x|h|i> a^{\dag}_x a_i
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        v_ten = tensor('h', [cor_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        v_ten = tensor('h', [cor_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(cor_1)]))
+
+        # Core-Active: <i|h|x> a^{\dag}_i a_x
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        v_ten = tensor('h', [act_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        v_ten = tensor('h', [act_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(act_1)]))
+
+        # Active-External: <x|h|a> a^{\dag}_x a_a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        v_ten = tensor('h', [act_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        v_ten = tensor('h', [act_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(act_1)]))
+
+        # External-Active: <a|h|x> a^{\dag}_a a_x
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        v_ten = tensor('h', [vir_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        v_ten = tensor('h', [vir_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(vir_1)]))
+
+        # External-Core: <a|h|i> a^{\dag}_a a_i
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        v_ten = tensor('h', [cor_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        v_ten = tensor('h', [cor_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(cor_1)]))
+
+        # Core-External: <i|h|a> a^{\dag}_i a_a
+        vir_1 = vir_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        v_ten = tensor('h', [vir_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        v_ten = tensor('h', [vir_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(vir_1)]))
+
+        # Core-Active-Core-Active: <ix||jy> \gamma^x_y a^{\dag}_i a_j
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        cor_3 = cor_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        cor_3 = cor_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        cor_3 = cor_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        cor_3 = cor_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        # External-Active-External-Active: <ax||by> \gamma^x_y a^{\dag}_a a_b
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        # <rs||pq> a^{\dag}_p a^{\dag}_q a_s a_r
+        tens_ind_cor = [options.core_type,    options.core_type,    options.core_type,    options.core_type]
+        tens_ind_act = [options.active_type,  options.active_type,  options.active_type,  options.active_type]
+        tens_ind_vir = [options.virtual_type, options.virtual_type, options.virtual_type, options.virtual_type]
+
+        for ind_type_1 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        ### Possible problem
+        for ind_type_1 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-1.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(1.00, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            if (tens_ind_type[0] != tens_ind_type[1]) and (tens_ind_type[2] != tens_ind_type[3]):
+                                v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                                V.append(term(0.50, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+                            else:
+                                v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                                V.append(term(1.00, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if (tens_ind_type[0] != tens_ind_type[1]) and (tens_ind_type[2] != tens_ind_type[3]):
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.50, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+        ### Possible problem
+
+        # External-Core-Core-External: <bj||ia> a^{\dag}_i a^{\dag}_a a_j a_b
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-2.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-2.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        # Active-Core-Core-Active: <yj||ix> a^{\dag}_i a^{\dag}_x a_j a_y
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-2.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-2.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        # External-Core-Core-External: <bj||ia> a^{\dag}_a a_b a_j a^{\dag}_i
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(4.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(2.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        # Active-Core-Core-Active: <yj||ix> a_j a^{\dag}_i a^{\dag}_x a_y
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(2.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(2.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        sys.stdout.flush()
+
+        return V
+
+    def Vperturbation_spin_integrated_explicit_cases(indices_lists):
+        "Construct spin-integrated perturbation operator V."
+
+        cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds = indices_lists
+
+        v2e_sym = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
+        v2e_sym_braket = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+        h1e_sym = [symmetry((1,0), 1)]
+
+        V = []
+
+        # Active-Core: <x|h|i> a^{\dag}_x a_i
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        v_ten = tensor('h', [cor_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        v_ten = tensor('h', [cor_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(cor_1)]))
+
+        # Core-Active: <i|h|x> a^{\dag}_i a_x
+        act_1 = act_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        v_ten = tensor('h', [act_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        v_ten = tensor('h', [act_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(act_1)]))
+
+        # Active-External: <x|h|a> a^{\dag}_x a_a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        v_ten = tensor('h', [act_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(act_1)]))
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        v_ten = tensor('h', [act_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(act_1)]))
+
+        # External-Active: <a|h|x> a^{\dag}_a a_x
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        v_ten = tensor('h', [vir_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        v_ten = tensor('h', [vir_1, act_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(act_2), desOp(vir_1)]))
+
+        # External-Core: <a|h|i> a^{\dag}_a a_i
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        v_ten = tensor('h', [cor_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        v_ten = tensor('h', [cor_1, vir_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(cor_1)]))
+
+        # Core-External: <i|h|a> a^{\dag}_i a_a
+        vir_1 = vir_alpha_inds.new_index()
+        cor_2 = cor_alpha_inds.new_index()
+        v_ten = tensor('h', [vir_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        cor_2 = cor_beta_inds.new_index()
+        v_ten = tensor('h', [vir_1, cor_2], h1e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(cor_2), desOp(vir_1)]))
+
+        # Core-Active-Core-Active: <ix||jy> \gamma^x_y a^{\dag}_i a_j
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        cor_3 = cor_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        cor_3 = cor_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        cor_3 = cor_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        cor_3 = cor_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        # External-Active-External-Active: <ax||by> \gamma^x_y a^{\dag}_a a_b
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        act_4 = act_alpha_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        vir_1 = vir_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        act_4 = act_beta_inds.new_index()
+
+        v_ten = tensor('v', [vir_1, act_2, vir_3, act_4], v2e_sym)
+        rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+        V.append(term(-1.0, [], [v_ten, rdm_ten, creOp(vir_3), desOp(vir_1)]))
+
+        # <rs||pq> a^{\dag}_p a^{\dag}_q a_s a_r
+        tens_ind_cor = [options.core_type,    options.core_type,    options.core_type,    options.core_type]
+        tens_ind_act = [options.active_type,  options.active_type,  options.active_type,  options.active_type]
+        tens_ind_vir = [options.virtual_type, options.virtual_type, options.virtual_type, options.virtual_type]
+
+        for ind_type_1 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        for ind_type_1 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+            ind_1 = ind_type_1.new_index()
+
+            for ind_type_2 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                ind_2 = ind_type_2.new_index()
+
+                for ind_type_3 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
+                    ind_3 = ind_type_3.new_index()
+
+                    for ind_type_4 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
+                        ind_4 = ind_type_4.new_index()
+
+                        tens_ind_type = [get_spatial_index_type(ind.indType) for ind in (ind_1, ind_2, ind_4, ind_3)]
+
+                        if tens_ind_type == tens_ind_cor:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(-0.25, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
+
+                        elif tens_ind_type == tens_ind_vir:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+                        elif tens_ind_type != tens_ind_act:
+                            v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
+                            V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
+
+        # External-Core-Core-External: <bj||ia> a^{\dag}_i a^{\dag}_a a_j a_b
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(vir_2), desOp(cor_4), desOp(vir_3)]))
+
+        # Active-Core-Core-Active: <yj||ix> a^{\dag}_i a^{\dag}_x a_j a_y
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(-1.0, [], [v_ten, creOp(cor_1), creOp(act_2), desOp(cor_4), desOp(act_3)]))
+
+        # External-Core-Core-External: <bj||ia> a^{\dag}_a a_b a_j a^{\dag}_i
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        vir_3 = vir_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [vir_3, cor_4, cor_1, vir_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, creOp(vir_2), desOp(vir_3), desOp(cor_4), creOp(cor_1)]))
+
+        # Active-Core-Core-Active: <yj||ix> a_j a^{\dag}_i a^{\dag}_x a_y
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_alpha_inds.new_index()
+        act_2 = act_beta_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_beta_inds.new_index()
+        cor_4 = cor_alpha_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        cor_1 = cor_beta_inds.new_index()
+        act_2 = act_alpha_inds.new_index()
+        act_3 = act_alpha_inds.new_index()
+        cor_4 = cor_beta_inds.new_index()
+        v_ten = tensor('v', [act_3, cor_4, cor_1, act_2], v2e_sym)
+        V.append(term(1.0, [], [v_ten, desOp(cor_4), creOp(cor_1), creOp(act_2), desOp(act_3)]))
+
+        sys.stdout.flush()
+
+        return V
+
+    if spin_integrated:
+        if explicit_spin_cases:
+            V = Vperturbation_spin_integrated_explicit_cases(indices_lists)
         else:
-           set_rdm = rdm_str
-           internal_tensor.append(set_rdm)
-#           if (transRDM):
-#              set_rdm = 'trans'+rdm_str
-#
-        rdm_indtype_str = ''
-        for i in range(cre_count):
-            rdm_indtype_str += 'c'
-        for i in range(des_count):
-            rdm_indtype_str += 'a'
-#
-        rdm_ind_str = ''
-        for i in credes_indices_list:
-            rdm_ind_str += str(i)
-#
-        if (transRDM):
-           if (trans_ind_str == None):
-              raise Exception("Defined 'trans_ind_str' and run again...")
-           else:
-              rdm_ind_str = trans_ind_str+rdm_ind_str
-#
-        tensorlist.append((set_rdm, rdm_ind_str, rdm_indtype_str))
-#
-     for i in range(len(tensorlist)):
-        if (tensorlist[i][0] == 'gamma'):
-           key_tensr = tensorlist[i][0]
-           value_tensr = tensorlist[i]
-           gamma_tuple = list(tensorlist[i])
-           gamma_tuple[0] = 'rdm'
-           if (rdm_str):
-              gamma_tuple[0] = rdm_str
-           tensorlist[i] = tuple(gamma_tuple)
-           value_tensr = tensorlist[i]
-        else:
-           key_tensr = tensorlist[i][0]
-           value_tensr = tensorlist[i]
-        name_default.setdefault(key_tensr, []).append(value_tensr)
-#        name_default.update({key_tensr : value_tensr})
-##        name_default.update({tensorlist[i][0] : tensorlist[i]})
-#
-        if ((tensorlist[i][0] not in internal_tensor) and (tensorlist[i][0] not in external_tensor)):
-           external_tensor.append(tensorlist[i][0])
-
-     checkey = 0
-#     if (tensor_name):
-     name_default_bak = dict(name_default)
-     for key0, value0 in tensor_rename.items():
-         if (key0 not in internal_tensor) and (key0 not in external_tensor):
-            checkey += 1
-            if (checkey > 0):
-               raise Exception("Unknown tensor key: '%s' to rename ..." % key0)
-#
-         for key1, value1 in name_default.items():
-            if (key0 == key1):
-               for i in range(len(value1)):
-                   list_tuple = list(value1[i])
-                   list_tuple[0] = value0
-                   external_tensor.append(value0)
-                   value1[i] = tuple(list_tuple)
-                  # name_default[key1] = value1
-                  ## del name_default[key1]
-                  ## name_default.update({value0 : value1})
-#
-     LHS_ind = ''
-     RHS_tensr = ''
-     lhs_ein_ind = []
-     rhs_ein_ten = []
-
-     for key, value in name_default.items():
-         for i in range(len(value)):
-             lhs_ein_ind.append(value[i][1])
-#
-             if (value[i][0] in external_tensor):
-                ein_tens_name = value[i][0]
-             else:
-                if ((value[i][0] == 't1') or (value[i][0] == 't2')):
-                   ein_tens_name = value[i][0]+'_'+value[i][2]
-                else:
-                   ein_tens_name = value[i][0]+'_'+value[i][2]+'_'+suffix
-#
-#             rhs_ein_ten.append(value[0]+'_'+value[2])
-             rhs_ein_ten.append(ein_tens_name)
-
-
-#     for i in range(len(tensorlist)):
-#     #   LHS_ind += tensorlist[i][1]
-#        lhs_ein_ind.append(tensorlist[i][1])
-#     #   RHS_tensr += tensorlist[i][0]+tensorlist[i][2]
-#        rhs_ein_ten.append(tensorlist[i][0]+'_'+tensorlist[i][2])
-#
-     if not (ind_str):
-        if (transRDM):
-          rhs_ind_str = '->'+trans_ind_str
-        else:
-          rhs_ind_str = ''
-     else:
-        if (transRDM):
-          rhs_ind_str = '->'+trans_ind_str+ind_str
-        else:
-          rhs_ind_str = '->'+ind_str
-#
-     sign = ''
-     if not (term1st == 0):
-        sign = '+'
-        if (term.numConstant < 0.0):
-           sign = '-'
-        if not (abs(term.numConstant) == 1.0):
-           cons = ' '+str(abs(term.numConstant))+' *'
-        else:
-           cons = ''
-     else:
-        cons = ' '
-        if not (term.numConstant == 1.0):
-           if (term.numConstant == -1.0):
-               cons = '-'
-           else:
-               cons = ' '+str(term.numConstant)+' *'
-#
-     IOpt = ' optimize = True'
-     if not (optimize):
-        IOpt = ' optimize = False'
-#
-     Icomnd = ''
-     if (rhs_str):
-        Icomnd = rhs_str
-
-
-     lhs_ind_str = str(lhs_ein_ind).translate(None, "'")[1:-1]
-     rhs_ten_str = str(rhs_ein_ten).translate(None, "'")[1:-1]
-
-## Changes made by Rajat to change print statement to list:
-     if (len(term.tensors)==0):
-        if (transRDM):
-          print lhs_str+" "+sign+"="+cons+term.constants[0]+" * "+'np.identity('+trans_ind_str+')'
-          einsum_list.append(lhs_str+" "+sign+"="+cons+term.constants[0]+" * "+'np.identity('+trans_ind_str+')\n')
-        else:
-          lhs_ind_str = term.constants[0][0]
-          print lhs_str+" "+sign+"="+cons+term.constants[0]
-          einsum_list.append(lhs_str+" "+sign+"="+cons+term.constants[0]+"\n") 
-     else:
-        print lhs_str+" "+sign+"="+cons+" np.einsum('"+lhs_ind_str+rhs_ind_str+"', "+rhs_ten_str+","+IOpt+")"+Icomnd+icopy
-        einsum_list.append(lhs_str+" "+sign+"="+cons+" np.einsum('"+lhs_ind_str+rhs_ind_str+"', "+rhs_ten_str+","+IOpt+")"+Icomnd+icopy+"\n")
-          
-     term1st += 1
-# 
- return einsum_list             ## Changes made by Rajat
-
-def einsum_help():
-    print("""\n        HELP :: 
-        -----------
-        terms         : A list of terms
-        lhs_str       : Left hand side string (e.g. string 'M' = einsum ..)
-        ind_str       : Einsum right side indix string (e.g. -> string 'p')
-        transRDM      : Transition RDM True of False
-        trans_ind_str : Transition RDM string if True
-        rhs_str       : Extra string for other kind of operation 
-                        (e.g. transpose, copy, reshape .. etc)
-        optimize      : By default optimization is true
-        suffix        : Additional string atachement to the tensor name 
-                        ( By default suffix = 'so' for spin orbitlas)
-        rdm_str       : RDM string name
-        tensor_rename : Rename tensor if required 
-                        (e.g. rename tensor 'X' to 'TEMP': X = 'TEMP'. 
-                        For multiple tensors: X = 'TEMP', h = 'Hamiltonian', ..)
---------------------------------------------------------------""")
-    yes = {'Yes','yes','y', 'Y', ''}
-    no = {'NO','no','n','N'}
-    sys.stdout.write("Do you want to continue [y/n] : ")
-    choice = raw_input().lower()
-    if choice in no:
-       exit()
-    print("-------------------------------------------------------------- ")
-
-def tensor_name_indices(tensr, suffix = ''):
-# Return Tensor name and indices as string
- tensr_ind_str = ''
- tensr_indtype_str = ''
- tensor_name = str(tensr.name)
-#
- for ind in range(len(tensr.indices)):
-     tensr_ind_str += str(tensr.indices[ind].name)
-#
-     if not (tensr.indices[ind].indType[0][0] == 'virtual'):
-        tensr_indtype_str += str(tensr.indices[ind].indType[0][0][0])
-     else:
-       tensr_indtype_str += 'e'
-#
-#     if (isinstance(tens, creOp) or isinstance(tens,desOp)):
-#
-     if (isinstance(tensr, kroneckerDelta)):
-       tensor_name = 'np.identity'
-       if (tensr.indices[0].indType[0][0] == 'core' and (tensr.indices[1].indType[0][0] == 'core')):
-          dstr = 'ncore'
-       elif (tensr.indices[0].indType[0][0] == 'active' and (tensr.indices[1].indType[0][0] == 'active')):
-          dstr = 'ncas'
-       else:
-          dstr = 'nextern'
-       tensor_name += str('(')+dstr+'_'+suffix+str(')')
-#
-     elif (((tensr.name == 'E') or (tensr.name == 'e')) and (len(tensr.indices) == 1)):
-       tensr_indtype_str = tensr.indices[0].indType[0][0]
-       if (tensr.indices[ind].indType[0][0] == 'virtual'):
-          tensr_indtype_str = 'extern'     # Change name 'virtual' to 'extern'
-     else:
-       if (tensr.name == 'gamma'):
-          tensr_indtype_str = 'ca'
-#      
- return tensor_name, tensr_ind_str, tensr_indtype_str
-
-def custom_tensor(tname, *tup):
-# Switch symmetry either one of (bra / ket) or both
-# Implemented only for T2 tensors
- ind = list(tup)
- if (len(ind) != 4):
-    raise Exception("Implemented only for 4 indices, not for %s ." % (len(ind)))
- else:
-    if (ind[0].indType == ind[1].indType) and (ind[2].indType == ind[3].indType):
-       symm  =  [ symmetry((1,0,2,3),-1),  symmetry((0,1,3,2), -1)]
-    elif (ind[0].indType == ind[1].indType) and (ind[2].indType != ind[3].indType):
-       symm  =  [ symmetry((1,0,2,3),-1)]
-    elif (ind[0].indType != ind[1].indType) and (ind[2].indType == ind[3].indType):
-       symm  =  [ symmetry((0,1,3,2), -1)]
+            V = Vperturbation_spin_integrated(indices_lists)
     else:
-       symm  = []
+        V = Vperturbation_spin_orbital(indices_lists)
 
- tname_tensor= tensor(tname, ind, symm)
+    return V
 
- return tname_tensor
+def getT(order = 1, spin_integrated = False, explicit_spin_cases = True):
+    "Get T amplitudes (order)."
+
+    indices_lists = create_dummy_indices_list(spin_integrated)
+
+    T = Tamplitude(order, indices_lists, spin_integrated, explicit_spin_cases)
+
+    return T
+
+def getV(spin_integrated = False, explicit_spin_cases = True):
+    "Get V pertubation terms."
+
+    indices_lists = create_dummy_indices_list(spin_integrated)
+
+    V = Vperturbation(indices_lists, spin_integrated, explicit_spin_cases)
+
+    return V
