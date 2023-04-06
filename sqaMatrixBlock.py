@@ -24,13 +24,14 @@ from sqaTensor import kroneckerDelta, sfExOp, creOp, desOp
 from sqaTerm import term, termChop, combineTerms
 from sqaOptions import options
 from sqaMisc import makeTuples, allDifferent
+from sqaSymmetry import symmetry
 
 from sqaNormalOrder import normalOrder
 
 from sqaIndex import get_spatial_index_type, get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type
 
-def matrixBlock(terms, transRDM = False):
+def matrixBlock(terms, transRDM = False, legacy_order = False):
     "Construct matrix block."
 
     startTime = time.time()
@@ -81,7 +82,7 @@ def matrixBlock(terms, transRDM = False):
     fTerms = dummyLabel(fTerms)
 
     # Reorder tensor indices: (core < active < virtual) order
-    reorder_tensor_indices(fTerms, reorder_t = True)
+    reorder_tensor_indices(fTerms, reorder_t = True, reorder_legacy = legacy_order)
 
     # Print the final results
     print("")
@@ -447,9 +448,11 @@ def contractDeltaFuncs_nondummy(_terms):
     sys.stdout.flush()
     return _terms
 
-def reorder_tensor_indices(_terms, reorder_t = True):
+def reorder_tensor_indices(_terms, reorder_t = True, reorder_legacy = False):
     print("Reordering indices according to core < active < virtual...")
     sys.stdout.flush()
+
+    v2e_sym_braket = symmetry((2,3,0,1), 1)
 
     for ind_unordered_term, unordered_term in enumerate(_terms):
         for ind_unordered_tensor, unordered_tensor in enumerate(unordered_term.tensors):
@@ -461,6 +464,11 @@ def reorder_tensor_indices(_terms, reorder_t = True):
             else:
                 reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
                                   (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4))
+
+            if (unordered_tensor.name == 'v') and (v2e_sym_braket not in unordered_tensor.symmetries):
+                unordered_tensor_symmetries = unordered_tensor.symmetries
+                unordered_tensor_symmetries.append(v2e_sym_braket)
+                unordered_tensor.symmetries = unordered_tensor_symmetries
 
             if reorder_tensor:
                 original_rank = []
@@ -494,10 +502,23 @@ def reorder_tensor_indices(_terms, reorder_t = True):
                 permuted_indices = [unordered_tensor.indices[ind] for ind in permutes_indices[permutes_rank_ind]]
                 ordered_tensor = unordered_tensor.copy()
                 ordered_tensor.indices = permuted_indices
+                order_factor = permutes_factors[permutes_rank_ind]
+
+                # Legacy ordering to obtain spin-orbital Prism integrals exceptions
+                if (ordered_tensor.name == 'v') and (reorder_legacy == True):
+
+                    inds_caae = [options.core_type,   options.active_type, options.active_type, options.virtual_type]
+                    inds_aaae = [options.active_type, options.active_type, options.active_type, options.virtual_type]
+
+                    exception_symm = symmetry((0,1,3,2), -1)
+
+                    unordered_v2e_inds = [get_spatial_index_type(ind) for ind in ordered_tensor.indices]
+
+                    if (unordered_v2e_inds in [inds_caae, inds_aaae]) and (exception_symm in ordered_tensor.symmetries):
+                        ordered_tensor.indices = [ordered_tensor.indices[i] for i in [0, 1, 3, 2]]
+                        order_factor *= - 1.0
 
                 _terms[ind_unordered_term].tensors[ind_unordered_tensor] = ordered_tensor.copy()
-
-                order_factor = permutes_factors[permutes_rank_ind]
                 _terms[ind_unordered_term].numConstant *= order_factor
 
                 if options.verbose:
