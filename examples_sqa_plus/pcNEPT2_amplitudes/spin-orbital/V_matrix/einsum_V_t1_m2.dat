@@ -1,0 +1,1 @@
+V1_m2 =- 1/2 * einsum('xyAB,XYxy->XYAB', v_aaee_so, rdm_ccaa_so, optimize = einsum_type)

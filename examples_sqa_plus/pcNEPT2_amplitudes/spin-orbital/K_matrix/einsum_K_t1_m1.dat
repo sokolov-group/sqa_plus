@@ -1,0 +1,2 @@
+K_ca =- einsum('Yx,Xx->XY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K_ca += 1/2 * einsum('Yxyz,Xxyz->XY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)

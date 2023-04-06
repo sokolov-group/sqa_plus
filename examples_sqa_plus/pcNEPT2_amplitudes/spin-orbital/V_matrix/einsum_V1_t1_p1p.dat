@@ -1,0 +1,4 @@
+V1 =- einsum('IX->IX', h_ca_so, optimize = einsum_type).copy()
+V1 += einsum('Ix,xX->IX', h_ca_so, rdm_ca_so, optimize = einsum_type)
+V1 -= einsum('IxXy,yx->IX', v_caaa_so, rdm_ca_so, optimize = einsum_type)
+V1 -= 1/2 * einsum('Ixyz,yzXx->IX', v_caaa_so, rdm_ccaa_so, optimize = einsum_type)

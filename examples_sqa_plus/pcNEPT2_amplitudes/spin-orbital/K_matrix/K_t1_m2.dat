@@ -1,0 +1,84 @@
+
+----------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------
+                               Spin-Orbital t1_m2 K                               
+----------------------------------------------------------------------------------
+
+# Create spin-orbital Dyall Hamiltonian ...
+## Create K_ccaa: a_X^\dag a_Y^\dag [H_{act}, a_W a_Z] ...
+
+ (   1.00000) cre(X) cre(Y) 
+ (   1.00000) des(W) des(Z) 
+
+## Calculating the commutator ...
+
+## Multiply ...
+## Compute expected value of spin-orbital K matrix ...
+
+---------------------------------- SQA Automation --------------------------------
+
+Computing expectation value with respect to virtual:=>
+Done!
+----------------------------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done!
+----------------------------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done!
+----------------------------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done!
+----------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------
+
+--------------------------------- Final results ----------------------------------
+
+ (   1.00000) h(W,x) cre(X) cre(Y) des(Z) des(x) 
+ (  -1.00000) h(Z,x) cre(X) cre(Y) des(W) des(x) 
+ (  -0.50000) v(W,Z,x,y) cre(X) cre(Y) des(x) des(y) 
+ (   1.00000) v(i,W,i,x) cre(X) cre(Y) des(Z) des(x) 
+ (  -1.00000) v(i,Z,i,x) cre(X) cre(Y) des(W) des(x) 
+ (   0.50000) v(W,x,y,z) cre(X) cre(Y) cre(x) des(Z) des(y) des(z) 
+ (  -0.50000) v(Z,x,y,z) cre(X) cre(Y) cre(x) des(W) des(y) des(z) 
+
+Total terms : 7
+SQA automation time :  0.021 seconds
+
+------------------------------------ WARNING -------------------------------------
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+
+2 terms removed:
+ (   1.00000) v(i,W,i,x) rdm(X,Y,Z,x) 
+ (  -1.00000) v(i,Z,i,x) rdm(X,Y,W,x) 
+----------------------------------------------------------------------------------
+Remaining terms: 5
+
+
+-------------------------------- genEinsum equations --------------------------------
+
+K_ccaa  = einsum('Wx,XYZx->XYZW', h_aa_so, rdm_ccaa_so, optimize = einsum_type)
+K_ccaa -= einsum('Zx,XYWx->XYZW', h_aa_so, rdm_ccaa_so, optimize = einsum_type)
+K_ccaa -= 1/2 * einsum('WZxy,XYxy->XYZW', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_ccaa += 1/2 * einsum('Wxyz,XYxZyz->XYZW', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K_ccaa -= 1/2 * einsum('Zxyz,XYxWyz->XYZW', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+
+-------------------------------------------------------------------------------------
+
+> Total elapsed time: 0.08 seconds.

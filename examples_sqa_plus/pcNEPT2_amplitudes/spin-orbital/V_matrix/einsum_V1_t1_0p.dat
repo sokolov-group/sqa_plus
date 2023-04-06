@@ -1,0 +1,2 @@
+V0p =- einsum('IA->IA', h_ce_so, optimize = einsum_type).copy()
+V0p -= einsum('IxAy,yx->IA', v_caea_so, rdm_ca_so, optimize = einsum_type)

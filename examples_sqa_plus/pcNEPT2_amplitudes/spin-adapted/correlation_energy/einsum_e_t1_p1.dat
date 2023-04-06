@@ -1,0 +1,4 @@
+e_p1 =- 2 * einsum('ijax,ijxa', t1_ccea, v_ccae, optimize = einsum_type)
+e_p1 += 4 * einsum('jiax,ijxa', t1_ccea, v_ccae, optimize = einsum_type)
+e_p1 += einsum('ijax,ijya,xy', t1_ccea, v_ccae, rdm_ca, optimize = einsum_type)
+e_p1 -= 2 * einsum('jiax,ijya,xy', t1_ccea, v_ccae, rdm_ca, optimize = einsum_type)

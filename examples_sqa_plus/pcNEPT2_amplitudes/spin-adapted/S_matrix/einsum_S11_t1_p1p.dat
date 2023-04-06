@@ -1,0 +1,2 @@
+S11_a_a  = einsum('XY->XY', np.identity(ncas), optimize = einsum_type).copy()
+S11_a_a -= 1/2 * einsum('YX->XY', rdm_ca, optimize = einsum_type).copy()

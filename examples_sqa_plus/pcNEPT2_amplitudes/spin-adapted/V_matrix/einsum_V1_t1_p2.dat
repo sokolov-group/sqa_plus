@@ -1,0 +1,5 @@
+V1_p2  = einsum('IJXY->IJXY', v_ccaa, optimize = einsum_type).copy()
+V1_p2 -= 1/2 * einsum('IJXx,xY->IJXY', v_ccaa, rdm_ca, optimize = einsum_type)
+V1_p2 -= 1/2 * einsum('IJxY,xX->IJXY', v_ccaa, rdm_ca, optimize = einsum_type)
+V1_p2 += 1/3 * einsum('IJxy,XYxy->IJXY', v_ccaa, rdm_ccaa, optimize = einsum_type)
+V1_p2 += 1/6 * einsum('IJxy,XYyx->IJXY', v_ccaa, rdm_ccaa, optimize = einsum_type)

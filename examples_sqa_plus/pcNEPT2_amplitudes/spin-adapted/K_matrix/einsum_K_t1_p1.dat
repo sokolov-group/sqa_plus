@@ -1,0 +1,5 @@
+K_ac  = einsum('XY->XY', h_aa, optimize = einsum_type).copy()
+K_ac -= 1/2 * einsum('Yx,xX->XY', h_aa, rdm_ca, optimize = einsum_type)
+K_ac += einsum('XxYy,xy->XY', v_aaaa, rdm_ca, optimize = einsum_type)
+K_ac -= 1/2 * einsum('XxyY,xy->XY', v_aaaa, rdm_ca, optimize = einsum_type)
+K_ac -= 1/2 * einsum('Yxyz,Xxyz->XY', v_aaaa, rdm_ccaa, optimize = einsum_type)

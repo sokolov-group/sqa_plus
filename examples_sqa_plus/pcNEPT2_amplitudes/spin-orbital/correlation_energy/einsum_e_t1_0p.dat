@@ -1,0 +1,5 @@
+e_0p  = einsum('ia,ia', h_ce, t1_ce, optimize = einsum_type)
+e_0p += einsum('ia,ixay,yx', h_ce, t1_caea, rdm_ca, optimize = einsum_type)
+e_0p += einsum('ia,iyax,yx', t1_ce, v_caea, rdm_ca, optimize = einsum_type)
+e_0p += einsum('ixay,izay,zx', t1_caea, v_caea, rdm_ca, optimize = einsum_type)
+e_0p -= einsum('ixay,iwaz,ywxz', t1_caea, v_caea, rdm_ccaa, optimize = einsum_type)

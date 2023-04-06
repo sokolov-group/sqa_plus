@@ -1,0 +1,2 @@
+V1 =- einsum('xA,Xx->XA', h_ae_so, rdm_ca_so, optimize = einsum_type)
+V1 += 1/2 * einsum('xyAz,Xzxy->XA', v_aaea_so, rdm_ccaa_so, optimize = einsum_type)

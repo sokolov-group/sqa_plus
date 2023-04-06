@@ -1,0 +1,114 @@
+
+----------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------
+                              Spin-Orbital t1_m1p K                               
+----------------------------------------------------------------------------------
+
+# Create spin-orbital Dyall Hamiltonian ...
+## Create K22: a_X^\dag a_Z^\dag a_W [H_{act}, a_U^\dag a_V a_Y] ...
+
+ (   1.00000) cre(X) cre(Z) des(W) 
+ (   1.00000) cre(U) des(V) des(Y) 
+
+## Calculating the commutator ...
+
+## Multiply ...
+## Compute expected value of spin-orbital K matrix ...
+
+---------------------------------- SQA Automation --------------------------------
+
+Computing expectation value with respect to virtual:=>
+Done!
+----------------------------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done!
+----------------------------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done!
+----------------------------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done!
+----------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------
+
+--------------------------------- Final results ----------------------------------
+
+ (   1.00000) h(U,W) cre(X) cre(Z) des(V) des(Y) 
+ (   1.00000) v(i,U,i,W) cre(X) cre(Z) des(V) des(Y) 
+ (   1.00000) h(V,x) kdelta(U,W) cre(X) cre(Z) des(Y) des(x) 
+ (  -1.00000) h(Y,x) kdelta(U,W) cre(X) cre(Z) des(V) des(x) 
+ (  -0.50000) kdelta(U,W) v(V,Y,x,y) cre(X) cre(Z) des(x) des(y) 
+ (   1.00000) kdelta(U,W) v(i,V,i,x) cre(X) cre(Z) des(Y) des(x) 
+ (  -1.00000) kdelta(U,W) v(i,Y,i,x) cre(X) cre(Z) des(V) des(x) 
+ (   1.00000) h(U,x) cre(X) cre(Z) cre(x) des(V) des(W) des(Y) 
+ (  -1.00000) h(V,x) cre(U) cre(X) cre(Z) des(W) des(Y) des(x) 
+ (  -1.00000) h(Y,x) cre(U) cre(X) cre(Z) des(V) des(W) des(x) 
+ (   1.00000) v(U,x,W,y) cre(X) cre(Z) cre(y) des(V) des(Y) des(x) 
+ (   1.00000) v(i,U,i,x) cre(X) cre(Z) cre(x) des(V) des(W) des(Y) 
+ (  -0.50000) v(V,W,x,y) cre(U) cre(X) cre(Z) des(Y) des(x) des(y) 
+ (   0.50000) v(V,Y,x,y) cre(U) cre(X) cre(Z) des(W) des(x) des(y) 
+ (  -1.00000) v(i,V,i,x) cre(U) cre(X) cre(Z) des(W) des(Y) des(x) 
+ (  -0.50000) v(W,Y,x,y) cre(U) cre(X) cre(Z) des(V) des(x) des(y) 
+ (  -1.00000) v(i,Y,i,x) cre(U) cre(X) cre(Z) des(V) des(W) des(x) 
+ (   0.50000) kdelta(U,W) v(V,x,y,z) cre(X) cre(Z) cre(x) des(Y) des(y) des(z) 
+ (  -0.50000) kdelta(U,W) v(Y,x,y,z) cre(X) cre(Z) cre(x) des(V) des(y) des(z) 
+ (  -0.50000) v(U,x,y,z) cre(X) cre(Z) cre(y) cre(z) des(V) des(W) des(Y) des(x) 
+ (   0.50000) v(V,x,y,z) cre(U) cre(X) cre(Z) cre(x) des(W) des(Y) des(y) des(z) 
+ (   0.50000) v(Y,x,y,z) cre(U) cre(X) cre(Z) cre(x) des(V) des(W) des(y) des(z) 
+
+Total terms : 22
+SQA automation time :  0.100 seconds
+
+------------------------------------ WARNING -------------------------------------
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+
+6 terms removed:
+ (   1.00000) v(i,U,i,W) rdm(X,Z,V,Y) 
+ (   1.00000) kdelta(U,W) v(i,V,i,x) rdm(X,Z,Y,x) 
+ (  -1.00000) kdelta(U,W) v(i,Y,i,x) rdm(X,Z,V,x) 
+ (   1.00000) v(i,U,i,x) rdm(X,Z,x,V,W,Y) 
+ (  -1.00000) v(i,V,i,x) rdm(U,X,Z,W,Y,x) 
+ (  -1.00000) v(i,Y,i,x) rdm(U,X,Z,V,W,x) 
+----------------------------------------------------------------------------------
+Remaining terms: 16
+
+
+-------------------------------- genEinsum equations --------------------------------
+
+K22  = einsum('UW,XZVY->XZWUVY', h_aa_so, rdm_ccaa_so, optimize = einsum_type)
+K22 += einsum('Vx,UW,XZYx->XZWUVY', h_aa_so, np.identity(ncas_so), rdm_ccaa_so, optimize = einsum_type)
+K22 -= einsum('Yx,UW,XZVx->XZWUVY', h_aa_so, np.identity(ncas_so), rdm_ccaa_so, optimize = einsum_type)
+K22 -= 1/2 * einsum('UW,VYxy,XZxy->XZWUVY', np.identity(ncas_so), v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K22 += einsum('Ux,XZxVWY->XZWUVY', h_aa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 -= einsum('Vx,UXZWYx->XZWUVY', h_aa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 -= einsum('Yx,UXZVWx->XZWUVY', h_aa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 += einsum('UxWy,XZyVYx->XZWUVY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 -= 1/2 * einsum('VWxy,UXZYxy->XZWUVY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 += 1/2 * einsum('VYxy,UXZWxy->XZWUVY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 -= 1/2 * einsum('WYxy,UXZVxy->XZWUVY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 += 1/2 * einsum('UW,Vxyz,XZxYyz->XZWUVY', np.identity(ncas_so), v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 -= 1/2 * einsum('UW,Yxyz,XZxVyz->XZWUVY', np.identity(ncas_so), v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K22 -= 1/2 * einsum('Uxyz,XZyzVWYx->XZWUVY', v_aaaa_so, rdm_ccccaaaa_so, optimize = einsum_type)
+K22 += 1/2 * einsum('Vxyz,UXZxWYyz->XZWUVY', v_aaaa_so, rdm_ccccaaaa_so, optimize = einsum_type)
+K22 += 1/2 * einsum('Yxyz,UXZxVWyz->XZWUVY', v_aaaa_so, rdm_ccccaaaa_so, optimize = einsum_type)
+
+-------------------------------------------------------------------------------------
+
+> Total elapsed time: 0.17 seconds.

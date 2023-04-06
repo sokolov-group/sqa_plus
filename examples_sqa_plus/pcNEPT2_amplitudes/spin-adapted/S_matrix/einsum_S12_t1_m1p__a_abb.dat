@@ -1,0 +1,2 @@
+S12_a_abb  = 1/3 * einsum('WZXY->XWZY', rdm_ccaa, optimize = einsum_type).copy()
+S12_a_abb += 1/6 * einsum('WZYX->XWZY', rdm_ccaa, optimize = einsum_type).copy()

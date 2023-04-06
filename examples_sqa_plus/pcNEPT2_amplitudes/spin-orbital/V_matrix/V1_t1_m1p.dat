@@ -1,0 +1,73 @@
+
+----------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------
+                              Spin-Orbital t1_m1p V                               
+----------------------------------------------------------------------------------
+
+# Create spin-orbital V operator ...
+## Create V: - 1.0 * a_X^\dag a_A * V...
+
+ (  -1.00000) cre(X) des(A) 
+
+## Multiply...
+## Compute expected value of spin-orbital V matrix ...
+
+---------------------------------- SQA Automation --------------------------------
+
+Computing expectation value with respect to virtual:=>
+Done!
+----------------------------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done!
+----------------------------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done!
+----------------------------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done!
+----------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------
+
+--------------------------------- Final results ----------------------------------
+
+ (  -1.00000) h(x,A) cre(X) des(x) 
+ (  -1.00000) v(i,x,i,A) cre(X) des(x) 
+ (   0.50000) v(x,y,A,z) cre(X) cre(z) des(x) des(y) 
+
+Total terms : 3
+SQA automation time :  0.090 seconds
+
+------------------------------------ WARNING -------------------------------------
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+
+1 terms removed:
+ (  -1.00000) v(i,x,i,A) rdm(X,x) 
+----------------------------------------------------------------------------------
+Remaining terms: 2
+
+
+-------------------------------- genEinsum equations --------------------------------
+
+V1 =- einsum('xA,Xx->XA', h_ae_so, rdm_ca_so, optimize = einsum_type)
+V1 += 1/2 * einsum('xyAz,Xzxy->XA', v_aaea_so, rdm_ccaa_so, optimize = einsum_type)
+
+-------------------------------------------------------------------------------------
+
+> Total elapsed time: 0.12 seconds.

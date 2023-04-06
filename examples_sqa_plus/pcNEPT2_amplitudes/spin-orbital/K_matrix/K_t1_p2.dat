@@ -1,0 +1,166 @@
+
+----------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------
+                               Spin-Orbital t1_p2 K                               
+----------------------------------------------------------------------------------
+
+# Create spin-orbital Dyall Hamiltonian ...
+## Create K_aacc: a_Z a_W [H_{act}, a_X^\dag a_Y^\dag] ...
+
+ (   1.00000) des(Z) des(W) 
+ (   1.00000) cre(X) cre(Y) 
+
+## Calculating the commutator ...
+
+## Multiply ...
+## Compute expected value of spin-orbital K matrix ...
+
+---------------------------------- SQA Automation --------------------------------
+
+Computing expectation value with respect to virtual:=>
+Done!
+----------------------------------------------------------------------------------
+Normal ordering with respect to core:=>
+Done!
+----------------------------------------------------------------------------------
+Computing expectation value with respect to core:=>
+Done!
+----------------------------------------------------------------------------------
+Contract delta function for non-dummy indices: =>
+Done!
+----------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------
+
+--------------------------------- Final results ----------------------------------
+
+ (   1.00000) v(W,Z,X,Y) 
+ (   1.00000) h(W,X) kdelta(Y,Z) 
+ (  -1.00000) h(W,Y) kdelta(X,Z) 
+ (  -1.00000) h(X,Z) kdelta(W,Y) 
+ (   1.00000) h(Y,Z) kdelta(W,X) 
+ (   1.00000) kdelta(W,X) v(i,Y,i,Z) 
+ (  -1.00000) kdelta(W,Y) v(i,X,i,Z) 
+ (  -1.00000) kdelta(X,Z) v(i,W,i,Y) 
+ (   1.00000) kdelta(Y,Z) v(i,W,i,X) 
+ (  -1.00000) h(W,X) cre(Y) des(Z) 
+ (   1.00000) h(W,Y) cre(X) des(Z) 
+ (   1.00000) h(X,Z) cre(Y) des(W) 
+ (  -1.00000) h(Y,Z) cre(X) des(W) 
+ (  -1.00000) v(W,Z,X,x) cre(Y) des(x) 
+ (   1.00000) v(W,Z,Y,x) cre(X) des(x) 
+ (  -1.00000) v(W,x,X,Y) cre(x) des(Z) 
+ (  -1.00000) v(i,W,i,X) cre(Y) des(Z) 
+ (   1.00000) v(i,W,i,Y) cre(X) des(Z) 
+ (   1.00000) v(X,Y,Z,x) cre(x) des(W) 
+ (   1.00000) v(i,X,i,Z) cre(Y) des(W) 
+ (  -1.00000) v(i,Y,i,Z) cre(X) des(W) 
+ (   1.00000) h(X,x) kdelta(W,Y) cre(x) des(Z) 
+ (  -1.00000) h(X,x) kdelta(Y,Z) cre(x) des(W) 
+ (  -1.00000) h(Y,x) kdelta(W,X) cre(x) des(Z) 
+ (   1.00000) h(Y,x) kdelta(X,Z) cre(x) des(W) 
+ (   1.00000) kdelta(W,X) v(Y,x,Z,y) cre(y) des(x) 
+ (  -1.00000) kdelta(W,X) v(i,Y,i,x) cre(x) des(Z) 
+ (  -1.00000) kdelta(W,Y) v(X,x,Z,y) cre(y) des(x) 
+ (   1.00000) kdelta(W,Y) v(i,X,i,x) cre(x) des(Z) 
+ (  -1.00000) kdelta(X,Z) v(W,x,Y,y) cre(x) des(y) 
+ (   1.00000) kdelta(X,Z) v(i,Y,i,x) cre(x) des(W) 
+ (   1.00000) kdelta(Y,Z) v(W,x,X,y) cre(x) des(y) 
+ (  -1.00000) kdelta(Y,Z) v(i,X,i,x) cre(x) des(W) 
+ (   1.00000) h(X,x) cre(Y) cre(x) des(W) des(Z) 
+ (  -1.00000) h(Y,x) cre(X) cre(x) des(W) des(Z) 
+ (   1.00000) v(W,x,X,y) cre(Y) cre(x) des(Z) des(y) 
+ (  -1.00000) v(W,x,Y,y) cre(X) cre(x) des(Z) des(y) 
+ (  -0.50000) v(X,Y,x,y) cre(x) cre(y) des(W) des(Z) 
+ (  -1.00000) v(X,x,Z,y) cre(Y) cre(y) des(W) des(x) 
+ (   1.00000) v(i,X,i,x) cre(Y) cre(x) des(W) des(Z) 
+ (   1.00000) v(Y,x,Z,y) cre(X) cre(y) des(W) des(x) 
+ (  -1.00000) v(i,Y,i,x) cre(X) cre(x) des(W) des(Z) 
+ (   0.50000) kdelta(W,X) v(Y,x,y,z) cre(y) cre(z) des(Z) des(x) 
+ (  -0.50000) kdelta(W,Y) v(X,x,y,z) cre(y) cre(z) des(Z) des(x) 
+ (  -0.50000) kdelta(X,Z) v(Y,x,y,z) cre(y) cre(z) des(W) des(x) 
+ (   0.50000) kdelta(Y,Z) v(X,x,y,z) cre(y) cre(z) des(W) des(x) 
+ (   0.50000) v(X,x,y,z) cre(Y) cre(y) cre(z) des(W) des(Z) des(x) 
+ (  -0.50000) v(Y,x,y,z) cre(X) cre(y) cre(z) des(W) des(Z) des(x) 
+
+Total terms : 48
+SQA automation time :  0.229 seconds
+
+------------------------------------ WARNING -------------------------------------
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+
+14 terms removed:
+ (   1.00000) kdelta(W,X) v(i,Y,i,Z) 
+ (  -1.00000) kdelta(W,Y) v(i,X,i,Z) 
+ (  -1.00000) kdelta(X,Z) v(i,W,i,Y) 
+ (   1.00000) kdelta(Y,Z) v(i,W,i,X) 
+ (  -1.00000) v(i,W,i,X) rdm(Y,Z) 
+ (   1.00000) v(i,W,i,Y) rdm(X,Z) 
+ (   1.00000) v(i,X,i,Z) rdm(Y,W) 
+ (  -1.00000) v(i,Y,i,Z) rdm(X,W) 
+ (  -1.00000) kdelta(W,X) v(i,Y,i,x) rdm(x,Z) 
+ (   1.00000) kdelta(W,Y) v(i,X,i,x) rdm(x,Z) 
+ (   1.00000) kdelta(X,Z) v(i,Y,i,x) rdm(x,W) 
+ (  -1.00000) kdelta(Y,Z) v(i,X,i,x) rdm(x,W) 
+ (   1.00000) v(i,X,i,x) rdm(Y,x,W,Z) 
+ (  -1.00000) v(i,Y,i,x) rdm(X,x,W,Z) 
+----------------------------------------------------------------------------------
+Remaining terms: 34
+
+
+-------------------------------- genEinsum equations --------------------------------
+
+K_aacc  = einsum('WZXY->ZWXY', v_aaaa_so, optimize = einsum_type).copy()
+K_aacc += einsum('WX,YZ->ZWXY', h_aa_so, np.identity(ncas_so), optimize = einsum_type)
+K_aacc -= einsum('WY,XZ->ZWXY', h_aa_so, np.identity(ncas_so), optimize = einsum_type)
+K_aacc -= einsum('XZ,WY->ZWXY', h_aa_so, np.identity(ncas_so), optimize = einsum_type)
+K_aacc += einsum('YZ,WX->ZWXY', h_aa_so, np.identity(ncas_so), optimize = einsum_type)
+K_aacc -= einsum('WX,YZ->ZWXY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('WY,XZ->ZWXY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('XZ,YW->ZWXY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc -= einsum('YZ,XW->ZWXY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc -= einsum('WZXx,Yx->ZWXY', v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('WZYx,Xx->ZWXY', v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc -= einsum('WxXY,xZ->ZWXY', v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('XYZx,xW->ZWXY', v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('Xx,WY,xZ->ZWXY', h_aa_so, np.identity(ncas_so), rdm_ca_so, optimize = einsum_type)
+K_aacc -= einsum('Xx,YZ,xW->ZWXY', h_aa_so, np.identity(ncas_so), rdm_ca_so, optimize = einsum_type)
+K_aacc -= einsum('Yx,WX,xZ->ZWXY', h_aa_so, np.identity(ncas_so), rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('Yx,XZ,xW->ZWXY', h_aa_so, np.identity(ncas_so), rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('WX,YxZy,yx->ZWXY', np.identity(ncas_so), v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc -= einsum('WY,XxZy,yx->ZWXY', np.identity(ncas_so), v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc -= einsum('XZ,WxYy,xy->ZWXY', np.identity(ncas_so), v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('YZ,WxXy,xy->ZWXY', np.identity(ncas_so), v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K_aacc += einsum('Xx,YxWZ->ZWXY', h_aa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc -= einsum('Yx,XxWZ->ZWXY', h_aa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc += einsum('WxXy,YxZy->ZWXY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc -= einsum('WxYy,XxZy->ZWXY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc -= 1/2 * einsum('XYxy,xyWZ->ZWXY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc -= einsum('XxZy,YyWx->ZWXY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc += einsum('YxZy,XyWx->ZWXY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc += 1/2 * einsum('WX,Yxyz,yzZx->ZWXY', np.identity(ncas_so), v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc -= 1/2 * einsum('WY,Xxyz,yzZx->ZWXY', np.identity(ncas_so), v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc -= 1/2 * einsum('XZ,Yxyz,yzWx->ZWXY', np.identity(ncas_so), v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc += 1/2 * einsum('YZ,Xxyz,yzWx->ZWXY', np.identity(ncas_so), v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K_aacc += 1/2 * einsum('Xxyz,YyzWZx->ZWXY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K_aacc -= 1/2 * einsum('Yxyz,XyzWZx->ZWXY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+
+-------------------------------------------------------------------------------------
+
+> Total elapsed time: 0.29 seconds.

@@ -1,0 +1,4 @@
+K11  = einsum('XY->XY', h_aa_so, optimize = einsum_type).copy()
+K11 -= einsum('Yx,xX->XY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K11 += einsum('XxYy,xy->XY', v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K11 += 1/2 * einsum('Yxyz,yzXx->XY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)

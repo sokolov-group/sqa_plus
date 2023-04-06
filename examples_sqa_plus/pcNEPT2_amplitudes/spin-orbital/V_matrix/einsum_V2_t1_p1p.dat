@@ -1,0 +1,7 @@
+V2  = einsum('IY,XZ->IXYZ', h_ca_so, rdm_ca_so, optimize = einsum_type)
+V2 -= einsum('IZ,XY->IXYZ', h_ca_so, rdm_ca_so, optimize = einsum_type)
+V2 += einsum('IxYZ,Xx->IXYZ', v_caaa_so, rdm_ca_so, optimize = einsum_type)
+V2 -= einsum('Ix,XxYZ->IXYZ', h_ca_so, rdm_ccaa_so, optimize = einsum_type)
+V2 -= einsum('IxYy,XyZx->IXYZ', v_caaa_so, rdm_ccaa_so, optimize = einsum_type)
+V2 += einsum('IxZy,XyYx->IXYZ', v_caaa_so, rdm_ccaa_so, optimize = einsum_type)
+V2 -= 1/2 * einsum('Ixyz,XyzYZx->IXYZ', v_caaa_so, rdm_cccaaa_so, optimize = einsum_type)

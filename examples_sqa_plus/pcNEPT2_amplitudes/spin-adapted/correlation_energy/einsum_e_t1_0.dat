@@ -1,0 +1,4 @@
+e_0  = einsum('ijab,ijab', t1_ccee, v_ccee, optimize = einsum_type)
+e_0 -= 1/2 * einsum('ijab,jiab', t1_ccee, v_ccee, optimize = einsum_type)
+e_0 -= 1/2 * einsum('jiab,ijab', t1_ccee, v_ccee, optimize = einsum_type)
+e_0 += einsum('jiab,jiab', t1_ccee, v_ccee, optimize = einsum_type)

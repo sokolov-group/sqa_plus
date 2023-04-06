@@ -1,0 +1,2 @@
+S22 =- einsum('XY,UVWZ->UVXWZY', np.identity(ncas_so), rdm_ccaa_so, optimize = einsum_type)
+S22 -= einsum('UVYWXZ->UVXWZY', rdm_cccaaa_so, optimize = einsum_type).copy()
