@@ -591,7 +591,7 @@ def Tamplitude(order = 1, indices_lists = None, spin_integrated = False, explici
         T = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry((1,0), -1)]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
         t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
         t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
@@ -1060,7 +1060,7 @@ def Tamplitude(order = 1, indices_lists = None, spin_integrated = False, explici
         T = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry((1,0), -1)]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
         t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
         t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
@@ -1649,7 +1649,7 @@ def Tamplitude_excitation(order = 1, indices_lists = None, spin_integrated = Fal
         T = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry((1,0), -1)]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
         t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
         t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
@@ -1763,7 +1763,7 @@ def Tamplitude_excitation(order = 1, indices_lists = None, spin_integrated = Fal
         T = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry((1,0), -1)]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
         t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
         t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
@@ -2023,7 +2023,7 @@ def Tamplitude_excitation(order = 1, indices_lists = None, spin_integrated = Fal
         T = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry((1,0), -1)]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
         t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
         t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
@@ -2490,7 +2490,7 @@ def Tamplitude_deexcitation(order = 1, indices_lists = None, spin_integrated = F
         T = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry((1,0), -1)]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
         t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
         t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
@@ -2604,7 +2604,7 @@ def Tamplitude_deexcitation(order = 1, indices_lists = None, spin_integrated = F
         T = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry((1,0), -1)]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
         t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
         t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
@@ -2864,7 +2864,7 @@ def Tamplitude_deexcitation(order = 1, indices_lists = None, spin_integrated = F
         T = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry((1,0), -1)]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm_ppqq = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
         t2_ten_symm_ppqr = [symmetry((1,0,2,3), -1)]
         t2_ten_symm_pqrr = [symmetry((0,1,3,2), -1)]
