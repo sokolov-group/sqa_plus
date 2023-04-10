@@ -274,6 +274,8 @@ class term:
         usedNames = []
         for t in self.tensors:
             for i in t.indices:
+                if i.userDefined:
+                    i.name = 'user_' + i.userDefined
                 if not (i.name in usedNames):
                     usedNames.append(i.name)
 
@@ -728,6 +730,8 @@ class term:
             for i in range(len(t.indices)):
                 if t.indices[i].tup() in canonMap.keys():
                     t.indices[i] = canonMap[t.indices[i].tup()].copy()
+                if t.indices[i].userDefined:
+                    t.indices[i].rename()
 
         # Turn on the canonical form flag to avoid calling this function again unnecessarily
         self.isInCanonicalForm = True
@@ -902,11 +906,6 @@ def combineTerms(termList, maxThreads = 1):
 
     # Remove terms with coefficients of zero
     termChop(termList)
-
-    for _term in termList:
-        for _tensor in _term.tensors:
-            for _index in _tensor.indices:
-                _index.rename()
 
     if options.verbose:
         print("Finished combining terms in %.3f seconds" %(time.time() - startTime))
