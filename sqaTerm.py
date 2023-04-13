@@ -310,11 +310,11 @@ class term:
 
     #------------------------------------------------------------------------------------------------
 
-    def makeCanonical(self):
+    def makeCanonical(self, rename_user_defined = True):
         "Converts the term to a unique canonical form."
 
         # Use the non recursive function
-        self.makeCanonical_non_recursive()
+        self.makeCanonical_non_recursive(rename_user_defined)
         return
 
         # If the tensor is already in canonical form, do nothing
@@ -393,7 +393,7 @@ class term:
 
     #------------------------------------------------------------------------------------------------
 
-    def makeCanonical_non_recursive(self):
+    def makeCanonical_non_recursive(self, rename_user_defined = True):
         "Converts the term to a unique canonical form using a non-recursive algorithm."
 
         # If the tensor is already in canonical form, do nothing
@@ -730,7 +730,7 @@ class term:
             for i in range(len(t.indices)):
                 if t.indices[i].tup() in canonMap.keys():
                     t.indices[i] = canonMap[t.indices[i].tup()].copy()
-                if t.indices[i].userDefined:
+                if rename_user_defined and t.indices[i].userDefined:
                     t.indices[i].rename()
 
         # Turn on the canonical form flag to avoid calling this function again unnecessarily
@@ -879,11 +879,11 @@ def combineTerms(termList, maxThreads = 1):
         for i in range(len(termList)):
             if options.verbose:
                 print '%6i    %s' %(i,str(termList[i]))
-            termList[i].makeCanonical()
+            termList[i].makeCanonical(rename_user_defined = False)
 
     # Sort the terms
     termList.sort()
-    
+
     # Combine any terms with the same canonical form
     i = 0
     while i < len(termList)-1:
@@ -892,6 +892,12 @@ def combineTerms(termList, maxThreads = 1):
             del(termList[i])
         else:
             i += 1
+
+    # Rename user defined dummy indices
+    for _term in termList:
+        for _tensor in _term.tensors:
+            for _ind in range(len(_tensor.indices)):
+                _tensor.indices[_ind].rename()
 
 #    i = 0
 #    while i < len(termList)-1:
