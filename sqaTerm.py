@@ -846,7 +846,7 @@ def combineTerms(termList, maxThreads = 1):
 
             while i < nTerms:
 
-                termList[i].makeCanonical()
+                termList[i].makeCanonical(rename_user_defined = False)
 
 #                pLock.acquire()
 #                print '%6i    %s' %(printCount[0],str(termList[i]))

@@ -135,29 +135,43 @@ def get_spin_index_type(indice_types):
     return spin_index_types
 
 def get_spatial_index_type(indice_types):
-    spatial_index_types = ''
+    spatial_index_type = ''
 
     if isinstance(indice_types, index):
         indice_types = indice_types.indType
 
     for index_type in indice_types:
         if not index_type in (options.alpha_type, options.beta_type):
-            spatial_index_types = index_type
+            spatial_index_type = index_type
 
-    return spatial_index_types
+    return spatial_index_type
 
 def is_index_type(indice_types, sqa_index_type):
-    is_type = False
+	is_type = False
 
-    for index_type in indice_types:
-      if index_type in sqa_index_type:
-          is_type = True
+	for index_type in indice_types:
+		if index_type in sqa_index_type:
+			is_type = True
 
-    return is_type
+	return is_type
 
 def is_core_index_type(index_type):
+	spatial_index_type = get_spatial_index_type(index_type)
+	is_core_index = False
+
+	for core_index_type in (options.core_type, options.cvs_core_type, options.cvs_valence_type):
+		if is_index_type(spatial_index_type, core_index_type):
+			is_core_index = True
+
+	return is_core_index
+
+def is_cvs_core_index_type(index_type):
     spatial_index_type = get_spatial_index_type(index_type)
-    return is_index_type(spatial_index_type, options.core_type)
+    return is_index_type(spatial_index_type, options.cvs_core_type)
+
+def is_cvs_valence_index_type(index_type):
+    spatial_index_type = get_spatial_index_type(index_type)
+    return is_index_type(spatial_index_type, options.cvs_valence_type)
 
 def is_active_index_type(index_type):
     spatial_index_type = get_spatial_index_type(index_type)

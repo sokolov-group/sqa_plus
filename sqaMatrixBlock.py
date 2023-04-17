@@ -89,10 +89,6 @@ def matrixBlock(terms, transRDM = False, legacy_order = False):
     print("--------------------------------- Final results ----------------------------------\n")
     sys.stdout.flush()
     for t in fTerms:
-        index_types = ()
-        for t_tensor in t.tensors:
-            for t_tensor_index in t_tensor.indices:
-                index_types += t_tensor_index.indType[0]
         print(t)
 
     print("")
@@ -142,19 +138,19 @@ def dummyLabel(_terms):
                 index_user_defined = t_tensor.indices[t_tensor_index].userDefined
 
                 if not index_user_defined:
-                        if index_name not in mymap.keys():
-                            if is_core_index_type(index_type):
-                                mymap[index_name] = coreInd[0]
-                                coreInd.pop(0)
-                            elif is_active_index_type(index_type):
-                                mymap[index_name] = actvInd[0]
-                                actvInd.pop(0)
-                            elif is_virtual_index_type(index_type):
-                                mymap[index_name] = virtInd[0]
-                                virtInd.pop(0)
+                    if index_name not in mymap.keys():
+                        if is_core_index_type(index_type):
+                            mymap[index_name] = coreInd[0]
+                            coreInd.pop(0)
+                        elif is_active_index_type(index_type):
+                            mymap[index_name] = actvInd[0]
+                            actvInd.pop(0)
+                        elif is_virtual_index_type(index_type):
+                            mymap[index_name] = virtInd[0]
+                            virtInd.pop(0)
 
                     # Update the label
-                        t_tensor.indices[t_tensor_index].name = mymap[index_name]
+                    t_tensor.indices[t_tensor_index].name = mymap[index_name]
 
     if options.verbose:
         print("")

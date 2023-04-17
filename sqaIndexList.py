@@ -45,7 +45,7 @@ class indexList:
 
         return index(self.index_name % index_number, self.index_type, self.dummy, self.user_defined)
 
-def create_dummy_indices_list(spin_integrated = False):
+def create_dummy_indices_list(spin_integrated = False, cvs_indices = False):
     "A function which returns lists of dummy indices of all classes."
 
     def create_dummy_indices_spin_orbital():
@@ -92,8 +92,42 @@ def create_dummy_indices_list(spin_integrated = False):
 
         return (cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds)
 
+    def create_cvs_dummy_indices_spin_integrated():
+        # Define operator types
+        tg_act = options.active_type
+        tg_vir = options.virtual_type
+
+        tg_cvs_cor = options.cvs_core_type
+        tg_cvs_val = options.cvs_valence_type
+
+        tg_alpha = options.alpha_type
+        tg_beta = options.beta_type
+
+        dummy = True
+
+        # Core dummy indices
+        cvs_cor_alpha_inds = indexList('x%ia', [tg_alpha, tg_cvs_cor], dummy)
+        cvs_cor_beta_inds  = indexList('x%ib', [tg_beta,  tg_cvs_cor], dummy)
+
+        cvs_val_alpha_inds = indexList('c%ia', [tg_alpha, tg_cvs_val], dummy)
+        cvs_val_beta_inds  = indexList('c%ib', [tg_beta,  tg_cvs_val], dummy)
+
+        # Active dummy indices
+        act_alpha_inds = indexList('a%ia', [tg_alpha, tg_act], dummy)
+        act_beta_inds  = indexList('a%ib', [tg_beta,  tg_act], dummy)
+
+        # Virtual dummy indices
+        vir_alpha_inds = indexList('v%ia', [tg_alpha, tg_vir], dummy)
+        vir_beta_inds  = indexList('v%ib', [tg_beta,  tg_vir], dummy)
+
+        return (cvs_cor_alpha_inds, cvs_cor_beta_inds, cvs_val_alpha_inds, cvs_val_beta_inds,
+                act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds)
+
     if spin_integrated:
-        dummy_indices = create_dummy_indices_spin_integrated()
+        if cvs_indices:
+            dummy_indices = create_cvs_dummy_indices_spin_integrated()
+        else:
+            dummy_indices = create_dummy_indices_spin_integrated()
     else:
         dummy_indices = create_dummy_indices_spin_orbital()
 

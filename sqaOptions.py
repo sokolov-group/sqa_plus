@@ -26,9 +26,14 @@ class sqaOptions:
         self.verbose = False
         self.alpha_type = ('alpha',)
         self.beta_type = ('beta',)
+
         self.core_type = ('core',)
         self.active_type = ('active',)
         self.virtual_type = ('virtual',)
+
+        self.cvs_core_type = ('cvs',)
+        self.cvs_valence_type = ('valence',)
+
 
 # Create an object of the options class
 options = sqaOptions()

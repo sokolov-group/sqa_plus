@@ -78,6 +78,7 @@ def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True
 
     # Print Spin-Adapted Equations
     print("\n----------------------------- Spin-adapted equations -----------------------------\n")
+    terms_sa.sort()
     for term in terms_sa:
         print("{:}".format(term))
 
@@ -266,7 +267,6 @@ def remove_spin_index_type(_tensor):
     "Remove spin index type of a given spin-integrated tensor"
 
     for index in _tensor.indices:
-
         index_spatial_type = get_spatial_index_type(index)
         index.indType = (index_spatial_type,)
 
@@ -490,7 +490,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
     print("Converting 1-RDMs to spin-adapted formulation...")
 
     # Define Spin-Adapted One-Body RDMs Symmetries
-    rdm1_sa_symm = [symmetry((0,1), 1)]
+    rdm1_sa_symm = [symmetry((1,0), 1)]
 
     # Define 1e- indices lists
     inds_aa = [options.alpha_type, options.alpha_type]

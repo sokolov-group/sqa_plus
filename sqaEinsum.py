@@ -16,6 +16,7 @@
 
 from sqaIndex import get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type, \
+                     is_cvs_core_index_type, is_cvs_valence_index_type, \
                      is_alpha_index_type, is_beta_index_type
 
 from sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
@@ -249,7 +250,12 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                         else:
                             orb_space = 'none'
                     else:
-                        orb_space = 'ncore'
+                        if is_cvs_core_index_type(tens.indices[0]):
+                            orb_space = 'ncvs'
+                        elif is_cvs_valence_index_type(tens.indices[0]):
+                            orb_space = 'nval'
+                        else:
+                            orb_space = 'ncore'
                 else:
                     orb_space = 'ncore'
 
@@ -298,7 +304,12 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                         else:
                             orb_space = 'core'
                     else:
-                        orb_space = 'ncore'
+                        if is_cvs_core_index_type(tens.indices[0]):
+                            orb_space = 'cvs'
+                        elif is_cvs_valence_index_type(tens.indices[0]):
+                            orb_space = 'val'
+                        else:
+                            orb_space = 'core'
                 else:
                     orb_space = 'core'
 
@@ -358,6 +369,13 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                                 tensor_name += 'c'
                         elif val_ind:
                             if (tens.indices[i].name in val_ind):
+                                tensor_name += 'v'
+                            else:
+                                tensor_name += 'c'
+                        else:
+                            if is_cvs_core_index_type(tens.indices[i]):
+                                tensor_name += 'x'
+                            elif is_cvs_valence_index_type(tens.indices[i]):
                                 tensor_name += 'v'
                             else:
                                 tensor_name += 'c'
