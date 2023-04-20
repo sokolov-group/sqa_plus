@@ -92,13 +92,33 @@ def create_dummy_indices_list(spin_integrated = False, cvs_indices = False):
 
         return (cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds)
 
-    def create_cvs_dummy_indices_spin_integrated():
+    def create_cvs_dummy_indices_spin_orbital():
         # Define operator types
+        tg_cvs_cor = options.cvs_core_type
+        tg_cvs_val = options.cvs_valence_type
         tg_act = options.active_type
         tg_vir = options.virtual_type
 
+        dummy = True
+
+        # Core dummy indices
+        cvs_cor_inds = indexList('x%ia', [tg_cvs_cor], dummy)
+        cvs_val_inds = indexList('c%ia', [tg_cvs_val], dummy)
+
+        # Active dummy indices
+        act_inds = indexList('a%ia', [tg_act], dummy)
+
+        # Virtual dummy indices
+        vir_inds = indexList('v%ia', [tg_vir], dummy)
+
+        return (cvs_cor_inds, cvs_val_inds, act_inds, vir_inds)
+
+    def create_cvs_dummy_indices_spin_integrated():
+        # Define operator types
         tg_cvs_cor = options.cvs_core_type
         tg_cvs_val = options.cvs_valence_type
+        tg_act = options.active_type
+        tg_vir = options.virtual_type
 
         tg_alpha = options.alpha_type
         tg_beta = options.beta_type
@@ -129,6 +149,9 @@ def create_dummy_indices_list(spin_integrated = False, cvs_indices = False):
         else:
             dummy_indices = create_dummy_indices_spin_integrated()
     else:
-        dummy_indices = create_dummy_indices_spin_orbital()
+        if cvs_indices:
+            dummy_indices = create_cvs_dummy_indices_spin_orbital()
+        else:
+            dummy_indices = create_dummy_indices_spin_orbital()
 
     return dummy_indices
