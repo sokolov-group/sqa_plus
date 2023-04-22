@@ -52,6 +52,7 @@ def matrixBlock(terms, transRDM = False, legacy_order = False):
     termChop(nterms)
 
     # Normal ordering with respect to core orbitals
+    nterms = dummyLabel(nterms)
     fTerms = normalOrderCore(nterms)
 
     # Evaluate Kroneker delta
@@ -119,7 +120,7 @@ def dummyLabel(_terms):
                 index_user_defined = t_tensor.indices[t_tensor_index].userDefined
 
                 if index_name not in reservedInd and index_user_defined:
-                    reservedInd.append(index_name)
+                    reservedInd.append(index_user_defined)
 
         for reserved_index_name in reservedInd:
             if reserved_index_name in coreInd:

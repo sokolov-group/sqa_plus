@@ -72,7 +72,7 @@ def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True
     print("\nCombining {:} spin-adapted terms...\n".format(num_terms_sa))
     combineTerms(terms_sa)
     reorder_tensor_indices(terms_sa, reorder_t)
-    dummyLabel(terms_sa)
+    terms_sa = dummyLabel(terms_sa)
     print("\n{:} spin-adapted terms combined.".format(num_terms_sa - len(terms_sa)))
     print("\n----------------------------------------------------------------------------------")
 

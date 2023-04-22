@@ -110,7 +110,7 @@ def Heff(order = 0, spin_integrated = False, explicit_spin_cases = True, cvs_ind
     sys.stdout.flush()
     return L
 
-def dyallH(indices_lists, spin_integrated = False, explicit_spin_cases = True, cvs_indices = False):
+def dyallH(indices_lists, spin_integrated = False, explicit_spin_cases = False, cvs_indices = False):
 
     def dyallH_spin_orbital(indices_lists):
         "Construct spin-integrated Dyall Hamiltonian operator."
@@ -9723,12 +9723,12 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
-                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])) or
+                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])) or
                                   ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]))):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(0.5, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
-                            elif ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])):
+                            elif ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(1.00, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
@@ -9752,13 +9752,13 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
-                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])) or
+                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])) or
                                   ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]))):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(0.5, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
         for ind_type_1 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
-            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_alpha_inds):
+            for ind_type_2 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                 for ind_type_3 in (cor_beta_inds, act_beta_inds, vir_beta_inds):
                     for ind_type_4 in (cor_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_1 = ind_type_1.new_index()
@@ -10809,12 +10809,12 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
                                 V.append(term(-1.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
 
-                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])) or
+                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])) or
                                   ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]))):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
                                 V.append(term(-2.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
 
-                            elif ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])):
+                            elif ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
                                 V.append(term(-4.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
 
@@ -10827,12 +10827,12 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
-                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])) or
+                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])) or
                                   ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]))):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(0.5, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
-                            elif ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])):
+                            elif ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(1.00, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
@@ -10855,7 +10855,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                             if (tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]):
                                 V.append(term(-1.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
 
-                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])) or
+                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])) or
                                   ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]))):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym_braket)
                                 V.append(term(-2.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
@@ -10865,13 +10865,13 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(0.25, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
-                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[3] == tens_spatial_type[3])) or
+                            elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])) or
                                   ((tens_spatial_type[0] == tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]))):
                                 v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(0.5, [], [v_ten, creOp(ind_1), creOp(ind_2), desOp(ind_4), desOp(ind_3)]))
 
         for ind_type_1 in (cvs_cor_alpha_inds, cvs_val_alpha_inds, act_alpha_inds, vir_alpha_inds):
-            for ind_type_2 in (cvs_cor_beta_inds, cvs_val_beta_inds, act_beta_inds, vir_alpha_inds):
+            for ind_type_2 in (cvs_cor_beta_inds, cvs_val_beta_inds, act_beta_inds, vir_beta_inds):
                 for ind_type_3 in (cvs_cor_beta_inds, cvs_val_beta_inds, act_beta_inds, vir_beta_inds):
                     for ind_type_4 in (cvs_cor_alpha_inds, cvs_val_alpha_inds, act_alpha_inds, vir_alpha_inds):
                         ind_1 = ind_type_1.new_index()
