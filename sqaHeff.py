@@ -9622,7 +9622,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
 
         # Core-Active-Core-Active: <ix||jy> \gamma^x_y a^{\dag}_i a_j
         for cor_inds in [cor_alpha_inds, cor_beta_inds]:
-            for act_inds in [act_alpha_inds, cor_beta_inds]:
+            for act_inds in [act_alpha_inds, act_beta_inds]:
                 cor_1 = cor_inds.new_index()
                 act_2 = act_inds.new_index()
                 cor_3 = cor_inds.new_index()
@@ -9634,7 +9634,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
 
         # External-Active-External-Active: <ax||by> \gamma^x_y a^{\dag}_a a_b
         for vir_inds in [vir_alpha_inds, vir_beta_inds]:
-            for act_inds in [act_alpha_inds, cor_beta_inds]:
+            for act_inds in [act_alpha_inds, act_beta_inds]:
                 vir_1 = vir_inds.new_index()
                 act_2 = act_inds.new_index()
                 vir_3 = vir_inds.new_index()
@@ -10704,6 +10704,18 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
         # Core-Active-Core-Active: <ix||jy> \gamma^x_y a^{\dag}_i a_j
         for cvs_inds_1 in [cvs_cor_alpha_inds, cvs_val_alpha_inds]:
             for cvs_inds_2 in [cvs_cor_alpha_inds, cvs_val_alpha_inds]:
+                for act_inds in [act_alpha_inds, act_beta_inds]:
+                    cor_1 = cvs_inds_1.new_index()
+                    act_2 = act_inds.new_index()
+                    cor_3 = cvs_inds_2.new_index()
+                    act_4 = act_inds.new_index()
+
+                    v_ten = tensor('v', [cor_1, act_2, cor_3, act_4], v2e_sym)
+                    rdm_ten = creDesTensor([creOp(act_2), desOp(act_4)])
+                    V.append(term(1.0, [], [v_ten, rdm_ten, desOp(cor_1), creOp(cor_3)]))
+
+        for cvs_inds_1 in [cvs_cor_beta_inds, cvs_val_beta_inds]:
+            for cvs_inds_2 in [cvs_cor_beta_inds, cvs_val_beta_inds]:
                 for act_inds in [act_alpha_inds, act_beta_inds]:
                     cor_1 = cvs_inds_1.new_index()
                     act_2 = act_inds.new_index()
