@@ -89,6 +89,9 @@ class index:
 		retval = cmp(self.name, other.name)
 		if retval != 0:
 			return retval
+		retval = cmp(self.userDefined, other.userDefined)
+		if retval != 0:
+			return retval
 		return cmp(self.indType, other.indType)
 
 	def tup(self):
