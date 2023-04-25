@@ -472,9 +472,9 @@ def reorder_tensor_indices(_terms, reorder_t = True, reorder_legacy = False):
                 original_rank = []
                 for ind in unordered_tensor.indices:
                     if is_core_index_type(ind) or is_cvs_core_index_type(ind):
-                        permute_rank.append(3)
+                        original_rank.append(3)
                     elif is_cvs_valence_index_type(ind):
-                        permute_rank.append(2)
+                        original_rank.append(2)
                     elif is_active_index_type(ind):
                         original_rank.append(1)
                     elif is_virtual_index_type(ind):
