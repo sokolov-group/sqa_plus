@@ -212,7 +212,7 @@ class term:
             t = self.tensors[i]
             
             # If the term is a delta funciton with a repeated index, remove it
-            if isinstance(t, kroneckerDelta) and (t.indices[0] == t.indices[1]):
+            if isinstance(t, kroneckerDelta) and (t.indices[0] == t.indices[1]) and (t.indices[0].userDefined == t.indices[1].userDefined):
                 del(self.tensors[i])
 
             # If the term is a delta funciton with contractable indices, contract them and remove the delta func
