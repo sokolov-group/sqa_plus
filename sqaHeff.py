@@ -10853,6 +10853,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
 
                         if tens_cor_type:
                             if (tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]):
+                                v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(-1.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
 
                             elif (((tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] == tens_spatial_type[3])) or
@@ -10887,6 +10888,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
 
                         if tens_cor_type:
                             if (tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]):
+                                v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(-1.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
 
                         elif (not tens_vir_type) and (not tens_act_type):
@@ -10911,6 +10913,7 @@ def Vperturbation(indices_lists, spin_integrated = False, explicit_spin_cases = 
 
                         if tens_cor_type:
                             if (tens_spatial_type[0] != tens_spatial_type[1]) and (tens_spatial_type[2] != tens_spatial_type[3]):
+                                v_ten = tensor('v', [ind_3, ind_4, ind_1, ind_2], v2e_sym)
                                 V.append(term(-1.00, [], [v_ten, desOp(ind_3), desOp(ind_4), creOp(ind_1), creOp(ind_2)]))
 
                         elif (not tens_vir_type) and (not tens_act_type):
