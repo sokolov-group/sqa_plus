@@ -29,7 +29,8 @@ from sqaSymmetry import symmetry
 from sqaNormalOrder import normalOrder
 
 from sqaIndex import get_spatial_index_type, get_spin_index_type, \
-                     is_core_index_type, is_active_index_type, is_virtual_index_type
+                     is_core_index_type, is_active_index_type, is_virtual_index_type, \
+                     is_cvs_core_index_type, is_cvs_valence_index_type
 
 def matrixBlock(terms, transRDM = False, legacy_order = False):
     "Construct matrix block."
@@ -470,8 +471,10 @@ def reorder_tensor_indices(_terms, reorder_t = True, reorder_legacy = False):
             if reorder_tensor:
                 original_rank = []
                 for ind in unordered_tensor.indices:
-                    if is_core_index_type(ind):
-                        original_rank.append(3)
+                    if is_core_index_type(ind) or is_cvs_core_index_type(ind):
+                        permute_rank.append(3)
+                    elif is_cvs_valence_index_type(ind):
+                        permute_rank.append(2)
                     elif is_active_index_type(ind):
                         original_rank.append(1)
                     elif is_virtual_index_type(ind):
@@ -485,8 +488,10 @@ def reorder_tensor_indices(_terms, reorder_t = True, reorder_legacy = False):
 
                     permuted_indices = [unordered_tensor.indices[ind] for ind in permute_indices]
                     for ind in permuted_indices:
-                        if is_core_index_type(ind):
+                        if is_core_index_type(ind) or is_cvs_core_index_type(ind):
                             permute_rank.append(3)
+                        elif is_cvs_valence_index_type(ind):
+                            permute_rank.append(2)
                         elif is_active_index_type(ind):
                             permute_rank.append(1)
                         elif is_virtual_index_type(ind):
