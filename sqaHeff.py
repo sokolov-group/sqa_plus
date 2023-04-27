@@ -2460,6 +2460,23 @@ def Tamplitude(order = 1, indices_lists = None, spin_integrated = False, explici
             T.append(T2_ex)
             T.append(T2_dex)
 
+        # Active-External: t_x^a
+        act_1 = act_alpha_inds.new_index()
+        vir_2 = vir_alpha_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
+        act_1 = act_beta_inds.new_index()
+        vir_2 = vir_beta_inds.new_index()
+        t1_ten = tensor(tname, [act_1, vir_2], t1_ten_symm)
+        T1_ex  = term( 1.0, [], [t1_ten, creOp(vir_2), desOp(act_1)])
+        T1_dex = term(-1.0, [], [t1_ten, creOp(act_1), desOp(vir_2)])
+        T.append(T1_ex)
+        T.append(T1_dex)
+
         # Active-External: t_{xy}^{az}
         act_1 = act_alpha_inds.new_index()
         act_2 = act_alpha_inds.new_index()
