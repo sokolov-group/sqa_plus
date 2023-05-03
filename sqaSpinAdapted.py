@@ -1346,6 +1346,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 
     # Define Spin-Adapted Amplitudes Symmetries
     t1_sa_symm = [symmetry((1,0), 1)]
+    t2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
 
     # Define 1e- indices lists
     inds_aa = [options.alpha_type, options.alpha_type]
@@ -1405,9 +1406,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 
                 if (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
 
-                    # Define Spin-Adapted Amplitudes Symmetries
-                    t2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
-
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten1_t2 = ten_t2.copy()
@@ -1446,9 +1444,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 
                 elif (ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
 
-                    # Define Spin-Adapted Amplitudes Symmetries
-                    t2_sa_symm = [symmetry((2,3,0,1), 1)]
-
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten1_t2 = ten_t2.copy()
@@ -1486,8 +1481,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         consts_t2_sa.append([const1_t2])
 
                 elif (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3]):
-                    # Define Spin-Adapted Amplitudes Symmetries
-                    t2_sa_symm = [symmetry((2,3,0,1), 1)]
 
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
@@ -1526,8 +1519,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         consts_t2_sa.append([const1_t2])
 
                 elif ((ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3])):
-                    # Define Spin-Adapted Amplitudes Symmetries
-                    t2_sa_symm = [symmetry((0,1,2,3), 1)]
 
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
