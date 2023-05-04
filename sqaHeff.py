@@ -2707,8 +2707,8 @@ def Tamplitude(order = 1, indices_lists = None, spin_integrated = False, explici
             vir_3 = vir_beta_inds.new_index()
             vir_4 = vir_alpha_inds.new_index()
             t2_ten = tensor(tname, [cor_1, act_2, vir_3, vir_4], t2_ten_symm_pqrr)
-            T2_ex  = term( 0.5, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
-            T2_dex = term(-0.5, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
+            T2_ex  = term( 1.0, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(cor_1)])
+            T2_dex = term(-1.0, [], [t2_ten, creOp(cor_1), creOp(act_2), desOp(vir_4), desOp(vir_3)])
             T.append(T2_ex)
             T.append(T2_dex)
 
