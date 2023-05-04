@@ -29,17 +29,14 @@ from sqaCommutator import commutator
 from sqaIndexList import indexLists
 from sqaOptions import options
 
-#TODO: Improve functions descriptions
-def Heff(order = 0, internal_excit = True):
+def Heff(order = 0, internal_excitations = True):
     "Construct effective Hamiltonian (L)."
 
-    #TODO: Improve printing
-    #TODO: It should print information about spin basis and CVS
     print("--------------------------------- Hamiltonian({:}) ---------------------------------".format(order))
     sys.stdout.flush()
     #   order = 0 : L(0) = H(0)
-    #   order = 1 : L(1) = V + [H(0),T(1) - T'(1)]
-    #   order = 2 : L(2) = [H(0),(T(2) - T'(2))] + 1/2 * [(V + L(1)), (T(1) - T'(1))]
+    #   order = 1 : L(1) = V + [H(0), T(1) - T'(1)]
+    #   order = 2 : L(2) = [H(0), (T(2) - T'(2))] + 1/2 * [(V + L(1)), (T(1) - T'(1))]
 
     if (order == 0):
         # L(0) = H(0)
@@ -69,7 +66,7 @@ def Heff(order = 0, internal_excit = True):
 
         effH = dyallH()
 
-        T2 = Tamplitude(2, internal_excit)
+        T2 = Tamplitude(2, internal_excitations)
 
         com1 = commutator(effH, T2)
         print("First Commutation: Done ...")
@@ -112,9 +109,10 @@ def Heff(order = 0, internal_excit = True):
     return L
 
 def dyallH():
+    "Construct Dyall Hamiltonian operator."
 
     def dyallH_spin_orbital():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-orbital Dyall Hamiltonian operator."
 
         cor_inds = indexLists.core
         act_inds = indexLists.active
@@ -351,7 +349,7 @@ def dyallH():
         return DyallH
 
     def dyallH_cvs_spin_orbital():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-orbital Dyall Hamiltonian operator using CVS approach."
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -404,7 +402,7 @@ def dyallH():
         return DyallH
 
     def dyallH_cvs_spin_integrated():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-integrated Dyall Hamiltonian operator using CVS approach."
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -473,7 +471,7 @@ def dyallH():
         return DyallH
 
     def dyallH_cvs_spin_integrated_explicit_cases():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-integrated Dyall Hamiltonian operator using CVS approach."
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -646,9 +644,10 @@ def dyallH():
     return dyallH
 
 def dyallH_act():
+    "Construct Dyall Hamiltonian active-space operator."
 
     def dyallH_act_spin_orbital():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-orbital Dyall Hamiltonian active-space operator."
 
         cor_inds = indexLists.core
         act_inds = indexLists.active
@@ -679,7 +678,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_spin_integrated():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-integrated Dyall Hamiltonian active-space operator."
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -724,7 +723,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_spin_integrated_explicit_cases():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-integrated Dyall Hamiltonian active-space operator."
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -816,7 +815,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_cvs_spin_orbital():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-orbital Dyall Hamiltonian active-space operator using CVS approach."
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -849,7 +848,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_cvs_spin_integrated():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-orbital Dyall Hamiltonian active-space operator using CVS approach."
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -902,7 +901,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_cvs_spin_integrated_explicit_cases():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        "Construct spin-integrated Dyall Hamiltonian active-space operator using CVS approach."
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -1038,11 +1037,11 @@ def dyallH_act():
 
     return dyallH_act
 
-def Tamplitude(order = 1, internal_excit = True):
-    # Cluster operator  : T - T^dag, Where T = T1 + T2
-    # Single excitation : T1
+def Tamplitude(order = 1, internal_excitations = True):
+    "Construct cluster operator: T - T^\dag; where T = T1 + T2"
 
-    def Tamplitude_spin_orbital(order, internal_excit):
+    def Tamplitude_spin_orbital(order, internal_excitations):
+        "Construct spin-orbital T amplitudes operator."
 
         cor_inds = indexLists.core
         act_inds = indexLists.active
@@ -1178,7 +1177,7 @@ def Tamplitude(order = 1, internal_excit = True):
         T.append(T2_ex)
         T.append(T2_dex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             act_1 = act_inds.new_index()
             act_2 = act_inds.new_index()
             t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
@@ -1187,7 +1186,8 @@ def Tamplitude(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_spin_integrated(order, internal_excit):
+    def Tamplitude_spin_integrated(order, internal_excitations):
+        "Construct spin-integrated T amplitudes operator."
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -1581,7 +1581,7 @@ def Tamplitude(order = 1, internal_excit = True):
         T.append(T2_ex)
         T.append(T2_dex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             t1_asym = [symmetry((1,0), -1)]
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
@@ -1597,7 +1597,8 @@ def Tamplitude(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_spin_integrated_explicit_cases(order, internal_excit):
+    def Tamplitude_spin_integrated_explicit_cases(order, internal_excitations):
+        "Construct spin-integrated T amplitudes operator."
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -2161,7 +2162,7 @@ def Tamplitude(order = 1, internal_excit = True):
         T.append(T2_ex)
         T.append(T2_dex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             t1_asym = [symmetry((1,0), -1)]
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
@@ -2177,7 +2178,8 @@ def Tamplitude(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_cvs_spin_orbital(order, internal_excit):
+    def Tamplitude_cvs_spin_orbital(order, internal_excitations):
+        "Construct spin-orbital T amplitudes operator using CVS approach."
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -2352,7 +2354,7 @@ def Tamplitude(order = 1, internal_excit = True):
         T.append(T2_ex)
         T.append(T2_dex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             act_1 = act_inds.new_index()
             act_2 = act_inds.new_index()
             t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
@@ -2361,7 +2363,8 @@ def Tamplitude(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_cvs_spin_integrated(order, internal_excit):
+    def Tamplitude_cvs_spin_integrated(order, internal_excitations):
+        "Construct spin-integrated T amplitudes operator using CVS approach."
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -2849,7 +2852,7 @@ def Tamplitude(order = 1, internal_excit = True):
         T.append(T2_ex)
         T.append(T2_dex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
             t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
@@ -2864,7 +2867,8 @@ def Tamplitude(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_cvs_spin_integrated_explicit_cases(order, internal_excit):
+    def Tamplitude_cvs_spin_integrated_explicit_cases(order, internal_excitations):
+        "Construct spin-integrated T amplitudes operator using CVS approach."
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -4182,7 +4186,7 @@ def Tamplitude(order = 1, internal_excit = True):
         T.append(T2_ex)
         T.append(T2_dex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             t1_asym = [symmetry((1,0), -1)]
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
@@ -4201,27 +4205,27 @@ def Tamplitude(order = 1, internal_excit = True):
     if options.spin_integrated:
         if options.explicit_spin_cases:
             if options.cvs_approach:
-                T = Tamplitude_cvs_spin_integrated_explicit_cases(order, internal_excit)
+                T = Tamplitude_cvs_spin_integrated_explicit_cases(order, internal_excitations)
             else:
-                T = Tamplitude_spin_integrated_explicit_cases(order, internal_excit)
+                T = Tamplitude_spin_integrated_explicit_cases(order, internal_excitations)
         else:
             if options.cvs_approach:
-                T = Tamplitude_cvs_spin_integrated(order, internal_excit)
+                T = Tamplitude_cvs_spin_integrated(order, internal_excitations)
             else:
-                T = Tamplitude_spin_integrated(order, internal_excit)
+                T = Tamplitude_spin_integrated(order, internal_excitations)
     elif options.spin_orbital:
         if options.cvs_approach:
-            T = Tamplitude_cvs_spin_orbital(order, internal_excit)
+            T = Tamplitude_cvs_spin_orbital(order, internal_excitations)
         else:
-            T = Tamplitude_spin_orbital(order, internal_excit)
+            T = Tamplitude_spin_orbital(order, internal_excitations)
 
     return T
 
 #TODO: Tamplitude_excitation and _dexcitation needs to be updated
 #TODO: Check 2-order terms in the end of _excitation
-def Tamplitude_excitation(order = 1, internal_excit = True):
+def Tamplitude_excitation(order = 1, internal_excitations = True):
 
-    def Tamplitude_excitation_spin_orbital(order, internal_excit):
+    def Tamplitude_excitation_spin_orbital(order, internal_excitations):
 
         cor_inds = indexLists.core
         act_inds = indexLists.active
@@ -4337,7 +4341,7 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_excitation_spin_integrated(order, internal_excit):
+    def Tamplitude_excitation_spin_integrated(order, internal_excitations):
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -4603,7 +4607,7 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_excitation_spin_integrated_explicit_cases(order, internal_excit):
+    def Tamplitude_excitation_spin_integrated_explicit_cases(order, internal_excitations):
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -5061,7 +5065,7 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_excitation_cvs_spin_orbital(order, internal_excit):
+    def Tamplitude_excitation_cvs_spin_orbital(order, internal_excitations):
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -5208,7 +5212,7 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             act_1 = act_inds.new_index()
             act_2 = act_inds.new_index()
             t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
@@ -5217,7 +5221,7 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_excitation_cvs_spin_integrated(order, internal_excit):
+    def Tamplitude_excitation_cvs_spin_integrated(order, internal_excitations):
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -5800,7 +5804,7 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
         T2_ex  = term( 1.00, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
             t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
@@ -5815,7 +5819,7 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
 
         return T
 
-    def Tamplitude_excitation_cvs_spin_integrated_explicit_cases(order, internal_excit):
+    def Tamplitude_excitation_cvs_spin_integrated_explicit_cases(order, internal_excitations):
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -6873,7 +6877,7 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
         T2_ex  = term( 0.25, [], [t2_ten, creOp(vir_3), creOp(vir_4), desOp(act_2), desOp(act_1)])
         T.append(T2_ex)
 
-        if (order == 2 and internal_excit):
+        if (order == 2 and internal_excitations):
             t1_asym = [symmetry((1,0), -1)]
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
@@ -6892,19 +6896,19 @@ def Tamplitude_excitation(order = 1, internal_excit = True):
     if options.spin_integrated:
         if options.explicit_spin_cases:
             if options.cvs_approach:
-                T = Tamplitude_excitation_cvs_spin_integrated_explicit_cases(order, internal_excit)
+                T = Tamplitude_excitation_cvs_spin_integrated_explicit_cases(order, internal_excitations)
             else:
-                T = Tamplitude_excitation_spin_integrated_explicit_cases(order, internal_excit)
+                T = Tamplitude_excitation_spin_integrated_explicit_cases(order, internal_excitations)
         else:
             if options.cvs_approach:
-                T = Tamplitude_excitation_cvs_spin_integrated(order, internal_excit)
+                T = Tamplitude_excitation_cvs_spin_integrated(order, internal_excitations)
             else:
-                T = Tamplitude_excitation_spin_integrated(order, internal_excit)
+                T = Tamplitude_excitation_spin_integrated(order, internal_excitations)
     elif options.spin_orbital:
         if options.cvs_approach:
-            T = Tamplitude_excitation_cvs_spin_orbital(order, internal_excit)
+            T = Tamplitude_excitation_cvs_spin_orbital(order, internal_excitations)
         else:
-            T = Tamplitude_excitation_spin_orbital(order, internal_excit)
+            T = Tamplitude_excitation_spin_orbital(order, internal_excitations)
 
     return T
 
@@ -9556,6 +9560,7 @@ def Tamplitude_deexcitation(order = 1):
     return T
 
 def Vperturbation():
+    "Construct perturbation operator V."
 
     def Vperturbation_spin_orbital():
         "Construct spin-orbital perturbation operator V."
@@ -10462,7 +10467,7 @@ def Vperturbation():
         return V
 
     def Vperturbation_cvs_spin_orbital():
-        "Construct spin-orbital perturbation operator V."
+        "Construct spin-orbital perturbation operator V using CVS approach."
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -10605,7 +10610,7 @@ def Vperturbation():
         return V
 
     def Vperturbation_cvs_spin_integrated():
-        "Construct spin-integrated perturbation operator V."
+        "Construct spin-integrated perturbation operator V using CVS approach."
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -10930,7 +10935,7 @@ def Vperturbation():
         return V
 
     def Vperturbation_cvs_spin_integrated_explicit_cases():
-        "Construct spin-integrated perturbation operator V."
+        "Construct spin-integrated perturbation operator V using CVS approach."
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -12085,7 +12090,7 @@ def Vperturbation():
 
         return V
 
-    if option.spin_integrated:
+    if options.spin_integrated:
         if options.explicit_spin_cases:
             if options.cvs_approach:
                 V = Vperturbation_cvs_spin_integrated_explicit_cases()
