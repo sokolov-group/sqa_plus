@@ -126,14 +126,12 @@ from sqaHeff import         \
   Tamplitude,               \
   Tamplitude_excitation,    \
   Tamplitude_deexcitation,  \
-  Vperturbation,            \
-  getT,                     \
-  getV                      \
+  Vperturbation
 
 from sqaEinsum import genEinsum
 
 from sqaIndexList import    \
-  indexList,                \
-  create_dummy_indices_list
+  indexLists,               \
+  dummyIndexList
 
 from sqaSpinAdapted import convertSpinIntegratedToAdapted
