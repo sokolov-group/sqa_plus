@@ -18,12 +18,34 @@
 # Author: Eric Neuscamman <eric.neuscamman@gmail.com>
 #
 
-class sqaOptions:
-    "A class to hold options for the second quantization algebra program."
+class sqaSpinBasis(object):
+    "A class to define types of spin-basis"
+
+    def __init__(self, value):
+        self.spin_basis = value        
+
+    def __get__(self, instance, owner):
+        return (instance.spin_basis == self.spin_basis)
+
+    def __set__(self, instance, value):
+        if type(value) == type(True):
+            if value:
+                instance.spin_basis = self.spin_basis
+        else:
+            raise Exception("Spin-basis should be 'True' or 'False' ...")
+
+class sqaOptions(object):
+    "A class to hold options for the SecondQuantizationAlgebra+."
+
+    spin_orbital = sqaSpinBasis('spin_orbital')
+    spin_adapted = sqaSpinBasis('spin_adapted')
+    spin_integrated = sqaSpinBasis('spin_integrated')
 
     def __init__(self):
         # Set default options
         self.verbose = False
+
+        # Indices types
         self.alpha_type = ('alpha',)
         self.beta_type = ('beta',)
 
@@ -34,6 +56,12 @@ class sqaOptions:
         self.cvs_core_type = ('cvs',)
         self.cvs_valence_type = ('valence',)
 
+        # Spin basis
+        self.spin_basis = 'spin_orbital'
+        self.explicit_spin_cases = False
+
+        # Core-Valence Separation approach
+        self.cvs_approach = False
 
 # Create an object of the options class
 options = sqaOptions()
