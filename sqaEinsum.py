@@ -533,17 +533,18 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
             coreTerm = False
             for tens_ind, tens in enumerate(term.tensors):
                 if tens.name == 'v':
-                    if ((
-                        (options.physicists_notation) and
-                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[2].name) or
-                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name) or
-                        (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[2].name) or
-                        (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[3].name))
-                        or ((options.chemists_notation) and
-                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[1].name) or
-                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name) or
-                        (terms[term_ind].tensors[tens_ind].indices[2].name) == (terms[term_ind].tensors[tens_ind].indices[1].name) or
-                        (terms[term_ind].tensors[tens_ind].indices[2].name) == (terms[term_ind].tensors[tens_ind].indices[3].name))):
+                    if (((options.physicists_notation) and
+                         (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[2].name) or
+                         (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name) or
+                         (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[2].name) or
+                         (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[3].name))
+                        or 
+                        ((options.chemists_notation) and
+                         (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[1].name) or
+                         (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name) or
+                         (terms[term_ind].tensors[tens_ind].indices[2].name) == (terms[term_ind].tensors[tens_ind].indices[1].name) or
+                         (terms[term_ind].tensors[tens_ind].indices[2].name) == (terms[term_ind].tensors[tens_ind].indices[3].name))
+                       ):
                         coreTerm = True
                         break
 
@@ -585,12 +586,18 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
                 # If intermediate is defined w/ 2e- integral
                 if tens.name == 'v':
-                    if (
-                        (tens.indices[0].name) == (tens.indices[2].name)
-                        or (tens.indices[0].name) == (tens.indices[3].name)
-                        or (tens.indices[1].name) == (tens.indices[2].name)
-                        or (tens.indices[1].name) == (tens.indices[3].name)
-                    ):
+                    if (((options.physicists_notation) and
+                         (tens.indices[0].name) == (tens.indices[2].name) or
+                         (tens.indices[0].name) == (tens.indices[3].name) or
+                         (tens.indices[1].name) == (tens.indices[2].name) or
+                         (tens.indices[1].name) == (tens.indices[3].name))
+                        or 
+                        ((options.chemists_notation) and
+                         (tens.indices[0].name) == (tens.indices[1].name) or
+                         (tens.indices[0].name) == (tens.indices[3].name) or
+                         (tens.indices[2].name) == (tens.indices[1].name) or
+                         (tens.indices[2].name) == (tens.indices[3].name))
+                        ):
                         removed_int.append(int_tensor.name)
                         removed_terms.append(terms[int_ind])
                         break
