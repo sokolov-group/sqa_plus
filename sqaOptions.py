@@ -74,7 +74,6 @@ class sqaOptions(object):
         self.legacy_ordering = True
 
         # MatrixBlock options
-        #TODO: Check if it's redundant with genEinsum.remove_trans_rdm_constant
         self.matrixBlock = lambda:None
         self.matrixBlock.remove_trans_rdm_constant = False
 
@@ -98,6 +97,11 @@ class sqaOptions(object):
 
         self.genEinsum.opt_einsum_terms = True
         self.genEinsum.optimize = True
+
+        # genIntermediates options
+        self.genIntermediates = lambda:None
+        self.genIntermediates.trans_rdm = False
+        self.genIntermediates.factor_depth = 1
 
     def add_user_defined_index(self, name):
         if name not in self.user_defined_indices:
