@@ -37,12 +37,31 @@ class sqaSpinBasis(object):
         else:
             raise Exception("Spin-basis must be True or False ...")
 
+class sqaTensorNotation(object):
+    "A class to define types of tensors notations"
+
+    def __init__(self, value):
+        self.tensors_notation = value        
+
+    def __get__(self, instance, owner):
+        return (instance.tensors_notation == self.tensors_notation)
+
+    def __set__(self, instance, value):
+        if type(value) == type(True):
+            if value:
+                instance.tensors_notation = self.tensors_notation
+        else:
+            raise Exception("Tensors notation must be True or False ...")
+
 class sqaOptions(object):
     "A class to hold options for the SecondQuantizationAlgebra+."
 
     spin_orbital = sqaSpinBasis('spin_orbital')
     spin_adapted = sqaSpinBasis('spin_adapted')
     spin_integrated = sqaSpinBasis('spin_integrated')
+
+    chemists_notation = sqaTensorNotation('chemists')
+    physicists_notation = sqaTensorNotation('physicists')
 
     def __init__(self):
         # Set default options
@@ -62,6 +81,9 @@ class sqaOptions(object):
         # Spin basis
         self.spin_basis = 'spin_orbital'
         self.explicit_spin_cases = False
+
+        # Tensors notations
+        self.tensors_notation = 'physicists'
 
         # Core-Valence Separation approach
         self.cvs_approach = False

@@ -533,12 +533,17 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
             coreTerm = False
             for tens_ind, tens in enumerate(term.tensors):
                 if tens.name == 'v':
-                    if (
-                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
-                        or (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
-                        or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[2].name)
-                        or (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[3].name)
-                    ):
+                    if ((
+                        (options.physicists_notation) and
+                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[2].name) or
+                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name) or
+                        (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[2].name) or
+                        (terms[term_ind].tensors[tens_ind].indices[1].name) == (terms[term_ind].tensors[tens_ind].indices[3].name))
+                        or ((options.chemists_notation) and
+                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[1].name) or
+                        (terms[term_ind].tensors[tens_ind].indices[0].name) == (terms[term_ind].tensors[tens_ind].indices[3].name) or
+                        (terms[term_ind].tensors[tens_ind].indices[2].name) == (terms[term_ind].tensors[tens_ind].indices[1].name) or
+                        (terms[term_ind].tensors[tens_ind].indices[2].name) == (terms[term_ind].tensors[tens_ind].indices[3].name))):
                         coreTerm = True
                         break
 
