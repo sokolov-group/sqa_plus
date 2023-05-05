@@ -220,15 +220,15 @@ def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
             einsum_list.append(einsum)
 
     if intermediate_list:
-        print("\n------------------------------ genEinsum intermediates ------------------------------\n")
+        options.print_header("genEinsum intermediates")
         for _einsum in int_einsum_list:
             print(_einsum)
-        print("\n-------------------------------------------------------------------------------------\n")
+        options.print_divider()
 
-    print("\n-------------------------------- genEinsum equations --------------------------------\n")
+    options.print_header("genEinsum equations")
     for _einsum in einsum_list:
         print(_einsum)
-    print("\n-------------------------------------------------------------------------------------\n")
+    options.print_divider()
 
     # Modify return for intermediate term definition
     if intermediate_list:
@@ -520,7 +520,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
     # Remove terms from standard term list
     if not int_terms:
-        print('\n------------------------------------ WARNING -------------------------------------')
+        options.print_header("WARNING")
         print('Terms with a contraction over repeating dummy core indices of 2e- integrals')
         print('will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms')
 
@@ -558,7 +558,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
         for term in core_terms:
             print(term)
 
-        print('----------------------------------------------------------------------------------')
+        options.print_divider()
         print('Remaining terms: ' + str(len(kept_terms)))
         print('')
 
@@ -566,7 +566,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
     # Filter through intermediate definitions
     else:
-        print('------------------------------------- WARNING ------------------------------------')
+        options.print_header("WARNING")
         print('Intermediate tensors defined w/ contractions over repeating dummy core indices of')
         print('2e- integrals will be removed. Set "remove_core_integrals" flag to FALSE to preserve definitions')
 
@@ -603,7 +603,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
             for tens, term in zip(removed_int, removed_terms):
                 print(tens + ": " + str(term[0]))
 
-        print('----------------------------------------------------------------------------------')
+        options.print_divider()
         print('')
 
         # Returned shortened intermediate list
@@ -613,7 +613,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 
 def remove_trans_rdm_const(terms, trans_int_list = None):
 
-    print('--------------------------------- WARNING ---------------------------------')
+    options.print_header("WARNING")
     print('Terms w/o transRDM tensor in the expression will be removed. Set "remove_trans_rdm_constant"')
     print('flag to FALSE to preserve terms')
 
@@ -650,7 +650,7 @@ def remove_trans_rdm_const(terms, trans_int_list = None):
     for term in const_terms:
         print(term)
 
-    print('---------------------------------------------------------------------------')
+    options.print_divider()
     print('Remaining terms: ' + str(len(trans_rdm_terms)))
     print('')
 

@@ -40,17 +40,17 @@ def decomp_3rdms_to_2rdms_so(inTerms, d3name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
 
     # Check input
     if type(inTerms) != type([]):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
 
     # Initialize index
     i = 0
@@ -65,7 +65,7 @@ def decomp_3rdms_to_2rdms_so(inTerms, d3name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
 
         # Check input
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize the rdm variable
         rdm = False
@@ -93,7 +93,7 @@ def decomp_3rdms_to_2rdms_so(inTerms, d3name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
             del(inTerms[i])
 
     if options.verbose:
-        print 'decomposed %i 3-body RDMs' %(opCount)
+        print('decomposed %i 3-body RDMs' %(opCount))
 
 
 #--------------------------------------------------------------------------------------------------
@@ -111,17 +111,17 @@ def decomp_4rdms_to_2rdms_so(inTerms, d4name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
 
     # Check input
     if type(inTerms) != type([]):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
 
     # Initialize index
     i = 0
@@ -136,7 +136,7 @@ def decomp_4rdms_to_2rdms_so(inTerms, d4name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
 
         # Check input
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize the rdm variable
         rdm = False
@@ -164,7 +164,7 @@ def decomp_4rdms_to_2rdms_so(inTerms, d4name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
             del(inTerms[i])
 
     if options.verbose:
-        print 'decomposed %i 4-body RDMs' %(opCount)
+        print('decomposed %i 4-body RDMs' %(opCount))
 
 
 #--------------------------------------------------------------------------------------------------
@@ -182,25 +182,25 @@ def decomp_4rdms_to_3rdms_so(inTerms, d4name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
 
     # Check input
     if type(inTerms) != type([]):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
     if ( not isinstance(d3_aaaaaa, tensor) ) or (len(d3_aaaaaa.indices) != 6):
-        raise TypeError, "d3_aaaaaa must be a tensor with 6 indices"
+        raise TypeError("d3_aaaaaa must be a tensor with 6 indices")
     if ( not isinstance(d3_bbbbbb, tensor) ) or (len(d3_bbbbbb.indices) != 6):
-        raise TypeError, "d3_bbbbbb must be a tensor with 6 indices"
+        raise TypeError("d3_bbbbbb must be a tensor with 6 indices")
     if ( not isinstance(d3_baabaa, tensor) ) or (len(d3_baabaa.indices) != 6):
-        raise TypeError, "d3_baabaa must be a tensor with 6 indices"
+        raise TypeError("d3_baabaa must be a tensor with 6 indices")
     if ( not isinstance(d3_abbabb, tensor) ) or (len(d3_abbabb.indices) != 6):
-        raise TypeError, "d3_abbabb must be a tensor with 6 indices"
+        raise TypeError("d3_abbabb must be a tensor with 6 indices")
 
     # Initialize index
     i = 0
@@ -215,7 +215,7 @@ def decomp_4rdms_to_3rdms_so(inTerms, d4name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
 
         # Check input
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize the rdm variable
         rdm = False
@@ -243,7 +243,7 @@ def decomp_4rdms_to_3rdms_so(inTerms, d4name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
             del(inTerms[i])
 
     if options.verbose:
-        print 'decomposed %i 4-body RDMs' %(opCount)
+        print('decomposed %i 4-body RDMs' %(opCount))
 
 
 #--------------------------------------------------------------------------------------------------
@@ -268,17 +268,17 @@ def decomp_3rdm_to_2rdm_so(d3, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
 
     # Check input
     if ( not isinstance(d3, tensor) ) or (len(d3.indices) != 6):
-        raise TypeError, "d3 must be a tensor with 6 indices"
+        raise TypeError("d3 must be a tensor with 6 indices")
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
 
     # Create dummy tensors for unknown-spin 1 and 2 rdms
     taken_names = [d3.name, d1_aa.name, d1_bb.name, d2_aaaa.name, d2_bbbb.name, d2_abab.name] 
@@ -313,7 +313,7 @@ def decomp_3rdm_to_2rdm_so(d3, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
             # determine the sign of the term based on the number of index permutations
             n_perm = get_num_perms(ti,bi)
             if n_perm > 1:
-                raise ValueError, "n_perm = %i which is > 1.    This was unexpected." %n_perm
+                raise ValueError("n_perm = %i which is > 1.    This was unexpected." %n_perm)
             sign = (-1)**n_perm
 
             # create the 1RDM 2RDM term
@@ -405,17 +405,17 @@ def decomp_4rdm_to_2rdm_so(d4, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
 
     # Check input
     if ( not isinstance(d4, tensor) ) or (len(d4.indices) != 8):
-        raise TypeError, "d4 must be a tensor with 8 indices"
+        raise TypeError("d4 must be a tensor with 8 indices")
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
 
     # Create dummy tensors for unknown-spin 1 and 2 rdms
     taken_names = [d4.name, d1_aa.name, d1_bb.name, d2_aaaa.name, d2_bbbb.name, d2_abab.name] 
@@ -659,25 +659,25 @@ def decomp_4rdm_to_3rdm_so(d4, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab, d3_aaaaa
 
     # Check input
     if ( not isinstance(d4, tensor) ) or (len(d4.indices) != 8):
-        raise TypeError, "d4 must be a tensor with 8 indices"
+        raise TypeError("d4 must be a tensor with 8 indices")
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
     if ( not isinstance(d3_aaaaaa, tensor) ) or (len(d3_aaaaaa.indices) != 6):
-        raise TypeError, "d3_aaaaaa must be a tensor with 6 indices"
+        raise TypeError("d3_aaaaaa must be a tensor with 6 indices")
     if ( not isinstance(d3_bbbbbb, tensor) ) or (len(d3_bbbbbb.indices) != 6):
-        raise TypeError, "d3_bbbbbb must be a tensor with 6 indices"
+        raise TypeError("d3_bbbbbb must be a tensor with 6 indices")
     if ( not isinstance(d3_baabaa, tensor) ) or (len(d3_baabaa.indices) != 6):
-        raise TypeError, "d3_baabaa must be a tensor with 6 indices"
+        raise TypeError("d3_baabaa must be a tensor with 6 indices")
     if ( not isinstance(d3_abbabb, tensor) ) or (len(d3_abbabb.indices) != 6):
-        raise TypeError, "d3_abbabb must be a tensor with 6 indices"
+        raise TypeError("d3_abbabb must be a tensor with 6 indices")
 
     # Create dummy tensors for unknown-spin rdms
     taken_names = [d4.name, d1_aa.name, d1_bb.name, d2_aaaa.name, d2_bbbb.name, d2_abab.name, \
@@ -950,17 +950,17 @@ def decomp_3ops_to_2ops_2rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
 
     # Check input
     if type(inTerms) != type([]):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
 
     # Initialize index
     i = 0
@@ -975,7 +975,7 @@ def decomp_3ops_to_2ops_2rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
 
         # Check input
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize the operator variable
         op = False
@@ -1018,7 +1018,7 @@ def decomp_3ops_to_2ops_2rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
             del(inTerms[i])
 
     if options.verbose:
-        print 'decomposed %i 3-body operators' %(opCount)
+        print('decomposed %i 3-body operators' %(opCount))
 
 
 #--------------------------------------------------------------------------------------------------
@@ -1036,17 +1036,17 @@ def decomp_4ops_to_2ops_2rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
 
     # Check input
     if type(inTerms) != type([]):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
 
     # Initialize index
     i = 0
@@ -1061,7 +1061,7 @@ def decomp_4ops_to_2ops_2rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
 
         # Check input
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize the operator variable
         op = False
@@ -1106,7 +1106,7 @@ def decomp_4ops_to_2ops_2rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
             del(inTerms[i])
 
     if options.verbose:
-        print 'decomposed %i 4-body operators' %(opCount)
+        print('decomposed %i 4-body operators' %(opCount))
 
 
 #--------------------------------------------------------------------------------------------------
@@ -1124,25 +1124,25 @@ def decomp_3ops_to_2ops_3rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
 
     # Check input
     if type(inTerms) != type([]):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
     if ( not isinstance(d3_aaaaaa, tensor) ) or (len(d3_aaaaaa.indices) != 6):
-        raise TypeError, "d3_aaaaaa must be a tensor with 6 indices"
+        raise TypeError("d3_aaaaaa must be a tensor with 6 indices")
     if ( not isinstance(d3_bbbbbb, tensor) ) or (len(d3_bbbbbb.indices) != 6):
-        raise TypeError, "d3_bbbbbb must be a tensor with 6 indices"
+        raise TypeError("d3_bbbbbb must be a tensor with 6 indices")
     if ( not isinstance(d3_baabaa, tensor) ) or (len(d3_baabaa.indices) != 6):
-        raise TypeError, "d3_baabaa must be a tensor with 6 indices"
+        raise TypeError("d3_baabaa must be a tensor with 6 indices")
     if ( not isinstance(d3_abbabb, tensor) ) or (len(d3_abbabb.indices) != 6):
-        raise TypeError, "d3_abbabb must be a tensor with 6 indices"
+        raise TypeError("d3_abbabb must be a tensor with 6 indices")
 
     # Initialize index
     i = 0
@@ -1157,7 +1157,7 @@ def decomp_3ops_to_2ops_3rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
 
         # Check input
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize the operator variable
         op = False
@@ -1200,7 +1200,7 @@ def decomp_3ops_to_2ops_3rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
             del(inTerms[i])
 
     if options.verbose:
-        print 'decomposed %i 3-body operators' %(opCount)
+        print('decomposed %i 3-body operators' %(opCount))
 
 
 #--------------------------------------------------------------------------------------------------
@@ -1218,25 +1218,25 @@ def decomp_4ops_to_2ops_3rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
 
     # Check input
     if type(inTerms) != type([]):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
     if ( not isinstance(d3_aaaaaa, tensor) ) or (len(d3_aaaaaa.indices) != 6):
-        raise TypeError, "d3_aaaaaa must be a tensor with 6 indices"
+        raise TypeError("d3_aaaaaa must be a tensor with 6 indices")
     if ( not isinstance(d3_bbbbbb, tensor) ) or (len(d3_bbbbbb.indices) != 6):
-        raise TypeError, "d3_bbbbbb must be a tensor with 6 indices"
+        raise TypeError("d3_bbbbbb must be a tensor with 6 indices")
     if ( not isinstance(d3_baabaa, tensor) ) or (len(d3_baabaa.indices) != 6):
-        raise TypeError, "d3_baabaa must be a tensor with 6 indices"
+        raise TypeError("d3_baabaa must be a tensor with 6 indices")
     if ( not isinstance(d3_abbabb, tensor) ) or (len(d3_abbabb.indices) != 6):
-        raise TypeError, "d3_abbabb must be a tensor with 6 indices"
+        raise TypeError("d3_abbabb must be a tensor with 6 indices")
 
     # Initialize index
     i = 0
@@ -1251,7 +1251,7 @@ def decomp_4ops_to_2ops_3rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
 
         # Check input
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize the operator variable
         op = False
@@ -1296,7 +1296,7 @@ def decomp_4ops_to_2ops_3rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
             del(inTerms[i])
 
     if options.verbose:
-        print 'decomposed %i 4-body operators' %(opCount)
+        print('decomposed %i 4-body operators' %(opCount))
 
 
 #--------------------------------------------------------------------------------------------------
@@ -1316,17 +1316,17 @@ def decomp_3op_to_2op_2rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
     if type(op) != type([]) or len(op) != 6 or \
          not (isinstance(op[0], creOp) and isinstance(op[1], creOp) and isinstance(op[2], creOp) and \
                     isinstance(op[3], desOp) and isinstance(op[4], desOp) and isinstance(op[5], desOp)):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
 
     # Create dummy tensors for unknown-spin 1 and 2 rdms
     taken_names = [d1_aa.name, d1_bb.name, d2_aaaa.name, d2_bbbb.name, d2_abab.name] 
@@ -1504,17 +1504,17 @@ def decomp_4op_to_2op_2rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
                     isinstance(op[2], creOp) and isinstance(op[3], creOp) and \
                     isinstance(op[4], desOp) and isinstance(op[5], desOp) and \
                     isinstance(op[6], desOp) and isinstance(op[7], desOp)):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
 
     # Create dummy tensors for unknown-spin 1 and 2 rdms
     taken_names = [d1_aa.name, d1_bb.name, d2_aaaa.name, d2_bbbb.name, d2_abab.name] 
@@ -1721,25 +1721,25 @@ def decomp_3op_to_2op_3rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab, d3_aa
     if type(op) != type([]) or len(op) != 6 or \
          not (isinstance(op[0], creOp) and isinstance(op[1], creOp) and isinstance(op[2], creOp) and \
                     isinstance(op[3], desOp) and isinstance(op[4], desOp) and isinstance(op[5], desOp)):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
     if ( not isinstance(d3_aaaaaa, tensor) ) or (len(d3_aaaaaa.indices) != 6):
-        raise TypeError, "d3_aaaaaa must be a tensor with 6 indices"
+        raise TypeError("d3_aaaaaa must be a tensor with 6 indices")
     if ( not isinstance(d3_bbbbbb, tensor) ) or (len(d3_bbbbbb.indices) != 6):
-        raise TypeError, "d3_bbbbbb must be a tensor with 6 indices"
+        raise TypeError("d3_bbbbbb must be a tensor with 6 indices")
     if ( not isinstance(d3_baabaa, tensor) ) or (len(d3_baabaa.indices) != 6):
-        raise TypeError, "d3_baabaa must be a tensor with 6 indices"
+        raise TypeError("d3_baabaa must be a tensor with 6 indices")
     if ( not isinstance(d3_abbabb, tensor) ) or (len(d3_abbabb.indices) != 6):
-        raise TypeError, "d3_abbabb must be a tensor with 6 indices"
+        raise TypeError("d3_abbabb must be a tensor with 6 indices")
 
     # Create dummy tensors for unknown-spin 1 and 2 rdms
     taken_names = [d1_aa.name, d1_bb.name, d2_aaaa.name, d2_bbbb.name, d2_abab.name] 
@@ -1912,25 +1912,25 @@ def decomp_4op_to_2op_3rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab, d3_aa
                     isinstance(op[2], creOp) and isinstance(op[3], creOp) and \
                     isinstance(op[4], desOp) and isinstance(op[5], desOp) and \
                     isinstance(op[6], desOp) and isinstance(op[7], desOp)):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
-        raise TypeError, "d1_aa must be a tensor with 2 indices"
+        raise TypeError("d1_aa must be a tensor with 2 indices")
     if ( not isinstance(d1_bb, tensor) ) or (len(d1_bb.indices) != 2):
-        raise TypeError, "d1_bb must be a tensor with 2 indices"
+        raise TypeError("d1_bb must be a tensor with 2 indices")
     if ( not isinstance(d2_aaaa, tensor) ) or (len(d2_aaaa.indices) != 4):
-        raise TypeError, "d2_aaaa must be a tensor with 4 indices"
+        raise TypeError("d2_aaaa must be a tensor with 4 indices")
     if ( not isinstance(d2_bbbb, tensor) ) or (len(d2_bbbb.indices) != 4):
-        raise TypeError, "d2_bbbb must be a tensor with 4 indices"
+        raise TypeError("d2_bbbb must be a tensor with 4 indices")
     if ( not isinstance(d2_abab, tensor) ) or (len(d2_abab.indices) != 4):
-        raise TypeError, "d2_abab must be a tensor with 4 indices"
+        raise TypeError("d2_abab must be a tensor with 4 indices")
     if ( not isinstance(d3_aaaaaa, tensor) ) or (len(d3_aaaaaa.indices) != 6):
-        raise TypeError, "d3_aaaaaa must be a tensor with 6 indices"
+        raise TypeError("d3_aaaaaa must be a tensor with 6 indices")
     if ( not isinstance(d3_bbbbbb, tensor) ) or (len(d3_bbbbbb.indices) != 6):
-        raise TypeError, "d3_bbbbbb must be a tensor with 6 indices"
+        raise TypeError("d3_bbbbbb must be a tensor with 6 indices")
     if ( not isinstance(d3_baabaa, tensor) ) or (len(d3_baabaa.indices) != 6):
-        raise TypeError, "d3_baabaa must be a tensor with 6 indices"
+        raise TypeError("d3_baabaa must be a tensor with 6 indices")
     if ( not isinstance(d3_abbabb, tensor) ) or (len(d3_abbabb.indices) != 6):
-        raise TypeError, "d3_abbabb must be a tensor with 6 indices"
+        raise TypeError("d3_abbabb must be a tensor with 6 indices")
 
     # Create dummy tensors for unknown-spin 1 and 2 rdms
     taken_names = [d1_aa.name, d1_bb.name, d2_aaaa.name, d2_bbbb.name, d2_abab.name] 

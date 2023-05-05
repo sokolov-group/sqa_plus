@@ -67,29 +67,29 @@ class tensor:
         # Process indices
         indicesError = "indices must be a list of index objects"
         if not isinstance(indices, type([])):
-            raise TypeError, indicesError
+            raise TypeError(indicesError)
         for i in indices:
             if not isinstance(i, index):
-                raise TypeError, indicesError
+                raise TypeError(indicesError)
             self.indices.append( i.copy() )
 
         # Process symmetries
         symmetryError = "symmetries must be a list of symmetry objects"
         if not isinstance(symmetries, type([])):
-            raise TypeError, symmetryError
+            raise TypeError(symmetryError)
         for sym in symmetries:
             if not isinstance(sym, symmetry):
-                raise TypeError, symmetryError
+                raise TypeError(symmetryError)
             for s in self.symmetries:
                 if s.pattern == sym.pattern:
-                    raise ValueError, "a tensor cannot have two symmetries with the same pattern"
+                    raise ValueError("a tensor cannot have two symmetries with the same pattern")
             self.symmetries.append( sym.copy() )
 
     #------------------------------------------------------------------------------------------------
 
     def __cmp__(self,other):
         if (not isinstance(other,tensor)):
-            raise TypeError, "A tensor may only be compared to another tensor"
+            raise TypeError("A tensor may only be compared to another tensor")
 
         # If other belongs to a tensor subclass, use the subclass's comparison method
         if isinstance(other,kroneckerDelta) or \
@@ -222,7 +222,7 @@ class tensor:
                     break
             if not unique:
                 print("No unique winner produced when sorting the indices of tensor %s" %(str(self)))
-                raise RuntimeError, "Scoring system did not produce unique winner."
+                raise RuntimeError("Scoring system did not produce unique winner.")
 
         # Sort indices in the uniquely determined order and return the resulting factor
         newIndeces = []
@@ -236,7 +236,7 @@ class tensor:
     def hasIndex(self,i):
         "Returns True if i is one of the tensor's indices and False otherwise."
         if not isinstance(i,index):
-            raise TypeError, "i must be of the index class"
+            raise TypeError("i must be of the index class")
         return (i in self.indices)
 
     #------------------------------------------------------------------------------------------------
@@ -259,7 +259,7 @@ class kroneckerDelta(tensor):
 
     def __init__(self,indices):
         if len(indices) != 2:
-            raise ValueError, "The kronecker delta function takes exactly two indices"
+            raise ValueError("The kronecker delta function takes exactly two indices")
         self.indices = []
         for i in indices:
             self.indices.append( i.copy() )
@@ -296,7 +296,7 @@ class kroneckerDelta(tensor):
 
         # Raise error if other is not a tensor
         else:
-            raise TypeError, "A kronekerDelta may only be compared to another tensor"
+            raise TypeError("A kronekerDelta may only be compared to another tensor")
         return 0
 
     #------------------------------------------------------------------------------------------------
@@ -328,8 +328,7 @@ class sfExOp(tensor):
     def __init__(self, indices):
         # Check that there are an even number of indices
         if len(indices)/2 != (len(indices)+1)/2:
-            raise ValueError, "A spin free excitation operator (the sfExOp class) must have an " + \
-                                                "even number of indices"
+            raise ValueError("A spin free excitation operator (the sfExOp class) must have an even number of indices")
 
         # Initialize order
         self.order = len(indices)/2
@@ -395,7 +394,7 @@ class sfExOp(tensor):
 
         # raise an error if other is not a tensor
         else:
-            raise TypeError, "An sfExOp object may only be compared to another tensor"
+            raise TypeError("An sfExOp object may only be compared to another tensor")
         return 0
 
     #------------------------------------------------------------------------------------------------
@@ -416,7 +415,7 @@ class creDesTensor(tensor):
 
         TypeErrorMessage = "ops must be a normal ordered list of creOp and desOp objects"
         if not type(ops) == type([]):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize list of cre/des operators
         self.ops = ops
@@ -442,7 +441,7 @@ class creDesTensor(tensor):
 
             # Ensure normal-ordering
             if (not isinstance(op, creOp)) and (not isinstance(op, desOp)):
-                raise TypeError, TypeErrorMessage
+                raise TypeError(TypeErrorMessage)
 
             if isinstance(op, desOp):
                 self.nDes += 1
@@ -451,7 +450,7 @@ class creDesTensor(tensor):
             if isinstance(op, creOp):
                 self.nCre += 1
                 if desFlag:
-                    raise TypeError, TypeErrorMessage
+                    raise TypeError(TypeErrorMessage)
 
             self.indices.append(op.indices[0].copy())
 
@@ -525,7 +524,7 @@ class creDesTensor(tensor):
             return 1
         # Raise an error if other is not a tensor
         else:
-            raise TypeError, "A creDesTensor object may only be compared to another tensor"
+            raise TypeError("A creDesTensor object may only be compared to another tensor")
 
     def copy(self):
         ops = []
@@ -557,7 +556,7 @@ class creDesTensor_original(tensor):
         
         TypeErrorMessage = "ops must be a normal ordered list of creOp and desOp objects"
         if not type(ops) == type([]):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
         # Initialize permutations and factors
         (self.permutations,self.factors) = (None,None)
@@ -568,13 +567,13 @@ class creDesTensor_original(tensor):
         desFlag = False
         for op in ops:
             if (not isinstance(op, creOp)) and (not isinstance(op, desOp)):
-                raise TypeError, TypeErrorMessage
+                raise TypeError(TypeErrorMessage)
             if isinstance(op, desOp):
                 desFlag = True
             if isinstance(op, creOp):
                 self.nCre += 1
                 if desFlag:
-                    raise TypeError, TypeErrorMessage
+                    raise TypeError(TypeErrorMessage)
             self.indices.append(op.indices[0].copy())
 
         # Initialize symmetries
@@ -623,7 +622,7 @@ class creDesTensor_original(tensor):
 
         # raise an error if other is not a tensor
         else:
-            raise TypeError, "A creDesTensor object may only be compared to another tensor"
+            raise TypeError("A creDesTensor object may only be compared to another tensor")
         return 0
 
     #------------------------------------------------------------------------------------------------
@@ -664,7 +663,7 @@ class creOp(tensor):
         elif isinstance(indices, index):
             inputIndex = indices.copy()
         else:
-            raise TypeError, "indices must be an index or a list of indices with length 1"
+            raise TypeError("indices must be an index or a list of indices with length 1")
         self.indices = [inputIndex]
 
         # Initialize permutations and factors
@@ -695,7 +694,7 @@ class creOp(tensor):
 
         # raise an error if other is not a tensor
         else:
-            raise TypeError, "An creOp object may only be compared to another tensor"
+            raise TypeError("An creOp object may only be compared to another tensor")
         return 0
 
     #------------------------------------------------------------------------------------------------
@@ -731,7 +730,7 @@ class desOp(tensor):
         elif isinstance(indices, index):
             inputIndex = indices.copy()
         else:
-            raise TypeError, "indices must be an index or a list of indices with length 1"
+            raise TypeError("indices must be an index or a list of indices with length 1")
         self.indices = [inputIndex]
 
         # Initialize permutations and factors
@@ -758,7 +757,7 @@ class desOp(tensor):
 
         # raise an error if other is not a tensor
         else:
-            raise TypeError, "An desOp object may only be compared to another tensor"
+            raise TypeError("An desOp object may only be compared to another tensor")
         return 0
 
     #------------------------------------------------------------------------------------------------

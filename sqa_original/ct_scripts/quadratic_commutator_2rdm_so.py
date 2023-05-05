@@ -155,7 +155,7 @@ for t in result:
     elif ind.indType == beta_type:
       typeCount[1] += 1
     else:
-      raise RuntimeError, "Index not of alpha or beta index type."
+      raise RuntimeError("Index not of alpha or beta index type.")
   # 0-op
   if len(indexList) == 0:
     t.tensors.append(sqa.tensor('r0', indexList, []))
@@ -168,7 +168,7 @@ for t in result:
     elif typeCount[0] == 1 and typeCount[1] == 1:
       t.numConstant = 0.0
     else:
-      raise RuntimeError, "Unexpected typeCount of [%i,%i]" %(typeCount[0],typeCount[1])
+      raise RuntimeError("Unexpected typeCount of [%i,%i]" %(typeCount[0],typeCount[1]))
   # 2-op
   elif len(indexList) == 4:
     # keep track of operator ordering
@@ -192,10 +192,10 @@ for t in result:
       t.numConstant = 0.0
       continue
     else:
-      raise RuntimeError, "Unexpected typeCount of [%i,%i]" %(typeCount[0],typeCount[1])
+      raise RuntimeError("Unexpected typeCount of [%i,%i]" %(typeCount[0],typeCount[1]))
   # Error
   else:
-    raise RuntimeError, "Unexpected number of indices."
+    raise RuntimeError("Unexpected number of indices.")
 sqa.termChop(result)
 print 'target tensor conversion complete at %.3f' %(time.time() - startTime)
 print ''
@@ -270,7 +270,7 @@ print ''
 #        target_string += ' %2s' %(ind.name)
 #      target_string += '\n'
 #  if target_string is None:
-#    raise RuntimeError, "term does not have a target tensor"
+#    raise RuntimeError("term does not have a target tensor")
 #  con_code += target_string
 #  con_code += 'alpha 1.00d+00\n'
 #  c = '%13.6e' %(t.numConstant)

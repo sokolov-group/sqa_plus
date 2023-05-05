@@ -47,25 +47,25 @@ class term:
         if type(numConstant) == type(1.0) or type(numConstant) == type(1):
             self.numConstant = float(numConstant)
         else:
-            raise TypeError, "numConstant must be given as a float or an int."
+            raise TypeError("numConstant must be given as a float or an int.")
         for c in constList:
             if type(c) != type('a'):
-                raise TypeError, "constList must be a list of strings"
+                raise TypeError("constList must be a list of strings")
             self.constants.append(c)
         for t in tensorList:
             if not isinstance(t, tensor):
-                raise TypeError, "tensorList must be a list of tensor objects"
+                raise TypeError("tensorList must be a list of tensor objects")
             self.tensors.append(t.copy())
         if type(isInCanonicalForm) == type(True):
             self.isInCanonicalForm = isInCanonicalForm
         else:
-            raise TypeError, "if specified, isInCanonicalForm must be True or False"
+            raise TypeError("if specified, isInCanonicalForm must be True or False")
 
     #------------------------------------------------------------------------------------------------
 
     def __cmp__(self,other):
         if not isinstance(other,term):
-            raise TypeError, "term object can only be compared to other term objects."
+            raise TypeError("term object can only be compared to other term objects.")
 
         # sort by number of loose creation operators first
         retval = cmp(self.nCreOps(),other.nCreOps())
@@ -116,7 +116,7 @@ class term:
         elif numDiff > 0:
             return 1
         else:
-            raise RuntimeError, "Failure in comparison of terms' numeric constants."
+            raise RuntimeError("Failure in comparison of terms' numeric constants.")
         return numDiff
 
     #------------------------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ class term:
             retval = self.copy()
             retval.numConstant += other.numConstant
         else:
-            raise RuntimeError, "self and other must have the same constants, tensors, and operators"
+            raise RuntimeError("self and other must have the same constants, tensors, and operators")
         return retval
 
     #------------------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ class term:
         if type(factor) == type(1.0) or type(factor) == type(1):
             self.numConstant *= factor
         else:
-            raise ValueError, "factor must an integer or float"
+            raise ValueError("factor must an integer or float")
 
     #------------------------------------------------------------------------------------------------
 
@@ -222,7 +222,7 @@ class term:
 
                 # Check that the indices have the same number of type groups
                 if len(i0.indType) != len(i1.indType):
-                    raise RuntimeError, "Cannot contract indices %s, %s.    They have different numbers of type groups." %(str(i0), str(i1))
+                    raise RuntimeError("Cannot contract indices %s, %s.    They have different numbers of type groups." %(str(i0), str(i1)))
 
                 # Determine the type of the new index based on the overlap between
                 # the types of the two indices
@@ -326,7 +326,7 @@ class term:
 
         # If the term is not normal ordered, raise an error
         if not self.isNormalOrdered():
-            raise RuntimeError, "A term must have normal ordered operators to be converted to canonical form."
+            raise RuntimeError("A term must have normal ordered operators to be converted to canonical form.")
 
         # Sort the constants
         self.constants.sort()
@@ -358,7 +358,7 @@ class term:
 
         # Check to see that only one candidate achieved the top score
         if nTopScore > 1:
-            raise RuntimeError, "%i candidates tied for the top score." %nTopScore
+            raise RuntimeError("%i candidates tied for the top score." %nTopScore)
 
         # Set the tensors and their indices in the canonical order (the order with the highest score)
         self.tensors = bestTensorList
@@ -370,7 +370,7 @@ class term:
         map = bestMap
         alphabet = list('abcdefghijklmnopqrstuvwxyz')
         if len(alphabet) < len(map):
-            raise RuntimeError, "Alphabet smaller than number of indices, no more names left!"
+            raise RuntimeError("Alphabet smaller than number of indices, no more names left!")
         canonMap = {}
         while map.keys():
             minVal = min(map.values())
@@ -402,7 +402,7 @@ class term:
 
         # If the term is not normal ordered, raise an error
         if not self.isNormalOrdered():
-            raise RuntimeError, "A term must have normal ordered operators to be converted to canonical form."
+            raise RuntimeError("A term must have normal ordered operators to be converted to canonical form.")
 
         # Sort the constants
         self.constants.sort()
@@ -684,7 +684,7 @@ class term:
 
 #        # Check to see that only one candidate achieved the top score
 #        if nTopScore > 1:
-#            #raise RuntimeError, "%i candidates tied for the top score." %nTopScore
+#            #raise RuntimeError("%i candidates tied for the top score." %nTopScore)
 #            print "WARNING: %i candidates tied for the top score." %nTopScore
 
 
@@ -709,7 +709,7 @@ class term:
         alphabet = filtered_alphabet
 
         if len(alphabet) < len(bestMap):
-            raise RuntimeError, "Alphabet smaller than number of indices, no more names left!"
+            raise RuntimeError("Alphabet smaller than number of indices, no more names left!")
         canonMap = {}
         while bestMap.keys():
             minVal = min(bestMap.values())
@@ -812,9 +812,9 @@ def combineTerms(termList, maxThreads = 1):
     "Combines any like terms in termList"
 
     if options.verbose:
-        print ''
-        print 'Combining like terms:'
-        print 'Converting %i terms to canonical form...' %(len(termList))
+        print('')
+        print('Combining like terms:')
+        print('Converting %i terms to canonical form...' %(len(termList)))
 
     startTime = time.time()
 
@@ -922,7 +922,7 @@ def combineTerms(termList, maxThreads = 1):
 
 def multiplyTerms(t1,t2):
     if (not isinstance(t1,term)) or (not isinstance(t2,term)):
-        raise TypeError, "t1 and t2 must be of type term"
+        raise TypeError("t1 and t2 must be of type term")
     numConst = t1.numConstant * t2.numConstant
     constList = []
     constList.extend(t1.constants)
@@ -941,11 +941,11 @@ def termChop(termList, tolerance = 1e-6):
     "Removes any terms with zero constant factors from termList."
     TypeErrorMessage = "termList must be a list of terms"
     if type(termList) != type([]):
-        raise TypeError, TypeErrorMessage
+        raise TypeError(TypeErrorMessage)
     i = 0
     while i < len(termList):
         if not isinstance(termList[i],term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
         if abs(termList[i].numConstant) < tolerance:
             del(termList[i])
         else:
@@ -1180,18 +1180,18 @@ def removeCoreOpPairs(inList):
 
     # prepare input argument
     if type(inList) != type([]):
-        raise TypeError, "input must be a list of terms"
+        raise TypeError("input must be a list of terms")
 
     # loop over input terms
     for t in inList:
 
         # Check that the term is indeed a term
         if not isinstance(t, term):
-            raise TypeError, "input must be a term or list of terms"
+            raise TypeError("input must be a term or list of terms")
 
         # Check that the term is normal ordered
         if not t.isNormalOrdered():
-            raise ValueError, "core index removal function only works for normal ordered terms"
+            raise ValueError("core index removal function only works for normal ordered terms")
 
         # Initialize a counter for unremoved creation operators
         creCount = 0
@@ -1306,16 +1306,16 @@ def removeCoreOps_sf(inList):
 
             # check that t is a term
             if not isinstance(t, term):
-                raise TypeError, "inList must be a list of term objects"
+                raise TypeError("inList must be a list of term objects")
 
             # check for normal ordering
             if not t.isNormalOrdered():
-                raise ValueError, "input terms must be normal ordered"
+                raise ValueError("input terms must be normal ordered")
 
             # check for spin-orbital creation and destruction operators
             for ten in t.tensors:
                 if isinstance(ten, creOp) or isinstance(ten, desOp):
-                    raise TypeError, "input terms may not contain creOp or desOp objects"
+                    raise TypeError("input terms may not contain creOp or desOp objects")
 
             # find the spin-free excitation operator
             op = None
@@ -1332,10 +1332,10 @@ def removeCoreOps_sf(inList):
             # ensure the sfExOp has no indices with multiple type groups or a type group with core and non-core types
             for ind in op.indices:
                 if len(ind.indType) > 1:
-                    raise ValueError, "index %s in term (%s) has more than one type group:    %s" %(ind.name, str(t), str(typeGroup))
+                    raise ValueError("index %s in term (%s) has more than one type group:    %s" %(ind.name, str(t), str(typeGroup)))
                 for typeGroup in ind.indType:
                     if options.core_type[0] in typeGroup and len(typeGroup) > 1:
-                        raise ValueError, "index %s in term (%s) has a type group including core and non-core types:    %s" %(ind.name, str(t), str(typeGroup))
+                        raise ValueError("index %s in term (%s) has a type group including core and non-core types:    %s" %(ind.name, str(t), str(typeGroup)))
 
             # compute the operator's order
             order = len(op.indices)/2
@@ -1382,7 +1382,7 @@ def removeCoreOps_sf(inList):
 
             # make sure the number of pairs is equal to the operator's order
             if len(pairs) != order:
-                raise ValueError, "number of pairs not equal to operator's order"
+                raise ValueError("number of pairs not equal to operator's order")
 
             # determine the new operator's indices.
             # record how many pairs there were with both elements equal to the targeted core operator
@@ -1426,7 +1426,7 @@ def removeCoreOps_sf(inList):
             elif nCre == 2 and nMatch == 0:
                 t.scale(1.0)
             else:
-                raise ValueError, "unexpected values:    nCre = %i, nMatch = %i" %(nCre, nMatch)
+                raise ValueError("unexpected values:    nCre = %i, nMatch = %i" %(nCre, nMatch))
 
             # print out the final term
             if options.verbose:
@@ -1445,7 +1445,7 @@ def removeCoreOps_sf(inList):
             if nCre == 2 and nMatch == 0:
                 inList.append(t.copy())
                 if len(newIndices) < 4:
-                    raise ValueError, "expected at least 4 remaining indices for nCre == 2 and nMatch == 0 case, but only %i are present" %len(newInices)
+                    raise ValueError("expected at least 4 remaining indices for nCre == 2 and nMatch == 0 case, but only %i are present" %len(newIndices))
                 (newIndices[0], newIndices[1]) = (newIndices[1], newIndices[0])
                 inList[-1].tensors[opPos] = sfExOp(newIndices)
                 # print out the additional final term
@@ -1479,7 +1479,7 @@ def removeVirtOps_sf(inList):
 
         # ensure that each element of inList is a term object
         if not isinstance(inList[i], term):
-            raise TypeError, "inList must be a list of term objects"
+            raise TypeError("inList must be a list of term objects")
 
         # determine if the term's spin-free excitation operators have any virtual indices
         hasVirtual = False

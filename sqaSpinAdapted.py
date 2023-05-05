@@ -32,11 +32,11 @@ def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
     startTime = time.time()
-    print("\n--------------- Converting Spin-Integrated Tensors to Spin-Adapted ---------------\n")
+    options.print_header("Converting Spin-Integrated Tensors to Spin-Adapted")
     sys.stdout.flush()
 
     # Convert Cre/Des Objects to RDM Objects
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     convert_credes_to_rdm(terms_si, trans_rdm = False)
     reorder_rdm_indices_notation(terms_si)
     reorder_rdm_spin_indices(terms_si)
@@ -65,7 +65,7 @@ def convertSpinIntegratedToAdapted(terms_si):
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
     # Combine Spin-Adapted Terms
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     for term_sa in terms_sa:
         term_sa.isInCanonicalForm = False
 
@@ -75,13 +75,13 @@ def convertSpinIntegratedToAdapted(terms_si):
     reorder_tensor_indices(terms_sa)
     dummyLabel(terms_sa)
     print("\n{:} spin-adapted terms combined.".format(num_terms_sa - len(terms_sa)))
-    print("\n----------------------------------------------------------------------------------")
+    options.print_divider()
 
     # Set terms as spin-adapted in sqaOptions class
     options.spin_adapted = True
 
     # Print Spin-Adapted Equations
-    print("\n----------------------------- Spin-adapted equations -----------------------------\n")
+    options.print_header("Spin-adapted equations")
     terms_sa.sort()
     for term in terms_sa:
         print("{:}".format(term))
@@ -89,7 +89,7 @@ def convertSpinIntegratedToAdapted(terms_si):
     print("\nTotal spin-integrated terms: {:}".format(len_terms_si))
     print("Total spin-adapted terms: {:}".format(len(terms_sa)))
     print("Spin-adaptation automation time :  {:.3f} seconds".format(time.time() - startTime))
-    print("\n----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
 
     return terms_sa
@@ -117,7 +117,7 @@ def convert_credes_to_rdm(_terms_credes, _trans_rdm = False):
             _terms_credes[term_credes_ind].tensors.append(ten_rdm)
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     return
 
 def reorder_rdm_indices_notation(_terms_rdm):
@@ -174,7 +174,7 @@ def reorder_rdm_indices_notation(_terms_rdm):
                 _terms_rdm[term_rdm_ind].tensors[ten_rdm_ind] = ten_rdm.copy()
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
@@ -263,7 +263,7 @@ def reorder_rdm_spin_indices(_terms_rdm):
                 _terms_rdm[term_rdm_ind].scale(order_factor)
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
@@ -279,7 +279,7 @@ def remove_spin_index_type(_tensor):
 def convert_h1e_si_to_sa(_terms_h1e_si):
     "Convert h1e Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting 1e- integrals to spin-adapted formulation...")
 
     # Define 1e- indices lists
@@ -325,7 +325,7 @@ def convert_h1e_si_to_sa(_terms_h1e_si):
 def convert_v2e_si_to_sa(_terms_v2e_si):
     "Convert v2e Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting 2e- integrals to spin-adapted formulation...")
 
     # Define Spin-Adapted 2e- integrals Symmetries
@@ -487,7 +487,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
 def convert_rdms_si_to_sa(_terms_rdm_si):
     "Convert RDM Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting RDMs to spin-adapted formulation...\n")
 
     # Convert One-Body RDMs
@@ -1295,7 +1295,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
 def convert_kdelta_si_to_sa(_terms_kdelta_si):
     "Convert Kronecker Delta Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting Kronecker Deltas to spin-adapted formulation...")
 
     # Converting kdelta objects in each term
@@ -1320,7 +1320,7 @@ def convert_kdelta_si_to_sa(_terms_kdelta_si):
 def convert_e_si_to_sa(_terms_e_si):
     "Convert Eigenvalue Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting eigenvalues to spin-adapted formulation...")
 
     # Converting eigenvalue objects in each term
@@ -1345,7 +1345,7 @@ def convert_e_si_to_sa(_terms_e_si):
 def convert_t_amplitudes_si_to_sa(_terms_t_si):
     "Convert T Amplitudes Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting T amplitudes to spin-adapted formulation...")
 
     # Define Spin-Adapted Amplitudes Symmetries

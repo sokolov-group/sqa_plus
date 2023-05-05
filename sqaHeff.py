@@ -32,7 +32,7 @@ from sqaOptions import options
 def Heff(order = 0, internal_excitations = True):
     "Construct effective Hamiltonian (L)."
 
-    print("--------------------------------- Hamiltonian({:}) ---------------------------------".format(order))
+    options.print_header("Hamiltonian ({:})".format(order))
     sys.stdout.flush()
     #   order = 0 : L(0) = H(0)
     #   order = 1 : L(1) = V + [H(0), T(1) - T'(1)]
@@ -101,10 +101,10 @@ def Heff(order = 0, internal_excitations = True):
         L.extend(com4)
 
     else:
-        raise Exception ('Unknown type of effective Hamiltonian of order = %s' % (order))
+        raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
 
     print("Done ...")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return L
 

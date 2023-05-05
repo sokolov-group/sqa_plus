@@ -36,10 +36,8 @@ def matrixBlock(terms):
     "Construct matrix block."
 
     startTime = time.time()
-    print("")
-    print("---------------------------------- SQA Automation --------------------------------")
+    options.print_header("SQA Automation")
     sys.stdout.flush()
-    print("")
     fTerms = []
 
     # Import options from sqaOptions class
@@ -92,8 +90,7 @@ def matrixBlock(terms):
     reorder_tensor_indices(fTerms)
 
     # Print the final results
-    print("")
-    print("--------------------------------- Final results ----------------------------------\n")
+    options.print_header("Final results")
     sys.stdout.flush()
     for t in fTerms:
         print(t)
@@ -156,7 +153,7 @@ def dummyLabel(_terms):
         print("")
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
@@ -186,7 +183,7 @@ def filterVirtual(_terms):
         print("")
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
@@ -216,7 +213,7 @@ def filterCore(_terms):
         print("")
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
@@ -230,7 +227,7 @@ def normalOrderCore(_terms):
         ordered_terms.extend(ordered_term)
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return ordered_terms
 
@@ -241,7 +238,7 @@ def normOrderCor(_term):
 
     # check if is a term
     if not isinstance(_term, term):
-        raise TypeError ("Input term must be of class term")
+        raise TypeError("Input term must be of class term")
 
     # determine what types of operators the term contains
     has_creDesOps = False
@@ -254,7 +251,7 @@ def normOrderCor(_term):
 
     # If term has both creation/destruction operators and spin free excitation operators raise an error
     if has_creDesOps and has_sfExOps:
-        raise RuntimeError ("Normal ordering not implemented when both creOp/desOp and sfExOp tensors are present")
+        raise RuntimeError("Normal ordering not implemented when both creOp/desOp and sfExOp tensors are present")
 
     # Normal ordering for creOp/desOp
     elif has_creDesOps:
@@ -347,7 +344,7 @@ def normOrderCor(_term):
     # Normal ordering for sfExOps
     elif has_sfExOps:
         # Make separate lists of the spin free excitation operators and other tensors
-        raise Exception ('This code does not support for now')
+        raise Exception('This code does not support for now')
 
     else:
         ordered_terms = []
@@ -437,7 +434,7 @@ def contractDeltaFuncs_nondummy(_terms):
     termChop(_terms)
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return _terms
 
@@ -528,7 +525,7 @@ def reorder_tensor_indices(_terms):
                     print(' %s    --->    %s (factor = %s)' % (unordered_tensor, ordered_tensor, order_factor))
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return _terms
 

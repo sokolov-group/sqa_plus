@@ -147,7 +147,7 @@ def combine_transpose(termList):
 
         # if requested, print each term
         if options.verbose:
-            print '%i %s' %(count, str(termList[j]))
+            print('%i %s' %(count, str(termList[j])))
 
         # increment the counter
         count += 1
@@ -183,8 +183,8 @@ def combine_transpose(termList):
 
     # if requested, print the elapsed time
     if options.verbose:
-        print 'Transpose combination complete in %.3f seconds' %(time.time() - startTime)
-        print ''
+        print('Transpose combination complete in %.3f seconds' %(time.time() - startTime))
+        print('')
 
 
 #--------------------------------------------------------------------------------------------------
@@ -200,14 +200,14 @@ def convert_ops_to_rdms_so(inTerms, name, ord = 0):
 
     # Check that the name is a string
     if type(name) != type('a'):
-        raise TypeError, 'name must be a string'
+        raise TypeError('name must be a string')
 
     # Process each term
     for t in inTerms:
 
         # Check that the term is normal ordered
         if not t.isNormalOrdered():
-            raise ValueError, "Cannot convert operators in '%s' to density matrix, they are not normal ordered" %(str(t))
+            raise ValueError("Cannot convert operators in '%s' to density matrix, they are not normal ordered" %(str(t)))
 
         # Determine number of creation and destruction operators
         creCount = 0
@@ -232,7 +232,7 @@ def convert_ops_to_rdms_so(inTerms, name, ord = 0):
 
             # Check that the term has no spin free excitation operators
             if isinstance(t.tensors[i], sfExOp):
-                raise TypeError, "Cannot convert spin orbital operators in '%s' to density matrix, a sfExOp is present" %(str(t))
+                raise TypeError("Cannot convert spin orbital operators in '%s' to density matrix, a sfExOp is present" %(str(t)))
 
             # Process a creation operator
             elif isinstance(t.tensors[i], creOp):
@@ -248,7 +248,7 @@ def convert_ops_to_rdms_so(inTerms, name, ord = 0):
         
         # Check that the number of cre/des ops are the same
         if creCount != desCount:
-            raise ValueError, "Cannot convert spin orbital operators in '%s' to density matrix, unequal number of cre/des operators" %(str(t))
+            raise ValueError("Cannot convert spin orbital operators in '%s' to density matrix, unequal number of cre/des operators" %(str(t)))
 
         # If any cre/des ops were converted, add the rdm to the term's tensor list
         if creCount > 0:
@@ -277,9 +277,9 @@ def getABCounts(indices):
                 hasB = True
                 BCount += 1
             if hasA and hasB:
-                raise ValueError, "Index '%s' has both alpha and beta type." %(ind.name)
+                raise ValueError("Index '%s' has both alpha and beta type." %(ind.name))
             if not hasA and not hasB:
-                raise ValueError, "Index '%s' has neither alpha nor beta type." %(ind.name)
+                raise ValueError("Index '%s' has neither alpha nor beta type." %(ind.name))
         return (ACount, BCount)
 
 
@@ -307,7 +307,7 @@ def assign_rdm_types(inTerms, rdm_name, rdms):
 
         # If the number of indices is not even, raise an error
         if len(rdms[i].indices) % 2 != 0:
-            raise ValueError, "Input rdms must have an even number of indices. rdm '%s' does not." %(str(rdms[i]))
+            raise ValueError("Input rdms must have an even number of indices. rdm '%s' does not." %(str(rdms[i])))
 
         # Compute the rdm's order
         order = len(rdms[i].indices) / 2
@@ -338,7 +338,7 @@ def assign_rdm_types(inTerms, rdm_name, rdms):
 
             # If the number of indices is not even, raise an error
             if len(ten.indices) % 2 != 0:
-                raise ValueError, "Density matrices must have an even number of indices. Tensor '%s' does not." %(str(ten))
+                raise ValueError("Density matrices must have an even number of indices. Tensor '%s' does not." %(str(ten)))
 
             # Compute the tensor's order
             order = len(ten.indices) / 2
@@ -394,7 +394,7 @@ def assign_rdm_types(inTerms, rdm_name, rdms):
 #                        for ind in indexList:
 #                            print ind.name, ", ", ind.indType
 #                        print "counts: %2i %2i %2i %2i" %(topACount, topBCount, bottomACount, bottomBCount)
-                        raise RuntimeError, "Could not sort the top indices of '%s' to match the rdm's alpha/beta ordering." %(str(ten))
+                        raise RuntimeError("Could not sort the top indices of '%s' to match the rdm's alpha/beta ordering." %(str(ten)))
 
             # Sort the bottom indices to match the rdm's alpha/beta order
             for j in range(order, len(indexList)-1):
@@ -413,7 +413,7 @@ def assign_rdm_types(inTerms, rdm_name, rdms):
                             break
                         k -= 1
                     if k == j:
-                        raise RuntimeError, "Could not sort the bottom indices of '%s' to match the rdm's alpha/beta ordering." %(str(ten))
+                        raise RuntimeError("Could not sort the bottom indices of '%s' to match the rdm's alpha/beta ordering." %(str(ten)))
 
             # Replace the tensor with the assigned rdm
             t.tensors[i] = tensor(matching_rdm.name, indexList, matching_rdm.symmetries)

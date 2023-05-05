@@ -18,6 +18,8 @@ from sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from sqaTerm import term
 from sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type
 
+from sqaOptions import options
+
 def genIntermediates(input_terms, ind_str = None, trans_rdm = False, custom_path = None, factor_depth = 1, print_level = 4):
 
     if factor_depth < 0 or not isinstance(factor_depth, int):
@@ -126,10 +128,10 @@ def genIntermediates(input_terms, ind_str = None, trans_rdm = False, custom_path
                     i_ind, j_ind = contract
 
                     if j_ind >= len(lhs_str):
-                         print("###################################################################")
-                         print("WARNING: Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
-                         print("###################################################################\n")
-                         contract_order.pop(con)
+                        options.print_header("WARNING")
+                        print("Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
+                        options.print_divider()
+                        contract_order.pop(con)
                 ################
 
                 # Make list of indices for all intermediates

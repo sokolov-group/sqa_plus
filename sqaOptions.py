@@ -103,5 +103,11 @@ class sqaOptions(object):
         if name not in self.user_defined_indices:
             self.user_defined_indices.append(name)
 
+    def print_header(self, string):
+        print("\n" + " {:} ".format(string).center(120, "-") + "\n")
+
+    def print_divider(self):
+        print("\n" + "-" * 120 + "\n")
+
 # Create an object of the options class
 options = sqaOptions()

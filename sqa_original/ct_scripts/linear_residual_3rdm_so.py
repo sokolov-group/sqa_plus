@@ -177,7 +177,7 @@ print ''
 #        target_string += ' %2s' %(ind.name)
 #      target_string += '\n'
 #  if target_string is None:
-#    raise RuntimeError, "term does not have a target tensor"
+#    raise RuntimeError("term does not have a target tensor")
 #  con_code += target_string
 #  con_code += 'alpha 1.00d+00\n'
 #  c = '%13.6e' %(t.numConstant)

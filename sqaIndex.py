@@ -53,7 +53,7 @@ class index:
 		indType = []
 		for l in indexType:
 			if not ( type(l) in [type([]), type(())] ):
-				raise TypeError, "indexType must be a list or tuple of lists or tuples of strings"
+				raise TypeError("indexType must be a list or tuple of lists or tuples of strings")
 			indType.append([])
 			indType[-1].extend(l)
 			indType[-1].sort()
@@ -63,17 +63,17 @@ class index:
 			self.indType.append(())
 			for s in l:
 				if type(s) != type('a'):
-					raise TypeError, "indexType must be a list or tuple of lists or tuples of strings"
+					raise TypeError("indexType must be a list or tuple of lists or tuples of strings")
 				self.indType[-1] = self.indType[-1] + (s,)
 		self.indType = tuple(self.indType)
 
 		# Initialize flag for whether the index is summed over
 		if type(isSummed) != type(True):
-			raise TypeError, "isSummed must be True or False"
+			raise TypeError("isSummed must be True or False")
 		self.isSummed = isSummed
 
 		if (type(userDefined) != type(True)) and not isinstance(userDefined, str):
-			raise TypeError, "userDefined must be True or False"
+			raise TypeError("userDefined must be True or False")
 
 		if userDefined is True:
 			self.userDefined = str(name)
@@ -83,7 +83,7 @@ class index:
 
 	def __cmp__(self,other):
 		if (not isinstance(other,index)):
-			raise ValueError, "can only compare index class with other index class objects."
+			raise ValueError("can only compare index class with other index class objects.")
 		retval = cmp(self.isSummed, other.isSummed)
 		if retval != 0:
 			return retval
