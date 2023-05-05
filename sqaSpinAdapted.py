@@ -99,7 +99,7 @@ def convertSpinIntegratedToAdapted(terms_si):
 
     return terms_sa
 
-def convert_credes_to_rdm(_terms_credes, _trans_rdm = False):
+def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
     "Convert Cre/Des Objects to RDM Objects"
 
     print("Convert Cre/Des objects to RDM objects...")
@@ -118,7 +118,7 @@ def convert_credes_to_rdm(_terms_credes, _trans_rdm = False):
         ## Modify term in list to use creDesTensor object instead of cre/des objects
         if credes_ops:
             _terms_credes[term_credes_ind].tensors = [tens for tens in term_credes.tensors if tens not in credes_ops]
-            ten_rdm = creDesTensor(credes_ops, _trans_rdm)
+            ten_rdm = creDesTensor(credes_ops, trans_rdm)
             _terms_credes[term_credes_ind].tensors.append(ten_rdm)
 
     print("Done!")

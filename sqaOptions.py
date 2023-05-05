@@ -34,6 +34,8 @@ class sqaSpinBasis(object):
             if value == 'spin_adapted':
                 instance.reorder_amplitudes = True
                 instance.legacy_ordering = False
+            if value != 'spin_integrated':
+                instance.genEinsum.spin_integrated_tensors = False
         else:
             raise Exception("Spin-basis must be True or False ...")
 
@@ -103,7 +105,7 @@ class sqaOptions(object):
         self.genEinsum = lambda:None
         self.genEinsum.lhs_string = None
         self.genEinsum.indices_string = None
-        self.genEinsum.spin_integrated_tensors = True
+        self.genEinsum.spin_integrated_tensors = False
 
         self.genEinsum.trans_rdm = False
         self.genEinsum.trans_indices_string = None
@@ -114,7 +116,7 @@ class sqaOptions(object):
         self.genEinsum.cvs_tensors = False
 
         self.genEinsum.remove_trans_rdm_constant = False
-        self.genEinsum.remove_core_integrals = False
+        self.genEinsum.remove_core_integrals = True
         self.genEinsum.intermediate_list = None
 
         self.genEinsum.opt_einsum_terms = True
@@ -130,10 +132,10 @@ class sqaOptions(object):
             self.user_defined_indices.append(name)
 
     def print_header(self, string):
-        print("\n" + " {:} ".format(string).center(120, "-") + "\n")
+        print("\n" + " {:} ".format(string).center(100, "-") + "\n")
 
     def print_divider(self):
-        print("\n" + "-" * 120 + "\n")
+        print("\n" + "-" * 100 + "\n")
 
 # Create an object of the options class
 options = sqaOptions()
