@@ -71,7 +71,7 @@ def matrixBlock(terms):
     # Contract delta function for both non-dummy indices
     contractDeltaFuncs_nondummy(fTerms)
 
-    # If (remove_trans_rdm_constant = True) =>  Remove those constant terms
+    # If (remove_trans_rdm_constant = True) => Remove those constant terms
     if (remove_trans_rdm_constant):
         for trm in fTerms:
             iremove = True
@@ -160,7 +160,7 @@ def dummyLabel(_terms):
 def filterVirtual(_terms):
     "A function to calculate expectation value wrt virtual: filter zero terms wrt virtual."
 
-    print("Computing expectation value with respect to virtual:=>")
+    print("Computing expectation value with respect to virtual ...")
     sys.stdout.flush()
 
     for t_term in _terms:
@@ -190,7 +190,7 @@ def filterVirtual(_terms):
 def filterCore(_terms):
     "A function to calculate expectation value wrt core: filter zero terms wrt core."
 
-    print("Computing expectation value with respect to core:=>")
+    print("Computing expectation value with respect to core ...")
     sys.stdout.flush()
 
     for t_term in _terms:
@@ -218,7 +218,7 @@ def filterCore(_terms):
     return
 
 def normalOrderCore(_terms):
-    print("Normal ordering with respect to core:=>")
+    print("Normal ordering with respect to core ...")
     sys.stdout.flush()
     ordered_terms = []
 
@@ -416,7 +416,7 @@ def sortOpsCore(_unsorted_ops, returnPermutation = False):
 def contractDeltaFuncs_nondummy(_terms):
     "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
 
-    print("Contract delta function for non-dummy indices: =>")
+    print("Contract delta function for non-dummy indices ...")
     sys.stdout.flush()
 
     for term in _terms:
