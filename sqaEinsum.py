@@ -219,6 +219,17 @@ def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
         if not 'none' in einsum:
             einsum_list.append(einsum)
 
+    if intermediate_list:
+        print("\n------------------------------ genEinsum intermediates ------------------------------\n")
+        for _einsum in int_einsum_list:
+            print(_einsum)
+        print("\n-------------------------------------------------------------------------------------\n")
+
+    print("\n-------------------------------- genEinsum equations --------------------------------\n")
+    for _einsum in einsum_list:
+        print(_einsum)
+    print("\n-------------------------------------------------------------------------------------\n")
+
     # Modify return for intermediate term definition
     if intermediate_list:
         return int_einsum_list, einsum_list

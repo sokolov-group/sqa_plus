@@ -28,7 +28,7 @@ from sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
-def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True):
+def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
     startTime = time.time()
@@ -37,14 +37,15 @@ def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True
 
     # Convert Cre/Des Objects to RDM Objects
     print("----------------------------------------------------------------------------------")
-    convert_credes_to_rdm(terms_si, trans_rdm)
+    convert_credes_to_rdm(terms_si, trans_rdm = False)
     reorder_rdm_indices_notation(terms_si)
     reorder_rdm_spin_indices(terms_si)
-    reorder_tensor_indices(terms_si, reorder_t)
+    reorder_tensor_indices(terms_si)
 
     dummyLabel(terms_si)
     terms_si.sort()
-
+    len_terms_si = len(terms_si)
+    
     # Convert Kronecker Delta to Spin-Adapted Formulation
     terms_sa = convert_kdelta_si_to_sa(terms_si)
 
@@ -71,10 +72,13 @@ def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True
     num_terms_sa = len(terms_sa)
     print("\nCombining {:} spin-adapted terms...\n".format(num_terms_sa))
     combineTerms(terms_sa)
-    reorder_tensor_indices(terms_sa, reorder_t)
+    reorder_tensor_indices(terms_sa)
     dummyLabel(terms_sa)
     print("\n{:} spin-adapted terms combined.".format(num_terms_sa - len(terms_sa)))
     print("\n----------------------------------------------------------------------------------")
+
+    # Set terms as spin-adapted in sqaOptions class
+    options.spin_adapted = True
 
     # Print Spin-Adapted Equations
     print("\n----------------------------- Spin-adapted equations -----------------------------\n")
@@ -82,7 +86,7 @@ def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True
     for term in terms_sa:
         print("{:}".format(term))
 
-    print("\nTotal spin-integrated terms: {:}".format(len(terms_si)))
+    print("\nTotal spin-integrated terms: {:}".format(len_terms_si))
     print("Total spin-adapted terms: {:}".format(len(terms_sa)))
     print("Spin-adaptation automation time :  {:.3f} seconds".format(time.time() - startTime))
     print("\n----------------------------------------------------------------------------------")

@@ -31,6 +31,9 @@ class sqaSpinBasis(object):
         if type(value) == type(True):
             if value:
                 instance.spin_basis = self.spin_basis
+            if value == 'spin_adapted':
+                instance.reorder_amplitudes = True
+                instance.legacy_ordering = False
         else:
             raise Exception("Spin-basis must be True or False ...")
 
@@ -65,6 +68,15 @@ class sqaOptions(object):
 
         # List of indices names defined by the user
         self.user_defined_indices = []
+
+        # Options about custom reorder of tensor indices
+        self.reorder_amplitudes = False
+        self.legacy_ordering = True
+
+        # MatrixBlock options
+        #TODO: Check if it's redundant with genEinsum.remove_trans_rdm_constant
+        self.matrixBlock = lambda:None
+        self.matrixBlock.remove_trans_rdm_constant = False
 
         # genEinsum options
         self.genEinsum = lambda:None
