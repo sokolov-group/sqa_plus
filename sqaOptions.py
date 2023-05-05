@@ -32,7 +32,7 @@ class sqaSpinBasis(object):
             if value:
                 instance.spin_basis = self.spin_basis
         else:
-            raise Exception("Spin-basis should be 'True' or 'False' ...")
+            raise Exception("Spin-basis must be True or False ...")
 
 class sqaOptions(object):
     "A class to hold options for the SecondQuantizationAlgebra+."
@@ -62,6 +62,34 @@ class sqaOptions(object):
 
         # Core-Valence Separation approach
         self.cvs_approach = False
+
+        # List of indices names defined by the user
+        self.user_defined_indices = []
+
+        # genEinsum options
+        self.genEinsum = lambda:None
+        self.genEinsum.lhs_string = None
+        self.genEinsum.indices_string = None
+        self.genEinsum.spin_integrated_tensors = True
+
+        self.genEinsum.trans_rdm = False
+        self.genEinsum.trans_indices_string = None
+        self.genEinsum.suffix = None
+
+        self.genEinsum.cvs_indices_list = None
+        self.genEinsum.valence_indices_list = None
+        self.genEinsum.cvs_tensors = False
+
+        self.genEinsum.remove_trans_rdm_constant = False
+        self.genEinsum.remove_core_integrals = False
+        self.genEinsum.intermediate_list = None
+
+        self.genEinsum.opt_einsum_terms = True
+        self.genEinsum.optimize = True
+
+    def add_user_defined_index(self, name):
+        if name not in self.user_defined_indices:
+            self.user_defined_indices.append(name)
 
 # Create an object of the options class
 options = sqaOptions()

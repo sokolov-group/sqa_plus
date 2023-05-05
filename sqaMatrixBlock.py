@@ -22,9 +22,9 @@
 import sys, time
 from sqaTensor import kroneckerDelta, sfExOp, creOp, desOp
 from sqaTerm import term, termChop, combineTerms
-from sqaOptions import options
 from sqaMisc import makeTuples, allDifferent
 from sqaSymmetry import symmetry
+from sqaOptions import options
 
 from sqaNormalOrder import normalOrder
 
@@ -47,14 +47,16 @@ def matrixBlock(terms, transRDM = False, legacy_order = False):
     for t in terms:
         t_no = normalOrder(t)
         nterms.extend(t_no)
+    del(terms)
 
     # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
     filterVirtual(nterms)
     termChop(nterms)
 
     # Normal ordering with respect to core orbitals
-    nterms = dummyLabel(nterms)
+    dummyLabel(nterms)
     fTerms = normalOrderCore(nterms)
+    del(nterms)
 
     # Evaluate Kroneker delta
     for t in fTerms:
@@ -81,7 +83,7 @@ def matrixBlock(terms, transRDM = False, legacy_order = False):
         termChop(fTerms)
 
     # Dummy indices label upate
-    fTerms = dummyLabel(fTerms)
+    dummyLabel(fTerms)
 
     # Reorder tensor indices: (core < active < virtual) order
     reorder_tensor_indices(fTerms, reorder_t = True, reorder_legacy = legacy_order)
@@ -106,24 +108,14 @@ def dummyLabel(_terms):
     print("Dummy indices relabelling...")
     sys.stdout.flush()
 
-    nterms = list(_terms)
-    for t in nterms:
+    for _term_ind, _term in enumerate(_terms):
         mymap = {}
 
         coreInd = list('ijklmnopq')
         actvInd = list('xyzwuvstr')
         virtInd = list('abcdefgh')
 
-        reservedInd = []
-        for t_tensor in t.tensors:
-            for t_tensor_index in range(len(t_tensor.indices)):
-                index_name = t_tensor.indices[t_tensor_index].name
-                index_user_defined = t_tensor.indices[t_tensor_index].userDefined
-
-                if index_name not in reservedInd and index_user_defined:
-                    reservedInd.append(index_user_defined)
-
-        for reserved_index_name in reservedInd:
+        for reserved_index_name in options.user_defined_indices:
             if reserved_index_name in coreInd:
                 coreInd.remove(reserved_index_name)
             elif reserved_index_name in actvInd:
@@ -131,13 +123,13 @@ def dummyLabel(_terms):
             elif reserved_index_name in virtInd:
                 virtInd.remove(reserved_index_name)
 
-        for t_tensor in t.tensors:
-            for t_tensor_index in range(len(t_tensor.indices)):
+        for _tensor_ind, _tensor in enumerate(_term.tensors):
+            for _index_ind, _index in enumerate(_tensor.indices):
 
                 # Decide which new label to assign
-                index_type = t_tensor.indices[t_tensor_index].indType
-                index_name = t_tensor.indices[t_tensor_index].name
-                index_user_defined = t_tensor.indices[t_tensor_index].userDefined
+                index_type = _index.indType
+                index_name = _index.name
+                index_user_defined = _index.userDefined
 
                 if not index_user_defined:
                     if index_name not in mymap.keys():
@@ -152,18 +144,18 @@ def dummyLabel(_terms):
                             virtInd.pop(0)
 
                     # Update the label
-                    t_tensor.indices[t_tensor_index].name = mymap[index_name]
+                    _terms[_term_ind].tensors[_tensor_ind].indices[_index_ind].name = mymap[index_name]
 
     if options.verbose:
         print("")
-        for _term in nterms:
+        for _term in _terms:
             print(_term)
         print("")
 
     print("Done!")
     print("----------------------------------------------------------------------------------")
     sys.stdout.flush()
-    return nterms
+    return
 
 def filterVirtual(_terms):
     "A function to calculate expectation value wrt virtual: filter zero terms wrt virtual."

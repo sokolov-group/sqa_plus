@@ -702,14 +702,9 @@ class term:
         # Create an index mapping that converts to a canonical alphabet, i.e. a-z
         alphabet = list('abcdefghijklmnopqrstuvwxyz')
 
-        user_defined_indexes = []
-        for index_mapped in bestMap.values():
-            if index_mapped.userDefined:
-                user_defined_indexes.append(index_mapped.userDefined)
-
         filtered_alphabet = []
         for character in alphabet:
-            if character not in user_defined_indexes:
+            if character not in options.user_defined_indices:
                 filtered_alphabet.append(character)
         alphabet = filtered_alphabet
 
@@ -724,7 +719,7 @@ class term:
                     canonMap[bestMap[key].tup()].name = alphabet.pop(0)
                     del bestMap[key]
                     break
-#        print "koushik check"
+
         # Rename the indices using the canonical mapping
         for t in self.tensors:
             for i in range(len(t.indices)):

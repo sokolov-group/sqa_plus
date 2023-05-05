@@ -22,11 +22,31 @@ from sqaIndex import get_spin_index_type, \
 from sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
 from sqaOptions import options
 
-def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_ind_str = None, suffix = None,
-              cvs_ind = None, val_ind = None, use_cvs_tensors = False, rm_trans_rdm_const = False, rm_core_int = False,
-              intermediate_list = None, opt_einsum_terms = True, optimize = True,
-              spin_integrated = False, use_spin_integrated_tensors = False,
-              help = False, **tensor_rename):
+def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
+              trans_indices_string = None, intermediate_list = None, help = False, **tensor_rename):
+
+    # Check if settings were done by argumments or by the options class
+    if not lhs_string:
+        lhs_string = options.genEinsum.lhs_string
+
+    if not indices_string:
+        indices_string = options.genEinsum.indices_string
+
+    if not trans_indices_string:
+        trans_indices_string = options.genEinsum.trans_indices_string
+
+    if not suffix:
+        suffix = options.genEinsum.suffix
+
+    if not intermediate_list:
+        intermediate_list = options.genEinsum.intermediate_list
+
+    trans_rdm = options.genEinsum.trans_rdm
+    remove_trans_rdm_constant = options.genEinsum.remove_trans_rdm_constant
+    remove_core_integrals = options.genEinsum.remove_core_integrals
+
+    opt_einsum_terms = options.genEinsum.opt_einsum_terms
+    optimize = options.genEinsum.optimize
 
     # Store custom names if provided by user
     custom_names = []
@@ -35,12 +55,12 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
             custom_names.append((old_name, new_name))
 
     # Default to 'temp' as name of matrix being created w/ einsum function
-    if not lhs_str:
-        lhs_str = 'temp'
+    if not lhs_string:
+        lhs_string = 'temp'
 
     # Default to spin-orbital suffix if not defined by user
-    # if not suffix:
-        # suffix = 'so'
+    if not suffix and options.spin_orbital:
+        suffix = 'so'
 
     ################################################
     # IF PROVIDED, PRINT EINSUMS FOR INT TERMS
@@ -56,18 +76,16 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
             trans_int = get_trans_intermediates(intermediate_list)
 
         # If using effective Hamiltonian, remove double-counted contributions to core terms
-        if rm_core_int:
+        if remove_core_integrals:
             intermediate_list, removed_int = remove_core_int(intermediate_list, int_terms = True)
 
         # Iterate through the list of provided intermediates
         for int_ind, (int_term, int_tensor) in enumerate(intermediate_list):
 
             # Pass tensors of term to function to create string representation of contraction indices and tensor names
-            int_tensor_inds, int_tensor_names = get_tensor_info(intermediate_list[int_ind][0].tensors, trans_rdm, trans_ind_str,
+            int_tensor_inds, int_tensor_names = get_tensor_info(intermediate_list[int_ind][0].tensors, trans_indices_string,
                                                                 ''.join([i.name for i in intermediate_list[int_ind][1].indices]),
-                                                                suffix, cvs_ind, val_ind, use_cvs_tensors,
-                                                                spin_integrated, use_spin_integrated_tensors,
-                                                                trans_int, custom_names)
+                                                                suffix, trans_int, custom_names)
 
             # Rename intermediates in tensor definitions
             if custom_names:
@@ -119,17 +137,17 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
             terms[term_ind].tensors.append(creDesTensor(credes_ops, trans_rdm))
 
     # Constants terms in CAS blocks are removed by default, print warning
-    if trans_rdm and rm_trans_rdm_const and intermediate_list and trans_int:
+    if trans_rdm and remove_trans_rdm_constant and intermediate_list and trans_int:
         terms, const_terms = remove_trans_rdm_const(terms, trans_int)
 
-    elif trans_rdm and rm_trans_rdm_const:
+    elif trans_rdm and remove_trans_rdm_constant:
         terms, const_terms = remove_trans_rdm_const(terms)
 
     # If using effective Hamiltonian, remove double-counted contributions to core terms
-    if intermediate_list and rm_core_int and removed_int:
+    if intermediate_list and remove_core_integrals and removed_int:
         terms, core_terms = remove_core_int(terms, removed_int)
 
-    elif rm_core_int:
+    elif remove_core_integrals:
         terms, core_terms = remove_core_int(terms)
 
     # Create empty list for storing einsums
@@ -140,7 +158,7 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
 
         ## PROCEED WITH GENERATING EINSUMS
         # Start to define einsum string
-        einsum = lhs_str + ' '
+        einsum = lhs_string + ' '
 
         # Determine sign of term
         pos = True
@@ -175,13 +193,11 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
 
         # Pass tensors of term to function to create string representation of contraction indices and tensor names
         if trans_rdm and intermediate_list:
-            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix,
-                                                        cvs_ind, val_ind, use_cvs_tensors, spin_integrated, use_spin_integrated_tensors,
-                                                        trans_int, custom_names)
+            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_indices_string, indices_string,
+                                                        suffix, trans_int, custom_names)
         else:
-            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_rdm, trans_ind_str, ind_str, suffix,
-                                                        cvs_ind, val_ind, use_cvs_tensors, spin_integrated, use_spin_integrated_tensors,
-                                                        custom_names)
+            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_indices_string, indices_string,
+                                                        suffix, custom_names)
 
         # Add contraction and tensor info
         tensor_info = (', '.join([str("'") + tensor_inds + str("'")] + tensor_names))
@@ -209,12 +225,24 @@ def genEinsum(terms, lhs_str = None, ind_str = None, trans_rdm = False, trans_in
     else:
         return einsum_list
 
-def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_ind = False, val_ind = False, use_cvs_tensors = False,
-                    spin_integrated = False, use_spin_integrated_tensors = False, trans_int = None, custom_names = None):
+def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, trans_int = None, custom_names = None):
+
+    # Import settings from options class
+    spin_integrated_tensors = options.genEinsum.spin_integrated_tensors
+    cvs_tensors = options.genEinsum.cvs_tensors
 
     # Pre-define list of names of tensors used in SQA and make list to store any new tensor 'types'
     tensor_names = []
     tensor_inds  = []
+
+    # Make a list out of the user-provided external indices
+    cvs_indices_list = options.genEinsum.cvs_indices_list
+    if isinstance(cvs_indices_list, str):
+        cvs_indices_list = list(cvs_indices_list)
+
+    valence_indices_list = options.genEinsum.valence_indices_list
+    if isinstance(valence_indices_list, str):
+        valence_indices_list = list(valence_indices_list)
 
     # Iterate through all the provided tensors
     for tens in sqa_tensors:
@@ -224,31 +252,34 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
 
             # Determine orbital space of kdelta
             if (is_core_index_type(tens.indices[0]) and is_core_index_type(tens.indices[1])):
-                if use_cvs_tensors:
-                    if cvs_ind and val_ind:
-                        if (tens.indices[0].name in cvs_ind) and (tens.indices[1].name in cvs_ind):
+                if cvs_tensors:
+                    if cvs_indices_list and valence_indices_list:
+                        if (tens.indices[0].name in cvs_indices_list) and (tens.indices[1].name in cvs_indices_list):
                             orb_space = 'ncvs'
-                        elif (tens.indices[0].name in val_ind) and (tens.indices[1].name in val_ind):
+                        elif (tens.indices[0].name in valence_indices_list) and (tens.indices[1].name in valence_indices_list):
                             orb_space = 'nval'
-                        elif (((tens.indices[0].name not in cvs_ind) and (tens.indices[0].name not in val_ind)) and
-                            ((tens.indices[1].name not in cvs_ind) and (tens.indices[1].name not in val_ind))):
+                        elif (((tens.indices[0].name not in cvs_indices_list) and (tens.indices[0].name not in valence_indices_list)) and
+                            ((tens.indices[1].name not in cvs_indices_list) and (tens.indices[1].name not in valence_indices_list))):
                             orb_space = 'ncore'
                         else:
                             orb_space = 'none'
-                    elif cvs_ind:
-                        if (tens.indices[0].name in cvs_ind) and (tens.indices[1].name in cvs_ind):
+
+                    elif cvs_indices_list:
+                        if (tens.indices[0].name in cvs_indices_list) and (tens.indices[1].name in cvs_indices_list):
                             orb_space = 'ncvs'
-                        elif (((tens.indices[0].name not in cvs_ind)) and ((tens.indices[1].name not in cvs_ind))):
+                        elif (((tens.indices[0].name not in cvs_indices_list)) and ((tens.indices[1].name not in cvs_indices_list))):
                             orb_space = 'ncore'
                         else:
                             orb_space = 'none'
-                    elif val_ind:
-                        if (tens.indices[0].name in val_ind) and (tens.indices[1].name in val_ind):
+
+                    elif valence_indices_list:
+                        if (tens.indices[0].name in valence_indices_list) and (tens.indices[1].name in valence_indices_list):
                             orb_space = 'nval'
-                        elif (((tens.indices[0].name not in val_ind)) and ((tens.indices[1].name not in val_ind))):
+                        elif (((tens.indices[0].name not in valence_indices_list)) and ((tens.indices[1].name not in valence_indices_list))):
                             orb_space = 'ncore'
                         else:
                             orb_space = 'none'
+
                     else:
                         if is_cvs_core_index_type(tens.indices[0]):
                             orb_space = 'ncvs'
@@ -285,21 +316,21 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
 
             # Determine orbital space of energies
             if is_core_index_type(tens.indices[0]):
-                if use_cvs_tensors:
-                    if cvs_ind and val_ind:
-                        if tens.indices[0].name in cvs_ind:
+                if cvs_tensors:
+                    if cvs_indices_list and valence_indices_list:
+                        if tens.indices[0].name in cvs_indices_list:
                             orb_space = 'cvs'
-                        elif tens.indices[0].name in val_ind:
+                        elif tens.indices[0].name in valence_indices_list:
                             orb_space = 'val'
                         else:
                             orb_space = 'core'
-                    elif cvs_ind:
-                        if tens.indices[0].name in cvs_ind:
+                    elif cvs_indices_list:
+                        if tens.indices[0].name in cvs_indices_list:
                             orb_space = 'cvs'
                         else:
                             orb_space = 'core'
-                    elif val_ind:
-                        if tens.indices[0].name in val_ind:
+                    elif valence_indices_list:
+                        if tens.indices[0].name in valence_indices_list:
                             orb_space = 'val'
                         else:
                             orb_space = 'core'
@@ -336,6 +367,16 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                 elif isinstance(op, desOp):
                     tensor_name += 'a'
 
+            # Append spin-integrated suffix if required
+            if spin_integrated_tensors:
+                spin_suffix = '_'
+                for i in range(len(tens.indices)):
+                    if is_alpha_index_type(tens.indices[i]):
+                        spin_suffix += 'a'
+                    elif is_beta_index_type(tens.indices[i]):
+                        spin_suffix += 'b'
+                tensor_name += spin_suffix
+
             # Append suffix
             if suffix:
                 tensor_name += '_' + suffix
@@ -354,21 +395,21 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                 if is_active_index_type(tens.indices[i]):
                     tensor_name += 'a'
                 elif is_core_index_type(tens.indices[i]):
-                    if use_cvs_tensors:
-                        if cvs_ind and val_ind:
-                            if (tens.indices[i].name in cvs_ind):
+                    if cvs_tensors:
+                        if cvs_indices_list and valence_indices_list:
+                            if (tens.indices[i].name in cvs_indices_list):
                                 tensor_name += 'x'
-                            elif (tens.indices[i].name in val_ind):
+                            elif (tens.indices[i].name in valence_indices_list):
                                 tensor_name += 'v'
                             else:
                                 tensor_name += 'c'
-                        elif cvs_ind:
-                            if (tens.indices[i].name in cvs_ind):
+                        elif cvs_indices_list:
+                            if (tens.indices[i].name in cvs_indices_list):
                                 tensor_name += 'x'
                             else:
                                 tensor_name += 'c'
-                        elif val_ind:
-                            if (tens.indices[i].name in val_ind):
+                        elif valence_indices_list:
+                            if (tens.indices[i].name in valence_indices_list):
                                 tensor_name += 'v'
                             else:
                                 tensor_name += 'c'
@@ -385,7 +426,7 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
                     tensor_name += 'e'
 
             # Append spin-integrated suffix if required
-            if use_spin_integrated_tensors:
+            if spin_integrated_tensors:
                 spin_suffix = '_'
                 for i in range(len(tens.indices)):
                     if is_alpha_index_type(tens.indices[i]):
@@ -409,7 +450,7 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
             tensor_name = '%s' % tens.name
 
             # Append spin-integrated suffix if required
-            if use_spin_integrated_tensors:
+            if spin_integrated_tensors:
                 spin_suffix = '_'
                 for i in range(len(tens.indices)):
                     if is_alpha_index_type(tens.indices[i]):
@@ -427,22 +468,22 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
         indices = ''.join([i.name for i in tens.indices])
 
         # Append 'slices' to appropiate dimensions of spin-integrated tensors
-        if spin_integrated and (not use_spin_integrated_tensors):
+        if options.spin_integrated and (not options.genEinsum.spin_integrated_tensors):
             tensor_name = append_spin_integrated_slice(tens, tensor_name, indices)
 
         # Append 'slices' to appropiate dimensions of tensors w/ CVS core indices
-        if (cvs_ind is not None) and (not use_cvs_tensors):
-            tensor_name = append_CVS_slice(tens, tensor_name, indices, cvs_ind, val_ind, suffix)
+        if (cvs_indices_list is not None) and (not cvs_tensors):
+            tensor_name = append_CVS_slice(tens, tensor_name, indices, suffix)
 
         # Append name of tensor (after and modifications due to special cases)
         tensor_names.append(tensor_name)
 
         # Append transition state index to appropriate set of indices
         if isinstance(tens, creDesTensor) and tens.trans_rdm:
-            indices = trans_ind_str + indices
+            indices = trans_indices_string + indices
 
         elif trans_int and (tens.name in trans_int):
-            indices = trans_ind_str + indices
+            indices = trans_indices_string + indices
 
         # Append completed index string to list
         tensor_inds.append(indices)
@@ -451,16 +492,16 @@ def get_tensor_info(sqa_tensors, trans_rdm, trans_ind_str, ind_str, suffix, cvs_
     tensor_inds = ','.join(tensor_inds)
 
     # Check if rhs string or transition index is provided before adding arrow
-    if trans_ind_str or ind_str:
+    if trans_indices_string or indices_string:
         tensor_inds += '->'
 
     # Append transition index first, if present
-    if trans_ind_str:
-        tensor_inds += trans_ind_str
+    if trans_indices_string:
+        tensor_inds += trans_indices_string
 
     # Append rhs string, if provided
-    if ind_str:
-        tensor_inds += ind_str
+    if indices_string:
+        tensor_inds += indices_string
 
     return tensor_inds, tensor_names
 
@@ -470,7 +511,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
     if not int_terms:
         print('\n------------------------------------ WARNING -------------------------------------')
         print('Terms with a contraction over repeating dummy core indices of 2e- integrals')
-        print('will be removed. Set "rm_core_int" flag to FALSE to preserve terms')
+        print('will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms')
 
         # Create lists to split up SQA terms
         kept_terms = []
@@ -516,7 +557,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
     else:
         print('------------------------------------- WARNING ------------------------------------')
         print('Intermediate tensors defined w/ contractions over repeating dummy core indices of')
-        print('2e- integrals will be removed. Set "rm_core_int" flag to FALSE to preserve definitions')
+        print('2e- integrals will be removed. Set "remove_core_integrals" flag to FALSE to preserve definitions')
 
         # Track which tensor definitions are removed and kept
         removed_int   = []
@@ -562,7 +603,7 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
 def remove_trans_rdm_const(terms, trans_int_list = None):
 
     print('--------------------------------- WARNING ---------------------------------')
-    print('Terms w/o transRDM tensor in the expression will be removed. Set "rm_trans_rdm_const"')
+    print('Terms w/o transRDM tensor in the expression will be removed. Set "remove_trans_rdm_constant"')
     print('flag to FALSE to preserve terms')
 
     # Create lists to split up SQA terms
@@ -642,18 +683,21 @@ def make_custom_name(sqa_tensor, rename_tuple):
 
     return new_name
 
-def append_CVS_slice(tens, tens_name, tens_indices, cvs_ind, val_ind, suffix):
+def append_CVS_slice(tens, tens_name, tens_indices, suffix):
 
     # Make a list out of the user-provided external indices
-    if cvs_ind:
-        cvs_ind = list(cvs_ind)
-    if val_ind:
-        val_ind = list(cvs_ind)
+    cvs_indices_list = options.genEinsum.cvs_indices_list
+    if isinstance(cvs_indices_list, str):
+        cvs_indices_list = list(cvs_indices_list)
+
+    valence_indices_list = options.genEinsum.valence_indices_list
+    if isinstance(valence_indices_list, str):
+        valence_indices_list = list(valence_indices_list)
 
     tens_indices = list(tens_indices)
 
     # Check whether tensor name needs an additional slice
-    num_cvs = len([ind for ind in tens_indices if ind in cvs_ind])
+    num_cvs = len([ind for ind in tens_indices if ind in cvs_indices_list])
 
     # Define ncvs string
     ncvs_string = 'ncvs'
@@ -677,10 +721,10 @@ def append_CVS_slice(tens, tens_name, tens_indices, cvs_ind, val_ind, suffix):
             for ind in tens_indices:
 
                 # Append slice through CVS indices
-                if ind in cvs_ind:
+                if ind in cvs_indices_list:
                     to_append += ':' + ncvs_string + ','
 
-                elif ind in val_ind:
+                elif ind in valence_indices_list:
                     to_append +=  ncvs_string + ':,'
 
                 # Ignore non-CVS indices
@@ -912,18 +956,18 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
 def einsum_help():
     print("""\n        HELP :: 
         -----------
-        terms         : A list of terms
-        lhs_str       : Left hand side string (e.g. string 'M' = einsum ..)
-        ind_str       : Einsum right side indix string (e.g. -> string 'p')
-        transRDM      : Transition RDM True of False
-        trans_ind_str : Transition RDM string if True
-        rhs_str       : Extra string for other kind of operation 
-                        (e.g. transpose, copy, reshape .. etc)
-        optimize      : By default optimization is true
-        suffix        : Additional string atachement to the tensor name 
-                        ( By default suffix = 'so' for spin orbitlas)
-        rdm_str       : RDM string name
-        tensor_rename : Rename tensor if required 
+        terms           : A list of terms
+        lhs_string      : Left hand side string (e.g. string 'M' = einsum ..)
+        indices_string  : Einsum right side indix string (e.g. -> string 'p')
+        transRDM        : Transition RDM True of False
+        trans_indices_string   : Transition RDM string if True
+        rhs_str         : Extra string for other kind of operation 
+                          (e.g. transpose, copy, reshape .. etc)
+        optimize        : By default optimization is true
+        suffix          : Additional string atachement to the tensor name 
+                          ( By default suffix = 'so' for spin orbitlas)
+        rdm_str         : RDM string name
+        tensor_rename   : Rename tensor if required 
                         (e.g. rename tensor 'X' to 'TEMP': X = 'TEMP'. 
                         For multiple tensors: X = 'TEMP', h = 'Hamiltonian', ..)
 --------------------------------------------------------------""")

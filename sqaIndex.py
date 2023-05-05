@@ -77,6 +77,7 @@ class index:
 
 		if userDefined is True:
 			self.userDefined = str(name)
+			options.add_user_defined_index(str(name))
 		else:
 			self.userDefined = userDefined
 

@@ -124,8 +124,6 @@ from sqaHeff import         \
   dyallH,                   \
   dyallH_act,               \
   Tamplitude,               \
-  Tamplitude_excitation,    \
-  Tamplitude_deexcitation,  \
   Vperturbation
 
 from sqaEinsum import genEinsum
