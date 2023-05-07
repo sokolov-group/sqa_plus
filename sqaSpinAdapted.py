@@ -38,15 +38,16 @@ def convertSpinIntegratedToAdapted(terms_si):
     # Convert Cre/Des Objects to RDM Objects
     options.print_divider()
     convert_credes_to_rdm(terms_si, trans_rdm = False)
-    reorder_rdm_spin_indices(terms_si)
-    reorder_tensor_indices(terms_si)
 
+    reorder_rdm_spin_indices(terms_si)
     dummyLabel(terms_si)
-    terms_si.sort()
     len_terms_si = len(terms_si)
     
     # Convert Kronecker Delta to Spin-Adapted Formulation
     terms_sa = convert_kdelta_si_to_sa(terms_si)
+
+    # Convert eigenvalues to Spin-Adapted Formulation
+    terms_sa = convert_e_si_to_sa(terms_sa)
 
     # Convert 1e- integrals to Spin-Adapted Formulation
     terms_sa = convert_h1e_si_to_sa(terms_sa)
@@ -54,14 +55,11 @@ def convertSpinIntegratedToAdapted(terms_si):
     # Convert 2e- integrals to Spin-Adapted Formulation
     terms_sa = convert_v2e_si_to_sa(terms_sa)
 
-    # Convert eigenvalues to Spin-Adapted Formulation
-    terms_sa = convert_e_si_to_sa(terms_sa)
+    # Convert T amplitudes to Spin-Adapted Formulation
+    terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
     # Convert RDMs to Spin-Adapted Formulation
     terms_sa = convert_rdms_si_to_sa(terms_sa)
-
-    # Convert T amplitudes to Spin-Adapted Formulation
-    terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
     # Combine Spin-Adapted Terms
     options.print_divider()
@@ -156,7 +154,7 @@ def reorder_v2e_indices_notation(_terms_v2e):
                 ten_v2e.indices = [ten_v2e.indices[i] for i in [0, 2, 1, 3]]
                 ten_v2e.symmetries = v2e_symm
 
-                _terms_v2e[ten_v2e_ind].tensors[ten_v2e_ind] = ten_v2e.copy()
+                _terms_v2e[term_v2e_ind].tensors[ten_v2e_ind] = ten_v2e.copy()
 
     print("Done!")
     options.print_divider()
@@ -735,6 +733,9 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
             tens_rdm3_sa = []
             consts_rdm3_sa = []
 
+            if options.verbose:
+                print("\n<<< {:}".format(term_rdm3_si))
+
             for ten_rdm3 in tens_rdm3:
                 ten_rdm3_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm3.indices]
 
@@ -992,7 +993,13 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     for ten_rdm3_sa_ind, ten_rdm3_sa in zip(tens_rdm3_ind, tens_rdm3_sa):
                         term_rdm3_sa.tensors[ten_rdm3_sa_ind] = remove_spin_index_type(ten_rdm3_sa)
                         term_rdm3_sa.tensors[ten_rdm3_sa_ind].symmetries = rdm3_sa_symm
+
+                    if options.verbose:
+                        print("--> {:} (factor = {:.5f})".format(term_rdm3_sa, consts_rdm3_sa_prod[tens_rdm3_sa_ind]))
+
                     terms_rdm3_sa.append(term_rdm3_sa)
+
+
         else:
             terms_rdm3_sa.append(term_rdm3_si)
 
@@ -1628,6 +1635,8 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 
         else:
             terms_t2_sa.append(term_t2_si)
+
+    termChop(terms_t2_sa)
 
     # Print kdelta spin-adapted terms
     if options.verbose:

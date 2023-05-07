@@ -94,7 +94,6 @@ class sqaOptions(object):
         self.user_defined_indices = []
 
         # Options about custom reorder of tensor indices
-        self.reorder_amplitudes = False
         self.legacy_ordering = True
 
         # MatrixBlock options
@@ -105,7 +104,9 @@ class sqaOptions(object):
         self.genEinsum = lambda:None
         self.genEinsum.lhs_string = None
         self.genEinsum.indices_string = None
+
         self.genEinsum.spin_integrated_tensors = False
+        self.genEinsum.keep_user_defined_dummy_names = False
 
         self.genEinsum.trans_rdm = False
         self.genEinsum.trans_indices_string = None
@@ -135,7 +136,7 @@ class sqaOptions(object):
         print("\n" + " {:} ".format(string).center(100, "-") + "\n")
 
     def print_divider(self):
-        print("\n" + "-" * 100 + "\n")
+        print("-" * 100)
 
 # Create an object of the options class
 options = sqaOptions()

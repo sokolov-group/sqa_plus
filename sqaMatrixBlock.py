@@ -55,7 +55,6 @@ def matrixBlock(terms):
     termChop(nterms)
 
     # Normal ordering with respect to core orbitals
-    dummyLabel(nterms)
     fTerms = normalOrderCore(nterms)
     del(nterms)
 
@@ -83,11 +82,11 @@ def matrixBlock(terms):
                 trm.numConstant = 0.0
         termChop(fTerms)
 
-    # Dummy indices label upate
-    dummyLabel(fTerms)
-
     # Reorder tensor indices: (core < active < virtual) order
     reorder_tensor_indices(fTerms)
+
+    # Dummy indices label upate
+    dummyLabel(fTerms)
 
     # Print the final results
     options.print_header("Final results")
@@ -105,6 +104,10 @@ def matrixBlock(terms):
 def dummyLabel(_terms):
     "A function to relabel dummy indices."
 
+    # Import options from sqaOptions class
+    user_defined_indices = options.user_defined_indices
+    keep_user_defined_dummy_names = options.genEinsum.keep_user_defined_dummy_names
+
     print("Dummy indices relabelling...")
     sys.stdout.flush()
 
@@ -115,13 +118,18 @@ def dummyLabel(_terms):
         actvInd = list('xyzwuvstr')
         virtInd = list('abcdefgh')
 
-        for reserved_index_name in options.user_defined_indices:
-            if reserved_index_name in coreInd:
-                coreInd.remove(reserved_index_name)
-            elif reserved_index_name in actvInd:
-                actvInd.remove(reserved_index_name)
-            elif reserved_index_name in virtInd:
-                virtInd.remove(reserved_index_name)
+        if keep_user_defined_dummy_names:
+            for reserved_index_name in user_defined_indices:
+                if reserved_index_name in coreInd:
+                    coreInd.remove(reserved_index_name)
+                elif reserved_index_name in actvInd:
+                    actvInd.remove(reserved_index_name)
+                elif reserved_index_name in virtInd:
+                    virtInd.remove(reserved_index_name)
+
+        if options.verbose:
+            _term_unlabeled = _term
+        _term_unlabeled = _term.copy()
 
         for _tensor_ind, _tensor in enumerate(_term.tensors):
             for _index_ind, _index in enumerate(_tensor.indices):
@@ -131,7 +139,7 @@ def dummyLabel(_terms):
                 index_name = _index.name
                 index_user_defined = _index.userDefined
 
-                if not index_user_defined:
+                if (keep_user_defined_dummy_names and not index_user_defined) or not keep_user_defined_dummy_names:
                     if index_name not in mymap.keys():
                         if is_core_index_type(index_type):
                             mymap[index_name] = coreInd[0]
@@ -146,11 +154,9 @@ def dummyLabel(_terms):
                     # Update the label
                     _terms[_term_ind].tensors[_tensor_ind].indices[_index_ind].name = mymap[index_name]
 
-    if options.verbose:
-        print("")
-        for _term in _terms:
-            print(_term)
-        print("")
+        if options.verbose:
+            print("{:} ---> {:}".format(_term_unlabeled, _terms[_term_ind]))
+        print("{:} ---> {:}".format(_term_unlabeled, _terms[_term_ind]))
 
     print("Done!")
     options.print_divider()
@@ -443,21 +449,20 @@ def reorder_tensor_indices(_terms):
     sys.stdout.flush()
 
     # Import options from sqaOptions class
-    reorder_amplitudes = options.reorder_amplitudes
     legacy_ordering = options.legacy_ordering
+    chemists_notation = options.chemists_notation
 
-    v2e_sym_braket = symmetry((2,3,0,1), 1)
+    if chemists_notation:
+        v2e_sym_braket = symmetry((1,3,0,2), 1)
+    else:
+        v2e_sym_braket = symmetry((2,3,0,1), 1)
 
     for ind_unordered_term, unordered_term in enumerate(_terms):
         for ind_unordered_tensor, unordered_tensor in enumerate(unordered_term.tensors):
-            if reorder_amplitudes:
-                reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
-                                  (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4) or
-                                  ((unordered_tensor.name[0] == 't') and
-                                   ((len(unordered_tensor.indices) == 2) or len(unordered_tensor.indices) == 4)))
-            else:
-                reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
-                                  (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4))
+            reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
+                              (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4) or
+                              ((unordered_tensor.name[0] == 't') and
+                               ((len(unordered_tensor.indices) == 2) or len(unordered_tensor.indices) == 4)))
 
             if (unordered_tensor.name == 'v') and (v2e_sym_braket not in unordered_tensor.symmetries):
                 unordered_tensor_symmetries = unordered_tensor.symmetries
@@ -503,16 +508,18 @@ def reorder_tensor_indices(_terms):
                 order_factor = permutes_factors[permutes_rank_ind]
 
                 # Legacy ordering to obtain spin-orbital Prism integrals exceptions
-                if (ordered_tensor.name == 'v') and legacy_ordering:
+                if (ordered_tensor.name in ['v', 't1', 't2']) and legacy_ordering and not chemists_notation:
 
+                    inds_ccae = [options.core_type,   options.core_type,   options.active_type, options.virtual_type]
                     inds_caae = [options.core_type,   options.active_type, options.active_type, options.virtual_type]
                     inds_aaae = [options.active_type, options.active_type, options.active_type, options.virtual_type]
+                    exceptions_list = [inds_ccae, inds_caae, inds_aaae]
 
                     exception_symm = symmetry((0,1,3,2), -1)
 
-                    unordered_v2e_inds = [get_spatial_index_type(ind) for ind in ordered_tensor.indices]
+                    unordered_tensor_inds = [get_spatial_index_type(ind) for ind in ordered_tensor.indices]
 
-                    if (unordered_v2e_inds in [inds_caae, inds_aaae]) and (exception_symm in ordered_tensor.symmetries):
+                    if (unordered_tensor_inds in exceptions_list) and (exception_symm in ordered_tensor.symmetries):
                         ordered_tensor.indices = [ordered_tensor.indices[i] for i in [0, 1, 3, 2]]
                         order_factor *= - 1.0
 
