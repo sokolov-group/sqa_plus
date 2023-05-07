@@ -138,7 +138,7 @@ def reorder_v2e_indices_notation(_terms_v2e):
         v2e_tensors_ind = []
 
         ## Define indices symmetries
-        v2e_symm = [symmetry((1,0,2,3), 1), symmetry((2,3,0,1), 1)]
+        v2e_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
 
         ## Append all v2e objects to list
         for ten_v2e_ind, ten_v2e in enumerate(term_v2e.tensors):
@@ -150,9 +150,15 @@ def reorder_v2e_indices_notation(_terms_v2e):
         if v2e_tensors:
             for ten_v2e_ind, ten_v2e in zip(v2e_tensors_ind, v2e_tensors):
 
+                if options.verbose:
+                    unordered_ten_v2e = ten_v2e.copy()
+
                 # v2e[p,q,r,s] => v2e[p,r,q,s]
                 ten_v2e.indices = [ten_v2e.indices[i] for i in [0, 2, 1, 3]]
                 ten_v2e.symmetries = v2e_symm
+
+                if options.verbose:
+                    print("{:}    --->    {:}".format(unordered_ten_v2e, ten_v2e))
 
                 _terms_v2e[term_v2e_ind].tensors[ten_v2e_ind] = ten_v2e.copy()
 
@@ -187,7 +193,7 @@ def reorder_rdm_indices_notation(_terms_rdm):
 
         ## Append all RDM objects to list
         for ten_rdm_ind, ten_rdm in enumerate(term_rdm.tensors):
-            if isinstance(ten_rdm, creDesTensor):
+            if (isinstance(ten_rdm, creDesTensor)) and (len(ten_rdm.indices) > 2):
                 rdm_tensors.append(ten_rdm)
                 rdm_tensors_ind.append(ten_rdm_ind)
 
@@ -209,6 +215,9 @@ def reorder_rdm_indices_notation(_terms_rdm):
                 if len(ten_rdm.indices) == 8:
                     ten_rdm.indices = [ten_rdm.indices[i] for i in [0, 1, 2, 3, 7, 6, 5, 4]]
                     ten_rdm.symmetries = rdm4_symm
+
+                if options.verbose:
+                    print("{:}    --->    {:}".format(_terms_rdm[term_rdm_ind].tensors[ten_rdm_ind], ten_rdm))
 
                 _terms_rdm[term_rdm_ind].tensors[ten_rdm_ind] = ten_rdm.copy()
 
@@ -351,13 +360,6 @@ def convert_h1e_si_to_sa(_terms_h1e_si):
 
     termChop(terms_h1e_sa)
 
-    # Print 1e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_h1e_sa in terms_h1e_sa:
-            print(term_h1e_sa)
-        print("")
-
     print("Done!")
     return terms_h1e_sa
 
@@ -395,6 +397,9 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
         if tens_v2e:
             tens_v2e_sa = []
             consts_v2e_sa = []
+
+            if options.verbose:
+                print("\n<<< {:}".format(term_v2e_si))
 
             for ten_v2e in tens_v2e:
 
@@ -506,19 +511,16 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                 for ten_v2e_sa_ind, ten_v2e_sa in zip(tens_v2e_ind, tens_v2e_sa):
                     term_v2e_sa.tensors[ten_v2e_sa_ind] = remove_spin_index_type(ten_v2e_sa)
                     term_v2e_sa.tensors[ten_v2e_sa_ind].symmetries = v2e_sa_symm
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_v2e_sa, consts_v2e_sa_prod[tens_v2e_sa_ind]))
+
                 terms_v2e_sa.append(term_v2e_sa)
 
         else:
             terms_v2e_sa.append(term_v2e_si)
 
     termChop(terms_v2e_sa)
-
-    # Print 2e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_v2e_sa in terms_v2e_sa:
-            print(term_v2e_sa)
-        print("")
 
     print("Done!")
     return terms_v2e_sa
@@ -546,24 +548,25 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
             if isinstance(ten, creDesTensor) and len(ten.indices) == 2:
                 ten_rdm1_spin_inds = [get_spin_index_type(ind) for ind in ten.indices]
 
+                if options.verbose:
+                    print("\n<<< {:}".format(term_rdm1_si))
+
                 if ten_rdm1_spin_inds in [inds_aa, inds_bb]:
-                    term_rdm1_sa.scale(1.0 / 2.0)
+                    consts_rdm1_sa_prod = 1.0 / 2.0 
+                    term_rdm1_sa.scale(consts_rdm1_sa_prod)
                     term_rdm1_sa.tensors[ten_ind] = remove_spin_index_type(ten)
                     term_rdm1_sa.tensors[ten_ind].symmetries = rdm1_sa_symm
                 else:
-                    term_rdm1_sa.scale(0.0)
+                    consts_rdm1_sa_prod = 0.0
+                    term_rdm1_sa.scale(consts_rdm1_sa_prod)
                     term_rdm1_sa.tensors[ten_ind] = remove_spin_index_type(ten)
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_rdm1_sa, consts_rdm1_sa_prod))
 
         terms_rdm1_sa.append(term_rdm1_sa)
 
     termChop(terms_rdm1_sa)
-
-    # Print 1e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_rdm1_sa in terms_rdm1_sa:
-            print(term_rdm1_sa)
-        print("")
 
     # Convert Two-Body RDMs
     print("Converting 2-RDMs to spin-adapted formulation...")
@@ -672,13 +675,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
             terms_rdm2_sa.append(term_rdm2_si)
 
     termChop(terms_rdm2_sa)
-
-    # Print 2e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_rdm2_sa in terms_rdm2_sa:
-            print(term_rdm2_sa)
-        print("")
 
     # Convert Three-Body RDMs
     print("Converting 3-RDMs to spin-adapted formulation...")
@@ -999,27 +995,17 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
 
                     terms_rdm3_sa.append(term_rdm3_sa)
 
-
         else:
             terms_rdm3_sa.append(term_rdm3_si)
 
     termChop(terms_rdm3_sa)
 
-    # Print 3e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_rdm3_sa in terms_rdm3_sa:
-            print(term_rdm3_sa)
-        print("")
-
     # Convert Four-Body RDMs
     print("Converting 4-RDMs to spin-adapted formulation...")
 
-    #TODO: Update symm
     # Define Spin-Adapted Four-Body RDMs Symmetries
-    rdm4_sa_symm = [symmetry((1,0,2,3,5,4,6,7), 1), symmetry((0,2,1,3,4,6,5,7), 1), symmetry((0,1,3,2,4,5,7,6), 1),
-                    symmetry((2,1,0,3,6,5,4,7), 1), symmetry((3,1,2,0,7,5,6,4), 1), symmetry((0,1,2,3,4,5,6,7), 1),
-                    symmetry((0,3,2,1,4,7,6,5), 1)]
+    rdm4_sa_symm = [symmetry((1,0,2,3,4,5,7,6), 1), symmetry((0,2,1,3,4,6,5,7), 1), symmetry((0,1,3,2,5,4,6,7), 1),
+                    symmetry((7,6,5,4,3,2,1,0), 1)]
 
     # Define 4e- indices lists
     inds_aaaaaaaa = [options.alpha_type, options.alpha_type, options.alpha_type, options.alpha_type,
@@ -1055,6 +1041,9 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
         if tens_rdm4:
             tens_rdm4_sa = []
             consts_rdm4_sa = []
+
+            if options.verbose:
+                print("\n<<< {:}".format(term_rdm4_si))
 
             for ten_rdm4 in tens_rdm4:
                 ten_rdm4_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm4.indices]
@@ -1325,18 +1314,16 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     for ten_rdm4_sa_ind, ten_rdm4_sa in zip(tens_rdm4_ind, tens_rdm4_sa):
                         term_rdm4_sa.tensors[ten_rdm4_sa_ind] = remove_spin_index_type(ten_rdm4_sa)
                         term_rdm4_sa.tensors[ten_rdm4_sa_ind].symmetries = rdm4_sa_symm
+
+                    if options.verbose:
+                        print("--> {:} (factor = {:.5f})".format(term_rdm4_sa, consts_rdm4_sa_prod[tens_rdm4_sa_ind]))
+
                     terms_rdm4_sa.append(term_rdm4_sa)
+
         else:
             terms_rdm4_sa.append(term_rdm4_si)
 
     termChop(terms_rdm4_sa)
-
-    # Print 4e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_rdm4_sa in terms_rdm4_sa:
-            print(term_rdm4_sa)
-        print("")
 
     print("Done!")
     return terms_rdm4_sa
@@ -1356,13 +1343,6 @@ def convert_kdelta_si_to_sa(_terms_kdelta_si):
                 term_kdelta_sa.tensors[ten_ind] = remove_spin_index_type(ten)
         terms_kdelta_sa.append(term_kdelta_sa)
 
-    # Print kdelta spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_kdelta_sa in terms_kdelta_sa:
-            print(term_kdelta_sa)
-        print("")
-
     print("Done!")
     return terms_kdelta_sa
 
@@ -1380,13 +1360,6 @@ def convert_e_si_to_sa(_terms_e_si):
             if ten.name == 'e' and len(ten.indices) == 1:
                 term_e_sa.tensors[ten_ind] = remove_spin_index_type(ten)
         terms_e_sa.append(term_e_sa)
-
-    # Print e spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_e_sa in terms_e_sa:
-            print(term_e_sa)
-        print("")
 
     print("Done!")
     return terms_e_sa
@@ -1414,13 +1387,21 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
             if ten.name[0] == 't' and len(ten.indices) == 2:
                 ten_t1_spin_inds = [get_spin_index_type(ind) for ind in ten.indices]
 
+                if options.verbose:
+                    print("\n<<< {:}".format(term_t1_si))
+
                 if ten_t1_spin_inds in [inds_aa, inds_bb]:
                     ten_t1 = ten.copy()
+                    consts_t1_sa_prod = 1.0
                     term_t1_sa.tensors[ten_ind] = remove_spin_index_type(ten_t1)
                     term_t1_sa.tensors[ten_ind].symmetries = t1_sa_symm
                 else:
-                    term_t1_sa.scale(0.0)
+                    consts_t1_sa_prod = 0.0
+                    term_t1_sa.scale(consts_t1_sa_prod)
                     term_t1_sa.tensors[ten_ind] = remove_spin_index_type(ten)
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_t1_sa, consts_t1_sa_prod))
 
         terms_t1_sa.append(term_t1_sa)
 
@@ -1451,6 +1432,9 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
         if tens_t2:
             tens_t2_sa = []
             consts_t2_sa = []
+
+            if options.verbose:
+                print("\n<<< {:}".format(term_t2_si))
 
             for ten_t2 in tens_t2:
 
@@ -1631,19 +1615,16 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                 for ten_t2_sa_ind, ten_t2_sa in zip(tens_t2_ind, tens_t2_sa):
                     term_t2_sa.tensors[ten_t2_sa_ind] = remove_spin_index_type(ten_t2_sa)
                     term_t2_sa.tensors[ten_t2_sa_ind].symmetries = t2_sa_symm
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_t2_sa, consts_t2_sa_prod[tens_t2_sa_ind]))
+
                 terms_t2_sa.append(term_t2_sa)
 
         else:
             terms_t2_sa.append(term_t2_si)
 
     termChop(terms_t2_sa)
-
-    # Print kdelta spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_t_sa in terms_t2_sa:
-            print(term_t_sa)
-        print("")
 
     print("Done!")
     return terms_t2_sa

@@ -101,12 +101,11 @@ def matrixBlock(terms):
 
     return fTerms
 
-def dummyLabel(_terms):
+def dummyLabel(_terms, keep_user_defined_dummy_names = True):
     "A function to relabel dummy indices."
 
     # Import options from sqaOptions class
     user_defined_indices = options.user_defined_indices
-    keep_user_defined_dummy_names = options.genEinsum.keep_user_defined_dummy_names
 
     print("Dummy indices relabelling...")
     sys.stdout.flush()
@@ -137,9 +136,12 @@ def dummyLabel(_terms):
                 # Decide which new label to assign
                 index_type = _index.indType
                 index_name = _index.name
+                index_summed = _index.isSummed
                 index_user_defined = _index.userDefined
 
-                if (keep_user_defined_dummy_names and not index_user_defined) or not keep_user_defined_dummy_names:
+                if (index_summed and 
+                    ((keep_user_defined_dummy_names and not index_user_defined)
+                      or not keep_user_defined_dummy_names)):
                     if index_name not in mymap.keys():
                         if is_core_index_type(index_type):
                             mymap[index_name] = coreInd[0]
@@ -156,7 +158,6 @@ def dummyLabel(_terms):
 
         if options.verbose:
             print("{:} ---> {:}".format(_term_unlabeled, _terms[_term_ind]))
-        print("{:} ---> {:}".format(_term_unlabeled, _terms[_term_ind]))
 
     print("Done!")
     options.print_divider()
@@ -453,7 +454,7 @@ def reorder_tensor_indices(_terms):
     chemists_notation = options.chemists_notation
 
     if chemists_notation:
-        v2e_sym_braket = symmetry((1,3,0,2), 1)
+        v2e_sym_braket = symmetry((2,3,0,1), 1)
     else:
         v2e_sym_braket = symmetry((2,3,0,1), 1)
 
@@ -523,13 +524,13 @@ def reorder_tensor_indices(_terms):
                         ordered_tensor.indices = [ordered_tensor.indices[i] for i in [0, 1, 3, 2]]
                         order_factor *= - 1.0
 
-                _terms[ind_unordered_term].tensors[ind_unordered_tensor] = ordered_tensor.copy()
-                _terms[ind_unordered_term].numConstant *= order_factor
-
                 if options.verbose:
                     print("")
                     print(unordered_term)
                     print(' %s    --->    %s (factor = %s)' % (unordered_tensor, ordered_tensor, order_factor))
+
+                _terms[ind_unordered_term].tensors[ind_unordered_tensor] = ordered_tensor.copy()
+                _terms[ind_unordered_term].numConstant *= order_factor
 
     print("Done!")
     options.print_divider()

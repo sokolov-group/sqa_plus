@@ -20,6 +20,7 @@ from sqaIndex import get_spin_index_type, \
                      is_alpha_index_type, is_beta_index_type
 
 from sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
+from sqaMatrixBlock import dummyLabel
 from sqaOptions import options
 
 def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
@@ -47,6 +48,10 @@ def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
 
     opt_einsum_terms = options.genEinsum.opt_einsum_terms
     optimize = options.genEinsum.optimize
+
+    keep_user_defined_dummy_names = options.genEinsum.keep_user_defined_dummy_names
+    if not keep_user_defined_dummy_names:
+        dummyLabel(terms, keep_user_defined_dummy_names)
 
     # Store custom names if provided by user
     custom_names = []
