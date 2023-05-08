@@ -927,7 +927,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
                     ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
-                    const3_rdm3 = 1.0 / 12.0
+                    const3_rdm3 = - 1.0 / 12.0
 
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,x,y)
                     ten4_rdm3 = ten_rdm3.copy()
@@ -940,7 +940,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                 elif ten_rdm3_spin_inds in [inds_baaaab, inds_abbbba]:
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten1_rdm3 = ten_rdm3.copy()
-                    const1_rdm3 = - 1.0 / 12.0
+                    const1_rdm3 = 1.0 / 12.0
 
                     ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten2_rdm3 = ten_rdm3.copy()
@@ -950,7 +950,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
                     ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
-                    const3_rdm3 = 1.0 / 12.0
+                    const3_rdm3 = - 1.0 / 12.0
 
                     ## Spin-Adapted RDM term: rdm(u,v,w,y,z,x)
                     ten4_rdm3 = ten_rdm3.copy()
