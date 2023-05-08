@@ -166,6 +166,16 @@ def is_core_index_type(index_type):
 
 	return is_core_index
 
+def is_cvs_index_type(index_type):
+	spatial_index_type = get_spatial_index_type(index_type)
+	is_cvs_index = False
+
+	for cvs_index_type in (options.cvs_core_type, options.cvs_valence_type):
+		if is_index_type(spatial_index_type, cvs_index_type):
+			is_cvs_index = True
+
+	return is_cvs_index
+
 def is_cvs_core_index_type(index_type):
     spatial_index_type = get_spatial_index_type(index_type)
     return is_index_type(spatial_index_type, options.cvs_core_type)

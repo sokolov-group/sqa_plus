@@ -114,7 +114,7 @@ class sqaOptions(object):
 
         self.genEinsum.cvs_indices_list = None
         self.genEinsum.valence_indices_list = None
-        self.genEinsum.cvs_tensors = False
+        self.genEinsum.cvs_tensors = True
 
         self.genEinsum.remove_trans_rdm_constant = False
         self.genEinsum.remove_core_integrals = True

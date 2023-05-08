@@ -454,7 +454,7 @@ def reorder_tensor_indices(_terms):
     chemists_notation = options.chemists_notation
 
     if chemists_notation:
-        v2e_sym_braket = symmetry((2,3,0,1), 1)
+        v2e_sym_braket = symmetry((1,0,3,2), 1)
     else:
         v2e_sym_braket = symmetry((2,3,0,1), 1)
 
