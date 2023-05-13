@@ -37,10 +37,10 @@ Then, core indices defined by the user must be of these types.
 ## Using summed (dummy) indices lists: `sqa_plus.indexLists`
 Besides the usage of `sqa_plus.index` class to define dummy indices, we provide an automated way to generate unique indices.
 The `sqa_plus.indexLists` object can be used to create dummy indices, free of conflict with SQA+ implemented operators.
+New indices can be obtained using the `new_index()` method.
 
 ```python
-# Examples of sqa_plus.indexLists usage 
-
+# Examples of sqa_plus.indexLists usage
 cvs_core_ind_1 = sqa_plus.indexLists.cvs_core.new_index()
 active_ind_1 = sqa_plus.indexLists.active.new_index()
 virtual_alpha_ind_1 = sqa_plus.indexLists.virtual_alpha.new_index()
@@ -48,35 +48,35 @@ virtual_alpha_ind_1 = sqa_plus.indexLists.virtual_alpha.new_index()
 
 #### Dummy index types supported
 - Spin-orbital basis:
--- `indexLists.core`
--- `indexLists.active`
--- `indexLists.virtual`
+	- `indexLists.core`
+	- `indexLists.active`
+	- `indexLists.virtual`
 
 - Spin-orbital basis using CVS:
--- `indexLists.cvs_core`
--- `indexLists.cvs_valence`
--- `indexLists.active`
--- `indexLists.virtual`
+	- `indexLists.cvs_core`
+	- `indexLists.cvs_valence`
+	- `indexLists.active`
+	- `indexLists.virtual`
 
 - Spin-integrated basis:
--- `indexLists.core_alpha`
--- `indexLists.active_alpha`
--- `indexLists.virtual_alpha`
+	- `indexLists.core_alpha`
+	- `indexLists.active_alpha`
+	- `indexLists.virtual_alpha`
 
--- `indexLists.core_beta`
--- `indexLists.active_beta`
--- `indexLists.virtual_beta`
+	- `indexLists.core_beta`
+	- `indexLists.active_beta`
+	- `indexLists.virtual_beta`
 
 - Spin-integrated basis using CVS:
--- `indexLists.cvs_core_alpha`
--- `indexLists.cvs_valence_alpha`
--- `indexLists.active_alpha`
--- `indexLists.virtual_alpha`
+	- `indexLists.cvs_core_alpha`
+	- `indexLists.cvs_valence_alpha`
+	- `indexLists.active_alpha`
+	- `indexLists.virtual_alpha`
 
--- `indexLists.cvs_core_beta`
--- `indexLists.cvs_valence_beta`
--- `indexLists.active_beta`
--- `indexLists.virtual_beta`
+	- `indexLists.cvs_core_beta`
+	- `indexLists.cvs_valence_beta`
+	- `indexLists.active_beta`
+	- `indexLists.virtual_beta`
 
 ## Spin-Adapted Equation Generator
 ### Spin-Adaptation Automation from Spin-Integrated Equations: `sqa_plus.ConvertSpinIntegratedToSpinAdapted`
