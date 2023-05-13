@@ -1,0 +1,6 @@
+sigma_cce  = 1/2 * einsum('LKB,B->KLB', X_abb, e_extern, optimize = einsum_type)
+sigma_cce -= 1/2 * einsum('LKB,K->KLB', X_abb, e_cvs, optimize = einsum_type)
+sigma_cce -= 1/2 * einsum('LKB,L->KLB', X_abb, e_cvs, optimize = einsum_type)
+sigma_cce -= 1/2 * einsum('KLB,B->KLB', X_bab, e_extern, optimize = einsum_type)
+sigma_cce += 1/2 * einsum('KLB,K->KLB', X_bab, e_cvs, optimize = einsum_type)
+sigma_cce += 1/2 * einsum('KLB,L->KLB', X_bab, e_cvs, optimize = einsum_type)

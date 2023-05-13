@@ -1,0 +1,6 @@
+T_c_cve =- 1/2 * einsum('JKxB,Ix->IJKB', t1_xvae, t1_xa, optimize = einsum_type)
+T_c_cve -= 1/2 * einsum('KJBa,Ia->IJKB', t1_vxee, t1_xe, optimize = einsum_type)
+T_c_cve -= 1/2 * einsum('JKxB,Iyxz,yz->IJKB', t1_xvae, t1_xaaa, rdm_ca, optimize = einsum_type)
+T_c_cve += 1/4 * einsum('JKxB,Iyzx,yz->IJKB', t1_xvae, t1_xaaa, rdm_ca, optimize = einsum_type)
+T_c_cve -= 1/2 * einsum('KJBa,Ixay,xy->IJKB', t1_vxee, t1_xaea, rdm_ca, optimize = einsum_type)
+T_c_cve += 1/4 * einsum('KJBa,Ixya,xy->IJKB', t1_vxee, t1_xaae, rdm_ca, optimize = einsum_type)

@@ -1,17 +1,12 @@
 import sqa_plus
-spin_integrated = False
-explicit_spin_cases = False
-use_legacy_order = True
 
-amplitude_string = 't1_p1p'
-s_block_string = 'S11'
+amplitude_string = 't1_m1p'
+s_block_string = 'S22'
 
 import time
 start = time.time()
 
-print("\n----------------------------------------------------------------------------------")
-print("Spin-Orbital {:} S".format(amplitude_string).center(82))
-print("----------------------------------------------------------------------------------\n")
+sqa_plus.options.print_header("Spin-Orbital {:} {:}".format(amplitude_string, s_block_string))
 
 # Create spin-orbital amplitude operator
 ## Define indices
@@ -150,16 +145,11 @@ for term_S in terms_S:
 
 # Compute expected value of spin-orbital S matrix
 print("## Compute expected value of spin-orbital S matrix ...")
-terms_expected_S = sqa_plus.matrixBlock(terms_S, transRDM = False, legacy_order = use_legacy_order)
+terms_expected_S = sqa_plus.matrixBlock(terms_S)
 
 # Create Numpy einsum equations
 terms_expected_S.sort()
-result = sqa_plus.genEinsum(terms_expected_S, s_string, final_indices_string, rm_core_int = True, suffix = 'so')
-
-print("\n-------------------------------- genEinsum equations --------------------------------\n")
-for item in result:
-    print(item)
-print("\n-------------------------------------------------------------------------------------\n")
+result = sqa_plus.genEinsum(terms_expected_S, s_string, final_indices_string)
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))

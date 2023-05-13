@@ -1,2 +1,1 @@
-e_m2  = 1/4 * einsum('xyab,zwab,xyzw', t1_aaee, v_aaee, rdm_ccaa, optimize = einsum_type)
-e_m2 += 1/4 * einsum('yxab,zwab,xywz', t1_aaee, v_aaee, rdm_ccaa, optimize = einsum_type)
+e_m2  = 1/2 * einsum('xyab,zawb,xyzw', t1_aaee, v_aeae, rdm_ccaa, optimize = einsum_type)

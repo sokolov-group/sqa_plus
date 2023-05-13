@@ -1,5 +1,5 @@
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -9,11 +9,10 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-                              Spin-Orbital t1_p1p K                               
-----------------------------------------------------------------------------------
+
+------------------------------------- Spin-Orbital t1_p1p K11 --------------------------------------
 
 # Create spin-orbital Dyall Hamiltonian ...
 ## Create K11: a_X [H_{act}, a_Y^\dag] ...
@@ -26,57 +25,62 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## Multiply ...
 ## Compute expected value of spin-orbital K matrix ...
 
----------------------------------- SQA Automation --------------------------------
+------------------------------------------ SQA Automation ------------------------------------------
 
-Computing expectation value with respect to virtual:=>
+Computing expectation value with respect to virtual ...
 Done!
-----------------------------------------------------------------------------------
-Normal ordering with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Computing expectation value with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Contract delta function for non-dummy indices: =>
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
 Done!
-----------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+ (   1.00000) h(X,Y)  --->  (   1.00000) h(x,y) 
+ (   1.00000) v(a,X,a,Y)  --->  (   1.00000) v(i,x,i,y) 
+ (  -1.00000) h(Y,a) cre(a) des(X)  --->  (  -1.00000) h(x,y) cre(y) des(z) 
+ (   1.00000) v(X,a,Y,b) cre(a) des(b)  --->  (   1.00000) v(x,y,z,w) cre(y) des(w) 
+ (  -1.00000) v(a,Y,a,b) cre(b) des(X)  --->  (  -1.00000) v(i,x,i,y) cre(y) des(z) 
+ (   0.50000) v(Y,a,b,c) cre(b) cre(c) des(X) des(a)  --->  (   0.50000) v(x,y,z,w) cre(z) cre(w) des(u) des(y) 
+Done!
+----------------------------------------------------------------------------------------------------
 
---------------------------------- Final results ----------------------------------
+------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) h(X,Y) 
- (   1.00000) v(i,X,i,Y) 
- (  -1.00000) h(Y,x) cre(x) des(X) 
- (   1.00000) v(X,x,Y,y) cre(x) des(y) 
- (  -1.00000) v(i,Y,i,x) cre(x) des(X) 
- (   0.50000) v(Y,x,y,z) cre(y) cre(z) des(X) des(x) 
+ (   1.00000) h(x,y) 
+ (   1.00000) v(i,x,i,y) 
+ (  -1.00000) h(x,y) cre(y) des(z) 
+ (   1.00000) v(x,y,z,w) cre(y) des(w) 
+ (  -1.00000) v(i,x,i,y) cre(y) des(z) 
+ (   0.50000) v(x,y,z,w) cre(z) cre(w) des(u) des(y) 
 
 Total terms : 6
-SQA automation time :  0.016 seconds
+SQA automation time :  0.020 seconds
 
------------------------------------- WARNING -------------------------------------
+--------------------------------------------- WARNING ----------------------------------------------
+
 Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 2 terms removed:
- (   1.00000) v(i,X,i,Y) 
- (  -1.00000) v(i,Y,i,x) rdm(x,X) 
-----------------------------------------------------------------------------------
+ (   1.00000) v(i,x,i,y) 
+ (  -1.00000) v(i,x,i,y) rdm(y,z) 
+----------------------------------------------------------------------------------------------------
 Remaining terms: 4
 
 
--------------------------------- genEinsum equations --------------------------------
+--------------------------------------- genEinsum equations ----------------------------------------
 
-K11  = einsum('XY->XY', h_aa_so, optimize = einsum_type).copy()
-K11 -= einsum('Yx,xX->XY', h_aa_so, rdm_ca_so, optimize = einsum_type)
-K11 += einsum('XxYy,xy->XY', v_aaaa_so, rdm_ca_so, optimize = einsum_type)
-K11 += 1/2 * einsum('Yxyz,yzXx->XY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 0.05 seconds.
+K11  = einsum('xy->XY', h_aa_so, optimize = einsum_type).copy()
+K11 -= einsum('xy,yz->XY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K11 += einsum('xyzw,yw->XY', v_aaaa_so, rdm_ca_so, optimize = einsum_type)
+K11 += 1/2 * einsum('xyzw,zwuy->XY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 0.06 seconds.

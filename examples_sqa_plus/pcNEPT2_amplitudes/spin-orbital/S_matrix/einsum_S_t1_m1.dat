@@ -1,1 +1,1 @@
-S_m1  = einsum('XY->XY', rdm_ca_so, optimize = einsum_type).copy()
+S_m1  = einsum('xy->XY', rdm_ca_so, optimize = einsum_type).copy()

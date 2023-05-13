@@ -1,0 +1,2 @@
+T_e_cva =- einsum('JKYA->AJKY', t1_xvae, optimize = einsum_type).copy()
+T_e_cva += 1/2 * einsum('JKxA,Yx->AJKY', t1_xvae, rdm_ca, optimize = einsum_type)

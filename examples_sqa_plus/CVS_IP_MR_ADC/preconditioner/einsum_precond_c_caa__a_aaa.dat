@@ -1,0 +1,5 @@
+precond_c_caa  = 1/2 * einsum('I,II,XY->IXY', e_cvs, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_c_caa += 1/2 * einsum('Xx,II,Yx->IXY', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_c_caa -= 1/2 * einsum('Yx,II,Xx->IXY', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_c_caa += 1/2 * einsum('II,Xxyz,Yyxz->IXY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_c_caa -= 1/2 * einsum('II,Yxyz,Xyxz->IXY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)

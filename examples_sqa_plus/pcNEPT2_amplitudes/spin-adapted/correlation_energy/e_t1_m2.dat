@@ -1,5 +1,5 @@
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -9,93 +9,81 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-                      Spin-Adapted t1_m2 correlation energy                       
-----------------------------------------------------------------------------------
+
+------------------------------ Spin-Adapted t1_m2 correlation energy -------------------------------
 
 # Create spin-integrated V operator ...
 ## Create T: t1_{xy}^{ab} a_a^\dag a_b^\dag a_y a_x ...
 
  (   0.25000) t1(x,y,a,b) cre(a) cre(b) des(y) des(x) 
- (   0.25000) t1(x,y,a,b) cre(a) cre(b) des(y) des(x) 
- (   0.25000) t1(x,y,a,b) cre(a) cre(b) des(y) des(x) 
- (   0.25000) t1(x,y,a,b) cre(a) cre(b) des(y) des(x) 
- (   0.25000) t1(x,y,a,b) cre(a) cre(b) des(y) des(x) 
+ (   0.50000) t1(x,y,a,b) cre(a) cre(b) des(y) des(x) 
+ (   0.50000) t1(x,y,a,b) cre(a) cre(b) des(y) des(x) 
  (   0.25000) t1(x,y,a,b) cre(a) cre(b) des(y) des(x) 
 
 ## Multiply V * T ...
 ## Compute expected value of spin-integrated pc-NEVPT2 energy ...
 
----------------------------------- SQA Automation --------------------------------
+------------------------------------------ SQA Automation ------------------------------------------
 
-Computing expectation value with respect to virtual:=>
+Computing expectation value with respect to virtual ...
 Done!
-----------------------------------------------------------------------------------
-Normal ordering with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Computing expectation value with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Contract delta function for non-dummy indices: =>
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
 Done!
-----------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 
---------------------------------- Final results ----------------------------------
+------------------------------------------ Final results -------------------------------------------
 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
- (  -0.12500) t1(x,y,a,b) v(a,b,z,w) cre(z) cre(w) des(x) des(y) 
+ (  -0.12500) t1(y,x,b,a) v(w,u,b,a) cre(w) cre(u) des(y) des(x) 
+ (  -0.50000) t1(y,x,b,a) v(w,u,b,a) cre(w) cre(u) des(y) des(x) 
+ (  -0.50000) t1(y,x,b,a) v(w,u,b,a) cre(w) cre(u) des(y) des(x) 
+ (  -0.12500) t1(y,x,b,a) v(w,u,b,a) cre(w) cre(u) des(y) des(x) 
 
-Total terms : 10
-SQA automation time :  12.673 seconds
+Total terms : 4
+SQA automation time :  3.650 seconds
 
---------------- Converting Spin-Integrated Tensors to Spin-Adapted ---------------
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Convert Cre/Des objects to RDM objects...
 Done!
-----------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reorder RDM tensor indices according to: alpha < beta
 Done!
-----------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
-----------------------------------------------------------------------------------
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Converting Kronecker Deltas to spin-adapted formulation...
 Done!
-----------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Converting eigenvalues to spin-adapted formulation...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
 
 Converting 1-RDMs to spin-adapted formulation...
@@ -103,49 +91,50 @@ Converting 2-RDMs to spin-adapted formulation...
 Converting 3-RDMs to spin-adapted formulation...
 Converting 4-RDMs to spin-adapted formulation...
 Done!
-----------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
+----------------------------------------------------------------------------------------------------
+
+Combining 20 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
 Done!
-----------------------------------------------------------------------------------
-
-Combining 32 spin-adapted terms...
-
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-30 spin-adapted terms combined.
+19 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
+-------------------------------------- Spin-adapted equations --------------------------------------
 
------------------------------ Spin-adapted equations -----------------------------
+ (   0.50000) t1(x,y,a,b) v(w,a,u,b) rdm(x,y,w,u) 
 
- (   0.25000) t1(x,y,a,b) v(z,w,a,b) rdm(x,y,z,w) 
- (   0.25000) t1(y,x,a,b) v(z,w,a,b) rdm(x,y,w,z) 
+Total spin-integrated terms: 4
+Total spin-adapted terms: 1
+Spin-adaptation automation time :  0.664 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 
-Total spin-integrated terms: 10
-Total spin-adapted terms: 2
-Spin-adaptation automation time :  0.993 seconds
+--------------------------------------------- WARNING ----------------------------------------------
 
-----------------------------------------------------------------------------------
-
------------------------------------- WARNING -------------------------------------
 Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
-----------------------------------------------------------------------------------
-Remaining terms: 2
+----------------------------------------------------------------------------------------------------
+Remaining terms: 1
 
 
--------------------------------- genEinsum equations --------------------------------
+--------------------------------------- genEinsum equations ----------------------------------------
 
-e_m2  = 1/4 * einsum('xyab,zwab,xyzw', t1_aaee, v_aaee, rdm_ccaa, optimize = einsum_type)
-e_m2 += 1/4 * einsum('yxab,zwab,xywz', t1_aaee, v_aaee, rdm_ccaa, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 14.31 seconds.
+e_m2  = 1/2 * einsum('xyab,zawb,xyzw', t1_aaee, v_aeae, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 4.54 seconds.

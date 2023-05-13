@@ -1,4 +1,4 @@
-V1_p2  = einsum('IJXY->IJXY', v_ccaa_so, optimize = einsum_type).copy()
-V1_p2 -= einsum('IJXx,xY->IJXY', v_ccaa_so, rdm_ca_so, optimize = einsum_type)
-V1_p2 += einsum('IJYx,xX->IJXY', v_ccaa_so, rdm_ca_so, optimize = einsum_type)
-V1_p2 -= 1/2 * einsum('IJxy,xyXY->IJXY', v_ccaa_so, rdm_ccaa_so, optimize = einsum_type)
+V1_p2  = einsum('ijxy->IJXY', v_ccaa_so, optimize = einsum_type).copy()
+V1_p2 -= einsum('ijxy,yz->IJXY', v_ccaa_so, rdm_ca_so, optimize = einsum_type)
+V1_p2 += einsum('ijxy,yz->IJXY', v_ccaa_so, rdm_ca_so, optimize = einsum_type)
+V1_p2 -= 1/2 * einsum('ijxy,xyzw->IJXY', v_ccaa_so, rdm_ccaa_so, optimize = einsum_type)

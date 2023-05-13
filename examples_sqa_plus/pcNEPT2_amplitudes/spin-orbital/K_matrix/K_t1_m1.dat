@@ -1,5 +1,5 @@
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -9,11 +9,10 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-                               Spin-Orbital t1_m1 K                               
-----------------------------------------------------------------------------------
+
+--------------------------------- Spin-Orbital t1_m1 ORDER_REPLACE ---------------------------------
 
 # Create spin-orbital Dyall Hamiltonian ...
 ## Create K_ca: a_X^\dag [H_{act}, a_Y] ...
@@ -26,51 +25,53 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## Multiply ...
 ## Compute expected value of spin-orbital K matrix ...
 
----------------------------------- SQA Automation --------------------------------
+------------------------------------------ SQA Automation ------------------------------------------
 
-Computing expectation value with respect to virtual:=>
+Computing expectation value with respect to virtual ...
 Done!
-----------------------------------------------------------------------------------
-Normal ordering with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Computing expectation value with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Contract delta function for non-dummy indices: =>
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
 Done!
-----------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+ (  -1.00000) h(Y,a) cre(X) des(a)  --->  (  -1.00000) h(x,y) cre(z) des(y) 
+ (  -1.00000) v(a,Y,a,b) cre(X) des(b)  --->  (  -1.00000) v(i,x,i,y) cre(z) des(y) 
+ (   0.50000) v(Y,a,b,c) cre(X) cre(a) des(b) des(c)  --->  (   0.50000) v(x,y,z,w) cre(u) cre(y) des(z) des(w) 
+Done!
+----------------------------------------------------------------------------------------------------
 
---------------------------------- Final results ----------------------------------
+------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) h(Y,x) cre(X) des(x) 
- (  -1.00000) v(i,Y,i,x) cre(X) des(x) 
- (   0.50000) v(Y,x,y,z) cre(X) cre(x) des(y) des(z) 
+ (  -1.00000) h(x,y) cre(z) des(y) 
+ (  -1.00000) v(i,x,i,y) cre(z) des(y) 
+ (   0.50000) v(x,y,z,w) cre(u) cre(y) des(z) des(w) 
 
 Total terms : 3
-SQA automation time :  0.007 seconds
+SQA automation time :  0.008 seconds
 
------------------------------------- WARNING -------------------------------------
+--------------------------------------------- WARNING ----------------------------------------------
+
 Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 1 terms removed:
- (  -1.00000) v(i,Y,i,x) rdm(X,x) 
-----------------------------------------------------------------------------------
+ (  -1.00000) v(i,x,i,y) rdm(z,y) 
+----------------------------------------------------------------------------------------------------
 Remaining terms: 2
 
 
--------------------------------- genEinsum equations --------------------------------
+--------------------------------------- genEinsum equations ----------------------------------------
 
-K_ca =- einsum('Yx,Xx->XY', h_aa_so, rdm_ca_so, optimize = einsum_type)
-K_ca += 1/2 * einsum('Yxyz,Xxyz->XY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
+K_ca =- einsum('xy,zy->XY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K_ca += 1/2 * einsum('xyzw,uyzw->XY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
 > Total elapsed time: 0.04 seconds.

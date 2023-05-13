@@ -1,22 +1,12 @@
 import sqa_plus
-spin_integrated = False
-explicit_spin_cases = False
-use_legacy_order = True
 
-amplitude_string = 't1_p1p'
+amplitude_string = 't1_m1p'
 k_block_string = 'K22'
 
 import time
 start = time.time()
 
-print("\n----------------------------------------------------------------------------------")
-print("Spin-Orbital {:} K".format(amplitude_string).center(82))
-print("----------------------------------------------------------------------------------\n")
-
-# Create spin-orbital Dyall Hamiltonian
-print("# Create spin-orbital Dyall Hamiltonian ...")
-indices_lists = sqa_plus.create_dummy_indices_list(spin_integrated)
-terms_Heff = sqa_plus.dyallH_act(indices_lists, spin_integrated, explicit_spin_cases)
+sqa_plus.options.print_header("Spin-Orbital {:} {:}".format(amplitude_string, k_block_string))
 
 # Create spin-orbital amplitude operator
 ## Define indices
@@ -49,6 +39,10 @@ des_w = sqa_plus.desOp(w)
 
 cre_z = sqa_plus.creOp(z)
 des_z = sqa_plus.desOp(z)
+
+# Create spin-orbital Dyall Hamiltonian
+print("# Create spin-orbital Dyall Hamiltonian ...")
+terms_Heff = sqa_plus.dyallH_act()
 
 ## Define terms
 if amplitude_string == 't1_0p':
@@ -166,16 +160,11 @@ for term_r_com in terms_r_com:
 
 # Compute expected value of spin-orbital K matrix
 print("## Compute expected value of spin-orbital K matrix ...")
-terms_expected_K = sqa_plus.matrixBlock(terms_K, transRDM = False, legacy_order = use_legacy_order)
+terms_expected_K = sqa_plus.matrixBlock(terms_K)
 
 # Create Numpy einsum equations
 terms_expected_K.sort()
-result = sqa_plus.genEinsum(terms_expected_K, k_string, final_indices_string, rm_core_int = True, suffix = 'so')
-
-print("\n-------------------------------- genEinsum equations --------------------------------\n")
-for item in result:
-    print(item)
-print("\n-------------------------------------------------------------------------------------\n")
+result = sqa_plus.genEinsum(terms_expected_K, k_string, final_indices_string)
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))

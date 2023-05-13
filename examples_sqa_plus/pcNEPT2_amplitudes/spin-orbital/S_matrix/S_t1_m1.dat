@@ -1,5 +1,5 @@
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -9,58 +9,57 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-                               Spin-Orbital t1_m1 S                               
-----------------------------------------------------------------------------------
+
+--------------------------------- Spin-Orbital t1_m1 ORDER_REPLACE ---------------------------------
 
 ## Create S11: a_X^\dag a_Y ...
 
  (   1.00000) cre(X) des(Y) 
 ## Compute expected value of spin-orbital S matrix ...
 
----------------------------------- SQA Automation --------------------------------
+------------------------------------------ SQA Automation ------------------------------------------
 
-Computing expectation value with respect to virtual:=>
+Computing expectation value with respect to virtual ...
 Done!
-----------------------------------------------------------------------------------
-Normal ordering with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Computing expectation value with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Contract delta function for non-dummy indices: =>
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
 Done!
-----------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+ (   1.00000) cre(X) des(Y)  --->  (   1.00000) cre(x) des(y) 
+Done!
+----------------------------------------------------------------------------------------------------
 
---------------------------------- Final results ----------------------------------
+------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) cre(X) des(Y) 
+ (   1.00000) cre(x) des(y) 
 
 Total terms : 1
-SQA automation time :  0.000 seconds
+SQA automation time :  0.001 seconds
 
------------------------------------- WARNING -------------------------------------
+--------------------------------------------- WARNING ----------------------------------------------
+
 Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Remaining terms: 1
 
 
--------------------------------- genEinsum equations --------------------------------
+--------------------------------------- genEinsum equations ----------------------------------------
 
-S_m1  = einsum('XY->XY', rdm_ca_so, optimize = einsum_type).copy()
-
--------------------------------------------------------------------------------------
-
+S_m1  = einsum('xy->XY', rdm_ca_so, optimize = einsum_type).copy()
+----------------------------------------------------------------------------------------------------
 > Total elapsed time: 0.00 seconds.

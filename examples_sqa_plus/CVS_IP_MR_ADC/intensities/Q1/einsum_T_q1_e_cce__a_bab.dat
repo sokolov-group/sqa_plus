@@ -1,0 +1,1 @@
+T_e_cce =- einsum('KJAB->AJKB', t1_xxee, optimize = einsum_type).copy()

@@ -1,1 +1,1 @@
-V1_0  = einsum('IJAB->IJAB', v_ccee_so, optimize = einsum_type).copy()
+V1_0  = einsum('ijab->IJAB', v_ccee_so, optimize = einsum_type).copy()

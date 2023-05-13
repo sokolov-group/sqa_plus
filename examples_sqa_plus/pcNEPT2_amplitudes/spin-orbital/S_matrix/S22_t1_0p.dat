@@ -1,5 +1,5 @@
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -9,60 +9,60 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-                               Spin-Orbital t1_0p S                               
-----------------------------------------------------------------------------------
+
+-------------------------------------- Spin-Orbital t1_0p S22 --------------------------------------
 
 ## Create S22: a_X^\dag a_Y^\dag a_Z a_W ...
 
  (   1.00000) cre(X) des(Y) cre(Z) des(W) 
 ## Compute expected value of spin-orbital S matrix ...
 
----------------------------------- SQA Automation --------------------------------
+------------------------------------------ SQA Automation ------------------------------------------
 
-Computing expectation value with respect to virtual:=>
+Computing expectation value with respect to virtual ...
 Done!
-----------------------------------------------------------------------------------
-Normal ordering with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Computing expectation value with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Contract delta function for non-dummy indices: =>
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
 Done!
-----------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+ (   1.00000) kdelta(Y,Z) cre(X) des(W)  --->  (   1.00000) kdelta(x,y) cre(z) des(w) 
+ (   1.00000) cre(X) cre(Z) des(W) des(Y)  --->  (   1.00000) cre(x) cre(y) des(z) des(w) 
+Done!
+----------------------------------------------------------------------------------------------------
 
---------------------------------- Final results ----------------------------------
+------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) kdelta(Y,Z) cre(X) des(W) 
- (   1.00000) cre(X) cre(Z) des(W) des(Y) 
+ (   1.00000) kdelta(x,y) cre(z) des(w) 
+ (   1.00000) cre(x) cre(y) des(z) des(w) 
 
 Total terms : 2
-SQA automation time :  0.001 seconds
+SQA automation time :  0.002 seconds
 
------------------------------------- WARNING -------------------------------------
+--------------------------------------------- WARNING ----------------------------------------------
+
 Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Remaining terms: 2
 
 
--------------------------------- genEinsum equations --------------------------------
+--------------------------------------- genEinsum equations ----------------------------------------
 
-S22  = einsum('YZ,XW->XYWZ', np.identity(ncas_so), rdm_ca_so, optimize = einsum_type)
-S22 += einsum('XZWY->XYWZ', rdm_ccaa_so, optimize = einsum_type).copy()
-
--------------------------------------------------------------------------------------
-
+S22  = einsum('xy,zw->XYWZ', np.identity(ncas_so), rdm_ca_so, optimize = einsum_type)
+S22 += einsum('xyzw->XYWZ', rdm_ccaa_so, optimize = einsum_type).copy()
+----------------------------------------------------------------------------------------------------
 > Total elapsed time: 0.00 seconds.

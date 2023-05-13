@@ -1,1 +1,1 @@
-V1_m1  = einsum('IxAB,Xx->IXAB', v_caee_so, rdm_ca_so, optimize = einsum_type)
+V1_m1  = einsum('ixab,yx->IXAB', v_caee_so, rdm_ca_so, optimize = einsum_type)

@@ -1,5 +1,5 @@
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -9,11 +9,10 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-                      Spin-Adapted t1_p1 correlation energy                       
-----------------------------------------------------------------------------------
+
+------------------------------ Spin-Adapted t1_p1 correlation energy -------------------------------
 
 # Create spin-orbital V operator ...
 ## Create T: t1_{ij}^{ax} a_a^\dag a_x^\dag a_j a_i ...
@@ -23,49 +22,51 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## Multiply V * T ...
 ## Compute expected value of spin-orbital pc-NEVPT2 energy ...
 
----------------------------------- SQA Automation --------------------------------
+------------------------------------------ SQA Automation ------------------------------------------
 
-Computing expectation value with respect to virtual:=>
+Computing expectation value with respect to virtual ...
 Done!
-----------------------------------------------------------------------------------
-Normal ordering with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Computing expectation value with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Contract delta function for non-dummy indices: =>
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
 Done!
-----------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 
---------------------------------- Final results ----------------------------------
+------------------------------------------ Final results -------------------------------------------
 
- (  -0.50000) t1(j,i,a,x) v(j,i,x,a) 
- (   0.50000) t1(j,i,a,x) v(j,i,y,a) cre(x) des(y) 
+ (   0.50000) t1(j,i,a,x) v(j,i,a,x) 
+ (  -0.50000) t1(j,i,a,x) v(j,i,a,w) cre(x) des(w) 
 
 Total terms : 2
-SQA automation time :  1.491 seconds
+SQA automation time :  0.787 seconds
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 
------------------------------------- WARNING -------------------------------------
+--------------------------------------------- WARNING ----------------------------------------------
+
 Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Remaining terms: 2
 
 
--------------------------------- genEinsum equations --------------------------------
+--------------------------------------- genEinsum equations ----------------------------------------
 
-e_p1 =- 1/2 * einsum('jiax,jixa', t1_ccea, v_ccae, optimize = einsum_type)
-e_p1 += 1/2 * einsum('jiax,jiya,xy', t1_ccea, v_ccae, rdm_ca, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 1.65 seconds.
+e_p1  = 1/2 * einsum('ijax,ijax', t1_ccea, v_ccea_so, optimize = einsum_type)
+e_p1 -= 1/2 * einsum('ijax,ijay,xy', t1_ccea, v_ccea_so, rdm_ca_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 0.82 seconds.

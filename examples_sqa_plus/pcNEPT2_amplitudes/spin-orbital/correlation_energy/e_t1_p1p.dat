@@ -1,5 +1,5 @@
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -9,11 +9,10 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-                      Spin-Adapted t1_p1p correlation energy                      
-----------------------------------------------------------------------------------
+
+------------------------------ Spin-Adapted t1_p1p correlation energy ------------------------------
 
 # Create spin-orbital V operator ...
 ## Create T: t1_{i}^{x} a_x^\dag a_i ...
@@ -26,71 +25,73 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ## Multiply V * T ...
 ## Compute expected value of spin-orbital pc-NEVPT2 energy ...
 
----------------------------------- SQA Automation --------------------------------
+------------------------------------------ SQA Automation ------------------------------------------
 
-Computing expectation value with respect to virtual:=>
+Computing expectation value with respect to virtual ...
 Done!
-----------------------------------------------------------------------------------
-Normal ordering with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Computing expectation value with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Contract delta function for non-dummy indices: =>
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
 Done!
-----------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 
---------------------------------- Final results ----------------------------------
+------------------------------------------ Final results -------------------------------------------
 
  (   1.00000) h(i,x) t1(i,x) 
- (  -1.00000) t1(i,x) v(i,j,j,x) 
- (  -1.00000) h(i,y) t1(i,x) cre(x) des(y) 
+ (  -1.00000) t1(i,x) v(i,k,k,x) 
+ (  -1.00000) h(i,w) t1(i,x) cre(x) des(w) 
  (   1.00000) h(i,y) t1(i,z,y,x) cre(x) des(z) 
- (   1.00000) t1(i,x) v(i,j,j,y) cre(x) des(y) 
- (  -1.00000) t1(i,z,y,x) v(i,j,j,y) cre(x) des(z) 
+ (   1.00000) t1(i,x) v(i,k,k,w) cre(x) des(w) 
+ (  -1.00000) t1(i,z,y,x) v(i,k,k,y) cre(x) des(z) 
  (   0.50000) t1(i,z,y,x) v(i,w,y,x) cre(w) des(z) 
- (   1.00000) t1(i,x) v(i,z,x,y) cre(z) des(y) 
+ (   1.00000) t1(i,x) v(i,w,x,u) cre(w) des(u) 
  (   0.50000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
- (   0.50000) t1(i,x) v(i,w,y,z) cre(x) cre(w) des(y) des(z) 
- (   0.50000) t1(i,z,y,x) v(i,j,j,w) cre(y) cre(x) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(i,u,y,w) cre(x) cre(u) des(z) des(w) 
- (  -0.25000) t1(i,z,y,x) v(i,v,w,u) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
+ (   0.50000) t1(i,x) v(i,w,u,v) cre(x) cre(w) des(u) des(v) 
+ (   0.50000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,y,u) cre(x) cre(w) des(z) des(u) 
+ (  -0.25000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
 
 Total terms : 13
-SQA automation time :  1.381 seconds
+SQA automation time :  7.898 seconds
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 
------------------------------------- WARNING -------------------------------------
+--------------------------------------------- WARNING ----------------------------------------------
+
 Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 4 terms removed:
  (  -1.00000) t1(i,x) v(i,j,j,x) 
  (   1.00000) t1(i,x) v(i,j,j,y) rdm(x,y) 
- (  -1.00000) t1(i,z,y,x) v(i,j,j,y) rdm(x,z) 
- (   0.50000) t1(i,z,y,x) v(i,j,j,w) rdm(y,x,z,w) 
-----------------------------------------------------------------------------------
+ (  -1.00000) t1(i,x,y,z) v(i,j,j,y) rdm(z,x) 
+ (   0.50000) t1(i,x,y,z) v(i,j,j,w) rdm(y,z,x,w) 
+----------------------------------------------------------------------------------------------------
 Remaining terms: 9
 
 
--------------------------------- genEinsum equations --------------------------------
+--------------------------------------- genEinsum equations ----------------------------------------
 
-e_p1p  = einsum('ix,ix', h_ca, t1_ca, optimize = einsum_type)
-e_p1p -= einsum('iy,ix,xy', h_ca, t1_ca, rdm_ca, optimize = einsum_type)
-e_p1p += einsum('iy,izyx,xz', h_ca, t1_caaa, rdm_ca, optimize = einsum_type)
-e_p1p += einsum('ix,izxy,zy', t1_ca, v_caaa, rdm_ca, optimize = einsum_type)
-e_p1p += 1/2 * einsum('izyx,iwyx,wz', t1_caaa, v_caaa, rdm_ca, optimize = einsum_type)
-e_p1p += 1/2 * einsum('iw,izyx,yxwz', h_ca, t1_caaa, rdm_ccaa, optimize = einsum_type)
-e_p1p += 1/2 * einsum('ix,iwyz,xwyz', t1_ca, v_caaa, rdm_ccaa, optimize = einsum_type)
-e_p1p -= einsum('izyx,iuyw,xuzw', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
-e_p1p -= 1/4 * einsum('izyx,ivwu,yxvzwu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 1.43 seconds.
+e_p1p  = einsum('ix,ix', h_ca_so, t1_ca, optimize = einsum_type)
+e_p1p -= einsum('ix,iy,yx', h_ca_so, t1_ca, rdm_ca_so, optimize = einsum_type)
+e_p1p += einsum('ix,iyxz,zy', h_ca_so, t1_caaa, rdm_ca_so, optimize = einsum_type)
+e_p1p += einsum('ix,iyxz,yz', t1_ca, v_caaa_so, rdm_ca_so, optimize = einsum_type)
+e_p1p += 1/2 * einsum('ixyz,iwyz,wx', t1_caaa, v_caaa_so, rdm_ca_so, optimize = einsum_type)
+e_p1p += 1/2 * einsum('ix,iyzw,zwxy', h_ca_so, t1_caaa, rdm_ccaa_so, optimize = einsum_type)
+e_p1p += 1/2 * einsum('ix,iyzw,xyzw', t1_ca, v_caaa_so, rdm_ccaa_so, optimize = einsum_type)
+e_p1p -= einsum('ixyz,iwyu,zwxu', t1_caaa, v_caaa_so, rdm_ccaa_so, optimize = einsum_type)
+e_p1p -= 1/4 * einsum('ixyz,iwuv,yzwxuv', t1_caaa, v_caaa_so, rdm_cccaaa_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 8.27 seconds.

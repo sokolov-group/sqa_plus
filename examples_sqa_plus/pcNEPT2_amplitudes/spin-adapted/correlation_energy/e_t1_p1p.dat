@@ -1,5 +1,5 @@
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
@@ -9,11 +9,10 @@ Licensed under the GNU General Public License v3.0;
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-                      Spin-Adapted t1_p1p correlation energy                      
-----------------------------------------------------------------------------------
+
+------------------------------ Spin-Adapted t1_p1p correlation energy ------------------------------
 
 # Create spin-integrated V operator ...
 ## Create T: t1_{i}^{x} a_x^\dag a_i ...
@@ -23,159 +22,134 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  (   1.00000) t1(i,x) cre(x) des(i) 
  (   1.00000) t1(i,x) cre(x) des(i) 
  (   0.50000) t1(i,z,x,y) cre(x) cre(y) des(z) des(i) 
- (   0.50000) t1(i,z,x,y) cre(x) cre(y) des(z) des(i) 
- (   0.50000) t1(i,z,x,y) cre(x) cre(y) des(z) des(i) 
- (   0.50000) t1(i,z,x,y) cre(x) cre(y) des(z) des(i) 
- (   0.50000) t1(i,z,x,y) cre(x) cre(y) des(z) des(i) 
+ (   1.00000) t1(i,z,x,y) cre(x) cre(y) des(z) des(i) 
+ (   1.00000) t1(i,z,x,y) cre(x) cre(y) des(z) des(i) 
  (   0.50000) t1(i,z,x,y) cre(x) cre(y) des(z) des(i) 
 
 ## Multiply V * T ...
 ## Compute expected value of spin-integrated pc-NEVPT2 energy ...
 
----------------------------------- SQA Automation --------------------------------
+------------------------------------------ SQA Automation ------------------------------------------
 
-Computing expectation value with respect to virtual:=>
+Computing expectation value with respect to virtual ...
 Done!
-----------------------------------------------------------------------------------
-Normal ordering with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Computing expectation value with respect to core:=>
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
 Done!
-----------------------------------------------------------------------------------
-Contract delta function for non-dummy indices: =>
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
 Done!
-----------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 
---------------------------------- Final results ----------------------------------
+------------------------------------------ Final results -------------------------------------------
 
  (   1.00000) h(i,x) t1(i,x) 
  (   1.00000) h(i,x) t1(i,x) 
- (  -1.00000) t1(i,x) v(j,x,i,j) 
- (  -1.00000) t1(i,x) v(j,x,i,j) 
- (  -1.00000) t1(i,x) v(j,x,i,j) 
- (  -1.00000) t1(i,x) v(j,x,i,j) 
- (  -1.00000) h(i,y) t1(i,x) cre(x) des(y) 
+ (  -1.00000) t1(i,x) v(i,k,k,x) 
+ (  -1.00000) t1(i,x) v(i,k,k,x) 
+ (  -1.00000) t1(i,x) v(i,k,k,x) 
+ (  -1.00000) t1(i,x) v(i,k,k,x) 
+ (  -1.00000) h(i,w) t1(i,x) cre(x) des(w) 
+ (   1.00000) h(i,x) t1(i,z,x,y) cre(y) des(z) 
+ (   1.00000) h(i,y) t1(i,z,y,x) cre(x) des(z) 
+ (  -1.00000) h(i,w) t1(i,x) cre(x) des(w) 
  (   1.00000) h(i,y) t1(i,z,y,x) cre(x) des(z) 
  (   1.00000) h(i,y) t1(i,z,y,x) cre(x) des(z) 
- (  -1.00000) h(i,y) t1(i,x) cre(x) des(y) 
- (   1.00000) h(i,y) t1(i,z,y,x) cre(x) des(z) 
- (   1.00000) h(i,y) t1(i,z,y,x) cre(x) des(z) 
- (   1.00000) t1(i,x) v(j,y,i,j) cre(x) des(y) 
- (   1.00000) t1(i,x) v(j,y,i,j) cre(x) des(y) 
- (  -1.00000) t1(i,z,y,x) v(j,y,i,j) cre(x) des(z) 
- (  -1.00000) t1(i,z,y,x) v(j,y,i,j) cre(x) des(z) 
- (   0.50000) t1(i,z,y,x) v(y,x,i,w) cre(w) des(z) 
- (  -1.00000) t1(i,z,y,x) v(j,y,i,j) cre(x) des(z) 
- (  -1.00000) t1(i,z,y,x) v(j,y,i,j) cre(x) des(z) 
- (   0.50000) t1(i,z,y,x) v(y,x,i,w) cre(w) des(z) 
- (   0.50000) t1(i,z,y,x) v(y,x,i,w) cre(w) des(z) 
- (   1.00000) t1(i,x) v(j,y,i,j) cre(x) des(y) 
- (   1.00000) t1(i,x) v(j,y,i,j) cre(x) des(y) 
- (   0.50000) t1(i,z,y,x) v(y,x,i,w) cre(w) des(z) 
- (  -1.00000) t1(i,z,y,x) v(j,y,i,j) cre(x) des(z) 
- (  -1.00000) t1(i,z,y,x) v(j,y,i,j) cre(x) des(z) 
- (   0.50000) t1(i,z,y,x) v(y,x,i,w) cre(w) des(z) 
- (  -1.00000) t1(i,z,y,x) v(j,y,i,j) cre(x) des(z) 
- (  -1.00000) t1(i,z,y,x) v(j,y,i,j) cre(x) des(z) 
- (   0.50000) t1(i,z,y,x) v(y,x,i,w) cre(w) des(z) 
- (   1.00000) t1(i,x) v(x,y,i,z) cre(z) des(y) 
- (   1.00000) t1(i,x) v(x,y,i,z) cre(z) des(y) 
- (   1.00000) t1(i,x) v(x,y,i,z) cre(z) des(y) 
- (   1.00000) t1(i,x) v(x,y,i,z) cre(z) des(y) 
+ (   1.00000) t1(i,x) v(i,k,k,w) cre(x) des(w) 
+ (   1.00000) t1(i,x) v(i,k,k,w) cre(x) des(w) 
+ (  -1.00000) t1(i,z,y,x) v(i,k,k,y) cre(x) des(z) 
+ (  -1.00000) t1(i,z,y,x) v(i,k,k,y) cre(x) des(z) 
+ (   0.50000) t1(i,z,y,x) v(i,w,y,x) cre(w) des(z) 
+ (  -1.00000) t1(i,z,x,y) v(i,k,k,x) cre(y) des(z) 
+ (  -1.00000) t1(i,z,x,y) v(i,k,k,x) cre(y) des(z) 
+ (   1.00000) t1(i,z,y,x) v(i,w,y,x) cre(w) des(z) 
+ (   1.00000) t1(i,x) v(i,k,k,w) cre(x) des(w) 
+ (   1.00000) t1(i,x) v(i,k,k,w) cre(x) des(w) 
+ (  -1.00000) t1(i,z,y,x) v(i,k,k,y) cre(x) des(z) 
+ (  -1.00000) t1(i,z,y,x) v(i,k,k,y) cre(x) des(z) 
+ (   1.00000) t1(i,z,y,x) v(i,w,y,x) cre(w) des(z) 
+ (  -1.00000) t1(i,z,y,x) v(i,k,k,y) cre(x) des(z) 
+ (  -1.00000) t1(i,z,y,x) v(i,k,k,y) cre(x) des(z) 
+ (   0.50000) t1(i,z,y,x) v(i,w,y,x) cre(w) des(z) 
+ (   1.00000) t1(i,x) v(i,w,x,u) cre(w) des(u) 
+ (   1.00000) t1(i,x) v(i,w,x,u) cre(w) des(u) 
+ (   1.00000) t1(i,x) v(i,w,x,u) cre(w) des(u) 
+ (   1.00000) t1(i,x) v(i,w,x,u) cre(w) des(u) 
  (   0.50000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
+ (   1.00000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
+ (   1.00000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
  (   0.50000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
- (   0.50000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
- (   0.50000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
- (   0.50000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
- (   0.50000) h(i,w) t1(i,z,y,x) cre(y) cre(x) des(w) des(z) 
- (   0.50000) t1(i,x) v(y,z,i,w) cre(x) cre(w) des(y) des(z) 
- (   0.50000) t1(i,x) v(y,z,i,w) cre(x) cre(w) des(y) des(z) 
- (   0.50000) t1(i,x) v(y,z,i,w) cre(x) cre(w) des(y) des(z) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(y,w,i,u) cre(x) cre(u) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(y,w,i,u) cre(x) cre(u) des(z) des(w) 
- (  -1.00000) t1(i,z,x,y) v(x,w,i,u) cre(y) cre(u) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(y,w,i,u) cre(x) cre(u) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(y,w,i,u) cre(x) cre(u) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (   0.50000) t1(i,x) v(y,z,i,w) cre(x) cre(w) des(y) des(z) 
- (   0.50000) t1(i,x) v(y,z,i,w) cre(x) cre(w) des(y) des(z) 
- (   0.50000) t1(i,x) v(y,z,i,w) cre(x) cre(w) des(y) des(z) 
- (  -1.00000) t1(i,z,x,y) v(x,w,i,u) cre(y) cre(u) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(y,w,i,u) cre(x) cre(u) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(y,w,i,u) cre(x) cre(u) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (   0.50000) t1(i,z,y,x) v(j,w,i,j) cre(y) cre(x) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(y,w,i,u) cre(x) cre(u) des(z) des(w) 
- (  -1.00000) t1(i,z,y,x) v(y,w,i,u) cre(x) cre(u) des(z) des(w) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
- (  -0.25000) t1(i,z,y,x) v(w,u,i,v) cre(y) cre(x) cre(v) des(z) des(w) des(u) 
+ (   0.50000) t1(i,x) v(i,w,u,v) cre(x) cre(w) des(u) des(v) 
+ (   1.00000) t1(i,x) v(i,w,u,v) cre(x) cre(w) des(u) des(v) 
+ (   0.50000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (   0.50000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,y,u) cre(x) cre(w) des(z) des(u) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,y,u) cre(x) cre(w) des(z) des(u) 
+ (  -1.00000) t1(i,z,x,y) v(i,w,x,u) cre(y) cre(w) des(z) des(u) 
+ (  -1.00000) t1(i,z,x,y) v(i,w,x,u) cre(y) cre(w) des(z) des(u) 
+ (   1.00000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (   1.00000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,y,u) cre(x) cre(w) des(z) des(u) 
+ (   1.00000) t1(i,x) v(i,w,u,v) cre(x) cre(w) des(u) des(v) 
+ (   0.50000) t1(i,x) v(i,w,u,v) cre(x) cre(w) des(u) des(v) 
+ (  -1.00000) t1(i,z,x,y) v(i,w,x,u) cre(y) cre(w) des(z) des(u) 
+ (   1.00000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (   1.00000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,y,u) cre(x) cre(w) des(z) des(u) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,y,u) cre(x) cre(w) des(z) des(u) 
+ (   0.50000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (   0.50000) t1(i,z,y,x) v(i,k,k,w) cre(y) cre(x) des(z) des(w) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,y,u) cre(x) cre(w) des(z) des(u) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,y,u) cre(x) cre(w) des(z) des(u) 
+ (  -0.25000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
+ (  -0.50000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
+ (  -0.50000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
+ (  -0.50000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
+ (  -0.50000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
+ (  -0.25000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
 
-Total terms : 86
-SQA automation time :  50.784 seconds
+Total terms : 66
+SQA automation time :  17.171 seconds
 
---------------- Converting Spin-Integrated Tensors to Spin-Adapted ---------------
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Convert Cre/Des objects to RDM objects...
 Done!
-----------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Reorder RDM tensor indices according to: alpha < beta
 Done!
-----------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
-----------------------------------------------------------------------------------
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Converting Kronecker Deltas to spin-adapted formulation...
 Done!
-----------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Converting eigenvalues to spin-adapted formulation...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
 
 Converting 1-RDMs to spin-adapted formulation...
@@ -183,105 +157,108 @@ Converting 2-RDMs to spin-adapted formulation...
 Converting 3-RDMs to spin-adapted formulation...
 Converting 4-RDMs to spin-adapted formulation...
 Done!
-----------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
+----------------------------------------------------------------------------------------------------
+
+Combining 220 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
 Done!
-----------------------------------------------------------------------------------
-
-Combining 298 spin-adapted terms...
-
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
 Reordering indices according to core < active < virtual...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
-----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
-268 spin-adapted terms combined.
+190 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
-
------------------------------ Spin-adapted equations -----------------------------
+-------------------------------------- Spin-adapted equations --------------------------------------
 
  (   2.00000) h(i,x) t1(i,x) 
- (  -2.00000) t1(i,x) v(i,j,j,x) 
- (   4.00000) t1(i,x) v(j,i,j,x) 
- (  -1.00000) h(i,y) t1(i,x) rdm(x,y) 
- (  -1.00000) h(i,w) t1(i,z,y,x) rdm(w,z,y,x) 
+ (  -2.00000) t1(i,x) v(i,k,k,x) 
+ (   4.00000) t1(i,x) v(k,k,i,x) 
+ (  -1.00000) h(i,w) t1(i,x) rdm(w,x) 
+ (  -1.00000) h(i,w) t1(i,z,x,y) rdm(w,z,x,y) 
  (  -1.00000) h(i,y) t1(i,z,x,y) rdm(x,z) 
  (   2.00000) h(i,y) t1(i,z,y,x) rdm(x,z) 
- (  -1.00000) t1(i,x) v(i,y,z,w) rdm(x,y,z,w) 
- (  -1.00000) t1(i,x) v(i,y,z,x) rdm(y,z) 
- (   2.00000) t1(i,x) v(i,y,x,z) rdm(y,z) 
- (   1.00000) t1(i,x) v(i,j,j,y) rdm(x,y) 
- (  -2.00000) t1(i,x) v(j,i,j,y) rdm(x,y) 
- (  -0.83333) t1(i,z,x,y) v(i,w,u,v) rdm(x,y,w,u,z,v) 
- (  -1.00000) t1(i,z,x,y) v(i,w,u,y) rdm(z,u,w,x) 
- (  -1.00000) t1(i,z,x,y) v(i,w,y,u) rdm(z,u,x,w) 
- (   1.00000) t1(i,z,x,y) v(i,j,j,y) rdm(x,z) 
- (  -2.00000) t1(i,z,x,y) v(j,i,j,w) rdm(z,w,y,x) 
- (  -2.00000) t1(i,z,x,y) v(j,i,j,y) rdm(x,z) 
- (   0.16667) t1(i,z,y,x) v(i,w,u,v) rdm(y,x,w,u,v,z) 
- (   0.16667) t1(i,z,y,x) v(i,w,u,v) rdm(y,x,w,v,u,z) 
- (   0.16667) t1(i,z,y,x) v(i,w,u,v) rdm(y,x,w,v,z,u) 
- (   0.16667) t1(i,z,y,x) v(i,w,u,v) rdm(y,x,w,z,u,v) 
- (   0.16667) t1(i,z,y,x) v(i,w,u,v) rdm(y,x,w,z,v,u) 
- (   1.00000) t1(i,z,y,x) v(i,j,j,w) rdm(z,w,x,y) 
- (   2.00000) t1(i,z,x,y) v(i,w,x,y) rdm(w,z) 
- (  -1.00000) t1(i,z,y,x) v(i,w,u,y) rdm(x,w,z,u) 
- (   2.00000) t1(i,z,y,x) v(i,w,y,u) rdm(x,w,z,u) 
- (  -2.00000) t1(i,z,y,x) v(i,j,j,y) rdm(x,z) 
- (   4.00000) t1(i,z,y,x) v(j,i,j,y) rdm(x,z) 
- (  -1.00000) t1(i,z,y,x) v(i,w,x,y) rdm(w,z) 
+ (   1.00000) t1(i,x) v(i,k,k,w) rdm(x,w) 
+ (  -1.00000) t1(i,x) v(i,w,u,v) rdm(x,u,w,v) 
+ (  -1.00000) t1(i,x) v(i,w,u,x) rdm(w,u) 
+ (   2.00000) t1(i,x) v(i,x,w,u) rdm(u,w) 
+ (  -2.00000) t1(i,x) v(k,k,i,w) rdm(x,w) 
+ (   1.00000) t1(i,z,x,y) v(i,k,k,y) rdm(x,z) 
+ (  -0.75000) t1(i,z,x,y) v(i,w,u,v) rdm(z,w,v,y,x,u) 
+ (  -1.00000) t1(i,z,x,y) v(i,w,u,y) rdm(x,u,w,z) 
+ (  -1.00000) t1(i,z,x,y) v(i,y,w,u) rdm(x,w,z,u) 
+ (  -2.00000) t1(i,z,x,y) v(k,k,i,w) rdm(z,w,y,x) 
+ (  -2.00000) t1(i,z,x,y) v(k,k,i,y) rdm(x,z) 
+ (   1.00000) t1(i,z,y,x) v(i,k,k,w) rdm(z,w,x,y) 
+ (  -2.00000) t1(i,z,y,x) v(i,k,k,y) rdm(x,z) 
+ (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,u,x,y) 
+ (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,u,y,x) 
+ (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,x,u,y) 
+ (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,y,u,x) 
+ (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,y,x,u) 
+ (  -1.00000) t1(i,z,y,x) v(i,w,u,y) rdm(x,u,z,w) 
+ (  -1.00000) t1(i,z,y,x) v(i,x,w,y) rdm(z,w) 
+ (   2.00000) t1(i,z,y,x) v(i,y,w,u) rdm(x,w,z,u) 
+ (   2.00000) t1(i,z,y,x) v(i,y,w,x) rdm(z,w) 
+ (   4.00000) t1(i,z,y,x) v(k,k,i,y) rdm(x,z) 
 
-Total spin-integrated terms: 86
+Total spin-integrated terms: 66
 Total spin-adapted terms: 30
-Spin-adaptation automation time :  5.563 seconds
+Spin-adaptation automation time :  14.998 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------
+--------------------------------------------- WARNING ----------------------------------------------
 
------------------------------------- WARNING -------------------------------------
 Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "rm_core_int" flag to FALSE to preserve terms
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 10 terms removed:
  (  -2.00000) t1(i,x) v(i,j,j,x) 
- (   4.00000) t1(i,x) v(j,i,j,x) 
+ (   4.00000) t1(i,x) v(j,j,i,x) 
  (   1.00000) t1(i,x) v(i,j,j,y) rdm(x,y) 
- (  -2.00000) t1(i,x) v(j,i,j,y) rdm(x,y) 
- (   1.00000) t1(i,z,x,y) v(i,j,j,y) rdm(x,z) 
- (  -2.00000) t1(i,z,x,y) v(j,i,j,w) rdm(z,w,y,x) 
- (  -2.00000) t1(i,z,x,y) v(j,i,j,y) rdm(x,z) 
- (   1.00000) t1(i,z,y,x) v(i,j,j,w) rdm(z,w,x,y) 
- (  -2.00000) t1(i,z,y,x) v(i,j,j,y) rdm(x,z) 
- (   4.00000) t1(i,z,y,x) v(j,i,j,y) rdm(x,z) 
-----------------------------------------------------------------------------------
+ (  -2.00000) t1(i,x) v(j,j,i,y) rdm(x,y) 
+ (   1.00000) t1(i,x,y,z) v(i,j,j,z) rdm(y,x) 
+ (  -2.00000) t1(i,x,y,z) v(j,j,i,w) rdm(x,w,z,y) 
+ (  -2.00000) t1(i,x,y,z) v(j,j,i,z) rdm(y,x) 
+ (   1.00000) t1(i,x,y,z) v(i,j,j,w) rdm(x,w,z,y) 
+ (  -2.00000) t1(i,x,y,z) v(i,j,j,y) rdm(z,x) 
+ (   4.00000) t1(i,x,y,z) v(j,j,i,y) rdm(z,x) 
+----------------------------------------------------------------------------------------------------
 Remaining terms: 20
 
 
--------------------------------- genEinsum equations --------------------------------
+--------------------------------------- genEinsum equations ----------------------------------------
 
 e_p1p  = 2 * einsum('ix,ix', h_ca, t1_ca, optimize = einsum_type)
-e_p1p -= einsum('iw,izyx,wzyx', h_ca, t1_caaa, rdm_ccaa, optimize = einsum_type)
-e_p1p -= einsum('iy,ix,xy', h_ca, t1_ca, rdm_ca, optimize = einsum_type)
-e_p1p -= einsum('iy,izxy,xz', h_ca, t1_caaa, rdm_ca, optimize = einsum_type)
-e_p1p += 2 * einsum('iy,izyx,xz', h_ca, t1_caaa, rdm_ca, optimize = einsum_type)
-e_p1p += 2 * einsum('ix,iyxz,yz', t1_ca, v_caaa, rdm_ca, optimize = einsum_type)
-e_p1p -= einsum('ix,iyzw,xyzw', t1_ca, v_caaa, rdm_ccaa, optimize = einsum_type)
+e_p1p -= einsum('ix,iy,xy', h_ca, t1_ca, rdm_ca, optimize = einsum_type)
+e_p1p -= einsum('ix,iyzw,xyzw', h_ca, t1_caaa, rdm_ccaa, optimize = einsum_type)
+e_p1p -= einsum('ix,iyzx,zy', h_ca, t1_caaa, rdm_ca, optimize = einsum_type)
+e_p1p += 2 * einsum('ix,iyxz,zy', h_ca, t1_caaa, rdm_ca, optimize = einsum_type)
+e_p1p -= einsum('ix,iyzw,xzyw', t1_ca, v_caaa, rdm_ccaa, optimize = einsum_type)
 e_p1p -= einsum('ix,iyzx,yz', t1_ca, v_caaa, rdm_ca, optimize = einsum_type)
-e_p1p -= 5/6 * einsum('izxy,iwuv,xywuzv', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p -= einsum('izxy,iwuy,zuwx', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
-e_p1p += 2 * einsum('izxy,iwxy,wz', t1_caaa, v_caaa, rdm_ca, optimize = einsum_type)
-e_p1p -= einsum('izxy,iwyu,zuxw', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
-e_p1p += 1/6 * einsum('izyx,iwuv,yxwuvz', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p += 1/6 * einsum('izyx,iwuv,yxwvuz', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p += 1/6 * einsum('izyx,iwuv,yxwvzu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p += 1/6 * einsum('izyx,iwuv,yxwzuv', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p += 1/6 * einsum('izyx,iwuv,yxwzvu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p -= einsum('izyx,iwuy,xwzu', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
-e_p1p -= einsum('izyx,iwxy,wz', t1_caaa, v_caaa, rdm_ca, optimize = einsum_type)
-e_p1p += 2 * einsum('izyx,iwyu,xwzu', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 57.28 seconds.
+e_p1p += 2 * einsum('ix,ixyz,zy', t1_ca, v_caaa, rdm_ca, optimize = einsum_type)
+e_p1p -= 3/4 * einsum('ixyz,iwuv,xwvzyu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p -= einsum('ixyz,iwuz,yuwx', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
+e_p1p -= einsum('ixyz,izwu,ywxu', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
+e_p1p += 1/4 * einsum('ixyz,iwuv,xwvuzy', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/4 * einsum('ixyz,iwuv,xwvuyz', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/4 * einsum('ixyz,iwuv,xwvzuy', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/4 * einsum('ixyz,iwuv,xwvyuz', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/4 * einsum('ixyz,iwuv,xwvyzu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p -= einsum('ixyz,iwuy,zuxw', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
+e_p1p -= einsum('ixyz,izwy,xw', t1_caaa, v_caaa, rdm_ca, optimize = einsum_type)
+e_p1p += 2 * einsum('ixyz,iywu,zwxu', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
+e_p1p += 2 * einsum('ixyz,iywz,xw', t1_caaa, v_caaa, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 32.47 seconds.

@@ -1,0 +1,1 @@
+T_a_cae  = 1/2 * einsum('JxXB,Yx->XJYB', t1_xaae, rdm_ca, optimize = einsum_type)

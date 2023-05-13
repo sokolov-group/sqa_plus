@@ -1,6 +1,5 @@
 import sqa_plus
-spin_integrated = True
-explicit_spin_cases = True
+sqa_plus.options.spin_integrated = True
 
 amplitude_string = 't1_p1p'
 k_block_string = 'K22'
@@ -9,14 +8,7 @@ spin_cases_string = 'bba_bba'
 import time
 start = time.time()
 
-print("\n----------------------------------------------------------------------------------")
-print("Spin-Adapted {:} K".format(amplitude_string).center(82))
-print("----------------------------------------------------------------------------------\n")
-
-# Create spin-integrated Dyall Hamiltonian
-print("# Create spin-integrated Dyall Hamiltonian ...")
-indices_lists = sqa_plus.create_dummy_indices_list(spin_integrated)
-terms_Heff = sqa_plus.dyallH_act(indices_lists, spin_integrated, explicit_spin_cases)
+sqa_plus.options.print_header("Spin-Adapted {:} {:} {:}".format(amplitude_string, k_block_string, spin_cases_string))
 
 # Create spin-integrated amplitude operator
 ## Define indices
@@ -76,6 +68,10 @@ cre_z_beta  = sqa_plus.creOp(z_beta)
 des_z_alpha = sqa_plus.desOp(z_alpha)
 des_z_beta  = sqa_plus.desOp(z_beta)
 
+# Create spin-integrated Dyall Hamiltonian
+print("# Create spin-integrated Dyall Hamiltonian ...")
+terms_Heff = sqa_plus.dyallH_act()
+
 ## Define terms
 if amplitude_string == 't1_0p':
     if spin_cases_string == 'aa_aa':
@@ -84,7 +80,7 @@ if amplitude_string == 't1_0p':
         term_l_op = sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])
         term_r_op = sqa_plus.term(1.0, [], [cre_z_alpha, des_w_alpha])
 
-        k_string = 'K_' + spin_cases_string
+        k_string = 'K_caca_' + spin_cases_string
         final_indices_string = 'XYWZ'
 
     elif spin_cases_string == 'aa_bb':
@@ -93,7 +89,7 @@ if amplitude_string == 't1_0p':
         term_l_op = sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])
         term_r_op = sqa_plus.term(1.0, [], [cre_z_beta, des_w_beta])
 
-        k_string = 'K_' + spin_cases_string
+        k_string = 'K_caca_' + spin_cases_string
         final_indices_string = 'XYWZ'
 
 elif amplitude_string == 't1_m1':
@@ -143,14 +139,13 @@ elif amplitude_string == 't1_m1p':
         final_indices_string = 'XY'
 
     elif k_block_string == 'K12':
-        if spin_cases_string == 'a_abb':
-            print("## Create K12: a_X^\dag [H_{act}, a_Y^\dag a_Z a_W] ...\n")
+        print("## Create K12: a_X^\dag [H_{act}, a_Y^\dag a_Z a_W] ...\n")
 
-            term_l_op = sqa_plus.term(1.0, [], [cre_x_alpha])
-            term_r_op = sqa_plus.term(1.0, [], [cre_y_beta, des_z_beta, des_w_alpha])
+        term_l_op = sqa_plus.term(1.0, [], [cre_x_alpha])
+        term_r_op = sqa_plus.term(1.0, [], [cre_y_beta, des_z_beta, des_w_alpha])
 
-            k_string = k_block_string + "_" + spin_cases_string
-            final_indices_string = 'XWZY'
+        k_string = 'K12_a_abb'
+        final_indices_string = 'XWZY'
 
     elif k_block_string == 'K22':
         if spin_cases_string == 'aaa_aaa':
@@ -182,14 +177,13 @@ elif amplitude_string == 't1_p1p':
         final_indices_string = 'XY'
 
     elif k_block_string == 'K12':
-        if spin_cases_string == 'a_bba':
-            print("## Create K12: a_X [H_{act}, a_Y^\dag a_Z^\dag a_W] ...\n")
+        print("## Create K12: a_X [H_{act}, a_Y^\dag a_Z^\dag a_W] ...\n")
 
-            term_l_op = sqa_plus.term(1.0, [], [des_x_alpha])
-            term_r_op = sqa_plus.term(1.0, [], [cre_y_alpha, cre_z_beta, des_w_beta])
+        term_l_op = sqa_plus.term(1.0, [], [des_x_alpha])
+        term_r_op = sqa_plus.term(1.0, [], [cre_y_alpha, cre_z_beta, des_w_beta])
 
-            k_string = k_block_string + "_" + spin_cases_string
-            final_indices_string = 'XWZY'
+        k_string = 'K12_a_bba'
+        final_indices_string = 'XWZY'
 
     elif k_block_string == 'K22':
         if spin_cases_string == 'aaa_aaa':
@@ -231,12 +225,7 @@ terms_expected_K_sa = sqa_plus.convertSpinIntegratedToAdapted(terms_expected_K)
 
 # Create Numpy einsum equations
 terms_expected_K_sa.sort()
-result = sqa_plus.genEinsum(terms_expected_K_sa, k_string, final_indices_string, rm_core_int = True, suffix = '')
-
-print("\n-------------------------------- genEinsum equations --------------------------------\n")
-for item in result:
-    print(item)
-print("\n-------------------------------------------------------------------------------------\n")
+result = sqa_plus.genEinsum(terms_expected_K_sa, k_string, final_indices_string)
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))

@@ -1,6 +1,5 @@
 import sqa_plus
-spin_integrated = True
-explicit_spin_cases = True
+sqa_plus.options.spin_integrated = True
 
 amplitude_string = 't1_p1p'
 s_block_string = 'S22'
@@ -9,9 +8,7 @@ spin_cases_string = 'bba_bba'
 import time
 start = time.time()
 
-print("\n----------------------------------------------------------------------------------")
-print("Spin-Adapted {:} S".format(amplitude_string).center(82))
-print("----------------------------------------------------------------------------------\n")
+sqa_plus.options.print_header("Spin-Adapted {:} {:} {:}".format(amplitude_string, s_block_string, spin_cases_string))
 
 # Create spin-integrated amplitude operator
 ## Define indices
@@ -98,6 +95,14 @@ if amplitude_string == 't1_0p':
             s_string = s_block_string + "_" + spin_cases_string
             final_indices_string = 'XYWZ'
 
+        elif spin_cases_string == 'ba_ba':
+            print("## Create S22: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+
+            terms_S = [sqa_plus.term(1.0, [], [cre_x_beta, des_y_alpha, cre_z_alpha, des_w_beta])]
+
+            s_string = s_block_string + "_" + spin_cases_string
+            final_indices_string = 'XYWZ'
+
 elif amplitude_string == 't1_m1':
     print("## Create S11: a_X^\dag a_Y ...\n")
 
@@ -140,13 +145,12 @@ elif amplitude_string == 't1_m1p':
         final_indices_string = 'XY'
 
     elif s_block_string == 'S12':
-        if spin_cases_string == 'a_abb':
-            print("## Create S12: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+        print("## Create S12: a_X^\dag a_Y^\dag a_Z a_W ...\n")
 
-            terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, cre_y_beta, des_z_beta, des_w_alpha])]
+        terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, cre_y_beta, des_z_beta, des_w_alpha])]
 
-            s_string = s_block_string + "_" + spin_cases_string
-            final_indices_string = 'XWZY'
+        s_string = 'S12_a_abb'
+        final_indices_string = 'XWZY'
 
     elif s_block_string == 'S22':
         if spin_cases_string == 'aaa_aaa':
@@ -175,13 +179,12 @@ elif amplitude_string == 't1_p1p':
         final_indices_string = 'XY'
 
     elif s_block_string == 'S12':
-        if spin_cases_string == 'a_bba':
-            print("## Create S12: a_X a_Y^\dag a_Z a_W ...\n")
+        print("## Create S12: a_X a_Y^\dag a_Z a_W ...\n")
 
-            terms_S = [sqa_plus.term(1.0, [], [des_x_alpha, cre_y_alpha, cre_z_beta, des_w_beta])]
+        terms_S = [sqa_plus.term(1.0, [], [des_x_alpha, cre_y_alpha, cre_z_beta, des_w_beta])]
 
-            s_string = s_block_string + "_" + spin_cases_string
-            final_indices_string = 'XWZY'
+        s_string = 'S12_a_bba'
+        final_indices_string = 'XWZY'
 
     elif s_block_string == 'S22':
         if spin_cases_string == 'aaa_aaa':
@@ -212,12 +215,7 @@ terms_expected_S_sa = sqa_plus.convertSpinIntegratedToAdapted(terms_expected_S)
 
 # Create Numpy einsum equations
 terms_expected_S_sa.sort()
-result = sqa_plus.genEinsum(terms_expected_S_sa, s_string, final_indices_string, rm_core_int = True, suffix = '')
-
-print("\n-------------------------------- genEinsum equations --------------------------------\n")
-for item in result:
-    print(item)
-print("\n-------------------------------------------------------------------------------------\n")
+result = sqa_plus.genEinsum(terms_expected_S_sa, s_string, final_indices_string)
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))

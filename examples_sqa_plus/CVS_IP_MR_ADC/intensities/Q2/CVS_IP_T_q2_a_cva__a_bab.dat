@@ -1,0 +1,284 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+----------------------------- Spin-Adapted CVS-IP: T Q2 A_CVA (a_bab) ------------------------------
+
+
+## Generating operators ...
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+## Calculating the excitation operator 1/2 * [[q^(0), T - T^\dag], T - T^\dag] ...
+## Calculating the commutator...
+## Calculating the excitation operator [q^(0), T^(2) - T^(2)^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) t2(J,K,X,Y) 
+ (   0.50000) t1(J,K,X,a) t1(Y,a) 
+ (   0.50000) t1(J,K,Y,a) t1(X,a) 
+ (   0.50000) t1(J,K,x,a) t1(X,Y,a,x) 
+ (   0.50000) t1(J,K,x,a) t1(X,Y,a,x) 
+ (  -0.50000) t1(J,K,a,b) t1(X,Y,a,b) 
+ (   0.50000) t1(J,x,X,Y) t1(K,x) 
+ (  -0.50000) t1(J,x) t1(K,x,X,Y) 
+ (  -1.00000) t2(J,K,X,x) cre(x) des(Y) 
+ (   0.50000) t1(J,K,X,a) t1(Y,x,a,y) cre(x) des(y) 
+ (   0.50000) t1(J,K,X,a) t1(Y,x,a,y) cre(x) des(y) 
+ (  -0.50000) t1(J,K,X,a) t1(x,a) cre(x) des(Y) 
+ (   0.50000) t1(J,K,Y,a) t1(X,x,a,y) cre(x) des(y) 
+ (   0.50000) t1(J,K,Y,a) t1(X,x,a,y) cre(x) des(y) 
+ (  -0.50000) t1(J,K,x,a) t1(X,y,a,x) cre(y) des(Y) 
+ (  -0.50000) t1(J,K,x,a) t1(X,Y,a,y) cre(x) des(y) 
+ (  -0.50000) t1(J,K,x,a) t1(X,a) cre(x) des(Y) 
+ (  -0.50000) t1(J,K,x,a) t1(X,y,a,x) cre(y) des(Y) 
+ (  -0.50000) t1(J,K,x,a) t1(X,Y,a,y) cre(x) des(y) 
+ (   0.50000) t1(J,K,a,b) t1(X,x,a,b) cre(x) des(Y) 
+ (   0.50000) t1(J,x,X,Y) t1(K,y,x,z) cre(z) des(y) 
+ (   0.50000) t1(J,x,X,Y) t1(K,y,x,z) cre(z) des(y) 
+ (  -0.50000) t1(J,x,X,y) t1(K,x) cre(y) des(Y) 
+ (  -0.50000) t1(J,x,X,y) t1(K,y,Y,z) cre(z) des(x) 
+ (   0.50000) t1(J,x,X,y) t1(K,z,Y,x) cre(y) des(z) 
+ (  -0.50000) t1(J,x,Y,y) t1(K,y,X,z) cre(z) des(x) 
+ (   0.50000) t1(J,x,Y,y) t1(K,z,X,x) cre(y) des(z) 
+ (  -0.50000) t1(J,x,y,z) t1(K,y,X,Y) cre(z) des(x) 
+ (   0.50000) t1(J,x) t1(K,x,X,y) cre(y) des(Y) 
+ (  -0.50000) t1(J,x,Y,y) t1(K,y,X,z) cre(z) des(x) 
+ (   0.50000) t1(J,x,Y,y) t1(K,z,X,x) cre(y) des(z) 
+ (  -0.50000) t1(J,x,y,z) t1(K,y,X,Y) cre(z) des(x) 
+ (   0.50000) t1(J,K,X,a) t1(x,y,a,z) cre(x) cre(y) des(Y) des(z) 
+ (   0.25000) t1(J,K,X,a) t1(x,y,a,z) cre(x) cre(y) des(Y) des(z) 
+ (   0.50000) t1(J,K,x,a) t1(X,y,a,z) cre(x) cre(y) des(Y) des(z) 
+ (   0.50000) t1(J,K,x,a) t1(X,y,a,z) cre(x) cre(y) des(Y) des(z) 
+ (   0.50000) t1(J,K,x,a) t1(X,y,a,z) cre(x) cre(y) des(Y) des(z) 
+ (  -0.50000) t1(J,x,X,y) t1(K,y,z,w) cre(z) cre(w) des(Y) des(x) 
+ (   0.50000) t1(J,x,X,y) t1(K,z,x,w) cre(y) cre(w) des(Y) des(z) 
+ (   0.50000) t1(J,x,X,y) t1(K,z,x,w) cre(y) cre(w) des(Y) des(z) 
+ (   0.50000) t1(J,x,y,z) t1(K,y,X,w) cre(z) cre(w) des(Y) des(x) 
+ (   0.50000) t1(J,x,y,z) t1(K,y,X,w) cre(z) cre(w) des(Y) des(x) 
+ (   0.50000) t1(J,x,y,z) t1(K,w,X,x) cre(y) cre(z) des(Y) des(w) 
+ (   0.50000) t1(J,x,y,z) t1(K,y,X,w) cre(z) cre(w) des(Y) des(x) 
+ (   0.25000) t1(J,x,y,z) t1(K,w,X,x) cre(y) cre(z) des(Y) des(w) 
+
+Total terms : 45
+SQA automation time :  227.416 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices according to: alpha < beta
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting Kronecker Deltas to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting eigenvalues to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 80 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+28 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -1.00000) t2(J,K,Y,X) 
+ (   0.50000) t1(J,K,Y,a) t1(X,a) 
+ (   0.50000) t1(J,K,a,b) t1(X,Y,b,a) 
+ (   0.50000) t1(J,K,x,a) t1(Y,X,x,a) 
+ (  -0.50000) t1(J,x) t1(K,x,X,Y) 
+ (  -0.50000) t1(J,x,Y,X) t1(K,x) 
+ (  -0.50000) t1(K,J,X,a) t1(Y,a) 
+ (   0.50000) t1(K,J,x,a) t1(X,Y,x,a) 
+ (   0.50000) t2(J,K,x,X) rdm(Y,x) 
+ (  -0.25000) t1(J,K,Y,a) t1(X,x,y,a) rdm(x,y) 
+ (   0.50000) t1(J,K,Y,a) t1(x,X,y,a) rdm(x,y) 
+ (  -0.25000) t1(J,K,a,b) t1(X,x,b,a) rdm(Y,x) 
+ (  -0.25000) t1(J,K,x,a) t1(X,a) rdm(Y,x) 
+ (   0.16667) t1(J,K,x,a) t1(X,y,z,a) rdm(Y,z,x,y) 
+ (   0.08333) t1(J,K,x,a) t1(X,y,z,a) rdm(Y,z,y,x) 
+ (  -0.25000) t1(J,K,x,a) t1(Y,X,y,a) rdm(x,y) 
+ (  -0.25000) t1(J,K,x,a) t1(y,X,x,a) rdm(Y,y) 
+ (  -0.25000) t1(J,K,x,a) t1(y,X,z,a) rdm(Y,z,x,y) 
+ (   0.25000) t1(J,x) t1(K,x,X,y) rdm(Y,y) 
+ (  -0.50000) t1(J,x,Y,X) t1(K,y,x,z) rdm(y,z) 
+ (   0.25000) t1(J,x,Y,X) t1(K,y,z,x) rdm(y,z) 
+ (  -0.50000) t1(J,x,Y,y) t1(K,y,X,z) rdm(x,z) 
+ (   0.25000) t1(J,x,Y,y) t1(K,y,z,X) rdm(x,z) 
+ (   0.50000) t1(J,x,Y,y) t1(K,z,X,x) rdm(y,z) 
+ (  -0.25000) t1(J,x,Y,y) t1(K,z,x,X) rdm(y,z) 
+ (   0.25000) t1(J,x,y,X) t1(K,x) rdm(Y,y) 
+ (  -0.25000) t1(J,x,y,X) t1(K,y,z,Y) rdm(x,z) 
+ (   0.16667) t1(J,x,y,X) t1(K,y,z,w) rdm(Y,x,w,z) 
+ (   0.08333) t1(J,x,y,X) t1(K,y,z,w) rdm(Y,x,z,w) 
+ (  -0.08333) t1(J,x,y,X) t1(K,z,w,x) rdm(Y,z,w,y) 
+ (  -0.16667) t1(J,x,y,X) t1(K,z,w,x) rdm(Y,z,y,w) 
+ (   0.25000) t1(J,x,y,X) t1(K,z,x,Y) rdm(y,z) 
+ (   0.25000) t1(J,x,y,X) t1(K,z,x,w) rdm(Y,z,y,w) 
+ (   0.25000) t1(J,x,y,Y) t1(K,y,X,z) rdm(x,z) 
+ (  -0.25000) t1(J,x,y,Y) t1(K,z,X,x) rdm(y,z) 
+ (  -0.25000) t1(J,x,y,z) t1(K,w,X,x) rdm(Y,w,y,z) 
+ (   0.16667) t1(J,x,y,z) t1(K,w,x,X) rdm(Y,w,y,z) 
+ (   0.08333) t1(J,x,y,z) t1(K,w,x,X) rdm(Y,w,z,y) 
+ (  -0.50000) t1(J,x,y,z) t1(K,y,X,Y) rdm(x,z) 
+ (   0.25000) t1(J,x,y,z) t1(K,y,X,w) rdm(Y,x,w,z) 
+ (   0.25000) t1(J,x,y,z) t1(K,z,X,Y) rdm(x,y) 
+ (   0.25000) t1(J,x,y,z) t1(K,z,X,w) rdm(Y,x,y,w) 
+ (  -0.08333) t1(J,x,y,z) t1(K,z,w,X) rdm(Y,x,w,y) 
+ (  -0.16667) t1(J,x,y,z) t1(K,z,w,X) rdm(Y,x,y,w) 
+ (   0.25000) t1(K,J,X,a) t1(Y,x,y,a) rdm(x,y) 
+ (  -0.50000) t1(K,J,X,a) t1(x,Y,y,a) rdm(x,y) 
+ (   0.25000) t1(K,J,X,a) t1(x,a) rdm(Y,x) 
+ (   0.25000) t1(K,J,X,a) t1(x,y,z,a) rdm(Y,z,y,x) 
+ (  -0.25000) t1(K,J,x,a) t1(X,Y,y,a) rdm(x,y) 
+ (  -0.25000) t1(K,J,x,a) t1(X,y,x,a) rdm(Y,y) 
+ (   0.08333) t1(K,J,x,a) t1(X,y,z,a) rdm(Y,z,x,y) 
+ (   0.16667) t1(K,J,x,a) t1(X,y,z,a) rdm(Y,z,y,x) 
+
+Total spin-integrated terms: 45
+Total spin-adapted terms: 52
+Spin-adaptation automation time :  2.370 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 52
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+T_a_cva =- einsum('JKYX->XJKY', t2_xvaa, optimize = einsum_type).copy()
+T_a_cva += 1/2 * einsum('JKYa,Xa->XJKY', t1_xvae, t1_ae, optimize = einsum_type)
+T_a_cva += 1/2 * einsum('JKab,XYba->XJKY', t1_xvee, t1_aaee, optimize = einsum_type)
+T_a_cva += 1/2 * einsum('JKxa,YXxa->XJKY', t1_xvae, t1_aaae, optimize = einsum_type)
+T_a_cva -= 1/2 * einsum('Jx,KxXY->XJKY', t1_xa, t1_vaaa, optimize = einsum_type)
+T_a_cva -= 1/2 * einsum('JxYX,Kx->XJKY', t1_xaaa, t1_va, optimize = einsum_type)
+T_a_cva -= 1/2 * einsum('KJXa,Ya->XJKY', t1_vxae, t1_ae, optimize = einsum_type)
+T_a_cva += 1/2 * einsum('KJxa,XYxa->XJKY', t1_vxae, t1_aaae, optimize = einsum_type)
+T_a_cva += 1/2 * einsum('JKxX,Yx->XJKY', t2_xvaa, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JKYa,Xxya,xy->XJKY', t1_xvae, t1_aaae, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/2 * einsum('JKYa,xXya,xy->XJKY', t1_xvae, t1_aaae, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JKab,Xxba,Yx->XJKY', t1_xvee, t1_aaee, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JKxa,Xa,Yx->XJKY', t1_xvae, t1_ae, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/6 * einsum('JKxa,Xyza,Yzxy->XJKY', t1_xvae, t1_aaae, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/12 * einsum('JKxa,Xyza,Yzyx->XJKY', t1_xvae, t1_aaae, rdm_ccaa, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JKxa,YXya,xy->XJKY', t1_xvae, t1_aaae, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JKxa,yXxa,Yy->XJKY', t1_xvae, t1_aaae, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JKxa,yXza,Yzxy->XJKY', t1_xvae, t1_aaae, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('Jx,KxXy,Yy->XJKY', t1_xa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/2 * einsum('JxYX,Kyxz,yz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('JxYX,Kyzx,yz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/2 * einsum('JxYy,KyXz,xz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('JxYy,KyzX,xz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/2 * einsum('JxYy,KzXx,yz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JxYy,KzxX,yz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('JxyX,Kx,Yy->XJKY', t1_xaaa, t1_va, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JxyX,KyzY,xz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/6 * einsum('JxyX,Kyzw,Yxwz->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/12 * einsum('JxyX,Kyzw,Yxzw->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva -= 1/12 * einsum('JxyX,Kzwx,Yzwy->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva -= 1/6 * einsum('JxyX,Kzwx,Yzyw->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('JxyX,KzxY,yz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('JxyX,Kzxw,Yzyw->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('JxyY,KyXz,xz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('JxyY,KzXx,yz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('Jxyz,KwXx,Ywyz->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/6 * einsum('Jxyz,KwxX,Ywyz->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/12 * einsum('Jxyz,KwxX,Ywzy->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva -= 1/2 * einsum('Jxyz,KyXY,xz->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('Jxyz,KyXw,Yxwz->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('Jxyz,KzXY,xy->XJKY', t1_xaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('Jxyz,KzXw,Yxyw->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva -= 1/12 * einsum('Jxyz,KzwX,Yxwy->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva -= 1/6 * einsum('Jxyz,KzwX,Yxyw->XJKY', t1_xaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('KJXa,Yxya,xy->XJKY', t1_vxae, t1_aaae, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/2 * einsum('KJXa,xYya,xy->XJKY', t1_vxae, t1_aaae, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('KJXa,xa,Yx->XJKY', t1_vxae, t1_ae, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/4 * einsum('KJXa,xyza,Yzyx->XJKY', t1_vxae, t1_aaae, rdm_ccaa, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('KJxa,XYya,xy->XJKY', t1_vxae, t1_aaae, rdm_ca, optimize = einsum_type)
+T_a_cva -= 1/4 * einsum('KJxa,Xyxa,Yy->XJKY', t1_vxae, t1_aaae, rdm_ca, optimize = einsum_type)
+T_a_cva += 1/12 * einsum('KJxa,Xyza,Yzxy->XJKY', t1_vxae, t1_aaae, rdm_ccaa, optimize = einsum_type)
+T_a_cva += 1/6 * einsum('KJxa,Xyza,Yzyx->XJKY', t1_vxae, t1_aaae, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 486.59 seconds.
