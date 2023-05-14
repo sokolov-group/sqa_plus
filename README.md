@@ -10,7 +10,7 @@ import sqa_plus
 
 # SecondQuantizationAlgebra Plus Capabilities
 
-To see how to use core SecondQuantizationAlgebra capabilities, such as the definition of indexes, operators and terms, and algebraic functions, such as Normal Ordering, please visit the [original README file](sqa_original/README.md).
+To see how to use core SecondQuantizationAlgebra capabilities, such as the definition of indexes, operators and terms, and algebraic functions, such as Normal Ordering, please visit the [original README file](README_sqa_extra.md).
 
 # Multireference Algebraic Diagrammatic Construction (MR-ADC) Theory Automation
 ## Spin-Orbital Effective Hamiltonian and Operators

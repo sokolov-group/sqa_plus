@@ -131,7 +131,7 @@ def combine_transpose(termList):
         if not t.isInCanonicalForm:
             if options.verbose:
                 print("making canonical...  %s" %(str(t)))
-            t.makeCanonical()
+            t.makeCanonical(rename_user_defined = False)
 
     # if requested, print a greeting
     if options.verbose:
