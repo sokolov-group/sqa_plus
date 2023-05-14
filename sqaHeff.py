@@ -1057,7 +1057,7 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
         T_deex = []
 
         # Define tensors symmetries
-        t1_ten_symm = [symmetry(1,0), 1]
+        t1_ten_symm = [symmetry((1,0), 1)]
         t2_ten_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1)]
 
         # Core-External: t_i^a
