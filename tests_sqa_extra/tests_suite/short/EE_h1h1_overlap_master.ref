@@ -1,2 +1,0 @@
-temp =- np.einsum('AD, WZ, XYUV->XYAZUVDW', np.identity(nextern_so), np.identity(ncas_so), rdm_ccaa_so, optimize = True)
-temp += np.einsum('AD, WXYUVZ->XYAZUVDW', np.identity(nextern_so), rdm_cccaaa_so, optimize = True)
