@@ -1,7 +1,6 @@
 import sqa_plus
 sqa_plus.options.spin_integrated = True
 sqa_plus.options.cvs_approach = True
-order_Heff = 0
 
 import time
 start = time.time()
@@ -188,7 +187,11 @@ elif diagonal_indices_string in ['caa']:
     diagonal_pairs_dict = {'K': 'I'}
 
 # Spin-Integrated H_eff
-terms_Heff = sqa_plus.Heff(order_Heff)
+if diagonal_indices_string in ['c_caa']:
+    terms_Heff = sqa_plus.Heff(0)
+    terms_Heff.extend(sqa_plus.Heff(1))
+else:
+    terms_Heff = sqa_plus.Heff(0)
 
 ## Calculating the commutator
 print("## Calculating the commutator [H(0), a_S^\dag a_T^\dag a_U] ...")

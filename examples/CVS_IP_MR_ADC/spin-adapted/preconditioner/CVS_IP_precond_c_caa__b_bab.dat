@@ -22,6 +22,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 Done ...
 ----------------------------------------------------------------------------------------------------
+
+----------------------------------------- Hamiltonian (1) ------------------------------------------
+
+Commutation: Done ...
+Done ...
+----------------------------------------------------------------------------------------------------
 ## Calculating the commutator [H(0), a_S^\dag a_T^\dag a_U] ...
 
 ## Calculating a_P^\dag a_Q a_R [H(0), a_S^\dag a_T^\dag a_U] ...
@@ -49,6 +55,7 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
+ (   1.00000) v(I,x,K,Y) cre(X) des(x) 
  (   1.00000) e(I) kdelta(I,K) cre(X) des(Y) 
  (   1.00000) h(X,x) kdelta(I,K) cre(x) des(Y) 
  (  -1.00000) h(Y,x) kdelta(I,K) cre(X) des(x) 
@@ -56,13 +63,17 @@ Done!
  (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y) 
  (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y) 
  (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y) 
+ (  -1.00000) v(I,x,K,y) rdm(x,y) cre(X) des(Y) 
+ (  -1.00000) v(I,x,K,y) rdm(x,y) cre(X) des(Y) 
+ (  -1.00000) v(I,x,K,y) cre(X) cre(y) des(Y) des(x) 
+ (  -1.00000) v(I,x,K,y) cre(X) cre(y) des(Y) des(x) 
  (  -0.50000) kdelta(I,K) v(X,x,y,z) cre(y) cre(z) des(Y) des(x) 
  (  -1.00000) kdelta(I,K) v(X,x,y,z) cre(y) cre(z) des(Y) des(x) 
  (   1.00000) kdelta(I,K) v(Y,x,y,z) cre(X) cre(x) des(y) des(z) 
  (   0.50000) kdelta(I,K) v(Y,x,y,z) cre(X) cre(x) des(y) des(z) 
 
-Total terms : 11
-SQA automation time :  0.149 seconds
+Total terms : 16
+SQA automation time :  56.019 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -122,9 +133,9 @@ Done!
 -------------------------------------- Spin-adapted equations --------------------------------------
 
 
-Total spin-integrated terms: 11
+Total spin-integrated terms: 16
 Total spin-adapted terms: 0
-Spin-adaptation automation time :  0.007 seconds
+Spin-adaptation automation time :  0.019 seconds
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- WARNING ----------------------------------------------
@@ -143,4 +154,4 @@ Done!
 --------------------------------------- genEinsum equations ----------------------------------------
 
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.27 seconds.
+> Total elapsed time: 423.36 seconds.
