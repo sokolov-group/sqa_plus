@@ -127,8 +127,7 @@ def dummyLabel(_terms, keep_user_defined_dummy_names = True):
                     virtInd.remove(reserved_index_name)
 
         if options.verbose:
-            _term_unlabeled = _term
-        _term_unlabeled = _term.copy()
+            _term_unlabeled = _term.copy()
 
         for _tensor_ind, _tensor in enumerate(_term.tensors):
             for _index_ind, _index in enumerate(_tensor.indices):

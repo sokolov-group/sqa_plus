@@ -201,6 +201,9 @@ def reorder_rdm_indices_notation(_terms_rdm):
         if rdm_tensors:
             for ten_rdm_ind, ten_rdm in zip(rdm_tensors_ind, rdm_tensors):
 
+                if options.verbose:
+                    unordered_tensor = ten_rdm.copy()
+
                 # rdm2[p,q,r,s] = < p^+ q^+ s r >
                 if len(ten_rdm.indices) == 4:
                     ten_rdm.indices = [ten_rdm.indices[i] for i in [0, 1, 3, 2]]
@@ -217,7 +220,7 @@ def reorder_rdm_indices_notation(_terms_rdm):
                     ten_rdm.symmetries = rdm4_symm
 
                 if options.verbose:
-                    print("{:}    --->    {:}".format(_terms_rdm[term_rdm_ind].tensors[ten_rdm_ind], ten_rdm))
+                    print("{:}    --->    {:}".format(unordered_tensor, ten_rdm))
 
                 _terms_rdm[term_rdm_ind].tensors[ten_rdm_ind] = ten_rdm.copy()
 
