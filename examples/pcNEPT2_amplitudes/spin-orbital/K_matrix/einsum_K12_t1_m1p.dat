@@ -1,0 +1,7 @@
+K12 =- einsum('xy,zwuy->XZWY', h_aa_so, rdm_ccaa_so, optimize = einsum_type)
+K12 += einsum('xy,zwuy->XZWY', h_aa_so, rdm_ccaa_so, optimize = einsum_type)
+K12 += einsum('xy,zywu->XZWY', h_aa_so, rdm_ccaa_so, optimize = einsum_type)
+K12 -= 1/2 * einsum('xyzw,uvzw->XZWY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)
+K12 -= 1/2 * einsum('xyzw,uvyszw->XZWY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K12 += 1/2 * einsum('xyzw,uvyszw->XZWY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)
+K12 += 1/2 * einsum('xyzw,uzwvsy->XZWY', v_aaaa_so, rdm_cccaaa_so, optimize = einsum_type)

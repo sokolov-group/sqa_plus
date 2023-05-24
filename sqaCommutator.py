@@ -39,13 +39,13 @@ def commutator(leftInput, rightInput, contract = True, combine = True):
     # Check input integrity
     TypeErrorMessage = "commutator inputs must be terms or lists of terms"
     if type(leftTerms) != type([]) or type(rightTerms) != type([]):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
     for t in rightTerms:
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
     for t in leftTerms:
         if not isinstance(t, term):
-            raise TypeError, TypeErrorMessage
+            raise TypeError(TypeErrorMessage)
 
     # Construct terms resulting from the commutator
     preNOTerms = [] #terms before normal ordering

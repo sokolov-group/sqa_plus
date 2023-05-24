@@ -1,0 +1,165 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+----------------------------- Spin-Adapted CVS-IP: T Q2 C_CCE (a_aaa) ------------------------------
+
+
+## Generating operators ...
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+## Calculating the excitation operator 1/2 * [[q^(0), T - T^\dag], T - T^\dag] ...
+## Calculating the commutator...
+## Calculating the excitation operator [q^(0), T^(2) - T^(2)^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -0.50000) t1(I,x) t1(J,K,x,B) 
+ (   0.50000) t1(I,a) t1(J,K,B,a) 
+ (  -0.50000) t1(I,x,y,z) t1(J,K,y,B) cre(x) des(z) 
+ (   0.50000) t1(I,x,a,y) t1(J,K,B,a) cre(x) des(y) 
+ (  -0.50000) t1(I,x,y,z) t1(J,K,y,B) cre(x) des(z) 
+ (   0.50000) t1(I,x,a,y) t1(J,K,B,a) cre(x) des(y) 
+
+Total terms : 6
+SQA automation time :  19.337 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices according to: alpha < beta
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting Kronecker Deltas to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting eigenvalues to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 16 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+4 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) t1(J,K,B,a) t1(I,a) 
+ (  -0.50000) t1(J,K,x,B) t1(I,x) 
+ (  -0.50000) t1(K,J,B,a) t1(I,a) 
+ (   0.50000) t1(K,J,x,B) t1(I,x) 
+ (   0.50000) t1(J,K,B,a) t1(I,x,a,y) rdm(x,y) 
+ (  -0.25000) t1(J,K,B,a) t1(I,x,y,a) rdm(x,y) 
+ (  -0.50000) t1(J,K,x,B) t1(I,y,x,z) rdm(y,z) 
+ (   0.25000) t1(J,K,x,B) t1(I,y,z,x) rdm(y,z) 
+ (  -0.50000) t1(K,J,B,a) t1(I,x,a,y) rdm(x,y) 
+ (   0.25000) t1(K,J,B,a) t1(I,x,y,a) rdm(x,y) 
+ (   0.50000) t1(K,J,x,B) t1(I,y,x,z) rdm(y,z) 
+ (  -0.25000) t1(K,J,x,B) t1(I,y,z,x) rdm(y,z) 
+
+Total spin-integrated terms: 6
+Total spin-adapted terms: 12
+Spin-adaptation automation time :  0.226 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 12
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+T_c_cce  = 1/2 * einsum('JKBa,Ia->IJKB', t1_xxee, t1_xe, optimize = einsum_type)
+T_c_cce -= 1/2 * einsum('JKxB,Ix->IJKB', t1_xxae, t1_xa, optimize = einsum_type)
+T_c_cce -= 1/2 * einsum('KJBa,Ia->IJKB', t1_xxee, t1_xe, optimize = einsum_type)
+T_c_cce += 1/2 * einsum('KJxB,Ix->IJKB', t1_xxae, t1_xa, optimize = einsum_type)
+T_c_cce += 1/2 * einsum('JKBa,Ixay,xy->IJKB', t1_xxee, t1_xaea, rdm_ca, optimize = einsum_type)
+T_c_cce -= 1/4 * einsum('JKBa,Ixya,xy->IJKB', t1_xxee, t1_xaae, rdm_ca, optimize = einsum_type)
+T_c_cce -= 1/2 * einsum('JKxB,Iyxz,yz->IJKB', t1_xxae, t1_xaaa, rdm_ca, optimize = einsum_type)
+T_c_cce += 1/4 * einsum('JKxB,Iyzx,yz->IJKB', t1_xxae, t1_xaaa, rdm_ca, optimize = einsum_type)
+T_c_cce -= 1/2 * einsum('KJBa,Ixay,xy->IJKB', t1_xxee, t1_xaea, rdm_ca, optimize = einsum_type)
+T_c_cce += 1/4 * einsum('KJBa,Ixya,xy->IJKB', t1_xxee, t1_xaae, rdm_ca, optimize = einsum_type)
+T_c_cce += 1/2 * einsum('KJxB,Iyxz,yz->IJKB', t1_xxae, t1_xaaa, rdm_ca, optimize = einsum_type)
+T_c_cce -= 1/4 * einsum('KJxB,Iyzx,yz->IJKB', t1_xxae, t1_xaaa, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 148.63 seconds.

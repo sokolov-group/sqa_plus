@@ -22,31 +22,32 @@ import sys, time
 import itertools
 
 from sqaMatrixBlock import dummyLabel, reorder_tensor_indices
-from sqaIndex import get_spatial_index_type, get_spin_index_type, is_alpha_index_type, is_beta_index_type
+from sqaIndex import get_spatial_index_type, get_spin_index_type, is_alpha_index_type, is_beta_index_type, is_cvs_index_type
 from sqaTerm import combineTerms, termChop
 from sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
-def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True):
+def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
     startTime = time.time()
-    print("\n--------------- Converting Spin-Integrated Tensors to Spin-Adapted ---------------\n")
+    options.print_header("Converting Spin-Integrated Tensors to Spin-Adapted")
     sys.stdout.flush()
 
     # Convert Cre/Des Objects to RDM Objects
-    print("----------------------------------------------------------------------------------")
-    convert_credes_to_rdm(terms_si, trans_rdm)
-    reorder_rdm_indices_notation(terms_si)
+    options.print_divider()
+    convert_credes_to_rdm(terms_si, trans_rdm = False)
+
     reorder_rdm_spin_indices(terms_si)
-    reorder_tensor_indices(terms_si, reorder_t)
-
-    terms_si = dummyLabel(terms_si)
-    terms_si.sort()
-
+    dummyLabel(terms_si)
+    len_terms_si = len(terms_si)
+    
     # Convert Kronecker Delta to Spin-Adapted Formulation
     terms_sa = convert_kdelta_si_to_sa(terms_si)
+
+    # Convert eigenvalues to Spin-Adapted Formulation
+    terms_sa = convert_e_si_to_sa(terms_sa)
 
     # Convert 1e- integrals to Spin-Adapted Formulation
     terms_sa = convert_h1e_si_to_sa(terms_sa)
@@ -54,42 +55,49 @@ def convertSpinIntegratedToAdapted(terms_si, trans_rdm = False, reorder_t = True
     # Convert 2e- integrals to Spin-Adapted Formulation
     terms_sa = convert_v2e_si_to_sa(terms_sa)
 
-    # Convert eigenvalues to Spin-Adapted Formulation
-    terms_sa = convert_e_si_to_sa(terms_sa)
+    # Convert T amplitudes to Spin-Adapted Formulation
+    terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
     # Convert RDMs to Spin-Adapted Formulation
     terms_sa = convert_rdms_si_to_sa(terms_sa)
 
-    # Convert T amplitudes to Spin-Adapted Formulation
-    terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
-
     # Combine Spin-Adapted Terms
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     for term_sa in terms_sa:
         term_sa.isInCanonicalForm = False
 
     num_terms_sa = len(terms_sa)
     print("\nCombining {:} spin-adapted terms...\n".format(num_terms_sa))
     combineTerms(terms_sa)
-    reorder_tensor_indices(terms_sa, reorder_t)
+
+    # Reorder tensors to Chemist's Notation
+    reorder_v2e_indices_notation(terms_sa)
+    reorder_rdm_indices_notation(terms_sa)
+    options.chemists_notation = True
+
+    reorder_tensor_indices(terms_sa)
     dummyLabel(terms_sa)
     print("\n{:} spin-adapted terms combined.".format(num_terms_sa - len(terms_sa)))
-    print("\n----------------------------------------------------------------------------------")
+    options.print_divider()
+
+    # Set terms as spin-adapted in sqaOptions class
+    options.spin_adapted = True
 
     # Print Spin-Adapted Equations
-    print("\n----------------------------- Spin-adapted equations -----------------------------\n")
+    options.print_header("Spin-adapted equations")
+    terms_sa.sort()
     for term in terms_sa:
         print("{:}".format(term))
 
-    print("\nTotal spin-integrated terms: {:}".format(len(terms_si)))
+    print("\nTotal spin-integrated terms: {:}".format(len_terms_si))
     print("Total spin-adapted terms: {:}".format(len(terms_sa)))
     print("Spin-adaptation automation time :  {:.3f} seconds".format(time.time() - startTime))
-    print("\n----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
 
     return terms_sa
 
-def convert_credes_to_rdm(_terms_credes, _trans_rdm = False):
+def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
     "Convert Cre/Des Objects to RDM Objects"
 
     print("Convert Cre/Des objects to RDM objects...")
@@ -108,11 +116,55 @@ def convert_credes_to_rdm(_terms_credes, _trans_rdm = False):
         ## Modify term in list to use creDesTensor object instead of cre/des objects
         if credes_ops:
             _terms_credes[term_credes_ind].tensors = [tens for tens in term_credes.tensors if tens not in credes_ops]
-            ten_rdm = creDesTensor(credes_ops, _trans_rdm)
+            ten_rdm = creDesTensor(credes_ops, trans_rdm)
             _terms_credes[term_credes_ind].tensors.append(ten_rdm)
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
+    return
+
+def reorder_v2e_indices_notation(_terms_v2e):
+    print("Reorder 2e- integrals in Chemists' notation...")
+    sys.stdout.flush()
+
+    if options.verbose:
+        print("\nv2e notation in spin-adapted chemists' notation:")
+        print("-> v2e[p,q,r,s] => v2e[p,r,q,s]")
+
+    for term_v2e_ind, term_v2e in enumerate(_terms_v2e):
+
+        ## List for storing v2e objects
+        v2e_tensors = []
+        v2e_tensors_ind = []
+
+        ## Define indices symmetries
+        v2e_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
+
+        ## Append all v2e objects to list
+        for ten_v2e_ind, ten_v2e in enumerate(term_v2e.tensors):
+            if (ten_v2e.name == 'v') and (len(ten_v2e.indices) == 4):
+                v2e_tensors.append(ten_v2e)
+                v2e_tensors_ind.append(ten_v2e_ind)
+
+        ## Convert from Physicists's to Chemists's Notation
+        if v2e_tensors:
+            for ten_v2e_ind, ten_v2e in zip(v2e_tensors_ind, v2e_tensors):
+
+                if options.verbose:
+                    unordered_ten_v2e = ten_v2e.copy()
+
+                # v2e[p,q,r,s] => v2e[p,r,q,s]
+                ten_v2e.indices = [ten_v2e.indices[i] for i in [0, 2, 1, 3]]
+                ten_v2e.symmetries = v2e_symm
+
+                if options.verbose:
+                    print("{:}    --->    {:}".format(unordered_ten_v2e, ten_v2e))
+
+                _terms_v2e[term_v2e_ind].tensors[ten_v2e_ind] = ten_v2e.copy()
+
+    print("Done!")
+    options.print_divider()
+    sys.stdout.flush()
     return
 
 def reorder_rdm_indices_notation(_terms_rdm):
@@ -132,24 +184,25 @@ def reorder_rdm_indices_notation(_terms_rdm):
         rdm_tensors_ind = []
 
         ## Define indices symmetries
-        rdm2_symm = [symmetry((1,0,2,3), -1), symmetry((0,1,3,2), -1), symmetry((2,3,0,1), 1)]
+        rdm2_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
 
-        rdm3_symm = [symmetry((1,0,2,3,4,5), -1), symmetry((0,2,1,3,4,5), -1), symmetry((0,1,2,4,3,5), -1),
-                     symmetry((0,1,2,3,5,4), -1), symmetry((3,4,5,0,1,2), 1)]
+        rdm3_symm = [symmetry((1,0,2,4,3,5), 1), symmetry((0,2,1,3,5,4), 1), symmetry((3,4,5,0,1,2), 1)]
 
-        rdm4_symm = [symmetry((1,0,2,3,4,5,6,7), -1), symmetry((0,2,1,3,4,5,6,7), -1), symmetry((0,1,3,2,4,5,6,7), -1),
-                     symmetry((0,1,2,3,5,4,6,7), -1), symmetry((0,1,2,3,4,6,5,7), -1), symmetry((0,1,2,3,4,5,7,6), -1),
-                     symmetry((4,5,6,7,0,1,2,3), 1)]
+        rdm4_symm = [symmetry((1,0,2,3,5,4,6,7), 1), symmetry((0,2,1,3,4,6,5,7), 1),
+                     symmetry((0,1,3,2,4,5,7,6), 1), symmetry((4,5,6,7,0,1,2,3), 1)]
 
         ## Append all RDM objects to list
         for ten_rdm_ind, ten_rdm in enumerate(term_rdm.tensors):
-            if isinstance(ten_rdm, creDesTensor):
+            if (isinstance(ten_rdm, creDesTensor)) and (len(ten_rdm.indices) > 2):
                 rdm_tensors.append(ten_rdm)
                 rdm_tensors_ind.append(ten_rdm_ind)
 
-        ## Modify term in list to use creDesTensor object instead of cre/des objects
+        ## Convert from Physicists's to Chemists's Notation
         if rdm_tensors:
             for ten_rdm_ind, ten_rdm in zip(rdm_tensors_ind, rdm_tensors):
+
+                if options.verbose:
+                    unordered_tensor = ten_rdm.copy()
 
                 # rdm2[p,q,r,s] = < p^+ q^+ s r >
                 if len(ten_rdm.indices) == 4:
@@ -166,10 +219,13 @@ def reorder_rdm_indices_notation(_terms_rdm):
                     ten_rdm.indices = [ten_rdm.indices[i] for i in [0, 1, 2, 3, 7, 6, 5, 4]]
                     ten_rdm.symmetries = rdm4_symm
 
+                if options.verbose:
+                    print("{:}    --->    {:}".format(unordered_tensor, ten_rdm))
+
                 _terms_rdm[term_rdm_ind].tensors[ten_rdm_ind] = ten_rdm.copy()
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
@@ -258,7 +314,7 @@ def reorder_rdm_spin_indices(_terms_rdm):
                 _terms_rdm[term_rdm_ind].scale(order_factor)
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
@@ -266,7 +322,6 @@ def remove_spin_index_type(_tensor):
     "Remove spin index type of a given spin-integrated tensor"
 
     for index in _tensor.indices:
-
         index_spatial_type = get_spatial_index_type(index)
         index.indType = (index_spatial_type,)
 
@@ -275,7 +330,7 @@ def remove_spin_index_type(_tensor):
 def convert_h1e_si_to_sa(_terms_h1e_si):
     "Convert h1e Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting 1e- integrals to spin-adapted formulation...")
 
     # Define 1e- indices lists
@@ -308,20 +363,13 @@ def convert_h1e_si_to_sa(_terms_h1e_si):
 
     termChop(terms_h1e_sa)
 
-    # Print 1e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_h1e_sa in terms_h1e_sa:
-            print(term_h1e_sa)
-        print("")
-
     print("Done!")
     return terms_h1e_sa
 
 def convert_v2e_si_to_sa(_terms_v2e_si):
     "Convert v2e Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting 2e- integrals to spin-adapted formulation...")
 
     # Define Spin-Adapted 2e- integrals Symmetries
@@ -353,18 +401,20 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
             tens_v2e_sa = []
             consts_v2e_sa = []
 
+            if options.verbose:
+                print("\n<<< {:}".format(term_v2e_si))
+
             for ten_v2e in tens_v2e:
 
                 ten_v2e_inds = [get_spatial_index_type(ind) for ind in ten_v2e.indices]
                 ten_v2e_spin_inds = [get_spin_index_type(ind) for ind in ten_v2e.indices]
-
+            
                 if ((ten_v2e_inds[0] == ten_v2e_inds[1] == ten_v2e_inds[2] == ten_v2e_inds[3]) or
 
                    (((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3]) and
                      (ten_v2e_inds[0] != ten_v2e_inds[2]) and (ten_v2e_inds[1] != ten_v2e_inds[3])) or
 
-                    ((ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3])) or
-                    ((ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3])))):
+                    ((ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3])))):
 
                     if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: v2e(p,q,r,s)
@@ -402,6 +452,87 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
 
                         tens_v2e_sa.append([ten1_v2e])
                         consts_v2e_sa.append([const1_v2e])
+
+                if (ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3]):
+
+                    if options.cvs_approach:
+                        ten_v2e_cvs_inds = [is_cvs_index_type(ind) for ind in ten_v2e.indices]
+
+                    if options.cvs_approach and (ten_v2e_cvs_inds[0] == ten_v2e_cvs_inds[1]):
+                        if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
+                            ## Spin-Adapted 2e- term: v2e(p,q,r,s)
+                            ten1_v2e = ten_v2e.copy()
+                            const1_v2e = 1.0
+
+                            ## Spin-Adapted 2e- term: v2e(q,p,r,s)
+                            ten2_v2e = ten_v2e.copy()
+                            ten2_v2e.indices = [ten2_v2e.indices[i] for i in [1, 0, 2, 3]]
+                            const2_v2e = - 1.0
+
+                            tens_v2e_sa.append([ten1_v2e, ten2_v2e])
+                            consts_v2e_sa.append([const1_v2e, const2_v2e])
+
+                        elif ten_v2e_spin_inds in [inds_abab, inds_baba]:
+                            ## Spin-Adapted 2e- term: v2e(p,q,r,s)
+                            ten1_v2e = ten_v2e.copy()
+                            const1_v2e = 1.0
+
+                            tens_v2e_sa.append([ten1_v2e])
+                            consts_v2e_sa.append([const1_v2e])
+
+                        elif ten_v2e_spin_inds in [inds_abba, inds_baab]:
+                            ## Spin-Adapted 2e- term: v2e(q,p,r,s)
+                            ten1_v2e = ten_v2e.copy()
+                            ten1_v2e.indices = [ten1_v2e.indices[i] for i in [1, 0, 2, 3]]
+                            const1_v2e = - 1.0
+
+                            tens_v2e_sa.append([ten1_v2e])
+                            consts_v2e_sa.append([const1_v2e])
+
+                        else:
+                            ten1_v2e = ten_v2e.copy()
+                            const1_v2e = 0.0
+
+                            tens_v2e_sa.append([ten1_v2e])
+                            consts_v2e_sa.append([const1_v2e])
+
+                    else:
+                        if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
+                            ## Spin-Adapted 2e- term: v2e(p,q,r,s)
+                            ten1_v2e = ten_v2e.copy()
+                            const1_v2e = 1.0
+
+                            ## Spin-Adapted 2e- term: v2e(p,q,s,r)
+                            ten2_v2e = ten_v2e.copy()
+                            ten2_v2e.indices = [ten2_v2e.indices[i] for i in [0, 1, 3, 2]]
+                            const2_v2e = - 1.0
+
+                            tens_v2e_sa.append([ten1_v2e, ten2_v2e])
+                            consts_v2e_sa.append([const1_v2e, const2_v2e])
+
+                        elif ten_v2e_spin_inds in [inds_abab, inds_baba]:
+                            ## Spin-Adapted 2e- term: v2e(p,q,r,s)
+                            ten1_v2e = ten_v2e.copy()
+                            const1_v2e = 1.0
+
+                            tens_v2e_sa.append([ten1_v2e])
+                            consts_v2e_sa.append([const1_v2e])
+
+                        elif ten_v2e_spin_inds in [inds_abba, inds_baab]:
+                            ## Spin-Adapted 2e- term: v2e(p,q,s,r)
+                            ten1_v2e = ten_v2e.copy()
+                            ten1_v2e.indices = [ten1_v2e.indices[i] for i in [0, 1, 3, 2]]
+                            const1_v2e = - 1.0
+
+                            tens_v2e_sa.append([ten1_v2e])
+                            consts_v2e_sa.append([const1_v2e])
+
+                        else:
+                            ten1_v2e = ten_v2e.copy()
+                            const1_v2e = 0.0
+
+                            tens_v2e_sa.append([ten1_v2e])
+                            consts_v2e_sa.append([const1_v2e])
 
                 elif ((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3])):
                     if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
@@ -463,6 +594,10 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                 for ten_v2e_sa_ind, ten_v2e_sa in zip(tens_v2e_ind, tens_v2e_sa):
                     term_v2e_sa.tensors[ten_v2e_sa_ind] = remove_spin_index_type(ten_v2e_sa)
                     term_v2e_sa.tensors[ten_v2e_sa_ind].symmetries = v2e_sa_symm
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_v2e_sa, consts_v2e_sa_prod[tens_v2e_sa_ind]))
+
                 terms_v2e_sa.append(term_v2e_sa)
 
         else:
@@ -470,27 +605,20 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
 
     termChop(terms_v2e_sa)
 
-    # Print 2e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_v2e_sa in terms_v2e_sa:
-            print(term_v2e_sa)
-        print("")
-
     print("Done!")
     return terms_v2e_sa
 
 def convert_rdms_si_to_sa(_terms_rdm_si):
     "Convert RDM Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting RDMs to spin-adapted formulation...\n")
 
     # Convert One-Body RDMs
     print("Converting 1-RDMs to spin-adapted formulation...")
 
     # Define Spin-Adapted One-Body RDMs Symmetries
-    rdm1_sa_symm = [symmetry((0,1), 1)]
+    rdm1_sa_symm = [symmetry((1,0), 1)]
 
     # Define 1e- indices lists
     inds_aa = [options.alpha_type, options.alpha_type]
@@ -503,30 +631,31 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
             if isinstance(ten, creDesTensor) and len(ten.indices) == 2:
                 ten_rdm1_spin_inds = [get_spin_index_type(ind) for ind in ten.indices]
 
+                if options.verbose:
+                    print("\n<<< {:}".format(term_rdm1_si))
+
                 if ten_rdm1_spin_inds in [inds_aa, inds_bb]:
-                    term_rdm1_sa.scale(1.0 / 2.0)
+                    consts_rdm1_sa_prod = 1.0 / 2.0 
+                    term_rdm1_sa.scale(consts_rdm1_sa_prod)
                     term_rdm1_sa.tensors[ten_ind] = remove_spin_index_type(ten)
                     term_rdm1_sa.tensors[ten_ind].symmetries = rdm1_sa_symm
                 else:
-                    term_rdm1_sa.scale(0.0)
+                    consts_rdm1_sa_prod = 0.0
+                    term_rdm1_sa.scale(consts_rdm1_sa_prod)
                     term_rdm1_sa.tensors[ten_ind] = remove_spin_index_type(ten)
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_rdm1_sa, consts_rdm1_sa_prod))
 
         terms_rdm1_sa.append(term_rdm1_sa)
 
     termChop(terms_rdm1_sa)
 
-    # Print 1e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_rdm1_sa in terms_rdm1_sa:
-            print(term_rdm1_sa)
-        print("")
-
     # Convert Two-Body RDMs
     print("Converting 2-RDMs to spin-adapted formulation...")
 
     # Define Spin-Adapted Two-Body RDMs Symmetries
-    rdm2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
+    rdm2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((3,2,1,0), 1)]
 
     # Define 2e- indices lists
     inds_aaaa = [options.alpha_type, options.alpha_type, options.alpha_type, options.alpha_type]
@@ -557,11 +686,11 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                 ten_rdm2_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm2.indices]
 
                 if ten_rdm2_spin_inds in [inds_aaaa, inds_bbbb]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,y,x)
                     ten1_rdm2 = ten_rdm2.copy()
                     const1_rdm2 = 1.0 / 6.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,s,r)
+                    ## Spin-Adapted RDM term: rdm(u,v,x,y)
                     ten2_rdm2 = ten_rdm2.copy()
                     ten2_rdm2.indices = [ten2_rdm2.indices[i] for i in [0, 1, 3, 2]]
                     const2_rdm2 = - 1.0 / 6.0
@@ -570,27 +699,27 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     consts_rdm2_sa.append([const1_rdm2, const2_rdm2])
 
                 elif ten_rdm2_spin_inds in [inds_abab, inds_baba]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,y,x)
                     ten1_rdm2 = ten_rdm2.copy()
-                    const1_rdm2 = 1.0 / 3.0
+                    const1_rdm2 = - 1.0 / 6.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,s,r)
+                    ## Spin-Adapted RDM term: rdm(u,v,x,y)
                     ten2_rdm2 = ten_rdm2.copy()
                     ten2_rdm2.indices = [ten2_rdm2.indices[i] for i in [0, 1, 3, 2]]
-                    const2_rdm2 = 1.0 / 6.0
+                    const2_rdm2 = - 1.0 / 3.0
 
                     tens_rdm2_sa.append([ten1_rdm2, ten2_rdm2])
                     consts_rdm2_sa.append([const1_rdm2, const2_rdm2])
 
                 elif ten_rdm2_spin_inds in [inds_abba, inds_baab]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,y,x)
                     ten1_rdm2 = ten_rdm2.copy()
-                    const1_rdm2 = - 1.0 / 6.0
+                    const1_rdm2 = 1.0 / 3.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,s,r)
+                    ## Spin-Adapted RDM term: rdm(u,v,x,y)
                     ten2_rdm2 = ten_rdm2.copy()
                     ten2_rdm2.indices = [ten2_rdm2.indices[i] for i in [0, 1, 3, 2]]
-                    const2_rdm2 = - 1.0 / 3.0
+                    const2_rdm2 = 1.0 / 6.0
 
                     tens_rdm2_sa.append([ten1_rdm2, ten2_rdm2])
                     consts_rdm2_sa.append([const1_rdm2, const2_rdm2])
@@ -630,18 +759,11 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
 
     termChop(terms_rdm2_sa)
 
-    # Print 2e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_rdm2_sa in terms_rdm2_sa:
-            print(term_rdm2_sa)
-        print("")
-
     # Convert Three-Body RDMs
     print("Converting 3-RDMs to spin-adapted formulation...")
 
     # Define Spin-Adapted Three-Body RDMs Symmetries
-    rdm3_sa_symm = [symmetry((1,0,2,4,3,5), 1), symmetry((0,2,1,3,5,4), 1), symmetry((2,1,0,5,4,3), 1)]
+    rdm3_sa_symm = [symmetry((1,0,2,3,5,4), 1), symmetry((0,2,1,4,3,5), 1), symmetry((5,4,3,2,1,0), 1)]
 
     # Define 3e- indices lists
     inds_aaaaaa = [options.alpha_type, options.alpha_type, options.alpha_type, options.alpha_type, options.alpha_type, options.alpha_type]
@@ -690,43 +812,69 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
             tens_rdm3_sa = []
             consts_rdm3_sa = []
 
+            if options.verbose:
+                print("\n<<< {:}".format(term_rdm3_si))
+
             for ten_rdm3 in tens_rdm3:
                 ten_rdm3_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm3.indices]
 
                 if ten_rdm3_spin_inds in [inds_aaaaaa, inds_bbbbbb]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten1_rdm3 = ten_rdm3.copy()
                     const1_rdm3 = 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
                     const2_rdm3 = 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
                     const3_rdm3 = 1.0 / 12.0
 
                     tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3])
                     consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3])
 
-                elif ten_rdm3_spin_inds in [inds_aabaab, inds_bbabba]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
+                elif ten_rdm3_spin_inds in [inds_aabbaa, inds_bbaabb]:
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten1_rdm3 = ten_rdm3.copy()
                     const1_rdm3 = 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
                     const2_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
                     const3_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,s,u)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,x,y)
+                    ten4_rdm3 = ten_rdm3.copy()
+                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 3, 5, 4]]
+                    const4_rdm4 = - 1.0 / 6.0
+
+                    tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
+                    consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
+
+                elif ten_rdm3_spin_inds in [inds_aababa, inds_bbabab]:
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
+                    ten1_rdm3 = ten_rdm3.copy()
+                    const1_rdm3 = - 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
+                    ten2_rdm3 = ten_rdm3.copy()
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    const2_rdm3 = - 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
+                    ten3_rdm3 = ten_rdm3.copy()
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    const3_rdm3 = 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,z,x)
                     ten4_rdm3 = ten_rdm3.copy()
                     ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 4, 3, 5]]
                     const4_rdm4 = - 1.0 / 6.0
@@ -734,91 +882,22 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
                     consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
 
-                elif ten_rdm3_spin_inds in [inds_aababa, inds_bbabab]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
+                elif ten_rdm3_spin_inds in [inds_aabaab, inds_bbabba]:
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten1_rdm3 = ten_rdm3.copy()
                     const1_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
-                    const2_rdm3 = - 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
-                    ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
-                    const3_rdm3 = 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t)
-                    ten4_rdm3 = ten_rdm3.copy()
-                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 3, 5, 4]]
-                    const4_rdm4 = - 1.0 / 6.0
-
-                    tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
-                    consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
-
-                elif ten_rdm3_spin_inds in [inds_aabbaa, inds_bbaabb]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
-                    ten1_rdm3 = ten_rdm3.copy()
-                    const1_rdm3 = - 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
-                    ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
                     const2_rdm3 = 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
                     const3_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,t,s)
-                    ten4_rdm3 = ten_rdm3.copy()
-                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 5, 4, 3]]
-                    const4_rdm4 = - 1.0 / 6.0
-
-                    tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
-                    consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
-
-                elif ten_rdm3_spin_inds in [inds_abaaab, inds_babbba]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
-                    ten1_rdm3 = ten_rdm3.copy()
-                    const1_rdm3 = - 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
-                    ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
-                    const2_rdm3 = 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
-                    ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
-                    const3_rdm3 = - 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t)
-                    ten4_rdm3 = ten_rdm3.copy()
-                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 3, 5, 4]]
-                    const4_rdm4 = - 1.0 / 6.0
-
-                    tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
-                    consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
-
-                elif ten_rdm3_spin_inds in [inds_abaaba, inds_babbab]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
-                    ten1_rdm3 = ten_rdm3.copy()
-                    const1_rdm3 = 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
-                    ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
-                    const2_rdm3 = - 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
-                    ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
-                    const3_rdm3 = - 1.0 / 12.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,t,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,y,z)
                     ten4_rdm3 = ten_rdm3.copy()
                     ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 5, 4, 3]]
                     const4_rdm4 = - 1.0 / 6.0
@@ -827,21 +906,21 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
 
                 elif ten_rdm3_spin_inds in [inds_ababaa, inds_bababb]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten1_rdm3 = ten_rdm3.copy()
                     const1_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
-                    const2_rdm3 = - 1.0 / 12.0
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    const2_rdm3 = 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
-                    const3_rdm3 = 1.0 / 12.0
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    const3_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,s,u)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,z,x)
                     ten4_rdm3 = ten_rdm3.copy()
                     ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 4, 3, 5]]
                     const4_rdm4 = - 1.0 / 6.0
@@ -849,70 +928,116 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
                     consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
 
-                elif ten_rdm3_spin_inds in [inds_baaaab, inds_abbbba]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
+                elif ten_rdm3_spin_inds in [inds_abaaba, inds_babbab]:
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten1_rdm3 = ten_rdm3.copy()
-                    const1_rdm3 = - 1.0 / 12.0
+                    const1_rdm3 = 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
                     const2_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
-                    const3_rdm3 = 1.0 / 12.0
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    const3_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,t,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,y,z)
                     ten4_rdm3 = ten_rdm3.copy()
                     ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 5, 4, 3]]
-                    const4_rdm3 = - 1.0 / 6.0
+                    const4_rdm4 = - 1.0 / 6.0
 
                     tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
-                    consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm3])
+                    consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
 
-                elif ten_rdm3_spin_inds in [inds_baaaba, inds_abbbab]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
+                elif ten_rdm3_spin_inds in [inds_abaaab, inds_babbba]:
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten1_rdm3 = ten_rdm3.copy()
                     const1_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
-                    const2_rdm3 = 1.0 / 12.0
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    const2_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
-                    const3_rdm3 = - 1.0 / 12.0
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    const3_rdm3 = 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,s,u)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,x,y)
                     ten4_rdm3 = ten_rdm3.copy()
-                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 4, 3, 5]]
+                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 3, 5, 4]]
                     const4_rdm4 = - 1.0 / 6.0
 
                     tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
                     consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
 
                 elif ten_rdm3_spin_inds in [inds_baabaa, inds_abbabb]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
+                    ten1_rdm3 = ten_rdm3.copy()
+                    const1_rdm3 = - 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
+                    ten2_rdm3 = ten_rdm3.copy()
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    const2_rdm3 = - 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
+                    ten3_rdm3 = ten_rdm3.copy()
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    const3_rdm3 = 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,y,z)
+                    ten4_rdm3 = ten_rdm3.copy()
+                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 5, 4, 3]]
+                    const4_rdm4 = - 1.0 / 6.0
+
+                    tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
+                    consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
+
+                elif ten_rdm3_spin_inds in [inds_baaaba, inds_abbbab]:
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
+                    ten1_rdm3 = ten_rdm3.copy()
+                    const1_rdm3 = - 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
+                    ten2_rdm3 = ten_rdm3.copy()
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    const2_rdm3 = 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
+                    ten3_rdm3 = ten_rdm3.copy()
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    const3_rdm3 = - 1.0 / 12.0
+
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,x,y)
+                    ten4_rdm3 = ten_rdm3.copy()
+                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 3, 5, 4]]
+                    const4_rdm4 = - 1.0 / 6.0
+
+                    tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
+                    consts_rdm3_sa.append([const1_rdm3, const2_rdm3, const3_rdm3, const4_rdm4])
+
+                elif ten_rdm3_spin_inds in [inds_baaaab, inds_abbbba]:
+                    ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten1_rdm3 = ten_rdm3.copy()
                     const1_rdm3 = 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,t,u,s)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten2_rdm3 = ten_rdm3.copy()
-                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
+                    ten2_rdm3.indices = [ten2_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
                     const2_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,u,s,t)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten3_rdm3 = ten_rdm3.copy()
-                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 5, 3, 4]]
+                    ten3_rdm3.indices = [ten3_rdm3.indices[i] for i in [0, 1, 2, 4, 5, 3]]
                     const3_rdm3 = - 1.0 / 12.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t)
+                    ## Spin-Adapted RDM term: rdm(u,v,w,y,z,x)
                     ten4_rdm3 = ten_rdm3.copy()
-                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 3, 5, 4]]
+                    ten4_rdm3.indices = [ten4_rdm3.indices[i] for i in [0, 1, 2, 4, 3, 5]]
                     const4_rdm4 = - 1.0 / 6.0
 
                     tens_rdm3_sa.append([ten1_rdm3, ten2_rdm3, ten3_rdm3, ten4_rdm3])
@@ -947,26 +1072,23 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     for ten_rdm3_sa_ind, ten_rdm3_sa in zip(tens_rdm3_ind, tens_rdm3_sa):
                         term_rdm3_sa.tensors[ten_rdm3_sa_ind] = remove_spin_index_type(ten_rdm3_sa)
                         term_rdm3_sa.tensors[ten_rdm3_sa_ind].symmetries = rdm3_sa_symm
+
+                    if options.verbose:
+                        print("--> {:} (factor = {:.5f})".format(term_rdm3_sa, consts_rdm3_sa_prod[tens_rdm3_sa_ind]))
+
                     terms_rdm3_sa.append(term_rdm3_sa)
+
         else:
             terms_rdm3_sa.append(term_rdm3_si)
 
     termChop(terms_rdm3_sa)
 
-    # Print 3e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_rdm3_sa in terms_rdm3_sa:
-            print(term_rdm3_sa)
-        print("")
-
     # Convert Four-Body RDMs
     print("Converting 4-RDMs to spin-adapted formulation...")
 
     # Define Spin-Adapted Four-Body RDMs Symmetries
-    rdm4_sa_symm = [symmetry((1,0,2,3,5,4,6,7), 1), symmetry((0,2,1,3,4,6,5,7), 1), symmetry((0,1,3,2,4,5,7,6), 1),
-                    symmetry((2,1,0,3,6,5,4,7), 1), symmetry((3,1,2,0,7,5,6,4), 1), symmetry((0,1,2,3,4,5,6,7), 1),
-                    symmetry((0,3,2,1,4,7,6,5), 1)]
+    rdm4_sa_symm = [symmetry((1,0,2,3,4,5,7,6), 1), symmetry((0,2,1,3,4,6,5,7), 1), symmetry((0,1,3,2,5,4,6,7), 1),
+                    symmetry((7,6,5,4,3,2,1,0), 1)]
 
     # Define 4e- indices lists
     inds_aaaaaaaa = [options.alpha_type, options.alpha_type, options.alpha_type, options.alpha_type,
@@ -1003,76 +1125,79 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
             tens_rdm4_sa = []
             consts_rdm4_sa = []
 
+            if options.verbose:
+                print("\n<<< {:}".format(term_rdm4_si))
+
             for ten_rdm4 in tens_rdm4:
                 ten_rdm4_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm4.indices]
 
                 if ten_rdm4_spin_inds in [inds_aaaaaaaa, inds_bbbbbbbb]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,w,v,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten1_rdm4 = ten_rdm4.copy()
-                    ten1_rdm4.indices = [ten1_rdm4.indices[i] for i in [0, 1, 2, 3, 4, 7, 5, 6]]
+                    ten1_rdm4.indices = [ten1_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 6, 4, 7]]
                     const1_rdm4 = 1.0 / 20.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,w,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,w,t,u)
                     ten2_rdm4 = ten_rdm4.copy()
                     ten2_rdm4.indices = [ten2_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 4, 7, 6]]
                     const2_rdm4 = 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,t,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,w,u)
                     ten3_rdm4 = ten_rdm4.copy()
                     ten3_rdm4.indices = [ten3_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 4, 6]]
                     const3_rdm4 = 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,v,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,v,w,u)
                     ten4_rdm4 = ten_rdm4.copy()
-                    ten4_rdm4.indices = [ten4_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 6, 4]]
+                    ten4_rdm4.indices = [ten4_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 5, 4, 6]]
                     const4_rdm4 = 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,u,w)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,u,t,v)
                     ten5_rdm4 = ten_rdm4.copy()
-                    ten5_rdm4.indices = [ten5_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 4, 5, 7]]
+                    ten5_rdm4.indices = [ten5_rdm4.indices[i] for i in [0, 1, 2, 3, 4, 6, 7, 5]]
                     const5_rdm4 = 1.0 / 20.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,w,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,t,v)
                     ten6_rdm4 = ten_rdm4.copy()
                     ten6_rdm4.indices = [ten6_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 4, 7, 5]]
                     const6_rdm4 = 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,w,u,v)
                     ten7_rdm4 = ten_rdm4.copy()
-                    ten7_rdm4.indices = [ten7_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 5, 7, 4]]
+                    ten7_rdm4.indices = [ten7_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 6, 5]]
                     const7_rdm4 = 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,w,t,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,w,v)
                     ten8_rdm4 = ten_rdm4.copy()
                     ten8_rdm4.indices = [ten8_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 4, 5]]
                     const8_rdm4 = 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,w,u,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u,w,v)
                     ten9_rdm4 = ten_rdm4.copy()
-                    ten9_rdm4.indices = [ten9_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 5, 4]]
+                    ten9_rdm4.indices = [ten9_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 4, 5]]
                     const9_rdm4 = 1.0 / 20.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,t,u,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,t,w)
                     ten10_rdm4 = ten_rdm4.copy()
-                    ten10_rdm4.indices = [ten10_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 5, 6]]
+                    ten10_rdm4.indices = [ten10_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 6, 7, 4]]
                     const10_rdm4 = 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,t,v,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,v,t,w)
                     ten11_rdm4 = ten_rdm4.copy()
-                    ten11_rdm4.indices = [ten11_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 6, 5]]
+                    ten11_rdm4.indices = [ten11_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 5, 7, 4]]
                     const11_rdm4 = 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,u,t,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,u,w)
                     ten12_rdm4 = ten_rdm4.copy()
-                    ten12_rdm4.indices = [ten12_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 5, 4, 6]]
+                    ten12_rdm4.indices = [ten12_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 6, 4]]
                     const12_rdm4 = 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,v,t,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,v,w)
                     ten13_rdm4 = ten_rdm4.copy()
-                    ten13_rdm4.indices = [ten13_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 4, 5]]
+                    ten13_rdm4.indices = [ten13_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 5, 4]]
                     const13_rdm4 = - 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,v,u,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u,v,w)
                     ten14_rdm4 = ten_rdm4.copy()
                     ten14_rdm4.indices = [ten14_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 5, 4]]
                     const14_rdm4 = 1.0 / 30.0
@@ -1086,72 +1211,72 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                                            const11_rdm4, const12_rdm4, const13_rdm4, const14_rdm4])
 
                 elif ten_rdm4_spin_inds in [inds_abbbabbb, inds_baaabaaa]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,w,v,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten1_rdm4 = ten_rdm4.copy()
-                    ten1_rdm4.indices = [ten1_rdm4.indices[i] for i in [0, 1, 2, 3, 4, 7, 5, 6]]
-                    const1_rdm4 = 1.0 / 5.0
+                    ten1_rdm4.indices = [ten1_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 6, 4, 7]]
+                    const1_rdm4 = - 1.0 / 20.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,w,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,w,t,u)
                     ten2_rdm4 = ten_rdm4.copy()
                     ten2_rdm4.indices = [ten2_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 4, 7, 6]]
-                    const2_rdm4 = 1.0 / 20.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,t,v)
-                    ten3_rdm4 = ten_rdm4.copy()
-                    ten3_rdm4.indices = [ten3_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 4, 6]]
-                    const3_rdm4 = 3.0 / 20.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,v,t)
-                    ten4_rdm4 = ten_rdm4.copy()
-                    ten4_rdm4.indices = [ten4_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 6, 4]]
-                    const4_rdm4 = 1.0 / 20.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,u,w)
-                    ten5_rdm4 = ten_rdm4.copy()
-                    ten5_rdm4.indices = [ten5_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 4, 5, 7]]
-                    const5_rdm4 = 1.0 / 30.0
+                    const2_rdm4 = - 1.0 / 30.0
 
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,w,u)
+                    ten3_rdm4 = ten_rdm4.copy()
+                    ten3_rdm4.indices = [ten3_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 4, 6]]
+                    const3_rdm4 = - 1.0 / 60.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,v,w,u)
+                    ten4_rdm4 = ten_rdm4.copy()
+                    ten4_rdm4.indices = [ten4_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 5, 4, 6]]
+                    const4_rdm4 = - 1.0 / 30.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,u,t,v)
+                    ten5_rdm4 = ten_rdm4.copy()
+                    ten5_rdm4.indices = [ten5_rdm4.indices[i] for i in [0, 1, 2, 3, 4, 6, 7, 5]]
+                    const5_rdm4 = - 1.0 / 20.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,t,v)
                     ten6_rdm4 = ten_rdm4.copy()
                     ten6_rdm4.indices = [ten6_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 4, 7, 5]]
                     const6_rdm4 = - 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,w,u,v)
                     ten7_rdm4 = ten_rdm4.copy()
-                    ten7_rdm4.indices = [ten7_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 5, 7, 4]]
+                    ten7_rdm4.indices = [ten7_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 6, 5]]
                     const7_rdm4 = - 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,w,t,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,w,v)
                     ten8_rdm4 = ten_rdm4.copy()
                     ten8_rdm4.indices = [ten8_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 4, 5]]
-                    const8_rdm4 = 1.0 / 20.0
+                    const8_rdm4 = - 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,w,u,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u,w,v)
                     ten9_rdm4 = ten_rdm4.copy()
-                    ten9_rdm4.indices = [ten9_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 5, 4]]
-                    const9_rdm4 = 7.0 / 60.0
+                    ten9_rdm4.indices = [ten9_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 4, 5]]
+                    const9_rdm4 = - 1.0 / 20.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,t,u,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,t,w)
                     ten10_rdm4 = ten_rdm4.copy()
-                    ten10_rdm4.indices = [ten10_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 5, 6]]
-                    const10_rdm4 = 2.0 / 15.0
+                    ten10_rdm4.indices = [ten10_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 6, 7, 4]]
+                    const10_rdm4 = - 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,t,v,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,v,t,w)
                     ten11_rdm4 = ten_rdm4.copy()
-                    ten11_rdm4.indices = [ten11_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 6, 5]]
-                    const11_rdm4 = - 1.0 / 60.0
+                    ten11_rdm4.indices = [ten11_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 5, 7, 4]]
+                    const11_rdm4 = 1.0 / 15.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,u,t,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,u,w)
                     ten12_rdm4 = ten_rdm4.copy()
-                    ten12_rdm4.indices = [ten12_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 5, 4, 6]]
+                    ten12_rdm4.indices = [ten12_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 6, 4]]
                     const12_rdm4 = 1.0 / 15.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,v,t,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,v,w)
                     ten13_rdm4 = ten_rdm4.copy()
-                    ten13_rdm4.indices = [ten13_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 4, 5]]
+                    ten13_rdm4.indices = [ten13_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 5, 4]]
                     const13_rdm4 = 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,v,u,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u,v,w)
                     ten14_rdm4 = ten_rdm4.copy()
                     ten14_rdm4.indices = [ten14_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 5, 4]]
                     const14_rdm4 = 1.0 / 20.0
@@ -1165,72 +1290,72 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                                            const11_rdm4, const12_rdm4, const13_rdm4, const14_rdm4])
 
                 elif ten_rdm4_spin_inds in [inds_aabbaabb, inds_bbaabbaa]:
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,w,v,u)
-                    ten1_rdm4 = ten_rdm4.copy()
-                    ten1_rdm4.indices = [ten1_rdm4.indices[i] for i in [0, 1, 2, 3, 4, 7, 5, 6]]
-                    const1_rdm4 = 1.0 / 20.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,w,v)
-                    ten2_rdm4 = ten_rdm4.copy()
-                    ten2_rdm4.indices = [ten2_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 4, 7, 6]]
-                    const2_rdm4 = 1.0 / 5.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,t,v)
-                    ten3_rdm4 = ten_rdm4.copy()
-                    ten3_rdm4.indices = [ten3_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 4, 6]]
-                    const3_rdm4 = 1.0 / 10.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,v,t)
-                    ten4_rdm4 = ten_rdm4.copy()
-                    ten4_rdm4.indices = [ten4_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 6, 4]]
-                    const4_rdm4 = - 1.0 / 20.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,u,w)
-                    ten5_rdm4 = ten_rdm4.copy()
-                    ten5_rdm4.indices = [ten5_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 4, 5, 7]]
-                    const5_rdm4 = 1.0 / 20.0
-
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,w,u)
-                    ten6_rdm4 = ten_rdm4.copy()
-                    ten6_rdm4.indices = [ten6_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 4, 7, 5]]
-                    const6_rdm4 = 1.0 / 10.0
-
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
-                    ten7_rdm4 = ten_rdm4.copy()
-                    ten7_rdm4.indices = [ten7_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 5, 7, 4]]
-                    const7_rdm4 = - 1.0 / 20.0
+                    ten1_rdm4 = ten_rdm4.copy()
+                    ten1_rdm4.indices = [ten1_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 6, 4, 7]]
+                    const1_rdm4 = - 1.0 / 30.0
 
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,w,t,u)
+                    ten2_rdm4 = ten_rdm4.copy()
+                    ten2_rdm4.indices = [ten2_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 4, 7, 6]]
+                    const2_rdm4 = 1.0 / 30.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,w,u)
+                    ten3_rdm4 = ten_rdm4.copy()
+                    ten3_rdm4.indices = [ten3_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 4, 6]]
+                    const3_rdm4 = 1.0 / 60.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,v,w,u)
+                    ten4_rdm4 = ten_rdm4.copy()
+                    ten4_rdm4.indices = [ten4_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 5, 4, 6]]
+                    const4_rdm4 = - 1.0 / 20.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,u,t,v)
+                    ten5_rdm4 = ten_rdm4.copy()
+                    ten5_rdm4.indices = [ten5_rdm4.indices[i] for i in [0, 1, 2, 3, 4, 6, 7, 5]]
+                    const5_rdm4 = - 1.0 / 30.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,w,t,v)
+                    ten6_rdm4 = ten_rdm4.copy()
+                    ten6_rdm4.indices = [ten6_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 4, 7, 5]]
+                    const6_rdm4 = 1.0 / 60.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,w,u,v)
+                    ten7_rdm4 = ten_rdm4.copy()
+                    ten7_rdm4.indices = [ten7_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 6, 5]]
+                    const7_rdm4 = - 1.0 / 20.0
+
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,w,v)
                     ten8_rdm4 = ten_rdm4.copy()
                     ten8_rdm4.indices = [ten8_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 4, 5]]
                     const8_rdm4 = 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,w,u,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u,w,v)
                     ten9_rdm4 = ten_rdm4.copy()
-                    ten9_rdm4.indices = [ten9_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 5, 4]]
-                    const9_rdm4 = - 1.0 / 30.0
+                    ten9_rdm4.indices = [ten9_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 4, 5]]
+                    const9_rdm4 = - 7.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,t,u,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,t,w)
                     ten10_rdm4 = ten_rdm4.copy()
-                    ten10_rdm4.indices = [ten10_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 5, 6]]
-                    const10_rdm4 = 1.0 / 5.0
+                    ten10_rdm4.indices = [ten10_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 6, 7, 4]]
+                    const10_rdm4 = 1.0 / 30.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,t,v,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,v,t,w)
                     ten11_rdm4 = ten_rdm4.copy()
-                    ten11_rdm4.indices = [ten11_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 4, 6, 5]]
-                    const11_rdm4 = 1.0 / 10.0
+                    ten11_rdm4.indices = [ten11_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 5, 7, 4]]
+                    const11_rdm4 = 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,u,t,v)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,v,t,u,w)
                     ten12_rdm4 = ten_rdm4.copy()
-                    ten12_rdm4.indices = [ten12_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 5, 4, 6]]
-                    const12_rdm4 = 1.0 / 10.0
+                    ten12_rdm4.indices = [ten12_rdm4.indices[i] for i in [0, 1, 2, 3, 5, 7, 6, 4]]
+                    const12_rdm4 = 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,v,t,u)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,u,t,v,w)
                     ten13_rdm4 = ten_rdm4.copy()
-                    ten13_rdm4.indices = [ten13_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 4, 5]]
-                    const13_rdm4 = 1.0 / 15.0
+                    ten13_rdm4.indices = [ten13_rdm4.indices[i] for i in [0, 1, 2, 3, 6, 7, 5, 4]]
+                    const13_rdm4 = - 1.0 / 60.0
 
-                    ## Spin-Adapted RDM term: rdm(p,q,r,s,w,v,u,t)
+                    ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u,v,w)
                     ten14_rdm4 = ten_rdm4.copy()
                     ten14_rdm4.indices = [ten14_rdm4.indices[i] for i in [0, 1, 2, 3, 7, 6, 5, 4]]
                     const14_rdm4 = 1.0 / 30.0
@@ -1272,18 +1397,16 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     for ten_rdm4_sa_ind, ten_rdm4_sa in zip(tens_rdm4_ind, tens_rdm4_sa):
                         term_rdm4_sa.tensors[ten_rdm4_sa_ind] = remove_spin_index_type(ten_rdm4_sa)
                         term_rdm4_sa.tensors[ten_rdm4_sa_ind].symmetries = rdm4_sa_symm
+
+                    if options.verbose:
+                        print("--> {:} (factor = {:.5f})".format(term_rdm4_sa, consts_rdm4_sa_prod[tens_rdm4_sa_ind]))
+
                     terms_rdm4_sa.append(term_rdm4_sa)
+
         else:
             terms_rdm4_sa.append(term_rdm4_si)
 
     termChop(terms_rdm4_sa)
-
-    # Print 4e- spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_rdm4_sa in terms_rdm4_sa:
-            print(term_rdm4_sa)
-        print("")
 
     print("Done!")
     return terms_rdm4_sa
@@ -1291,7 +1414,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
 def convert_kdelta_si_to_sa(_terms_kdelta_si):
     "Convert Kronecker Delta Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting Kronecker Deltas to spin-adapted formulation...")
 
     # Converting kdelta objects in each term
@@ -1303,20 +1426,13 @@ def convert_kdelta_si_to_sa(_terms_kdelta_si):
                 term_kdelta_sa.tensors[ten_ind] = remove_spin_index_type(ten)
         terms_kdelta_sa.append(term_kdelta_sa)
 
-    # Print kdelta spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_kdelta_sa in terms_kdelta_sa:
-            print(term_kdelta_sa)
-        print("")
-
     print("Done!")
     return terms_kdelta_sa
 
 def convert_e_si_to_sa(_terms_e_si):
     "Convert Eigenvalue Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting eigenvalues to spin-adapted formulation...")
 
     # Converting eigenvalue objects in each term
@@ -1328,24 +1444,18 @@ def convert_e_si_to_sa(_terms_e_si):
                 term_e_sa.tensors[ten_ind] = remove_spin_index_type(ten)
         terms_e_sa.append(term_e_sa)
 
-    # Print e spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_e_sa in terms_e_sa:
-            print(term_e_sa)
-        print("")
-
     print("Done!")
     return terms_e_sa
 
 def convert_t_amplitudes_si_to_sa(_terms_t_si):
     "Convert T Amplitudes Objects from Spin-Integrated to Spin-Adapted"
 
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     print("Converting T amplitudes to spin-adapted formulation...")
 
     # Define Spin-Adapted Amplitudes Symmetries
     t1_sa_symm = [symmetry((1,0), 1)]
+    t2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
 
     # Define 1e- indices lists
     inds_aa = [options.alpha_type, options.alpha_type]
@@ -1360,13 +1470,21 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
             if ten.name[0] == 't' and len(ten.indices) == 2:
                 ten_t1_spin_inds = [get_spin_index_type(ind) for ind in ten.indices]
 
+                if options.verbose:
+                    print("\n<<< {:}".format(term_t1_si))
+
                 if ten_t1_spin_inds in [inds_aa, inds_bb]:
                     ten_t1 = ten.copy()
+                    consts_t1_sa_prod = 1.0
                     term_t1_sa.tensors[ten_ind] = remove_spin_index_type(ten_t1)
                     term_t1_sa.tensors[ten_ind].symmetries = t1_sa_symm
                 else:
-                    term_t1_sa.scale(0.0)
+                    consts_t1_sa_prod = 0.0
+                    term_t1_sa.scale(consts_t1_sa_prod)
                     term_t1_sa.tensors[ten_ind] = remove_spin_index_type(ten)
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_t1_sa, consts_t1_sa_prod))
 
         terms_t1_sa.append(term_t1_sa)
 
@@ -1398,15 +1516,15 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
             tens_t2_sa = []
             consts_t2_sa = []
 
+            if options.verbose:
+                print("\n<<< {:}".format(term_t2_si))
+
             for ten_t2 in tens_t2:
 
                 ten_t2_inds = [get_spatial_index_type(ind) for ind in ten_t2.indices]
                 ten_t2_spin_inds = [get_spin_index_type(ind) for ind in ten_t2.indices]
 
                 if (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
-
-                    # Define Spin-Adapted Amplitudes Symmetries
-                    t2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
 
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
@@ -1446,9 +1564,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 
                 elif (ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
 
-                    # Define Spin-Adapted Amplitudes Symmetries
-                    t2_sa_symm = [symmetry((2,3,0,1), 1)]
-
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten1_t2 = ten_t2.copy()
@@ -1486,8 +1601,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         consts_t2_sa.append([const1_t2])
 
                 elif (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3]):
-                    # Define Spin-Adapted Amplitudes Symmetries
-                    t2_sa_symm = [symmetry((2,3,0,1), 1)]
 
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
@@ -1526,44 +1639,84 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         consts_t2_sa.append([const1_t2])
 
                 elif ((ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3])):
-                    # Define Spin-Adapted Amplitudes Symmetries
-                    t2_sa_symm = [symmetry((0,1,2,3), 1)]
 
-                    if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
-                        ## Spin-Adapted 2e- term: t(p,q,r,s)
-                        ten1_t2 = ten_t2.copy()
-                        const1_t2 = 1.0
+                    if options.cvs_approach:
+                        ten_t2_cvs_inds = [is_cvs_index_type(ind) for ind in ten_t2.indices]
 
-                        ## Spin-Adapted 2e- term: t(p,q,s,r)
-                        ten2_t2 = ten_t2.copy()
-                        ten2_t2.indices = [ten2_t2.indices[i] for i in [0, 1, 3, 2]]
-                        const2_t2 = - 1.0
+                    if options.cvs_approach and (ten_t2_cvs_inds[0] == ten_t2_cvs_inds[1]):
+                        if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
+                            ## Spin-Adapted 2e- term: t(p,q,r,s)
+                            ten1_t2 = ten_t2.copy()
+                            const1_t2 = 1.0
 
-                        tens_t2_sa.append([ten1_t2, ten2_t2])
-                        consts_t2_sa.append([const1_t2, const2_t2])
+                            ## Spin-Adapted 2e- term: t(q,p,r,s)
+                            ten2_t2 = ten_t2.copy()
+                            ten2_t2.indices = [ten2_t2.indices[i] for i in [1, 0, 2, 3]]
+                            const2_t2 = - 1.0
 
-                    elif ten_t2_spin_inds in [inds_abab, inds_baba]:
-                        ## Spin-Adapted 2e- term: t(p,q,r,s)
-                        ten1_t2 = ten_t2.copy()
-                        const1_t2 = 1.0
+                            tens_t2_sa.append([ten1_t2, ten2_t2])
+                            consts_t2_sa.append([const1_t2, const2_t2])
 
-                        tens_t2_sa.append([ten1_t2])
-                        consts_t2_sa.append([const1_t2])
+                        elif ten_t2_spin_inds in [inds_abab, inds_baba]:
+                            ## Spin-Adapted 2e- term: t(p,q,r,s)
+                            ten1_t2 = ten_t2.copy()
+                            const1_t2 = 1.0
 
-                    elif ten_t2_spin_inds in [inds_abba, inds_baab]:
-                        ten1_t2 = ten_t2.copy()
-                        ten1_t2.indices = [ten1_t2.indices[i] for i in [0, 1, 3, 2]]
-                        const1_t2 = - 1.0
+                            tens_t2_sa.append([ten1_t2])
+                            consts_t2_sa.append([const1_t2])
 
-                        tens_t2_sa.append([ten1_t2])
-                        consts_t2_sa.append([const1_t2])
+                        elif ten_t2_spin_inds in [inds_abba, inds_baab]:
+                            ## Spin-Adapted 2e- term: t(q,p,r,s)
+                            ten1_t2 = ten_t2.copy()
+                            ten1_t2.indices = [ten1_t2.indices[i] for i in [1, 0, 2, 3]]
+                            const1_t2 = - 1.0
+
+                            tens_t2_sa.append([ten1_t2])
+                            consts_t2_sa.append([const1_t2])
+
+                        else:
+                            ten1_t2 = ten_t2.copy()
+                            const1_t2 = 0.0
+
+                            tens_t2_sa.append([ten1_t2])
+                            consts_t2_sa.append([const1_t2])
 
                     else:
-                        ten1_t2 = ten_t2.copy()
-                        const1_t2 = 0.0
+                        if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
+                            ## Spin-Adapted 2e- term: t(p,q,r,s)
+                            ten1_t2 = ten_t2.copy()
+                            const1_t2 = 1.0
 
-                        tens_t2_sa.append([ten1_t2])
-                        consts_t2_sa.append([const1_t2])
+                            ## Spin-Adapted 2e- term: t(p,q,s,r)
+                            ten2_t2 = ten_t2.copy()
+                            ten2_t2.indices = [ten2_t2.indices[i] for i in [0, 1, 3, 2]]
+                            const2_t2 = - 1.0
+
+                            tens_t2_sa.append([ten1_t2, ten2_t2])
+                            consts_t2_sa.append([const1_t2, const2_t2])
+
+                        elif ten_t2_spin_inds in [inds_abab, inds_baba]:
+                            ## Spin-Adapted 2e- term: t(p,q,r,s)
+                            ten1_t2 = ten_t2.copy()
+                            const1_t2 = 1.0
+
+                            tens_t2_sa.append([ten1_t2])
+                            consts_t2_sa.append([const1_t2])
+
+                        elif ten_t2_spin_inds in [inds_abba, inds_baab]:
+                            ten1_t2 = ten_t2.copy()
+                            ten1_t2.indices = [ten1_t2.indices[i] for i in [0, 1, 3, 2]]
+                            const1_t2 = - 1.0
+
+                            tens_t2_sa.append([ten1_t2])
+                            consts_t2_sa.append([const1_t2])
+
+                        else:
+                            ten1_t2 = ten_t2.copy()
+                            const1_t2 = 0.0
+
+                            tens_t2_sa.append([ten1_t2])
+                            consts_t2_sa.append([const1_t2])
 
             tens_t2_sa_permut = []
             for item in list(itertools.product(*tens_t2_sa)):
@@ -1587,17 +1740,16 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                 for ten_t2_sa_ind, ten_t2_sa in zip(tens_t2_ind, tens_t2_sa):
                     term_t2_sa.tensors[ten_t2_sa_ind] = remove_spin_index_type(ten_t2_sa)
                     term_t2_sa.tensors[ten_t2_sa_ind].symmetries = t2_sa_symm
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_t2_sa, consts_t2_sa_prod[tens_t2_sa_ind]))
+
                 terms_t2_sa.append(term_t2_sa)
 
         else:
             terms_t2_sa.append(term_t2_si)
 
-    # Print kdelta spin-adapted terms
-    if options.verbose:
-        print("")
-        for term_t_sa in terms_t2_sa:
-            print(term_t_sa)
-        print("")
+    termChop(terms_t2_sa)
 
     print("Done!")
     return terms_t2_sa

@@ -1,0 +1,95 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+-------------------------------------- Spin-Orbital t1_p1p V ---------------------------------------
+
+# Create spin-orbital V operator ...
+## Create V: - 1.0 * a_I^\dag a_X^\dag a_Y a_Z * V...
+
+ (  -1.00000) cre(I) cre(X) des(Y) des(Z) 
+
+## Multiply...
+## Compute expected value of spin-orbital V matrix ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+ (   1.00000) h(I,Y) cre(X) des(Z)  --->  (   1.00000) h(i,x) cre(y) des(z) 
+ (  -1.00000) h(I,Z) cre(X) des(Y)  --->  (  -1.00000) h(i,x) cre(y) des(z) 
+ (   1.00000) v(I,a,Y,Z) cre(X) des(a)  --->  (   1.00000) v(i,x,y,z) cre(w) des(x) 
+ (  -1.00000) v(I,a,a,Y) cre(X) des(Z)  --->  (  -1.00000) v(i,j,j,x) cre(y) des(z) 
+ (   1.00000) v(I,a,a,Z) cre(X) des(Y)  --->  (   1.00000) v(i,j,j,x) cre(y) des(z) 
+ (  -1.00000) h(I,a) cre(X) cre(a) des(Y) des(Z)  --->  (  -1.00000) h(i,x) cre(y) cre(x) des(z) des(w) 
+ (  -1.00000) v(I,a,Y,b) cre(X) cre(b) des(Z) des(a)  --->  (  -1.00000) v(i,x,y,z) cre(w) cre(z) des(u) des(x) 
+ (   1.00000) v(I,a,Z,b) cre(X) cre(b) des(Y) des(a)  --->  (   1.00000) v(i,x,y,z) cre(w) cre(z) des(u) des(x) 
+ (   1.00000) v(I,a,a,b) cre(X) cre(b) des(Y) des(Z)  --->  (   1.00000) v(i,j,j,x) cre(y) cre(x) des(z) des(w) 
+ (  -0.50000) v(I,a,b,c) cre(X) cre(b) cre(c) des(Y) des(Z) des(a)  --->  (  -0.50000) v(i,x,y,z) cre(w) cre(y) cre(z) des(u) des(v) des(x) 
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) h(i,x) cre(y) des(z) 
+ (  -1.00000) h(i,x) cre(y) des(z) 
+ (   1.00000) v(i,x,y,z) cre(w) des(x) 
+ (  -1.00000) v(i,j,j,x) cre(y) des(z) 
+ (   1.00000) v(i,j,j,x) cre(y) des(z) 
+ (  -1.00000) h(i,x) cre(y) cre(x) des(z) des(w) 
+ (  -1.00000) v(i,x,y,z) cre(w) cre(z) des(u) des(x) 
+ (   1.00000) v(i,x,y,z) cre(w) cre(z) des(u) des(x) 
+ (   1.00000) v(i,j,j,x) cre(y) cre(x) des(z) des(w) 
+ (  -0.50000) v(i,x,y,z) cre(w) cre(y) cre(z) des(u) des(v) des(x) 
+
+Total terms : 10
+SQA automation time :  0.979 seconds
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+3 terms removed:
+ (  -1.00000) v(i,j,j,x) rdm(y,z) 
+ (   1.00000) v(i,j,j,x) rdm(y,z) 
+ (   1.00000) v(i,j,j,x) rdm(y,x,z,w) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 7
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+V2 =- einsum('ix,yz->IXYZ', h_ca_so, rdm_ca_so, optimize = einsum_type)
+V2 += einsum('ix,yz->IXYZ', h_ca_so, rdm_ca_so, optimize = einsum_type)
+V2 += einsum('ixyz,wx->IXYZ', v_caaa_so, rdm_ca_so, optimize = einsum_type)
+V2 -= einsum('ix,yxzw->IXYZ', h_ca_so, rdm_ccaa_so, optimize = einsum_type)
+V2 -= einsum('ixyz,wzux->IXYZ', v_caaa_so, rdm_ccaa_so, optimize = einsum_type)
+V2 += einsum('ixyz,wzux->IXYZ', v_caaa_so, rdm_ccaa_so, optimize = einsum_type)
+V2 -= 1/2 * einsum('ixyz,wyzuvx->IXYZ', v_caaa_so, rdm_cccaaa_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 1.01 seconds.

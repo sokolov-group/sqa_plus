@@ -1,0 +1,2 @@
+V1_p1  = einsum('ijax->IJAX', v_ccea_so, optimize = einsum_type).copy()
+V1_p1 -= einsum('ijax,xy->IJAX', v_ccea_so, rdm_ca_so, optimize = einsum_type)

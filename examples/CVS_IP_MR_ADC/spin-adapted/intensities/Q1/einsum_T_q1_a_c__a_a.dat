@@ -1,0 +1,3 @@
+T_a_c  = einsum('JX->XJ', t1_xa, optimize = einsum_type).copy()
+T_a_c += einsum('JxXy,xy->XJ', t1_xaaa, rdm_ca, optimize = einsum_type)
+T_a_c -= 1/2 * einsum('JxyX,xy->XJ', t1_xaaa, rdm_ca, optimize = einsum_type)

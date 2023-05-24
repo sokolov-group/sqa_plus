@@ -1,0 +1,5 @@
+S_p2  = 1/3 * einsum('WZXY->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
+S_p2 += 1/6 * einsum('WZYX->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
+S_p2 += einsum('WX,YZ->XYWZ', np.identity(ncas), np.identity(ncas), optimize = einsum_type)
+S_p2 -= 1/2 * einsum('WX,YZ->XYWZ', np.identity(ncas), rdm_ca, optimize = einsum_type)
+S_p2 -= 1/2 * einsum('YZ,WX->XYWZ', np.identity(ncas), rdm_ca, optimize = einsum_type)

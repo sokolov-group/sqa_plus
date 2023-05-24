@@ -37,7 +37,7 @@ def normalOrder(inTerm):
 
     # check that inTerm is a term
     if not isinstance(inTerm, term):
-        raise TypeError, "inTerm must be of class term"
+        raise TypeError("inTerm must be of class term")
 
     # determine what types of operators the term contains
     has_creDesOps = False
@@ -51,8 +51,7 @@ def normalOrder(inTerm):
     # If term has both creation/destruction operators and spin free excitation operators,
     # raise an error
     if has_creDesOps and has_sfExOps:
-        raise RuntimeError, "Normal ordering not implemented when both creOp/desOp and sfExOp " + \
-                                                "tensors are present"
+        raise RuntimeError("Normal ordering not implemented when both creOp/desOp and sfExOp tensors are present")
 
     # if the term is already normal ordered, return it unchanged
     elif inTerm.isNormalOrdered():
@@ -239,7 +238,7 @@ def normalOrder(inTerm):
                                 # Ensure that all slots in the index list have been filled
                                 for ind in indexList:
                                     if ind is False:
-                                        raise RuntimeError, "There is at least one unassigned index in the new spin free operator."
+                                        raise RuntimeError("There is at least one unassigned index in the new spin free operator.")
 
                                 # Add the new excitation operator to the tensor list
                                 tensorList.append(sfExOp(indexList))
@@ -257,7 +256,7 @@ def normalOrder(inTerm):
         outTerms = iter_output_terms
 
     else:
-        raise RuntimeError, "Normal ordering function failed to choose what to do."
+        raise RuntimeError("Normal ordering function failed to choose what to do.")
 
 #    print "Terms after normal ordering:"
 #    for t in outTerms:

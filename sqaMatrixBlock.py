@@ -22,29 +22,33 @@
 import sys, time
 from sqaTensor import kroneckerDelta, sfExOp, creOp, desOp
 from sqaTerm import term, termChop, combineTerms
-from sqaOptions import options
 from sqaMisc import makeTuples, allDifferent
+from sqaSymmetry import symmetry
+from sqaOptions import options
 
 from sqaNormalOrder import normalOrder
 
 from sqaIndex import get_spatial_index_type, get_spin_index_type, \
-                     is_core_index_type, is_active_index_type, is_virtual_index_type
+                     is_core_index_type, is_active_index_type, is_virtual_index_type, \
+                     is_cvs_core_index_type, is_cvs_valence_index_type
 
-def matrixBlock(terms, transRDM = False):
+def matrixBlock(terms):
     "Construct matrix block."
 
     startTime = time.time()
-    print("")
-    print("---------------------------------- SQA Automation --------------------------------")
+    options.print_header("SQA Automation")
     sys.stdout.flush()
-    print("")
     fTerms = []
+
+    # Import options from sqaOptions class
+    remove_trans_rdm_constant = options.matrixBlock.remove_trans_rdm_constant
 
     # Make sure that input expression is normal-ordered with respect to physical vacuum
     nterms = []
     for t in terms:
         t_no = normalOrder(t)
         nterms.extend(t_no)
+    del(terms)
 
     # Filter zero terms wrt virtual (note: Filter first for virtual orbitals)
     filterVirtual(nterms)
@@ -52,6 +56,7 @@ def matrixBlock(terms, transRDM = False):
 
     # Normal ordering with respect to core orbitals
     fTerms = normalOrderCore(nterms)
+    del(nterms)
 
     # Evaluate Kroneker delta
     for t in fTerms:
@@ -65,8 +70,8 @@ def matrixBlock(terms, transRDM = False):
     # Contract delta function for both non-dummy indices
     contractDeltaFuncs_nondummy(fTerms)
 
-    # If (transRDM = True) =>  Remove those constant terms
-    if (transRDM):
+    # If (remove_trans_rdm_constant = True) => Remove those constant terms
+    if (remove_trans_rdm_constant):
         for trm in fTerms:
             iremove = True
             for i in range(len(trm.tensors)):
@@ -77,21 +82,16 @@ def matrixBlock(terms, transRDM = False):
                 trm.numConstant = 0.0
         termChop(fTerms)
 
-    # Dummy indices label upate
-    fTerms = dummyLabel(fTerms)
-
     # Reorder tensor indices: (core < active < virtual) order
-    reorder_tensor_indices(fTerms, reorder_t = True)
+    reorder_tensor_indices(fTerms)
+
+    # Dummy indices label upate
+    dummyLabel(fTerms)
 
     # Print the final results
-    print("")
-    print("--------------------------------- Final results ----------------------------------\n")
+    options.print_header("Final results")
     sys.stdout.flush()
     for t in fTerms:
-        index_types = ()
-        for t_tensor in t.tensors:
-            for t_tensor_index in t_tensor.indices:
-                index_types += t_tensor_index.indType[0]
         print(t)
 
     print("")
@@ -101,75 +101,72 @@ def matrixBlock(terms, transRDM = False):
 
     return fTerms
 
-def dummyLabel(_terms):
+def dummyLabel(_terms, keep_user_defined_dummy_names = True):
     "A function to relabel dummy indices."
+
+    # Import options from sqaOptions class
+    user_defined_indices = options.user_defined_indices
 
     print("Dummy indices relabelling...")
     sys.stdout.flush()
 
-    nterms = list(_terms)
-    for t in nterms:
+    for _term_ind, _term in enumerate(_terms):
         mymap = {}
 
         coreInd = list('ijklmnopq')
         actvInd = list('xyzwuvstr')
         virtInd = list('abcdefgh')
 
-        reservedInd = []
-        for t_tensor in t.tensors:
-            for t_tensor_index in range(len(t_tensor.indices)):
-                index_name = t_tensor.indices[t_tensor_index].name
-                index_user_defined = t_tensor.indices[t_tensor_index].userDefined
+        if keep_user_defined_dummy_names:
+            for reserved_index_name in user_defined_indices:
+                if reserved_index_name in coreInd:
+                    coreInd.remove(reserved_index_name)
+                elif reserved_index_name in actvInd:
+                    actvInd.remove(reserved_index_name)
+                elif reserved_index_name in virtInd:
+                    virtInd.remove(reserved_index_name)
 
-                if index_name not in reservedInd and index_user_defined:
-                    reservedInd.append(index_name)
+        if options.verbose:
+            _term_unlabeled = _term.copy()
 
-        for reserved_index_name in reservedInd:
-            if reserved_index_name in coreInd:
-                coreInd.remove(reserved_index_name)
-            elif reserved_index_name in actvInd:
-                actvInd.remove(reserved_index_name)
-            elif reserved_index_name in virtInd:
-                virtInd.remove(reserved_index_name)
-
-        for t_tensor in t.tensors:
-            for t_tensor_index in range(len(t_tensor.indices)):
+        for _tensor_ind, _tensor in enumerate(_term.tensors):
+            for _index_ind, _index in enumerate(_tensor.indices):
 
                 # Decide which new label to assign
-                index_type = t_tensor.indices[t_tensor_index].indType
-                index_name = t_tensor.indices[t_tensor_index].name
-                index_user_defined = t_tensor.indices[t_tensor_index].userDefined
+                index_type = _index.indType
+                index_name = _index.name
+                index_summed = _index.isSummed
+                index_user_defined = _index.userDefined
 
-                if not index_user_defined:
-                        if index_name not in mymap.keys():
-                            if is_core_index_type(index_type):
-                                mymap[index_name] = coreInd[0]
-                                coreInd.pop(0)
-                            elif is_active_index_type(index_type):
-                                mymap[index_name] = actvInd[0]
-                                actvInd.pop(0)
-                            elif is_virtual_index_type(index_type):
-                                mymap[index_name] = virtInd[0]
-                                virtInd.pop(0)
+                if (index_summed and 
+                    ((keep_user_defined_dummy_names and not index_user_defined)
+                      or not keep_user_defined_dummy_names)):
+                    if index_name not in mymap.keys():
+                        if is_core_index_type(index_type):
+                            mymap[index_name] = coreInd[0]
+                            coreInd.pop(0)
+                        elif is_active_index_type(index_type):
+                            mymap[index_name] = actvInd[0]
+                            actvInd.pop(0)
+                        elif is_virtual_index_type(index_type):
+                            mymap[index_name] = virtInd[0]
+                            virtInd.pop(0)
 
                     # Update the label
-                        t_tensor.indices[t_tensor_index].name = mymap[index_name]
+                    _terms[_term_ind].tensors[_tensor_ind].indices[_index_ind].name = mymap[index_name]
 
-    if options.verbose:
-        print("")
-        for _term in nterms:
-            print(_term)
-        print("")
+        if options.verbose:
+            print("{:} ---> {:}".format(_term_unlabeled, _terms[_term_ind]))
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
-    return nterms
+    return
 
 def filterVirtual(_terms):
     "A function to calculate expectation value wrt virtual: filter zero terms wrt virtual."
 
-    print("Computing expectation value with respect to virtual:=>")
+    print("Computing expectation value with respect to virtual ...")
     sys.stdout.flush()
 
     for t_term in _terms:
@@ -192,14 +189,14 @@ def filterVirtual(_terms):
         print("")
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
 def filterCore(_terms):
     "A function to calculate expectation value wrt core: filter zero terms wrt core."
 
-    print("Computing expectation value with respect to core:=>")
+    print("Computing expectation value with respect to core ...")
     sys.stdout.flush()
 
     for t_term in _terms:
@@ -222,12 +219,12 @@ def filterCore(_terms):
         print("")
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return
 
 def normalOrderCore(_terms):
-    print("Normal ordering with respect to core:=>")
+    print("Normal ordering with respect to core ...")
     sys.stdout.flush()
     ordered_terms = []
 
@@ -236,7 +233,7 @@ def normalOrderCore(_terms):
         ordered_terms.extend(ordered_term)
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return ordered_terms
 
@@ -247,7 +244,7 @@ def normOrderCor(_term):
 
     # check if is a term
     if not isinstance(_term, term):
-        raise TypeError ("Input term must be of class term")
+        raise TypeError("Input term must be of class term")
 
     # determine what types of operators the term contains
     has_creDesOps = False
@@ -260,7 +257,7 @@ def normOrderCor(_term):
 
     # If term has both creation/destruction operators and spin free excitation operators raise an error
     if has_creDesOps and has_sfExOps:
-        raise RuntimeError ("Normal ordering not implemented when both creOp/desOp and sfExOp tensors are present")
+        raise RuntimeError("Normal ordering not implemented when both creOp/desOp and sfExOp tensors are present")
 
     # Normal ordering for creOp/desOp
     elif has_creDesOps:
@@ -353,7 +350,7 @@ def normOrderCor(_term):
     # Normal ordering for sfExOps
     elif has_sfExOps:
         # Make separate lists of the spin free excitation operators and other tensors
-        raise Exception ('This code does not support for now')
+        raise Exception('This code does not support for now')
 
     else:
         ordered_terms = []
@@ -425,7 +422,7 @@ def sortOpsCore(_unsorted_ops, returnPermutation = False):
 def contractDeltaFuncs_nondummy(_terms):
     "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
 
-    print("Contract delta function for non-dummy indices: =>")
+    print("Contract delta function for non-dummy indices ...")
     sys.stdout.flush()
 
     for term in _terms:
@@ -443,30 +440,42 @@ def contractDeltaFuncs_nondummy(_terms):
     termChop(_terms)
 
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return _terms
 
-def reorder_tensor_indices(_terms, reorder_t = True):
+def reorder_tensor_indices(_terms):
     print("Reordering indices according to core < active < virtual...")
     sys.stdout.flush()
 
+    # Import options from sqaOptions class
+    legacy_ordering = options.legacy_ordering
+    chemists_notation = options.chemists_notation
+
+    if chemists_notation:
+        v2e_sym_braket = symmetry((1,0,3,2), 1)
+    else:
+        v2e_sym_braket = symmetry((2,3,0,1), 1)
+
     for ind_unordered_term, unordered_term in enumerate(_terms):
         for ind_unordered_tensor, unordered_tensor in enumerate(unordered_term.tensors):
-            if reorder_t:
-                reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
-                                  (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4) or
-                                  ((unordered_tensor.name[0] == 't') and
-                                   ((len(unordered_tensor.indices) == 2) or len(unordered_tensor.indices) == 4)))
-            else:
-                reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
-                                  (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4))
+            reorder_tensor = ((unordered_tensor.name == 'h' and len(unordered_tensor.indices) == 2) or
+                              (unordered_tensor.name == 'v' and len(unordered_tensor.indices) == 4) or
+                              ((unordered_tensor.name[0] == 't') and
+                               ((len(unordered_tensor.indices) == 2) or len(unordered_tensor.indices) == 4)))
+
+            if (unordered_tensor.name == 'v') and (v2e_sym_braket not in unordered_tensor.symmetries):
+                unordered_tensor_symmetries = unordered_tensor.symmetries
+                unordered_tensor_symmetries.append(v2e_sym_braket)
+                unordered_tensor.symmetries = unordered_tensor_symmetries
 
             if reorder_tensor:
                 original_rank = []
                 for ind in unordered_tensor.indices:
-                    if is_core_index_type(ind):
+                    if is_core_index_type(ind) or is_cvs_core_index_type(ind):
                         original_rank.append(3)
+                    elif is_cvs_valence_index_type(ind):
+                        original_rank.append(2)
                     elif is_active_index_type(ind):
                         original_rank.append(1)
                     elif is_virtual_index_type(ind):
@@ -480,8 +489,10 @@ def reorder_tensor_indices(_terms, reorder_t = True):
 
                     permuted_indices = [unordered_tensor.indices[ind] for ind in permute_indices]
                     for ind in permuted_indices:
-                        if is_core_index_type(ind):
+                        if is_core_index_type(ind) or is_cvs_core_index_type(ind):
                             permute_rank.append(3)
+                        elif is_cvs_valence_index_type(ind):
+                            permute_rank.append(2)
                         elif is_active_index_type(ind):
                             permute_rank.append(1)
                         elif is_virtual_index_type(ind):
@@ -494,19 +505,34 @@ def reorder_tensor_indices(_terms, reorder_t = True):
                 permuted_indices = [unordered_tensor.indices[ind] for ind in permutes_indices[permutes_rank_ind]]
                 ordered_tensor = unordered_tensor.copy()
                 ordered_tensor.indices = permuted_indices
-
-                _terms[ind_unordered_term].tensors[ind_unordered_tensor] = ordered_tensor.copy()
-
                 order_factor = permutes_factors[permutes_rank_ind]
-                _terms[ind_unordered_term].numConstant *= order_factor
+
+                # Legacy ordering to obtain spin-orbital Prism integrals exceptions
+                if (ordered_tensor.name in ['v', 't1', 't2']) and legacy_ordering and not chemists_notation:
+
+                    inds_ccae = [options.core_type,   options.core_type,   options.active_type, options.virtual_type]
+                    inds_caae = [options.core_type,   options.active_type, options.active_type, options.virtual_type]
+                    inds_aaae = [options.active_type, options.active_type, options.active_type, options.virtual_type]
+                    exceptions_list = [inds_ccae, inds_caae, inds_aaae]
+
+                    exception_symm = symmetry((0,1,3,2), -1)
+
+                    unordered_tensor_inds = [get_spatial_index_type(ind) for ind in ordered_tensor.indices]
+
+                    if (unordered_tensor_inds in exceptions_list) and (exception_symm in ordered_tensor.symmetries):
+                        ordered_tensor.indices = [ordered_tensor.indices[i] for i in [0, 1, 3, 2]]
+                        order_factor *= - 1.0
 
                 if options.verbose:
                     print("")
                     print(unordered_term)
                     print(' %s    --->    %s (factor = %s)' % (unordered_tensor, ordered_tensor, order_factor))
 
+                _terms[ind_unordered_term].tensors[ind_unordered_tensor] = ordered_tensor.copy()
+                _terms[ind_unordered_term].numConstant *= order_factor
+
     print("Done!")
-    print("----------------------------------------------------------------------------------")
+    options.print_divider()
     sys.stdout.flush()
     return _terms
 

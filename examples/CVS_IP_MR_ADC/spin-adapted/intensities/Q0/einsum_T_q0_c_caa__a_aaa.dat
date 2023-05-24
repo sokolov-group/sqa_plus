@@ -1,0 +1,1 @@
+T_c_caa  = 1/2 * einsum('IJ,YZ->IJYZ', np.identity(ncvs), rdm_ca, optimize = einsum_type)

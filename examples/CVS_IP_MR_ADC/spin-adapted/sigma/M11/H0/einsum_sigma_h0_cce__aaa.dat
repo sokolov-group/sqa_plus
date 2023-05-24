@@ -1,0 +1,3 @@
+sigma_cce =- einsum('KLB,B->KLB', X_aaa, e_extern, optimize = einsum_type)
+sigma_cce += einsum('KLB,K->KLB', X_aaa, e_cvs, optimize = einsum_type)
+sigma_cce += einsum('KLB,L->KLB', X_aaa, e_cvs, optimize = einsum_type)

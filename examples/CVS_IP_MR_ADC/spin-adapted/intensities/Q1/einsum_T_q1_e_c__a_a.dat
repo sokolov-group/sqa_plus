@@ -1,0 +1,3 @@
+T_e_c  = einsum('JA->AJ', t1_xe, optimize = einsum_type).copy()
+T_e_c += einsum('JxAy,yx->AJ', t1_xaea, rdm_ca, optimize = einsum_type)
+T_e_c -= 1/2 * einsum('JxyA,yx->AJ', t1_xaae, rdm_ca, optimize = einsum_type)

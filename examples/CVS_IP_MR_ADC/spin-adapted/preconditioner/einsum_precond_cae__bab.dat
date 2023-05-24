@@ -1,0 +1,4 @@
+precond_cae =- 1/2 * einsum('A,AA,II,WX->IAXY', e_extern, np.identity(nextern), np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_cae += 1/2 * einsum('I,AA,II,WX->IAXY', e_cvs, np.identity(nextern), np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_cae += 1/2 * einsum('Xx,AA,II,Wx->IAXY', h_aa, np.identity(nextern), np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_cae += 1/2 * einsum('Xxyz,AA,II,Wyxz->IAXY', v_aaaa, np.identity(nextern), np.identity(ncvs), rdm_ccaa, optimize = einsum_type)

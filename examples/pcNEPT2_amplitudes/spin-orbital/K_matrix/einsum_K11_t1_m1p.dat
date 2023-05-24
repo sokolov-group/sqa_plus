@@ -1,0 +1,2 @@
+K11 =- einsum('xy,zy->XY', h_aa_so, rdm_ca_so, optimize = einsum_type)
+K11 += 1/2 * einsum('xyzw,uyzw->XY', v_aaaa_so, rdm_ccaa_so, optimize = einsum_type)

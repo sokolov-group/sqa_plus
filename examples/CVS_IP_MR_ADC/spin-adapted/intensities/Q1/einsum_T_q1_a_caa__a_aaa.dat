@@ -1,0 +1,6 @@
+T_a_caa  = 1/2 * einsum('JX,YZ->XJYZ', t1_xa, rdm_ca, optimize = einsum_type)
+T_a_caa += 1/2 * einsum('JxXZ,Yx->XJYZ', t1_xaaa, rdm_ca, optimize = einsum_type)
+T_a_caa += 1/2 * einsum('JxXy,YyZx->XJYZ', t1_xaaa, rdm_ccaa, optimize = einsum_type)
+T_a_caa -= 1/2 * einsum('JxZX,Yx->XJYZ', t1_xaaa, rdm_ca, optimize = einsum_type)
+T_a_caa -= 1/6 * einsum('JxyX,YyZx->XJYZ', t1_xaaa, rdm_ccaa, optimize = einsum_type)
+T_a_caa += 1/6 * einsum('JxyX,YyxZ->XJYZ', t1_xaaa, rdm_ccaa, optimize = einsum_type)

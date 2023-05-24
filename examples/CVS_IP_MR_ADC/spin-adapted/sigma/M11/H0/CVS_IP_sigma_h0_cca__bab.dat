@@ -1,0 +1,204 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+----------------------------- Spin-Adapted CVS-IP: Sigma H0 CCA (bab) ------------------------------
+
+
+## Generating operators ...
+
+
+## Right operator terms:
+ (   0.50000) X_aaa(i,j,x) cre(i) cre(j) des(x) 
+ (   0.50000) X_abb(i,j,x) cre(i) cre(j) des(x) 
+ (   0.50000) X_bab(i,j,x) cre(i) cre(j) des(x) 
+
+## Left operator terms:
+ (   1.00000) cre(W) des(L) des(K) 
+
+----------------------------------------- Hamiltonian (0) ------------------------------------------
+
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(0), a_S^\dag a_T^\dag a_U] ...
+
+## Calculating a_P^\dag a_Q a_R [H(0), a_S^\dag a_T^\dag a_U] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -0.50000) X_abb(L,K,W) e(K) 
+ (  -0.50000) X_abb(L,K,W) e(L) 
+ (   0.50000) X_abb(L,K,z) h(W,z) 
+ (   0.50000) X_bab(K,L,W) e(K) 
+ (   0.50000) X_bab(K,L,W) e(L) 
+ (  -0.50000) X_bab(K,L,z) h(W,z) 
+ (   0.50000) X_abb(L,K,x) e(K) cre(W) des(x) 
+ (   0.50000) X_abb(L,K,x) e(L) cre(W) des(x) 
+ (  -0.50000) X_abb(L,K,z) h(z,w) cre(W) des(w) 
+ (   0.50000) X_abb(L,K,z) v(W,w,z,u) cre(u) des(w) 
+ (   0.50000) X_abb(L,K,z) v(W,w,z,u) cre(u) des(w) 
+ (  -0.50000) X_bab(K,L,x) e(K) cre(W) des(x) 
+ (  -0.50000) X_bab(K,L,x) e(L) cre(W) des(x) 
+ (   0.50000) X_bab(K,L,z) h(z,w) cre(W) des(w) 
+ (  -0.50000) X_bab(K,L,z) v(W,w,z,u) cre(u) des(w) 
+ (  -0.50000) X_bab(K,L,z) v(W,w,z,u) cre(u) des(w) 
+ (   0.50000) X_abb(L,K,z) v(z,w,u,v) cre(W) cre(w) des(u) des(v) 
+ (   0.25000) X_abb(L,K,z) v(z,w,u,v) cre(W) cre(w) des(u) des(v) 
+ (  -0.50000) X_bab(K,L,z) v(z,w,u,v) cre(W) cre(w) des(u) des(v) 
+ (  -0.25000) X_bab(K,L,z) v(z,w,u,v) cre(W) cre(w) des(u) des(v) 
+
+Total terms : 20
+SQA automation time :  0.717 seconds
+----------------------------------------------------------------------------------------------------
+
+----------------------- Converting Sigma vector to spin-adapted formulation ------------------------
+
+----------------------------------------------------------------------------------------------------
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices according to: alpha < beta
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting Kronecker Deltas to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting eigenvalues to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 30 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+12 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) X_abb(L,K,W) e(K) 
+ (  -0.50000) X_abb(L,K,W) e(L) 
+ (   0.50000) X_abb(L,K,z) h(W,z) 
+ (   0.50000) X_bab(K,L,W) e(K) 
+ (   0.50000) X_bab(K,L,W) e(L) 
+ (  -0.50000) X_bab(K,L,z) h(W,z) 
+ (   0.25000) X_abb(L,K,x) e(K) rdm(W,x) 
+ (   0.25000) X_abb(L,K,x) e(L) rdm(W,x) 
+ (  -0.25000) X_abb(L,K,z) h(z,w) rdm(W,w) 
+ (  -0.25000) X_abb(L,K,z) v(W,w,u,z) rdm(u,w) 
+ (   0.50000) X_abb(L,K,z) v(W,z,w,u) rdm(w,u) 
+ (  -0.25000) X_abb(L,K,z) v(z,w,u,v) rdm(W,u,w,v) 
+ (  -0.25000) X_bab(K,L,x) e(K) rdm(W,x) 
+ (  -0.25000) X_bab(K,L,x) e(L) rdm(W,x) 
+ (   0.25000) X_bab(K,L,z) h(z,w) rdm(W,w) 
+ (   0.25000) X_bab(K,L,z) v(W,w,u,z) rdm(u,w) 
+ (  -0.50000) X_bab(K,L,z) v(W,z,w,u) rdm(w,u) 
+ (   0.25000) X_bab(K,L,z) v(z,w,u,v) rdm(W,u,w,v) 
+
+Total spin-integrated terms: 20
+Total spin-adapted terms: 18
+Spin-adaptation automation time :  0.083 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 18
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+sigma_cca =- 1/2 * einsum('LKW,K->KLW', X_abb, e_cvs, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('LKW,L->KLW', X_abb, e_cvs, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('LKx,Wx->KLW', X_abb, h_aa, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('KLW,K->KLW', X_bab, e_cvs, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('KLW,L->KLW', X_bab, e_cvs, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('KLx,Wx->KLW', X_bab, h_aa, optimize = einsum_type)
+sigma_cca += 1/4 * einsum('LKx,K,Wx->KLW', X_abb, e_cvs, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/4 * einsum('LKx,L,Wx->KLW', X_abb, e_cvs, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/4 * einsum('LKx,xy,Wy->KLW', X_abb, h_aa, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/4 * einsum('LKx,Wyzx,zy->KLW', X_abb, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('LKx,Wxyz,yz->KLW', X_abb, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/4 * einsum('LKx,xyzw,Wzyw->KLW', X_abb, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_cca -= 1/4 * einsum('KLx,K,Wx->KLW', X_bab, e_cvs, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/4 * einsum('KLx,L,Wx->KLW', X_bab, e_cvs, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/4 * einsum('KLx,xy,Wy->KLW', X_bab, h_aa, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/4 * einsum('KLx,Wyzx,zy->KLW', X_bab, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('KLx,Wxyz,yz->KLW', X_bab, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/4 * einsum('KLx,xyzw,Wzyw->KLW', X_bab, v_aaaa, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 1.36 seconds.

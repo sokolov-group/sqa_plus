@@ -21,20 +21,34 @@
 from sqaIndex import index
 from sqaOptions import options
 
-class indexList:
+class dummyIndexList:
     "A list of indices created on demand."
 
-    def __init__(self, index_name, index_type, dummy):
-        self.index_name = index_name
+    def __init__(self, index_name, index_type, sqa_default_index):
+
+        if self.check_index_name_conflicts(index_name, sqa_default_index):
+            self.index_name = index_name
+        else:
+            raise Exception("Index name {:} is reserved to SQA+ internal dummy indices.")
+
         self.index_type = index_type
         self.index_reserved = 0
-        self.dummy = dummy
-        self.user_defined = False
+        self.index_dummy = True
+        self.index_user_defined = False
+
+    def check_index_name_conflicts(self, index_name, sqa_default_index):
+        sqa_default_index_names = ['cc%i', 'cc%ia', 'cc%ib',
+                                   'xx%i', 'xx%ia', 'xx%ib',
+                                   'vv%i', 'vv%ia', 'vv%ib',
+                                   'aa%i', 'aa%ia', 'aa%ib',
+                                   'ee%i', 'ee%ia', 'ee%ib']
+
+        return sqa_default_index or ((not sqa_default_index) and (index_name not in sqa_default_index_names))
 
     def new_indices(self, index_external):
         new_index_list = []
         for index_number in range(self.index_reserved, self.index_reserved + index_external):
-            new_index_list.append(index(self.index_name % index_number, self.index_type, self.dummy, self.user_defined))
+            new_index_list.append(index(self.index_name % index_number, self.index_type, self.index_dummy, self.index_user_defined))
         self.index_reserved += index_external
 
         return new_index_list
@@ -43,58 +57,49 @@ class indexList:
         index_number = self.index_reserved
         self.index_reserved += 1
 
-        return index(self.index_name % index_number, self.index_type, self.dummy, self.user_defined)
+        return index(self.index_name % index_number, self.index_type, self.index_dummy, self.index_user_defined)
 
-def create_dummy_indices_list(spin_integrated = False):
-    "A function which returns lists of dummy indices of all classes."
+class sqaIndexLists:
+    "A class to define all types of required dummy indices in actual SQA+ implementation."
 
-    def create_dummy_indices_spin_orbital():
-        # Define operator types
-        tg_cor = options.core_type
-        tg_act = options.active_type
-        tg_vir = options.virtual_type
+    def __init__(self):
 
-        dummy = True
+        self.sqa_default_index = True
 
-        # Core dummy indices
-        cor_inds = indexList('c%ia', [tg_cor], dummy)
+        # Define spin-orbital indices
+        ## Core dummy indices
+        self.core = dummyIndexList('cc%i', [options.core_type], self.sqa_default_index)
 
-        # Active dummy indices
-        act_inds = indexList('a%ia', [tg_act], dummy)
+        ## CVS core dummy indices
+        self.cvs_core = dummyIndexList('xx%i', [options.cvs_core_type], self.sqa_default_index)
 
-        # Virtual dummy indices
-        vir_inds = indexList('v%ia', [tg_vir], dummy)
+        self.cvs_valence = dummyIndexList('vv%i', [options.cvs_valence_type], self.sqa_default_index)
 
-        return (cor_inds, act_inds, vir_inds)
+        ## Active dummy indices
+        self.active = dummyIndexList('aa%i', [options.active_type], self.sqa_default_index)
 
-    def create_dummy_indices_spin_integrated():
-        # Define operator types
-        tg_cor = options.core_type
-        tg_act = options.active_type
-        tg_vir = options.virtual_type
+        ## Virtual dummy indices
+        self.virtual = dummyIndexList('ee%i', [options.virtual_type], self.sqa_default_index)
 
-        tg_alpha = options.alpha_type
-        tg_beta = options.beta_type
+        # Define spin-integrated indices
+        ## Core dummy indices
+        self.core_alpha = dummyIndexList('cc%ia', [options.alpha_type, options.core_type], self.sqa_default_index)
+        self.core_beta  = dummyIndexList('cc%ib', [options.beta_type,  options.core_type], self.sqa_default_index)
 
-        dummy = True
+        ## CVS core dummy indices
+        self.cvs_core_alpha = dummyIndexList('xx%ia', [options.alpha_type, options.cvs_core_type], self.sqa_default_index)
+        self.cvs_core_beta  = dummyIndexList('xx%ib', [options.beta_type,  options.cvs_core_type], self.sqa_default_index)
 
-        # Core dummy indices
-        cor_alpha_inds = indexList('c%ia', [tg_alpha, tg_cor], dummy)
-        cor_beta_inds  = indexList('c%ib', [tg_beta,  tg_cor], dummy)
+        self.cvs_valence_alpha = dummyIndexList('vv%ia', [options.alpha_type, options.cvs_valence_type], self.sqa_default_index)
+        self.cvs_valence_beta  = dummyIndexList('vv%ib', [options.beta_type,  options.cvs_valence_type], self.sqa_default_index)
+ 
+        ## Active dummy indices
+        self.active_alpha = dummyIndexList('aa%ia', [options.alpha_type, options.active_type], self.sqa_default_index)
+        self.active_beta  = dummyIndexList('aa%ib', [options.beta_type,  options.active_type], self.sqa_default_index)
 
-        # Active dummy indices
-        act_alpha_inds = indexList('a%ia', [tg_alpha, tg_act], dummy)
-        act_beta_inds  = indexList('a%ib', [tg_beta,  tg_act], dummy)
+        ## Virtual dummy indices
+        self.virtual_alpha = dummyIndexList('ee%ia', [options.alpha_type, options.virtual_type], self.sqa_default_index)
+        self.virtual_beta  = dummyIndexList('ee%ib', [options.beta_type,  options.virtual_type], self.sqa_default_index)
 
-        # Virtual dummy indices
-        vir_alpha_inds = indexList('v%ia', [tg_alpha, tg_vir], dummy)
-        vir_beta_inds  = indexList('v%ib', [tg_beta,  tg_vir], dummy)
-
-        return (cor_alpha_inds, cor_beta_inds, act_alpha_inds, act_beta_inds, vir_alpha_inds, vir_beta_inds)
-
-    if spin_integrated:
-        dummy_indices = create_dummy_indices_spin_integrated()
-    else:
-        dummy_indices = create_dummy_indices_spin_orbital()
-
-    return dummy_indices
+# Create an object of the indexLists class
+indexLists = sqaIndexLists()

@@ -1,0 +1,1 @@
+S12 =- einsum('xyzw->XWZY', rdm_ccaa_so, optimize = einsum_type).copy()

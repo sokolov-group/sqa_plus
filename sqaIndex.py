@@ -53,7 +53,7 @@ class index:
 		indType = []
 		for l in indexType:
 			if not ( type(l) in [type([]), type(())] ):
-				raise TypeError, "indexType must be a list or tuple of lists or tuples of strings"
+				raise TypeError("indexType must be a list or tuple of lists or tuples of strings")
 			indType.append([])
 			indType[-1].extend(l)
 			indType[-1].sort()
@@ -63,26 +63,27 @@ class index:
 			self.indType.append(())
 			for s in l:
 				if type(s) != type('a'):
-					raise TypeError, "indexType must be a list or tuple of lists or tuples of strings"
+					raise TypeError("indexType must be a list or tuple of lists or tuples of strings")
 				self.indType[-1] = self.indType[-1] + (s,)
 		self.indType = tuple(self.indType)
 
 		# Initialize flag for whether the index is summed over
 		if type(isSummed) != type(True):
-			raise TypeError, "isSummed must be True or False"
+			raise TypeError("isSummed must be True or False")
 		self.isSummed = isSummed
 
 		if (type(userDefined) != type(True)) and not isinstance(userDefined, str):
-			raise TypeError, "userDefined must be True or False"
+			raise TypeError("userDefined must be True or False")
 
 		if userDefined is True:
 			self.userDefined = str(name)
+			options.add_user_defined_index(str(name))
 		else:
 			self.userDefined = userDefined
 
 	def __cmp__(self,other):
 		if (not isinstance(other,index)):
-			raise ValueError, "can only compare index class with other index class objects."
+			raise ValueError("can only compare index class with other index class objects.")
 		retval = cmp(self.isSummed, other.isSummed)
 		if retval != 0:
 			return retval
@@ -135,29 +136,53 @@ def get_spin_index_type(indice_types):
     return spin_index_types
 
 def get_spatial_index_type(indice_types):
-    spatial_index_types = ''
+    spatial_index_type = ''
 
     if isinstance(indice_types, index):
         indice_types = indice_types.indType
 
     for index_type in indice_types:
         if not index_type in (options.alpha_type, options.beta_type):
-            spatial_index_types = index_type
+            spatial_index_type = index_type
 
-    return spatial_index_types
+    return spatial_index_type
 
 def is_index_type(indice_types, sqa_index_type):
-    is_type = False
+	is_type = False
 
-    for index_type in indice_types:
-      if index_type in sqa_index_type:
-          is_type = True
+	for index_type in indice_types:
+		if index_type in sqa_index_type:
+			is_type = True
 
-    return is_type
+	return is_type
 
 def is_core_index_type(index_type):
+	spatial_index_type = get_spatial_index_type(index_type)
+	is_core_index = False
+
+	for core_index_type in (options.core_type, options.cvs_core_type, options.cvs_valence_type):
+		if is_index_type(spatial_index_type, core_index_type):
+			is_core_index = True
+
+	return is_core_index
+
+def is_cvs_index_type(index_type):
+	spatial_index_type = get_spatial_index_type(index_type)
+	is_cvs_index = False
+
+	for cvs_index_type in (options.cvs_core_type, options.cvs_valence_type):
+		if is_index_type(spatial_index_type, cvs_index_type):
+			is_cvs_index = True
+
+	return is_cvs_index
+
+def is_cvs_core_index_type(index_type):
     spatial_index_type = get_spatial_index_type(index_type)
-    return is_index_type(spatial_index_type, options.core_type)
+    return is_index_type(spatial_index_type, options.cvs_core_type)
+
+def is_cvs_valence_index_type(index_type):
+    spatial_index_type = get_spatial_index_type(index_type)
+    return is_index_type(spatial_index_type, options.cvs_valence_type)
 
 def is_active_index_type(index_type):
     spatial_index_type = get_spatial_index_type(index_type)

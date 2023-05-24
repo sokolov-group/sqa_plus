@@ -1,1 +1,0 @@
-temp =  np.einsum('AB, YZUX->YZBUXA', np.identity(nextern_so), rdm_ccaa_so, optimize = True)

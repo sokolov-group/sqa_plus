@@ -1,0 +1,160 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+------------------------------- Spin-Adapted Preconditioner cae aaa --------------------------------
+
+
+## Generating operators ...
+
+
+----------------------------------------- Hamiltonian (0) ------------------------------------------
+
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(0), a_S^\dag a_T^\dag a_U] ...
+
+## Calculating a_P^\dag a_Q a_R [H(0), a_S^\dag a_T^\dag a_U] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) e(A) kdelta(A,B) kdelta(I,K) cre(X) des(W) 
+ (   1.00000) e(I) kdelta(A,B) kdelta(I,K) cre(X) des(W) 
+ (   1.00000) h(X,x) kdelta(A,B) kdelta(I,K) cre(x) des(W) 
+ (   2.00000) v(i,X,i,x) kdelta(A,B) kdelta(I,K) cre(x) des(W) 
+ (   2.00000) v(i,X,i,x) kdelta(A,B) kdelta(I,K) cre(x) des(W) 
+ (   2.00000) v(i,X,i,x) kdelta(A,B) kdelta(I,K) cre(x) des(W) 
+ (   2.00000) v(i,X,i,x) kdelta(A,B) kdelta(I,K) cre(x) des(W) 
+ (  -0.50000) v(X,x,y,z) kdelta(A,B) kdelta(I,K) cre(y) cre(z) des(W) des(x) 
+ (  -1.00000) v(X,x,y,z) kdelta(A,B) kdelta(I,K) cre(y) cre(z) des(W) des(x) 
+
+Total terms : 9
+SQA automation time :  0.163 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices according to: alpha < beta
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting Kronecker Deltas to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting eigenvalues to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 15 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+7 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) e(A) kdelta(A,B) kdelta(I,K) rdm(W,X) 
+ (   0.50000) e(I) kdelta(A,B) kdelta(I,K) rdm(W,X) 
+ (   0.50000) h(X,x) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+ (   0.50000) v(X,x,y,z) kdelta(A,B) kdelta(I,K) rdm(W,y,x,z) 
+ (  -1.00000) v(i,X,x,i) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+ (   2.00000) v(i,i,X,x) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+ (  -1.00000) v(i,X,x,i) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+ (   2.00000) v(i,i,X,x) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+
+Total spin-integrated terms: 9
+Total spin-adapted terms: 8
+Spin-adaptation automation time :  0.341 seconds
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+4 terms removed:
+ (  -1.00000) v(i,X,x,i) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+ (   2.00000) v(i,i,X,x) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+ (  -1.00000) v(i,X,x,i) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+ (   2.00000) v(i,i,X,x) kdelta(A,B) kdelta(I,K) rdm(W,x) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 4
+
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+precond_cae =- 1/2 * einsum('A,AA,II,WX->IAXY', e_extern, np.identity(nextern), np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_cae += 1/2 * einsum('I,AA,II,WX->IAXY', e_cvs, np.identity(nextern), np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_cae += 1/2 * einsum('Xx,AA,II,Wx->IAXY', h_aa, np.identity(nextern), np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_cae += 1/2 * einsum('Xxyz,AA,II,Wyxz->IAXY', v_aaaa, np.identity(nextern), np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 0.62 seconds.

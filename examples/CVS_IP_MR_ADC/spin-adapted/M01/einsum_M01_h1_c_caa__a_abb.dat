@@ -1,0 +1,6 @@
+M_c_caa_a_abb  = 1/2 * einsum('IKZx,Wx->IKWZ', v_xxaa, rdm_ca, optimize = einsum_type)
+M_c_caa_a_abb += 1/2 * einsum('IKxy,WxZy->IKWZ', v_xxaa, rdm_ccaa, optimize = einsum_type)
+M_c_caa_a_abb -= 1/3 * einsum('IxyK,WyZx->IKWZ', v_xaax, rdm_ccaa, optimize = einsum_type)
+M_c_caa_a_abb -= 1/6 * einsum('IxyK,WyxZ->IKWZ', v_xaax, rdm_ccaa, optimize = einsum_type)
+M_c_caa_a_abb -= 1/2 * einsum('IKxy,xy,WZ->IKWZ', v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
+M_c_caa_a_abb += 1/4 * einsum('IxyK,yx,WZ->IKWZ', v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)

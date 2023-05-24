@@ -1,0 +1,2 @@
+S22_aa_bb  = 1/6 * einsum('WYXZ->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
+S22_aa_bb += 1/3 * einsum('WYZX->XYWZ', rdm_ccaa, optimize = einsum_type).copy()

@@ -1,0 +1,1 @@
+e_m1  = 1/2 * einsum('ixab,iyab,yx', t1_caee, v_caee_so, rdm_ca_so, optimize = einsum_type)
