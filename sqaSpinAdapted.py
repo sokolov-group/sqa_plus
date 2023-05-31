@@ -1073,7 +1073,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                 elif ten_rdm3_spin_inds in [inds_baabaa, inds_abbabb]:
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
-                    const_rdm3_tens_sa = - 1.0 / 12.0
+                    const_rdm3_sa = - 1.0 / 12.0
 
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
@@ -1081,7 +1081,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ## Spin-Adapted RDM term: rdm(u,v,w,x,z,y)
                     ten_rdm3_sa = ten_rdm3.copy()
                     ten_rdm3_sa.indices = [ten_rdm3_sa.indices[i] for i in [0, 1, 2, 5, 3, 4]]
-                    const_rdm3_tens_sa = - 1.0 / 12.0
+                    const_rdm3_sa = - 1.0 / 12.0
 
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
@@ -1089,7 +1089,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ## Spin-Adapted RDM term: rdm(u,v,w,y,x,z)
                     ten_rdm3_sa = ten_rdm3.copy()
                     ten_rdm3_sa.indices = [ten_rdm3_sa.indices[i] for i in [0, 1, 2, 4, 5, 3]]
-                    const_rdm3_tens_sa = 1.0 / 12.0
+                    const_rdm3_sa = 1.0 / 12.0
 
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
@@ -1097,7 +1097,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ## Spin-Adapted RDM term: rdm(u,v,w,x,y,z)
                     ten_rdm3_sa = ten_rdm3.copy()
                     ten_rdm3_sa.indices = [ten_rdm3_sa.indices[i] for i in [0, 1, 2, 5, 4, 3]]
-                    const_rdm3_tens_sa = - 1.0 / 6.0
+                    const_rdm3_sa = - 1.0 / 6.0
 
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
