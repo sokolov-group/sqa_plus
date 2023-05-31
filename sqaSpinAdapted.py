@@ -38,8 +38,6 @@ def convertSpinIntegratedToAdapted(terms_si):
     # Convert Cre/Des Objects to RDM Objects
     options.print_divider()
     convert_credes_to_rdm(terms_si, trans_rdm = False)
-
-    reorder_rdm_spin_indices(terms_si)
     dummyLabel(terms_si)
     len_terms_si = len(terms_si)
 
@@ -229,95 +227,6 @@ def reorder_rdm_indices_notation(_terms_rdm):
                     print("{:}    --->    {:}".format(unordered_tensor, ten_rdm))
 
                 _terms_rdm[term_rdm_ind].tensors[ten_rdm_ind] = ten_rdm.copy()
-
-    print("Done!")
-    options.print_divider()
-    sys.stdout.flush()
-    return
-
-def reorder_rdm_spin_indices(_terms_rdm):
-    "Reorder RDM tensor indices according to: alpha < beta"
-
-    print("Reorder RDM tensor indices according to: alpha < beta")
-    sys.stdout.flush()
-
-    for term_rdm_ind, term_rdm in enumerate(_terms_rdm):
-
-        ## List for storing RDM objects
-        rdm_tensors = []
-        rdm_tensors_ind = []
-
-        ## Append all RDM objects to list
-        for ten_rdm_ind, ten_rdm in enumerate(term_rdm.tensors):
-            #TODO: Consider if this approach can be applied to other RDMs
-            if isinstance(ten_rdm, creDesTensor) and len(ten_rdm.indices) == 8:
-                rdm_tensors.append(ten_rdm)
-                rdm_tensors_ind.append(ten_rdm_ind)
-
-        if rdm_tensors:
-            for ten_rdm_ind, ten_rdm in zip(rdm_tensors_ind, rdm_tensors):
-
-                # Reordering indices according to alpha > beta
-                original_rank = []
-                original_name_rank = []
-                for ind in ten_rdm.indices:
-                    original_name_rank.append(ind.name)
-                    if is_alpha_index_type(ind):
-                        original_rank.append(1)
-                    elif is_beta_index_type(ind):
-                        original_rank.append(0)
-
-                if sum(original_rank) > len(ten_rdm.indices)//2:
-                    high_spin = True
-                else:
-                    high_spin = False
-
-                full_permutes_indices, full_permutes_factors = ten_rdm.symPermutes()
-
-                # Remove bra-ket permutes
-                permutes_indices = []
-                permutes_factors = []
-                for permute_indices, permute_factors in zip(full_permutes_indices, full_permutes_factors):
-                    if permute_indices[0] < len(ten_rdm.indices) // 2:
-                        permutes_indices.append(permute_indices)
-                        permutes_factors.append(permute_factors)
-
-                permutes_rank = []
-                permutes_name_rank = []
-
-                for permute_indices in permutes_indices:
-                    permute_rank = []
-                    permute_name_rank = []
-
-                    permuted_indices = [ten_rdm.indices[ind] for ind in permute_indices]
-                    for ind in permuted_indices:
-                        permute_name_rank.append(ind.name)
-                        if is_alpha_index_type(ind):
-                            permute_rank.append(1)
-                        elif is_beta_index_type(ind):
-                            permute_rank.append(0)
-
-                    permutes_name_rank.append(permute_name_rank)
-                    permutes_rank.append(permute_rank)
-
-                permutes_rank, permutes_name_rank, permutes_indices, permutes_factors = zip(*sorted(zip(permutes_rank, permutes_name_rank, permutes_indices, permutes_factors), reverse=True))
-
-                if high_spin:
-                    permutes_rank_ind = [ind for ind, rank in enumerate(permutes_rank) if rank == permutes_rank[-1]][-1]
-                else:
-                    permutes_rank_ind = [ind for ind, rank in enumerate(permutes_rank) if rank == permutes_rank[0]][-1]
-
-                permuted_indices = [ten_rdm.indices[ind] for ind in permutes_indices[permutes_rank_ind]]
-                order_factor = permutes_factors[permutes_rank_ind]
-
-                ordered_tensor = ten_rdm.copy()
-                ordered_tensor.indices = permuted_indices
-
-                if options.verbose:
-                    print("{:}    --->    {:} (factor = {:})".format(ten_rdm, ordered_tensor, order_factor))
-
-                _terms_rdm[term_rdm_ind].tensors[ten_rdm_ind] = ordered_tensor.copy()
-                _terms_rdm[term_rdm_ind].scale(order_factor)
 
     print("Done!")
     options.print_divider()
