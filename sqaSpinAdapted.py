@@ -1138,11 +1138,11 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
     inds_bbbababb = [options.beta_type, options.beta_type,  options.beta_type, options.alpha_type,
                      options.beta_type, options.alpha_type, options.beta_type, options.beta_type]
 
-    inds_bbbabbab = [options.beta_type,  options.beta_type, options.beta_type,  options.alpha_type,
-                     options.alpha_type, options.beta_type, options.alpha_type, options.beta_type]
+    inds_bbbabbab = [options.beta_type, options.beta_type, options.beta_type,  options.alpha_type,
+                     options.beta_type, options.beta_type, options.alpha_type, options.beta_type]
 
-    inds_bbbabbba = [options.beta_type,  options.beta_type, options.beta_type, options.alpha_type,
-                     options.alpha_type, options.beta_type, options.beta_type, options.alpha_type]
+    inds_bbbabbba = [options.beta_type, options.beta_type, options.beta_type, options.alpha_type,
+                     options.beta_type, options.beta_type, options.beta_type, options.alpha_type]
 
     inds_bbababbb = [options.beta_type,  options.beta_type, options.alpha_type, options.beta_type,
                      options.alpha_type, options.beta_type, options.beta_type,  options.beta_type]
@@ -1150,11 +1150,11 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
     inds_bbabbabb = [options.beta_type, options.beta_type,  options.alpha_type, options.beta_type,
                      options.beta_type, options.alpha_type, options.beta_type,  options.beta_type]
 
-    inds_bbabbbab = [options.beta_type,  options.beta_type, options.alpha_type, options.beta_type,
-                     options.alpha_type, options.beta_type, options.alpha_type, options.beta_type]
+    inds_bbabbbab = [options.beta_type, options.beta_type, options.alpha_type, options.beta_type,
+                     options.beta_type, options.beta_type, options.alpha_type, options.beta_type]
 
-    inds_bbabbbba = [options.beta_type,  options.beta_type, options.alpha_type, options.beta_type,
-                     options.alpha_type, options.beta_type, options.beta_type,  options.alpha_type]
+    inds_bbabbbba = [options.beta_type, options.beta_type, options.alpha_type, options.beta_type,
+                     options.beta_type, options.beta_type, options.beta_type,  options.alpha_type]
 
     inds_babbabbb = [options.beta_type,  options.alpha_type, options.beta_type, options.beta_type,
                      options.alpha_type, options.beta_type,  options.beta_type, options.beta_type]
