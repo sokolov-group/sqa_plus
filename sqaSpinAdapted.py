@@ -55,11 +55,7 @@ def convertSpinIntegratedToAdapted(terms_si):
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
     # Convert RDMs to Canonical Form before Spin-Adaptation
-    for num, term_sa in enumerate(terms_sa):
-        print(">>> makeCanonical {:}/{:} : {:}".format(num, len(terms_sa), term_sa))
-        for tensor_sa in term_sa.tensors:
-            print("> {:}".format([ind.indType for ind in tensor_sa.indices]))
-            print("> {:}".format([(ind.pattern, ind.factor) for ind in tensor_sa.symmetries]))
+    for term_sa in terms_sa:
         term_sa.isInCanonicalForm = False
         term_sa.makeCanonical()
     dummyLabel(terms_sa)
