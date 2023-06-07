@@ -1295,10 +1295,10 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                      options.alpha_type, options.beta_type,  options.alpha_type, options.alpha_type]
 
     inds_aaabaaba = [options.alpha_type, options.alpha_type, options.alpha_type, options.beta_type,
-                     options.beta_type,  options.alpha_type, options.beta_type,  options.alpha_type]
+                     options.alpha_type, options.alpha_type, options.beta_type,  options.alpha_type]
 
     inds_aaabaaab = [options.alpha_type, options.alpha_type, options.alpha_type, options.beta_type,
-                     options.beta_type,  options.alpha_type, options.alpha_type, options.beta_type]
+                     options.alpha_type, options.alpha_type, options.alpha_type, options.beta_type]
 
     inds_aababaaa = [options.alpha_type, options.alpha_type, options.beta_type,  options.alpha_type,
                      options.beta_type,  options.alpha_type, options.alpha_type, options.alpha_type]
@@ -1307,10 +1307,10 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                      options.alpha_type, options.beta_type,  options.alpha_type, options.alpha_type]
 
     inds_aabaaaba = [options.alpha_type, options.alpha_type, options.beta_type, options.alpha_type,
-                     options.beta_type,  options.alpha_type, options.beta_type, options.alpha_type]
+                     options.alpha_type, options.alpha_type, options.beta_type, options.alpha_type]
 
     inds_aabaaaab = [options.alpha_type, options.alpha_type, options.beta_type,  options.alpha_type,
-                     options.beta_type,  options.alpha_type, options.alpha_type, options.beta_type]
+                     options.alpha_type, options.alpha_type, options.alpha_type, options.beta_type]
 
     inds_abaabaaa = [options.alpha_type, options.beta_type,  options.alpha_type, options.alpha_type,
                      options.beta_type,  options.alpha_type, options.alpha_type, options.alpha_type]
