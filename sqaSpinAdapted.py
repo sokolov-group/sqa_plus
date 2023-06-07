@@ -38,6 +38,7 @@ def convertSpinIntegratedToAdapted(terms_si):
     # Convert Cre/Des Objects to RDM Objects
     options.print_divider()
     convert_credes_to_rdm(terms_si, trans_rdm = False)
+
     dummyLabel(terms_si)
     len_terms_si = len(terms_si)
 
@@ -54,7 +55,11 @@ def convertSpinIntegratedToAdapted(terms_si):
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
     # Convert RDMs to Canonical Form before Spin-Adaptation
-    for term_sa in terms_sa:
+    for num, term_sa in enumerate(terms_sa):
+        print(">>> makeCanonical {:}/{:} : {:}".format(num, len(terms_sa), term_sa))
+        for tensor_sa in term_sa.tensors:
+            print("> {:}".format([ind.indType for ind in tensor_sa.indices]))
+            print("> {:}".format([(ind.pattern, ind.factor) for ind in tensor_sa.symmetries]))
         term_sa.isInCanonicalForm = False
         term_sa.makeCanonical()
     dummyLabel(terms_sa)
