@@ -5307,7 +5307,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,t,u,v,w)
                     ten_rdm4_sa = ten_rdm4.copy()
                     ten_rdm4_sa.indices = [ten_rdm4_sa.indices[i] for i in [0, 1, 2, 3, 7, 6, 5, 4]]
-                    const_rdm4_sa = 1.0 / 20.0
+                    const_rdm4_sa = - 1.0 / 20.0
 
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
