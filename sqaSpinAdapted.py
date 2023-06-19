@@ -54,7 +54,7 @@ def convertSpinIntegratedToAdapted(terms_si):
     # Convert T amplitudes to Spin-Adapted Formulation
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
-    # Convert RDMs to Canonical Form before Spin-Adaptation
+   # Convert RDMs to Canonical Form before Spin-Adaptation
     for term_sa in terms_sa:
         term_sa.isInCanonicalForm = False
         term_sa.makeCanonical()
@@ -5364,10 +5364,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
     options.print_divider()
     print("Converting T amplitudes to spin-adapted formulation...")
 
-    # Define Spin-Adapted Amplitudes Symmetries
-    t1_sa_symm = [symmetry((1,0), 1)]
-    t2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
-
     # Define 1e- indices lists
     inds_aa = [options.alpha_type, options.alpha_type]
     inds_bb = [options.beta_type,  options.beta_type]
@@ -5388,7 +5384,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                     ten_t1 = ten.copy()
                     consts_t1_sa_prod = 1.0
                     term_t1_sa.tensors[ten_ind] = ten_t1
-                    term_t1_sa.tensors[ten_ind].symmetries = t1_sa_symm
+                    term_t1_sa.tensors[ten_ind].symmetries = []
                 else:
                     ten_t1 = ten.copy()
                     consts_t1_sa_prod = 0.0
@@ -5650,7 +5646,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                 term_t2_sa.scale(consts_t2_sa_prod[tens_t2_sa_ind])
 
                 for ten_t2_sa_ind, ten_t2_sa in zip(tens_t2_ind, tens_t2_sa):
-                    term_t2_sa.tensors[ten_t2_sa_ind].symmetries = t2_sa_symm
+                    term_t2_sa.tensors[ten_t2_sa_ind].symmetries = []
 
                 if options.verbose:
                     print("--> {:} (factor = {:.5f})".format(term_t2_sa, consts_t2_sa_prod[tens_t2_sa_ind]))
