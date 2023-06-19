@@ -5714,10 +5714,10 @@ def update_sa_tensors_symmetries(_terms_sa):
             elif _tensor_sa.name == 'v' and len(_tensor_sa.indices) == 4:
                 _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = v2e_sa_symm
 
-            elif _tensor_sa.name == 't1' and len(_tensor_sa.indices) == 2:
+            elif _tensor_sa.name in ['t1', 't2'] and len(_tensor_sa.indices) == 2:
                 _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = t1_sa_symm
 
-            elif _tensor_sa.name == 't2' and len(_tensor_sa.indices) == 4:
+            elif _tensor_sa.name in ['t1', 't2'] and len(_tensor_sa.indices) == 4:
                 _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = t2_sa_symm
 
             elif isinstance(_tensor_sa, creDesTensor) and len(_tensor_sa.indices) == 2:
