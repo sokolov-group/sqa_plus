@@ -56,8 +56,14 @@ def convertSpinIntegratedToAdapted(terms_si):
 
    # Convert RDMs to Canonical Form before Spin-Adaptation
     for term_sa in terms_sa:
-        term_sa.isInCanonicalForm = False
-        term_sa.makeCanonical()
+        has_high_rdms = False
+        for tensor_sa in term_sa.tensors:
+            if isinstance(tensor_sa, creDesTensor) and len(tensor_sa.indices) in [6, 8]:
+                has_high_rdms = True
+        
+        if has_high_rdms:
+            term_sa.isInCanonicalForm = False
+            term_sa.makeCanonical()
     dummyLabel(terms_sa)
 
     # Convert RDMs to Spin-Adapted Formulation
@@ -523,7 +529,6 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
 
                 for ten_v2e_sa_ind, ten_v2e_sa in zip(tens_v2e_ind, tens_v2e_sa):
                     term_v2e_sa.tensors[ten_v2e_sa_ind] = ten_v2e_sa
-                    term_v2e_sa.tensors[ten_v2e_sa_ind].symmetries = []
 
                 if options.verbose:
                     print("--> {:} (factor = {:.5f})".format(term_v2e_sa, consts_v2e_sa_prod[tens_v2e_sa_ind]))
@@ -5384,7 +5389,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                     ten_t1 = ten.copy()
                     consts_t1_sa_prod = 1.0
                     term_t1_sa.tensors[ten_ind] = ten_t1
-                    term_t1_sa.tensors[ten_ind].symmetries = []
                 else:
                     ten_t1 = ten.copy()
                     consts_t1_sa_prod = 0.0
@@ -5645,9 +5649,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                 term_t2_sa = term_t2_si.copy()
                 term_t2_sa.scale(consts_t2_sa_prod[tens_t2_sa_ind])
 
-                for ten_t2_sa_ind, ten_t2_sa in zip(tens_t2_ind, tens_t2_sa):
-                    term_t2_sa.tensors[ten_t2_sa_ind].symmetries = []
-
                 if options.verbose:
                     print("--> {:} (factor = {:.5f})".format(term_t2_sa, consts_t2_sa_prod[tens_t2_sa_ind]))
 
@@ -5691,6 +5692,9 @@ def update_sa_tensors_symmetries(_terms_sa):
     h1e_sa_symm = [symmetry((1,0), 1)]
     v2e_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
 
+    t1_sa_symm = [symmetry((1,0), 1)]
+    t2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
+
     rdm1_sa_symm = [symmetry((1,0), 1)]
     rdm2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((3,2,1,0), 1)]
     rdm3_sa_symm = [symmetry((1,0,2,3,5,4), 1), symmetry((0,2,1,4,3,5), 1), symmetry((5,4,3,2,1,0), 1)]
@@ -5709,6 +5713,12 @@ def update_sa_tensors_symmetries(_terms_sa):
 
             elif _tensor_sa.name == 'v' and len(_tensor_sa.indices) == 4:
                 _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = v2e_sa_symm
+
+            elif _tensor_sa.name == 't1' and len(_tensor_sa.indices) == 2:
+                _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = t1_sa_symm
+
+            elif _tensor_sa.name == 't2' and len(_tensor_sa.indices) == 4:
+                _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = t2_sa_symm
 
             elif isinstance(_tensor_sa, creDesTensor) and len(_tensor_sa.indices) == 2:
                 _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm1_sa_symm
