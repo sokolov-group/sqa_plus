@@ -54,7 +54,7 @@ def convertSpinIntegratedToAdapted(terms_si):
     # Convert T amplitudes to Spin-Adapted Formulation
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
-   # Convert RDMs to Canonical Form before Spin-Adaptation
+    # Convert RDMs to Canonical Form before Spin-Adaptation
     for term_sa in terms_sa:
         has_high_rdms = False
         for tensor_sa in term_sa.tensors:
@@ -64,7 +64,6 @@ def convertSpinIntegratedToAdapted(terms_si):
         if has_high_rdms:
             term_sa.isInCanonicalForm = False
             term_sa.makeCanonical()
-            dummyLabel(terms_sa)
 
     # Convert RDMs to Spin-Adapted Formulation
     terms_sa = convert_rdms_si_to_sa(terms_sa)
