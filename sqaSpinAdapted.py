@@ -28,7 +28,7 @@ from sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
-def convertSpinIntegratedToAdapted(terms_si):
+def convertSpinIntegratedToAdapted(terms_si, custom_si_to_sa_functions = []):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
     startTime = time.time()
@@ -53,6 +53,15 @@ def convertSpinIntegratedToAdapted(terms_si):
 
     # Convert T amplitudes to Spin-Adapted Formulation
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
+
+    # Convert custom tensors using user-defined Spin-Adapted Functions
+    if custom_si_to_sa_functions:
+        options.print_divider()
+        options.print_header("Converting user-defined tensors to spin-adapted formulation")
+
+    for convert_custom_si_to_sa in custom_si_to_sa_functions:
+        terms_sa = convert_custom_si_to_sa(terms_sa, options)
+        options.print_divider()
 
     # Convert RDMs to Canonical Form before Spin-Adaptation
     for term_sa in terms_sa:
