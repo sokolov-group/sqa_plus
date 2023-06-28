@@ -28,8 +28,13 @@ from sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
-def convertSpinIntegratedToAdapted(terms_si, custom_si_to_sa_functions = []):
+def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
+
+    # Check if settings were done by argumments or by the options class
+    custom_functions = options.convertSpinIntegratedToAdapted.custom_functions
+    improve_3rdms_combinations = options.convertSpinIntegratedToAdapted.improve_3rdms_combinations
+    improve_4rdms_combinations = options.convertSpinIntegratedToAdapted.improve_4rdms_combinations
 
     startTime = time.time()
     options.print_header("Converting Spin-Integrated Tensors to Spin-Adapted")
@@ -55,24 +60,30 @@ def convertSpinIntegratedToAdapted(terms_si, custom_si_to_sa_functions = []):
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
     # Convert custom tensors using user-defined Spin-Adapted Functions
-    if custom_si_to_sa_functions:
+    if custom_functions:
         options.print_divider()
-        options.print_header("Converting user-defined tensors to spin-adapted formulation")
+        print("Converting user-defined tensors to spin-adapted formulation ...")
 
-    for convert_custom_si_to_sa in custom_si_to_sa_functions:
-        terms_sa = convert_custom_si_to_sa(terms_sa, options)
-        options.print_divider()
+        for convert_custom_si_to_sa in custom_functions:
+            terms_sa = convert_custom_si_to_sa(terms_sa)
+        print("Done!")
 
     # Convert RDMs to Canonical Form before Spin-Adaptation
-    for term_sa in terms_sa:
-        has_high_rdms = False
-        for tensor_sa in term_sa.tensors:
-            if isinstance(tensor_sa, creDesTensor) and len(tensor_sa.indices) in [6, 8]:
-                has_high_rdms = True
-        
-        if has_high_rdms:
-            term_sa.isInCanonicalForm = False
-            term_sa.makeCanonical()
+    if improve_3rdms_combinations or improve_4rdms_combinations:
+        for term_sa in terms_sa:
+            has_high_rdms = False
+            for tensor_sa in term_sa.tensors:
+                if improve_3rdms_combinations:
+                    if isinstance(tensor_sa, creDesTensor) and len(tensor_sa.indices) == 6:
+                        has_high_rdms = True
+
+                elif improve_4rdms_combinations:
+                    if isinstance(tensor_sa, creDesTensor) and len(tensor_sa.indices) == 8:
+                        has_high_rdms = True
+
+            if has_high_rdms:
+                term_sa.isInCanonicalForm = False
+                term_sa.makeCanonical()
 
     # Convert RDMs to Spin-Adapted Formulation
     terms_sa = convert_rdms_si_to_sa(terms_sa)
