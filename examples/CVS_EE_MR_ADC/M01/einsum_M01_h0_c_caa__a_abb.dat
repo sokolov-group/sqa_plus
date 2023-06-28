@@ -1,0 +1,5 @@
+M_c_caa_a_abb  = 1/2 * einsum('K,IK,WZ->IKWZ', e_cvs, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+M_c_caa_a_abb += 1/2 * einsum('Wx,IK,Zx->IKWZ', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+M_c_caa_a_abb -= 1/2 * einsum('Zx,IK,Wx->IKWZ', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+M_c_caa_a_abb += 1/2 * einsum('IK,Wxyz,Zyxz->IKWZ', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+M_c_caa_a_abb -= 1/2 * einsum('IK,Zxyz,Wyxz->IKWZ', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)

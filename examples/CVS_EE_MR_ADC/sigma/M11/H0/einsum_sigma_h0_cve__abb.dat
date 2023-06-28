@@ -1,0 +1,3 @@
+sigma_cve =- einsum('KLB,B->KLB', X_abb, e_extern, optimize = einsum_type)
+sigma_cve += einsum('KLB,K->KLB', X_abb, e_cvs, optimize = einsum_type)
+sigma_cve += einsum('KLB,L->KLB', X_abb, e_val, optimize = einsum_type)

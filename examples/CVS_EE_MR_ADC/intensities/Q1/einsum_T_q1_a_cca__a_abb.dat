@@ -1,0 +1,2 @@
+T_a_cca  = einsum('JKXY->XJKY', t1_xxaa, optimize = einsum_type).copy()
+T_a_cca -= 1/2 * einsum('JKXx,Yx->XJKY', t1_xxaa, rdm_ca, optimize = einsum_type)

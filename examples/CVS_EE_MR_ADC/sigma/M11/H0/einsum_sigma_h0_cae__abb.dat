@@ -1,0 +1,4 @@
+sigma_cae =- 1/2 * einsum('KxB,B,Zx->KZB', X_abb, e_extern, rdm_ca, optimize = einsum_type)
+sigma_cae += 1/2 * einsum('KxB,K,Zx->KZB', X_abb, e_cvs, rdm_ca, optimize = einsum_type)
+sigma_cae += 1/2 * einsum('KxB,xy,Zy->KZB', X_abb, h_aa, rdm_ca, optimize = einsum_type)
+sigma_cae += 1/2 * einsum('KxB,xyzw,Zzyw->KZB', X_abb, v_aaaa, rdm_ccaa, optimize = einsum_type)

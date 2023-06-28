@@ -1,0 +1,2 @@
+M_c_cva_a_bab =- einsum('LIKY->IKLY', v_vxxa, optimize = einsum_type).copy()
+M_c_cva_a_bab += 1/2 * einsum('LIKx,Yx->IKLY', v_vxxa, rdm_ca, optimize = einsum_type)

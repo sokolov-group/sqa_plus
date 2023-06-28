@@ -1,0 +1,3 @@
+M_c_caa_a_bab =- 1/2 * einsum('IxZK,Wx->IKWZ', v_xaax, rdm_ca, optimize = einsum_type)
+M_c_caa_a_bab += 1/6 * einsum('IxyK,WyZx->IKWZ', v_xaax, rdm_ccaa, optimize = einsum_type)
+M_c_caa_a_bab += 1/3 * einsum('IxyK,WyxZ->IKWZ', v_xaax, rdm_ccaa, optimize = einsum_type)

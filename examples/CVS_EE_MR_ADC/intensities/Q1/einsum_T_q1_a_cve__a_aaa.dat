@@ -1,0 +1,2 @@
+T_a_cve  = einsum('JKXB->XJKB', t1_xvae, optimize = einsum_type).copy()
+T_a_cve -= einsum('KJXB->XJKB', t1_vxae, optimize = einsum_type).copy()
