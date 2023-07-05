@@ -218,29 +218,10 @@ for term_commutator in terms_commutator:
 # Expected value of Spin-Adapted IP M11
 expected_IP_M11 = sqa_plus.matrixBlock(terms_IP_M11)
 
-def convert_X_si_to_sa(_terms_x_si, options):
-    options.print_divider()
-    options.print_header("Converting Sigma vector to spin-adapted formulation")
-
-    from sqa_plus.sqaSpinAdapted import remove_spin_index_type
-
-    # Define Spin-Adapted 2e- integrals Symmetries
-    x_sa_symm = []
-
-    # Convert objects in each term
-    for term_ind, term_x_si in enumerate(_terms_x_si):
-        for ten_ind, ten in enumerate(term_x_si.tensors):
-            if ten.name[0] == 'X' and len(ten.indices) == 3:
-                _terms_x_si[term_ind].tensors[ten_ind] = remove_spin_index_type(ten)
-                _terms_x_si[term_ind].tensors[ten_ind].symmetries = x_sa_symm
-
-    options.print_divider()
-
-    return _terms_x_si
-
-expected_IP_M11 = convert_X_si_to_sa(expected_IP_M11, sqa_plus.options)
-
 # Spin-Adaptation of IP M11
+from custom_si_to_sa_functions import convert_X_si_to_sa
+sqa_plus.options.add_spin_adaptation_custom_function(convert_X_si_to_sa)
+
 expected_IP_M11_sa = sqa_plus.convertSpinIntegratedToAdapted(expected_IP_M11)
 
 # Generating Numpy einsum equations
@@ -248,3 +229,4 @@ result = sqa_plus.genEinsum(expected_IP_M11_sa, 'sigma_' + indices_string, final
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))
+

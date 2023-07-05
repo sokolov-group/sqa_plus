@@ -6,8 +6,8 @@ order_Heff = 1
 import time
 start = time.time()
 
-indices_string = 'INDEX_REPLACE'
-spin_indices_string = 'SPIN_REPLACE'
+indices_string = 'caa_cca'
+spin_indices_string = 'bab'
 
 sqa_plus.options.print_header("Spin-Adapted CVS-IP: Sigma H1 {:} ({:})".format(indices_string.upper(), spin_indices_string))
 
@@ -88,11 +88,9 @@ if indices_string_right in ['caa']:
 elif indices_string_right in ['cca']:
     X_tensor_aaa = [sqa_plus.tensor('X_aaa', [i_alpha, j_alpha, x_alpha], symmetry_X_ppq)]
     X_tensor_abb = [sqa_plus.tensor('X_abb', [i_alpha, j_beta,  x_beta],  [])]
-    X_tensor_bab = [sqa_plus.tensor('X_bab', [i_beta,  j_alpha, x_beta],  [])]
 
     terms_right = [sqa_plus.term(0.5, [], X_tensor_aaa + [sqa_plus.creOp(i_alpha), sqa_plus.creOp(j_alpha), sqa_plus.desOp(x_alpha)]),
-                   sqa_plus.term(0.5, [], X_tensor_abb + [sqa_plus.creOp(i_alpha), sqa_plus.creOp(j_beta),  sqa_plus.desOp(x_beta)]),
-                   sqa_plus.term(0.5, [], X_tensor_bab + [sqa_plus.creOp(i_beta),  sqa_plus.creOp(j_alpha), sqa_plus.desOp(x_beta)])]
+                   sqa_plus.term(1.0, [], X_tensor_abb + [sqa_plus.creOp(i_alpha), sqa_plus.creOp(j_beta),  sqa_plus.desOp(x_beta)])]
 
 elif indices_string_right in ['cva']:
     X_tensor_aaa = [sqa_plus.tensor('X_aaa', [i_alpha, j_val_alpha, x_alpha], [])]
@@ -106,11 +104,9 @@ elif indices_string_right in ['cva']:
 elif indices_string_right in ['cce']:
     X_tensor_aaa = [sqa_plus.tensor('X_aaa', [i_alpha, j_alpha, a_alpha], symmetry_X_ppq)]
     X_tensor_abb = [sqa_plus.tensor('X_abb', [i_alpha, j_beta,  a_beta],  [])]
-    X_tensor_bab = [sqa_plus.tensor('X_bab', [i_beta,  j_alpha, a_beta],  [])]
 
     terms_right = [sqa_plus.term(0.5, [], X_tensor_aaa + [sqa_plus.creOp(i_alpha), sqa_plus.creOp(j_alpha), sqa_plus.desOp(a_alpha)]),
-                   sqa_plus.term(0.5, [], X_tensor_abb + [sqa_plus.creOp(i_alpha), sqa_plus.creOp(j_beta),  sqa_plus.desOp(a_beta)]),
-                   sqa_plus.term(0.5, [], X_tensor_bab + [sqa_plus.creOp(i_beta),  sqa_plus.creOp(j_alpha), sqa_plus.desOp(a_beta)])]
+                   sqa_plus.term(1.0, [], X_tensor_abb + [sqa_plus.creOp(i_alpha), sqa_plus.creOp(j_beta),  sqa_plus.desOp(a_beta)])]
 
 elif indices_string_right in ['cve']:
     X_tensor_aaa = [sqa_plus.tensor('X_aaa', [i_alpha, j_val_alpha, a_alpha], [])]
@@ -234,41 +230,15 @@ for term_commutator in terms_commutator:
 # Expected value of Spin-Adapted IP M11
 expected_IP_M11 = sqa_plus.matrixBlock(terms_IP_M11)
 
-def convert_X_si_to_sa(_terms_x_si, options):
-    options.print_divider()
-    options.print_header("Converting Sigma vector to spin-adapted formulation")
-
-    from sqa_plus.sqaSpinAdapted import remove_spin_index_type
-
-    # Define Spin-Adapted 2e- integrals Symmetries
-    x_sa_symm = []
-
-    # Convert objects in each term
-    for term_ind, term_x_si in enumerate(_terms_x_si):
-        for ten_ind, ten in enumerate(term_x_si.tensors):
-            if ten.name[0] == 'X' and len(ten.indices) == 3:
-                _terms_x_si[term_ind].tensors[ten_ind] = remove_spin_index_type(ten)
-                _terms_x_si[term_ind].tensors[ten_ind].symmetries = x_sa_symm
-
-    options.print_divider()
-
-    return _terms_x_si
-
-expected_IP_M11 = convert_X_si_to_sa(expected_IP_M11, sqa_plus.options)
-
 # Spin-Adaptation of IP M11
+from custom_si_to_sa_functions import convert_X_si_to_sa
+sqa_plus.options.add_spin_adaptation_custom_function(convert_X_si_to_sa)
+
 expected_IP_M11_sa = sqa_plus.convertSpinIntegratedToAdapted(expected_IP_M11)
 
 # Generating Numpy einsum equations
-result = sqa_plus.genEinsum(expected_IP_M11_sa, 'sigma_' + indices_string_left, final_indices_string,
-                       use_cvs_tensors = True, rm_core_int = True)
-
-print("\n-------------------------------- genEinsum equations --------------------------------\n")
-for item in result:
-    print(item)
-print("\n-------------------------------------------------------------------------------------\n")
+result = sqa_plus.genEinsum(expected_IP_M11_sa, 'sigma_' + indices_string_left, final_indices_string)
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))
-
 

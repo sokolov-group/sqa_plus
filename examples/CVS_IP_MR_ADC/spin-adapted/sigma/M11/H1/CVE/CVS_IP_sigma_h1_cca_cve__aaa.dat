@@ -68,12 +68,7 @@ Done!
  (   1.00000) X_abb(L,k,b) v(k,z,K,b) cre(W) des(z) 
 
 Total terms : 8
-SQA automation time :  366.713 seconds
-----------------------------------------------------------------------------------------------------
-
------------------------ Converting Sigma vector to spin-adapted formulation ------------------------
-
-----------------------------------------------------------------------------------------------------
+SQA automation time :  329.362 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -81,18 +76,9 @@ SQA automation time :  366.713 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -101,6 +87,10 @@ Converting 2e- integrals to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
@@ -147,7 +137,7 @@ Done!
 
 Total spin-integrated terms: 8
 Total spin-adapted terms: 12
-Spin-adaptation automation time :  0.024 seconds
+Spin-adaptation automation time :  0.020 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -178,22 +168,4 @@ sigma_cca += 1/2 * einsum('Lia,iKxa,Wx->KLW', X_aaa, v_vxae, rdm_ca, optimize = 
 sigma_cca += 1/2 * einsum('Kia,Lxai,Wx->KLW', X_abb, v_xaev, rdm_ca, optimize = einsum_type)
 sigma_cca -= 1/2 * einsum('Lia,Kxai,Wx->KLW', X_abb, v_xaev, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-
--------------------------------- genEinsum equations --------------------------------
-
-sigma_cca =- einsum('Kia,LWai->KLW', X_aaa, v_xaev, optimize = einsum_type)
-sigma_cca += einsum('Kia,iLWa->KLW', X_aaa, v_vxae, optimize = einsum_type)
-sigma_cca += einsum('Lia,KWai->KLW', X_aaa, v_xaev, optimize = einsum_type)
-sigma_cca -= einsum('Lia,iKWa->KLW', X_aaa, v_vxae, optimize = einsum_type)
-sigma_cca -= einsum('Kia,LWai->KLW', X_abb, v_xaev, optimize = einsum_type)
-sigma_cca += einsum('Lia,KWai->KLW', X_abb, v_xaev, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Kia,Lxai,Wx->KLW', X_aaa, v_xaev, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Kia,iLxa,Wx->KLW', X_aaa, v_vxae, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Lia,Kxai,Wx->KLW', X_aaa, v_xaev, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Lia,iKxa,Wx->KLW', X_aaa, v_vxae, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Kia,Lxai,Wx->KLW', X_abb, v_xaev, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Lia,Kxai,Wx->KLW', X_abb, v_xaev, rdm_ca, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 641.80 seconds.
+> Total elapsed time: 579.31 seconds.

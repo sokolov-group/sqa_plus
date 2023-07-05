@@ -87,7 +87,7 @@ Done!
  (   1.00000) v(X,x,y,z) kdelta(I,L) kdelta(J,K) cre(Y) cre(x) des(y) des(z) 
 
 Total terms : 36
-SQA automation time :  2.172 seconds
+SQA automation time :  1.749 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -95,18 +95,9 @@ SQA automation time :  2.172 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -183,7 +174,7 @@ Done!
 
 Total spin-integrated terms: 36
 Total spin-adapted terms: 34
-Spin-adaptation automation time :  0.831 seconds
+Spin-adaptation automation time :  0.802 seconds
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- WARNING ----------------------------------------------
@@ -236,4 +227,4 @@ precond_cca -= 1/2 * einsum('XxyY,IJ,JI,yx->IJXY', v_aaaa, np.identity(ncvs), np
 precond_cca += 1/2 * einsum('Xxyz,II,JJ,Yyxz->IJXY', v_aaaa, np.identity(ncvs), np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
 precond_cca -= 1/2 * einsum('Xxyz,IJ,JI,Yyxz->IJXY', v_aaaa, np.identity(ncvs), np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 3.27 seconds.
+> Total elapsed time: 2.68 seconds.

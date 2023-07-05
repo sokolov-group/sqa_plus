@@ -60,7 +60,7 @@ Done!
  (  -1.00000) v(X,x,y,z) kdelta(A,B) kdelta(I,K) cre(y) cre(z) des(W) des(x) 
 
 Total terms : 9
-SQA automation time :  0.156 seconds
+SQA automation time :  0.147 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -68,18 +68,9 @@ SQA automation time :  0.156 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -130,7 +121,7 @@ Done!
 
 Total spin-integrated terms: 9
 Total spin-adapted terms: 8
-Spin-adaptation automation time :  0.346 seconds
+Spin-adaptation automation time :  0.312 seconds
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- WARNING ----------------------------------------------
@@ -157,4 +148,4 @@ precond_cae += 1/2 * einsum('I,AA,II,WX->IAXY', e_cvs, np.identity(nextern), np.
 precond_cae += 1/2 * einsum('Xx,AA,II,Wx->IAXY', h_aa, np.identity(nextern), np.identity(ncvs), rdm_ca, optimize = einsum_type)
 precond_cae += 1/2 * einsum('Xxyz,AA,II,Wyxz->IAXY', v_aaaa, np.identity(nextern), np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.62 seconds.
+> Total elapsed time: 0.57 seconds.

@@ -20,8 +20,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 ## Right operator terms:
  (   0.50000) X_aaa(i,j,x) cre(i) cre(j) des(x) 
- (   0.50000) X_abb(i,j,x) cre(i) cre(j) des(x) 
- (   0.50000) X_bab(i,j,x) cre(i) cre(j) des(x) 
+ (   1.00000) X_abb(i,j,x) cre(i) cre(j) des(x) 
 
 ## Left operator terms:
  (   1.00000) cre(W) des(L) des(K) 
@@ -59,65 +58,36 @@ Done!
 ------------------------------------------ Final results -------------------------------------------
 
  (   1.00000) X_aaa(K,k,z) v(k,W,L,z) 
- (   0.50000) X_abb(K,k,z) v(k,W,L,z) 
- (   0.50000) X_abb(k,L,z) v(k,W,K,z) 
- (  -0.50000) X_abb(i,j,W) v(K,L,i,j) 
- (  -0.50000) X_bab(L,k,z) v(k,W,K,z) 
- (  -0.50000) X_bab(k,K,z) v(k,W,L,z) 
- (  -0.50000) X_bab(i,j,W) v(K,L,i,j) 
- (  -0.50000) X_abb(K,j,W) v(j,z,L,w) rdm(z,w) 
- (  -0.50000) X_abb(K,j,W) v(j,z,L,w) rdm(z,w) 
- (  -0.50000) X_abb(i,L,W) v(i,z,K,w) rdm(z,w) 
- (  -0.50000) X_abb(i,L,W) v(i,z,K,w) rdm(z,w) 
- (   0.50000) X_bab(L,j,W) v(j,z,K,w) rdm(z,w) 
- (   0.50000) X_bab(L,j,W) v(j,z,K,w) rdm(z,w) 
- (   0.50000) X_bab(i,K,W) v(i,z,L,w) rdm(z,w) 
- (   0.50000) X_bab(i,K,W) v(i,z,L,w) rdm(z,w) 
+ (   1.00000) X_abb(K,k,z) v(k,W,L,z) 
+ (   1.00000) X_abb(k,L,z) v(k,W,K,z) 
+ (  -1.00000) X_abb(i,j,W) v(K,L,i,j) 
+ (  -1.00000) X_abb(K,j,W) v(j,z,L,w) rdm(z,w) 
+ (  -1.00000) X_abb(K,j,W) v(j,z,L,w) rdm(z,w) 
+ (  -1.00000) X_abb(i,L,W) v(i,z,K,w) rdm(z,w) 
+ (  -1.00000) X_abb(i,L,W) v(i,z,K,w) rdm(z,w) 
  (  -1.00000) X_aaa(K,k,z) v(k,w,L,z) cre(W) des(w) 
  (  -1.00000) X_aaa(K,j,x) v(j,W,L,z) cre(z) des(x) 
- (  -0.50000) X_abb(K,k,z) v(k,w,L,z) cre(W) des(w) 
- (   0.50000) X_abb(K,j,W) v(j,z,L,w) cre(w) des(z) 
- (   0.50000) X_abb(K,j,W) v(j,z,L,w) cre(w) des(z) 
- (  -0.50000) X_abb(K,j,x) v(j,W,L,z) cre(z) des(x) 
- (  -0.50000) X_abb(k,L,z) v(k,w,K,z) cre(W) des(w) 
- (   0.50000) X_abb(k,j,x) v(K,L,k,j) cre(W) des(x) 
- (   0.50000) X_abb(i,L,W) v(i,z,K,w) cre(w) des(z) 
- (   0.50000) X_abb(i,L,W) v(i,z,K,w) cre(w) des(z) 
- (  -0.50000) X_abb(i,L,x) v(i,W,K,z) cre(z) des(x) 
- (   0.50000) X_bab(L,k,z) v(k,w,K,z) cre(W) des(w) 
- (  -0.50000) X_bab(L,j,W) v(j,z,K,w) cre(w) des(z) 
- (  -0.50000) X_bab(L,j,W) v(j,z,K,w) cre(w) des(z) 
- (   0.50000) X_bab(L,j,x) v(j,W,K,z) cre(z) des(x) 
- (   0.50000) X_bab(k,K,z) v(k,w,L,z) cre(W) des(w) 
- (   0.50000) X_bab(k,j,x) v(K,L,k,j) cre(W) des(x) 
- (  -0.50000) X_bab(i,K,W) v(i,z,L,w) cre(w) des(z) 
- (  -0.50000) X_bab(i,K,W) v(i,z,L,w) cre(w) des(z) 
- (   0.50000) X_bab(i,K,x) v(i,W,L,z) cre(z) des(x) 
- (   0.50000) X_abb(K,j,x) v(j,z,L,w) rdm(z,w) cre(W) des(x) 
- (   0.50000) X_abb(K,j,x) v(j,z,L,w) rdm(z,w) cre(W) des(x) 
- (   0.50000) X_abb(i,L,x) v(i,z,K,w) rdm(z,w) cre(W) des(x) 
- (   0.50000) X_abb(i,L,x) v(i,z,K,w) rdm(z,w) cre(W) des(x) 
- (  -0.50000) X_bab(L,j,x) v(j,z,K,w) rdm(z,w) cre(W) des(x) 
- (  -0.50000) X_bab(L,j,x) v(j,z,K,w) rdm(z,w) cre(W) des(x) 
- (  -0.50000) X_bab(i,K,x) v(i,z,L,w) rdm(z,w) cre(W) des(x) 
- (  -0.50000) X_bab(i,K,x) v(i,z,L,w) rdm(z,w) cre(W) des(x) 
+ (  -1.00000) X_abb(K,k,z) v(k,w,L,z) cre(W) des(w) 
+ (   1.00000) X_abb(K,j,W) v(j,z,L,w) cre(w) des(z) 
+ (   1.00000) X_abb(K,j,W) v(j,z,L,w) cre(w) des(z) 
+ (  -1.00000) X_abb(K,j,x) v(j,W,L,z) cre(z) des(x) 
+ (  -1.00000) X_abb(k,L,z) v(k,w,K,z) cre(W) des(w) 
+ (   1.00000) X_abb(k,j,x) v(K,L,k,j) cre(W) des(x) 
+ (   1.00000) X_abb(i,L,W) v(i,z,K,w) cre(w) des(z) 
+ (   1.00000) X_abb(i,L,W) v(i,z,K,w) cre(w) des(z) 
+ (  -1.00000) X_abb(i,L,x) v(i,W,K,z) cre(z) des(x) 
+ (   1.00000) X_abb(K,j,x) v(j,z,L,w) rdm(z,w) cre(W) des(x) 
+ (   1.00000) X_abb(K,j,x) v(j,z,L,w) rdm(z,w) cre(W) des(x) 
+ (   1.00000) X_abb(i,L,x) v(i,z,K,w) rdm(z,w) cre(W) des(x) 
+ (   1.00000) X_abb(i,L,x) v(i,z,K,w) rdm(z,w) cre(W) des(x) 
  (   1.00000) X_aaa(K,j,x) v(j,z,L,w) cre(W) cre(w) des(x) des(z) 
- (   0.50000) X_abb(K,j,x) v(j,z,L,w) cre(W) cre(w) des(x) des(z) 
- (   0.50000) X_abb(K,j,x) v(j,z,L,w) cre(W) cre(w) des(x) des(z) 
- (   0.50000) X_abb(i,L,x) v(i,z,K,w) cre(W) cre(w) des(x) des(z) 
- (   0.50000) X_abb(i,L,x) v(i,z,K,w) cre(W) cre(w) des(x) des(z) 
- (  -0.50000) X_bab(L,j,x) v(j,z,K,w) cre(W) cre(w) des(x) des(z) 
- (  -0.50000) X_bab(L,j,x) v(j,z,K,w) cre(W) cre(w) des(x) des(z) 
- (  -0.50000) X_bab(i,K,x) v(i,z,L,w) cre(W) cre(w) des(x) des(z) 
- (  -0.50000) X_bab(i,K,x) v(i,z,L,w) cre(W) cre(w) des(x) des(z) 
+ (   1.00000) X_abb(K,j,x) v(j,z,L,w) cre(W) cre(w) des(x) des(z) 
+ (   1.00000) X_abb(K,j,x) v(j,z,L,w) cre(W) cre(w) des(x) des(z) 
+ (   1.00000) X_abb(i,L,x) v(i,z,K,w) cre(W) cre(w) des(x) des(z) 
+ (   1.00000) X_abb(i,L,x) v(i,z,K,w) cre(W) cre(w) des(x) des(z) 
 
-Total terms : 52
-SQA automation time :  1834.388 seconds
-----------------------------------------------------------------------------------------------------
-
------------------------ Converting Sigma vector to spin-adapted formulation ------------------------
-
-----------------------------------------------------------------------------------------------------
+Total terms : 28
+SQA automation time :  803.257 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -125,18 +95,9 @@ SQA automation time :  1834.388 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -145,6 +106,10 @@ Converting 2e- integrals to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
@@ -156,7 +121,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 87 spin-adapted terms...
+Combining 46 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -171,62 +136,41 @@ Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-40 spin-adapted terms combined.
+20 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
  (  -1.00000) X_aaa(K,k,z) v(L,W,z,k) 
- (  -0.50000) X_abb(K,k,z) v(L,W,z,k) 
- (   0.50000) X_abb(K,k,z) v(L,k,z,W) 
- (  -0.50000) X_abb(i,j,W) v(K,i,L,j) 
- (   0.50000) X_abb(k,L,z) v(K,k,z,W) 
- (  -0.50000) X_bab(L,k,z) v(K,k,z,W) 
- (   0.50000) X_bab(i,j,W) v(K,j,L,i) 
- (   0.50000) X_bab(k,K,z) v(L,W,z,k) 
- (  -0.50000) X_bab(k,K,z) v(L,k,z,W) 
+ (  -1.00000) X_abb(K,k,z) v(L,W,z,k) 
+ (   1.00000) X_abb(K,k,z) v(L,k,z,W) 
+ (  -1.00000) X_abb(i,j,W) v(K,i,L,j) 
+ (   1.00000) X_abb(k,L,z) v(K,k,z,W) 
  (   0.50000) X_aaa(K,j,x) v(L,W,z,j) rdm(x,z) 
  (  -0.16667) X_aaa(K,j,x) v(L,z,w,j) rdm(W,w,x,z) 
  (  -0.33333) X_aaa(K,j,x) v(L,z,w,j) rdm(W,w,z,x) 
  (   0.50000) X_aaa(K,k,z) v(L,w,z,k) rdm(W,w) 
- (   0.25000) X_abb(K,j,x) v(L,W,z,j) rdm(x,z) 
- (  -0.25000) X_abb(K,j,x) v(L,j,z,W) rdm(x,z) 
- (  -0.25000) X_abb(K,j,x) v(L,j,z,w) rdm(W,z,x,w) 
- (   0.08333) X_abb(K,j,x) v(L,z,w,j) rdm(W,w,x,z) 
- (  -0.08333) X_abb(K,j,x) v(L,z,w,j) rdm(W,w,z,x) 
- (  -0.25000) X_abb(K,k,z) v(L,k,z,w) rdm(W,w) 
- (   0.25000) X_abb(K,k,z) v(L,w,z,k) rdm(W,w) 
- (  -0.25000) X_abb(i,L,x) v(K,i,z,W) rdm(x,z) 
- (  -0.25000) X_abb(i,L,x) v(K,i,z,w) rdm(W,z,x,w) 
- (   0.16667) X_abb(i,L,x) v(K,z,w,i) rdm(W,w,x,z) 
- (   0.08333) X_abb(i,L,x) v(K,z,w,i) rdm(W,w,z,x) 
- (  -0.25000) X_abb(k,L,z) v(K,k,z,w) rdm(W,w) 
- (   0.25000) X_abb(k,j,x) v(K,k,L,j) rdm(W,x) 
- (   0.25000) X_bab(L,j,x) v(K,j,z,W) rdm(x,z) 
- (   0.25000) X_bab(L,j,x) v(K,j,z,w) rdm(W,z,x,w) 
- (  -0.16667) X_bab(L,j,x) v(K,z,w,j) rdm(W,w,x,z) 
- (  -0.08333) X_bab(L,j,x) v(K,z,w,j) rdm(W,w,z,x) 
- (   0.25000) X_bab(L,k,z) v(K,k,z,w) rdm(W,w) 
- (  -0.25000) X_bab(i,K,x) v(L,W,z,i) rdm(x,z) 
- (   0.25000) X_bab(i,K,x) v(L,i,z,W) rdm(x,z) 
- (   0.25000) X_bab(i,K,x) v(L,i,z,w) rdm(W,z,x,w) 
- (  -0.08333) X_bab(i,K,x) v(L,z,w,i) rdm(W,w,x,z) 
- (   0.08333) X_bab(i,K,x) v(L,z,w,i) rdm(W,w,z,x) 
- (   0.25000) X_bab(k,K,z) v(L,k,z,w) rdm(W,w) 
- (  -0.25000) X_bab(k,K,z) v(L,w,z,k) rdm(W,w) 
- (  -0.25000) X_bab(k,j,x) v(K,j,L,k) rdm(W,x) 
- (   0.25000) X_abb(K,j,x) v(L,j,z,w) rdm(z,w) rdm(W,x) 
- (  -0.12500) X_abb(K,j,x) v(L,z,w,j) rdm(w,z) rdm(W,x) 
- (   0.25000) X_abb(i,L,x) v(K,i,z,w) rdm(z,w) rdm(W,x) 
- (  -0.12500) X_abb(i,L,x) v(K,z,w,i) rdm(w,z) rdm(W,x) 
- (  -0.25000) X_bab(L,j,x) v(K,j,z,w) rdm(z,w) rdm(W,x) 
- (   0.12500) X_bab(L,j,x) v(K,z,w,j) rdm(w,z) rdm(W,x) 
- (  -0.25000) X_bab(i,K,x) v(L,i,z,w) rdm(z,w) rdm(W,x) 
- (   0.12500) X_bab(i,K,x) v(L,z,w,i) rdm(w,z) rdm(W,x) 
+ (   0.50000) X_abb(K,j,x) v(L,W,z,j) rdm(x,z) 
+ (  -0.50000) X_abb(K,j,x) v(L,j,z,W) rdm(x,z) 
+ (  -0.50000) X_abb(K,j,x) v(L,j,z,w) rdm(W,z,x,w) 
+ (   0.16667) X_abb(K,j,x) v(L,z,w,j) rdm(W,w,x,z) 
+ (  -0.16667) X_abb(K,j,x) v(L,z,w,j) rdm(W,w,z,x) 
+ (  -0.50000) X_abb(K,k,z) v(L,k,z,w) rdm(W,w) 
+ (   0.50000) X_abb(K,k,z) v(L,w,z,k) rdm(W,w) 
+ (  -0.50000) X_abb(i,L,x) v(K,i,z,W) rdm(x,z) 
+ (  -0.50000) X_abb(i,L,x) v(K,i,z,w) rdm(W,z,x,w) 
+ (   0.33333) X_abb(i,L,x) v(K,z,w,i) rdm(W,w,x,z) 
+ (   0.16667) X_abb(i,L,x) v(K,z,w,i) rdm(W,w,z,x) 
+ (  -0.50000) X_abb(k,L,z) v(K,k,z,w) rdm(W,w) 
+ (   0.50000) X_abb(k,j,x) v(K,k,L,j) rdm(W,x) 
+ (   0.50000) X_abb(K,j,x) v(L,j,z,w) rdm(z,w) rdm(W,x) 
+ (  -0.25000) X_abb(K,j,x) v(L,z,w,j) rdm(w,z) rdm(W,x) 
+ (   0.50000) X_abb(i,L,x) v(K,i,z,w) rdm(z,w) rdm(W,x) 
+ (  -0.25000) X_abb(i,L,x) v(K,z,w,i) rdm(w,z) rdm(W,x) 
 
-Total spin-integrated terms: 52
-Total spin-adapted terms: 47
-Spin-adaptation automation time :  0.325 seconds
+Total spin-integrated terms: 28
+Total spin-adapted terms: 26
+Spin-adaptation automation time :  0.147 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -239,110 +183,36 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 47
+Remaining terms: 26
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
 sigma_cca =- einsum('Kix,LWxi->KLW', X_aaa, v_xaax, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Kix,LWxi->KLW', X_abb, v_xaax, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Kix,LixW->KLW', X_abb, v_xxaa, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('ijW,KiLj->KLW', X_abb, v_xxxx, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('iLx,KixW->KLW', X_abb, v_xxaa, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Lix,KixW->KLW', X_bab, v_xxaa, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('ijW,KjLi->KLW', X_bab, v_xxxx, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('iKx,LWxi->KLW', X_bab, v_xaax, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('iKx,LixW->KLW', X_bab, v_xxaa, optimize = einsum_type)
+sigma_cca -= einsum('Kix,LWxi->KLW', X_abb, v_xaax, optimize = einsum_type)
+sigma_cca += einsum('Kix,LixW->KLW', X_abb, v_xxaa, optimize = einsum_type)
+sigma_cca -= einsum('ijW,KiLj->KLW', X_abb, v_xxxx, optimize = einsum_type)
+sigma_cca += einsum('iLx,KixW->KLW', X_abb, v_xxaa, optimize = einsum_type)
 sigma_cca += 1/2 * einsum('Kix,LWyi,xy->KLW', X_aaa, v_xaax, rdm_ca, optimize = einsum_type)
 sigma_cca -= 1/6 * einsum('Kix,Lyzi,Wzxy->KLW', X_aaa, v_xaax, rdm_ccaa, optimize = einsum_type)
 sigma_cca -= 1/3 * einsum('Kix,Lyzi,Wzyx->KLW', X_aaa, v_xaax, rdm_ccaa, optimize = einsum_type)
 sigma_cca += 1/2 * einsum('Kix,Lyxi,Wy->KLW', X_aaa, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Kix,LWyi,xy->KLW', X_abb, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('Kix,LiyW,xy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('Kix,Liyz,Wyxz->KLW', X_abb, v_xxaa, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/12 * einsum('Kix,Lyzi,Wzxy->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/12 * einsum('Kix,Lyzi,Wzyx->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('Kix,Lixy,Wy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Kix,Lyxi,Wy->KLW', X_abb, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iLx,KiyW,xy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iLx,Kiyz,Wyxz->KLW', X_abb, v_xxaa, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/6 * einsum('iLx,Kyzi,Wzxy->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/12 * einsum('iLx,Kyzi,Wzyx->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iLx,Kixy,Wy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('ijx,KiLj,Wx->KLW', X_abb, v_xxxx, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Lix,KiyW,xy->KLW', X_bab, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Lix,Kiyz,Wyxz->KLW', X_bab, v_xxaa, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/6 * einsum('Lix,Kyzi,Wzxy->KLW', X_bab, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/12 * einsum('Lix,Kyzi,Wzyx->KLW', X_bab, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Lix,Kixy,Wy->KLW', X_bab, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iKx,LWyi,xy->KLW', X_bab, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('iKx,LiyW,xy->KLW', X_bab, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('iKx,Liyz,Wyxz->KLW', X_bab, v_xxaa, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/12 * einsum('iKx,Lyzi,Wzxy->KLW', X_bab, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/12 * einsum('iKx,Lyzi,Wzyx->KLW', X_bab, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('iKx,Lixy,Wy->KLW', X_bab, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iKx,Lyxi,Wy->KLW', X_bab, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('ijx,KjLi,Wx->KLW', X_bab, v_xxxx, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Kix,Liyz,yz,Wx->KLW', X_abb, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/8 * einsum('Kix,Lyzi,zy,Wx->KLW', X_abb, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('iLx,Kiyz,yz,Wx->KLW', X_abb, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/8 * einsum('iLx,Kyzi,zy,Wx->KLW', X_abb, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('Lix,Kiyz,yz,Wx->KLW', X_bab, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/8 * einsum('Lix,Kyzi,zy,Wx->KLW', X_bab, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iKx,Liyz,yz,Wx->KLW', X_bab, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/8 * einsum('iKx,Lyzi,zy,Wx->KLW', X_bab, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('Kix,LWyi,xy->KLW', X_abb, v_xaax, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('Kix,LiyW,xy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('Kix,Liyz,Wyxz->KLW', X_abb, v_xxaa, rdm_ccaa, optimize = einsum_type)
+sigma_cca += 1/6 * einsum('Kix,Lyzi,Wzxy->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
+sigma_cca -= 1/6 * einsum('Kix,Lyzi,Wzyx->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('Kix,Lixy,Wy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('Kix,Lyxi,Wy->KLW', X_abb, v_xaax, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('iLx,KiyW,xy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('iLx,Kiyz,Wyxz->KLW', X_abb, v_xxaa, rdm_ccaa, optimize = einsum_type)
+sigma_cca += 1/3 * einsum('iLx,Kyzi,Wzxy->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
+sigma_cca += 1/6 * einsum('iLx,Kyzi,Wzyx->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
+sigma_cca -= 1/2 * einsum('iLx,Kixy,Wy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('ijx,KiLj,Wx->KLW', X_abb, v_xxxx, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('Kix,Liyz,yz,Wx->KLW', X_abb, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/4 * einsum('Kix,Lyzi,zy,Wx->KLW', X_abb, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
+sigma_cca += 1/2 * einsum('iLx,Kiyz,yz,Wx->KLW', X_abb, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
+sigma_cca -= 1/4 * einsum('iLx,Kyzi,zy,Wx->KLW', X_abb, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-
--------------------------------- genEinsum equations --------------------------------
-
-sigma_cca =- einsum('Kix,LWxi->KLW', X_aaa, v_xaax, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Kix,LWxi->KLW', X_abb, v_xaax, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Kix,LixW->KLW', X_abb, v_xxaa, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('ijW,KiLj->KLW', X_abb, v_xxxx, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('iLx,KixW->KLW', X_abb, v_xxaa, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Lix,KixW->KLW', X_bab, v_xxaa, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('ijW,KjLi->KLW', X_bab, v_xxxx, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('iKx,LWxi->KLW', X_bab, v_xaax, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('iKx,LixW->KLW', X_bab, v_xxaa, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Kix,LWyi,xy->KLW', X_aaa, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/6 * einsum('Kix,Lyzi,Wzxy->KLW', X_aaa, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/3 * einsum('Kix,Lyzi,Wzyx->KLW', X_aaa, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Kix,Lyxi,Wy->KLW', X_aaa, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Kix,LWyi,xy->KLW', X_abb, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('Kix,LiyW,xy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('Kix,Liyz,Wyxz->KLW', X_abb, v_xxaa, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/12 * einsum('Kix,Lyzi,Wzxy->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/12 * einsum('Kix,Lyzi,Wzyx->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('Kix,Lixy,Wy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Kix,Lyxi,Wy->KLW', X_abb, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iLx,KiyW,xy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iLx,Kiyz,Wyxz->KLW', X_abb, v_xxaa, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/6 * einsum('iLx,Kyzi,Wzxy->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/12 * einsum('iLx,Kyzi,Wzyx->KLW', X_abb, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iLx,Kixy,Wy->KLW', X_abb, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('ijx,KiLj,Wx->KLW', X_abb, v_xxxx, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Lix,KiyW,xy->KLW', X_bab, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Lix,Kiyz,Wyxz->KLW', X_bab, v_xxaa, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/6 * einsum('Lix,Kyzi,Wzxy->KLW', X_bab, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/12 * einsum('Lix,Kyzi,Wzyx->KLW', X_bab, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Lix,Kixy,Wy->KLW', X_bab, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iKx,LWyi,xy->KLW', X_bab, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('iKx,LiyW,xy->KLW', X_bab, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('iKx,Liyz,Wyxz->KLW', X_bab, v_xxaa, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/12 * einsum('iKx,Lyzi,Wzxy->KLW', X_bab, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/12 * einsum('iKx,Lyzi,Wzyx->KLW', X_bab, v_xaax, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('iKx,Lixy,Wy->KLW', X_bab, v_xxaa, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iKx,Lyxi,Wy->KLW', X_bab, v_xaax, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('ijx,KjLi,Wx->KLW', X_bab, v_xxxx, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('Kix,Liyz,yz,Wx->KLW', X_abb, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/8 * einsum('Kix,Lyzi,zy,Wx->KLW', X_abb, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/4 * einsum('iLx,Kiyz,yz,Wx->KLW', X_abb, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/8 * einsum('iLx,Kyzi,zy,Wx->KLW', X_abb, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('Lix,Kiyz,yz,Wx->KLW', X_bab, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/8 * einsum('Lix,Kyzi,zy,Wx->KLW', X_bab, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/4 * einsum('iKx,Liyz,yz,Wx->KLW', X_bab, v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/8 * einsum('iKx,Lyzi,zy,Wx->KLW', X_bab, v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 2211.56 seconds.
+> Total elapsed time: 1079.42 seconds.

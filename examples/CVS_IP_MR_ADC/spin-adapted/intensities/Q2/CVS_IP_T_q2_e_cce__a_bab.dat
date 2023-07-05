@@ -73,7 +73,7 @@ Done!
  (  -0.50000) t1(J,x,y,z) t1(K,y,A,B) cre(z) des(x) 
 
 Total terms : 22
-SQA automation time :  31.482 seconds
+SQA automation time :  30.030 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -81,18 +81,9 @@ SQA automation time :  31.482 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -159,7 +150,7 @@ Done!
 
 Total spin-integrated terms: 22
 Total spin-adapted terms: 24
-Spin-adaptation automation time :  0.505 seconds
+Spin-adaptation automation time :  0.404 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -202,4 +193,4 @@ T_e_cce += 1/4 * einsum('xyAB,JKzx,yz->AJKB', t1_aaee, t1_xxaa, rdm_ca, optimize
 T_e_cce += 1/4 * einsum('xyzA,KJxB,zy->AJKB', t1_aaae, t1_xxae, rdm_ca, optimize = einsum_type)
 T_e_cce -= 1/2 * einsum('xyzA,KJyB,zx->AJKB', t1_aaae, t1_xxae, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 204.30 seconds.
+> Total elapsed time: 185.89 seconds.

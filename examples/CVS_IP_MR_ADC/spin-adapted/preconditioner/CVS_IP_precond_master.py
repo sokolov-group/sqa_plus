@@ -160,6 +160,7 @@ elif diagonal_indices_string in ['c_caa']:
         term_right = sqa_plus.term(1.0, [], [sqa_plus.creOp(i_beta), sqa_plus.creOp(x_alpha), sqa_plus.desOp(y_beta)])
 
     final_indices_string = 'IXY'
+    diagonal_indices_string = diagonal_indices_string + '__' + spin_indices_string
     diagonal_pairs_dict = {'K': 'I'}
 
 elif diagonal_indices_string in ['caa']:
@@ -184,6 +185,7 @@ elif diagonal_indices_string in ['caa']:
         term_right = sqa_plus.term(1.0, [], [sqa_plus.creOp(i_alpha), sqa_plus.creOp(x_alpha), sqa_plus.desOp(y_alpha)])
 
     final_indices_string = 'IWZXY'
+    diagonal_indices_string = diagonal_indices_string + '__' + spin_indices_string
     diagonal_pairs_dict = {'K': 'I'}
 
 # Spin-Integrated H_eff

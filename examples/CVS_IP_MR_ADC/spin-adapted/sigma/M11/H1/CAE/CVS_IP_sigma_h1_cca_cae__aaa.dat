@@ -68,12 +68,7 @@ Done!
  (   1.00000) X_abb(L,x,b) v(K,b,z,w) cre(W) cre(x) des(z) des(w) 
 
 Total terms : 8
-SQA automation time :  327.838 seconds
-----------------------------------------------------------------------------------------------------
-
------------------------ Converting Sigma vector to spin-adapted formulation ------------------------
-
-----------------------------------------------------------------------------------------------------
+SQA automation time :  311.682 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -81,18 +76,9 @@ SQA automation time :  327.838 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -101,6 +87,10 @@ Converting 2e- integrals to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
@@ -149,7 +139,7 @@ Done!
 
 Total spin-integrated terms: 8
 Total spin-adapted terms: 14
-Spin-adaptation automation time :  0.081 seconds
+Spin-adaptation automation time :  0.073 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -182,24 +172,4 @@ sigma_cca += 1/2 * einsum('Lxa,KWay,xy->KLW', X_abb, v_xaea, rdm_ca, optimize = 
 sigma_cca -= 1/6 * einsum('Lxa,Kyaz,Wxzy->KLW', X_abb, v_xaea, rdm_ccaa, optimize = einsum_type)
 sigma_cca -= 1/3 * einsum('Lxa,Kyaz,Wxyz->KLW', X_abb, v_xaea, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-
--------------------------------- genEinsum equations --------------------------------
-
-sigma_cca =- 1/2 * einsum('Kxa,LWay,xy->KLW', X_aaa, v_xaea, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Kxa,LyaW,xy->KLW', X_aaa, v_xaea, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/6 * einsum('Kxa,Lyaz,Wxzy->KLW', X_aaa, v_xaea, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/6 * einsum('Kxa,Lyaz,Wxyz->KLW', X_aaa, v_xaea, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Lxa,KWay,xy->KLW', X_aaa, v_xaea, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Lxa,KyaW,xy->KLW', X_aaa, v_xaea, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/6 * einsum('Lxa,Kyaz,Wxzy->KLW', X_aaa, v_xaea, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/6 * einsum('Lxa,Kyaz,Wxyz->KLW', X_aaa, v_xaea, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/2 * einsum('Kxa,LWay,xy->KLW', X_abb, v_xaea, rdm_ca, optimize = einsum_type)
-sigma_cca += 1/6 * einsum('Kxa,Lyaz,Wxzy->KLW', X_abb, v_xaea, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/3 * einsum('Kxa,Lyaz,Wxyz->KLW', X_abb, v_xaea, rdm_ccaa, optimize = einsum_type)
-sigma_cca += 1/2 * einsum('Lxa,KWay,xy->KLW', X_abb, v_xaea, rdm_ca, optimize = einsum_type)
-sigma_cca -= 1/6 * einsum('Lxa,Kyaz,Wxzy->KLW', X_abb, v_xaea, rdm_ccaa, optimize = einsum_type)
-sigma_cca -= 1/3 * einsum('Lxa,Kyaz,Wxyz->KLW', X_abb, v_xaea, rdm_ccaa, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 634.59 seconds.
+> Total elapsed time: 591.49 seconds.

@@ -51,7 +51,7 @@ Done!
 
 
 Total terms : 0
-SQA automation time :  0.156 seconds
+SQA automation time :  0.141 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -59,18 +59,9 @@ SQA automation time :  0.156 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -132,4 +123,4 @@ Remaining terms: 0
 --------------------------------------- genEinsum equations ----------------------------------------
 
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.28 seconds.
+> Total elapsed time: 0.26 seconds.

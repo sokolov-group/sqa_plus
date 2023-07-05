@@ -20,8 +20,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 ## Right operator terms:
  (   0.50000) X_aaa(i,j,a) cre(i) cre(j) des(a) 
- (   0.50000) X_abb(i,j,a) cre(i) cre(j) des(a) 
- (   0.50000) X_bab(i,j,a) cre(i) cre(j) des(a) 
+ (   1.00000) X_abb(i,j,a) cre(i) cre(j) des(a) 
 
 ## Left operator terms:
  (   1.00000) cre(B) des(L) des(K) 
@@ -61,10 +60,8 @@ Done!
  (   1.00000) X_aaa(K,k,b) v(k,B,L,b) 
  (  -1.00000) X_aaa(L,k,b) v(k,B,K,b) 
  (  -0.50000) X_aaa(i,j,B) v(K,L,i,j) 
- (   0.50000) X_abb(K,k,b) v(k,B,L,b) 
- (  -0.50000) X_abb(L,k,b) v(k,B,K,b) 
- (  -0.50000) X_bab(k,K,b) v(k,B,L,b) 
- (   0.50000) X_bab(k,L,b) v(k,B,K,b) 
+ (   1.00000) X_abb(K,k,b) v(k,B,L,b) 
+ (  -1.00000) X_abb(L,k,b) v(k,B,K,b) 
  (   1.00000) X_aaa(K,L,b) v(z,B,w,b) rdm(z,w) 
  (   1.00000) X_aaa(K,L,b) v(z,B,w,b) rdm(z,w) 
  (  -1.00000) X_aaa(K,j,B) v(j,z,L,w) rdm(z,w) 
@@ -78,13 +75,8 @@ Done!
  (  -1.00000) X_aaa(L,j,B) v(j,z,K,w) cre(w) des(z) 
  (  -1.00000) X_aaa(L,j,B) v(j,z,K,w) cre(w) des(z) 
 
-Total terms : 19
-SQA automation time :  58.567 seconds
-----------------------------------------------------------------------------------------------------
-
------------------------ Converting Sigma vector to spin-adapted formulation ------------------------
-
-----------------------------------------------------------------------------------------------------
+Total terms : 17
+SQA automation time :  37.458 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -92,18 +84,9 @@ SQA automation time :  58.567 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -112,6 +95,10 @@ Converting 2e- integrals to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
@@ -123,7 +110,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 28 spin-adapted terms...
+Combining 26 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -149,14 +136,12 @@ Done!
  (  -1.00000) X_aaa(L,k,b) v(k,K,B,b) 
  (  -0.50000) X_aaa(i,j,B) v(K,i,L,j) 
  (   0.50000) X_aaa(i,j,B) v(K,j,L,i) 
- (  -0.50000) X_abb(K,k,b) v(L,B,b,k) 
- (   0.50000) X_abb(L,k,b) v(K,B,b,k) 
- (   0.50000) X_bab(k,K,b) v(L,B,b,k) 
- (  -0.50000) X_bab(k,L,b) v(K,B,b,k) 
+ (  -1.00000) X_abb(K,k,b) v(L,B,b,k) 
+ (   1.00000) X_abb(L,k,b) v(K,B,b,k) 
 
-Total spin-integrated terms: 19
-Total spin-adapted terms: 10
-Spin-adaptation automation time :  0.055 seconds
+Total spin-integrated terms: 17
+Total spin-adapted terms: 8
+Spin-adaptation automation time :  0.046 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -169,7 +154,7 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 10
+Remaining terms: 8
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
@@ -180,25 +165,7 @@ sigma_cce += einsum('Lia,KBai->KLB', X_aaa, v_xeex, optimize = einsum_type)
 sigma_cce -= einsum('Lia,iKBa->KLB', X_aaa, v_xxee, optimize = einsum_type)
 sigma_cce -= 1/2 * einsum('ijB,KiLj->KLB', X_aaa, v_xxxx, optimize = einsum_type)
 sigma_cce += 1/2 * einsum('ijB,KjLi->KLB', X_aaa, v_xxxx, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('Kia,LBai->KLB', X_abb, v_xeex, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Lia,KBai->KLB', X_abb, v_xeex, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('iKa,LBai->KLB', X_bab, v_xeex, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('iLa,KBai->KLB', X_bab, v_xeex, optimize = einsum_type)
+sigma_cce -= einsum('Kia,LBai->KLB', X_abb, v_xeex, optimize = einsum_type)
+sigma_cce += einsum('Lia,KBai->KLB', X_abb, v_xeex, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-
--------------------------------- genEinsum equations --------------------------------
-
-sigma_cce =- einsum('Kia,LBai->KLB', X_aaa, v_xeex, optimize = einsum_type)
-sigma_cce += einsum('Kia,iLBa->KLB', X_aaa, v_xxee, optimize = einsum_type)
-sigma_cce += einsum('Lia,KBai->KLB', X_aaa, v_xeex, optimize = einsum_type)
-sigma_cce -= einsum('Lia,iKBa->KLB', X_aaa, v_xxee, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('ijB,KiLj->KLB', X_aaa, v_xxxx, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('ijB,KjLi->KLB', X_aaa, v_xxxx, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('Kia,LBai->KLB', X_abb, v_xeex, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Lia,KBai->KLB', X_abb, v_xeex, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('iKa,LBai->KLB', X_bab, v_xeex, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('iLa,KBai->KLB', X_bab, v_xeex, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 381.13 seconds.
+> Total elapsed time: 290.22 seconds.

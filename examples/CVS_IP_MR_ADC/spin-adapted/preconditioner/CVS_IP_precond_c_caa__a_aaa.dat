@@ -22,12 +22,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 Done ...
 ----------------------------------------------------------------------------------------------------
-
------------------------------------------ Hamiltonian (1) ------------------------------------------
-
-Commutation: Done ...
-Done ...
-----------------------------------------------------------------------------------------------------
 ## Calculating the commutator [H(0), a_S^\dag a_T^\dag a_U] ...
 
 ## Calculating a_P^\dag a_Q a_R [H(0), a_S^\dag a_T^\dag a_U] ...
@@ -55,7 +49,6 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) v(I,x,K,Y) cre(X) des(x) 
  (   1.00000) e(I) kdelta(I,K) cre(X) des(Y) 
  (   1.00000) h(X,x) kdelta(I,K) cre(x) des(Y) 
  (  -1.00000) h(Y,x) kdelta(I,K) cre(X) des(x) 
@@ -67,17 +60,13 @@ Done!
  (  -2.00000) kdelta(I,K) v(i,Y,i,x) cre(X) des(x) 
  (  -2.00000) kdelta(I,K) v(i,Y,i,x) cre(X) des(x) 
  (  -2.00000) kdelta(I,K) v(i,Y,i,x) cre(X) des(x) 
- (  -1.00000) v(I,x,K,y) rdm(x,y) cre(X) des(Y) 
- (  -1.00000) v(I,x,K,y) rdm(x,y) cre(X) des(Y) 
- (  -1.00000) v(I,x,K,y) cre(X) cre(y) des(Y) des(x) 
- (  -1.00000) v(I,x,K,y) cre(X) cre(y) des(Y) des(x) 
  (  -0.50000) kdelta(I,K) v(X,x,y,z) cre(y) cre(z) des(Y) des(x) 
  (  -1.00000) kdelta(I,K) v(X,x,y,z) cre(y) cre(z) des(Y) des(x) 
  (   0.50000) kdelta(I,K) v(Y,x,y,z) cre(X) cre(x) des(y) des(z) 
  (   1.00000) kdelta(I,K) v(Y,x,y,z) cre(X) cre(x) des(y) des(z) 
 
-Total terms : 20
-SQA automation time :  56.909 seconds
+Total terms : 15
+SQA automation time :  0.202 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -85,18 +74,9 @@ SQA automation time :  56.909 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -116,7 +96,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 38 spin-adapted terms...
+Combining 27 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -131,16 +111,11 @@ Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-18 spin-adapted terms combined.
+14 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (   0.50000) v(I,K,x,Y) rdm(X,x) 
- (   0.50000) v(I,K,x,y) rdm(X,y,Y,x) 
- (  -0.50000) v(I,Y,x,K) rdm(X,x) 
- (  -0.16667) v(I,x,y,K) rdm(X,x,Y,y) 
- (   0.16667) v(I,x,y,K) rdm(X,x,y,Y) 
  (   0.50000) e(I) kdelta(I,K) rdm(X,Y) 
  (   0.50000) h(X,x) kdelta(I,K) rdm(Y,x) 
  (  -0.50000) h(Y,x) kdelta(I,K) rdm(X,x) 
@@ -154,12 +129,10 @@ Done!
  (   1.00000) kdelta(I,K) v(i,Y,x,i) rdm(X,x) 
  (   2.00000) kdelta(I,K) v(i,i,X,x) rdm(Y,x) 
  (  -2.00000) kdelta(I,K) v(i,i,Y,x) rdm(X,x) 
- (  -0.50000) v(I,K,x,y) rdm(x,y) rdm(X,Y) 
- (   0.25000) v(I,x,y,K) rdm(y,x) rdm(X,Y) 
 
-Total spin-integrated terms: 20
-Total spin-adapted terms: 20
-Spin-adaptation automation time :  0.318 seconds
+Total spin-integrated terms: 15
+Total spin-adapted terms: 13
+Spin-adaptation automation time :  0.144 seconds
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- WARNING ----------------------------------------------
@@ -177,7 +150,7 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
  (   2.00000) kdelta(I,K) v(i,i,X,x) rdm(Y,x) 
  (  -2.00000) kdelta(I,K) v(i,i,Y,x) rdm(X,x) 
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 12
+Remaining terms: 5
 
 Contract delta function for non-dummy indices ...
 Done!
@@ -185,17 +158,10 @@ Done!
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-precond_c_caa  = 1/2 * einsum('IIxY,Xx->IXY', v_xxaa, rdm_ca, optimize = einsum_type)
-precond_c_caa += 1/2 * einsum('IIxy,XyYx->IXY', v_xxaa, rdm_ccaa, optimize = einsum_type)
-precond_c_caa -= 1/2 * einsum('IYxI,Xx->IXY', v_xaax, rdm_ca, optimize = einsum_type)
-precond_c_caa -= 1/6 * einsum('IxyI,XxYy->IXY', v_xaax, rdm_ccaa, optimize = einsum_type)
-precond_c_caa += 1/6 * einsum('IxyI,XxyY->IXY', v_xaax, rdm_ccaa, optimize = einsum_type)
-precond_c_caa += 1/2 * einsum('I,II,XY->IXY', e_cvs, np.identity(ncvs), rdm_ca, optimize = einsum_type)
-precond_c_caa += 1/2 * einsum('Xx,II,Yx->IXY', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
-precond_c_caa -= 1/2 * einsum('Yx,II,Xx->IXY', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
-precond_c_caa += 1/2 * einsum('II,Xxyz,Yyxz->IXY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
-precond_c_caa -= 1/2 * einsum('II,Yxyz,Xyxz->IXY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
-precond_c_caa -= 1/2 * einsum('IIxy,xy,XY->IXY', v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
-precond_c_caa += 1/4 * einsum('IxyI,yx,XY->IXY', v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
+precond_c_caa__a_aaa  = 1/2 * einsum('I,II,XY->IXY', e_cvs, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_c_caa__a_aaa += 1/2 * einsum('Xx,II,Yx->IXY', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_c_caa__a_aaa -= 1/2 * einsum('Yx,II,Xx->IXY', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_c_caa__a_aaa += 1/2 * einsum('II,Xxyz,Yyxz->IXY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_c_caa__a_aaa -= 1/2 * einsum('II,Yxyz,Xyxz->IXY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 349.12 seconds.
+> Total elapsed time: 0.50 seconds.

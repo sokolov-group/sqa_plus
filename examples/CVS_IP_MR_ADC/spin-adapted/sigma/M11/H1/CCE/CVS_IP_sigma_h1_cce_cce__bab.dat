@@ -20,8 +20,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 ## Right operator terms:
  (   0.50000) X_aaa(i,j,a) cre(i) cre(j) des(a) 
- (   0.50000) X_abb(i,j,a) cre(i) cre(j) des(a) 
- (   0.50000) X_bab(i,j,a) cre(i) cre(j) des(a) 
+ (   1.00000) X_abb(i,j,a) cre(i) cre(j) des(a) 
 
 ## Left operator terms:
  (   1.00000) cre(B) des(L) des(K) 
@@ -59,44 +58,24 @@ Done!
 ------------------------------------------ Final results -------------------------------------------
 
  (  -1.00000) X_aaa(L,k,b) v(k,B,K,b) 
- (  -0.50000) X_abb(L,k,b) v(k,B,K,b) 
- (  -0.50000) X_abb(k,K,b) v(k,B,L,b) 
- (  -0.50000) X_abb(i,j,B) v(K,L,i,j) 
- (   0.50000) X_bab(K,k,b) v(k,B,L,b) 
- (   0.50000) X_bab(k,L,b) v(k,B,K,b) 
- (  -0.50000) X_bab(i,j,B) v(K,L,i,j) 
- (  -0.50000) X_abb(L,K,b) v(z,B,w,b) rdm(z,w) 
- (  -0.50000) X_abb(L,K,b) v(z,B,w,b) rdm(z,w) 
- (   0.50000) X_abb(L,j,B) v(j,z,K,w) rdm(z,w) 
- (   0.50000) X_abb(L,j,B) v(j,z,K,w) rdm(z,w) 
- (   0.50000) X_abb(i,K,B) v(i,z,L,w) rdm(z,w) 
- (   0.50000) X_abb(i,K,B) v(i,z,L,w) rdm(z,w) 
- (   0.50000) X_bab(K,L,b) v(z,B,w,b) rdm(z,w) 
- (   0.50000) X_bab(K,L,b) v(z,B,w,b) rdm(z,w) 
- (  -0.50000) X_bab(K,j,B) v(j,z,L,w) rdm(z,w) 
- (  -0.50000) X_bab(K,j,B) v(j,z,L,w) rdm(z,w) 
- (  -0.50000) X_bab(i,L,B) v(i,z,K,w) rdm(z,w) 
- (  -0.50000) X_bab(i,L,B) v(i,z,K,w) rdm(z,w) 
- (   0.50000) X_abb(L,K,b) v(z,B,w,b) cre(w) des(z) 
- (   0.50000) X_abb(L,K,b) v(z,B,w,b) cre(w) des(z) 
- (  -0.50000) X_abb(L,j,B) v(j,z,K,w) cre(w) des(z) 
- (  -0.50000) X_abb(L,j,B) v(j,z,K,w) cre(w) des(z) 
- (  -0.50000) X_abb(i,K,B) v(i,z,L,w) cre(w) des(z) 
- (  -0.50000) X_abb(i,K,B) v(i,z,L,w) cre(w) des(z) 
- (  -0.50000) X_bab(K,L,b) v(z,B,w,b) cre(w) des(z) 
- (  -0.50000) X_bab(K,L,b) v(z,B,w,b) cre(w) des(z) 
- (   0.50000) X_bab(K,j,B) v(j,z,L,w) cre(w) des(z) 
- (   0.50000) X_bab(K,j,B) v(j,z,L,w) cre(w) des(z) 
- (   0.50000) X_bab(i,L,B) v(i,z,K,w) cre(w) des(z) 
- (   0.50000) X_bab(i,L,B) v(i,z,K,w) cre(w) des(z) 
+ (  -1.00000) X_abb(L,k,b) v(k,B,K,b) 
+ (  -1.00000) X_abb(k,K,b) v(k,B,L,b) 
+ (  -1.00000) X_abb(i,j,B) v(K,L,i,j) 
+ (  -1.00000) X_abb(L,K,b) v(z,B,w,b) rdm(z,w) 
+ (  -1.00000) X_abb(L,K,b) v(z,B,w,b) rdm(z,w) 
+ (   1.00000) X_abb(L,j,B) v(j,z,K,w) rdm(z,w) 
+ (   1.00000) X_abb(L,j,B) v(j,z,K,w) rdm(z,w) 
+ (   1.00000) X_abb(i,K,B) v(i,z,L,w) rdm(z,w) 
+ (   1.00000) X_abb(i,K,B) v(i,z,L,w) rdm(z,w) 
+ (   1.00000) X_abb(L,K,b) v(z,B,w,b) cre(w) des(z) 
+ (   1.00000) X_abb(L,K,b) v(z,B,w,b) cre(w) des(z) 
+ (  -1.00000) X_abb(L,j,B) v(j,z,K,w) cre(w) des(z) 
+ (  -1.00000) X_abb(L,j,B) v(j,z,K,w) cre(w) des(z) 
+ (  -1.00000) X_abb(i,K,B) v(i,z,L,w) cre(w) des(z) 
+ (  -1.00000) X_abb(i,K,B) v(i,z,L,w) cre(w) des(z) 
 
-Total terms : 31
-SQA automation time :  59.465 seconds
-----------------------------------------------------------------------------------------------------
-
------------------------ Converting Sigma vector to spin-adapted formulation ------------------------
-
-----------------------------------------------------------------------------------------------------
+Total terms : 16
+SQA automation time :  40.125 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -104,18 +83,9 @@ SQA automation time :  59.465 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -124,6 +94,10 @@ Converting 2e- integrals to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
@@ -135,7 +109,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 45 spin-adapted terms...
+Combining 23 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -150,24 +124,20 @@ Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-36 spin-adapted terms combined.
+18 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
  (   1.00000) X_aaa(L,k,b) v(K,B,b,k) 
- (   0.50000) X_abb(L,k,b) v(K,B,b,k) 
- (  -0.50000) X_abb(L,k,b) v(k,K,B,b) 
- (   0.50000) X_abb(i,j,B) v(K,j,L,i) 
- (  -0.50000) X_abb(k,K,b) v(k,L,B,b) 
- (   0.50000) X_bab(K,k,b) v(k,L,B,b) 
- (  -0.50000) X_bab(i,j,B) v(K,i,L,j) 
- (  -0.50000) X_bab(k,L,b) v(K,B,b,k) 
- (   0.50000) X_bab(k,L,b) v(k,K,B,b) 
+ (   1.00000) X_abb(L,k,b) v(K,B,b,k) 
+ (  -1.00000) X_abb(L,k,b) v(k,K,B,b) 
+ (   1.00000) X_abb(i,j,B) v(K,j,L,i) 
+ (  -1.00000) X_abb(k,K,b) v(k,L,B,b) 
 
-Total spin-integrated terms: 31
-Total spin-adapted terms: 9
-Spin-adaptation automation time :  0.095 seconds
+Total spin-integrated terms: 16
+Total spin-adapted terms: 5
+Spin-adaptation automation time :  0.047 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -180,34 +150,15 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 9
+Remaining terms: 5
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
 sigma_cce  = einsum('Lia,KBai->KLB', X_aaa, v_xeex, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Lia,KBai->KLB', X_abb, v_xeex, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('Lia,iKBa->KLB', X_abb, v_xxee, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('ijB,KjLi->KLB', X_abb, v_xxxx, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('iKa,iLBa->KLB', X_abb, v_xxee, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Kia,iLBa->KLB', X_bab, v_xxee, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('ijB,KiLj->KLB', X_bab, v_xxxx, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('iLa,KBai->KLB', X_bab, v_xeex, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('iLa,iKBa->KLB', X_bab, v_xxee, optimize = einsum_type)
+sigma_cce += einsum('Lia,KBai->KLB', X_abb, v_xeex, optimize = einsum_type)
+sigma_cce -= einsum('Lia,iKBa->KLB', X_abb, v_xxee, optimize = einsum_type)
+sigma_cce += einsum('ijB,KjLi->KLB', X_abb, v_xxxx, optimize = einsum_type)
+sigma_cce -= einsum('iKa,iLBa->KLB', X_abb, v_xxee, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-
--------------------------------- genEinsum equations --------------------------------
-
-sigma_cce  = einsum('Lia,KBai->KLB', X_aaa, v_xeex, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Lia,KBai->KLB', X_abb, v_xeex, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('Lia,iKBa->KLB', X_abb, v_xxee, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('ijB,KjLi->KLB', X_abb, v_xxxx, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('iKa,iLBa->KLB', X_abb, v_xxee, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Kia,iLBa->KLB', X_bab, v_xxee, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('ijB,KiLj->KLB', X_bab, v_xxxx, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('iLa,KBai->KLB', X_bab, v_xeex, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('iLa,iKBa->KLB', X_bab, v_xxee, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 383.07 seconds.
+> Total elapsed time: 298.55 seconds.

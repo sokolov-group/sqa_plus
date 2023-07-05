@@ -110,12 +110,7 @@ Done!
  (  -1.00000) X_bab(K,L,z) t1(w,u,B,v) v(z,s,w,t) cre(u) cre(s) des(v) des(t) 
 
 Total terms : 50
-SQA automation time :  169.522 seconds
-----------------------------------------------------------------------------------------------------
-
------------------------ Converting Sigma vector to spin-adapted formulation ------------------------
-
-----------------------------------------------------------------------------------------------------
+SQA automation time :  184.143 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -123,18 +118,9 @@ SQA automation time :  169.522 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -143,6 +129,10 @@ Converting 2e- integrals to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
@@ -223,7 +213,7 @@ Done!
 
 Total spin-integrated terms: 50
 Total spin-adapted terms: 46
-Spin-adaptation automation time :  2.132 seconds
+Spin-adaptation automation time :  2.027 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -288,44 +278,4 @@ sigma_cve += einsum('KLx,yxzB,ywuv,zuwv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa,
 sigma_cve += 1/2 * einsum('KLx,xyzB,zwuv,yuwv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
 sigma_cve -= 1/2 * einsum('KLx,xyzB,ywuv,zuwv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-
--------------------------------- genEinsum equations --------------------------------
-
-sigma_cve =- einsum('iLx,ixBK->KLB', X_aaa, v_xaex, optimize = einsum_type)
-sigma_cve -= einsum('KLx,xB->KLB', X_bab, h_ae, optimize = einsum_type)
-sigma_cve += einsum('Kix,LixB->KLB', X_bab, v_vvae, optimize = einsum_type)
-sigma_cve += einsum('iLx,KixB->KLB', X_bab, v_xxae, optimize = einsum_type)
-sigma_cve -= einsum('iLx,ixBK->KLB', X_bab, v_xaex, optimize = einsum_type)
-sigma_cve += 1/2 * einsum('iLx,iyBK,xy->KLB', X_aaa, v_xaex, rdm_ca, optimize = einsum_type)
-sigma_cve -= einsum('KLx,B,xB->KLB', X_bab, e_extern, t1_ae, optimize = einsum_type)
-sigma_cve += einsum('KLx,xy,yB->KLB', X_bab, h_aa, t1_ae, optimize = einsum_type)
-sigma_cve -= einsum('KLx,yzxB,zy->KLB', X_bab, v_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve += 1/2 * einsum('KLx,xyzB,yz->KLB', X_bab, v_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('Kix,LiyB,xy->KLB', X_bab, v_vvae, rdm_ca, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('iLx,KiyB,xy->KLB', X_bab, v_xxae, rdm_ca, optimize = einsum_type)
-sigma_cve += 1/2 * einsum('iLx,iyBK,xy->KLB', X_bab, v_xaex, rdm_ca, optimize = einsum_type)
-sigma_cve -= einsum('KLx,B,yxzB,zy->KLB', X_bab, e_extern, t1_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve += 1/2 * einsum('KLx,B,xyzB,zy->KLB', X_bab, e_extern, t1_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve -= einsum('KLx,yz,wxyB,zw->KLB', X_bab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve += einsum('KLx,yz,yxwB,zw->KLB', X_bab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve += 1/2 * einsum('KLx,yz,xwyB,zw->KLB', X_bab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('KLx,yz,xywB,zw->KLB', X_bab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve += einsum('KLx,xy,zywB,wz->KLB', X_bab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('KLx,xy,yzwB,wz->KLB', X_bab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('KLx,yB,xzwy,wz->KLB', X_bab, t1_ae, v_aaaa, rdm_ca, optimize = einsum_type)
-sigma_cve += einsum('KLx,yB,xyzw,zw->KLB', X_bab, t1_ae, v_aaaa, rdm_ca, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('KLx,yzwB,xuvz,wuyv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('KLx,yzwB,xuvy,wuvz->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_cve += 1/2 * einsum('KLx,yzwB,xuwv,zyuv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_cve += einsum('KLx,yzwB,xzuv,wvyu->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_cve += einsum('KLx,yzwB,xzuy,wu->KLB', X_bab, t1_aaae, v_aaaa, rdm_ca, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('KLx,yzwB,xyuv,wvzu->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('KLx,yzwB,xyuz,wu->KLB', X_bab, t1_aaae, v_aaaa, rdm_ca, optimize = einsum_type)
-sigma_cve -= einsum('KLx,yxzB,zwuv,yuwv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_cve += einsum('KLx,yxzB,ywuv,zuwv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_cve += 1/2 * einsum('KLx,xyzB,zwuv,yuwv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_cve -= 1/2 * einsum('KLx,xyzB,ywuv,zuwv->KLB', X_bab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 478.09 seconds.
+> Total elapsed time: 498.02 seconds.
