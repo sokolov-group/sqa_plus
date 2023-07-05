@@ -47,7 +47,7 @@ Done!
  (   1.00000) kdelta(I,J) 
 
 Total terms : 1
-SQA automation time :  0.003 seconds
+SQA automation time :  0.001 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -55,18 +55,9 @@ SQA automation time :  0.003 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -110,7 +101,7 @@ Done!
 
 Total spin-integrated terms: 1
 Total spin-adapted terms: 1
-Spin-adaptation automation time :  0.002 seconds
+Spin-adaptation automation time :  0.001 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -130,4 +121,4 @@ Remaining terms: 1
 
 T_c_c  = einsum('IJ->IJ', np.identity(ncvs), optimize = einsum_type).copy()
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.01 seconds.
+> Total elapsed time: 0.00 seconds.
