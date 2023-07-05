@@ -1,6 +1,3 @@
 sigma_cae =- 1/6 * einsum('Kix,iyBz,Zxzy->KZB', X_bab, v_vaea, rdm_ccaa, optimize = einsum_type)
 sigma_cae -= 1/3 * einsum('Kix,iyBz,Zxyz->KZB', X_bab, v_vaea, rdm_ccaa, optimize = einsum_type)
 sigma_cae += 1/2 * einsum('Kix,iyBx,Zy->KZB', X_bab, v_vaea, rdm_ca, optimize = einsum_type)
-sigma_cae =- 1/6 * einsum('Kix,iyBz,Zxzy->KZB', X_bab, v_vaea, rdm_ccaa, optimize = einsum_type)
-sigma_cae -= 1/3 * einsum('Kix,iyBz,Zxyz->KZB', X_bab, v_vaea, rdm_ccaa, optimize = einsum_type)
-sigma_cae += 1/2 * einsum('Kix,iyBx,Zy->KZB', X_bab, v_vaea, rdm_ca, optimize = einsum_type)

@@ -66,12 +66,7 @@ Done!
  (   1.00000) X_bab(L,j,x) v(K,z,j,B) cre(z) des(x) 
 
 Total terms : 6
-SQA automation time :  167.868 seconds
-----------------------------------------------------------------------------------------------------
-
------------------------ Converting Sigma vector to spin-adapted formulation ------------------------
-
-----------------------------------------------------------------------------------------------------
+SQA automation time :  175.649 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -79,18 +74,9 @@ SQA automation time :  167.868 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -99,6 +85,10 @@ Converting 2e- integrals to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
@@ -141,7 +131,7 @@ Done!
 
 Total spin-integrated terms: 6
 Total spin-adapted terms: 8
-Spin-adaptation automation time :  0.028 seconds
+Spin-adaptation automation time :  0.025 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -168,18 +158,4 @@ sigma_cce -= 1/2 * einsum('Kix,LiyB,xy->KLB', X_abb, v_xvae, rdm_ca, optimize = 
 sigma_cce += 1/2 * einsum('Kix,iyBL,xy->KLB', X_abb, v_vaex, rdm_ca, optimize = einsum_type)
 sigma_cce += 1/2 * einsum('Lix,KiyB,xy->KLB', X_bab, v_xvae, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-
--------------------------------- genEinsum equations --------------------------------
-
-sigma_cce =- einsum('Kix,ixBL->KLB', X_aaa, v_vaex, optimize = einsum_type)
-sigma_cce += einsum('Kix,LixB->KLB', X_abb, v_xvae, optimize = einsum_type)
-sigma_cce -= einsum('Kix,ixBL->KLB', X_abb, v_vaex, optimize = einsum_type)
-sigma_cce -= einsum('Lix,KixB->KLB', X_bab, v_xvae, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Kix,iyBL,xy->KLB', X_aaa, v_vaex, rdm_ca, optimize = einsum_type)
-sigma_cce -= 1/2 * einsum('Kix,LiyB,xy->KLB', X_abb, v_xvae, rdm_ca, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Kix,iyBL,xy->KLB', X_abb, v_vaex, rdm_ca, optimize = einsum_type)
-sigma_cce += 1/2 * einsum('Lix,KiyB,xy->KLB', X_bab, v_xvae, rdm_ca, optimize = einsum_type)
-
--------------------------------------------------------------------------------------
-
-> Total elapsed time: 474.35 seconds.
+> Total elapsed time: 474.64 seconds.

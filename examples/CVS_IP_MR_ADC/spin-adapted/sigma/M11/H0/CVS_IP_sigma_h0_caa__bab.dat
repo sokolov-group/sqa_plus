@@ -82,12 +82,7 @@ Done!
  (  -1.00000) X_bab(K,x,y) v(x,z,w,u) cre(Z) cre(w) cre(u) des(W) des(y) des(z) 
 
 Total terms : 23
-SQA automation time :  0.640 seconds
-----------------------------------------------------------------------------------------------------
-
------------------------ Converting Sigma vector to spin-adapted formulation ------------------------
-
-----------------------------------------------------------------------------------------------------
+SQA automation time :  0.576 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -95,18 +90,9 @@ SQA automation time :  0.640 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -115,6 +101,10 @@ Converting 2e- integrals to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
 Done!
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
@@ -141,7 +131,7 @@ Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-26 spin-adapted terms combined.
+28 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
@@ -170,25 +160,23 @@ Done!
  (  -1.33333) X_bab(K,x,y) v(k,k,x,z) rdm(W,y,z,Z) 
  (   0.33333) X_bab(K,x,y) v(k,x,z,k) rdm(W,y,Z,z) 
  (   0.66667) X_bab(K,x,y) v(k,x,z,k) rdm(W,y,z,Z) 
- (   0.12500) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,Z,u,z) 
- (  -0.04167) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,Z,z,u) 
- (   0.12500) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,u,Z,z) 
- (   0.12500) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,u,z,Z) 
- (  -0.20833) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,z,Z,u) 
- (   0.12500) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,z,u,Z) 
+ (   0.16667) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,Z,u,z) 
+ (   0.16667) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,u,Z,z) 
+ (   0.16667) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,u,z,Z) 
+ (  -0.16667) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,z,Z,u) 
+ (   0.16667) X_bab(K,x,y) v(x,z,w,u) rdm(W,y,w,z,u,Z) 
  (   0.16667) X_bab(K,x,z) v(Z,w,u,z) rdm(W,u,w,x) 
  (   0.33333) X_bab(K,x,z) v(Z,w,u,z) rdm(W,u,x,w) 
  (  -0.50000) X_bab(K,x,z) v(Z,z,w,u) rdm(W,w,x,u) 
- (  -0.04167) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,Z,u,x) 
- (   0.12500) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,Z,x,u) 
- (  -0.04167) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,u,Z,x) 
- (  -0.04167) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,u,x,Z) 
- (   0.29167) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,x,Z,u) 
- (  -0.04167) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,x,u,Z) 
+ (  -0.16667) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,Z,u,x) 
+ (  -0.16667) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,u,Z,x) 
+ (  -0.16667) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,u,x,Z) 
+ (   0.16667) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,x,Z,u) 
+ (  -0.16667) X_bab(K,x,z) v(z,w,u,v) rdm(W,w,v,x,u,Z) 
 
 Total spin-integrated terms: 23
-Total spin-adapted terms: 39
-Spin-adaptation automation time :  0.917 seconds
+Total spin-adapted terms: 37
+Spin-adaptation automation time :  3.005 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -213,7 +201,7 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
  (   0.33333) X_bab(K,x,y) v(i,x,z,i) rdm(W,y,Z,z) 
  (   0.66667) X_bab(K,x,y) v(i,x,z,i) rdm(W,y,z,Z) 
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 27
+Remaining terms: 25
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
@@ -230,20 +218,18 @@ sigma_caa += 1/3 * einsum('Kxy,yz,WzxZ->KWZ', X_bab, h_aa, rdm_ccaa, optimize = 
 sigma_caa += 1/2 * einsum('KxZ,xyzw,Wzyw->KWZ', X_bab, v_aaaa, rdm_ccaa, optimize = einsum_type)
 sigma_caa -= 1/3 * einsum('Kxy,Zzxw,Wywz->KWZ', X_bab, v_aaaa, rdm_ccaa, optimize = einsum_type)
 sigma_caa -= 1/6 * einsum('Kxy,Zzxw,Wyzw->KWZ', X_bab, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_caa += 1/8 * einsum('Kxy,xzwu,WywZuz->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa -= 1/24 * einsum('Kxy,xzwu,WywZzu->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa += 1/8 * einsum('Kxy,xzwu,WywuZz->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa += 1/8 * einsum('Kxy,xzwu,WywuzZ->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa -= 5/24 * einsum('Kxy,xzwu,WywzZu->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa += 1/8 * einsum('Kxy,xzwu,WywzuZ->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa += 1/6 * einsum('Kxy,xzwu,WywZuz->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa += 1/6 * einsum('Kxy,xzwu,WywuZz->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa += 1/6 * einsum('Kxy,xzwu,WywuzZ->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa -= 1/6 * einsum('Kxy,xzwu,WywzZu->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa += 1/6 * einsum('Kxy,xzwu,WywzuZ->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
 sigma_caa += 1/6 * einsum('Kxy,Zzwy,Wwzx->KWZ', X_bab, v_aaaa, rdm_ccaa, optimize = einsum_type)
 sigma_caa += 1/3 * einsum('Kxy,Zzwy,Wwxz->KWZ', X_bab, v_aaaa, rdm_ccaa, optimize = einsum_type)
 sigma_caa -= 1/2 * einsum('Kxy,Zyzw,Wzxw->KWZ', X_bab, v_aaaa, rdm_ccaa, optimize = einsum_type)
-sigma_caa -= 1/24 * einsum('Kxy,yzwu,WzuZwx->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa += 1/8 * einsum('Kxy,yzwu,WzuZxw->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa -= 1/24 * einsum('Kxy,yzwu,WzuwZx->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa -= 1/24 * einsum('Kxy,yzwu,WzuwxZ->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa += 7/24 * einsum('Kxy,yzwu,WzuxZw->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
-sigma_caa -= 1/24 * einsum('Kxy,yzwu,WzuxwZ->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa -= 1/6 * einsum('Kxy,yzwu,WzuZwx->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa -= 1/6 * einsum('Kxy,yzwu,WzuwZx->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa -= 1/6 * einsum('Kxy,yzwu,WzuwxZ->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa += 1/6 * einsum('Kxy,yzwu,WzuxZw->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_caa -= 1/6 * einsum('Kxy,yzwu,WzuxwZ->KWZ', X_bab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 2.07 seconds.
+> Total elapsed time: 4.07 seconds.
