@@ -120,7 +120,7 @@ Done!
  (  -0.25000) t1(i,z,y,x) v(i,w,u,v) cre(y) cre(x) cre(w) des(z) des(u) des(v) 
 
 Total terms : 66
-SQA automation time :  17.171 seconds
+SQA automation time :  11.567 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -128,18 +128,9 @@ SQA automation time :  17.171 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -192,18 +183,18 @@ Done!
  (   2.00000) t1(i,x) v(i,x,w,u) rdm(u,w) 
  (  -2.00000) t1(i,x) v(k,k,i,w) rdm(x,w) 
  (   1.00000) t1(i,z,x,y) v(i,k,k,y) rdm(x,z) 
- (  -0.75000) t1(i,z,x,y) v(i,w,u,v) rdm(z,w,v,y,x,u) 
+ (   0.33333) t1(i,z,x,y) v(i,w,u,v) rdm(z,w,v,x,y,u) 
+ (  -0.66667) t1(i,z,x,y) v(i,w,u,v) rdm(z,w,v,y,x,u) 
  (  -1.00000) t1(i,z,x,y) v(i,w,u,y) rdm(x,u,w,z) 
  (  -1.00000) t1(i,z,x,y) v(i,y,w,u) rdm(x,w,z,u) 
  (  -2.00000) t1(i,z,x,y) v(k,k,i,w) rdm(z,w,y,x) 
  (  -2.00000) t1(i,z,x,y) v(k,k,i,y) rdm(x,z) 
  (   1.00000) t1(i,z,y,x) v(i,k,k,w) rdm(z,w,x,y) 
  (  -2.00000) t1(i,z,y,x) v(i,k,k,y) rdm(x,z) 
- (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,u,x,y) 
- (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,u,y,x) 
- (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,x,u,y) 
- (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,y,u,x) 
- (   0.25000) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,y,x,u) 
+ (   0.33333) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,u,x,y) 
+ (   0.33333) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,u,y,x) 
+ (   0.33333) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,x,u,y) 
+ (   0.33333) t1(i,z,y,x) v(i,w,u,v) rdm(z,w,v,y,u,x) 
  (  -1.00000) t1(i,z,y,x) v(i,w,u,y) rdm(x,u,z,w) 
  (  -1.00000) t1(i,z,y,x) v(i,x,w,y) rdm(z,w) 
  (   2.00000) t1(i,z,y,x) v(i,y,w,u) rdm(x,w,z,u) 
@@ -212,7 +203,7 @@ Done!
 
 Total spin-integrated terms: 66
 Total spin-adapted terms: 30
-Spin-adaptation automation time :  14.998 seconds
+Spin-adaptation automation time :  15.960 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -248,17 +239,17 @@ e_p1p += 2 * einsum('ix,iyxz,zy', h_ca, t1_caaa, rdm_ca, optimize = einsum_type)
 e_p1p -= einsum('ix,iyzw,xzyw', t1_ca, v_caaa, rdm_ccaa, optimize = einsum_type)
 e_p1p -= einsum('ix,iyzx,yz', t1_ca, v_caaa, rdm_ca, optimize = einsum_type)
 e_p1p += 2 * einsum('ix,ixyz,zy', t1_ca, v_caaa, rdm_ca, optimize = einsum_type)
-e_p1p -= 3/4 * einsum('ixyz,iwuv,xwvzyu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/3 * einsum('ixyz,iwuv,xwvyzu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p -= 2/3 * einsum('ixyz,iwuv,xwvzyu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
 e_p1p -= einsum('ixyz,iwuz,yuwx', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
 e_p1p -= einsum('ixyz,izwu,ywxu', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
-e_p1p += 1/4 * einsum('ixyz,iwuv,xwvuzy', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p += 1/4 * einsum('ixyz,iwuv,xwvuyz', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p += 1/4 * einsum('ixyz,iwuv,xwvzuy', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p += 1/4 * einsum('ixyz,iwuv,xwvyuz', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
-e_p1p += 1/4 * einsum('ixyz,iwuv,xwvyzu', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/3 * einsum('ixyz,iwuv,xwvuzy', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/3 * einsum('ixyz,iwuv,xwvuyz', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/3 * einsum('ixyz,iwuv,xwvzuy', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
+e_p1p += 1/3 * einsum('ixyz,iwuv,xwvyuz', t1_caaa, v_caaa, rdm_cccaaa, optimize = einsum_type)
 e_p1p -= einsum('ixyz,iwuy,zuxw', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
 e_p1p -= einsum('ixyz,izwy,xw', t1_caaa, v_caaa, rdm_ca, optimize = einsum_type)
 e_p1p += 2 * einsum('ixyz,iywu,zwxu', t1_caaa, v_caaa, rdm_ccaa, optimize = einsum_type)
 e_p1p += 2 * einsum('ixyz,iywz,xw', t1_caaa, v_caaa, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 32.47 seconds.
+> Total elapsed time: 27.71 seconds.

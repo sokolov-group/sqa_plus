@@ -46,7 +46,7 @@ Done!
  (  -1.00000) cre(Y) cre(Z) des(W) des(X) 
 
 Total terms : 2
-SQA automation time :  0.003 seconds
+SQA automation time :  0.001 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -54,18 +54,9 @@ SQA automation time :  0.003 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -75,6 +66,9 @@ Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
 Done!
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
 
@@ -111,7 +105,7 @@ Done!
 
 Total spin-integrated terms: 2
 Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.008 seconds
+Spin-adaptation automation time :  0.004 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -133,4 +127,4 @@ S12_a_bba =- 1/6 * einsum('WXYZ->XWZY', rdm_ccaa, optimize = einsum_type).copy()
 S12_a_bba -= 1/3 * einsum('WXZY->XWZY', rdm_ccaa, optimize = einsum_type).copy()
 S12_a_bba += 1/2 * einsum('XY,WZ->XWZY', np.identity(ncas), rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.02 seconds.
+> Total elapsed time: 0.01 seconds.

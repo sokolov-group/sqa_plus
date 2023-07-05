@@ -88,7 +88,7 @@ Done!
  (   0.25000) t1(y,x,a,z) v(w,u,a,v) cre(z) cre(w) cre(u) des(y) des(x) des(v) 
 
 Total terms : 34
-SQA automation time :  6.218 seconds
+SQA automation time :  4.398 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -96,18 +96,9 @@ SQA automation time :  6.218 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -153,18 +144,18 @@ Done!
  (  -1.00000) t1(x,a) v(k,w,a,k) rdm(x,w) 
  (   1.00000) t1(x,a) v(w,u,v,a) rdm(x,u,v,w) 
  (   2.00000) t1(x,y,z,a) v(k,k,w,a) rdm(z,w,x,y) 
- (  -0.25000) t1(x,y,z,a) v(w,u,v,a) rdm(z,v,w,y,x,u) 
+ (  -0.33333) t1(x,y,z,a) v(w,u,v,a) rdm(z,v,w,u,y,x) 
+ (  -0.33333) t1(x,y,z,a) v(w,u,v,a) rdm(z,v,w,x,u,y) 
+ (   0.66667) t1(x,y,z,a) v(w,u,v,a) rdm(z,v,w,x,y,u) 
  (  -1.00000) t1(y,x,z,a) v(k,w,a,k) rdm(z,w,y,x) 
- (  -0.25000) t1(y,x,z,a) v(w,u,v,a) rdm(z,v,w,u,x,y) 
- (  -0.25000) t1(y,x,z,a) v(w,u,v,a) rdm(z,v,w,u,y,x) 
- (  -0.25000) t1(y,x,z,a) v(w,u,v,a) rdm(z,v,w,x,u,y) 
- (  -0.25000) t1(y,x,z,a) v(w,u,v,a) rdm(z,v,w,y,u,x) 
- (   0.75000) t1(y,x,z,a) v(w,u,v,a) rdm(z,v,w,y,x,u) 
+ (  -0.33333) t1(y,x,z,a) v(w,u,v,a) rdm(z,v,w,u,y,x) 
+ (  -0.33333) t1(y,x,z,a) v(w,u,v,a) rdm(z,v,w,x,u,y) 
+ (  -0.33333) t1(y,x,z,a) v(w,u,v,a) rdm(z,v,w,x,y,u) 
  (   1.00000) t1(y,x,z,a) v(w,z,u,a) rdm(y,x,w,u) 
 
 Total spin-integrated terms: 34
 Total spin-adapted terms: 14
-Spin-adaptation automation time :  14.708 seconds
+Spin-adaptation automation time :  15.196 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -189,12 +180,12 @@ Remaining terms: 10
 e_m1p  = einsum('xa,ya,xy', h_ae, t1_ae, rdm_ca, optimize = einsum_type)
 e_m1p += einsum('xa,yzwa,xwzy', h_ae, t1_aaae, rdm_ccaa, optimize = einsum_type)
 e_m1p += einsum('xa,yzwa,xzwy', t1_ae, v_aaae, rdm_ccaa, optimize = einsum_type)
-e_m1p -= 1/4 * einsum('xyza,wuva,zvwyxu', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
-e_m1p -= 1/4 * einsum('xyza,wuva,zvwuyx', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
-e_m1p -= 1/4 * einsum('xyza,wuva,zvwuxy', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
-e_m1p -= 1/4 * einsum('xyza,wuva,zvwyux', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
-e_m1p -= 1/4 * einsum('xyza,wuva,zvwxuy', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
-e_m1p += 3/4 * einsum('xyza,wuva,zvwxyu', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
+e_m1p -= 1/3 * einsum('xyza,wuva,zvwuyx', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
+e_m1p -= 1/3 * einsum('xyza,wuva,zvwxuy', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
+e_m1p += 2/3 * einsum('xyza,wuva,zvwxyu', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
+e_m1p -= 1/3 * einsum('xyza,wuva,zvwuxy', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
+e_m1p -= 1/3 * einsum('xyza,wuva,zvwyux', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
+e_m1p -= 1/3 * einsum('xyza,wuva,zvwyxu', t1_aaae, v_aaae, rdm_cccaaa, optimize = einsum_type)
 e_m1p += einsum('xyza,wzua,xywu', t1_aaae, v_aaae, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 21.21 seconds.
+> Total elapsed time: 19.77 seconds.

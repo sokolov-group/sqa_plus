@@ -45,7 +45,7 @@ Done!
  (   1.00000) cre(X) des(Y) 
 
 Total terms : 1
-SQA automation time :  0.001 seconds
+SQA automation time :  0.000 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -53,18 +53,9 @@ SQA automation time :  0.001 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -74,6 +65,9 @@ Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
 Done!
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
 

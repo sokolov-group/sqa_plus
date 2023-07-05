@@ -60,7 +60,7 @@ Done!
  (   1.00000) v(Y,x,y,z) cre(y) cre(z) des(X) des(x) 
 
 Total terms : 10
-SQA automation time :  0.124 seconds
+SQA automation time :  0.020 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -68,18 +68,9 @@ SQA automation time :  0.124 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -89,6 +80,9 @@ Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
 Done!
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
 
@@ -131,7 +125,7 @@ Done!
 
 Total spin-integrated terms: 10
 Total spin-adapted terms: 9
-Spin-adaptation automation time :  0.471 seconds
+Spin-adaptation automation time :  0.043 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -159,4 +153,4 @@ K_ac += einsum('XYxy,xy->XY', v_aaaa, rdm_ca, optimize = einsum_type)
 K_ac -= 1/2 * einsum('XxyY,yx->XY', v_aaaa, rdm_ca, optimize = einsum_type)
 K_ac -= 1/2 * einsum('Yxyz,Xyxz->XY', v_aaaa, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 1.10 seconds.
+> Total elapsed time: 0.11 seconds.

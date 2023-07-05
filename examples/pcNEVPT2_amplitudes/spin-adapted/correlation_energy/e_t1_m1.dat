@@ -54,7 +54,7 @@ Done!
  (   0.50000) t1(i,x,b,a) v(i,w,b,a) cre(w) des(x) 
 
 Total terms : 4
-SQA automation time :  5.136 seconds
+SQA automation time :  2.700 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -62,18 +62,9 @@ SQA automation time :  5.136 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -118,7 +109,7 @@ Done!
 
 Total spin-integrated terms: 4
 Total spin-adapted terms: 2
-Spin-adaptation automation time :  0.160 seconds
+Spin-adaptation automation time :  0.086 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -139,4 +130,4 @@ Remaining terms: 2
 e_m1  = 2 * einsum('ixab,iayb,xy', t1_caee, v_ceae, rdm_ca, optimize = einsum_type)
 e_m1 -= einsum('ixab,ibya,xy', t1_caee, v_ceae, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 5.52 seconds.
+> Total elapsed time: 2.91 seconds.

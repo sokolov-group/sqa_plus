@@ -54,18 +54,9 @@ SQA automation time :  0.001 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -75,6 +66,9 @@ Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
 Done!
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
 
@@ -133,4 +127,4 @@ S22_aa_aa =- 1/6 * einsum('WYXZ->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
 S22_aa_aa += 1/6 * einsum('WYZX->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
 S22_aa_aa += 1/2 * einsum('YZ,WX->XYWZ', np.identity(ncas), rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.02 seconds.
+> Total elapsed time: 0.01 seconds.

@@ -48,7 +48,7 @@ Done!
  (  -1.00000) v(I,J,A,B) 
 
 Total terms : 1
-SQA automation time :  0.820 seconds
+SQA automation time :  0.458 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -56,18 +56,9 @@ SQA automation time :  0.820 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -77,6 +68,9 @@ Done!
 ----------------------------------------------------------------------------------------------------
 Converting T amplitudes to spin-adapted formulation...
 Done!
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 Converting RDMs to spin-adapted formulation...
 
@@ -111,7 +105,7 @@ Done!
 
 Total spin-integrated terms: 1
 Total spin-adapted terms: 1
-Spin-adaptation automation time :  0.002 seconds
+Spin-adaptation automation time :  0.001 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -131,4 +125,4 @@ Remaining terms: 1
 
 V1_0 =- einsum('IAJB->IJAB', v_cece, optimize = einsum_type).copy()
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.90 seconds.
+> Total elapsed time: 0.50 seconds.

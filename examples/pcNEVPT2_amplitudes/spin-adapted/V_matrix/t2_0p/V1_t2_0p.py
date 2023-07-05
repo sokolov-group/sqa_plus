@@ -59,7 +59,7 @@ print("{:} spin-integrated A terms created.".format(len(terms2_T)))
 print("\n## Calculating [V + H^(1), T - T^\dag]:")
 terms_commutator_V_H1_T = sqa_plus.commutator(terms_V_H1, terms2_T)
 print("{:} spin-integrated terms created.".format(len(terms_commutator_V_H1_T)))
-
+ 
 print("\n## Calculating a^\dag_p a_q [V + H^(1), T - T^\dag]:")
 terms_V1 = []
 for _term_Heff in terms_commutator_V_H1_T:
@@ -79,4 +79,3 @@ result = sqa_plus.genEinsum(expected_V1_sa, 'V1', 'IA')
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))
-

@@ -58,7 +58,7 @@ Done!
  (  -0.50000) t1(j,i,a,x) v(j,i,a,w) cre(x) des(w) 
 
 Total terms : 8
-SQA automation time :  10.196 seconds
+SQA automation time :  6.525 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -66,18 +66,9 @@ SQA automation time :  10.196 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -124,7 +115,7 @@ Done!
 
 Total spin-integrated terms: 8
 Total spin-adapted terms: 4
-Spin-adaptation automation time :  0.205 seconds
+Spin-adaptation automation time :  0.118 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
@@ -147,4 +138,4 @@ e_p1 += 4 * einsum('ijxa,ixja', t1_ccae, v_cace, optimize = einsum_type)
 e_p1 += einsum('ijxa,jyia,xy', t1_ccae, v_cace, rdm_ca, optimize = einsum_type)
 e_p1 -= 2 * einsum('ijxa,iyja,xy', t1_ccae, v_cace, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 10.64 seconds.
+> Total elapsed time: 6.78 seconds.
