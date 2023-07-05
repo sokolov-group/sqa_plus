@@ -54,7 +54,7 @@ Done!
  (   1.00000) e(J) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
 
 Total terms : 3
-SQA automation time :  0.039 seconds
+SQA automation time :  0.035 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -62,18 +62,9 @@ SQA automation time :  0.039 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices according to: alpha < beta
-Done!
-----------------------------------------------------------------------------------------------------
 Dummy indices relabelling...
 Done!
 ----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting Kronecker Deltas to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting eigenvalues to spin-adapted formulation...
-Done!
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -119,7 +110,7 @@ Done!
 
 Total spin-integrated terms: 3
 Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.017 seconds
+Spin-adaptation automation time :  0.015 seconds
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- WARNING ----------------------------------------------
@@ -141,4 +132,4 @@ precond_cve =- einsum('A,AA,II,JJ->IJA', e_extern, np.identity(nextern), np.iden
 precond_cve += einsum('I,AA,II,JJ->IJA', e_cvs, np.identity(nextern), np.identity(ncvs), np.identity(nval), optimize = einsum_type)
 precond_cve += einsum('J,AA,II,JJ->IJA', e_val, np.identity(nextern), np.identity(ncvs), np.identity(nval), optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.15 seconds.
+> Total elapsed time: 0.14 seconds.
