@@ -6,7 +6,7 @@ order_Heff = 1
 import time
 start = time.time()
 
-indices_string = 'c_cca'
+indices_string = 'c_caa'
 spin_indices_string = 'a_bab'
 
 sqa_plus.options.print_header("Spin-Adapted CVS-IP: M01")
