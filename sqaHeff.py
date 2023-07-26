@@ -640,6 +640,8 @@ def dyallH():
             dyallH = dyallH_cvs_spin_orbital()
         else:
             dyallH = dyallH_spin_orbital()
+    else:
+        raise Exception("Operators in the selected spin-basis not implemented.")
 
     return dyallH
 
@@ -1034,6 +1036,8 @@ def dyallH_act():
             dyallH_act = dyallH_act_cvs_spin_orbital()
         else:
             dyallH_act = dyallH_act_spin_orbital()
+    else:
+        raise Exception("Operators in the selected spin-basis not implemented.")
 
     return dyallH_act
 
@@ -4204,6 +4208,8 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
             (T_ex, T_deex) = Tamplitude_cvs_spin_orbital(order, internal_excitations)
         else:
             (T_ex, T_deex) = Tamplitude_spin_orbital(order, internal_excitations)
+    else:
+        raise Exception("Operators in the selected spin-basis not implemented.")
 
     if only_excitations:
         T = T_ex
@@ -6761,6 +6767,8 @@ def Vperturbation():
             V = Vperturbation_cvs_spin_orbital()
         else:
             V = Vperturbation_spin_orbital()
+    else:
+        raise Exception("Operators in the selected spin-basis not implemented.")
 
     return V
 
