@@ -330,11 +330,11 @@ def normOrderCor(_term):
                 subOpString[conPair[0]] = 'contracted'
                 subOpString[conPair[1]] = 'contracted'
                 for q in subOpString[conPair[0]+1:conPair[1]]:
-                    if not (q is 'contracted'):
+                    if not (q == 'contracted'):
                         conSign *= -1
             i = 0
             while i < len(subOpString):
-                if subOpString[i] is 'contracted':
+                if subOpString[i] == 'contracted':
                     del(subOpString[i])
                 else:
                     i += 1
