@@ -873,7 +873,7 @@ def combineTerms(termList, maxThreads = 1):
         # Convert the terms to canonical form in the main thread
         for i in range(len(termList)):
             if options.verbose:
-                print '%6i    %s' %(i,str(termList[i]))
+                print ('%6i    %s' %(i,str(termList[i])))
             termList[i].makeCanonical(rename_user_defined = False)
 
     # Sort the terms
