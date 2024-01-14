@@ -910,22 +910,22 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
 
 
  if print_default:
-    print r'\documentclass{article}'
-    print r'\usepackage{amsmath}'
-    print r'\begin{document}'
-    print ''
-    print ''
+    print (r'\documentclass{article}')
+    print (r'\usepackage{amsmath}')
+    print (r'\begin{document}')
+    print ('')
+    print ('')
 #    print r"\begin{equation}"
-    print r"\begin{align*}"
-    print lhs
+    print (r"\begin{align*}")
+    print (lhs)
     for i in tex:
-#      print " & "+i+' \\\\'
+#      print (" & "+i+' \\\\')
       print(" & "+i+r'\\')
-    print r"\end{align*}"
+    print (r"\end{align*}")
 #    print r"\end{equation}"
-    print ''
-    print ''
-    print r'\end{document}'
+    print ('')
+    print ('')
+    print (r'\end{document}')
 
 
  ### write to a file ###
@@ -975,7 +975,7 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
 
  except OSError as e:
    #  sys.exit()
-     print 'Latex compilation error ...'
+     print ('Latex compilation error ...')
 
 # pdf()
 # proc_cleanup(procs)

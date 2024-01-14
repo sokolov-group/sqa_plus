@@ -50,7 +50,7 @@ class symmetry:
                     tempList.append(elem)
             if not patternError:
                 tempList.sort()
-                patternError = ( tempList != range(len(pattern)) )
+                patternError = ( tempList != list(range(len(pattern))) )
         if patternError:
             raise ValueError("pattern must be a tuple of contiguous, non-negative integers including zero. They need not be in order.")
         else:
