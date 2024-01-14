@@ -463,7 +463,7 @@ class creDesTensor(tensor):
         else:
             self.symmetries = []
             if len(self.indices) > 1:
-                swapValues = range(len(self.indices)-1)
+                swapValues = list(range(len(self.indices)-1))
 
                 if self.nCre > 0:
                     del(swapValues[self.nCre-1])
