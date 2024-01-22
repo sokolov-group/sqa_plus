@@ -126,14 +126,18 @@ def normalOrder(inTerm):
                 subOpString[conPair[0]] = 'contracted'
                 subOpString[conPair[1]] = 'contracted'
                 for q in subOpString[conPair[0]+1:conPair[1]]:
-                    if not (q == 'contracted'):
+#                    if not (q == 'contracted'):
+                    if not (q is 'contracted'):
                         conSign *= -1
             i = 0
             while i < len(subOpString):
-                if subOpString[i] == 'contracted':
+#                if subOpString[i] == 'contracted':
+                if subOpString[i] is 'contracted':
                     del(subOpString[i])
                 else:
                     i += 1
+            print ("\nSORTOPS FUNCTION CALL IN SQANORMALORDER.PY")
+            print ("------------------------------------------")
             (sortSign,sortedOps) = sortOps(subOpString)
             totalSign = conSign * sortSign
             outTensors = []

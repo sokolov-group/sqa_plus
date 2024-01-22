@@ -526,6 +526,8 @@ class term:
                         op.indices[0] = map[op.indices[0].tup()]
 
                 # Sort the operators and apply the resulting sign
+                print ("\nFIRST SORTOPS FUNCTION CALL IN SQATERM.PY")
+                print ("-----------------------------------------")
                 (s,opList) = sortOps(opList)
                 factor *= s
 
@@ -1012,6 +1014,8 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
                 op.indices[0] = map[op.indices[0].tup()].copy()
 
         # Sort the operators and apply the resulting sign
+        print ("\nSECOND SORTOPS FUNCTION CALL IN SQATERM.PY")
+        print ("------------------------------------------")
         (s,opList) = sortOps(opList)
         sign *= s
 
@@ -1141,29 +1145,181 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
 def sortOps(unsortedOps, returnPermutation = False):
     """
     Sorts a list of creation/destruction operators into normal order and alphebetically.
-    Performs no contractions.    Returns the overall sign resulting from the sort and the sorted operator list.
+    Performs no contractions. Returns the overall sign resulting from the sort and the sorted operator list.
     """
-    sortedOps = unsortedOps + []
+    sortedOps = list(unsortedOps)
+    print ("TENSOR LIST PASSED TO SORTOPS FUNCTION:")
+    print (sortedOps)
+    print ("\n")
     i = 0
     sign = 1
+    perm = []
+
     if returnPermutation:
         perm = range(len(unsortedOps))
+
+    # Sort through all operators
     while i < len(sortedOps)-1:
+
+        print ('-----------------------')
+        print ('WHILE LOOP INDEX: %d\n' %(i))
+        print ('operator[i]')
+        print ('------------')
+        print (sortedOps[i])
+        print ('\noperator[i+1]')
+        print ('------------')
+        print (sortedOps[i+1])
+        print ('\n')
+
+        # Check that only single-particle operators are being sorted
+        if not (len(sortedOps[i].indices) == 1 and len(sortedOps[i+1].indices) == 1):
+            raise Exception('Function is only meant to sort single-particle creation/annihilation operators')
+
+#        # PYTHON3 creOp/desOp comparison
+#        # First, check if two adjacent operators are creOp followed by desOp
+#        if isinstance(sortedOps[i], creOp) and isinstance(sortedOps[i+1], desOp):
+#            print ("CREATION THEN DESTRUCTION, PROCEEDING\n")
+#            i += 1
+#
+#        # Next check if operators are either both creOp or desOp
+#        elif (isinstance(sortedOps[i], creOp) and isinstance(sortedOps[i+1], creOp)) or \
+#             (isinstance(sortedOps[i], desOp) and isinstance(sortedOps[i+1], desOp)):
+#            
+#            print ("DOUBLE CREATION/DESTRUCTION, CHECKING\n")
+#
+#            # Extract index objects from tensors
+#            i0_ind = sortedOps[i].indices[0]
+#            print (i0_ind.name)
+#            i1_ind = sortedOps[i+1].indices[0]
+#            print (i1_ind.name)
+#
+#            # Index of operator[i] is external and index of operator[i+1] is dummy
+#            if (not i0_ind.isSummed and i1_ind.isSummed):
+#                i += 1
+#
+#            # Index of operator[i] is dummy and index of operator[i+1] is external
+#            elif (i0_ind.isSummed and not i1_ind.isSummed):
+#                sortedOps, i, sign, perm = rearrangeOps(sortedOps, i, sign, returnPermutation, perm)
+#
+#            # Indices of operator[i] and operator[i+1] are both dummy
+#            elif (i0_ind.isSummed and i1_ind.isSummed):
+#                print ('Operator i: DUMMY && Operator i+1: DUMMY')
+#                print ('operator i  :')
+#                print (sortedOps[i])
+#                print ('operator i+1:')
+#                print (sortedOps[i+1])
+#                print ('\n')
+# 
+#                # Check names of indices to determine if they have been renamed or not
+#                if (len(i0_ind.name) >= 4 and len(i1_ind.name) >= 4) and \
+#                   (('user' not in str(i0_ind.name)) or ('user' not in str(i1_ind.name))):
+#
+#                    # Parse names of indices for subspace, index number, and spin information
+#                    i0_space = i0_ind.name[:2]
+#                    i0_num   = int(i0_ind.name[2:-1])
+#                    i0_spin  = str(i0_ind.name[-1])
+#
+#                    i1_space = i1_ind.name[:2]
+#                    i1_num   = int(i1_ind.name[2:-1])
+#                    i1_spin  = str(i1_ind.name[-1])
+#                    print (i0_space, i0_num, i0_spin)
+#                    print (i1_space, i1_num, i1_spin)
+#
+#                    # If both operators belong to the same orbital subspace
+#                    if i0_space == i1_space:
+#
+#                        # If index numbers of operators are in increasing order
+#                        if i0_num < i1_num:
+#                            i += 1
+#
+#                        # If indices of operators are the same dummy number, check spin
+#                        elif i0_num == i1_num:
+#
+#                            # Operator i is alpha, operator i+1 is beta
+#                            if i0_spin < i1_spin:
+#                                i += 1
+#                            
+#                            # Operator i is beta, operator i+1 is alpha, rearrange them
+#                            else:
+#                                sortedOps, i, sign, perm = rearrangeOps(sortedOps, i, sign, returnPermutation, perm)
+#
+#                        # Index numbers are not in increasing order, rearrange them
+#                        else:
+#                            sortedOps, i, sign, perm = rearrangeOps(sortedOps, i, sign, returnPermutation, perm)
+#
+#                    # Operators belong to different orbital subspaces                
+#                    elif i0_space != i1_space:
+#                        print (i0_space, i0_num, i0_spin)
+#                        print (i1_space, i1_num, i1_spin)
+#                        exit()
+# 
+#                # Sorting if indices are renamed
+#                else:
+#                    print (i0_ind.name)
+#                    print (i1_ind.name)
+#                    print ('RENAME!')
+#                    exit()
+#
+#            # Indices of operator[i] and operator[i+1] are both external
+#            elif (not i0_ind.isSummed and not i1_ind.isSummed):
+#                print ('Operator i: EXT && Operator i+1: EXT')
+#                print ('operator i  :')
+#                print (sortedOps[i])
+#                print ('operator i+1:')
+#                print (sortedOps[i+1])
+#                print ('\n')
+#                exit()                
+
+        # PYTHON2 desOp/creOp comparison
         if sortedOps[i] <= sortedOps[i+1]:
-             i += 1
+            if (isinstance(sortedOps[i], creOp) and isinstance(sortedOps[i+1], creOp)) or \
+               (isinstance(sortedOps[i], desOp) and isinstance(sortedOps[i+1], desOp)):
+                print ("CHECK PASS")
+
+            i += 1
+            print ("^^^^^^^                 ^^^^^^^")
+            print ("ITERATING INDEX, OPERATORS RETURN TRUE FOR IF STATEMENT")
+            print ("-------------------------------------------------------------------\n")
+
+        # If not of the above criteria are met, re-arrange operators
         else:
-            temp = sortedOps[i]
-            sortedOps[i] = sortedOps[i+1]
-            sortedOps[i+1] = temp
-            if returnPermutation:
-                temp = perm[i]
-                perm[i] = perm[i+1]
-                perm[i+1] = temp
-            i = 0
-            sign *= -1
+            print ("^^^^^^^                 ^^^^^^^")
+            print ("REARRANGING AND RESETTING INDEX, OPERATORS FALL INTO ELSE STATEMENT")
+            print ("-------------------------------------------------------------------\n")
+            sortedOps, i, sign, perm = rearrangeOps(sortedOps, i, sign, returnPermutation, perm)
+
+    print ("------------------")
+    print ("** TERMS SORTED!**")
+    print ("------------------")
+
     if returnPermutation:
         return (sign,sortedOps,perm)
-    return (sign,sortedOps)
+    else:
+        return (sign,sortedOps)
+
+
+#--------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------
+
+
+def rearrangeOps(op_list, index, sign, returnPermutation, perm):
+    """
+    Rearranges a pair of operators in a list.
+    If 'returnPermutation' is set to true, tracks the permutation of the operators in a list
+    """
+    temp = op_list[index]
+    op_list[index] = op_list[index + 1]
+    op_list[index + 1] = temp
+
+    if returnPermutation:
+        temp = perm[index]
+        perm[index] = perm[index + 1]
+        perm[index + 1] = temp
+
+    index = 0
+    sign *= -1
+
+    return (op_list, index, sign, perm)
 
 
 #--------------------------------------------------------------------------------------------------
