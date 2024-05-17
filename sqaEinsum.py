@@ -403,7 +403,7 @@ def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, t
                     tensor_name = make_custom_name(tens, custom_names)
 
         # Name remaining tensors w/ same convention of orbital space and suffix
-        elif tens.name == 'h' or tens.name == 'v' or tens.name == 't1' or tens.name == 't2':
+        elif tens.name == 'h' or tens.name == 'h_soc' or tens.name == 'v' or tens.name == 't1' or tens.name == 't2' or tens.name == 'T2' or tens.name == 'T1': #Added by Rajat
             tensor_name = tens.name + '_'
 
             # Append letter representing orbital subspace of indices
@@ -452,7 +452,7 @@ def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, t
                 tensor_name += spin_suffix
 
             # Append suffix
-            if not (tens.name == 't1' or tens.name == 't2') and suffix:
+            if not (tens.name == 't1' or tens.name == 't2' or tens.name == 'T1' or tens.name == 'T2') and suffix:
                 tensor_name += '_' + suffix
 
             # Rename if custom name is provided
