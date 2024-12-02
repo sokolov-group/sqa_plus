@@ -1,0 +1,210 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+------------------------------- Spin-Adapted V(X,Y): T-Slice t2_ccee -------------------------------
+
+# Defining a^\dag_p a_q...
+
+## Creating first set of spin-integrated T - T^\dag...
+74 spin-integrated A terms created.
+
+## Creating second set of spin-integrated T - T^\dag...
+74 spin-integrated A terms created.
+
+## Selecting spin-integrated T - T^\dag slice: t2_ccee...
+
+# First Amplitude Set t2_ccee...
+ (   0.25000) t1(cc7a,cc8a,ee7a,ee8a) cre(ee7a) cre(ee8a) des(cc8a) des(cc7a) 
+ (   0.25000) t1(cc7b,cc8b,ee7b,ee8b) cre(ee7b) cre(ee8b) des(cc8b) des(cc7b) 
+ (   1.00000) t1(cc9a,cc9b,ee9a,ee9b) cre(ee9a) cre(ee9b) des(cc9b) des(cc9a) 
+ (  -0.25000) t1(cc7a,cc8a,ee7a,ee8a) cre(cc7a) cre(cc8a) des(ee8a) des(ee7a) 
+ (  -0.25000) t1(cc7b,cc8b,ee7b,ee8b) cre(cc7b) cre(cc8b) des(ee8b) des(ee7b) 
+ (  -1.00000) t1(cc9a,cc9b,ee9a,ee9b) cre(cc9a) cre(cc9b) des(ee9b) des(ee9a) 
+>>> Slice t2_ccee: 6 spin-integrated A terms selected.
+
+# Second Amplitude Set t2_ccee...
+ (   0.25000) t1(cc26a,cc27a,ee26a,ee27a) cre(ee26a) cre(ee27a) des(cc27a) des(cc26a) 
+ (   0.25000) t1(cc26b,cc27b,ee26b,ee27b) cre(ee26b) cre(ee27b) des(cc27b) des(cc26b) 
+ (   1.00000) t1(cc28a,cc28b,ee28a,ee28b) cre(ee28a) cre(ee28b) des(cc28b) des(cc28a) 
+ (  -0.25000) t1(cc26a,cc27a,ee26a,ee27a) cre(cc26a) cre(cc27a) des(ee27a) des(ee26a) 
+ (  -0.25000) t1(cc26b,cc27b,ee26b,ee27b) cre(cc26b) cre(cc27b) des(ee27b) des(ee26b) 
+ (  -1.00000) t1(cc28a,cc28b,ee28a,ee28b) cre(cc28a) cre(cc28b) des(ee28b) des(ee28a) 
+>>> Slice t2_ccee: 6 spin-integrated A terms selected.
+
+# Creating spin-integrated [2V, T - T^\dag]:
+
+## Creating spin-integrated V...
+248 spin-integrated V terms created.
+
+## Calculating [2V, T - T^\dag]:
+>>> Slice t2_ccee: 1044 spin-integrated terms created.
+
+## Calculating a^\dag_p a_q [2V, T - T^\dag]:
+>>> Slice t2_ccee: 1044 spin-integrated a^\dag_p a_q [V + H1, A1] terms created.
+
+# Creating spin-integrated [[H0, T - T^\dag], T - T^\dag]:
+
+## Creating spin-integrated  H^(0)...
+14 spin-integrated H^(0) terms created.
+
+## Calculating [H^(0), T - T^\dag]:
+>>> Slice t2_ccee: 16 spin-integrated terms created.
+
+## Calculating [[H0, T - T^\dag], T - T^\dag]:
+>>> Slice t2_ccee: 1000 spin-integrated terms created.
+
+## Calculating a^\dag_p a_q [[H^(0), T - T^\dag], T - T^\dag]:
+>>> Slice t2_ccee: 2044 spin-integrated a^\dag_p a_q [[H0, A1], A1] terms created.
+
+----------------------------------------------------------------------------------------------------
+
+## Calculating matrix element of t2_ccee slice of V1:
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -0.25000) t1(i,j,a,b) v(i,j,a,b) cre(X) des(Y) 
+ (  -0.25000) t1(i,j,a,b) v(i,j,a,b) cre(X) des(Y) 
+ (  -1.00000) t1(i,j,a,b) v(i,j,a,b) cre(X) des(Y) 
+ (  -1.00000) t1(i,j,a,b) v(i,j,a,b) cre(X) des(Y) 
+ (  -0.25000) t1(i,j,a,b) v(i,j,a,b) cre(X) des(Y) 
+ (  -0.25000) t1(i,j,a,b) v(i,j,a,b) cre(X) des(Y) 
+ (   0.50000) e(i) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (   1.00000) e(i) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (  -0.50000) e(a) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (  -0.50000) e(a) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (  -0.50000) e(a) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (   1.00000) e(i) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (   0.50000) e(i) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (  -0.50000) e(a) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (  -0.50000) e(a) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (  -0.50000) e(a) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+
+Total terms : 16
+SQA automation time :  4.121 seconds
+>>> Slice V1: 16 spin-integrated a^\dag_p a_q [[H0, A1], A1] terms created.
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Removing 5th order RDMs...
+Done! 0 5th-order RDMs have been removed.
+
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 16 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 40 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+34 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -2.00000) t1(i,j,a,b) v(i,a,j,b) rdm(X,Y) 
+ (   1.00000) t1(i,j,a,b) v(j,a,i,b) rdm(X,Y) 
+ (  -2.00000) e(a) t1(i,j,a,b) t1(i,j,a,b) rdm(X,Y) 
+ (   1.00000) e(a) t1(i,j,a,b) t1(j,i,a,b) rdm(X,Y) 
+ (   2.00000) e(i) t1(i,j,a,b) t1(i,j,a,b) rdm(X,Y) 
+ (  -1.00000) e(i) t1(i,j,a,b) t1(i,j,b,a) rdm(X,Y) 
+
+Total spin-integrated terms: 16
+Total spin-adapted terms: 6
+Spin-adaptation automation time :  0.344 seconds
+----------------------------------------------------------------------------------------------------
+>>> Slice V1: 6 spin-adapted a^\dag_p a_q [[H0, A1], A1] terms created.
+
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 6
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+V1 =- 2 * einsum('ijab,iajb,XY->XY', t1_ccee, v_cece, rdm_ca, optimize = einsum_type)
+V1 += einsum('ijab,jaib,XY->XY', t1_ccee, v_cece, rdm_ca, optimize = einsum_type)
+V1 -= 2 * einsum('a,ijab,ijab,XY->XY', e_extern, t1_ccee, t1_ccee, rdm_ca, optimize = einsum_type)
+V1 += einsum('a,ijab,jiab,XY->XY', e_extern, t1_ccee, t1_ccee, rdm_ca, optimize = einsum_type)
+V1 += 2 * einsum('i,ijab,ijab,XY->XY', e_core, t1_ccee, t1_ccee, rdm_ca, optimize = einsum_type)
+V1 -= einsum('i,ijab,ijba,XY->XY', e_core, t1_ccee, t1_ccee, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 97.45 seconds.

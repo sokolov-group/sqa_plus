@@ -1,0 +1,505 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+------------------------------- Spin-Orbital V(X,Y): T-Slice t1_m1p --------------------------------
+
+# Defining a^\dag_p a_q...
+
+## Creating first set of spin-orbital T - T^\dag...
+22 spin-orbital A terms created.
+
+## Creating second set of spin-orbital T - T^\dag...
+22 spin-orbital A terms created.
+
+## Selecting spin-orbital T - T^\dag slice: t1_m1p...
+
+# First Amplitude Set...
+ (   1.00000) t1(aa6,ee2) cre(ee2) des(aa6) 
+ (   0.50000) t1(aa7,aa8,ee3,aa9) cre(ee3) cre(aa9) des(aa8) des(aa7) 
+ (  -1.00000) t1(aa6,ee2) cre(aa6) des(ee2) 
+ (  -0.50000) t1(aa7,aa8,ee3,aa9) cre(aa7) cre(aa8) des(aa9) des(ee3) 
+>>> Slice t1_m1p: 4 spin-orbital A terms selected.
+
+# Second Amplitude Set...
+ (   1.00000) t1(aa22,ee13) cre(ee13) des(aa22) 
+ (   0.50000) t1(aa23,aa24,ee14,aa25) cre(ee14) cre(aa25) des(aa24) des(aa23) 
+ (  -1.00000) t1(aa22,ee13) cre(aa22) des(ee13) 
+ (  -0.50000) t1(aa23,aa24,ee14,aa25) cre(aa23) cre(aa24) des(aa25) des(ee14) 
+>>> Slice t1_m1p: 4 spin-orbital A terms selected.
+
+# Creating spin-orbital [2V + [H^(0), T - T^\dag], T - T^\dag]:
+
+## Creating spin-orbital V...
+82 spin-orbital V terms created.
+
+## Creating spin-orbital H^(0)...
+6 spin-orbital H^(0) terms created.
+
+## Calculating [H^(0), T - T^\dag]:
+>>> Slice t1_m1p: 24 spin-orbital terms created.
+
+## Calculating V + H^(1):
+>>> Slice t1_m1p: 106 spin-orbital terms created.
+
+## Calculating [V + H^(1), T - T^\dag]:
+>>> Slice t1_m1p: 24 spin-orbital terms created.
+
+## Calculating a^\dag_p a_q [V + H^(1), T - T^\dag]:
+>>> Slice t1_m1p: 550 spin-orbital a^\dag_p a_q [V + H^(1), T - T^\dag] terms created.
+
+----------------------------------------------------------------------------------------------------
+
+## Calculating matrix element of t1_m1p slice of V1:
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) h(Y,a) t1(x,a) cre(X) des(x) 
+ (  -1.00000) h(x,a) t1(Y,a) cre(X) des(x) 
+ (  -1.00000) t1(Y,a) v(i,x,i,a) cre(X) des(x) 
+ (  -1.00000) t1(x,a) v(i,Y,i,a) cre(X) des(x) 
+ (  -1.00000) e(a) t1(Y,a) t1(x,a) cre(X) des(x) 
+ (   0.50000) h(Y,x) t1(x,a) t1(y,a) cre(X) des(y) 
+ (   0.50000) h(x,y) t1(x,a) t1(Y,a) cre(X) des(y) 
+ (   0.50000) v(i,Y,i,x) t1(x,a) t1(y,a) cre(X) des(y) 
+ (   0.50000) v(i,x,i,y) t1(x,a) t1(Y,a) cre(X) des(y) 
+ (   0.50000) h(Y,a) t1(x,y,a,z) cre(X) cre(z) des(x) des(y) 
+ (   1.00000) h(x,a) t1(Y,y,a,z) cre(X) cre(y) des(x) des(z) 
+ (   1.00000) h(x,a) t1(y,a) cre(X) cre(x) des(Y) des(y) 
+ (   1.00000) h(x,a) t1(y,a) cre(X) cre(y) des(Y) des(x) 
+ (  -0.50000) h(x,a) t1(y,z,a,Y) cre(X) cre(x) des(y) des(z) 
+ (   0.50000) t1(Y,x,a,y) v(z,w,a,y) cre(X) cre(x) des(z) des(w) 
+ (  -1.00000) t1(Y,x,a,y) v(i,z,i,a) cre(X) cre(x) des(y) des(z) 
+ (   0.50000) t1(Y,a) v(x,y,a,z) cre(X) cre(z) des(x) des(y) 
+ (  -0.50000) t1(x,y,a,Y) v(i,z,i,a) cre(X) cre(z) des(x) des(y) 
+ (   0.50000) t1(x,y,a,z) v(Y,w,a,z) cre(X) cre(w) des(x) des(y) 
+ (   0.50000) t1(x,y,a,z) v(i,Y,i,a) cre(X) cre(z) des(x) des(y) 
+ (   1.00000) t1(x,a) v(Y,y,a,z) cre(X) cre(y) des(x) des(z) 
+ (   1.00000) t1(x,a) v(i,y,i,a) cre(X) cre(y) des(Y) des(x) 
+ (  -0.50000) t1(x,a) v(y,z,a,Y) cre(X) cre(x) des(y) des(z) 
+ (   1.00000) t1(x,a) v(i,y,i,a) cre(X) cre(x) des(Y) des(y) 
+ (   0.50000) e(a) t1(Y,a) t1(x,y,a,z) cre(X) cre(z) des(x) des(y) 
+ (  -1.00000) e(a) t1(Y,x,a,y) t1(z,a) cre(X) cre(x) des(y) des(z) 
+ (   0.50000) e(a) t1(Y,x,a,y) t1(z,w,a,y) cre(X) cre(x) des(z) des(w) 
+ (   1.00000) e(a) t1(x,a) t1(y,a) cre(X) cre(x) des(Y) des(y) 
+ (  -0.50000) e(a) t1(x,a) t1(y,z,a,Y) cre(X) cre(x) des(y) des(z) 
+ (  -0.25000) h(Y,x) t1(x,y,a,z) t1(w,u,a,z) cre(X) cre(y) des(w) des(u) 
+ (   0.50000) h(Y,x) t1(x,y,a,z) t1(w,a) cre(X) cre(y) des(z) des(w) 
+ (  -0.25000) h(Y,x) t1(x,a) t1(y,z,a,w) cre(X) cre(w) des(y) des(z) 
+ (  -0.25000) h(Y,x) t1(y,z,a,x) t1(w,a) cre(X) cre(w) des(y) des(z) 
+ (  -0.25000) h(x,y) t1(Y,x,a,z) t1(w,u,a,z) cre(X) cre(y) des(w) des(u) 
+ (   0.50000) h(x,y) t1(Y,x,a,z) t1(w,a) cre(X) cre(y) des(z) des(w) 
+ (  -0.50000) h(x,y) t1(Y,z,a,x) t1(w,a) cre(X) cre(z) des(y) des(w) 
+ (   0.50000) h(x,y) t1(Y,z,a,x) t1(w,u,a,y) cre(X) cre(z) des(w) des(u) 
+ (   0.50000) h(x,y) t1(x,z,a,Y) t1(w,a) cre(X) cre(w) des(y) des(z) 
+ (  -0.50000) h(x,y) t1(x,z,a,w) t1(Y,u,a,w) cre(X) cre(u) des(y) des(z) 
+ (  -0.50000) h(x,y) t1(x,z,a,w) t1(Y,a) cre(X) cre(w) des(y) des(z) 
+ (  -0.50000) h(x,y) t1(x,a) t1(Y,z,a,w) cre(X) cre(z) des(y) des(w) 
+ (  -0.50000) h(x,y) t1(x,a) t1(z,a) cre(X) cre(y) des(Y) des(z) 
+ (  -0.50000) h(x,y) t1(x,a) t1(z,a) cre(X) cre(z) des(Y) des(y) 
+ (   0.25000) h(x,y) t1(x,a) t1(z,w,a,Y) cre(X) cre(y) des(z) des(w) 
+ (   0.25000) h(x,y) t1(z,w,a,x) t1(Y,a) cre(X) cre(y) des(z) des(w) 
+ (  -0.25000) v(Y,x,y,z) t1(x,a) t1(w,a) cre(X) cre(w) des(y) des(z) 
+ (  -0.12500) v(Y,x,y,z) t1(y,z,a,w) t1(u,v,a,w) cre(X) cre(x) des(u) des(v) 
+ (   0.25000) v(Y,x,y,z) t1(y,z,a,w) t1(u,a) cre(X) cre(x) des(w) des(u) 
+ (   0.50000) v(Y,x,y,z) t1(y,a) t1(w,a) cre(X) cre(x) des(z) des(w) 
+ (  -0.25000) v(Y,x,y,z) t1(y,a) t1(w,u,a,z) cre(X) cre(x) des(w) des(u) 
+ (  -0.25000) v(i,Y,i,x) t1(x,y,a,z) t1(w,u,a,z) cre(X) cre(y) des(w) des(u) 
+ (   0.50000) v(i,Y,i,x) t1(x,y,a,z) t1(w,a) cre(X) cre(y) des(z) des(w) 
+ (  -0.25000) v(i,Y,i,x) t1(x,a) t1(y,z,a,w) cre(X) cre(w) des(y) des(z) 
+ (  -0.25000) v(i,Y,i,x) t1(y,z,a,x) t1(w,a) cre(X) cre(w) des(y) des(z) 
+ (   0.25000) v(x,y,z,w) t1(Y,u,a,x) t1(y,a) cre(X) cre(u) des(z) des(w) 
+ (   0.12500) v(x,y,z,w) t1(x,y,a,Y) t1(u,a) cre(X) cre(u) des(z) des(w) 
+ (  -0.12500) v(x,y,z,w) t1(x,y,a,u) t1(Y,v,a,u) cre(X) cre(v) des(z) des(w) 
+ (  -0.12500) v(x,y,z,w) t1(x,y,a,u) t1(Y,a) cre(X) cre(u) des(z) des(w) 
+ (  -0.25000) v(x,y,z,w) t1(x,a) t1(Y,a) cre(X) cre(y) des(z) des(w) 
+ (  -0.25000) v(i,x,i,y) t1(Y,x,a,z) t1(w,u,a,z) cre(X) cre(y) des(w) des(u) 
+ (   0.50000) v(i,x,i,y) t1(Y,x,a,z) t1(w,a) cre(X) cre(y) des(z) des(w) 
+ (  -0.50000) v(i,x,i,y) t1(Y,z,a,x) t1(w,a) cre(X) cre(z) des(y) des(w) 
+ (   0.50000) v(i,x,i,y) t1(Y,z,a,x) t1(w,u,a,y) cre(X) cre(z) des(w) des(u) 
+ (   0.50000) v(i,x,i,y) t1(x,z,a,Y) t1(w,a) cre(X) cre(w) des(y) des(z) 
+ (  -0.50000) v(i,x,i,y) t1(x,z,a,w) t1(Y,u,a,w) cre(X) cre(u) des(y) des(z) 
+ (  -0.50000) v(i,x,i,y) t1(x,z,a,w) t1(Y,a) cre(X) cre(w) des(y) des(z) 
+ (  -0.50000) v(i,x,i,y) t1(x,a) t1(Y,z,a,w) cre(X) cre(z) des(y) des(w) 
+ (  -0.50000) v(i,x,i,y) t1(x,a) t1(z,a) cre(X) cre(y) des(Y) des(z) 
+ (  -0.50000) v(i,x,i,y) t1(x,a) t1(z,a) cre(X) cre(z) des(Y) des(y) 
+ (   0.25000) v(i,x,i,y) t1(x,a) t1(z,w,a,Y) cre(X) cre(y) des(z) des(w) 
+ (   0.25000) v(i,x,i,y) t1(z,w,a,x) t1(Y,a) cre(X) cre(y) des(z) des(w) 
+ (   0.50000) h(x,a) t1(y,z,a,w) cre(X) cre(x) cre(w) des(Y) des(y) des(z) 
+ (   0.50000) h(x,a) t1(y,z,a,w) cre(X) cre(y) cre(z) des(Y) des(x) des(w) 
+ (  -0.50000) t1(Y,x,a,y) v(z,w,a,u) cre(X) cre(x) cre(u) des(y) des(z) des(w) 
+ (  -0.25000) t1(x,y,a,Y) v(z,w,a,u) cre(X) cre(z) cre(w) des(x) des(y) des(u) 
+ (   0.25000) t1(x,y,a,z) v(w,u,a,z) cre(X) cre(w) cre(u) des(Y) des(x) des(y) 
+ (   0.50000) t1(x,y,a,z) v(Y,w,a,u) cre(X) cre(z) cre(w) des(x) des(y) des(u) 
+ (  -0.50000) t1(x,y,a,z) v(i,w,i,a) cre(X) cre(z) cre(w) des(Y) des(x) des(y) 
+ (  -0.25000) t1(x,y,a,z) v(w,u,a,Y) cre(X) cre(x) cre(y) des(z) des(w) des(u) 
+ (   0.25000) t1(x,y,a,z) v(w,u,a,z) cre(X) cre(x) cre(y) des(Y) des(w) des(u) 
+ (  -0.50000) t1(x,y,a,z) v(i,w,i,a) cre(X) cre(x) cre(y) des(Y) des(z) des(w) 
+ (   0.50000) t1(x,a) v(y,z,a,w) cre(X) cre(y) cre(z) des(Y) des(x) des(w) 
+ (   0.50000) t1(x,a) v(y,z,a,w) cre(X) cre(x) cre(w) des(Y) des(y) des(z) 
+ (  -0.50000) e(a) t1(Y,x,a,y) t1(z,w,a,u) cre(X) cre(x) cre(u) des(y) des(z) des(w) 
+ (   0.50000) e(a) t1(x,a) t1(y,z,a,w) cre(X) cre(x) cre(w) des(Y) des(y) des(z) 
+ (  -0.50000) e(a) t1(x,y,a,z) t1(w,a) cre(X) cre(x) cre(y) des(Y) des(z) des(w) 
+ (  -0.25000) e(a) t1(x,y,a,z) t1(w,u,a,Y) cre(X) cre(x) cre(y) des(z) des(w) des(u) 
+ (   0.25000) e(a) t1(x,y,a,z) t1(w,u,a,z) cre(X) cre(x) cre(y) des(Y) des(w) des(u) 
+ (   0.25000) h(Y,x) t1(x,y,a,z) t1(w,u,a,v) cre(X) cre(y) cre(v) des(z) des(w) des(u) 
+ (  -0.12500) h(Y,x) t1(y,z,a,x) t1(w,u,a,v) cre(X) cre(w) cre(u) des(y) des(z) des(v) 
+ (   0.25000) h(x,y) t1(Y,x,a,z) t1(w,u,a,v) cre(X) cre(y) cre(v) des(z) des(w) des(u) 
+ (  -0.25000) h(x,y) t1(Y,z,a,x) t1(w,u,a,v) cre(X) cre(z) cre(v) des(y) des(w) des(u) 
+ (   0.25000) h(x,y) t1(x,z,a,Y) t1(w,u,a,v) cre(X) cre(w) cre(u) des(y) des(z) des(v) 
+ (  -0.25000) h(x,y) t1(x,z,a,w) t1(u,v,a,w) cre(X) cre(y) cre(z) des(Y) des(u) des(v) 
+ (  -0.25000) h(x,y) t1(x,z,a,w) t1(u,v,a,w) cre(X) cre(u) cre(v) des(Y) des(y) des(z) 
+ (  -0.50000) h(x,y) t1(x,z,a,w) t1(Y,u,a,v) cre(X) cre(w) cre(u) des(y) des(z) des(v) 
+ (   0.50000) h(x,y) t1(x,z,a,w) t1(u,a) cre(X) cre(y) cre(z) des(Y) des(w) des(u) 
+ (   0.50000) h(x,y) t1(x,z,a,w) t1(u,a) cre(X) cre(w) cre(u) des(Y) des(y) des(z) 
+ (   0.25000) h(x,y) t1(x,z,a,w) t1(u,v,a,Y) cre(X) cre(y) cre(z) des(w) des(u) des(v) 
+ (  -0.25000) h(x,y) t1(x,a) t1(z,w,a,u) cre(X) cre(y) cre(u) des(Y) des(z) des(w) 
+ (  -0.25000) h(x,y) t1(x,a) t1(z,w,a,u) cre(X) cre(z) cre(w) des(Y) des(y) des(u) 
+ (   0.25000) h(x,y) t1(z,w,a,x) t1(Y,u,a,v) cre(X) cre(y) cre(u) des(z) des(w) des(v) 
+ (  -0.25000) h(x,y) t1(z,w,a,x) t1(u,a) cre(X) cre(y) cre(u) des(Y) des(z) des(w) 
+ (  -0.25000) h(x,y) t1(z,w,a,x) t1(u,a) cre(X) cre(z) cre(w) des(Y) des(y) des(u) 
+ (  -0.12500) h(x,y) t1(z,w,a,x) t1(u,v,a,Y) cre(X) cre(z) cre(w) des(y) des(u) des(v) 
+ (   0.25000) h(x,y) t1(z,w,a,x) t1(u,v,a,y) cre(X) cre(z) cre(w) des(Y) des(u) des(v) 
+ (  -0.12500) v(Y,x,y,z) t1(x,w,a,u) t1(v,s,a,u) cre(X) cre(v) cre(s) des(y) des(z) des(w) 
+ (   0.25000) v(Y,x,y,z) t1(x,w,a,u) t1(v,a) cre(X) cre(u) cre(v) des(y) des(z) des(w) 
+ (  -0.12500) v(Y,x,y,z) t1(x,a) t1(w,u,a,v) cre(X) cre(w) cre(u) des(y) des(z) des(v) 
+ (   0.12500) v(Y,x,y,z) t1(y,z,a,w) t1(u,v,a,s) cre(X) cre(x) cre(s) des(w) des(u) des(v) 
+ (   0.25000) v(Y,x,y,z) t1(y,w,a,u) t1(v,s,a,u) cre(X) cre(x) cre(w) des(z) des(v) des(s) 
+ (  -0.50000) v(Y,x,y,z) t1(y,w,a,u) t1(v,a) cre(X) cre(x) cre(w) des(z) des(u) des(v) 
+ (  -0.25000) v(Y,x,y,z) t1(y,w,a,u) t1(v,s,a,z) cre(X) cre(x) cre(w) des(u) des(v) des(s) 
+ (   0.25000) v(Y,x,y,z) t1(y,a) t1(w,u,a,v) cre(X) cre(x) cre(v) des(z) des(w) des(u) 
+ (  -0.12500) v(Y,x,y,z) t1(w,u,a,x) t1(v,a) cre(X) cre(w) cre(u) des(y) des(z) des(v) 
+ (  -0.25000) v(Y,x,y,z) t1(w,u,a,x) t1(v,s,a,y) cre(X) cre(w) cre(u) des(z) des(v) des(s) 
+ (   0.25000) v(Y,x,y,z) t1(w,u,a,y) t1(v,a) cre(X) cre(x) cre(v) des(z) des(w) des(u) 
+ (   0.25000) v(i,Y,i,x) t1(x,y,a,z) t1(w,u,a,v) cre(X) cre(y) cre(v) des(z) des(w) des(u) 
+ (  -0.12500) v(i,Y,i,x) t1(y,z,a,x) t1(w,u,a,v) cre(X) cre(w) cre(u) des(y) des(z) des(v) 
+ (  -0.12500) v(x,y,z,w) t1(Y,x,a,u) t1(v,s,a,u) cre(X) cre(z) cre(w) des(y) des(v) des(s) 
+ (   0.25000) v(x,y,z,w) t1(Y,x,a,u) t1(v,a) cre(X) cre(z) cre(w) des(y) des(u) des(v) 
+ (   0.12500) v(x,y,z,w) t1(Y,x,a,u) t1(v,s,a,y) cre(X) cre(z) cre(w) des(u) des(v) des(s) 
+ (   0.25000) v(x,y,z,w) t1(Y,u,a,x) t1(y,v,a,s) cre(X) cre(u) cre(s) des(z) des(w) des(v) 
+ (  -0.25000) v(x,y,z,w) t1(Y,u,a,x) t1(v,a) cre(X) cre(y) cre(u) des(z) des(w) des(v) 
+ (  -0.50000) v(x,y,z,w) t1(Y,u,a,x) t1(v,s,a,z) cre(X) cre(y) cre(u) des(w) des(v) des(s) 
+ (   0.06250) v(x,y,z,w) t1(x,y,a,Y) t1(u,v,a,s) cre(X) cre(u) cre(v) des(z) des(w) des(s) 
+ (  -0.06250) v(x,y,z,w) t1(x,y,a,u) t1(v,s,a,u) cre(X) cre(z) cre(w) des(Y) des(v) des(s) 
+ (  -0.06250) v(x,y,z,w) t1(x,y,a,u) t1(v,s,a,u) cre(X) cre(v) cre(s) des(Y) des(z) des(w) 
+ (  -0.12500) v(x,y,z,w) t1(x,y,a,u) t1(Y,v,a,s) cre(X) cre(u) cre(v) des(z) des(w) des(s) 
+ (   0.12500) v(x,y,z,w) t1(x,y,a,u) t1(v,a) cre(X) cre(z) cre(w) des(Y) des(u) des(v) 
+ (   0.12500) v(x,y,z,w) t1(x,y,a,u) t1(v,a) cre(X) cre(u) cre(v) des(Y) des(z) des(w) 
+ (   0.06250) v(x,y,z,w) t1(x,y,a,u) t1(v,s,a,Y) cre(X) cre(z) cre(w) des(u) des(v) des(s) 
+ (   0.25000) v(x,y,z,w) t1(x,u,a,Y) t1(v,a) cre(X) cre(y) cre(v) des(z) des(w) des(u) 
+ (  -0.12500) v(x,y,z,w) t1(x,u,a,Y) t1(v,s,a,y) cre(X) cre(v) cre(s) des(z) des(w) des(u) 
+ (  -0.25000) v(x,y,z,w) t1(x,u,a,v) t1(Y,s,a,v) cre(X) cre(y) cre(s) des(z) des(w) des(u) 
+ (  -0.25000) v(x,y,z,w) t1(x,u,a,v) t1(Y,a) cre(X) cre(y) cre(v) des(z) des(w) des(u) 
+ (  -0.25000) v(x,y,z,w) t1(x,a) t1(Y,u,a,v) cre(X) cre(y) cre(u) des(z) des(w) des(v) 
+ (   0.25000) v(x,y,z,w) t1(x,a) t1(u,a) cre(X) cre(y) cre(u) des(Y) des(z) des(w) 
+ (   0.25000) v(x,y,z,w) t1(x,a) t1(u,a) cre(X) cre(z) cre(w) des(Y) des(y) des(u) 
+ (   0.12500) v(x,y,z,w) t1(x,a) t1(u,v,a,Y) cre(X) cre(z) cre(w) des(y) des(u) des(v) 
+ (  -0.12500) v(x,y,z,w) t1(x,a) t1(u,v,a,y) cre(X) cre(z) cre(w) des(Y) des(u) des(v) 
+ (  -0.12500) v(x,y,z,w) t1(x,a) t1(u,v,a,y) cre(X) cre(u) cre(v) des(Y) des(z) des(w) 
+ (   0.12500) v(x,y,z,w) t1(u,v,a,x) t1(Y,a) cre(X) cre(z) cre(w) des(y) des(u) des(v) 
+ (   0.25000) v(i,x,i,y) t1(Y,x,a,z) t1(w,u,a,v) cre(X) cre(y) cre(v) des(z) des(w) des(u) 
+ (  -0.25000) v(i,x,i,y) t1(Y,z,a,x) t1(w,u,a,v) cre(X) cre(z) cre(v) des(y) des(w) des(u) 
+ (   0.25000) v(i,x,i,y) t1(x,z,a,Y) t1(w,u,a,v) cre(X) cre(w) cre(u) des(y) des(z) des(v) 
+ (  -0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,w) cre(X) cre(y) cre(z) des(Y) des(u) des(v) 
+ (  -0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,w) cre(X) cre(u) cre(v) des(Y) des(y) des(z) 
+ (  -0.50000) v(i,x,i,y) t1(x,z,a,w) t1(Y,u,a,v) cre(X) cre(w) cre(u) des(y) des(z) des(v) 
+ (   0.50000) v(i,x,i,y) t1(x,z,a,w) t1(u,a) cre(X) cre(y) cre(z) des(Y) des(w) des(u) 
+ (   0.50000) v(i,x,i,y) t1(x,z,a,w) t1(u,a) cre(X) cre(w) cre(u) des(Y) des(y) des(z) 
+ (   0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,Y) cre(X) cre(y) cre(z) des(w) des(u) des(v) 
+ (  -0.25000) v(i,x,i,y) t1(x,a) t1(z,w,a,u) cre(X) cre(y) cre(u) des(Y) des(z) des(w) 
+ (  -0.25000) v(i,x,i,y) t1(x,a) t1(z,w,a,u) cre(X) cre(z) cre(w) des(Y) des(y) des(u) 
+ (   0.25000) v(i,x,i,y) t1(z,w,a,x) t1(Y,u,a,v) cre(X) cre(y) cre(u) des(z) des(w) des(v) 
+ (  -0.25000) v(i,x,i,y) t1(z,w,a,x) t1(u,a) cre(X) cre(y) cre(u) des(Y) des(z) des(w) 
+ (  -0.25000) v(i,x,i,y) t1(z,w,a,x) t1(u,a) cre(X) cre(z) cre(w) des(Y) des(y) des(u) 
+ (  -0.12500) v(i,x,i,y) t1(z,w,a,x) t1(u,v,a,Y) cre(X) cre(z) cre(w) des(y) des(u) des(v) 
+ (   0.25000) v(i,x,i,y) t1(z,w,a,x) t1(u,v,a,y) cre(X) cre(z) cre(w) des(Y) des(u) des(v) 
+ (   0.25000) t1(x,y,a,z) v(w,u,a,v) cre(X) cre(z) cre(w) cre(u) des(Y) des(x) des(y) des(v) 
+ (   0.25000) t1(x,y,a,z) v(w,u,a,v) cre(X) cre(x) cre(y) cre(v) des(Y) des(z) des(w) des(u) 
+ (   0.25000) e(a) t1(x,y,a,z) t1(w,u,a,v) cre(X) cre(x) cre(y) cre(v) des(Y) des(z) des(w) des(u) 
+ (  -0.25000) h(x,y) t1(x,z,a,w) t1(u,v,a,s) cre(X) cre(y) cre(z) cre(s) des(Y) des(w) des(u) des(v) 
+ (  -0.25000) h(x,y) t1(x,z,a,w) t1(u,v,a,s) cre(X) cre(w) cre(u) cre(v) des(Y) des(y) des(z) des(s) 
+ (   0.12500) h(x,y) t1(z,w,a,x) t1(u,v,a,s) cre(X) cre(y) cre(u) cre(v) des(Y) des(z) des(w) des(s) 
+ (   0.12500) h(x,y) t1(z,w,a,x) t1(u,v,a,s) cre(X) cre(z) cre(w) cre(s) des(Y) des(y) des(u) des(v) 
+ (  -0.12500) v(Y,x,y,z) t1(x,w,a,u) t1(v,s,a,t) cre(X) cre(u) cre(v) cre(s) des(y) des(z) des(w) des(t) 
+ (   0.25000) v(Y,x,y,z) t1(y,w,a,u) t1(v,s,a,t) cre(X) cre(x) cre(w) cre(t) des(z) des(u) des(v) des(s) 
+ (   0.06250) v(Y,x,y,z) t1(w,u,a,x) t1(v,s,a,t) cre(X) cre(w) cre(u) cre(t) des(y) des(z) des(v) des(s) 
+ (  -0.12500) v(Y,x,y,z) t1(w,u,a,y) t1(v,s,a,t) cre(X) cre(x) cre(v) cre(s) des(z) des(w) des(u) des(t) 
+ (  -0.12500) v(x,y,z,w) t1(Y,x,a,u) t1(v,s,a,t) cre(X) cre(z) cre(w) cre(t) des(y) des(u) des(v) des(s) 
+ (   0.12500) v(x,y,z,w) t1(Y,u,a,x) t1(v,s,a,t) cre(X) cre(y) cre(u) cre(t) des(z) des(w) des(v) des(s) 
+ (  -0.06250) v(x,y,z,w) t1(x,y,a,u) t1(v,s,a,t) cre(X) cre(z) cre(w) cre(t) des(Y) des(u) des(v) des(s) 
+ (  -0.06250) v(x,y,z,w) t1(x,y,a,u) t1(v,s,a,t) cre(X) cre(u) cre(v) cre(s) des(Y) des(z) des(w) des(t) 
+ (  -0.12500) v(x,y,z,w) t1(x,u,a,Y) t1(v,s,a,t) cre(X) cre(y) cre(v) cre(s) des(z) des(w) des(u) des(t) 
+ (  -0.12500) v(x,y,z,w) t1(x,u,a,v) t1(s,t,a,v) cre(X) cre(y) cre(s) cre(t) des(Y) des(z) des(w) des(u) 
+ (  -0.12500) v(x,y,z,w) t1(x,u,a,v) t1(s,t,a,v) cre(X) cre(z) cre(w) cre(u) des(Y) des(y) des(s) des(t) 
+ (   0.25000) v(x,y,z,w) t1(x,u,a,v) t1(Y,s,a,t) cre(X) cre(y) cre(v) cre(s) des(z) des(w) des(u) des(t) 
+ (   0.25000) v(x,y,z,w) t1(x,u,a,v) t1(s,a) cre(X) cre(y) cre(v) cre(s) des(Y) des(z) des(w) des(u) 
+ (   0.25000) v(x,y,z,w) t1(x,u,a,v) t1(s,a) cre(X) cre(z) cre(w) cre(u) des(Y) des(y) des(v) des(s) 
+ (  -0.12500) v(x,y,z,w) t1(x,u,a,v) t1(s,t,a,Y) cre(X) cre(z) cre(w) cre(u) des(y) des(v) des(s) des(t) 
+ (   0.12500) v(x,y,z,w) t1(x,u,a,v) t1(s,t,a,y) cre(X) cre(z) cre(w) cre(u) des(Y) des(v) des(s) des(t) 
+ (   0.12500) v(x,y,z,w) t1(x,u,a,v) t1(s,t,a,y) cre(X) cre(v) cre(s) cre(t) des(Y) des(z) des(w) des(u) 
+ (  -0.12500) v(x,y,z,w) t1(x,a) t1(u,v,a,s) cre(X) cre(y) cre(u) cre(v) des(Y) des(z) des(w) des(s) 
+ (  -0.12500) v(x,y,z,w) t1(x,a) t1(u,v,a,s) cre(X) cre(z) cre(w) cre(s) des(Y) des(y) des(u) des(v) 
+ (  -0.12500) v(x,y,z,w) t1(u,v,a,x) t1(Y,s,a,t) cre(X) cre(z) cre(w) cre(s) des(y) des(u) des(v) des(t) 
+ (  -0.12500) v(x,y,z,w) t1(u,v,a,x) t1(s,a) cre(X) cre(y) cre(u) cre(v) des(Y) des(z) des(w) des(s) 
+ (  -0.12500) v(x,y,z,w) t1(u,v,a,x) t1(s,a) cre(X) cre(z) cre(w) cre(s) des(Y) des(y) des(u) des(v) 
+ (   0.06250) v(x,y,z,w) t1(u,v,a,x) t1(s,t,a,Y) cre(X) cre(y) cre(u) cre(v) des(z) des(w) des(s) des(t) 
+ (  -0.25000) v(x,y,z,w) t1(u,v,a,x) t1(s,t,a,z) cre(X) cre(y) cre(u) cre(v) des(Y) des(w) des(s) des(t) 
+ (  -0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,s) cre(X) cre(y) cre(z) cre(s) des(Y) des(w) des(u) des(v) 
+ (  -0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,s) cre(X) cre(w) cre(u) cre(v) des(Y) des(y) des(z) des(s) 
+ (   0.12500) v(i,x,i,y) t1(z,w,a,x) t1(u,v,a,s) cre(X) cre(y) cre(u) cre(v) des(Y) des(z) des(w) des(s) 
+ (   0.12500) v(i,x,i,y) t1(z,w,a,x) t1(u,v,a,s) cre(X) cre(z) cre(w) cre(s) des(Y) des(y) des(u) des(v) 
+ (   0.12500) v(x,y,z,w) t1(x,u,a,v) t1(s,t,a,r) cre(X) cre(y) cre(v) cre(s) cre(t) des(Y) des(z) des(w) des(u) des(r) 
+ (   0.12500) v(x,y,z,w) t1(x,u,a,v) t1(s,t,a,r) cre(X) cre(z) cre(w) cre(u) cre(r) des(Y) des(y) des(v) des(s) des(t) 
+ (  -0.06250) v(x,y,z,w) t1(u,v,a,x) t1(s,t,a,r) cre(X) cre(y) cre(u) cre(v) cre(r) des(Y) des(z) des(w) des(s) des(t) 
+ (  -0.06250) v(x,y,z,w) t1(u,v,a,x) t1(s,t,a,r) cre(X) cre(z) cre(w) cre(s) cre(t) des(Y) des(y) des(u) des(v) des(r) 
+
+Total terms : 198
+SQA automation time :  8.698 seconds
+>>> Slice V1: 198 spin-orbital a^\dag_p a_q [V + H^(1), A^(1)] terms created.
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+49 terms removed:
+ (  -1.00000) t1(Y,a) v(i,x,i,a) rdm(X,x) 
+ (  -1.00000) t1(x,a) v(i,Y,i,a) rdm(X,x) 
+ (   0.50000) v(i,Y,i,x) t1(x,a) t1(y,a) rdm(X,y) 
+ (   0.50000) v(i,x,i,y) t1(x,a) t1(Y,a) rdm(X,y) 
+ (  -1.00000) t1(Y,x,a,y) v(i,z,i,a) rdm(X,x,y,z) 
+ (  -0.50000) t1(x,y,a,Y) v(i,z,i,a) rdm(X,z,x,y) 
+ (   0.50000) t1(x,y,a,z) v(i,Y,i,a) rdm(X,z,x,y) 
+ (   1.00000) t1(x,a) v(i,y,i,a) rdm(X,y,Y,x) 
+ (   1.00000) t1(x,a) v(i,y,i,a) rdm(X,x,Y,y) 
+ (  -0.25000) v(i,Y,i,x) t1(x,y,a,z) t1(w,u,a,z) rdm(X,y,w,u) 
+ (   0.50000) v(i,Y,i,x) t1(x,y,a,z) t1(w,a) rdm(X,y,z,w) 
+ (  -0.25000) v(i,Y,i,x) t1(x,a) t1(y,z,a,w) rdm(X,w,y,z) 
+ (  -0.25000) v(i,Y,i,x) t1(y,z,a,x) t1(w,a) rdm(X,w,y,z) 
+ (  -0.25000) v(i,x,i,y) t1(Y,x,a,z) t1(w,u,a,z) rdm(X,y,w,u) 
+ (   0.50000) v(i,x,i,y) t1(Y,x,a,z) t1(w,a) rdm(X,y,z,w) 
+ (  -0.50000) v(i,x,i,y) t1(Y,z,a,x) t1(w,a) rdm(X,z,y,w) 
+ (   0.50000) v(i,x,i,y) t1(Y,z,a,x) t1(w,u,a,y) rdm(X,z,w,u) 
+ (   0.50000) v(i,x,i,y) t1(x,z,a,Y) t1(w,a) rdm(X,w,y,z) 
+ (  -0.50000) v(i,x,i,y) t1(x,z,a,w) t1(Y,u,a,w) rdm(X,u,y,z) 
+ (  -0.50000) v(i,x,i,y) t1(x,z,a,w) t1(Y,a) rdm(X,w,y,z) 
+ (  -0.50000) v(i,x,i,y) t1(x,a) t1(Y,z,a,w) rdm(X,z,y,w) 
+ (  -0.50000) v(i,x,i,y) t1(x,a) t1(z,a) rdm(X,y,Y,z) 
+ (  -0.50000) v(i,x,i,y) t1(x,a) t1(z,a) rdm(X,z,Y,y) 
+ (   0.25000) v(i,x,i,y) t1(x,a) t1(z,w,a,Y) rdm(X,y,z,w) 
+ (   0.25000) v(i,x,i,y) t1(z,w,a,x) t1(Y,a) rdm(X,y,z,w) 
+ (  -0.50000) t1(x,y,a,z) v(i,w,i,a) rdm(X,z,w,Y,x,y) 
+ (  -0.50000) t1(x,y,a,z) v(i,w,i,a) rdm(X,x,y,Y,z,w) 
+ (   0.25000) v(i,Y,i,x) t1(x,y,a,z) t1(w,u,a,v) rdm(X,y,v,z,w,u) 
+ (  -0.12500) v(i,Y,i,x) t1(y,z,a,x) t1(w,u,a,v) rdm(X,w,u,y,z,v) 
+ (   0.25000) v(i,x,i,y) t1(Y,x,a,z) t1(w,u,a,v) rdm(X,y,v,z,w,u) 
+ (  -0.25000) v(i,x,i,y) t1(Y,z,a,x) t1(w,u,a,v) rdm(X,z,v,y,w,u) 
+ (   0.25000) v(i,x,i,y) t1(x,z,a,Y) t1(w,u,a,v) rdm(X,w,u,y,z,v) 
+ (  -0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,w) rdm(X,y,z,Y,u,v) 
+ (  -0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,w) rdm(X,u,v,Y,y,z) 
+ (  -0.50000) v(i,x,i,y) t1(x,z,a,w) t1(Y,u,a,v) rdm(X,w,u,y,z,v) 
+ (   0.50000) v(i,x,i,y) t1(x,z,a,w) t1(u,a) rdm(X,y,z,Y,w,u) 
+ (   0.50000) v(i,x,i,y) t1(x,z,a,w) t1(u,a) rdm(X,w,u,Y,y,z) 
+ (   0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,Y) rdm(X,y,z,w,u,v) 
+ (  -0.25000) v(i,x,i,y) t1(x,a) t1(z,w,a,u) rdm(X,y,u,Y,z,w) 
+ (  -0.25000) v(i,x,i,y) t1(x,a) t1(z,w,a,u) rdm(X,z,w,Y,y,u) 
+ (   0.25000) v(i,x,i,y) t1(z,w,a,x) t1(Y,u,a,v) rdm(X,y,u,z,w,v) 
+ (  -0.25000) v(i,x,i,y) t1(z,w,a,x) t1(u,a) rdm(X,y,u,Y,z,w) 
+ (  -0.25000) v(i,x,i,y) t1(z,w,a,x) t1(u,a) rdm(X,z,w,Y,y,u) 
+ (  -0.12500) v(i,x,i,y) t1(z,w,a,x) t1(u,v,a,Y) rdm(X,z,w,y,u,v) 
+ (   0.25000) v(i,x,i,y) t1(z,w,a,x) t1(u,v,a,y) rdm(X,z,w,Y,u,v) 
+ (  -0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,s) rdm(X,y,z,s,Y,w,u,v) 
+ (  -0.25000) v(i,x,i,y) t1(x,z,a,w) t1(u,v,a,s) rdm(X,w,u,v,Y,y,z,s) 
+ (   0.12500) v(i,x,i,y) t1(z,w,a,x) t1(u,v,a,s) rdm(X,y,u,v,Y,z,w,s) 
+ (   0.12500) v(i,x,i,y) t1(z,w,a,x) t1(u,v,a,s) rdm(X,z,w,s,Y,y,u,v) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 149
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+V1__t1_m1p =- einsum('Ya,xa,Xx->XY', h_ae_so, t1_ae, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1p -= einsum('xa,Ya,Xx->XY', h_ae_so, t1_ae, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1p -= einsum('a,Ya,xa,Xx->XY', e_extern_so, t1_ae, t1_ae, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('Yx,xa,ya,Xy->XY', h_aa_so, t1_ae, t1_ae, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xy,xa,Ya,Xy->XY', h_aa_so, t1_ae, t1_ae, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('Ya,xyaz,Xzxy->XY', h_ae_so, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += einsum('xa,Yyaz,Xyxz->XY', h_ae_so, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += einsum('xa,ya,XxYy->XY', h_ae_so, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += einsum('xa,ya,XyYx->XY', h_ae_so, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xa,yzaY,Xxyz->XY', h_ae_so, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('Yxay,zway,Xxzw->XY', t1_aaea, v_aaea_so, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('Ya,xyaz,Xzxy->XY', t1_ae, v_aaea_so, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xyaz,Ywaz,Xwxy->XY', t1_aaea, v_aaea_so, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += einsum('xa,Yyaz,Xyxz->XY', t1_ae, v_aaea_so, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xa,yzaY,Xxyz->XY', t1_ae, v_aaea_so, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('a,Ya,xyaz,Xzxy->XY', e_extern_so, t1_ae, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= einsum('a,Yxay,za,Xxyz->XY', e_extern_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('a,Yxay,zway,Xxzw->XY', e_extern_so, t1_aaea, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += einsum('a,xa,ya,XxYy->XY', e_extern_so, t1_ae, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('a,xa,yzaY,Xxyz->XY', e_extern_so, t1_ae, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('Yx,xyaz,wuaz,Xywu->XY', h_aa_so, t1_aaea, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('Yx,xyaz,wa,Xyzw->XY', h_aa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('Yx,xa,yzaw,Xwyz->XY', h_aa_so, t1_ae, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('Yx,yzax,wa,Xwyz->XY', h_aa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,Yxaz,wuaz,Xywu->XY', h_aa_so, t1_aaea, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xy,Yxaz,wa,Xyzw->XY', h_aa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xy,Yzax,wa,Xzyw->XY', h_aa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xy,Yzax,wuay,Xzwu->XY', h_aa_so, t1_aaea, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xy,xzaY,wa,Xwyz->XY', h_aa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xy,xzaw,Yuaw,Xuyz->XY', h_aa_so, t1_aaea, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xy,xzaw,Ya,Xwyz->XY', h_aa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xy,xa,Yzaw,Xzyw->XY', h_aa_so, t1_ae, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xy,xa,za,XyYz->XY', h_aa_so, t1_ae, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xy,xa,za,XzYy->XY', h_aa_so, t1_ae, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xy,xa,zwaY,Xyzw->XY', h_aa_so, t1_ae, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xy,zwax,Ya,Xyzw->XY', h_aa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('Yxyz,xa,wa,Xwyz->XY', v_aaaa_so, t1_ae, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('Yxyz,yzaw,uvaw,Xxuv->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('Yxyz,yzaw,ua,Xxwu->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('Yxyz,ya,wa,Xxzw->XY', v_aaaa_so, t1_ae, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('Yxyz,ya,wuaz,Xxwu->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,Yuax,ya,Xuzw->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,xyaY,ua,Xuzw->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xyau,Yvau,Xvzw->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xyau,Ya,Xuzw->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xyzw,xa,Ya,Xyzw->XY', v_aaaa_so, t1_ae, t1_ae, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xa,yzaw,XxwYyz->XY', h_ae_so, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xa,yzaw,XyzYxw->XY', h_ae_so, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('Yxay,zwau,Xxuyzw->XY', t1_aaea, v_aaea_so, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xyaY,zwau,Xzwxyu->XY', t1_aaea, v_aaea_so, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyaz,wuaz,XwuYxy->XY', t1_aaea, v_aaea_so, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xyaz,Ywau,Xzwxyu->XY', t1_aaea, v_aaea_so, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xyaz,wuaY,Xxyzwu->XY', t1_aaea, v_aaea_so, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyaz,wuaz,XxyYwu->XY', t1_aaea, v_aaea_so, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xa,yzaw,XyzYxw->XY', t1_ae, v_aaea_so, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xa,yzaw,XxwYyz->XY', t1_ae, v_aaea_so, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('a,Yxay,zwau,Xxuyzw->XY', e_extern_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('a,xa,yzaw,XxwYyz->XY', e_extern_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('a,xyaz,wa,XxyYzw->XY', e_extern_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('a,xyaz,wuaY,Xxyzwu->XY', e_extern_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('a,xyaz,wuaz,XxyYwu->XY', e_extern_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('Yx,xyaz,wuav,Xyvzwu->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('Yx,yzax,wuav,Xwuyzv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xy,Yxaz,wuav,Xyvzwu->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,Yzax,wuav,Xzvywu->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xy,xzaY,wuav,Xwuyzv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,xzaw,uvaw,XyzYuv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,xzaw,uvaw,XuvYyz->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xy,xzaw,Yuav,Xwuyzv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xy,xzaw,ua,XyzYwu->XY', h_aa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/2 * einsum('xy,xzaw,ua,XwuYyz->XY', h_aa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xy,xzaw,uvaY,Xyzwuv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,xa,zwau,XyuYzw->XY', h_aa_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,xa,zwau,XzwYyu->XY', h_aa_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xy,zwax,Yuav,Xyuzwv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,zwax,ua,XyuYzw->XY', h_aa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,zwax,ua,XzwYyu->XY', h_aa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xy,zwax,uvaY,Xzwyuv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xy,zwax,uvay,XzwYuv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('Yxyz,xwau,vsau,Xvsyzw->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('Yxyz,xwau,va,Xuvyzw->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('Yxyz,xa,wuav,Xwuyzv->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('Yxyz,yzaw,uvas,Xxswuv->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('Yxyz,ywau,vsau,Xxwzvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('Yxyz,ywau,va,Xxwzuv->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('Yxyz,ywau,vsaz,Xxwuvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('Yxyz,ya,wuav,Xxvzwu->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('Yxyz,wuax,va,Xwuyzv->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('Yxyz,wuax,vsay,Xwuzvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('Yxyz,wuay,va,Xxvzwu->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,Yxau,vsau,Xzwyvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,Yxau,va,Xzwyuv->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,Yxau,vsay,Xzwuvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,Yuax,yvas,Xuszwv->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xyzw,Yuax,va,Xyuzwv->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/2 * einsum('xyzw,Yuax,vsaz,Xyuwvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/16 * einsum('xyzw,xyaY,uvas,Xuvzws->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/16 * einsum('xyzw,xyau,vsau,XzwYvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/16 * einsum('xyzw,xyau,vsau,XvsYzw->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xyau,Yvas,Xuvzws->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,xyau,va,XzwYuv->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,xyau,va,XuvYzw->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/16 * einsum('xyzw,xyau,vsaY,Xzwuvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,xuaY,va,Xyvzwu->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xuaY,vsay,Xvszwu->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xyzw,xuav,Ysav,Xyszwu->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xyzw,xuav,Ya,Xyvzwu->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xyzw,xa,Yuav,Xyuzwv->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,xa,ua,XyuYzw->XY', v_aaaa_so, t1_ae, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,xa,ua,XzwYyu->XY', v_aaaa_so, t1_ae, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,xa,uvaY,Xzwyuv->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xa,uvay,XzwYuv->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xa,uvay,XuvYzw->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,uvax,Ya,Xzwyuv->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyaz,wuav,XzwuYxyv->XY', t1_aaea, v_aaea_so, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyaz,wuav,XxyvYzwu->XY', t1_aaea, v_aaea_so, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('a,xyaz,wuav,XxyvYzwu->XY', e_extern_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,xzaw,uvas,XyzsYwuv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xy,xzaw,uvas,XwuvYyzs->XY', h_aa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xy,zwax,uvas,XyuvYzws->XY', h_aa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xy,zwax,uvas,XzwsYyuv->XY', h_aa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('Yxyz,xwau,vsat,Xuvsyzwt->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('Yxyz,ywau,vsat,Xxwtzuvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/16 * einsum('Yxyz,wuax,vsat,Xwutyzvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('Yxyz,wuay,vsat,Xxvszwut->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,Yxau,vsat,Xzwtyuvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,Yuax,vsat,Xyutzwvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/16 * einsum('xyzw,xyau,vsat,XzwtYuvs->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/16 * einsum('xyzw,xyau,vsat,XuvsYzwt->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xuaY,vsat,Xyvszwut->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xuav,stav,XystYzwu->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xuav,stav,XzwuYyst->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,xuav,Ysat,Xyvszwut->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,xuav,sa,XyvsYzwu->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/4 * einsum('xyzw,xuav,sa,XzwuYyvs->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xuav,staY,Xzwuyvst->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,xuav,stay,XzwuYvst->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,xuav,stay,XvstYzwu->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xa,uvas,XyuvYzws->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,xa,uvas,XzwsYyuv->XY', v_aaaa_so, t1_ae, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,uvax,Ysat,Xzwsyuvt->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,uvax,sa,XyuvYzws->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/8 * einsum('xyzw,uvax,sa,XzwsYyuv->XY', v_aaaa_so, t1_aaea, t1_ae, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/16 * einsum('xyzw,uvax,staY,Xyuvzwst->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/4 * einsum('xyzw,uvax,staz,XyuvYwst->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_ccccaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,xuav,star,XyvstYzwur->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccccaaaaa_so, optimize = einsum_type)
+V1__t1_m1p += 1/8 * einsum('xyzw,xuav,star,XzwurYyvst->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccccaaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/16 * einsum('xyzw,uvax,star,XyuvrYzwst->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccccaaaaa_so, optimize = einsum_type)
+V1__t1_m1p -= 1/16 * einsum('xyzw,uvax,star,XzwstYyuvr->XY', v_aaaa_so, t1_aaea, t1_aaea, rdm_cccccaaaaa_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 44.14 seconds.

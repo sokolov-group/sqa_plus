@@ -1,0 +1,113 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+-------------------------------- Spin-Orbital V(X,Y): T-Slice t1_0 ---------------------------------
+
+# Defining a^\dag_p a_q...
+
+## Creating first set of spin-orbital T - T^\dag...
+22 spin-orbital A terms created.
+
+## Creating second set of spin-orbital T - T^\dag...
+22 spin-orbital A terms created.
+
+## Selecting spin-orbital T - T^\dag slice: t1_0...
+
+# First Amplitude Set...
+ (   0.25000) t1(cc4,cc5,ee4,ee5) cre(ee4) cre(ee5) des(cc5) des(cc4) 
+ (  -0.25000) t1(cc4,cc5,ee4,ee5) cre(cc4) cre(cc5) des(ee5) des(ee4) 
+>>> Slice t1_0: 2 spin-orbital A terms selected.
+
+# Second Amplitude Set...
+ (   0.25000) t1(cc15,cc16,ee15,ee16) cre(ee15) cre(ee16) des(cc16) des(cc15) 
+ (  -0.25000) t1(cc15,cc16,ee15,ee16) cre(cc15) cre(cc16) des(ee16) des(ee15) 
+>>> Slice t1_0: 2 spin-orbital A terms selected.
+
+# Creating spin-orbital [2V + [H^(0), T - T^\dag], T - T^\dag]:
+
+## Creating spin-orbital V...
+82 spin-orbital V terms created.
+
+## Creating spin-orbital H^(0)...
+6 spin-orbital H^(0) terms created.
+
+## Calculating [H^(0), T - T^\dag]:
+>>> Slice t1_0: 4 spin-orbital terms created.
+
+## Calculating V + H^(1):
+>>> Slice t1_0: 86 spin-orbital terms created.
+
+## Calculating [V + H^(1), T - T^\dag]:
+>>> Slice t1_0: 4 spin-orbital terms created.
+
+## Calculating a^\dag_p a_q [V + H^(1), T - T^\dag]:
+>>> Slice t1_0: 170 spin-orbital a^\dag_p a_q [V + H^(1), T - T^\dag] terms created.
+
+----------------------------------------------------------------------------------------------------
+
+## Calculating matrix element of t1_0 slice of V1:
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -0.25000) t1(i,j,a,b) v(i,j,a,b) cre(X) des(Y) 
+ (  -0.25000) t1(i,j,a,b) v(i,j,a,b) cre(X) des(Y) 
+ (   0.50000) e(i) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+ (  -0.50000) e(a) t1(i,j,a,b) t1(i,j,a,b) cre(X) des(Y) 
+
+Total terms : 4
+SQA automation time :  0.223 seconds
+>>> Slice V1: 4 spin-orbital a^\dag_p a_q [V + H^(1), A^(1)] terms created.
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 4
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+V1__t1_0 =- 1/4 * einsum('ijab,ijab,XY->XY', t1_ccee, v_ccee_so, rdm_ca_so, optimize = einsum_type)
+V1__t1_0 -= 1/4 * einsum('ijab,ijab,XY->XY', t1_ccee, v_ccee_so, rdm_ca_so, optimize = einsum_type)
+V1__t1_0 += 1/2 * einsum('i,ijab,ijab,XY->XY', e_core_so, t1_ccee, t1_ccee, rdm_ca_so, optimize = einsum_type)
+V1__t1_0 -= 1/2 * einsum('a,ijab,ijab,XY->XY', e_extern_so, t1_ccee, t1_ccee, rdm_ca_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 8.59 seconds.

@@ -1,9 +1,9 @@
 import sqa_plus
 sqa_plus.options.spin_integrated = True
 
-amplitude_string = 't1_p1p'
+amplitude_string = 't1_0p'
 k_block_string = 'K22'
-spin_cases_string = 'bba_bba'
+spin_cases_string = 'aa_aa'
 
 import time
 start = time.time()
@@ -88,6 +88,34 @@ if amplitude_string == 't1_0p':
 
         term_l_op = sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])
         term_r_op = sqa_plus.term(1.0, [], [cre_z_beta, des_w_beta])
+
+        k_string = 'K_caca_' + spin_cases_string
+        final_indices_string = 'XYWZ'
+
+elif amplitude_string == 't1_0pp':
+    print("## Create K_caca: (a_X^\dag a_Y - a_Y^\dag a_X) [H_{act}, a_Z^\dag a_W - a_W^\dag a_Z] ...\n")
+    if spin_cases_string == 'aa_aa':
+
+        l_op = sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])
+        l_op_dag = sqa_plus.term(-1.0, [], [cre_y_alpha, des_x_alpha]) 
+        term_l_op = [l_op, l_op_dag]
+    
+        r_op = sqa_plus.term(1.0, [], [cre_z_alpha, des_w_alpha])
+        r_op_dag = sqa_plus.term(-1.0, [], [cre_w_alpha, des_z_alpha]) 
+        term_r_op = [r_op, r_op_dag]
+
+        k_string = 'K_caca_' + spin_cases_string
+        final_indices_string = 'XYWZ'
+
+    elif spin_cases_string == 'aa_bb':
+
+        l_op = sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])
+        l_op_dag = sqa_plus.term(-1.0, [], [cre_y_alpha, des_x_alpha]) 
+        term_l_op = [l_op, l_op_dag]
+    
+        r_op = sqa_plus.term(1.0, [], [cre_z_beta, des_w_beta])
+        r_op_dag = sqa_plus.term(-1.0, [], [cre_w_beta, des_z_beta]) 
+        term_r_op = [r_op, r_op_dag]
 
         k_string = 'K_caca_' + spin_cases_string
         final_indices_string = 'XYWZ'
@@ -204,8 +232,8 @@ elif amplitude_string == 't1_p1p':
             k_string = k_block_string + "_" + spin_cases_string
             final_indices_string = 'UVXWZY'
 
-print(term_l_op)
-print(term_r_op)
+print term_l_op
+print term_r_op
 
 ## Compute the commutator
 print("\n## Calculating the commutator ...")
@@ -214,8 +242,12 @@ terms_r_com = sqa_plus.commutator(terms_Heff, term_r_op)
 print("\n## Multiply ...")
 terms_K = []
 for term_r_com in terms_r_com:
-    terms_K.append(sqa_plus.multiplyTerms(term_l_op, term_r_com))
-
+    if type(term_l_op) != list:
+        terms_K.append(sqa_plus.multiplyTerms(term_l_op, term_r_com))
+    else:
+        for term in term_l_op:
+            terms_K.append(sqa_plus.multiplyTerms(term, term_r_com))
+ 
 # Compute expected value of spin-integrated K matrix
 print("## Compute expected value of spin-integrated K matrix ...")
 terms_expected_K = sqa_plus.matrixBlock(terms_K)

@@ -1,0 +1,4 @@
+einsum equations from TY_q0_ca.dat
+
+TY[s_c:f_c, s_a:f_a]  = einsum('PQ->PQ', Y_KW__aa, optimize = einsum_type).copy()
+TY[s_c:f_c, s_a:f_a] -= 1/2 * einsum('Px,Qx->PQ', Y_KW__aa, rdm_ca, optimize = einsum_type)

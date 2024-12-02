@@ -1,0 +1,190 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+----------------------------- Spin-Adapted Preconditioner CVAA (baba) ------------------------------
+
+
+## Generating operators ...
+
+
+## Generating Term a_I^\dag a_J^\dag a_Y a_X ... a_W^\dag a_Z^\dag a_L a_K ...
+
+
+----------------------------------------- Hamiltonian (0) ------------------------------------------
+
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(0), h_NU^\dag] ...
+
+## Calculating [h_MU, [H(0), h_NU^\dag]] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) v(W,Z,X,Y) kdelta(I,K) kdelta(J,L) 
+ (   1.00000) h(W,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (   1.00000) h(Y,Z) kdelta(I,K) kdelta(J,L) kdelta(W,X) 
+ (   2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (   2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (   2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (   2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (  -1.00000) e(K) kdelta(I,K) kdelta(J,L) kdelta(W,X) kdelta(Y,Z) 
+ (  -1.00000) e(L) kdelta(I,K) kdelta(J,L) kdelta(W,X) kdelta(Y,Z) 
+ (  -1.00000) h(W,X) kdelta(I,K) kdelta(J,L) cre(Z) des(Y) 
+ (  -1.00000) h(Y,Z) kdelta(I,K) kdelta(J,L) cre(W) des(X) 
+ (  -1.00000) v(W,Z,X,x) kdelta(I,K) kdelta(J,L) cre(x) des(Y) 
+ (   1.00000) v(W,Z,Y,x) kdelta(I,K) kdelta(J,L) cre(x) des(X) 
+ (  -2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) cre(Z) des(Y) 
+ (  -2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) cre(Z) des(Y) 
+ (  -1.00000) v(W,x,X,Y) kdelta(I,K) kdelta(J,L) cre(Z) des(x) 
+ (  -2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) cre(Z) des(Y) 
+ (  -2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) cre(Z) des(Y) 
+ (   1.00000) v(X,Y,Z,x) kdelta(I,K) kdelta(J,L) cre(W) des(x) 
+ (   1.00000) e(K) kdelta(I,K) kdelta(J,L) kdelta(W,X) cre(Z) des(Y) 
+ (   1.00000) e(K) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(W) des(X) 
+ (   1.00000) e(L) kdelta(I,K) kdelta(J,L) kdelta(W,X) cre(Z) des(Y) 
+ (   1.00000) e(L) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(W) des(X) 
+ (  -1.00000) h(W,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(x) des(X) 
+ (  -1.00000) h(Z,x) kdelta(I,K) kdelta(J,L) kdelta(W,X) cre(x) des(Y) 
+ (   1.00000) v(W,x,X,y) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(y) des(x) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(x) des(X) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(x) des(X) 
+ (   1.00000) v(W,x,X,y) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(y) des(x) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(x) des(X) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(x) des(X) 
+ (   1.00000) v(Y,x,Z,y) kdelta(I,K) kdelta(J,L) kdelta(W,X) cre(x) des(y) 
+ (   1.00000) v(Y,x,Z,y) kdelta(I,K) kdelta(J,L) kdelta(W,X) cre(x) des(y) 
+ (   1.00000) e(K) kdelta(I,K) kdelta(J,L) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) e(L) kdelta(I,K) kdelta(J,L) cre(W) cre(Z) des(X) des(Y) 
+ (   1.00000) h(W,x) kdelta(I,K) kdelta(J,L) cre(Z) cre(x) des(X) des(Y) 
+ (  -1.00000) h(Z,x) kdelta(I,K) kdelta(J,L) cre(W) cre(x) des(X) des(Y) 
+ (  -1.00000) v(W,Z,x,y) kdelta(I,K) kdelta(J,L) cre(x) cre(y) des(X) des(Y) 
+ (   1.00000) v(W,x,X,y) kdelta(I,K) kdelta(J,L) cre(Z) cre(y) des(Y) des(x) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) cre(Z) cre(x) des(X) des(Y) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) cre(Z) cre(x) des(X) des(Y) 
+ (   1.00000) v(W,x,X,y) kdelta(I,K) kdelta(J,L) cre(Z) cre(y) des(Y) des(x) 
+ (  -1.00000) v(W,x,Y,y) kdelta(I,K) kdelta(J,L) cre(Z) cre(y) des(X) des(x) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) cre(Z) cre(x) des(X) des(Y) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) cre(Z) cre(x) des(X) des(Y) 
+ (  -1.00000) v(X,x,Z,y) kdelta(I,K) kdelta(J,L) cre(W) cre(x) des(Y) des(y) 
+ (   1.00000) v(Y,x,Z,y) kdelta(I,K) kdelta(J,L) cre(W) cre(x) des(X) des(y) 
+ (   1.00000) v(Y,x,Z,y) kdelta(I,K) kdelta(J,L) cre(W) cre(x) des(X) des(y) 
+ (   0.50000) v(W,x,y,z) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(y) cre(z) des(X) des(x) 
+ (   1.00000) v(W,x,y,z) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) cre(y) cre(z) des(X) des(x) 
+ (   1.00000) v(Z,x,y,z) kdelta(I,K) kdelta(J,L) kdelta(W,X) cre(y) cre(z) des(Y) des(x) 
+ (   0.50000) v(Z,x,y,z) kdelta(I,K) kdelta(J,L) kdelta(W,X) cre(y) cre(z) des(Y) des(x) 
+ (   0.50000) v(W,x,y,z) kdelta(I,K) kdelta(J,L) cre(Z) cre(y) cre(z) des(X) des(Y) des(x) 
+ (   1.00000) v(W,x,y,z) kdelta(I,K) kdelta(J,L) cre(Z) cre(y) cre(z) des(X) des(Y) des(x) 
+ (  -1.00000) v(Z,x,y,z) kdelta(I,K) kdelta(J,L) cre(W) cre(y) cre(z) des(X) des(Y) des(x) 
+ (  -0.50000) v(Z,x,y,z) kdelta(I,K) kdelta(J,L) cre(W) cre(y) cre(z) des(X) des(Y) des(x) 
+
+Total terms : 56
+SQA automation time :  24.776 seconds
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+16 terms removed:
+ (   2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (   2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (   2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (   2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) 
+ (  -2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) rdm(Z,Y) 
+ (  -2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) rdm(Z,Y) 
+ (  -2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) rdm(Z,Y) 
+ (  -2.00000) v(i,W,i,X) kdelta(I,K) kdelta(J,L) rdm(Z,Y) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) rdm(x,X) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) rdm(x,X) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) rdm(x,X) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) kdelta(Y,Z) rdm(x,X) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) rdm(Z,x,X,Y) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) rdm(Z,x,X,Y) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) rdm(Z,x,X,Y) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(J,L) rdm(Z,x,X,Y) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 40
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+precond_cvaa  = einsum('WZXY,IK,JL->IJXYWZ', v_aaaa[::2,1::2,::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('WX,IK,JL,YZ->IJXYWZ', h_aa[::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[1::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('YZ,IK,JL,WX->IJXYWZ', h_aa[1::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], optimize = einsum_type)
+precond_cvaa -= einsum('K,IK,JL,WX,YZ->IJXYWZ', e_cvs[1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], np.identity(ncas)[1::2,1::2], optimize = einsum_type)
+precond_cvaa -= einsum('L,IK,JL,WX,YZ->IJXYWZ', e_val[::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], np.identity(ncas)[1::2,1::2], optimize = einsum_type)
+precond_cvaa -= einsum('WX,IK,JL,ZY->IJXYWZ', h_aa[::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ca[1::2,1::2], optimize = einsum_type)
+precond_cvaa -= einsum('YZ,IK,JL,WX->IJXYWZ', h_aa[1::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ca[::2,::2], optimize = einsum_type)
+precond_cvaa -= einsum('WZXx,IK,JL,xY->IJXYWZ', v_aaaa[::2,1::2,::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ca[1::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('WZYx,IK,JL,xX->IJXYWZ', v_aaaa[::2,1::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ca[::2,::2], optimize = einsum_type)
+precond_cvaa -= einsum('WxXY,IK,JL,Zx->IJXYWZ', v_aaaa[::2,1::2,::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ca[1::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('XYZx,IK,JL,Wx->IJXYWZ', v_aaaa[::2,1::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ca[::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('K,IK,JL,WX,ZY->IJXYWZ', e_cvs[1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], rdm_ca[1::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('K,IK,JL,YZ,WX->IJXYWZ', e_cvs[1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[1::2,1::2], rdm_ca[::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('L,IK,JL,WX,ZY->IJXYWZ', e_val[::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], rdm_ca[1::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('L,IK,JL,YZ,WX->IJXYWZ', e_val[::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[1::2,1::2], rdm_ca[::2,::2], optimize = einsum_type)
+precond_cvaa -= einsum('Wx,IK,JL,YZ,xX->IJXYWZ', h_aa[::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[1::2,1::2], rdm_ca[::2,::2], optimize = einsum_type)
+precond_cvaa -= einsum('Zx,IK,JL,WX,xY->IJXYWZ', h_aa[1::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], rdm_ca[1::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('WxXy,IK,JL,YZ,yx->IJXYWZ', v_aaaa[::2,::2,::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[1::2,1::2], rdm_ca[::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('WxXy,IK,JL,YZ,yx->IJXYWZ', v_aaaa[::2,1::2,::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[1::2,1::2], rdm_ca[1::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('YxZy,IK,JL,WX,xy->IJXYWZ', v_aaaa[1::2,::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], rdm_ca[::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('YxZy,IK,JL,WX,xy->IJXYWZ', v_aaaa[1::2,1::2,1::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], rdm_ca[1::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('K,IK,JL,WZXY->IJXYWZ', e_cvs[1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[::2,1::2,::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('L,IK,JL,WZXY->IJXYWZ', e_val[::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[::2,1::2,::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('Wx,IK,JL,ZxXY->IJXYWZ', h_aa[::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[1::2,::2,::2,1::2], optimize = einsum_type)
+precond_cvaa -= einsum('Zx,IK,JL,WxXY->IJXYWZ', h_aa[1::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[::2,1::2,::2,1::2], optimize = einsum_type)
+precond_cvaa -= einsum('WZxy,IK,JL,xyXY->IJXYWZ', v_aaaa[::2,1::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[1::2,::2,::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('WxXy,IK,JL,ZyYx->IJXYWZ', v_aaaa[::2,::2,::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[1::2,::2,1::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('WxXy,IK,JL,ZyYx->IJXYWZ', v_aaaa[::2,1::2,::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[1::2,1::2,1::2,1::2], optimize = einsum_type)
+precond_cvaa -= einsum('WxYy,IK,JL,ZyXx->IJXYWZ', v_aaaa[::2,1::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[1::2,::2,::2,1::2], optimize = einsum_type)
+precond_cvaa -= einsum('XxZy,IK,JL,WxYy->IJXYWZ', v_aaaa[::2,1::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[::2,1::2,1::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('YxZy,IK,JL,WxXy->IJXYWZ', v_aaaa[1::2,::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[::2,::2,::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('YxZy,IK,JL,WxXy->IJXYWZ', v_aaaa[1::2,1::2,1::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_ccaa[::2,1::2,::2,1::2], optimize = einsum_type)
+precond_cvaa += 1/2 * einsum('Wxyz,IK,JL,YZ,yzXx->IJXYWZ', v_aaaa[::2,::2,::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[1::2,1::2], rdm_ccaa[::2,::2,::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('Wxyz,IK,JL,YZ,yzXx->IJXYWZ', v_aaaa[::2,1::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[1::2,1::2], rdm_ccaa[1::2,::2,::2,1::2], optimize = einsum_type)
+precond_cvaa += einsum('Zxyz,IK,JL,WX,yzYx->IJXYWZ', v_aaaa[1::2,::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], rdm_ccaa[1::2,::2,1::2,::2], optimize = einsum_type)
+precond_cvaa += 1/2 * einsum('Zxyz,IK,JL,WX,yzYx->IJXYWZ', v_aaaa[1::2,1::2,1::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], np.identity(ncas)[::2,::2], rdm_ccaa[1::2,1::2,1::2,1::2], optimize = einsum_type)
+precond_cvaa += 1/2 * einsum('Wxyz,IK,JL,ZyzXYx->IJXYWZ', v_aaaa[::2,::2,::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_cccaaa[1::2,::2,::2,::2,1::2,::2], optimize = einsum_type)
+precond_cvaa += einsum('Wxyz,IK,JL,ZyzXYx->IJXYWZ', v_aaaa[::2,1::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_cccaaa[1::2,1::2,::2,::2,1::2,1::2], optimize = einsum_type)
+precond_cvaa -= einsum('Zxyz,IK,JL,WyzXYx->IJXYWZ', v_aaaa[1::2,::2,1::2,::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_cccaaa[::2,1::2,::2,::2,1::2,::2], optimize = einsum_type)
+precond_cvaa -= 1/2 * einsum('Zxyz,IK,JL,WyzXYx->IJXYWZ', v_aaaa[1::2,1::2,1::2,1::2], np.identity(ncvs)[1::2,1::2], np.identity(nval)[::2,::2], rdm_cccaaa[::2,1::2,1::2,::2,1::2,1::2], optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 25.92 seconds.

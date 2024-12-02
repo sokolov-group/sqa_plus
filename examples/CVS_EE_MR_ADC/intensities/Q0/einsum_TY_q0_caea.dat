@@ -1,0 +1,7 @@
+einsum equations from TY_q0_caea.dat
+
+TY[:, s_c:f_c, s_e:f_e]  = 1/2 * einsum('RPxQy,xy->RPQ', Y_KWCU__aaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('RPxQy,xy->RPQ', Y_KWCU__abab, rdm_ca, optimize = einsum_type)
+
+TY[:, s_c:f_c, s_e:f_e]  = 1/2 * einsum('RPxQy,xy->RPQ', Y_KWCU__baba, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('RPxQy,xy->RPQ', Y_KWCU__bbbb, rdm_ca, optimize = einsum_type)

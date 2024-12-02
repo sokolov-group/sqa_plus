@@ -28,7 +28,7 @@ from sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from sqaOptions import options
 from sqaSymmetry import symmetry
 
-def convertSpinIntegratedToAdapted(terms_si):
+def convertSpinIntegratedToAdapted(terms_si, remove_5rdms = False):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
     # Check if settings were done by argumments or by the options class
@@ -44,8 +44,16 @@ def convertSpinIntegratedToAdapted(terms_si):
     options.print_divider()
     convert_credes_to_rdm(terms_si, trans_rdm = False)
 
+    ## Remove 5th order RDM Objects
+    if remove_5rdms:
+       terms_si = remove_5RDM_objects(terms_si) 
+
+###    dummyLabel(terms_si, memory_check = False)
     dummyLabel(terms_si)
     len_terms_si = len(terms_si)
+    sys.stdout.flush()
+
+    print(' >>> {:} spin-integrated terms must be processed...'.format(len_terms_si))
 
     # Temporarily remove spin-integrated symmetries of non-RDM tensors
     remove_si_tensors_symmetries(terms_si)
@@ -149,6 +157,29 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
             ten_rdm = creDesTensor(credes_ops, trans_rdm)
             _terms_credes[term_credes_ind].tensors.append(ten_rdm)
 
+####    terms_generator = iter(_terms_credes)
+####    for term_credes in enumerate(terms_generator):
+####
+####        print(term_credes)
+####
+####        ## List for storing cre/des operators
+####        credes_ops = []
+####
+####        ## Append all cre/des operators to list
+####        for tens_credes in term_credes[1].tensors:
+####            if isinstance(tens_credes, creOp) or isinstance(tens_credes, desOp):
+####                credes_ops.append(tens_credes)
+####
+####        ## Modify term in list to use creDesTensor object instead of cre/des objects
+####        if credes_ops:
+####            new_tensors = [tens for tens in term_credes[1].tensors if tens not in credes_ops]
+####            ## Create creDesTensor 
+####            ten_rdm = creDesTensor(credes_ops, trans_rdm)
+####            new_tensors.append(ten_rdm)
+####            ## Update tensors
+####            term_credes[1].tensors = new_tensors
+
+    sys.stdout.flush()
     print("Done!")
     options.print_divider()
     return
@@ -5387,6 +5418,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 
     options.print_divider()
     print("Converting T amplitudes to spin-adapted formulation...")
+    sys.stdout.flush()
 
     # Define 1e- indices lists
     inds_aa = [options.alpha_type, options.alpha_type]
@@ -5701,11 +5733,14 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 
     termChop(terms_t2_sa)
 
+    sys.stdout.flush()
     print("Done!")
     return terms_t2_sa
 
 def remove_si_tensors_symmetries(_terms_si):
     "Remove Symmetries of non-RDM Spin-Integrated Tensors"
+
+    print('\n >>> removing the symmetries of non-RDM spin-integrated tensors...')
 
     for _term_ind, _term_si in enumerate(_terms_si):
         for _tensor_ind, _tensor_si in enumerate(_term_si.tensors):
@@ -5724,6 +5759,9 @@ def remove_si_tensors_symmetries(_terms_si):
 
             elif _tensor_si.name in ['t1', 't2'] and len(_tensor_si.indices) in [2, 4]:
                 _terms_si[_term_ind].tensors[_tensor_ind].symmetries = []
+
+    print(' >>> symmetry removal complete.')
+    sys.stdout.flush()
 
 def update_sa_tensors_symmetries(_terms_sa):
     "Update Symmetries of Spin-Adapted Tensors"
@@ -5773,3 +5811,32 @@ def update_sa_tensors_symmetries(_terms_sa):
 
             elif isinstance(_tensor_sa, creDesTensor) and len(_tensor_sa.indices) == 8:
                 _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm4_sa_symm
+
+def remove_5RDM_objects(_terms_rdm_si):
+    "Remove 5th order RDM Objects from Spin-Integrated Terms"
+
+    options.print_divider()
+    print("Removing 5th order RDMs...")
+
+    # Collect all 5-RDM objects in each term
+    terms_removed_rdm5 = []
+    for term_rdm5_si in _terms_rdm_si:
+        term_removed_rdm5 = term_rdm5_si.copy()
+        for ten_ind, ten in enumerate(term_rdm5_si.tensors):
+             if isinstance(ten, creDesTensor) and len(ten.indices) == 10:
+                if options.verbose:
+                    print("\n<<< {:}".format(term_rdm5_si))
+
+                consts_rdm_prod = 0.0 
+                term_removed_rdm5.scale(consts_rdm_prod)
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_removed_rdm5, consts_rdm_prod))
+
+        terms_removed_rdm5.append(term_removed_rdm5)
+
+    before = len(terms_removed_rdm5) 
+    termChop(terms_removed_rdm5)
+    after = len(terms_removed_rdm5)
+    print("Done! {:} 5th-order RDMs have been removed.\n".format(before-after))
+    return terms_removed_rdm5 

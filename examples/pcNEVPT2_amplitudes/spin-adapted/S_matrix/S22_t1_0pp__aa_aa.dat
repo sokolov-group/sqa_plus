@@ -1,0 +1,150 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+---------------------------------- Spin-Adapted t1_0pp S22 aa_aa -----------------------------------
+
+## Create S22: (a_X^\dag a_Y - a_Y^\dag a_X) (a_Z^\dag a_W - a_W^\dag a_Z)...
+
+ (   1.00000) cre(X) des(Y) cre(Z) des(W) 
+ (  -1.00000) cre(X) des(Y) cre(W) des(Z) 
+ (  -1.00000) cre(Y) des(X) cre(Z) des(W) 
+ (   1.00000) cre(Y) des(X) cre(W) des(Z) 
+## Compute expected value of spin-integrated S matrix ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) kdelta(W,X) cre(Y) des(Z) 
+ (  -1.00000) kdelta(W,Y) cre(X) des(Z) 
+ (  -1.00000) kdelta(X,Z) cre(Y) des(W) 
+ (   1.00000) kdelta(Y,Z) cre(X) des(W) 
+ (  -1.00000) cre(W) cre(X) des(Y) des(Z) 
+ (   1.00000) cre(W) cre(Y) des(X) des(Z) 
+ (   1.00000) cre(X) cre(Z) des(W) des(Y) 
+ (  -1.00000) cre(Y) cre(Z) des(W) des(X) 
+
+Total terms : 8
+SQA automation time :  0.003 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 8 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 12 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+4 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.33333) rdm(W,X,Y,Z) 
+ (  -0.33333) rdm(W,X,Z,Y) 
+ (  -0.33333) rdm(W,Y,X,Z) 
+ (   0.33333) rdm(W,Y,Z,X) 
+ (   0.50000) kdelta(W,X) rdm(Y,Z) 
+ (  -0.50000) kdelta(W,Y) rdm(X,Z) 
+ (  -0.50000) kdelta(X,Z) rdm(W,Y) 
+ (   0.50000) kdelta(Y,Z) rdm(W,X) 
+
+Total spin-integrated terms: 8
+Total spin-adapted terms: 8
+Spin-adaptation automation time :  0.008 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 8
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+S22_aa_aa  = 1/3 * einsum('WXYZ->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
+S22_aa_aa -= 1/3 * einsum('WXZY->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
+S22_aa_aa -= 1/3 * einsum('WYXZ->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
+S22_aa_aa += 1/3 * einsum('WYZX->XYWZ', rdm_ccaa, optimize = einsum_type).copy()
+S22_aa_aa += 1/2 * einsum('WX,YZ->XYWZ', np.identity(ncas), rdm_ca, optimize = einsum_type)
+S22_aa_aa -= 1/2 * einsum('WY,XZ->XYWZ', np.identity(ncas), rdm_ca, optimize = einsum_type)
+S22_aa_aa -= 1/2 * einsum('XZ,WY->XYWZ', np.identity(ncas), rdm_ca, optimize = einsum_type)
+S22_aa_aa += 1/2 * einsum('YZ,WX->XYWZ', np.identity(ncas), rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 0.03 seconds.

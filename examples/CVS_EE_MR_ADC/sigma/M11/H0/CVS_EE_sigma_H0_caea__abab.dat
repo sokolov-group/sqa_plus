@@ -1,0 +1,278 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+-------------------------- Spin-Adapted CVS-EE: Sigma H0 CAEA_CAEA (abab) --------------------------
+
+
+## Generating operators ...
+
+
+## Right operator terms:
+ (   1.00000) X_aaaa(i,x,a,y) cre(a) cre(y) des(x) des(i) 
+ (   1.00000) X_abab(i,x,a,y) cre(a) cre(y) des(x) des(i) 
+ (   1.00000) X_baab(i,x,a,y) cre(a) cre(y) des(x) des(i) 
+
+## Left operator terms:
+ (   1.00000) cre(K) cre(W) des(U) des(C) 
+
+----------------------------------------- Hamiltonian (0) ------------------------------------------
+
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(0), h(1)^\dag] ...
+
+## Calculating [h^(1), [H(0), h(1)^\dag]] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) X_abab(K,x,C,U) e(C) cre(W) des(x) 
+ (  -1.00000) X_abab(K,x,C,U) e(K) cre(W) des(x) 
+ (  -1.00000) X_abab(K,w,C,U) h(w,u) cre(W) des(u) 
+ (   1.00000) X_abab(K,x,C,y) h(U,y) cre(W) des(x) 
+ (  -1.00000) X_aaaa(K,x,C,y) e(C) cre(W) cre(y) des(U) des(x) 
+ (   1.00000) X_aaaa(K,x,C,y) e(K) cre(W) cre(y) des(U) des(x) 
+ (   1.00000) X_aaaa(K,w,C,y) h(w,u) cre(W) cre(y) des(U) des(u) 
+ (  -1.00000) X_aaaa(K,x,C,y) h(y,w) cre(W) cre(w) des(U) des(x) 
+ (   1.00000) X_aaaa(K,w,C,y) v(U,w,u,v) cre(W) cre(y) des(u) des(v) 
+ (   2.00000) X_aaaa(K,w,C,y) v(k,w,k,u) cre(W) cre(y) des(U) des(u) 
+ (   2.00000) X_aaaa(K,w,C,y) v(k,w,k,u) cre(W) cre(y) des(U) des(u) 
+ (   2.00000) X_aaaa(K,w,C,y) v(k,w,k,u) cre(W) cre(y) des(U) des(u) 
+ (   2.00000) X_aaaa(K,w,C,y) v(k,w,k,u) cre(W) cre(y) des(U) des(u) 
+ (  -1.00000) X_aaaa(K,x,C,y) v(U,w,y,u) cre(W) cre(w) des(x) des(u) 
+ (  -2.00000) X_aaaa(K,x,C,y) v(k,y,k,w) cre(W) cre(w) des(U) des(x) 
+ (  -2.00000) X_aaaa(K,x,C,y) v(k,y,k,w) cre(W) cre(w) des(U) des(x) 
+ (  -2.00000) X_aaaa(K,x,C,y) v(k,y,k,w) cre(W) cre(w) des(U) des(x) 
+ (  -2.00000) X_aaaa(K,x,C,y) v(k,y,k,w) cre(W) cre(w) des(U) des(x) 
+ (  -1.00000) X_abab(K,x,C,y) e(C) cre(W) cre(y) des(U) des(x) 
+ (   1.00000) X_abab(K,x,C,y) e(K) cre(W) cre(y) des(U) des(x) 
+ (   1.00000) X_abab(K,w,C,y) h(w,u) cre(W) cre(y) des(U) des(u) 
+ (  -1.00000) X_abab(K,x,C,y) h(y,w) cre(W) cre(w) des(U) des(x) 
+ (   1.00000) X_abab(K,w,C,U) v(w,u,v,s) cre(W) cre(u) des(v) des(s) 
+ (   0.50000) X_abab(K,w,C,U) v(w,u,v,s) cre(W) cre(u) des(v) des(s) 
+ (   0.50000) X_abab(K,w,C,y) v(U,w,u,v) cre(W) cre(y) des(u) des(v) 
+ (  -1.00000) X_abab(K,x,C,y) v(U,w,y,u) cre(W) cre(w) des(x) des(u) 
+ (  -1.00000) X_abab(K,x,C,y) v(U,w,y,u) cre(W) cre(w) des(x) des(u) 
+ (   0.50000) X_aaaa(K,w,C,y) v(w,u,v,s) cre(W) cre(y) cre(u) des(U) des(v) des(s) 
+ (   1.00000) X_aaaa(K,w,C,y) v(w,u,v,s) cre(W) cre(y) cre(u) des(U) des(v) des(s) 
+ (  -0.50000) X_aaaa(K,x,C,y) v(y,w,u,v) cre(W) cre(u) cre(v) des(U) des(x) des(w) 
+ (  -1.00000) X_aaaa(K,x,C,y) v(y,w,u,v) cre(W) cre(u) cre(v) des(U) des(x) des(w) 
+ (   1.00000) X_abab(K,w,C,y) v(w,u,v,s) cre(W) cre(y) cre(u) des(U) des(v) des(s) 
+ (   0.50000) X_abab(K,w,C,y) v(w,u,v,s) cre(W) cre(y) cre(u) des(U) des(v) des(s) 
+ (  -1.00000) X_abab(K,x,C,y) v(y,w,u,v) cre(W) cre(u) cre(v) des(U) des(x) des(w) 
+ (  -0.50000) X_abab(K,x,C,y) v(y,w,u,v) cre(W) cre(u) cre(v) des(U) des(x) des(w) 
+
+Total terms : 35
+SQA automation time :  0.192 seconds
+Converting Sigma vector to spin-adapted formulation ...
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 108 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+54 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.33333) X_aaaa(K,x,C,y) e(C) rdm(U,x,W,y) 
+ (   0.16667) X_aaaa(K,x,C,y) e(C) rdm(U,x,y,W) 
+ (  -0.33333) X_aaaa(K,x,C,y) e(K) rdm(U,x,W,y) 
+ (  -0.16667) X_aaaa(K,x,C,y) e(K) rdm(U,x,y,W) 
+ (  -0.33333) X_aaaa(K,w,C,y) h(w,u) rdm(U,u,W,y) 
+ (  -0.16667) X_aaaa(K,w,C,y) h(w,u) rdm(U,u,y,W) 
+ (   0.33333) X_aaaa(K,x,C,y) h(y,w) rdm(U,x,W,w) 
+ (   0.16667) X_aaaa(K,x,C,y) h(y,w) rdm(U,x,w,W) 
+ (  -0.33333) X_aaaa(K,w,C,y) v(U,u,w,v) rdm(W,y,u,v) 
+ (  -0.16667) X_aaaa(K,w,C,y) v(U,u,w,v) rdm(W,y,v,u) 
+ (  -1.33333) X_aaaa(K,w,C,y) v(k,k,w,u) rdm(U,u,W,y) 
+ (  -0.66667) X_aaaa(K,w,C,y) v(k,k,w,u) rdm(U,u,y,W) 
+ (   0.66667) X_aaaa(K,w,C,y) v(k,w,u,k) rdm(U,u,W,y) 
+ (   0.33333) X_aaaa(K,w,C,y) v(k,w,u,k) rdm(U,u,y,W) 
+ (  -1.33333) X_aaaa(K,w,C,y) v(k,k,w,u) rdm(U,u,W,y) 
+ (  -0.66667) X_aaaa(K,w,C,y) v(k,k,w,u) rdm(U,u,y,W) 
+ (   0.66667) X_aaaa(K,w,C,y) v(k,w,u,k) rdm(U,u,W,y) 
+ (   0.33333) X_aaaa(K,w,C,y) v(k,w,u,k) rdm(U,u,y,W) 
+ (  -0.33333) X_aaaa(K,w,C,y) v(w,u,v,s) rdm(U,u,s,W,y,v) 
+ (  -0.16667) X_aaaa(K,w,C,y) v(w,u,v,s) rdm(U,u,s,y,W,v) 
+ (   0.33333) X_aaaa(K,x,C,y) v(U,w,u,y) rdm(W,u,w,x) 
+ (   0.16667) X_aaaa(K,x,C,y) v(U,w,u,y) rdm(W,u,x,w) 
+ (   1.33333) X_aaaa(K,x,C,y) v(k,k,y,w) rdm(U,x,W,w) 
+ (   0.66667) X_aaaa(K,x,C,y) v(k,k,y,w) rdm(U,x,w,W) 
+ (  -0.66667) X_aaaa(K,x,C,y) v(k,y,w,k) rdm(U,x,W,w) 
+ (  -0.33333) X_aaaa(K,x,C,y) v(k,y,w,k) rdm(U,x,w,W) 
+ (   1.33333) X_aaaa(K,x,C,y) v(k,k,y,w) rdm(U,x,W,w) 
+ (   0.66667) X_aaaa(K,x,C,y) v(k,k,y,w) rdm(U,x,w,W) 
+ (  -0.66667) X_aaaa(K,x,C,y) v(k,y,w,k) rdm(U,x,W,w) 
+ (  -0.33333) X_aaaa(K,x,C,y) v(k,y,w,k) rdm(U,x,w,W) 
+ (   0.33333) X_aaaa(K,x,C,y) v(y,w,u,v) rdm(U,x,u,W,w,v) 
+ (   0.16667) X_aaaa(K,x,C,y) v(y,w,u,v) rdm(U,x,u,w,W,v) 
+ (   0.50000) X_abab(K,x,C,U) e(C) rdm(W,x) 
+ (  -0.50000) X_abab(K,x,C,U) e(K) rdm(W,x) 
+ (   0.16667) X_abab(K,x,C,y) e(C) rdm(U,x,W,y) 
+ (  -0.16667) X_abab(K,x,C,y) e(C) rdm(U,x,y,W) 
+ (  -0.16667) X_abab(K,x,C,y) e(K) rdm(U,x,W,y) 
+ (   0.16667) X_abab(K,x,C,y) e(K) rdm(U,x,y,W) 
+ (  -0.50000) X_abab(K,w,C,U) h(w,u) rdm(W,u) 
+ (  -0.16667) X_abab(K,w,C,y) h(w,u) rdm(U,u,W,y) 
+ (   0.16667) X_abab(K,w,C,y) h(w,u) rdm(U,u,y,W) 
+ (   0.50000) X_abab(K,x,C,y) h(U,y) rdm(W,x) 
+ (   0.16667) X_abab(K,x,C,y) h(y,w) rdm(U,x,W,w) 
+ (  -0.16667) X_abab(K,x,C,y) h(y,w) rdm(U,x,w,W) 
+ (  -0.50000) X_abab(K,w,C,U) v(w,u,v,s) rdm(W,v,u,s) 
+ (  -0.16667) X_abab(K,w,C,y) v(U,u,w,v) rdm(W,y,u,v) 
+ (   0.16667) X_abab(K,w,C,y) v(U,u,w,v) rdm(W,y,v,u) 
+ (  -0.16667) X_abab(K,w,C,y) v(w,u,v,s) rdm(U,u,s,W,y,v) 
+ (   0.16667) X_abab(K,w,C,y) v(w,u,v,s) rdm(U,u,s,y,W,v) 
+ (   0.16667) X_abab(K,x,C,y) v(U,w,u,y) rdm(W,u,w,x) 
+ (  -0.16667) X_abab(K,x,C,y) v(U,w,u,y) rdm(W,u,x,w) 
+ (   0.50000) X_abab(K,x,C,y) v(U,y,w,u) rdm(W,w,x,u) 
+ (   0.16667) X_abab(K,x,C,y) v(y,w,u,v) rdm(U,x,u,W,w,v) 
+ (  -0.16667) X_abab(K,x,C,y) v(y,w,u,v) rdm(U,x,u,w,W,v) 
+
+Total spin-integrated terms: 35
+Total spin-adapted terms: 54
+Spin-adaptation automation time :  5.929 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+16 terms removed:
+ (  -1.33333) X_aaaa(K,x,C,y) v(i,i,x,z) rdm(U,z,W,y) 
+ (  -0.66667) X_aaaa(K,x,C,y) v(i,i,x,z) rdm(U,z,y,W) 
+ (   0.66667) X_aaaa(K,x,C,y) v(i,x,z,i) rdm(U,z,W,y) 
+ (   0.33333) X_aaaa(K,x,C,y) v(i,x,z,i) rdm(U,z,y,W) 
+ (  -1.33333) X_aaaa(K,x,C,y) v(i,i,x,z) rdm(U,z,W,y) 
+ (  -0.66667) X_aaaa(K,x,C,y) v(i,i,x,z) rdm(U,z,y,W) 
+ (   0.66667) X_aaaa(K,x,C,y) v(i,x,z,i) rdm(U,z,W,y) 
+ (   0.33333) X_aaaa(K,x,C,y) v(i,x,z,i) rdm(U,z,y,W) 
+ (   1.33333) X_aaaa(K,x,C,y) v(i,i,y,z) rdm(U,x,W,z) 
+ (   0.66667) X_aaaa(K,x,C,y) v(i,i,y,z) rdm(U,x,z,W) 
+ (  -0.66667) X_aaaa(K,x,C,y) v(i,y,z,i) rdm(U,x,W,z) 
+ (  -0.33333) X_aaaa(K,x,C,y) v(i,y,z,i) rdm(U,x,z,W) 
+ (   1.33333) X_aaaa(K,x,C,y) v(i,i,y,z) rdm(U,x,W,z) 
+ (   0.66667) X_aaaa(K,x,C,y) v(i,i,y,z) rdm(U,x,z,W) 
+ (  -0.66667) X_aaaa(K,x,C,y) v(i,y,z,i) rdm(U,x,W,z) 
+ (  -0.33333) X_aaaa(K,x,C,y) v(i,y,z,i) rdm(U,x,z,W) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 38
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+sigma_KWCU_abab  = 1/3 * einsum('KxCy,C,UxWy->KWCU', X_aaaa, e_extern, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,C,UxyW->KWCU', X_aaaa, e_extern, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/3 * einsum('KxCy,K,UxWy->KWCU', X_aaaa, e_cvs, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,K,UxyW->KWCU', X_aaaa, e_cvs, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/3 * einsum('KxCy,xz,UzWy->KWCU', X_aaaa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,xz,UzyW->KWCU', X_aaaa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/3 * einsum('KxCy,yz,UxWz->KWCU', X_aaaa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,yz,UxzW->KWCU', X_aaaa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/3 * einsum('KxCy,Uzxw,Wyzw->KWCU', X_aaaa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,Uzxw,Wywz->KWCU', X_aaaa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/3 * einsum('KxCy,xzwu,UzuWyw->KWCU', X_aaaa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,xzwu,UzuyWw->KWCU', X_aaaa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/3 * einsum('KxCy,Uzwy,Wwzx->KWCU', X_aaaa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,Uzwy,Wwxz->KWCU', X_aaaa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/3 * einsum('KxCy,yzwu,UxwWzu->KWCU', X_aaaa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,yzwu,UxwzWu->KWCU', X_aaaa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/2 * einsum('KxCU,C,Wx->KWCU', X_abab, e_extern, rdm_ca, optimize = einsum_type)
+sigma_KWCU_abab -= 1/2 * einsum('KxCU,K,Wx->KWCU', X_abab, e_cvs, rdm_ca, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,C,UxWy->KWCU', X_abab, e_extern, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,C,UxyW->KWCU', X_abab, e_extern, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,K,UxWy->KWCU', X_abab, e_cvs, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,K,UxyW->KWCU', X_abab, e_cvs, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/2 * einsum('KxCU,xy,Wy->KWCU', X_abab, h_aa, rdm_ca, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,xz,UzWy->KWCU', X_abab, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,xz,UzyW->KWCU', X_abab, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/2 * einsum('KxCy,Uy,Wx->KWCU', X_abab, h_aa, rdm_ca, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,yz,UxWz->KWCU', X_abab, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,yz,UxzW->KWCU', X_abab, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/2 * einsum('KxCU,xyzw,Wzyw->KWCU', X_abab, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,Uzxw,Wyzw->KWCU', X_abab, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,Uzxw,Wywz->KWCU', X_abab, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,xzwu,UzuWyw->KWCU', X_abab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,xzwu,UzuyWw->KWCU', X_abab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,Uzwy,Wwzx->KWCU', X_abab, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,Uzwy,Wwxz->KWCU', X_abab, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/2 * einsum('KxCy,Uyzw,Wzxw->KWCU', X_abab, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWCU_abab += 1/6 * einsum('KxCy,yzwu,UxwWzu->KWCU', X_abab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWCU_abab -= 1/6 * einsum('KxCy,yzwu,UxwzWu->KWCU', X_abab, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 7.56 seconds.

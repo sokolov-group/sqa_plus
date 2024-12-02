@@ -1,9 +1,11 @@
 import sqa_plus
 sqa_plus.options.spin_integrated = True
 
-amplitude_string = 't1_p1p'
+from sqa_plus.sqaTerm import multiplyTerms
+
+amplitude_string = 't1_0pp'
 s_block_string = 'S22'
-spin_cases_string = 'bba_bba'
+spin_cases_string = 'ba_ba'
 
 import time
 start = time.time()
@@ -80,7 +82,7 @@ if amplitude_string == 't1_0p':
 
     elif s_block_string == 'S22':
         if spin_cases_string == 'aa_aa':
-            print("## Create S22: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_X^\dag a_Y a_Z^\dag a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha, cre_z_alpha, des_w_alpha])]
 
@@ -88,7 +90,7 @@ if amplitude_string == 't1_0p':
             final_indices_string = 'XYWZ'
 
         elif spin_cases_string == 'aa_bb':
-            print("## Create S22: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_X^\dag a_Y a_Z^\dag a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha, cre_z_beta, des_w_beta])]
 
@@ -96,7 +98,7 @@ if amplitude_string == 't1_0p':
             final_indices_string = 'XYWZ'
 
         elif spin_cases_string == 'ba_ba':
-            print("## Create S22: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_X^\dag a_Y a_Z^\dag a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_x_beta, des_y_alpha, cre_z_alpha, des_w_beta])]
 
@@ -203,6 +205,45 @@ elif amplitude_string == 't1_p1p':
             s_string = s_block_string + "_" + spin_cases_string
             final_indices_string = 'UVXWZY'
 
+elif amplitude_string == 't1_0pp':
+
+    terms_S = []
+    if spin_cases_string == 'aa_aa':
+        print("## Create S22: (a_X^\dag a_Y - a_Y^\dag a_X) (a_Z^\dag a_W - a_W^\dag a_Z)...\n")
+
+        l_op = sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])
+        l_op_dag = sqa_plus.term(-1.0, [], [cre_y_alpha, des_x_alpha]) 
+        l_term = [l_op, l_op_dag]
+    
+        r_op = sqa_plus.term(1.0, [], [cre_z_alpha, des_w_alpha])
+        r_op_dag = sqa_plus.term(-1.0, [], [cre_w_alpha, des_z_alpha]) 
+        r_term = [r_op, r_op_dag]
+
+        for l in l_term:
+            for r in r_term:
+                terms_S.append( multiplyTerms(l,r) )
+
+        s_string = s_block_string + "_" + spin_cases_string
+        final_indices_string = 'XYWZ'
+    
+    elif spin_cases_string == 'aa_bb':
+        print("## Create S22: (a_X^\dag a_Y - a_Y^\dag a_X) (a_Z^\dag a_W - a_W^\dag a_Z)...\n")
+
+        l_op = sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])
+        l_op_dag = sqa_plus.term(-1.0, [], [cre_y_alpha, des_x_alpha]) 
+        l_term = [l_op, l_op_dag]
+    
+        r_op = sqa_plus.term(1.0, [], [cre_z_beta, des_w_beta])
+        r_op_dag = sqa_plus.term(-1.0, [], [cre_w_beta, des_z_beta]) 
+        r_term = [r_op, r_op_dag]
+
+        for l in l_term:
+            for r in r_term:
+                terms_S.append( multiplyTerms(l,r) )
+    
+        s_string = s_block_string + "_" + spin_cases_string
+        final_indices_string = 'XYWZ'
+
 for term_S in terms_S:
     print(term_S)
 
@@ -219,3 +260,4 @@ result = sqa_plus.genEinsum(terms_expected_S_sa, s_string, final_indices_string)
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))
+

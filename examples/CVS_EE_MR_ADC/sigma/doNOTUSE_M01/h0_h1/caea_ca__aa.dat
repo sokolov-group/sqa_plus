@@ -1,0 +1,1862 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+---------------------------- Spin-Adapted CVS-EE: Sigma H1 CAEA_CA (aa) ----------------------------
+
+
+## Generating operators ...
+
+
+## Left operator terms:
+ (   1.00000) X_aaaa(i,x,a,y) cre(i) cre(x) des(y) des(a) 
+ (   1.00000) X_abab(i,x,a,y) cre(i) cre(x) des(y) des(a) 
+ (   1.00000) X_baab(i,x,a,y) cre(i) cre(x) des(y) des(a) 
+ (   1.00000) X_bbbb(i,x,a,y) cre(i) cre(x) des(y) des(a) 
+ (   1.00000) X_baba(i,x,a,y) cre(i) cre(x) des(y) des(a) 
+ (   1.00000) X_abba(i,x,a,y) cre(i) cre(x) des(y) des(a) 
+
+## Right operator terms:
+ (   1.00000) cre(W) des(K) 
+
+----------------------------------------- Hamiltonian (1) ------------------------------------------
+
+Commutation: Done ...
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(1), h(0)^\dag] ...
+
+## Calculating [h(1), [H(1), h(0)^\dag]] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) X_aaaa(K,x,c,y) h(W,c) cre(x) des(y) 
+ (   1.00000) X_aaaa(K,x,c,w) v(W,u,c,w) cre(x) des(u) 
+ (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+ (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+ (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+ (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+ (   1.00000) X_aaaa(k,x,c,W) v(k,w,K,c) cre(x) des(w) 
+ (  -1.00000) X_aaaa(k,x,c,y) v(k,W,K,c) cre(x) des(y) 
+ (   1.00000) X_abab(K,x,c,y) h(W,c) cre(x) des(y) 
+ (   1.00000) X_abab(K,x,c,w) v(W,u,c,w) cre(x) des(u) 
+ (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+ (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+ (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+ (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+ (  -1.00000) X_abab(k,x,c,y) v(k,W,K,c) cre(x) des(y) 
+ (   1.00000) X_abba(K,x,c,w) v(W,u,c,w) cre(x) des(u) 
+ (   1.00000) X_abba(k,x,c,W) v(k,w,K,c) cre(x) des(w) 
+ (   1.00000) X_baba(k,x,c,W) v(k,w,K,c) cre(x) des(w) 
+ (  -1.00000) X_baba(k,x,c,y) v(k,W,K,c) cre(x) des(y) 
+ (  -1.00000) X_bbbb(k,x,c,y) v(k,W,K,c) cre(x) des(y) 
+ (   1.00000) X_aaaa(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u) 
+ (   1.00000) X_aaaa(K,x,c,y) e(c) t1(W,c) cre(x) des(y) 
+ (  -1.00000) X_aaaa(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v) 
+ (   1.00000) X_aaaa(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v) 
+ (  -1.00000) X_aaaa(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v) 
+ (  -1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,c) cre(x) des(y) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+ (   1.00000) X_abab(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u) 
+ (   1.00000) X_abab(K,x,c,y) e(c) t1(W,c) cre(x) des(y) 
+ (  -1.00000) X_abab(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v) 
+ (   1.00000) X_abab(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v) 
+ (  -1.00000) X_abab(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v) 
+ (  -1.00000) X_abab(K,x,c,y) h(W,w) t1(w,c) cre(x) des(y) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v) 
+ (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s) 
+ (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+ (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+ (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+ (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+ (   1.00000) X_abba(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u) 
+ (  -1.00000) X_abba(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v) 
+ (   1.00000) X_abba(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v) 
+ (  -1.00000) X_abba(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v) 
+ (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+ (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+ (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+ (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+ (   1.00000) X_abba(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v) 
+ (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+ (  -1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s) 
+ (  -1.00000) X_aaaa(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (  -1.00000) X_aaaa(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (   1.00000) X_aaaa(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+ (  -1.00000) X_abab(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (  -1.00000) X_abab(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (   1.00000) X_abab(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+ (  -1.00000) X_abba(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (   1.00000) X_abba(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+ (   1.00000) X_baba(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+ (   1.00000) X_bbbb(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+ (  -1.00000) X_aaaa(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (  -1.00000) X_aaaa(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (   1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+ (  -1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+ (   1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+ (  -1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+ (   0.50000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (  -1.00000) X_abab(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (  -1.00000) X_abab(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (   1.00000) X_abab(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_abab(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_abab(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+ (  -1.00000) X_abab(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+ (   1.00000) X_abab(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+ (  -1.00000) X_abab(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+ (   1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+ (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+ (   1.00000) X_abab(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+ (   0.50000) X_abab(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+ (   0.50000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+ (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+ (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+ (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+ (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+ (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+ (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+ (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+ (   0.50000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+ (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+ (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (  -1.00000) X_abba(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+ (   1.00000) X_abba(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+ (  -1.00000) X_abba(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+ (   1.00000) X_abba(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_abba(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+ (   0.50000) X_abba(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+ (   1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+ (  -1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+ (  -1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+ (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+ (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+ (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+ (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+ (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+ (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+ (   0.50000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+ (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+ (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+ (   1.00000) X_abba(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+ (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+ (   0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (  -0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (  -1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (   0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (  -1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (  -0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (   0.25000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (   1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (  -0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (  -1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (   1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (   0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (  -1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (  -0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (   0.25000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (   0.50000) X_abba(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+ (  -0.50000) X_abba(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (  -1.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+ (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   0.50000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+ (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+ (   0.50000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+ (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+
+Total terms : 234
+SQA automation time :  15.855 seconds
+Converting Sigma vector to spin-adapted formulation ...
+----------------------------------------------------------------------------------------------------
+Converting custom vector to spin-adapted formulation...
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) h(W,c) cre(x) des(y) 
+-->  (   1.00000) X_aaaa(K,x,c,y) h(W,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) v(W,u,c,w) cre(x) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,w) v(W,u,c,w) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+-->  (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+-->  (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+-->  (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+-->  (   1.00000) X_aaaa(K,x,c,y) v(k,W,k,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(k,x,c,W) v(k,w,K,c) cre(x) des(w) 
+-->  (   1.00000) X_aaaa(k,x,c,W) v(k,w,K,c) cre(x) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(k,x,c,y) v(k,W,K,c) cre(x) des(y) 
+-->  (  -1.00000) X_aaaa(k,x,c,y) v(k,W,K,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) h(W,c) cre(x) des(y) 
+-->  (   1.00000) X_abab(K,x,c,y) h(W,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) v(W,u,c,w) cre(x) des(u) 
+-->  (   1.00000) X_abab(K,x,c,w) v(W,u,c,w) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+-->  (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+-->  (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+-->  (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y) 
+-->  (   1.00000) X_abab(K,x,c,y) v(k,W,k,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(k,x,c,y) v(k,W,K,c) cre(x) des(y) 
+-->  (  -1.00000) X_abab(k,x,c,y) v(k,W,K,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) v(W,u,c,w) cre(x) des(u) 
+-->  (   1.00000) X_abba(K,x,c,w) v(W,u,c,w) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(k,x,c,W) v(k,w,K,c) cre(x) des(w) 
+-->  (   1.00000) X_abba(k,x,c,W) v(k,w,K,c) cre(x) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_baba(k,x,c,W) v(k,w,K,c) cre(x) des(w) 
+-->  (   1.00000) X_baba(k,x,c,W) v(k,w,K,c) cre(x) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_baba(k,x,c,y) v(k,W,K,c) cre(x) des(y) 
+-->  (  -1.00000) X_baba(k,x,c,y) v(k,W,K,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_bbbb(k,x,c,y) v(k,W,K,c) cre(x) des(y) 
+-->  (  -1.00000) X_bbbb(k,x,c,y) v(k,W,K,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) e(c) t1(W,c) cre(x) des(y) 
+-->  (   1.00000) X_aaaa(K,x,c,y) e(c) t1(W,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v) 
+-->  (  -1.00000) X_aaaa(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v) 
+-->  (   1.00000) X_aaaa(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v) 
+-->  (  -1.00000) X_aaaa(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,c) cre(x) des(y) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v) 
+-->  (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v) 
+-->  (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v) 
+-->  (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v) 
+-->  (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(k,u,k,v) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -0.50000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s) 
+-->  (  -0.50000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+-->  (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+-->  (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+-->  (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+-->  (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u) 
+-->  (   1.00000) X_abab(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) e(c) t1(W,c) cre(x) des(y) 
+-->  (   1.00000) X_abab(K,x,c,y) e(c) t1(W,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v) 
+-->  (  -1.00000) X_abab(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v) 
+-->  (   1.00000) X_abab(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v) 
+-->  (  -1.00000) X_abab(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) h(W,w) t1(w,c) cre(x) des(y) 
+-->  (  -1.00000) X_abab(K,x,c,y) h(W,w) t1(w,c) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s) 
+-->  (  -1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+-->  (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+-->  (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+-->  (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y) 
+-->  (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,k,w) cre(x) des(y)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u) 
+-->  (   1.00000) X_abba(K,x,c,w) e(c) t1(W,u,c,w) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v) 
+-->  (  -1.00000) X_abba(K,x,c,w) h(W,u) t1(u,v,c,w) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v) 
+-->  (   1.00000) X_abba(K,x,c,w) h(w,u) t1(W,v,c,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v) 
+-->  (  -1.00000) X_abba(K,x,c,w) h(u,v) t1(W,u,c,w) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+-->  (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+-->  (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+-->  (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u) 
+-->  (   2.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(k,w,k,v) cre(x) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(u,c) v(W,v,w,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v) 
+-->  (  -2.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(k,W,k,u) cre(x) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s) 
+-->  (  -1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,v) cre(x) des(s)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+-->  (   1.00000) X_aaaa(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_abab(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_abab(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+-->  (   1.00000) X_abab(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_abba(K,x,c,y) v(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+-->  (   1.00000) X_abba(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_baba(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+-->  (   1.00000) X_baba(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_bbbb(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w) 
+-->  (   1.00000) X_bbbb(k,x,c,y) v(k,w,K,c) cre(W) cre(x) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   0.50000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   0.50000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   0.50000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   0.50000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+-->  (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+-->  (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+-->  (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s)  (factor = 1.00000)
+
+<<<  (   0.50000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+-->  (   0.50000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+-->  (   1.00000) X_aaaa(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   0.50000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+-->  (   0.50000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_abab(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_abab(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abab(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abab(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abab(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+-->  (  -1.00000) X_abab(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abab(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+-->  (  -1.00000) X_abab(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+-->  (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abab(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   0.50000) X_abab(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   0.50000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+-->  (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+-->  (  -1.00000) X_abab(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+-->  (   1.00000) X_abab(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,w,k,v) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+-->  (   0.50000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w) 
+-->  (  -1.00000) X_abba(K,x,c,y) e(c) t1(W,w,c,u) cre(x) cre(u) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abba(K,x,c,y) h(W,w) t1(w,u,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v) 
+-->  (  -1.00000) X_abba(K,x,c,y) h(w,u) t1(W,v,c,w) cre(x) cre(u) des(y) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abba(K,x,c,y) h(w,u) t1(W,w,c,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abba(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   0.50000) X_abba(K,x,c,w) t1(W,u,c,w) v(u,v,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,u,s,t) cre(x) cre(v) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+-->  (  -1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t) 
+-->  (  -1.00000) X_abba(K,x,c,w) t1(W,u,c,v) v(w,s,v,t) cre(x) cre(s) des(u) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,w) v(W,s,u,t) cre(x) cre(t) des(v) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v) 
+-->  (   0.50000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,s,w,t) cre(x) cre(t) des(u) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t) 
+-->  (   1.00000) X_abba(K,x,c,w) t1(u,v,c,s) v(W,t,w,u) cre(x) cre(s) des(v) des(t)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w) 
+-->  (  -2.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(k,u,k,v) cre(x) cre(v) des(y) des(w)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u) 
+-->  (   1.00000) X_abba(K,x,c,y) t1(w,c) v(W,u,w,v) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u) 
+-->  (   2.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(k,W,k,w) cre(x) cre(v) des(y) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s) 
+-->  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,u) cre(x) cre(v) des(y) des(s)  (factor = 1.00000)
+
+<<<  (   0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -1.00000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (  -0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -0.50000) X_aaaa(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (   0.25000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+-->  (   0.25000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_aaaa(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -1.00000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (  -0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -0.50000) X_abab(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (   0.25000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+-->  (   0.25000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abab(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   1.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abba(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t) 
+-->  (   0.50000) X_abba(K,x,c,y) t1(W,w,c,u) v(w,v,s,t) cre(x) cre(u) cre(v) des(y) des(s) des(t)  (factor = 1.00000)
+
+<<<  (  -0.50000) X_abba(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -0.50000) X_abba(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (  -1.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v) 
+-->  (  -1.00000) X_abba(K,x,c,y) t1(W,w,c,u) v(u,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(v)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+-->  (   0.50000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+
+<<<  (   0.50000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u) 
+-->  (   0.50000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,v,s,t) cre(x) cre(s) cre(t) des(y) des(w) des(u)  (factor = 1.00000)
+
+<<<  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s) 
+-->  (   1.00000) X_abba(K,x,c,y) t1(w,u,c,v) v(W,s,w,t) cre(x) cre(v) cre(t) des(y) des(u) des(s)  (factor = 1.00000)
+Done!
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 234 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 895 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+505 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) X_aaaa(K,x,c,y) h(W,c) rdm(x,y) 
+ (  -0.50000) X_aaaa(K,x,c,w) v(W,w,u,c) rdm(x,u) 
+ (   0.50000) X_aaaa(K,x,c,w) v(u,w,W,c) rdm(x,u) 
+ (   0.16667) X_aaaa(K,x,c,y) v(W,w,u,c) rdm(x,w,u,y) 
+ (  -0.16667) X_aaaa(K,x,c,y) v(W,w,u,c) rdm(x,w,y,u) 
+ (  -0.50000) X_aaaa(K,x,c,y) v(k,W,c,k) rdm(x,y) 
+ (   1.00000) X_aaaa(K,x,c,y) v(k,k,W,c) rdm(x,y) 
+ (  -0.50000) X_aaaa(K,x,c,y) v(k,W,c,k) rdm(x,y) 
+ (   1.00000) X_aaaa(K,x,c,y) v(k,k,W,c) rdm(x,y) 
+ (   0.50000) X_aaaa(K,x,c,y) v(w,u,W,c) rdm(x,u,y,w) 
+ (  -0.50000) X_aaaa(k,x,c,W) v(K,w,c,k) rdm(x,w) 
+ (   0.50000) X_aaaa(k,x,c,W) v(k,K,w,c) rdm(x,w) 
+ (   0.50000) X_aaaa(k,x,c,y) v(K,W,c,k) rdm(x,y) 
+ (  -0.16667) X_aaaa(k,x,c,y) v(K,w,c,k) rdm(W,x,w,y) 
+ (   0.16667) X_aaaa(k,x,c,y) v(K,w,c,k) rdm(W,x,y,w) 
+ (  -0.50000) X_aaaa(k,x,c,y) v(k,K,W,c) rdm(x,y) 
+ (   0.16667) X_aaaa(k,x,c,y) v(k,K,w,c) rdm(W,x,w,y) 
+ (  -0.16667) X_aaaa(k,x,c,y) v(k,K,w,c) rdm(W,x,y,w) 
+ (   0.50000) X_abab(K,x,c,y) h(W,c) rdm(x,y) 
+ (   0.50000) X_abab(K,x,c,w) v(u,w,W,c) rdm(x,u) 
+ (  -0.16667) X_abab(K,x,c,y) v(W,w,u,c) rdm(x,w,u,y) 
+ (  -0.33333) X_abab(K,x,c,y) v(W,w,u,c) rdm(x,w,y,u) 
+ (  -0.50000) X_abab(K,x,c,y) v(k,W,c,k) rdm(x,y) 
+ (   1.00000) X_abab(K,x,c,y) v(k,k,W,c) rdm(x,y) 
+ (  -0.50000) X_abab(K,x,c,y) v(k,W,c,k) rdm(x,y) 
+ (   1.00000) X_abab(K,x,c,y) v(k,k,W,c) rdm(x,y) 
+ (   0.50000) X_abab(K,x,c,y) v(w,u,W,c) rdm(x,u,y,w) 
+ (   0.50000) X_abab(k,x,c,y) v(K,W,c,k) rdm(x,y) 
+ (  -0.33333) X_abab(k,x,c,y) v(K,w,c,k) rdm(W,x,w,y) 
+ (  -0.16667) X_abab(k,x,c,y) v(K,w,c,k) rdm(W,x,y,w) 
+ (  -0.50000) X_abab(k,x,c,y) v(k,K,W,c) rdm(x,y) 
+ (   0.33333) X_abab(k,x,c,y) v(k,K,w,c) rdm(W,x,w,y) 
+ (   0.16667) X_abab(k,x,c,y) v(k,K,w,c) rdm(W,x,y,w) 
+ (  -0.50000) X_abba(K,x,c,w) v(W,w,u,c) rdm(x,u) 
+ (   0.33333) X_abba(K,x,c,y) v(W,w,u,c) rdm(x,w,u,y) 
+ (   0.16667) X_abba(K,x,c,y) v(W,w,u,c) rdm(x,w,y,u) 
+ (   0.50000) X_abba(k,x,c,W) v(k,K,w,c) rdm(x,w) 
+ (  -0.16667) X_abba(k,x,c,y) v(k,K,w,c) rdm(W,x,w,y) 
+ (  -0.33333) X_abba(k,x,c,y) v(k,K,w,c) rdm(W,x,y,w) 
+ (  -0.50000) X_baba(k,x,c,W) v(K,w,c,k) rdm(x,w) 
+ (   0.50000) X_baba(k,x,c,y) v(K,W,c,k) rdm(x,y) 
+ (  -0.16667) X_baba(k,x,c,y) v(K,w,c,k) rdm(W,x,w,y) 
+ (   0.16667) X_baba(k,x,c,y) v(K,w,c,k) rdm(W,x,y,w) 
+ (   0.50000) X_bbbb(k,x,c,y) v(K,W,c,k) rdm(x,y) 
+ (  -0.33333) X_bbbb(k,x,c,y) v(K,w,c,k) rdm(W,x,w,y) 
+ (  -0.16667) X_bbbb(k,x,c,y) v(K,w,c,k) rdm(W,x,y,w) 
+ (  -0.50000) X_aaaa(K,x,c,w) e(c) t1(W,u,w,c) rdm(x,u) 
+ (   0.50000) X_aaaa(K,x,c,w) e(c) t1(u,W,w,c) rdm(x,u) 
+ (   0.50000) X_aaaa(K,x,c,y) e(c) t1(W,c) rdm(x,y) 
+ (   0.16667) X_aaaa(K,x,c,y) e(c) t1(W,w,u,c) rdm(x,u,w,y) 
+ (  -0.16667) X_aaaa(K,x,c,y) e(c) t1(W,w,u,c) rdm(x,u,y,w) 
+ (   0.50000) X_aaaa(K,x,c,y) e(c) t1(w,W,u,c) rdm(x,u,y,w) 
+ (   0.50000) X_aaaa(K,x,c,w) h(W,u) t1(u,v,w,c) rdm(x,v) 
+ (  -0.50000) X_aaaa(K,x,c,w) h(W,u) t1(v,u,w,c) rdm(x,v) 
+ (   0.50000) X_aaaa(K,x,c,w) h(u,v) t1(W,u,w,c) rdm(x,v) 
+ (  -0.50000) X_aaaa(K,x,c,w) h(u,v) t1(u,W,w,c) rdm(x,v) 
+ (  -0.50000) X_aaaa(K,x,c,w) h(w,u) t1(W,v,u,c) rdm(x,v) 
+ (   0.50000) X_aaaa(K,x,c,w) h(w,u) t1(v,W,u,c) rdm(x,v) 
+ (  -0.50000) X_aaaa(K,x,c,y) h(W,w) t1(u,w,v,c) rdm(x,v,y,u) 
+ (  -0.50000) X_aaaa(K,x,c,y) h(W,w) t1(w,c) rdm(x,y) 
+ (  -0.16667) X_aaaa(K,x,c,y) h(W,w) t1(w,u,v,c) rdm(x,v,u,y) 
+ (   0.16667) X_aaaa(K,x,c,y) h(W,w) t1(w,u,v,c) rdm(x,v,y,u) 
+ (   0.16667) X_aaaa(K,x,c,y) h(w,u) t1(W,v,w,c) rdm(x,u,v,y) 
+ (  -0.16667) X_aaaa(K,x,c,y) h(w,u) t1(W,v,w,c) rdm(x,u,y,v) 
+ (  -0.16667) X_aaaa(K,x,c,y) h(w,u) t1(W,w,v,c) rdm(x,v,u,y) 
+ (   0.16667) X_aaaa(K,x,c,y) h(w,u) t1(W,w,v,c) rdm(x,v,y,u) 
+ (   0.50000) X_aaaa(K,x,c,y) h(w,u) t1(v,W,w,c) rdm(x,u,y,v) 
+ (  -0.50000) X_aaaa(K,x,c,y) h(w,u) t1(w,W,v,c) rdm(x,v,y,u) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,v,c) v(k,k,w,v) rdm(x,u) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(W,u,v,c) v(k,w,v,k) rdm(x,u) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(W,u,v,c) v(k,k,w,v) rdm(x,u) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(W,u,v,c) v(k,w,v,k) rdm(x,u) 
+ (  -0.16667) X_aaaa(K,x,c,w) t1(W,u,v,c) v(w,s,t,v) rdm(x,t,s,u) 
+ (   0.16667) X_aaaa(K,x,c,w) t1(W,u,v,c) v(w,s,t,v) rdm(x,t,u,s) 
+ (   0.16667) X_aaaa(K,x,c,w) t1(W,u,v,c) v(w,s,u,t) rdm(x,v,s,t) 
+ (  -0.16667) X_aaaa(K,x,c,w) t1(W,u,v,c) v(w,s,u,t) rdm(x,v,t,s) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(W,u,v,c) v(w,v,s,t) rdm(x,s,u,t) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(W,u,w,c) v(k,k,u,v) rdm(x,v) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,w,c) v(k,u,v,k) rdm(x,v) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(W,u,w,c) v(k,k,u,v) rdm(x,v) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(W,u,w,c) v(k,u,v,k) rdm(x,v) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(W,u,w,c) v(u,v,s,t) rdm(x,s,v,t) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(u,W,v,c) v(k,k,w,v) rdm(x,u) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(u,W,v,c) v(k,w,v,k) rdm(x,u) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(u,W,v,c) v(k,k,w,v) rdm(x,u) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(u,W,v,c) v(k,w,v,k) rdm(x,u) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(u,W,v,c) v(w,s,t,v) rdm(x,t,s,u) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(u,W,v,c) v(w,s,u,t) rdm(x,v,s,t) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(u,W,v,c) v(w,v,s,t) rdm(x,s,u,t) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(u,W,w,c) v(k,k,u,v) rdm(x,v) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,W,w,c) v(k,u,v,k) rdm(x,v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(u,W,w,c) v(k,k,u,v) rdm(x,v) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,W,w,c) v(k,u,v,k) rdm(x,v) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(u,W,w,c) v(u,v,s,t) rdm(x,s,v,t) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(u,c) v(W,u,v,w) rdm(x,v) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(u,c) v(W,w,v,u) rdm(x,v) 
+ (  -0.16667) X_aaaa(K,x,c,w) t1(u,v,s,c) v(W,t,s,w) rdm(x,t,u,v) 
+ (   0.16667) X_aaaa(K,x,c,w) t1(u,v,s,c) v(W,t,s,w) rdm(x,t,v,u) 
+ (   0.16667) X_aaaa(K,x,c,w) t1(u,v,s,c) v(W,u,t,w) rdm(x,s,t,v) 
+ (  -0.16667) X_aaaa(K,x,c,w) t1(u,v,s,c) v(W,u,t,w) rdm(x,s,v,t) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(u,v,s,c) v(W,v,t,w) rdm(x,s,t,u) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(u,v,s,c) v(W,w,s,t) rdm(x,t,v,u) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(u,v,s,c) v(W,w,t,u) rdm(x,s,v,t) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(u,v,s,c) v(W,w,t,v) rdm(x,s,t,u) 
+ (   0.16667) X_aaaa(K,x,c,w) t1(u,v,w,c) v(W,s,t,u) rdm(x,s,t,v) 
+ (  -0.16667) X_aaaa(K,x,c,w) t1(u,v,w,c) v(W,s,t,u) rdm(x,s,v,t) 
+ (  -0.16667) X_aaaa(K,x,c,w) t1(u,v,w,c) v(W,s,t,v) rdm(x,s,t,u) 
+ (   0.16667) X_aaaa(K,x,c,w) t1(u,v,w,c) v(W,s,t,v) rdm(x,s,u,t) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(W,u,s,t) rdm(x,t,v,s) 
+ (   0.50000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(W,u,s,v) rdm(x,s) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(W,v,s,t) rdm(x,t,u,s) 
+ (  -0.50000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(W,v,s,u) rdm(x,s) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(k,W,u,k) rdm(x,v) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(k,W,v,k) rdm(x,u) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(k,k,W,u) rdm(x,v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(k,k,W,v) rdm(x,u) 
+ (  -1.00000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(k,W,u,k) rdm(x,v) 
+ (   1.00000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(k,W,v,k) rdm(x,u) 
+ (   2.00000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(k,k,W,u) rdm(x,v) 
+ (  -2.00000) X_aaaa(K,x,c,w) t1(u,v,w,c) v(k,k,W,v) rdm(x,u) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,k,w,v) rdm(x,u,v,y) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,k,w,v) rdm(x,u,y,v) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,w,v,k) rdm(x,u,v,y) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,w,v,k) rdm(x,u,y,v) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,k,w,v) rdm(x,u,v,y) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,k,w,v) rdm(x,u,y,v) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,w,v,k) rdm(x,u,v,y) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(W,w,u,c) v(k,w,v,k) rdm(x,u,y,v) 
+ (   0.16667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,w,y,s) 
+ (  -0.16667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,y,w,s) 
+ (  -0.16667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,v,y,t) 
+ (   0.16667) X_aaaa(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,y,v,t) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,k,w,v) rdm(x,u,v,y) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,k,w,v) rdm(x,u,y,v) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,w,v,k) rdm(x,u,v,y) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,w,v,k) rdm(x,u,y,v) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,k,w,v) rdm(x,u,v,y) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,k,w,v) rdm(x,u,y,v) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,w,v,k) rdm(x,u,v,y) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(w,W,u,c) v(k,w,v,k) rdm(x,u,y,v) 
+ (   0.50000) X_aaaa(K,x,c,y) t1(w,W,u,c) v(u,v,s,t) rdm(x,v,t,y,w,s) 
+ (  -0.50000) X_aaaa(K,x,c,y) t1(w,W,u,c) v(w,v,s,t) rdm(x,u,s,y,v,t) 
+ (  -0.16667) X_aaaa(K,x,c,y) t1(w,c) v(W,u,v,w) rdm(x,u,v,y) 
+ (   0.16667) X_aaaa(K,x,c,y) t1(w,c) v(W,u,v,w) rdm(x,u,y,v) 
+ (  -0.50000) X_aaaa(K,x,c,y) t1(w,c) v(W,w,u,v) rdm(x,v,y,u) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,w,k) rdm(x,y) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,k,W,w) rdm(x,y) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,W,w,k) rdm(x,y) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(w,c) v(k,k,W,w) rdm(x,y) 
+ (  -0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,t,w,y) 
+ (   0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,y,w,t) 
+ (  -0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,u,t,y) 
+ (   0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,y,t,u) 
+ (   0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,u,y,w) 
+ (  -0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,y,u,w) 
+ (  -0.50000) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,u,s,t) rdm(x,v,t,y,w,s) 
+ (  -0.50000) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,u,s,w) rdm(x,v,y,s) 
+ (  -0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,u,y,s) 
+ (   0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,y,u,s) 
+ (  -0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,w,s,u) rdm(x,v,s,y) 
+ (   0.16667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(W,w,s,u) rdm(x,v,y,s) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,W,u,k) rdm(x,v,y,w) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,u,y) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,y,u) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,k,W,u) rdm(x,v,y,w) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,u,y) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,y,u) 
+ (   1.00000) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,W,u,k) rdm(x,v,y,w) 
+ (   0.33333) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,u,y) 
+ (  -0.33333) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,y,u) 
+ (  -2.00000) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,k,W,u) rdm(x,v,y,w) 
+ (  -0.66667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,u,y) 
+ (   0.66667) X_aaaa(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,y,u) 
+ (   0.50000) X_abab(K,x,c,w) e(c) t1(u,W,w,c) rdm(x,u) 
+ (   0.50000) X_abab(K,x,c,y) e(c) t1(W,c) rdm(x,y) 
+ (  -0.16667) X_abab(K,x,c,y) e(c) t1(W,w,u,c) rdm(x,u,w,y) 
+ (  -0.33333) X_abab(K,x,c,y) e(c) t1(W,w,u,c) rdm(x,u,y,w) 
+ (   0.50000) X_abab(K,x,c,y) e(c) t1(w,W,u,c) rdm(x,u,y,w) 
+ (  -0.50000) X_abab(K,x,c,w) h(W,u) t1(v,u,w,c) rdm(x,v) 
+ (  -0.50000) X_abab(K,x,c,w) h(u,v) t1(u,W,w,c) rdm(x,v) 
+ (   0.50000) X_abab(K,x,c,w) h(w,u) t1(v,W,u,c) rdm(x,v) 
+ (  -0.50000) X_abab(K,x,c,y) h(W,w) t1(u,w,v,c) rdm(x,v,y,u) 
+ (  -0.50000) X_abab(K,x,c,y) h(W,w) t1(w,c) rdm(x,y) 
+ (   0.16667) X_abab(K,x,c,y) h(W,w) t1(w,u,v,c) rdm(x,v,u,y) 
+ (   0.33333) X_abab(K,x,c,y) h(W,w) t1(w,u,v,c) rdm(x,v,y,u) 
+ (  -0.16667) X_abab(K,x,c,y) h(w,u) t1(W,v,w,c) rdm(x,u,v,y) 
+ (  -0.33333) X_abab(K,x,c,y) h(w,u) t1(W,v,w,c) rdm(x,u,y,v) 
+ (   0.16667) X_abab(K,x,c,y) h(w,u) t1(W,w,v,c) rdm(x,v,u,y) 
+ (   0.33333) X_abab(K,x,c,y) h(w,u) t1(W,w,v,c) rdm(x,v,y,u) 
+ (   0.50000) X_abab(K,x,c,y) h(w,u) t1(v,W,w,c) rdm(x,u,y,v) 
+ (  -0.50000) X_abab(K,x,c,y) h(w,u) t1(w,W,v,c) rdm(x,v,y,u) 
+ (  -0.33333) X_abab(K,x,c,w) t1(W,u,v,c) v(w,s,t,v) rdm(x,t,s,u) 
+ (  -0.16667) X_abab(K,x,c,w) t1(W,u,v,c) v(w,s,t,v) rdm(x,t,u,s) 
+ (   0.33333) X_abab(K,x,c,w) t1(W,u,v,c) v(w,s,u,t) rdm(x,v,s,t) 
+ (   0.16667) X_abab(K,x,c,w) t1(W,u,v,c) v(w,s,u,t) rdm(x,v,t,s) 
+ (   0.50000) X_abab(K,x,c,w) t1(u,W,v,c) v(w,s,t,v) rdm(x,t,s,u) 
+ (  -0.50000) X_abab(K,x,c,w) t1(u,W,v,c) v(w,s,u,t) rdm(x,v,s,t) 
+ (   0.50000) X_abab(K,x,c,w) t1(u,W,v,c) v(w,v,s,t) rdm(x,s,u,t) 
+ (  -0.50000) X_abab(K,x,c,w) t1(u,W,w,c) v(u,v,s,t) rdm(x,s,v,t) 
+ (  -0.50000) X_abab(K,x,c,w) t1(u,c) v(W,u,v,w) rdm(x,v) 
+ (  -0.33333) X_abab(K,x,c,w) t1(u,v,s,c) v(W,t,s,w) rdm(x,t,u,v) 
+ (  -0.16667) X_abab(K,x,c,w) t1(u,v,s,c) v(W,t,s,w) rdm(x,t,v,u) 
+ (   0.33333) X_abab(K,x,c,w) t1(u,v,s,c) v(W,u,t,w) rdm(x,s,t,v) 
+ (   0.16667) X_abab(K,x,c,w) t1(u,v,s,c) v(W,u,t,w) rdm(x,s,v,t) 
+ (  -0.50000) X_abab(K,x,c,w) t1(u,v,s,c) v(W,v,t,w) rdm(x,s,t,u) 
+ (   0.33333) X_abab(K,x,c,w) t1(u,v,w,c) v(W,s,t,u) rdm(x,s,t,v) 
+ (   0.16667) X_abab(K,x,c,w) t1(u,v,w,c) v(W,s,t,u) rdm(x,s,v,t) 
+ (   0.16667) X_abab(K,x,c,w) t1(u,v,w,c) v(W,s,t,v) rdm(x,s,t,u) 
+ (   0.33333) X_abab(K,x,c,w) t1(u,v,w,c) v(W,s,t,v) rdm(x,s,u,t) 
+ (  -0.50000) X_abab(K,x,c,w) t1(u,v,w,c) v(W,v,s,t) rdm(x,t,u,s) 
+ (  -0.50000) X_abab(K,x,c,w) t1(u,v,w,c) v(W,v,s,u) rdm(x,s) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,v,w,c) v(k,W,v,k) rdm(x,u) 
+ (  -2.00000) X_abab(K,x,c,w) t1(u,v,w,c) v(k,k,W,v) rdm(x,u) 
+ (   1.00000) X_abab(K,x,c,w) t1(u,v,w,c) v(k,W,v,k) rdm(x,u) 
+ (  -2.00000) X_abab(K,x,c,w) t1(u,v,w,c) v(k,k,W,v) rdm(x,u) 
+ (  -0.66667) X_abab(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (  -1.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (   0.66667) X_abab(K,x,c,y) t1(W,w,u,c) v(k,k,w,v) rdm(x,u,v,y) 
+ (   1.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(k,k,w,v) rdm(x,u,y,v) 
+ (   0.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (   0.66667) X_abab(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (  -0.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(k,w,v,k) rdm(x,u,v,y) 
+ (  -0.66667) X_abab(K,x,c,y) t1(W,w,u,c) v(k,w,v,k) rdm(x,u,y,v) 
+ (  -0.66667) X_abab(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (  -1.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (   0.66667) X_abab(K,x,c,y) t1(W,w,u,c) v(k,k,w,v) rdm(x,u,v,y) 
+ (   1.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(k,k,w,v) rdm(x,u,y,v) 
+ (   0.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (   0.66667) X_abab(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (  -0.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(k,w,v,k) rdm(x,u,v,y) 
+ (  -0.66667) X_abab(K,x,c,y) t1(W,w,u,c) v(k,w,v,k) rdm(x,u,y,v) 
+ (  -0.16667) X_abab(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,w,y,s) 
+ (  -0.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,y,w,s) 
+ (   0.16667) X_abab(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,v,y,t) 
+ (   0.33333) X_abab(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,y,v,t) 
+ (   0.66667) X_abab(K,x,c,y) t1(w,W,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (   1.33333) X_abab(K,x,c,y) t1(w,W,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (  -0.66667) X_abab(K,x,c,y) t1(w,W,u,c) v(k,k,w,v) rdm(x,u,v,y) 
+ (  -1.33333) X_abab(K,x,c,y) t1(w,W,u,c) v(k,k,w,v) rdm(x,u,y,v) 
+ (  -0.33333) X_abab(K,x,c,y) t1(w,W,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (  -0.66667) X_abab(K,x,c,y) t1(w,W,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (   0.33333) X_abab(K,x,c,y) t1(w,W,u,c) v(k,w,v,k) rdm(x,u,v,y) 
+ (   0.66667) X_abab(K,x,c,y) t1(w,W,u,c) v(k,w,v,k) rdm(x,u,y,v) 
+ (   0.66667) X_abab(K,x,c,y) t1(w,W,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (   1.33333) X_abab(K,x,c,y) t1(w,W,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (  -0.66667) X_abab(K,x,c,y) t1(w,W,u,c) v(k,k,w,v) rdm(x,u,v,y) 
+ (  -1.33333) X_abab(K,x,c,y) t1(w,W,u,c) v(k,k,w,v) rdm(x,u,y,v) 
+ (  -0.33333) X_abab(K,x,c,y) t1(w,W,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (  -0.66667) X_abab(K,x,c,y) t1(w,W,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (   0.33333) X_abab(K,x,c,y) t1(w,W,u,c) v(k,w,v,k) rdm(x,u,v,y) 
+ (   0.66667) X_abab(K,x,c,y) t1(w,W,u,c) v(k,w,v,k) rdm(x,u,y,v) 
+ (   0.50000) X_abab(K,x,c,y) t1(w,W,u,c) v(u,v,s,t) rdm(x,v,t,y,w,s) 
+ (  -0.50000) X_abab(K,x,c,y) t1(w,W,u,c) v(w,v,s,t) rdm(x,u,s,y,v,t) 
+ (   0.16667) X_abab(K,x,c,y) t1(w,c) v(W,u,v,w) rdm(x,u,v,y) 
+ (   0.33333) X_abab(K,x,c,y) t1(w,c) v(W,u,v,w) rdm(x,u,y,v) 
+ (  -0.50000) X_abab(K,x,c,y) t1(w,c) v(W,w,u,v) rdm(x,v,y,u) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,w,k) rdm(x,y) 
+ (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,k,W,w) rdm(x,y) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,c) v(k,W,w,k) rdm(x,y) 
+ (  -2.00000) X_abab(K,x,c,y) t1(w,c) v(k,k,W,w) rdm(x,y) 
+ (   0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,t,w,y) 
+ (   0.33333) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,y,w,t) 
+ (  -0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,t,u,y) 
+ (  -0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,t,y,u) 
+ (  -0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,u,y,t) 
+ (   0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,y,t,u) 
+ (  -0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,y,u,t) 
+ (  -0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,u,y,w) 
+ (  -0.33333) X_abab(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,y,u,w) 
+ (  -0.50000) X_abab(K,x,c,y) t1(w,u,v,c) v(W,u,s,t) rdm(x,v,t,y,w,s) 
+ (  -0.50000) X_abab(K,x,c,y) t1(w,u,v,c) v(W,u,s,w) rdm(x,v,y,s) 
+ (   0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,u,y,s) 
+ (   0.33333) X_abab(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,y,u,s) 
+ (   0.16667) X_abab(K,x,c,y) t1(w,u,v,c) v(W,w,s,u) rdm(x,v,s,y) 
+ (   0.33333) X_abab(K,x,c,y) t1(w,u,v,c) v(W,w,s,u) rdm(x,v,y,s) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,v,c) v(k,W,u,k) rdm(x,v,y,w) 
+ (  -0.33333) X_abab(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,u,y) 
+ (  -0.66667) X_abab(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,y,u) 
+ (  -2.00000) X_abab(K,x,c,y) t1(w,u,v,c) v(k,k,W,u) rdm(x,v,y,w) 
+ (   0.66667) X_abab(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,u,y) 
+ (   1.33333) X_abab(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,y,u) 
+ (   1.00000) X_abab(K,x,c,y) t1(w,u,v,c) v(k,W,u,k) rdm(x,v,y,w) 
+ (  -0.33333) X_abab(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,u,y) 
+ (  -0.66667) X_abab(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,y,u) 
+ (  -2.00000) X_abab(K,x,c,y) t1(w,u,v,c) v(k,k,W,u) rdm(x,v,y,w) 
+ (   0.66667) X_abab(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,u,y) 
+ (   1.33333) X_abab(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,y,u) 
+ (  -0.50000) X_abba(K,x,c,w) e(c) t1(W,u,w,c) rdm(x,u) 
+ (   0.33333) X_abba(K,x,c,y) e(c) t1(W,w,u,c) rdm(x,u,w,y) 
+ (   0.16667) X_abba(K,x,c,y) e(c) t1(W,w,u,c) rdm(x,u,y,w) 
+ (   0.50000) X_abba(K,x,c,w) h(W,u) t1(u,v,w,c) rdm(x,v) 
+ (   0.50000) X_abba(K,x,c,w) h(u,v) t1(W,u,w,c) rdm(x,v) 
+ (  -0.50000) X_abba(K,x,c,w) h(w,u) t1(W,v,u,c) rdm(x,v) 
+ (  -0.33333) X_abba(K,x,c,y) h(W,w) t1(w,u,v,c) rdm(x,v,u,y) 
+ (  -0.16667) X_abba(K,x,c,y) h(W,w) t1(w,u,v,c) rdm(x,v,y,u) 
+ (   0.33333) X_abba(K,x,c,y) h(w,u) t1(W,v,w,c) rdm(x,u,v,y) 
+ (   0.16667) X_abba(K,x,c,y) h(w,u) t1(W,v,w,c) rdm(x,u,y,v) 
+ (  -0.33333) X_abba(K,x,c,y) h(w,u) t1(W,w,v,c) rdm(x,v,u,y) 
+ (  -0.16667) X_abba(K,x,c,y) h(w,u) t1(W,w,v,c) rdm(x,v,y,u) 
+ (  -2.00000) X_abba(K,x,c,w) t1(W,u,v,c) v(k,k,w,v) rdm(x,u) 
+ (   1.00000) X_abba(K,x,c,w) t1(W,u,v,c) v(k,w,v,k) rdm(x,u) 
+ (  -2.00000) X_abba(K,x,c,w) t1(W,u,v,c) v(k,k,w,v) rdm(x,u) 
+ (   1.00000) X_abba(K,x,c,w) t1(W,u,v,c) v(k,w,v,k) rdm(x,u) 
+ (   0.16667) X_abba(K,x,c,w) t1(W,u,v,c) v(w,s,t,v) rdm(x,t,s,u) 
+ (   0.33333) X_abba(K,x,c,w) t1(W,u,v,c) v(w,s,t,v) rdm(x,t,u,s) 
+ (  -0.16667) X_abba(K,x,c,w) t1(W,u,v,c) v(w,s,u,t) rdm(x,v,s,t) 
+ (  -0.33333) X_abba(K,x,c,w) t1(W,u,v,c) v(w,s,u,t) rdm(x,v,t,s) 
+ (  -0.50000) X_abba(K,x,c,w) t1(W,u,v,c) v(w,v,s,t) rdm(x,s,u,t) 
+ (   0.50000) X_abba(K,x,c,w) t1(W,u,w,c) v(u,v,s,t) rdm(x,s,v,t) 
+ (   0.50000) X_abba(K,x,c,w) t1(u,c) v(W,w,v,u) rdm(x,v) 
+ (   0.16667) X_abba(K,x,c,w) t1(u,v,s,c) v(W,t,s,w) rdm(x,t,u,v) 
+ (   0.33333) X_abba(K,x,c,w) t1(u,v,s,c) v(W,t,s,w) rdm(x,t,v,u) 
+ (  -0.16667) X_abba(K,x,c,w) t1(u,v,s,c) v(W,u,t,w) rdm(x,s,t,v) 
+ (  -0.33333) X_abba(K,x,c,w) t1(u,v,s,c) v(W,u,t,w) rdm(x,s,v,t) 
+ (  -0.50000) X_abba(K,x,c,w) t1(u,v,s,c) v(W,w,s,t) rdm(x,t,v,u) 
+ (   0.50000) X_abba(K,x,c,w) t1(u,v,s,c) v(W,w,t,u) rdm(x,s,v,t) 
+ (   0.50000) X_abba(K,x,c,w) t1(u,v,s,c) v(W,w,t,v) rdm(x,s,t,u) 
+ (  -0.16667) X_abba(K,x,c,w) t1(u,v,w,c) v(W,s,t,u) rdm(x,s,t,v) 
+ (  -0.33333) X_abba(K,x,c,w) t1(u,v,w,c) v(W,s,t,u) rdm(x,s,v,t) 
+ (  -0.33333) X_abba(K,x,c,w) t1(u,v,w,c) v(W,s,t,v) rdm(x,s,t,u) 
+ (  -0.16667) X_abba(K,x,c,w) t1(u,v,w,c) v(W,s,t,v) rdm(x,s,u,t) 
+ (   0.50000) X_abba(K,x,c,w) t1(u,v,w,c) v(W,u,s,t) rdm(x,t,v,s) 
+ (   0.50000) X_abba(K,x,c,w) t1(u,v,w,c) v(W,u,s,v) rdm(x,s) 
+ (  -1.00000) X_abba(K,x,c,w) t1(u,v,w,c) v(k,W,u,k) rdm(x,v) 
+ (   2.00000) X_abba(K,x,c,w) t1(u,v,w,c) v(k,k,W,u) rdm(x,v) 
+ (  -1.00000) X_abba(K,x,c,w) t1(u,v,w,c) v(k,W,u,k) rdm(x,v) 
+ (   2.00000) X_abba(K,x,c,w) t1(u,v,w,c) v(k,k,W,u) rdm(x,v) 
+ (   1.33333) X_abba(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (   0.66667) X_abba(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (  -0.66667) X_abba(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (  -0.33333) X_abba(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (   1.33333) X_abba(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,w,y) 
+ (   0.66667) X_abba(K,x,c,y) t1(W,w,u,c) v(k,k,u,v) rdm(x,v,y,w) 
+ (  -0.66667) X_abba(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,w,y) 
+ (  -0.33333) X_abba(K,x,c,y) t1(W,w,u,c) v(k,u,v,k) rdm(x,v,y,w) 
+ (  -0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,s,w,y) 
+ (  -0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,s,y,w) 
+ (  -0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,w,s,y) 
+ (   0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,w,y,s) 
+ (  -0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(u,v,s,t) rdm(x,v,t,y,s,w) 
+ (   0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,t,v,y) 
+ (   0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,t,y,v) 
+ (   0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,v,t,y) 
+ (  -0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,v,y,t) 
+ (   0.16667) X_abba(K,x,c,y) t1(W,w,u,c) v(w,v,s,t) rdm(x,u,s,y,t,v) 
+ (  -0.33333) X_abba(K,x,c,y) t1(w,c) v(W,u,v,w) rdm(x,u,v,y) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,c) v(W,u,v,w) rdm(x,u,y,v) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,t,w,y) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,t,y,w) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,w,t,y) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,w,y,t) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,t,u) rdm(x,v,s,y,t,w) 
+ (  -0.33333) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,u,t,y) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,t,w) rdm(x,v,s,y,t,u) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,u,w,y) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,u,y,w) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,w,u,y) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,w,y,u) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,s,v,t) rdm(x,s,t,y,w,u) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,s,u,y) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,s,y,u) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,u,s,y) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,u,y,s) 
+ (   0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,w,s,t) rdm(x,v,t,y,s,u) 
+ (  -0.33333) X_abba(K,x,c,y) t1(w,u,v,c) v(W,w,s,u) rdm(x,v,s,y) 
+ (  -0.16667) X_abba(K,x,c,y) t1(w,u,v,c) v(W,w,s,u) rdm(x,v,y,s) 
+ (   0.66667) X_abba(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,u,y) 
+ (   0.33333) X_abba(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,y,u) 
+ (  -1.33333) X_abba(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,u,y) 
+ (  -0.66667) X_abba(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,y,u) 
+ (   0.66667) X_abba(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,u,y) 
+ (   0.33333) X_abba(K,x,c,y) t1(w,u,v,c) v(k,W,w,k) rdm(x,v,y,u) 
+ (  -1.33333) X_abba(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,u,y) 
+ (  -0.66667) X_abba(K,x,c,y) t1(w,u,v,c) v(k,k,W,w) rdm(x,v,y,u) 
+
+Total spin-integrated terms: 234
+Total spin-adapted terms: 390
+Spin-adaptation automation time :  83.576 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+156 terms removed:
+ (  -0.50000) X_aaaa(K,x,a,y) v(i,W,a,i) rdm(x,y) 
+ (   1.00000) X_aaaa(K,x,a,y) v(i,i,W,a) rdm(x,y) 
+ (  -0.50000) X_aaaa(K,x,a,y) v(i,W,a,i) rdm(x,y) 
+ (   1.00000) X_aaaa(K,x,a,y) v(i,i,W,a) rdm(x,y) 
+ (  -0.50000) X_abab(K,x,a,y) v(i,W,a,i) rdm(x,y) 
+ (   1.00000) X_abab(K,x,a,y) v(i,i,W,a) rdm(x,y) 
+ (  -0.50000) X_abab(K,x,a,y) v(i,W,a,i) rdm(x,y) 
+ (   1.00000) X_abab(K,x,a,y) v(i,i,W,a) rdm(x,y) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,y,w) rdm(x,z) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,y,w,i) rdm(x,z) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,y,w) rdm(x,z) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,y,w,i) rdm(x,z) 
+ (   2.00000) X_aaaa(K,x,a,y) t1(W,z,y,a) v(i,i,z,w) rdm(x,w) 
+ (  -1.00000) X_aaaa(K,x,a,y) t1(W,z,y,a) v(i,z,w,i) rdm(x,w) 
+ (   2.00000) X_aaaa(K,x,a,y) t1(W,z,y,a) v(i,i,z,w) rdm(x,w) 
+ (  -1.00000) X_aaaa(K,x,a,y) t1(W,z,y,a) v(i,z,w,i) rdm(x,w) 
+ (   2.00000) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,y,w) rdm(x,z) 
+ (  -1.00000) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,y,w,i) rdm(x,z) 
+ (   2.00000) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,y,w) rdm(x,z) 
+ (  -1.00000) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,y,w,i) rdm(x,z) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(z,W,y,a) v(i,i,z,w) rdm(x,w) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(z,W,y,a) v(i,z,w,i) rdm(x,w) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(z,W,y,a) v(i,i,z,w) rdm(x,w) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(z,W,y,a) v(i,z,w,i) rdm(x,w) 
+ (  -1.00000) X_aaaa(K,x,a,y) t1(z,w,y,a) v(i,W,z,i) rdm(x,w) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(z,w,y,a) v(i,W,w,i) rdm(x,z) 
+ (   2.00000) X_aaaa(K,x,a,y) t1(z,w,y,a) v(i,i,W,z) rdm(x,w) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(z,w,y,a) v(i,i,W,w) rdm(x,z) 
+ (  -1.00000) X_aaaa(K,x,a,y) t1(z,w,y,a) v(i,W,z,i) rdm(x,w) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(z,w,y,a) v(i,W,w,i) rdm(x,z) 
+ (   2.00000) X_aaaa(K,x,a,y) t1(z,w,y,a) v(i,i,W,z) rdm(x,w) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(z,w,y,a) v(i,i,W,w) rdm(x,z) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,z,u) rdm(x,w,u,y) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,z,u) rdm(x,w,y,u) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,z,u,i) rdm(x,w,u,y) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,z,u,i) rdm(x,w,y,u) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,z,u) rdm(x,w,u,y) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,i,z,u) rdm(x,w,y,u) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,z,u,i) rdm(x,w,u,y) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(W,z,w,a) v(i,z,u,i) rdm(x,w,y,u) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,z,u) rdm(x,w,u,y) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,z,u) rdm(x,w,y,u) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,z,u,i) rdm(x,w,u,y) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,z,u,i) rdm(x,w,y,u) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,z,u) rdm(x,w,u,y) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,i,z,u) rdm(x,w,y,u) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,z,u,i) rdm(x,w,u,y) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(z,W,w,a) v(i,z,u,i) rdm(x,w,y,u) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(z,a) v(i,W,z,i) rdm(x,y) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(z,a) v(i,i,W,z) rdm(x,y) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(z,a) v(i,W,z,i) rdm(x,y) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(z,a) v(i,i,W,z) rdm(x,y) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,W,w,i) rdm(x,u,y,z) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,w,y) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,y,w) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,i,W,w) rdm(x,u,y,z) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,w,y) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,y,w) 
+ (   1.00000) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,W,w,i) rdm(x,u,y,z) 
+ (   0.33333) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,w,y) 
+ (  -0.33333) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,y,w) 
+ (  -2.00000) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,i,W,w) rdm(x,u,y,z) 
+ (  -0.66667) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,w,y) 
+ (   0.66667) X_aaaa(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,y,w) 
+ (   1.00000) X_abab(K,x,a,y) t1(z,w,y,a) v(i,W,w,i) rdm(x,z) 
+ (  -2.00000) X_abab(K,x,a,y) t1(z,w,y,a) v(i,i,W,w) rdm(x,z) 
+ (   1.00000) X_abab(K,x,a,y) t1(z,w,y,a) v(i,W,w,i) rdm(x,z) 
+ (  -2.00000) X_abab(K,x,a,y) t1(z,w,y,a) v(i,i,W,w) rdm(x,z) 
+ (  -0.66667) X_abab(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (  -1.33333) X_abab(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (   0.66667) X_abab(K,x,a,y) t1(W,z,w,a) v(i,i,z,u) rdm(x,w,u,y) 
+ (   1.33333) X_abab(K,x,a,y) t1(W,z,w,a) v(i,i,z,u) rdm(x,w,y,u) 
+ (   0.33333) X_abab(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (   0.66667) X_abab(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (  -0.33333) X_abab(K,x,a,y) t1(W,z,w,a) v(i,z,u,i) rdm(x,w,u,y) 
+ (  -0.66667) X_abab(K,x,a,y) t1(W,z,w,a) v(i,z,u,i) rdm(x,w,y,u) 
+ (  -0.66667) X_abab(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (  -1.33333) X_abab(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (   0.66667) X_abab(K,x,a,y) t1(W,z,w,a) v(i,i,z,u) rdm(x,w,u,y) 
+ (   1.33333) X_abab(K,x,a,y) t1(W,z,w,a) v(i,i,z,u) rdm(x,w,y,u) 
+ (   0.33333) X_abab(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (   0.66667) X_abab(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (  -0.33333) X_abab(K,x,a,y) t1(W,z,w,a) v(i,z,u,i) rdm(x,w,u,y) 
+ (  -0.66667) X_abab(K,x,a,y) t1(W,z,w,a) v(i,z,u,i) rdm(x,w,y,u) 
+ (   0.66667) X_abab(K,x,a,y) t1(z,W,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (   1.33333) X_abab(K,x,a,y) t1(z,W,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (  -0.66667) X_abab(K,x,a,y) t1(z,W,w,a) v(i,i,z,u) rdm(x,w,u,y) 
+ (  -1.33333) X_abab(K,x,a,y) t1(z,W,w,a) v(i,i,z,u) rdm(x,w,y,u) 
+ (  -0.33333) X_abab(K,x,a,y) t1(z,W,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (  -0.66667) X_abab(K,x,a,y) t1(z,W,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (   0.33333) X_abab(K,x,a,y) t1(z,W,w,a) v(i,z,u,i) rdm(x,w,u,y) 
+ (   0.66667) X_abab(K,x,a,y) t1(z,W,w,a) v(i,z,u,i) rdm(x,w,y,u) 
+ (   0.66667) X_abab(K,x,a,y) t1(z,W,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (   1.33333) X_abab(K,x,a,y) t1(z,W,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (  -0.66667) X_abab(K,x,a,y) t1(z,W,w,a) v(i,i,z,u) rdm(x,w,u,y) 
+ (  -1.33333) X_abab(K,x,a,y) t1(z,W,w,a) v(i,i,z,u) rdm(x,w,y,u) 
+ (  -0.33333) X_abab(K,x,a,y) t1(z,W,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (  -0.66667) X_abab(K,x,a,y) t1(z,W,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (   0.33333) X_abab(K,x,a,y) t1(z,W,w,a) v(i,z,u,i) rdm(x,w,u,y) 
+ (   0.66667) X_abab(K,x,a,y) t1(z,W,w,a) v(i,z,u,i) rdm(x,w,y,u) 
+ (   1.00000) X_abab(K,x,a,y) t1(z,a) v(i,W,z,i) rdm(x,y) 
+ (  -2.00000) X_abab(K,x,a,y) t1(z,a) v(i,i,W,z) rdm(x,y) 
+ (   1.00000) X_abab(K,x,a,y) t1(z,a) v(i,W,z,i) rdm(x,y) 
+ (  -2.00000) X_abab(K,x,a,y) t1(z,a) v(i,i,W,z) rdm(x,y) 
+ (   1.00000) X_abab(K,x,a,y) t1(z,w,u,a) v(i,W,w,i) rdm(x,u,y,z) 
+ (  -0.33333) X_abab(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,w,y) 
+ (  -0.66667) X_abab(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,y,w) 
+ (  -2.00000) X_abab(K,x,a,y) t1(z,w,u,a) v(i,i,W,w) rdm(x,u,y,z) 
+ (   0.66667) X_abab(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,w,y) 
+ (   1.33333) X_abab(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,y,w) 
+ (   1.00000) X_abab(K,x,a,y) t1(z,w,u,a) v(i,W,w,i) rdm(x,u,y,z) 
+ (  -0.33333) X_abab(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,w,y) 
+ (  -0.66667) X_abab(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,y,w) 
+ (  -2.00000) X_abab(K,x,a,y) t1(z,w,u,a) v(i,i,W,w) rdm(x,u,y,z) 
+ (   0.66667) X_abab(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,w,y) 
+ (   1.33333) X_abab(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,y,w) 
+ (  -2.00000) X_abba(K,x,a,y) t1(W,z,w,a) v(i,i,y,w) rdm(x,z) 
+ (   1.00000) X_abba(K,x,a,y) t1(W,z,w,a) v(i,y,w,i) rdm(x,z) 
+ (  -2.00000) X_abba(K,x,a,y) t1(W,z,w,a) v(i,i,y,w) rdm(x,z) 
+ (   1.00000) X_abba(K,x,a,y) t1(W,z,w,a) v(i,y,w,i) rdm(x,z) 
+ (  -1.00000) X_abba(K,x,a,y) t1(z,w,y,a) v(i,W,z,i) rdm(x,w) 
+ (   2.00000) X_abba(K,x,a,y) t1(z,w,y,a) v(i,i,W,z) rdm(x,w) 
+ (  -1.00000) X_abba(K,x,a,y) t1(z,w,y,a) v(i,W,z,i) rdm(x,w) 
+ (   2.00000) X_abba(K,x,a,y) t1(z,w,y,a) v(i,i,W,z) rdm(x,w) 
+ (   1.33333) X_abba(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (   0.66667) X_abba(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (  -0.66667) X_abba(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (  -0.33333) X_abba(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (   1.33333) X_abba(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,z,y) 
+ (   0.66667) X_abba(K,x,a,y) t1(W,z,w,a) v(i,i,w,u) rdm(x,u,y,z) 
+ (  -0.66667) X_abba(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,z,y) 
+ (  -0.33333) X_abba(K,x,a,y) t1(W,z,w,a) v(i,w,u,i) rdm(x,u,y,z) 
+ (   0.66667) X_abba(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,w,y) 
+ (   0.33333) X_abba(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,y,w) 
+ (  -1.33333) X_abba(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,w,y) 
+ (  -0.66667) X_abba(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,y,w) 
+ (   0.66667) X_abba(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,w,y) 
+ (   0.33333) X_abba(K,x,a,y) t1(z,w,u,a) v(i,W,z,i) rdm(x,u,y,w) 
+ (  -1.33333) X_abba(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,w,y) 
+ (  -0.66667) X_abba(K,x,a,y) t1(z,w,u,a) v(i,i,W,z) rdm(x,u,y,w) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 234
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+sigma_KW_aa  = 1/2 * einsum('Kxay,Wa,xy->KW', X_aaaa, h_ae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wyza,xz->KW', X_aaaa, v_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zyWa,xz->KW', X_aaaa, v_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,xzwy->KW', X_aaaa, v_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,xzyw->KW', X_aaaa, v_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwWa,xwyz->KW', X_aaaa, v_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('ixaW,Kyai,xy->KW', X_aaaa, v_xaex, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('ixaW,iKya,xy->KW', X_aaaa, v_xxae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('ixay,KWai,xy->KW', X_aaaa, v_xaex, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('ixay,Kzai,Wxzy->KW', X_aaaa, v_xaex, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('ixay,Kzai,Wxyz->KW', X_aaaa, v_xaex, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('ixay,iKWa,xy->KW', X_aaaa, v_xxae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('ixay,iKza,Wxzy->KW', X_aaaa, v_xxae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('ixay,iKza,Wxyz->KW', X_aaaa, v_xxae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,Wa,xy->KW', X_abab, h_ae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zyWa,xz->KW', X_abab, v_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,xzwy->KW', X_abab, v_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,Wzwa,xzyw->KW', X_abab, v_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwWa,xwyz->KW', X_abab, v_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('ixay,KWai,xy->KW', X_abab, v_xaex, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('ixay,Kzai,Wxzy->KW', X_abab, v_xaex, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('ixay,Kzai,Wxyz->KW', X_abab, v_xaex, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('ixay,iKWa,xy->KW', X_abab, v_xxae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('ixay,iKza,Wxzy->KW', X_abab, v_xxae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('ixay,iKza,Wxyz->KW', X_abab, v_xxae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wyza,xz->KW', X_abba, v_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,Wzwa,xzwy->KW', X_abba, v_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,xzyw->KW', X_abba, v_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('ixaW,iKya,xy->KW', X_abba, v_xxae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('ixay,iKza,Wxzy->KW', X_abba, v_xxae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('ixay,iKza,Wxyz->KW', X_abba, v_xxae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('ixaW,Kyai,xy->KW', X_baba, v_xaex, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('ixay,KWai,xy->KW', X_baba, v_xaex, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('ixay,Kzai,Wxzy->KW', X_baba, v_xaex, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('ixay,Kzai,Wxyz->KW', X_baba, v_xaex, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('ixay,KWai,xy->KW', X_bbbb, v_xaex, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('ixay,Kzai,Wxzy->KW', X_bbbb, v_xaex, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('ixay,Kzai,Wxyz->KW', X_bbbb, v_xaex, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,a,Wzya,xz->KW', X_aaaa, e_extern, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,a,zWya,xz->KW', X_aaaa, e_extern, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,a,Wa,xy->KW', X_aaaa, e_extern, t1_ae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,a,Wzwa,xwzy->KW', X_aaaa, e_extern, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,a,Wzwa,xwyz->KW', X_aaaa, e_extern, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,a,zWwa,xwyz->KW', X_aaaa, e_extern, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,Wz,zwya,xw->KW', X_aaaa, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wz,wzya,xw->KW', X_aaaa, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zw,Wzya,xw->KW', X_aaaa, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zw,zWya,xw->KW', X_aaaa, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,yz,Wwza,xw->KW', X_aaaa, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,yz,wWza,xw->KW', X_aaaa, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wz,wzua,xuyw->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wz,za,xy->KW', X_aaaa, h_aa, t1_ae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wz,zwua,xuwy->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wz,zwua,xuyw->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zw,Wuza,xwuy->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zw,Wuza,xwyu->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zw,Wzua,xuwy->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zw,Wzua,xuyw->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zw,uWza,xwyu->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zw,zWua,xuyw->KW', X_aaaa, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,yuvw,xvuz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,yuvw,xvzu->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,yuzv,xwuv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,yuzv,xwvu->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wzwa,ywuv,xuzv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,Wzya,zwuv,xuwv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zWwa,yuvw,xvuz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zWwa,yuzv,xwuv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zWwa,ywuv,xuzv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zWya,zwuv,xuwv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,za,Wzwy,xw->KW', X_aaaa, t1_ae, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,za,Wywz,xw->KW', X_aaaa, t1_ae, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvuy,xvzw->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvuy,xvwz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvy,xuvw->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wzvy,xuwv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwua,Wwvy,xuvz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwua,Wyuv,xvwz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwua,Wyvz,xuwv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwua,Wyvw,xuvz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwya,Wuvz,xuvw->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwya,Wuvz,xuwv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwya,Wuvw,xuvz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwya,Wuvw,xuzv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwya,Wzuv,xvwu->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwya,Wzuw,xu->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwya,Wwuv,xvzu->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwya,Wwuz,xu->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,wuvs,xuszyv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,wuvs,xusyzv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,zuvs,xwvuys->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,zuvs,xwvyus->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zWwa,wuvs,xusyzv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zWwa,zuvs,xwvyus->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,za,Wwuz,xwuy->KW', X_aaaa, t1_ae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,za,Wwuz,xwyu->KW', X_aaaa, t1_ae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,za,Wzwu,xuyw->KW', X_aaaa, t1_ae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvsw,xuvszy->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvsw,xuvyzs->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvsz,xuvwsy->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvsz,xuvysw->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvus,xvswyz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvus,xvsywz->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwua,Wwvs,xusyzv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwua,Wwvz,xuyv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wzvs,xuswyv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvs,xusywv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wzvw,xuvy->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvw,xuyv->KW', X_aaaa, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,a,zWya,xz->KW', X_abab, e_extern, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,a,Wa,xy->KW', X_abab, e_extern, t1_ae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,a,Wzwa,xwzy->KW', X_abab, e_extern, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,a,Wzwa,xwyz->KW', X_abab, e_extern, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,a,zWwa,xwyz->KW', X_abab, e_extern, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wz,wzya,xw->KW', X_abab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zw,zWya,xw->KW', X_abab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,yz,wWza,xw->KW', X_abab, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wz,wzua,xuyw->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wz,za,xy->KW', X_abab, h_aa, t1_ae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wz,zwua,xuwy->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,Wz,zwua,xuyw->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zw,Wuza,xwuy->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zw,Wuza,xwyu->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zw,Wzua,xuwy->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zw,Wzua,xuyw->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zw,uWza,xwyu->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zw,zWua,xuyw->KW', X_abab, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,Wzwa,yuvw,xvuz->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,yuvw,xvzu->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,Wzwa,yuzv,xwuv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,yuzv,xwvu->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zWwa,yuvw,xvuz->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zWwa,yuzv,xwuv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zWwa,ywuv,xuzv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zWya,zwuv,xuwv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,za,Wzwy,xw->KW', X_abab, t1_ae, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zwua,Wvuy,xvzw->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvuy,xvwz->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zwua,Wzvy,xuvw->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvy,xuwv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwua,Wwvy,xuvz->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zwya,Wuvz,xuvw->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwya,Wuvz,xuwv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwya,Wuvw,xuvz->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zwya,Wuvw,xuzv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwya,Wwuv,xvzu->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwya,Wwuz,xu->KW', X_abab, t1_aaae, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,wuvs,xuszyv->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,Wzwa,wuvs,xusyzv->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,zuvs,xwvuys->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,Wzwa,zuvs,xwvyus->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zWwa,wuvs,xusyzv->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zWwa,zuvs,xwvyus->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,za,Wwuz,xwuy->KW', X_abab, t1_ae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,za,Wwuz,xwyu->KW', X_abab, t1_ae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,za,Wzwu,xuyw->KW', X_abab, t1_ae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvsw,xuvszy->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zwua,Wvsw,xuvyzs->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvsz,xuvswy->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvsz,xuvsyw->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvsz,xuvwys->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvsz,xuvysw->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvsz,xuvyws->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvus,xvswyz->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zwua,Wvus,xvsywz->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwua,Wwvs,xusyzv->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwua,Wwvz,xuyv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvs,xuswyv->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zwua,Wzvs,xusywv->KW', X_abab, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvw,xuvy->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zwua,Wzvw,xuyv->KW', X_abab, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,a,Wzya,xz->KW', X_abba, e_extern, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,a,Wzwa,xwzy->KW', X_abba, e_extern, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,a,Wzwa,xwyz->KW', X_abba, e_extern, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,Wz,zwya,xw->KW', X_abba, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zw,Wzya,xw->KW', X_abba, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,yz,Wwza,xw->KW', X_abba, h_aa, t1_aaae, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,Wz,zwua,xuwy->KW', X_abba, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wz,zwua,xuyw->KW', X_abba, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zw,Wuza,xwuy->KW', X_abba, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zw,Wuza,xwyu->KW', X_abba, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zw,Wzua,xuwy->KW', X_abba, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zw,Wzua,xuyw->KW', X_abba, h_aa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,yuvw,xvuz->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,Wzwa,yuvw,xvzu->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,yuzv,xwuv->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,Wzwa,yuzv,xwvu->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,Wzwa,ywuv,xuzv->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,Wzya,zwuv,xuwv->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,za,Wywz,xw->KW', X_abba, t1_ae, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvuy,xvzw->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/3 * einsum('Kxay,zwua,Wvuy,xvwz->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wzvy,xuvw->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zwua,Wzvy,xuwv->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kxay,zwua,Wyuv,xvwz->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwua,Wyvz,xuwv->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwua,Wyvw,xuvz->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwya,Wuvz,xuvw->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zwya,Wuvz,xuwv->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zwya,Wuvw,xuvz->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwya,Wuvw,xuzv->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwya,Wzuv,xvwu->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kxay,zwya,Wzuw,xu->KW', X_abba, t1_aaae, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,wuvs,xusvzy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,wuvs,xusvyz->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,wuvs,xuszvy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,wuvs,xuszyv->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,wuvs,xusyvz->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,zuvs,xwvsuy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,zuvs,xwvsyu->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,zuvs,xwvusy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,Wzwa,zuvs,xwvuys->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,Wzwa,zuvs,xwvysu->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,za,Wwuz,xwuy->KW', X_abba, t1_ae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,za,Wwuz,xwyu->KW', X_abba, t1_ae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvsw,xuvszy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvsw,xuvsyz->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvsw,xuvzsy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvsw,xuvzys->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvsw,xuvysz->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zwua,Wvsz,xuvwsy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvsz,xuvysw->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvus,xvswzy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wvus,xvswyz->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvus,xvszwy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvus,xvszyw->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wvus,xvsyzw->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvs,xusvwy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvs,xusvyw->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvs,xuswvy->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wzvs,xuswyv->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa += 1/6 * einsum('Kxay,zwua,Wzvs,xusyvw->KW', X_abba, t1_aaae, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KW_aa -= 1/3 * einsum('Kxay,zwua,Wzvw,xuvy->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KW_aa -= 1/6 * einsum('Kxay,zwua,Wzvw,xuyv->KW', X_abba, t1_aaae, v_aaaa, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 681.22 seconds.

@@ -1,0 +1,379 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+--------------------------- Spin-Adapted CVS-EE: Sigma H0 CA_CAAA (aaaa) ---------------------------
+
+
+## Generating operators ...
+
+
+## Right operator terms:
+ (   1.00000) cre(Y) cre(Z) des(W) des(K) 
+
+## Left operator terms:
+ (   1.00000) X_aa(i,x) cre(i) des(x) 
+ (   1.00000) X_aa(i,x) cre(i) des(x) 
+
+----------------------------------------- Hamiltonian (0) ------------------------------------------
+
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(1), h(1)^\dag] ...
+
+## Calculating [h^(0), [H(1), h(1)^\dag]] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) X_aa(K,Y) e(K) cre(Z) des(W) 
+ (   1.00000) X_aa(K,Z) e(K) cre(Y) des(W) 
+ (  -1.00000) X_aa(K,Y) h(W,y) cre(Z) des(y) 
+ (   1.00000) X_aa(K,Y) h(Z,y) cre(y) des(W) 
+ (   1.00000) X_aa(K,Z) h(W,y) cre(Y) des(y) 
+ (  -1.00000) X_aa(K,Z) h(Y,y) cre(y) des(W) 
+ (   1.00000) X_aa(K,y) h(Y,y) cre(Z) des(W) 
+ (  -1.00000) X_aa(K,y) h(Z,y) cre(Y) des(W) 
+ (  -2.00000) X_aa(K,Y) v(j,W,j,y) cre(Z) des(y) 
+ (  -2.00000) X_aa(K,Y) v(j,W,j,y) cre(Z) des(y) 
+ (  -2.00000) X_aa(K,Y) v(j,W,j,y) cre(Z) des(y) 
+ (  -2.00000) X_aa(K,Y) v(j,W,j,y) cre(Z) des(y) 
+ (   2.00000) X_aa(K,Y) v(j,Z,j,y) cre(y) des(W) 
+ (   2.00000) X_aa(K,Y) v(j,Z,j,y) cre(y) des(W) 
+ (   2.00000) X_aa(K,Y) v(j,Z,j,y) cre(y) des(W) 
+ (   2.00000) X_aa(K,Y) v(j,Z,j,y) cre(y) des(W) 
+ (   2.00000) X_aa(K,Z) v(j,W,j,y) cre(Y) des(y) 
+ (   2.00000) X_aa(K,Z) v(j,W,j,y) cre(Y) des(y) 
+ (   2.00000) X_aa(K,Z) v(j,W,j,y) cre(Y) des(y) 
+ (   2.00000) X_aa(K,Z) v(j,W,j,y) cre(Y) des(y) 
+ (  -2.00000) X_aa(K,Z) v(j,Y,j,y) cre(y) des(W) 
+ (  -2.00000) X_aa(K,Z) v(j,Y,j,y) cre(y) des(W) 
+ (  -2.00000) X_aa(K,Z) v(j,Y,j,y) cre(y) des(W) 
+ (  -2.00000) X_aa(K,Z) v(j,Y,j,y) cre(y) des(W) 
+ (   1.00000) X_aa(K,y) v(Y,Z,y,z) cre(z) des(W) 
+ (   2.00000) X_aa(K,y) v(j,Y,j,y) cre(Z) des(W) 
+ (   2.00000) X_aa(K,y) v(j,Y,j,y) cre(Z) des(W) 
+ (   2.00000) X_aa(K,y) v(j,Y,j,y) cre(Z) des(W) 
+ (   2.00000) X_aa(K,y) v(j,Y,j,y) cre(Z) des(W) 
+ (  -2.00000) X_aa(K,y) v(j,Z,j,y) cre(Y) des(W) 
+ (  -2.00000) X_aa(K,y) v(j,Z,j,y) cre(Y) des(W) 
+ (  -2.00000) X_aa(K,y) v(j,Z,j,y) cre(Y) des(W) 
+ (  -2.00000) X_aa(K,y) v(j,Z,j,y) cre(Y) des(W) 
+ (   1.00000) X_aa(K,x) e(K) cre(Y) cre(Z) des(W) des(x) 
+ (  -1.00000) X_aa(K,x) h(W,y) cre(Y) cre(Z) des(x) des(y) 
+ (   1.00000) X_aa(K,x) h(Y,y) cre(Z) cre(y) des(W) des(x) 
+ (  -1.00000) X_aa(K,x) h(Z,y) cre(Y) cre(y) des(W) des(x) 
+ (   0.50000) X_aa(K,Y) v(W,y,z,w) cre(Z) cre(y) des(z) des(w) 
+ (   1.00000) X_aa(K,Y) v(W,y,z,w) cre(Z) cre(y) des(z) des(w) 
+ (  -0.50000) X_aa(K,Y) v(Z,y,z,w) cre(z) cre(w) des(W) des(y) 
+ (  -1.00000) X_aa(K,Y) v(Z,y,z,w) cre(z) cre(w) des(W) des(y) 
+ (  -0.50000) X_aa(K,Z) v(W,y,z,w) cre(Y) cre(y) des(z) des(w) 
+ (  -1.00000) X_aa(K,Z) v(W,y,z,w) cre(Y) cre(y) des(z) des(w) 
+ (   0.50000) X_aa(K,Z) v(Y,y,z,w) cre(z) cre(w) des(W) des(y) 
+ (   1.00000) X_aa(K,Z) v(Y,y,z,w) cre(z) cre(w) des(W) des(y) 
+ (   0.50000) X_aa(K,y) v(W,y,z,w) cre(Y) cre(Z) des(z) des(w) 
+ (  -1.00000) X_aa(K,y) v(Y,z,y,w) cre(Z) cre(w) des(W) des(z) 
+ (  -1.00000) X_aa(K,y) v(Y,z,y,w) cre(Z) cre(w) des(W) des(z) 
+ (   1.00000) X_aa(K,y) v(Z,z,y,w) cre(Y) cre(w) des(W) des(z) 
+ (   1.00000) X_aa(K,y) v(Z,z,y,w) cre(Y) cre(w) des(W) des(z) 
+ (  -2.00000) X_aa(K,x) v(j,W,j,y) cre(Y) cre(Z) des(x) des(y) 
+ (  -2.00000) X_aa(K,x) v(j,W,j,y) cre(Y) cre(Z) des(x) des(y) 
+ (  -2.00000) X_aa(K,x) v(j,W,j,y) cre(Y) cre(Z) des(x) des(y) 
+ (  -2.00000) X_aa(K,x) v(j,W,j,y) cre(Y) cre(Z) des(x) des(y) 
+ (  -0.50000) X_aa(K,x) v(Y,Z,y,z) cre(y) cre(z) des(W) des(x) 
+ (   2.00000) X_aa(K,x) v(j,Y,j,y) cre(Z) cre(y) des(W) des(x) 
+ (   2.00000) X_aa(K,x) v(j,Y,j,y) cre(Z) cre(y) des(W) des(x) 
+ (   2.00000) X_aa(K,x) v(j,Y,j,y) cre(Z) cre(y) des(W) des(x) 
+ (   2.00000) X_aa(K,x) v(j,Y,j,y) cre(Z) cre(y) des(W) des(x) 
+ (  -2.00000) X_aa(K,x) v(j,Z,j,y) cre(Y) cre(y) des(W) des(x) 
+ (  -2.00000) X_aa(K,x) v(j,Z,j,y) cre(Y) cre(y) des(W) des(x) 
+ (  -2.00000) X_aa(K,x) v(j,Z,j,y) cre(Y) cre(y) des(W) des(x) 
+ (  -2.00000) X_aa(K,x) v(j,Z,j,y) cre(Y) cre(y) des(W) des(x) 
+ (  -0.50000) X_aa(K,x) v(W,y,z,w) cre(Y) cre(Z) cre(y) des(x) des(z) des(w) 
+ (  -1.00000) X_aa(K,x) v(W,y,z,w) cre(Y) cre(Z) cre(y) des(x) des(z) des(w) 
+ (   0.50000) X_aa(K,x) v(Y,y,z,w) cre(Z) cre(z) cre(w) des(W) des(x) des(y) 
+ (   1.00000) X_aa(K,x) v(Y,y,z,w) cre(Z) cre(z) cre(w) des(W) des(x) des(y) 
+ (  -0.50000) X_aa(K,x) v(Z,y,z,w) cre(Y) cre(z) cre(w) des(W) des(x) des(y) 
+ (  -1.00000) X_aa(K,x) v(Z,y,z,w) cre(Y) cre(z) cre(w) des(W) des(x) des(y) 
+
+Total terms : 69
+SQA automation time :  0.211 seconds
+----------------------------------------------------------------------------------------------------
+
+----------------------- Converting Sigma vector to spin-adapted formulation ------------------------
+
+----------------------------------------------------------------------------------------------------
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 164 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+78 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) X_aa(K,Y) e(K) rdm(W,Z) 
+ (   0.50000) X_aa(K,Z) e(K) rdm(W,Y) 
+ (  -0.16667) X_aa(K,x) e(K) rdm(W,x,Y,Z) 
+ (   0.16667) X_aa(K,x) e(K) rdm(W,x,Z,Y) 
+ (  -0.50000) X_aa(K,Y) h(W,y) rdm(Z,y) 
+ (   0.50000) X_aa(K,Y) h(Z,y) rdm(W,y) 
+ (   0.50000) X_aa(K,Z) h(W,y) rdm(Y,y) 
+ (  -0.50000) X_aa(K,Z) h(Y,y) rdm(W,y) 
+ (   0.16667) X_aa(K,x) h(W,y) rdm(Y,Z,x,y) 
+ (  -0.16667) X_aa(K,x) h(W,y) rdm(Y,Z,y,x) 
+ (  -0.16667) X_aa(K,x) h(Y,y) rdm(W,x,Z,y) 
+ (   0.16667) X_aa(K,x) h(Y,y) rdm(W,x,y,Z) 
+ (   0.16667) X_aa(K,x) h(Z,y) rdm(W,x,Y,y) 
+ (  -0.16667) X_aa(K,x) h(Z,y) rdm(W,x,y,Y) 
+ (   0.50000) X_aa(K,y) h(Y,y) rdm(W,Z) 
+ (  -0.50000) X_aa(K,y) h(Z,y) rdm(W,Y) 
+ (  -0.50000) X_aa(K,Y) v(W,y,z,w) rdm(Z,z,y,w) 
+ (   0.50000) X_aa(K,Y) v(Z,y,z,w) rdm(W,z,y,w) 
+ (   1.00000) X_aa(K,Y) v(j,W,y,j) rdm(Z,y) 
+ (  -1.00000) X_aa(K,Y) v(j,Z,y,j) rdm(W,y) 
+ (  -2.00000) X_aa(K,Y) v(j,j,W,y) rdm(Z,y) 
+ (   2.00000) X_aa(K,Y) v(j,j,Z,y) rdm(W,y) 
+ (   1.00000) X_aa(K,Y) v(j,W,y,j) rdm(Z,y) 
+ (  -1.00000) X_aa(K,Y) v(j,Z,y,j) rdm(W,y) 
+ (  -2.00000) X_aa(K,Y) v(j,j,W,y) rdm(Z,y) 
+ (   2.00000) X_aa(K,Y) v(j,j,Z,y) rdm(W,y) 
+ (   0.50000) X_aa(K,Z) v(W,y,z,w) rdm(Y,z,y,w) 
+ (  -0.50000) X_aa(K,Z) v(Y,y,z,w) rdm(W,z,y,w) 
+ (  -1.00000) X_aa(K,Z) v(j,W,y,j) rdm(Y,y) 
+ (   1.00000) X_aa(K,Z) v(j,Y,y,j) rdm(W,y) 
+ (   2.00000) X_aa(K,Z) v(j,j,W,y) rdm(Y,y) 
+ (  -2.00000) X_aa(K,Z) v(j,j,Y,y) rdm(W,y) 
+ (  -1.00000) X_aa(K,Z) v(j,W,y,j) rdm(Y,y) 
+ (   1.00000) X_aa(K,Z) v(j,Y,y,j) rdm(W,y) 
+ (   2.00000) X_aa(K,Z) v(j,j,W,y) rdm(Y,y) 
+ (  -2.00000) X_aa(K,Z) v(j,j,Y,y) rdm(W,y) 
+ (   0.16667) X_aa(K,x) v(W,y,z,w) rdm(Y,Z,z,x,y,w) 
+ (  -0.16667) X_aa(K,x) v(W,y,z,w) rdm(Y,Z,z,y,x,w) 
+ (   0.16667) X_aa(K,x) v(Y,y,Z,z) rdm(W,x,y,z) 
+ (  -0.16667) X_aa(K,x) v(Y,y,Z,z) rdm(W,x,z,y) 
+ (  -0.16667) X_aa(K,x) v(Y,y,z,w) rdm(W,x,z,Z,y,w) 
+ (   0.16667) X_aa(K,x) v(Y,y,z,w) rdm(W,x,z,y,Z,w) 
+ (   0.16667) X_aa(K,x) v(Z,y,z,w) rdm(W,x,z,Y,y,w) 
+ (  -0.16667) X_aa(K,x) v(Z,y,z,w) rdm(W,x,z,y,Y,w) 
+ (  -0.33333) X_aa(K,x) v(j,W,y,j) rdm(Y,Z,x,y) 
+ (   0.33333) X_aa(K,x) v(j,W,y,j) rdm(Y,Z,y,x) 
+ (   0.33333) X_aa(K,x) v(j,Y,y,j) rdm(W,x,Z,y) 
+ (  -0.33333) X_aa(K,x) v(j,Y,y,j) rdm(W,x,y,Z) 
+ (  -0.33333) X_aa(K,x) v(j,Z,y,j) rdm(W,x,Y,y) 
+ (   0.33333) X_aa(K,x) v(j,Z,y,j) rdm(W,x,y,Y) 
+ (   0.66667) X_aa(K,x) v(j,j,W,y) rdm(Y,Z,x,y) 
+ (  -0.66667) X_aa(K,x) v(j,j,W,y) rdm(Y,Z,y,x) 
+ (  -0.66667) X_aa(K,x) v(j,j,Y,y) rdm(W,x,Z,y) 
+ (   0.66667) X_aa(K,x) v(j,j,Y,y) rdm(W,x,y,Z) 
+ (   0.66667) X_aa(K,x) v(j,j,Z,y) rdm(W,x,Y,y) 
+ (  -0.66667) X_aa(K,x) v(j,j,Z,y) rdm(W,x,y,Y) 
+ (  -0.33333) X_aa(K,x) v(j,W,y,j) rdm(Y,Z,x,y) 
+ (   0.33333) X_aa(K,x) v(j,W,y,j) rdm(Y,Z,y,x) 
+ (   0.33333) X_aa(K,x) v(j,Y,y,j) rdm(W,x,Z,y) 
+ (  -0.33333) X_aa(K,x) v(j,Y,y,j) rdm(W,x,y,Z) 
+ (  -0.33333) X_aa(K,x) v(j,Z,y,j) rdm(W,x,Y,y) 
+ (   0.33333) X_aa(K,x) v(j,Z,y,j) rdm(W,x,y,Y) 
+ (   0.66667) X_aa(K,x) v(j,j,W,y) rdm(Y,Z,x,y) 
+ (  -0.66667) X_aa(K,x) v(j,j,W,y) rdm(Y,Z,y,x) 
+ (  -0.66667) X_aa(K,x) v(j,j,Y,y) rdm(W,x,Z,y) 
+ (   0.66667) X_aa(K,x) v(j,j,Y,y) rdm(W,x,y,Z) 
+ (   0.66667) X_aa(K,x) v(j,j,Z,y) rdm(W,x,Y,y) 
+ (  -0.66667) X_aa(K,x) v(j,j,Z,y) rdm(W,x,y,Y) 
+ (   0.16667) X_aa(K,y) v(W,z,y,w) rdm(Y,Z,w,z) 
+ (  -0.16667) X_aa(K,y) v(W,z,y,w) rdm(Y,Z,z,w) 
+ (   0.50000) X_aa(K,y) v(Y,y,Z,z) rdm(W,z) 
+ (   0.50000) X_aa(K,y) v(Y,y,z,w) rdm(W,z,Z,w) 
+ (  -0.50000) X_aa(K,y) v(Y,z,Z,y) rdm(W,z) 
+ (  -0.16667) X_aa(K,y) v(Y,z,w,y) rdm(W,w,Z,z) 
+ (   0.16667) X_aa(K,y) v(Y,z,w,y) rdm(W,w,z,Z) 
+ (  -0.50000) X_aa(K,y) v(Z,y,z,w) rdm(W,z,Y,w) 
+ (   0.16667) X_aa(K,y) v(Z,z,w,y) rdm(W,w,Y,z) 
+ (  -0.16667) X_aa(K,y) v(Z,z,w,y) rdm(W,w,z,Y) 
+ (  -1.00000) X_aa(K,y) v(j,Y,y,j) rdm(W,Z) 
+ (   1.00000) X_aa(K,y) v(j,Z,y,j) rdm(W,Y) 
+ (   2.00000) X_aa(K,y) v(j,j,Y,y) rdm(W,Z) 
+ (  -2.00000) X_aa(K,y) v(j,j,Z,y) rdm(W,Y) 
+ (  -1.00000) X_aa(K,y) v(j,Y,y,j) rdm(W,Z) 
+ (   1.00000) X_aa(K,y) v(j,Z,y,j) rdm(W,Y) 
+ (   2.00000) X_aa(K,y) v(j,j,Y,y) rdm(W,Z) 
+ (  -2.00000) X_aa(K,y) v(j,j,Z,y) rdm(W,Y) 
+
+Total spin-integrated terms: 69
+Total spin-adapted terms: 86
+Spin-adaptation automation time :  4.546 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+48 terms removed:
+ (   1.00000) X_aa(K,Y) v(i,W,x,i) rdm(Z,x) 
+ (  -1.00000) X_aa(K,Y) v(i,Z,x,i) rdm(W,x) 
+ (  -2.00000) X_aa(K,Y) v(i,i,W,x) rdm(Z,x) 
+ (   2.00000) X_aa(K,Y) v(i,i,Z,x) rdm(W,x) 
+ (   1.00000) X_aa(K,Y) v(i,W,x,i) rdm(Z,x) 
+ (  -1.00000) X_aa(K,Y) v(i,Z,x,i) rdm(W,x) 
+ (  -2.00000) X_aa(K,Y) v(i,i,W,x) rdm(Z,x) 
+ (   2.00000) X_aa(K,Y) v(i,i,Z,x) rdm(W,x) 
+ (  -1.00000) X_aa(K,Z) v(i,W,x,i) rdm(Y,x) 
+ (   1.00000) X_aa(K,Z) v(i,Y,x,i) rdm(W,x) 
+ (   2.00000) X_aa(K,Z) v(i,i,W,x) rdm(Y,x) 
+ (  -2.00000) X_aa(K,Z) v(i,i,Y,x) rdm(W,x) 
+ (  -1.00000) X_aa(K,Z) v(i,W,x,i) rdm(Y,x) 
+ (   1.00000) X_aa(K,Z) v(i,Y,x,i) rdm(W,x) 
+ (   2.00000) X_aa(K,Z) v(i,i,W,x) rdm(Y,x) 
+ (  -2.00000) X_aa(K,Z) v(i,i,Y,x) rdm(W,x) 
+ (  -0.33333) X_aa(K,x) v(i,W,y,i) rdm(Y,Z,x,y) 
+ (   0.33333) X_aa(K,x) v(i,W,y,i) rdm(Y,Z,y,x) 
+ (   0.33333) X_aa(K,x) v(i,Y,y,i) rdm(W,x,Z,y) 
+ (  -0.33333) X_aa(K,x) v(i,Y,y,i) rdm(W,x,y,Z) 
+ (  -0.33333) X_aa(K,x) v(i,Z,y,i) rdm(W,x,Y,y) 
+ (   0.33333) X_aa(K,x) v(i,Z,y,i) rdm(W,x,y,Y) 
+ (   0.66667) X_aa(K,x) v(i,i,W,y) rdm(Y,Z,x,y) 
+ (  -0.66667) X_aa(K,x) v(i,i,W,y) rdm(Y,Z,y,x) 
+ (  -0.66667) X_aa(K,x) v(i,i,Y,y) rdm(W,x,Z,y) 
+ (   0.66667) X_aa(K,x) v(i,i,Y,y) rdm(W,x,y,Z) 
+ (   0.66667) X_aa(K,x) v(i,i,Z,y) rdm(W,x,Y,y) 
+ (  -0.66667) X_aa(K,x) v(i,i,Z,y) rdm(W,x,y,Y) 
+ (  -0.33333) X_aa(K,x) v(i,W,y,i) rdm(Y,Z,x,y) 
+ (   0.33333) X_aa(K,x) v(i,W,y,i) rdm(Y,Z,y,x) 
+ (   0.33333) X_aa(K,x) v(i,Y,y,i) rdm(W,x,Z,y) 
+ (  -0.33333) X_aa(K,x) v(i,Y,y,i) rdm(W,x,y,Z) 
+ (  -0.33333) X_aa(K,x) v(i,Z,y,i) rdm(W,x,Y,y) 
+ (   0.33333) X_aa(K,x) v(i,Z,y,i) rdm(W,x,y,Y) 
+ (   0.66667) X_aa(K,x) v(i,i,W,y) rdm(Y,Z,x,y) 
+ (  -0.66667) X_aa(K,x) v(i,i,W,y) rdm(Y,Z,y,x) 
+ (  -0.66667) X_aa(K,x) v(i,i,Y,y) rdm(W,x,Z,y) 
+ (   0.66667) X_aa(K,x) v(i,i,Y,y) rdm(W,x,y,Z) 
+ (   0.66667) X_aa(K,x) v(i,i,Z,y) rdm(W,x,Y,y) 
+ (  -0.66667) X_aa(K,x) v(i,i,Z,y) rdm(W,x,y,Y) 
+ (  -1.00000) X_aa(K,x) v(i,Y,x,i) rdm(W,Z) 
+ (   1.00000) X_aa(K,x) v(i,Z,x,i) rdm(W,Y) 
+ (   2.00000) X_aa(K,x) v(i,i,Y,x) rdm(W,Z) 
+ (  -2.00000) X_aa(K,x) v(i,i,Z,x) rdm(W,Y) 
+ (  -1.00000) X_aa(K,x) v(i,Y,x,i) rdm(W,Z) 
+ (   1.00000) X_aa(K,x) v(i,Z,x,i) rdm(W,Y) 
+ (   2.00000) X_aa(K,x) v(i,i,Y,x) rdm(W,Z) 
+ (  -2.00000) X_aa(K,x) v(i,i,Z,x) rdm(W,Y) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 38
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+sigma_KWYZ_aaaa =- 1/2 * einsum('KY,K,WZ->KWYZ', X_aa, e_cvs, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/2 * einsum('KZ,K,WY->KWYZ', X_aa, e_cvs, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,K,WxYZ->KWYZ', X_aa, e_cvs, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,K,WxZY->KWYZ', X_aa, e_cvs, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/2 * einsum('KY,Wx,Zx->KWYZ', X_aa, h_aa, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/2 * einsum('KY,Zx,Wx->KWYZ', X_aa, h_aa, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/2 * einsum('KZ,Wx,Yx->KWYZ', X_aa, h_aa, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/2 * einsum('KZ,Yx,Wx->KWYZ', X_aa, h_aa, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Wy,YZxy->KWYZ', X_aa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Wy,YZyx->KWYZ', X_aa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Yy,WxZy->KWYZ', X_aa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Yy,WxyZ->KWYZ', X_aa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Zy,WxYy->KWYZ', X_aa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Zy,WxyY->KWYZ', X_aa, h_aa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/2 * einsum('Kx,Yx,WZ->KWYZ', X_aa, h_aa, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/2 * einsum('Kx,Zx,WY->KWYZ', X_aa, h_aa, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/2 * einsum('KY,Wxyz,Zyxz->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/2 * einsum('KY,Zxyz,Wyxz->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/2 * einsum('KZ,Wxyz,Yyxz->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/2 * einsum('KZ,Yxyz,Wyxz->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Wyzw,YZzxyw->KWYZ', X_aa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Wyzw,YZzyxw->KWYZ', X_aa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,YyZz,Wxyz->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,YyZz,Wxzy->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Yyzw,WxzZyw->KWYZ', X_aa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Yyzw,WxzyZw->KWYZ', X_aa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Zyzw,WxzYyw->KWYZ', X_aa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Zyzw,WxzyYw->KWYZ', X_aa, v_aaaa, rdm_cccaaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Wyxz,YZzy->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Wyxz,YZyz->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/2 * einsum('Kx,YxZy,Wy->KWYZ', X_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/2 * einsum('Kx,Yxyz,WyZz->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/2 * einsum('Kx,YyZx,Wy->KWYZ', X_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Yyzx,WzZy->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Yyzx,WzyZ->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/2 * einsum('Kx,Zxyz,WyYz->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa += 1/6 * einsum('Kx,Zyzx,WzYy->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+sigma_KWYZ_aaaa -= 1/6 * einsum('Kx,Zyzx,WzyY->KWYZ', X_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 5.49 seconds.

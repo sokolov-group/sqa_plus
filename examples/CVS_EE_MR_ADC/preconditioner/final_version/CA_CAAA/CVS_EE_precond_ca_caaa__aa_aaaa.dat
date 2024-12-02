@@ -1,0 +1,479 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+-------------------------- Spin-Adapted Preconditioner CA_CAAA (aa_aaaa) ---------------------------
+
+
+## Generating operators ...
+
+
+## Generating Term a_I^\dag a_X ... a_Y^\dag a_Z^\dag a_W a_K ...
+
+
+## Left operator terms:
+ (   1.00000) cre(I) des(X) 
+
+## Right operator terms:
+ (   1.00000) cre(Y) cre(Z) des(W) des(K) 
+
+----------------------------------------- Hamiltonian (0) ------------------------------------------
+
+Done ...
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------- Hamiltonian (1) ------------------------------------------
+
+Commutation: Done ...
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(0), h_NU^\dag] ...
+
+## Calculating [h_MU, [H(0), h_NU^\dag]] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) v(I,Y,K,X) cre(Z) des(W) 
+ (   1.00000) v(I,Z,K,X) cre(Y) des(W) 
+ (   1.00000) h(X,Y) kdelta(I,K) cre(Z) des(W) 
+ (  -1.00000) h(X,Z) kdelta(I,K) cre(Y) des(W) 
+ (   1.00000) kdelta(I,K) v(X,x,Y,Z) cre(x) des(W) 
+ (   2.00000) kdelta(I,K) v(i,X,i,Y) cre(Z) des(W) 
+ (  -2.00000) kdelta(I,K) v(i,X,i,Z) cre(Y) des(W) 
+ (   2.00000) kdelta(I,K) v(i,X,i,Y) cre(Z) des(W) 
+ (  -2.00000) kdelta(I,K) v(i,X,i,Z) cre(Y) des(W) 
+ (   2.00000) kdelta(I,K) v(i,X,i,Y) cre(Z) des(W) 
+ (  -2.00000) kdelta(I,K) v(i,X,i,Z) cre(Y) des(W) 
+ (   2.00000) kdelta(I,K) v(i,X,i,Y) cre(Z) des(W) 
+ (  -2.00000) kdelta(I,K) v(i,X,i,Z) cre(Y) des(W) 
+ (  -1.00000) kdelta(X,Y) v(I,Z,K,x) cre(x) des(W) 
+ (   1.00000) kdelta(X,Z) v(I,Y,K,x) cre(x) des(W) 
+ (  -1.00000) e(K) kdelta(I,K) kdelta(X,Y) cre(Z) des(W) 
+ (   1.00000) e(K) kdelta(I,K) kdelta(X,Z) cre(Y) des(W) 
+ (  -1.00000) h(W,x) kdelta(I,K) kdelta(X,Y) cre(Z) des(x) 
+ (   1.00000) h(W,x) kdelta(I,K) kdelta(X,Z) cre(Y) des(x) 
+ (  -1.00000) h(Y,x) kdelta(I,K) kdelta(X,Z) cre(x) des(W) 
+ (   1.00000) h(Z,x) kdelta(I,K) kdelta(X,Y) cre(x) des(W) 
+ (   1.00000) kdelta(X,Y) v(I,x,K,y) rdm(x,y) cre(Z) des(W) 
+ (   1.00000) kdelta(X,Y) v(I,x,K,y) rdm(x,y) cre(Z) des(W) 
+ (  -1.00000) kdelta(X,Z) v(I,x,K,y) rdm(x,y) cre(Y) des(W) 
+ (  -1.00000) kdelta(X,Z) v(I,x,K,y) rdm(x,y) cre(Y) des(W) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(X,Y) cre(Z) des(x) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(X,Z) cre(Y) des(x) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(X,Y) cre(Z) des(x) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(X,Z) cre(Y) des(x) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(X,Y) cre(Z) des(x) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(X,Z) cre(Y) des(x) 
+ (  -2.00000) v(i,W,i,x) kdelta(I,K) kdelta(X,Y) cre(Z) des(x) 
+ (   2.00000) v(i,W,i,x) kdelta(I,K) kdelta(X,Z) cre(Y) des(x) 
+ (  -2.00000) v(i,Y,i,x) kdelta(I,K) kdelta(X,Z) cre(x) des(W) 
+ (  -2.00000) v(i,Y,i,x) kdelta(I,K) kdelta(X,Z) cre(x) des(W) 
+ (  -2.00000) v(i,Y,i,x) kdelta(I,K) kdelta(X,Z) cre(x) des(W) 
+ (  -2.00000) v(i,Y,i,x) kdelta(I,K) kdelta(X,Z) cre(x) des(W) 
+ (   2.00000) v(i,Z,i,x) kdelta(I,K) kdelta(X,Y) cre(x) des(W) 
+ (   2.00000) v(i,Z,i,x) kdelta(I,K) kdelta(X,Y) cre(x) des(W) 
+ (   2.00000) v(i,Z,i,x) kdelta(I,K) kdelta(X,Y) cre(x) des(W) 
+ (   2.00000) v(i,Z,i,x) kdelta(I,K) kdelta(X,Y) cre(x) des(W) 
+ (  -1.00000) v(I,Y,K,x) cre(Z) cre(x) des(W) des(X) 
+ (   1.00000) v(I,Z,K,x) cre(Y) cre(x) des(W) des(X) 
+ (   1.00000) v(I,x,K,X) cre(Y) cre(Z) des(W) des(x) 
+ (   1.00000) e(K) kdelta(I,K) cre(Y) cre(Z) des(W) des(X) 
+ (  -1.00000) h(W,x) kdelta(I,K) cre(Y) cre(Z) des(X) des(x) 
+ (   1.00000) h(Y,x) kdelta(I,K) cre(Z) cre(x) des(W) des(X) 
+ (  -1.00000) h(Z,x) kdelta(I,K) cre(Y) cre(x) des(W) des(X) 
+ (   0.50000) kdelta(I,K) v(W,X,x,y) cre(Y) cre(Z) des(x) des(y) 
+ (  -2.00000) kdelta(I,K) v(i,W,i,x) cre(Y) cre(Z) des(X) des(x) 
+ (  -2.00000) kdelta(I,K) v(i,W,i,x) cre(Y) cre(Z) des(X) des(x) 
+ (  -2.00000) kdelta(I,K) v(i,W,i,x) cre(Y) cre(Z) des(X) des(x) 
+ (  -2.00000) kdelta(I,K) v(i,W,i,x) cre(Y) cre(Z) des(X) des(x) 
+ (  -1.00000) kdelta(I,K) v(X,x,Y,y) cre(Z) cre(x) des(W) des(y) 
+ (   1.00000) kdelta(I,K) v(X,x,Z,y) cre(Y) cre(x) des(W) des(y) 
+ (  -1.00000) kdelta(I,K) v(X,x,Y,y) cre(Z) cre(x) des(W) des(y) 
+ (   1.00000) kdelta(I,K) v(X,x,Z,y) cre(Y) cre(x) des(W) des(y) 
+ (  -0.50000) kdelta(I,K) v(Y,Z,x,y) cre(x) cre(y) des(W) des(X) 
+ (   2.00000) kdelta(I,K) v(i,Y,i,x) cre(Z) cre(x) des(W) des(X) 
+ (   2.00000) kdelta(I,K) v(i,Y,i,x) cre(Z) cre(x) des(W) des(X) 
+ (   2.00000) kdelta(I,K) v(i,Y,i,x) cre(Z) cre(x) des(W) des(X) 
+ (   2.00000) kdelta(I,K) v(i,Y,i,x) cre(Z) cre(x) des(W) des(X) 
+ (  -2.00000) kdelta(I,K) v(i,Z,i,x) cre(Y) cre(x) des(W) des(X) 
+ (  -2.00000) kdelta(I,K) v(i,Z,i,x) cre(Y) cre(x) des(W) des(X) 
+ (  -2.00000) kdelta(I,K) v(i,Z,i,x) cre(Y) cre(x) des(W) des(X) 
+ (  -2.00000) kdelta(I,K) v(i,Z,i,x) cre(Y) cre(x) des(W) des(X) 
+ (   1.00000) kdelta(X,Y) v(I,x,K,y) cre(Z) cre(y) des(W) des(x) 
+ (   1.00000) kdelta(X,Y) v(I,x,K,y) cre(Z) cre(y) des(W) des(x) 
+ (  -1.00000) kdelta(X,Z) v(I,x,K,y) cre(Y) cre(y) des(W) des(x) 
+ (  -1.00000) kdelta(X,Z) v(I,x,K,y) cre(Y) cre(y) des(W) des(x) 
+ (  -1.00000) v(I,x,K,y) rdm(x,y) cre(Y) cre(Z) des(W) des(X) 
+ (  -1.00000) v(I,x,K,y) rdm(x,y) cre(Y) cre(Z) des(W) des(X) 
+ (   0.50000) v(W,x,y,z) kdelta(I,K) kdelta(X,Y) cre(Z) cre(x) des(y) des(z) 
+ (  -0.50000) v(W,x,y,z) kdelta(I,K) kdelta(X,Z) cre(Y) cre(x) des(y) des(z) 
+ (   1.00000) v(W,x,y,z) kdelta(I,K) kdelta(X,Y) cre(Z) cre(x) des(y) des(z) 
+ (  -1.00000) v(W,x,y,z) kdelta(I,K) kdelta(X,Z) cre(Y) cre(x) des(y) des(z) 
+ (   0.50000) v(Y,x,y,z) kdelta(I,K) kdelta(X,Z) cre(y) cre(z) des(W) des(x) 
+ (   1.00000) v(Y,x,y,z) kdelta(I,K) kdelta(X,Z) cre(y) cre(z) des(W) des(x) 
+ (  -0.50000) v(Z,x,y,z) kdelta(I,K) kdelta(X,Y) cre(y) cre(z) des(W) des(x) 
+ (  -1.00000) v(Z,x,y,z) kdelta(I,K) kdelta(X,Y) cre(y) cre(z) des(W) des(x) 
+ (   1.00000) v(I,x,K,y) cre(Y) cre(Z) cre(y) des(W) des(X) des(x) 
+ (   1.00000) v(I,x,K,y) cre(Y) cre(Z) cre(y) des(W) des(X) des(x) 
+ (  -0.50000) kdelta(I,K) v(W,x,y,z) cre(Y) cre(Z) cre(x) des(X) des(y) des(z) 
+ (  -1.00000) kdelta(I,K) v(W,x,y,z) cre(Y) cre(Z) cre(x) des(X) des(y) des(z) 
+ (   0.50000) kdelta(I,K) v(Y,x,y,z) cre(Z) cre(y) cre(z) des(W) des(X) des(x) 
+ (   1.00000) kdelta(I,K) v(Y,x,y,z) cre(Z) cre(y) cre(z) des(W) des(X) des(x) 
+ (  -0.50000) kdelta(I,K) v(Z,x,y,z) cre(Y) cre(y) cre(z) des(W) des(X) des(x) 
+ (  -1.00000) kdelta(I,K) v(Z,x,y,z) cre(Y) cre(y) cre(z) des(W) des(X) des(x) 
+
+Total terms : 88
+SQA automation time :  83.020 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 218 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+93 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) v(I,K,Y,X) rdm(W,Z) 
+ (   0.16667) v(I,K,Y,x) rdm(W,X,Z,x) 
+ (  -0.16667) v(I,K,Y,x) rdm(W,X,x,Z) 
+ (   0.50000) v(I,K,Z,X) rdm(W,Y) 
+ (  -0.16667) v(I,K,Z,x) rdm(W,X,Y,x) 
+ (   0.16667) v(I,K,Z,x) rdm(W,X,x,Y) 
+ (  -0.16667) v(I,K,x,X) rdm(W,x,Y,Z) 
+ (   0.16667) v(I,K,x,X) rdm(W,x,Z,Y) 
+ (  -0.16667) v(I,K,x,y) rdm(W,X,x,Y,Z,y) 
+ (   0.16667) v(I,K,x,y) rdm(W,X,x,Z,Y,y) 
+ (   0.50000) v(I,X,Y,K) rdm(W,Z) 
+ (  -0.50000) v(I,X,Z,K) rdm(W,Y) 
+ (   0.16667) v(I,X,x,K) rdm(W,x,Y,Z) 
+ (  -0.16667) v(I,X,x,K) rdm(W,x,Z,Y) 
+ (  -0.16667) v(I,x,Y,K) rdm(W,X,Z,x) 
+ (   0.16667) v(I,x,Y,K) rdm(W,X,x,Z) 
+ (   0.16667) v(I,x,Z,K) rdm(W,X,Y,x) 
+ (  -0.16667) v(I,x,Z,K) rdm(W,X,x,Y) 
+ (  -0.08333) v(I,x,y,K) rdm(W,X,y,Y,x,Z) 
+ (  -0.08333) v(I,x,y,K) rdm(W,X,y,Z,Y,x) 
+ (  -0.08333) v(I,x,y,K) rdm(W,X,y,x,Z,Y) 
+ (  -0.16667) e(K) kdelta(I,K) rdm(W,X,Y,Z) 
+ (   0.16667) e(K) kdelta(I,K) rdm(W,X,Z,Y) 
+ (   0.16667) h(W,x) kdelta(I,K) rdm(X,x,Y,Z) 
+ (  -0.16667) h(W,x) kdelta(I,K) rdm(X,x,Z,Y) 
+ (   0.50000) h(X,Y) kdelta(I,K) rdm(W,Z) 
+ (  -0.50000) h(X,Z) kdelta(I,K) rdm(W,Y) 
+ (  -0.16667) h(Y,x) kdelta(I,K) rdm(W,X,Z,x) 
+ (   0.16667) h(Y,x) kdelta(I,K) rdm(W,X,x,Z) 
+ (   0.16667) h(Z,x) kdelta(I,K) rdm(W,X,Y,x) 
+ (  -0.16667) h(Z,x) kdelta(I,K) rdm(W,X,x,Y) 
+ (  -0.16667) kdelta(I,K) v(W,x,X,y) rdm(Y,Z,x,y) 
+ (   0.16667) kdelta(I,K) v(W,x,X,y) rdm(Y,Z,y,x) 
+ (   0.16667) kdelta(I,K) v(W,x,y,z) rdm(X,x,z,Y,Z,y) 
+ (  -0.16667) kdelta(I,K) v(W,x,y,z) rdm(X,x,z,Z,Y,y) 
+ (   0.50000) kdelta(I,K) v(X,Y,x,Z) rdm(W,x) 
+ (   0.50000) kdelta(I,K) v(X,Y,x,y) rdm(W,y,Z,x) 
+ (  -0.50000) kdelta(I,K) v(X,Z,x,Y) rdm(W,x) 
+ (  -0.50000) kdelta(I,K) v(X,Z,x,y) rdm(W,y,Y,x) 
+ (  -0.16667) kdelta(I,K) v(X,x,y,Y) rdm(W,x,Z,y) 
+ (   0.16667) kdelta(I,K) v(X,x,y,Y) rdm(W,x,y,Z) 
+ (   0.16667) kdelta(I,K) v(X,x,y,Z) rdm(W,x,Y,y) 
+ (  -0.16667) kdelta(I,K) v(X,x,y,Z) rdm(W,x,y,Y) 
+ (   0.16667) kdelta(I,K) v(Y,x,Z,y) rdm(W,X,x,y) 
+ (  -0.16667) kdelta(I,K) v(Y,x,Z,y) rdm(W,X,y,x) 
+ (  -0.16667) kdelta(I,K) v(Y,x,y,z) rdm(W,X,y,Z,x,z) 
+ (   0.16667) kdelta(I,K) v(Y,x,y,z) rdm(W,X,y,x,Z,z) 
+ (   0.16667) kdelta(I,K) v(Z,x,y,z) rdm(W,X,y,Y,x,z) 
+ (  -0.16667) kdelta(I,K) v(Z,x,y,z) rdm(W,X,y,x,Y,z) 
+ (  -0.33333) kdelta(I,K) v(i,W,x,i) rdm(X,x,Y,Z) 
+ (   0.33333) kdelta(I,K) v(i,W,x,i) rdm(X,x,Z,Y) 
+ (  -1.00000) kdelta(I,K) v(i,X,Y,i) rdm(W,Z) 
+ (   1.00000) kdelta(I,K) v(i,X,Z,i) rdm(W,Y) 
+ (   0.33333) kdelta(I,K) v(i,Y,x,i) rdm(W,X,Z,x) 
+ (  -0.33333) kdelta(I,K) v(i,Y,x,i) rdm(W,X,x,Z) 
+ (  -0.33333) kdelta(I,K) v(i,Z,x,i) rdm(W,X,Y,x) 
+ (   0.33333) kdelta(I,K) v(i,Z,x,i) rdm(W,X,x,Y) 
+ (   0.66667) kdelta(I,K) v(i,i,W,x) rdm(X,x,Y,Z) 
+ (  -0.66667) kdelta(I,K) v(i,i,W,x) rdm(X,x,Z,Y) 
+ (   2.00000) kdelta(I,K) v(i,i,X,Y) rdm(W,Z) 
+ (  -2.00000) kdelta(I,K) v(i,i,X,Z) rdm(W,Y) 
+ (  -0.66667) kdelta(I,K) v(i,i,Y,x) rdm(W,X,Z,x) 
+ (   0.66667) kdelta(I,K) v(i,i,Y,x) rdm(W,X,x,Z) 
+ (   0.66667) kdelta(I,K) v(i,i,Z,x) rdm(W,X,Y,x) 
+ (  -0.66667) kdelta(I,K) v(i,i,Z,x) rdm(W,X,x,Y) 
+ (  -0.33333) kdelta(I,K) v(i,W,x,i) rdm(X,x,Y,Z) 
+ (   0.33333) kdelta(I,K) v(i,W,x,i) rdm(X,x,Z,Y) 
+ (  -1.00000) kdelta(I,K) v(i,X,Y,i) rdm(W,Z) 
+ (   1.00000) kdelta(I,K) v(i,X,Z,i) rdm(W,Y) 
+ (   0.33333) kdelta(I,K) v(i,Y,x,i) rdm(W,X,Z,x) 
+ (  -0.33333) kdelta(I,K) v(i,Y,x,i) rdm(W,X,x,Z) 
+ (  -0.33333) kdelta(I,K) v(i,Z,x,i) rdm(W,X,Y,x) 
+ (   0.33333) kdelta(I,K) v(i,Z,x,i) rdm(W,X,x,Y) 
+ (   0.66667) kdelta(I,K) v(i,i,W,x) rdm(X,x,Y,Z) 
+ (  -0.66667) kdelta(I,K) v(i,i,W,x) rdm(X,x,Z,Y) 
+ (   2.00000) kdelta(I,K) v(i,i,X,Y) rdm(W,Z) 
+ (  -2.00000) kdelta(I,K) v(i,i,X,Z) rdm(W,Y) 
+ (  -0.66667) kdelta(I,K) v(i,i,Y,x) rdm(W,X,Z,x) 
+ (   0.66667) kdelta(I,K) v(i,i,Y,x) rdm(W,X,x,Z) 
+ (   0.66667) kdelta(I,K) v(i,i,Z,x) rdm(W,X,Y,x) 
+ (  -0.66667) kdelta(I,K) v(i,i,Z,x) rdm(W,X,x,Y) 
+ (  -0.50000) kdelta(X,Y) v(I,K,Z,x) rdm(W,x) 
+ (  -0.50000) kdelta(X,Y) v(I,K,x,y) rdm(W,x,Z,y) 
+ (   0.50000) kdelta(X,Y) v(I,x,Z,K) rdm(W,x) 
+ (   0.16667) kdelta(X,Y) v(I,x,y,K) rdm(W,y,Z,x) 
+ (  -0.16667) kdelta(X,Y) v(I,x,y,K) rdm(W,y,x,Z) 
+ (   0.50000) kdelta(X,Z) v(I,K,Y,x) rdm(W,x) 
+ (   0.50000) kdelta(X,Z) v(I,K,x,y) rdm(W,x,Y,y) 
+ (  -0.50000) kdelta(X,Z) v(I,x,Y,K) rdm(W,x) 
+ (  -0.16667) kdelta(X,Z) v(I,x,y,K) rdm(W,y,Y,x) 
+ (   0.16667) kdelta(X,Z) v(I,x,y,K) rdm(W,y,x,Y) 
+ (   0.16667) v(I,K,x,y) rdm(x,y) rdm(W,X,Y,Z) 
+ (  -0.16667) v(I,K,x,y) rdm(x,y) rdm(W,X,Z,Y) 
+ (  -0.08333) v(I,x,y,K) rdm(y,x) rdm(W,X,Y,Z) 
+ (   0.08333) v(I,x,y,K) rdm(y,x) rdm(W,X,Z,Y) 
+ (  -0.50000) e(K) kdelta(I,K) kdelta(X,Y) rdm(W,Z) 
+ (   0.50000) e(K) kdelta(I,K) kdelta(X,Z) rdm(W,Y) 
+ (  -0.50000) h(W,x) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (   0.50000) h(W,x) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (  -0.50000) h(Y,x) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (   0.50000) h(Z,x) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+ (   0.50000) kdelta(X,Y) v(I,K,x,y) rdm(x,y) rdm(W,Z) 
+ (  -0.25000) kdelta(X,Y) v(I,x,y,K) rdm(y,x) rdm(W,Z) 
+ (  -0.50000) kdelta(X,Z) v(I,K,x,y) rdm(x,y) rdm(W,Y) 
+ (   0.25000) kdelta(X,Z) v(I,x,y,K) rdm(y,x) rdm(W,Y) 
+ (  -0.50000) v(W,x,y,z) kdelta(I,K) kdelta(X,Y) rdm(Z,y,x,z) 
+ (   0.50000) v(W,x,y,z) kdelta(I,K) kdelta(X,Z) rdm(Y,y,x,z) 
+ (  -0.50000) v(Y,x,y,z) kdelta(I,K) kdelta(X,Z) rdm(W,y,x,z) 
+ (   0.50000) v(Z,x,y,z) kdelta(I,K) kdelta(X,Y) rdm(W,y,x,z) 
+ (   1.00000) v(i,W,x,i) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (  -1.00000) v(i,W,x,i) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (   1.00000) v(i,Y,x,i) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (  -1.00000) v(i,Z,x,i) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+ (  -2.00000) v(i,i,W,x) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (   2.00000) v(i,i,W,x) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (  -2.00000) v(i,i,Y,x) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (   2.00000) v(i,i,Z,x) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+ (   1.00000) v(i,W,x,i) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (  -1.00000) v(i,W,x,i) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (   1.00000) v(i,Y,x,i) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (  -1.00000) v(i,Z,x,i) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+ (  -2.00000) v(i,i,W,x) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (   2.00000) v(i,i,W,x) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (  -2.00000) v(i,i,Y,x) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (   2.00000) v(i,i,Z,x) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+
+Total spin-integrated terms: 88
+Total spin-adapted terms: 125
+Spin-adaptation automation time :  11.408 seconds
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+48 terms removed:
+ (  -0.33333) kdelta(I,K) v(i,W,x,i) rdm(X,x,Y,Z) 
+ (   0.33333) kdelta(I,K) v(i,W,x,i) rdm(X,x,Z,Y) 
+ (  -1.00000) kdelta(I,K) v(i,X,Y,i) rdm(W,Z) 
+ (   1.00000) kdelta(I,K) v(i,X,Z,i) rdm(W,Y) 
+ (   0.33333) kdelta(I,K) v(i,Y,x,i) rdm(W,X,Z,x) 
+ (  -0.33333) kdelta(I,K) v(i,Y,x,i) rdm(W,X,x,Z) 
+ (  -0.33333) kdelta(I,K) v(i,Z,x,i) rdm(W,X,Y,x) 
+ (   0.33333) kdelta(I,K) v(i,Z,x,i) rdm(W,X,x,Y) 
+ (   0.66667) kdelta(I,K) v(i,i,W,x) rdm(X,x,Y,Z) 
+ (  -0.66667) kdelta(I,K) v(i,i,W,x) rdm(X,x,Z,Y) 
+ (   2.00000) kdelta(I,K) v(i,i,X,Y) rdm(W,Z) 
+ (  -2.00000) kdelta(I,K) v(i,i,X,Z) rdm(W,Y) 
+ (  -0.66667) kdelta(I,K) v(i,i,Y,x) rdm(W,X,Z,x) 
+ (   0.66667) kdelta(I,K) v(i,i,Y,x) rdm(W,X,x,Z) 
+ (   0.66667) kdelta(I,K) v(i,i,Z,x) rdm(W,X,Y,x) 
+ (  -0.66667) kdelta(I,K) v(i,i,Z,x) rdm(W,X,x,Y) 
+ (  -0.33333) kdelta(I,K) v(i,W,x,i) rdm(X,x,Y,Z) 
+ (   0.33333) kdelta(I,K) v(i,W,x,i) rdm(X,x,Z,Y) 
+ (  -1.00000) kdelta(I,K) v(i,X,Y,i) rdm(W,Z) 
+ (   1.00000) kdelta(I,K) v(i,X,Z,i) rdm(W,Y) 
+ (   0.33333) kdelta(I,K) v(i,Y,x,i) rdm(W,X,Z,x) 
+ (  -0.33333) kdelta(I,K) v(i,Y,x,i) rdm(W,X,x,Z) 
+ (  -0.33333) kdelta(I,K) v(i,Z,x,i) rdm(W,X,Y,x) 
+ (   0.33333) kdelta(I,K) v(i,Z,x,i) rdm(W,X,x,Y) 
+ (   0.66667) kdelta(I,K) v(i,i,W,x) rdm(X,x,Y,Z) 
+ (  -0.66667) kdelta(I,K) v(i,i,W,x) rdm(X,x,Z,Y) 
+ (   2.00000) kdelta(I,K) v(i,i,X,Y) rdm(W,Z) 
+ (  -2.00000) kdelta(I,K) v(i,i,X,Z) rdm(W,Y) 
+ (  -0.66667) kdelta(I,K) v(i,i,Y,x) rdm(W,X,Z,x) 
+ (   0.66667) kdelta(I,K) v(i,i,Y,x) rdm(W,X,x,Z) 
+ (   0.66667) kdelta(I,K) v(i,i,Z,x) rdm(W,X,Y,x) 
+ (  -0.66667) kdelta(I,K) v(i,i,Z,x) rdm(W,X,x,Y) 
+ (   1.00000) v(i,W,x,i) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (  -1.00000) v(i,W,x,i) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (   1.00000) v(i,Y,x,i) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (  -1.00000) v(i,Z,x,i) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+ (  -2.00000) v(i,i,W,x) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (   2.00000) v(i,i,W,x) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (  -2.00000) v(i,i,Y,x) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (   2.00000) v(i,i,Z,x) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+ (   1.00000) v(i,W,x,i) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (  -1.00000) v(i,W,x,i) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (   1.00000) v(i,Y,x,i) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (  -1.00000) v(i,Z,x,i) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+ (  -2.00000) v(i,i,W,x) kdelta(I,K) kdelta(X,Y) rdm(Z,x) 
+ (   2.00000) v(i,i,W,x) kdelta(I,K) kdelta(X,Z) rdm(Y,x) 
+ (  -2.00000) v(i,i,Y,x) kdelta(I,K) kdelta(X,Z) rdm(W,x) 
+ (   2.00000) v(i,i,Z,x) kdelta(I,K) kdelta(X,Y) rdm(W,x) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 77
+
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+precond_ca_caaa__aa_aaaa =- 1/2 * einsum('IIYX,WZ->IXWZY', v_xxaa, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('IIYx,WXZx->IXWZY', v_xxaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('IIYx,WXxZ->IXWZY', v_xxaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('IIZX,WY->IXWZY', v_xxaa, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('IIZx,WXYx->IXWZY', v_xxaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('IIZx,WXxY->IXWZY', v_xxaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('IIxX,WxYZ->IXWZY', v_xxaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('IIxX,WxZY->IXWZY', v_xxaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('IIxy,WXxYZy->IXWZY', v_xxaa, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('IIxy,WXxZYy->IXWZY', v_xxaa, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('IXYI,WZ->IXWZY', v_xaax, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('IXZI,WY->IXWZY', v_xaax, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('IXxI,WxYZ->IXWZY', v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('IXxI,WxZY->IXWZY', v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('IxYI,WXZx->IXWZY', v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('IxYI,WXxZ->IXWZY', v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('IxZI,WXYx->IXWZY', v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('IxZI,WXxY->IXWZY', v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/12 * einsum('IxyI,WXyYxZ->IXWZY', v_xaax, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/12 * einsum('IxyI,WXyZYx->IXWZY', v_xaax, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/12 * einsum('IxyI,WXyxZY->IXWZY', v_xaax, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('I,II,WXYZ->IXWZY', e_cvs, np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('I,II,WXZY->IXWZY', e_cvs, np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('Wx,II,XxYZ->IXWZY', h_aa, np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('Wx,II,XxZY->IXWZY', h_aa, np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('XY,II,WZ->IXWZY', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('XZ,II,WY->IXWZY', h_aa, np.identity(ncvs), rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('Yx,II,WXZx->IXWZY', h_aa, np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('Yx,II,WXxZ->IXWZY', h_aa, np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('Zx,II,WXYx->IXWZY', h_aa, np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('Zx,II,WXxY->IXWZY', h_aa, np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('II,WxXy,YZxy->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('II,WxXy,YZyx->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('II,Wxyz,XxzYZy->IXWZY', np.identity(ncvs), v_aaaa, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('II,Wxyz,XxzZYy->IXWZY', np.identity(ncvs), v_aaaa, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('II,XYxZ,Wx->IXWZY', np.identity(ncvs), v_aaaa, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('II,XYxy,WyZx->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('II,XZxY,Wx->IXWZY', np.identity(ncvs), v_aaaa, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('II,XZxy,WyYx->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('II,XxyY,WxZy->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('II,XxyY,WxyZ->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('II,XxyZ,WxYy->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('II,XxyZ,WxyY->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('II,YxZy,WXxy->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('II,YxZy,WXyx->IXWZY', np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('II,Yxyz,WXyZxz->IXWZY', np.identity(ncvs), v_aaaa, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('II,Yxyz,WXyxZz->IXWZY', np.identity(ncvs), v_aaaa, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('II,Zxyz,WXyYxz->IXWZY', np.identity(ncvs), v_aaaa, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('II,Zxyz,WXyxYz->IXWZY', np.identity(ncvs), v_aaaa, rdm_cccaaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('XY,IIZx,Wx->IXWZY', np.identity(ncas), v_xxaa, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('XY,IIxy,WxZy->IXWZY', np.identity(ncas), v_xxaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('XY,IxZI,Wx->IXWZY', np.identity(ncas), v_xaax, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('XY,IxyI,WyZx->IXWZY', np.identity(ncas), v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('XY,IxyI,WyxZ->IXWZY', np.identity(ncas), v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('XZ,IIYx,Wx->IXWZY', np.identity(ncas), v_xxaa, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('XZ,IIxy,WxYy->IXWZY', np.identity(ncas), v_xxaa, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('XZ,IxYI,Wx->IXWZY', np.identity(ncas), v_xaax, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('XZ,IxyI,WyYx->IXWZY', np.identity(ncas), v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('XZ,IxyI,WyxY->IXWZY', np.identity(ncas), v_xaax, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/6 * einsum('IIxy,xy,WXYZ->IXWZY', v_xxaa, rdm_ca, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/6 * einsum('IIxy,xy,WXZY->IXWZY', v_xxaa, rdm_ca, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/12 * einsum('IxyI,yx,WXYZ->IXWZY', v_xaax, rdm_ca, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/12 * einsum('IxyI,yx,WXZY->IXWZY', v_xaax, rdm_ca, rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('I,II,XY,WZ->IXWZY', e_cvs, np.identity(ncvs), np.identity(ncas), rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('I,II,XZ,WY->IXWZY', e_cvs, np.identity(ncvs), np.identity(ncas), rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('Wx,II,XY,Zx->IXWZY', h_aa, np.identity(ncvs), np.identity(ncas), rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('Wx,II,XZ,Yx->IXWZY', h_aa, np.identity(ncvs), np.identity(ncas), rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('Yx,II,XZ,Wx->IXWZY', h_aa, np.identity(ncvs), np.identity(ncas), rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('Zx,II,XY,Wx->IXWZY', h_aa, np.identity(ncvs), np.identity(ncas), rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('XY,IIxy,xy,WZ->IXWZY', np.identity(ncas), v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/4 * einsum('XY,IxyI,yx,WZ->IXWZY', np.identity(ncas), v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('XZ,IIxy,xy,WY->IXWZY', np.identity(ncas), v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/4 * einsum('XZ,IxyI,yx,WY->IXWZY', np.identity(ncas), v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('Wxyz,II,XY,Zyxz->IXWZY', v_aaaa, np.identity(ncvs), np.identity(ncas), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('Wxyz,II,XZ,Yyxz->IXWZY', v_aaaa, np.identity(ncvs), np.identity(ncas), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa -= 1/2 * einsum('Yxyz,II,XZ,Wyxz->IXWZY', v_aaaa, np.identity(ncvs), np.identity(ncas), rdm_ccaa, optimize = einsum_type)
+precond_ca_caaa__aa_aaaa += 1/2 * einsum('Zxyz,II,XY,Wyxz->IXWZY', v_aaaa, np.identity(ncvs), np.identity(ncas), rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 560.74 seconds.

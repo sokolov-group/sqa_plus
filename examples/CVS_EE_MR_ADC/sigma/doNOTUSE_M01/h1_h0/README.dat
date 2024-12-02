@@ -1,0 +1,2 @@
+ALMOST all h1 <- h0 coupling blocks have been computing using the non-transposed version of M (h^(1) and h^{(0)\dag}.
+-the exception to this is CAAA <- CE, where a transposed was used to avoid 4-RDMs in the working equations

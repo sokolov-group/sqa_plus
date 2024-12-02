@@ -1,0 +1,258 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+----------------------------------------- Hamiltonian (1) ------------------------------------------
+
+Commutation: Done ...
+Done ...
+----------------------------------------------------------------------------------------------------
+ (   1.00000) cre(X) des(Y) h(cc2,aa8) cre(aa8) des(cc2) 
+ (   1.00000) cre(X) des(Y) h(aa9,cc3) cre(cc3) des(aa9) 
+ (   1.00000) cre(X) des(Y) h(aa10,ee1) cre(ee1) des(aa10) 
+ (   1.00000) cre(X) des(Y) h(ee2,aa11) cre(aa11) des(ee2) 
+ (   1.00000) cre(X) des(Y) h(cc4,ee3) cre(ee3) des(cc4) 
+ (   1.00000) cre(X) des(Y) h(ee4,cc5) cre(cc5) des(ee4) 
+ (   1.00000) cre(X) des(Y) v(cc6,aa12,cc7,aa13) rdm(aa12,aa13) des(cc6) cre(cc7) 
+ (  -1.00000) cre(X) des(Y) v(ee5,aa14,ee6,aa15) rdm(aa14,aa15) cre(ee6) des(ee5) 
+ (  -0.25000) cre(X) des(Y) v(cc10,cc11,cc8,cc9) des(cc10) des(cc11) cre(cc8) cre(cc9) 
+ (   0.25000) cre(X) des(Y) v(cc14,aa16,cc12,cc13) cre(cc12) cre(cc13) des(aa16) des(cc14) 
+ (   0.25000) cre(X) des(Y) v(cc17,ee7,cc15,cc16) cre(cc15) cre(cc16) des(ee7) des(cc17) 
+ (   0.25000) cre(X) des(Y) v(aa17,cc20,cc18,cc19) cre(cc18) cre(cc19) des(cc20) des(aa17) 
+ (   0.25000) cre(X) des(Y) v(aa18,aa19,cc21,cc22) cre(cc21) cre(cc22) des(aa19) des(aa18) 
+ (   0.25000) cre(X) des(Y) v(aa20,ee8,cc23,cc24) cre(cc23) cre(cc24) des(ee8) des(aa20) 
+ (   0.25000) cre(X) des(Y) v(ee9,cc27,cc25,cc26) cre(cc25) cre(cc26) des(cc27) des(ee9) 
+ (   0.25000) cre(X) des(Y) v(ee10,aa21,cc28,cc29) cre(cc28) cre(cc29) des(aa21) des(ee10) 
+ (   0.25000) cre(X) des(Y) v(ee11,ee12,cc30,cc31) cre(cc30) cre(cc31) des(ee12) des(ee11) 
+ (   0.25000) cre(X) des(Y) v(cc33,cc34,cc32,aa22) cre(cc32) cre(aa22) des(cc34) des(cc33) 
+ (   0.25000) cre(X) des(Y) v(cc38,ee13,cc37,aa25) cre(cc37) cre(aa25) des(ee13) des(cc38) 
+ (   0.25000) cre(X) des(Y) v(aa29,aa30,cc41,aa28) cre(cc41) cre(aa28) des(aa30) des(aa29) 
+ (   0.25000) cre(X) des(Y) v(aa32,ee14,cc42,aa31) cre(cc42) cre(aa31) des(ee14) des(aa32) 
+ (   0.25000) cre(X) des(Y) v(ee15,cc44,cc43,aa33) cre(cc43) cre(aa33) des(cc44) des(ee15) 
+ (   0.25000) cre(X) des(Y) v(ee16,aa35,cc45,aa34) cre(cc45) cre(aa34) des(aa35) des(ee16) 
+ (   0.25000) cre(X) des(Y) v(ee17,ee18,cc46,aa36) cre(cc46) cre(aa36) des(ee18) des(ee17) 
+ (   0.25000) cre(X) des(Y) v(cc48,cc49,cc47,ee19) cre(cc47) cre(ee19) des(cc49) des(cc48) 
+ (   0.25000) cre(X) des(Y) v(cc51,aa37,cc50,ee20) cre(cc50) cre(ee20) des(aa37) des(cc51) 
+ (   0.25000) cre(X) des(Y) v(aa38,cc55,cc54,ee23) cre(cc54) cre(ee23) des(cc55) des(aa38) 
+ (   0.25000) cre(X) des(Y) v(aa39,aa40,cc56,ee24) cre(cc56) cre(ee24) des(aa40) des(aa39) 
+ (   0.25000) cre(X) des(Y) v(aa41,ee26,cc57,ee25) cre(cc57) cre(ee25) des(ee26) des(aa41) 
+ (   0.25000) cre(X) des(Y) v(ee30,aa42,cc60,ee29) cre(cc60) cre(ee29) des(aa42) des(ee30) 
+ (   0.25000) cre(X) des(Y) v(ee32,ee33,cc61,ee31) cre(cc61) cre(ee31) des(ee33) des(ee32) 
+ (   0.25000) cre(X) des(Y) v(cc63,cc64,aa43,cc62) cre(aa43) cre(cc62) des(cc64) des(cc63) 
+ (   0.25000) cre(X) des(Y) v(cc68,ee34,aa46,cc67) cre(aa46) cre(cc67) des(ee34) des(cc68) 
+ (   0.25000) cre(X) des(Y) v(aa50,aa51,aa49,cc71) cre(aa49) cre(cc71) des(aa51) des(aa50) 
+ (   0.25000) cre(X) des(Y) v(aa53,ee35,aa52,cc72) cre(aa52) cre(cc72) des(ee35) des(aa53) 
+ (   0.25000) cre(X) des(Y) v(ee36,cc74,aa54,cc73) cre(aa54) cre(cc73) des(cc74) des(ee36) 
+ (   0.25000) cre(X) des(Y) v(ee37,aa56,aa55,cc75) cre(aa55) cre(cc75) des(aa56) des(ee37) 
+ (   0.25000) cre(X) des(Y) v(ee38,ee39,aa57,cc76) cre(aa57) cre(cc76) des(ee39) des(ee38) 
+ (   0.25000) cre(X) des(Y) v(cc77,cc78,aa58,aa59) cre(aa58) cre(aa59) des(cc78) des(cc77) 
+ (   0.25000) cre(X) des(Y) v(cc79,aa62,aa60,aa61) cre(aa60) cre(aa61) des(aa62) des(cc79) 
+ (   0.25000) cre(X) des(Y) v(cc80,ee40,aa63,aa64) cre(aa63) cre(aa64) des(ee40) des(cc80) 
+ (   0.25000) cre(X) des(Y) v(aa67,cc81,aa65,aa66) cre(aa65) cre(aa66) des(cc81) des(aa67) 
+ (   0.25000) cre(X) des(Y) v(aa74,ee41,aa72,aa73) cre(aa72) cre(aa73) des(ee41) des(aa74) 
+ (   0.25000) cre(X) des(Y) v(ee42,cc82,aa75,aa76) cre(aa75) cre(aa76) des(cc82) des(ee42) 
+ (   0.25000) cre(X) des(Y) v(ee43,aa79,aa77,aa78) cre(aa77) cre(aa78) des(aa79) des(ee43) 
+ (   0.25000) cre(X) des(Y) v(ee44,ee45,aa80,aa81) cre(aa80) cre(aa81) des(ee45) des(ee44) 
+ (   0.25000) cre(X) des(Y) v(cc83,cc84,aa82,ee46) cre(aa82) cre(ee46) des(cc84) des(cc83) 
+ (   0.25000) cre(X) des(Y) v(cc85,aa84,aa83,ee47) cre(aa83) cre(ee47) des(aa84) des(cc85) 
+ (   0.25000) cre(X) des(Y) v(cc86,ee49,aa85,ee48) cre(aa85) cre(ee48) des(ee49) des(cc86) 
+ (   0.25000) cre(X) des(Y) v(aa87,cc87,aa86,ee50) cre(aa86) cre(ee50) des(cc87) des(aa87) 
+ (   0.25000) cre(X) des(Y) v(aa89,aa90,aa88,ee51) cre(aa88) cre(ee51) des(aa90) des(aa89) 
+ (   0.25000) cre(X) des(Y) v(aa92,ee53,aa91,ee52) cre(aa91) cre(ee52) des(ee53) des(aa92) 
+ (   0.25000) cre(X) des(Y) v(ee55,cc88,aa93,ee54) cre(aa93) cre(ee54) des(cc88) des(ee55) 
+ (   0.25000) cre(X) des(Y) v(ee57,aa95,aa94,ee56) cre(aa94) cre(ee56) des(aa95) des(ee57) 
+ (   0.25000) cre(X) des(Y) v(ee59,ee60,aa96,ee58) cre(aa96) cre(ee58) des(ee60) des(ee59) 
+ (   0.25000) cre(X) des(Y) v(cc90,cc91,ee61,cc89) cre(ee61) cre(cc89) des(cc91) des(cc90) 
+ (   0.25000) cre(X) des(Y) v(cc93,aa97,ee62,cc92) cre(ee62) cre(cc92) des(aa97) des(cc93) 
+ (   0.25000) cre(X) des(Y) v(aa98,cc97,ee65,cc96) cre(ee65) cre(cc96) des(cc97) des(aa98) 
+ (   0.25000) cre(X) des(Y) v(aa99,aa100,ee66,cc98) cre(ee66) cre(cc98) des(aa100) des(aa99) 
+ (   0.25000) cre(X) des(Y) v(aa101,ee68,ee67,cc99) cre(ee67) cre(cc99) des(ee68) des(aa101) 
+ (   0.25000) cre(X) des(Y) v(ee72,aa102,ee71,cc102) cre(ee71) cre(cc102) des(aa102) des(ee72) 
+ (   0.25000) cre(X) des(Y) v(ee74,ee75,ee73,cc103) cre(ee73) cre(cc103) des(ee75) des(ee74) 
+ (   0.25000) cre(X) des(Y) v(cc104,cc105,ee76,aa103) cre(ee76) cre(aa103) des(cc105) des(cc104) 
+ (   0.25000) cre(X) des(Y) v(cc106,aa105,ee77,aa104) cre(ee77) cre(aa104) des(aa105) des(cc106) 
+ (   0.25000) cre(X) des(Y) v(cc107,ee79,ee78,aa106) cre(ee78) cre(aa106) des(ee79) des(cc107) 
+ (   0.25000) cre(X) des(Y) v(aa108,cc108,ee80,aa107) cre(ee80) cre(aa107) des(cc108) des(aa108) 
+ (   0.25000) cre(X) des(Y) v(aa110,aa111,ee81,aa109) cre(ee81) cre(aa109) des(aa111) des(aa110) 
+ (   0.25000) cre(X) des(Y) v(aa113,ee83,ee82,aa112) cre(ee82) cre(aa112) des(ee83) des(aa113) 
+ (   0.25000) cre(X) des(Y) v(ee85,cc109,ee84,aa114) cre(ee84) cre(aa114) des(cc109) des(ee85) 
+ (   0.25000) cre(X) des(Y) v(ee87,aa116,ee86,aa115) cre(ee86) cre(aa115) des(aa116) des(ee87) 
+ (   0.25000) cre(X) des(Y) v(ee89,ee90,ee88,aa117) cre(ee88) cre(aa117) des(ee90) des(ee89) 
+ (   0.25000) cre(X) des(Y) v(cc110,cc111,ee91,ee92) cre(ee91) cre(ee92) des(cc111) des(cc110) 
+ (   0.25000) cre(X) des(Y) v(cc112,aa118,ee93,ee94) cre(ee93) cre(ee94) des(aa118) des(cc112) 
+ (   0.25000) cre(X) des(Y) v(cc113,ee97,ee95,ee96) cre(ee95) cre(ee96) des(ee97) des(cc113) 
+ (   0.25000) cre(X) des(Y) v(aa119,cc114,ee98,ee99) cre(ee98) cre(ee99) des(cc114) des(aa119) 
+ (   0.25000) cre(X) des(Y) v(aa120,aa121,ee100,ee101) cre(ee100) cre(ee101) des(aa121) des(aa120) 
+ (   0.25000) cre(X) des(Y) v(aa122,ee104,ee102,ee103) cre(ee102) cre(ee103) des(ee104) des(aa122) 
+ (   0.25000) cre(X) des(Y) v(ee107,cc115,ee105,ee106) cre(ee105) cre(ee106) des(cc115) des(ee107) 
+ (   0.25000) cre(X) des(Y) v(ee110,aa123,ee108,ee109) cre(ee108) cre(ee109) des(aa123) des(ee110) 
+ (   0.25000) cre(X) des(Y) v(ee113,ee114,ee111,ee112) cre(ee111) cre(ee112) des(ee114) des(ee113) 
+ (   1.00000) cre(X) des(Y) v(ee116,cc117,cc116,ee115) cre(ee115) des(ee116) des(cc117) cre(cc116) 
+ (   1.00000) cre(X) des(Y) v(aa125,cc119,cc118,aa124) des(cc119) cre(cc118) cre(aa124) des(aa125) 
+ (  -1.00000) cre(X) des(Y) e(a) t1(a,b) cre(a) des(b) 
+ (  -1.00000) cre(X) des(Y) e(a) t1(a,b) cre(b) des(a) 
+ (  -1.00000) cre(X) des(Y) e(a) t1(a,b) cre(a) des(b) 
+ (  -1.00000) cre(X) des(Y) e(a) t1(a,b) cre(b) des(a) 
+ (   1.00000) cre(X) des(Y) e(a) t1(a,b) cre(a) des(b) 
+ (   1.00000) cre(X) des(Y) e(a) t1(a,b) cre(b) des(a) 
+ (   1.00000) cre(X) des(Y) e(a) t1(a,b) cre(a) des(b) 
+ (   1.00000) cre(X) des(Y) e(a) t1(a,b) cre(b) des(a) 
+ (   1.00000) cre(X) des(Y) h(a,b) t1(a,c) cre(b) des(c) 
+ (   1.00000) cre(X) des(Y) h(a,b) t1(a,c) cre(c) des(b) 
+ (  -1.00000) cre(X) des(Y) h(a,b) t1(a,c) cre(b) des(c) 
+ (  -1.00000) cre(X) des(Y) h(a,b) t1(a,c) cre(c) des(b) 
+ (  -1.00000) cre(X) des(Y) t1(a,b) v(a,c,c,d) cre(b) des(d) 
+ (  -1.00000) cre(X) des(Y) t1(a,b) v(a,c,c,d) cre(d) des(b) 
+ (   1.00000) cre(X) des(Y) t1(a,b) v(a,c,c,d) cre(b) des(d) 
+ (   1.00000) cre(X) des(Y) t1(a,b) v(a,c,c,d) cre(d) des(b) 
+ (   0.50000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(a) cre(b) des(c) des(d) 
+ (   0.50000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(c) cre(d) des(a) des(b) 
+ (   1.00000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(a) cre(b) des(c) des(d) 
+ (   1.00000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(c) cre(d) des(a) des(b) 
+ (   0.50000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(a) cre(b) des(c) des(d) 
+ (   0.50000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(c) cre(d) des(a) des(b) 
+ (   0.50000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(a) cre(b) des(c) des(d) 
+ (   0.50000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(c) cre(d) des(a) des(b) 
+ (   1.00000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(a) cre(b) des(c) des(d) 
+ (   1.00000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(c) cre(d) des(a) des(b) 
+ (   0.50000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(a) cre(b) des(c) des(d) 
+ (   0.50000) cre(X) des(Y) e(a) t1(a,b,c,d) cre(c) cre(d) des(a) des(b) 
+ (  -0.50000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(a) cre(d) des(b) des(c) 
+ (  -0.50000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(b) cre(c) des(a) des(d) 
+ (  -0.50000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(a) cre(d) des(b) des(c) 
+ (  -0.50000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(b) cre(c) des(a) des(d) 
+ (  -1.00000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(a) cre(d) des(b) des(c) 
+ (  -1.00000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(b) cre(c) des(a) des(d) 
+ (  -1.00000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(a) cre(d) des(b) des(c) 
+ (  -1.00000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(b) cre(c) des(a) des(d) 
+ (  -0.50000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(a) cre(d) des(b) des(c) 
+ (  -0.50000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(b) cre(c) des(a) des(d) 
+ (  -0.50000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(a) cre(d) des(b) des(c) 
+ (  -0.50000) cre(X) des(Y) e(a) t1(b,c,a,d) cre(b) cre(c) des(a) des(d) 
+ (   1.00000) cre(X) des(Y) h(a,b) t1(a,c,d,e) cre(b) cre(c) des(d) des(e) 
+ (   1.00000) cre(X) des(Y) h(a,b) t1(a,c,d,e) cre(d) cre(e) des(b) des(c) 
+ (   0.50000) cre(X) des(Y) h(a,b) t1(a,c,d,e) cre(b) cre(c) des(d) des(e) 
+ (   0.50000) cre(X) des(Y) h(a,b) t1(a,c,d,e) cre(d) cre(e) des(b) des(c) 
+ (   0.50000) cre(X) des(Y) h(a,b) t1(a,c,d,e) cre(b) cre(c) des(d) des(e) 
+ (   0.50000) cre(X) des(Y) h(a,b) t1(a,c,d,e) cre(d) cre(e) des(b) des(c) 
+ (   0.50000) cre(X) des(Y) h(a,b) t1(a,c,d,e) cre(b) cre(c) des(d) des(e) 
+ (   0.50000) cre(X) des(Y) h(a,b) t1(a,c,d,e) cre(d) cre(e) des(b) des(c) 
+ (  -0.50000) cre(X) des(Y) h(a,b) t1(c,d,a,e) cre(b) cre(e) des(c) des(d) 
+ (  -0.50000) cre(X) des(Y) h(a,b) t1(c,d,a,e) cre(c) cre(d) des(b) des(e) 
+ (  -1.00000) cre(X) des(Y) h(a,b) t1(c,d,a,e) cre(b) cre(e) des(c) des(d) 
+ (  -1.00000) cre(X) des(Y) h(a,b) t1(c,d,a,e) cre(c) cre(d) des(b) des(e) 
+ (  -1.00000) cre(X) des(Y) h(a,b) t1(c,a,d,e) cre(b) cre(c) des(d) des(e) 
+ (  -1.00000) cre(X) des(Y) h(a,b) t1(c,a,d,e) cre(d) cre(e) des(b) des(c) 
+ (   1.00000) cre(X) des(Y) h(a,b) t1(c,d,e,a) cre(b) cre(e) des(c) des(d) 
+ (   1.00000) cre(X) des(Y) h(a,b) t1(c,d,e,a) cre(c) cre(d) des(b) des(e) 
+ (  -0.50000) cre(X) des(Y) h(a,b) t1(c,d,a,e) cre(b) cre(e) des(c) des(d) 
+ (  -0.50000) cre(X) des(Y) h(a,b) t1(c,d,a,e) cre(c) cre(d) des(b) des(e) 
+ (  -0.50000) cre(X) des(Y) h(a,b) t1(c,d,a,e) cre(b) cre(e) des(c) des(d) 
+ (  -0.50000) cre(X) des(Y) h(a,b) t1(c,d,a,e) cre(c) cre(d) des(b) des(e) 
+ (   0.25000) cre(X) des(Y) t1(a,b,c,d) v(a,b,e,f) cre(c) cre(d) des(e) des(f) 
+ (   0.25000) cre(X) des(Y) t1(a,b,c,d) v(a,b,e,f) cre(e) cre(f) des(c) des(d) 
+ (   1.00000) cre(X) des(Y) t1(a,b,c,d) v(a,e,e,f) cre(b) cre(f) des(c) des(d) 
+ (   1.00000) cre(X) des(Y) t1(a,b,c,d) v(a,e,e,f) cre(c) cre(d) des(b) des(f) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(c,e,e,f) cre(a) cre(b) des(d) des(f) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(c,e,e,f) cre(d) cre(f) des(a) des(b) 
+ (   0.12500) cre(X) des(Y) t1(a,b,c,d) v(a,b,e,f) cre(c) cre(d) des(e) des(f) 
+ (   0.12500) cre(X) des(Y) t1(a,b,c,d) v(a,b,e,f) cre(e) cre(f) des(c) des(d) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(a,e,e,f) cre(b) cre(f) des(c) des(d) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(a,e,e,f) cre(c) cre(d) des(b) des(f) 
+ (  -0.50000) cre(X) des(Y) t1(a,b) v(a,c,d,e) cre(b) cre(c) des(d) des(e) 
+ (  -0.50000) cre(X) des(Y) t1(a,b) v(a,c,d,e) cre(d) cre(e) des(b) des(c) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(a,e,e,f) cre(b) cre(f) des(c) des(d) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(a,e,e,f) cre(c) cre(d) des(b) des(f) 
+ (  -0.25000) cre(X) des(Y) t1(a,b,c,d) v(c,d,e,f) cre(a) cre(b) des(e) des(f) 
+ (  -0.25000) cre(X) des(Y) t1(a,b,c,d) v(c,d,e,f) cre(e) cre(f) des(a) des(b) 
+ (  -1.00000) cre(X) des(Y) t1(a,b,c,d) v(c,e,e,f) cre(a) cre(b) des(d) des(f) 
+ (  -1.00000) cre(X) des(Y) t1(a,b,c,d) v(c,e,e,f) cre(d) cre(f) des(a) des(b) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(a,e,e,f) cre(b) cre(f) des(c) des(d) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(a,e,e,f) cre(c) cre(d) des(b) des(f) 
+ (   0.50000) cre(X) des(Y) t1(a,b) v(a,c,d,e) cre(b) cre(c) des(d) des(e) 
+ (   0.50000) cre(X) des(Y) t1(a,b) v(a,c,d,e) cre(d) cre(e) des(b) des(c) 
+ (  -1.00000) cre(X) des(Y) t1(a,b,c,d) v(b,e,e,f) cre(a) cre(f) des(c) des(d) 
+ (  -1.00000) cre(X) des(Y) t1(a,b,c,d) v(b,e,e,f) cre(c) cre(d) des(a) des(f) 
+ (   1.00000) cre(X) des(Y) t1(a,b,c,d) v(d,e,e,f) cre(a) cre(b) des(c) des(f) 
+ (   1.00000) cre(X) des(Y) t1(a,b,c,d) v(d,e,e,f) cre(c) cre(f) des(a) des(b) 
+ (  -0.12500) cre(X) des(Y) t1(a,b,c,d) v(c,d,e,f) cre(a) cre(b) des(e) des(f) 
+ (  -0.12500) cre(X) des(Y) t1(a,b,c,d) v(c,d,e,f) cre(e) cre(f) des(a) des(b) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(c,e,e,f) cre(a) cre(b) des(d) des(f) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(c,e,e,f) cre(d) cre(f) des(a) des(b) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(c,e,e,f) cre(a) cre(b) des(d) des(f) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(c,e,e,f) cre(d) cre(f) des(a) des(b) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(a,e,f,g) cre(b) cre(f) cre(g) des(c) des(d) des(e) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(a,e,f,g) cre(c) cre(d) cre(e) des(b) des(f) des(g) 
+ (   0.25000) cre(X) des(Y) t1(a,b,c,d) v(c,e,f,g) cre(a) cre(b) cre(e) des(d) des(f) des(g) 
+ (   0.25000) cre(X) des(Y) t1(a,b,c,d) v(c,e,f,g) cre(d) cre(f) cre(g) des(a) des(b) des(e) 
+ (  -0.25000) cre(X) des(Y) t1(a,b,c,d) v(a,e,f,g) cre(b) cre(f) cre(g) des(c) des(d) des(e) 
+ (  -0.25000) cre(X) des(Y) t1(a,b,c,d) v(a,e,f,g) cre(c) cre(d) cre(e) des(b) des(f) des(g) 
+ (  -0.25000) cre(X) des(Y) t1(a,b,c,d) v(a,e,f,g) cre(b) cre(f) cre(g) des(c) des(d) des(e) 
+ (  -0.25000) cre(X) des(Y) t1(a,b,c,d) v(a,e,f,g) cre(c) cre(d) cre(e) des(b) des(f) des(g) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(c,e,f,g) cre(a) cre(b) cre(e) des(d) des(f) des(g) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(c,e,f,g) cre(d) cre(f) cre(g) des(a) des(b) des(e) 
+ (  -0.25000) cre(X) des(Y) t1(a,b,c,d) v(a,e,f,g) cre(b) cre(f) cre(g) des(c) des(d) des(e) 
+ (  -0.25000) cre(X) des(Y) t1(a,b,c,d) v(a,e,f,g) cre(c) cre(d) cre(e) des(b) des(f) des(g) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(b,e,f,g) cre(a) cre(f) cre(g) des(c) des(d) des(e) 
+ (   0.50000) cre(X) des(Y) t1(a,b,c,d) v(b,e,f,g) cre(c) cre(d) cre(e) des(a) des(f) des(g) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(d,e,f,g) cre(a) cre(b) cre(e) des(c) des(f) des(g) 
+ (  -0.50000) cre(X) des(Y) t1(a,b,c,d) v(d,e,f,g) cre(c) cre(f) cre(g) des(a) des(b) des(e) 
+ (   0.25000) cre(X) des(Y) t1(a,b,c,d) v(c,e,f,g) cre(a) cre(b) cre(e) des(d) des(f) des(g) 
+ (   0.25000) cre(X) des(Y) t1(a,b,c,d) v(c,e,f,g) cre(d) cre(f) cre(g) des(a) des(b) des(e) 
+ (   0.25000) cre(X) des(Y) t1(a,b,c,d) v(c,e,f,g) cre(a) cre(b) cre(e) des(d) des(f) des(g) 
+ (   0.25000) cre(X) des(Y) t1(a,b,c,d) v(c,e,f,g) cre(d) cre(f) cre(g) des(a) des(b) des(e) 
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.200 seconds
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 3.42 seconds.

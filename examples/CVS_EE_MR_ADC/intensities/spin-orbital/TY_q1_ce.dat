@@ -1,0 +1,106 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+--------------------------------- Spin-Orbital CVS-EE: TY Q1 Q_CE ----------------------------------
+
+
+## Generating operators ...
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KC(i,a) d_ae_so(R,x,a) t1(i,x) 
+ (  -1.00000) Y_KC(i,a) d_ca_so(R,i,x) t1(x,a) 
+ (  -1.00000) Y_KC(i,a) d_ca_so(R,j,x) t1(i,j,x,a) 
+ (  -1.00000) Y_KC(i,a) d_cc_so(R,i,j) t1(j,a) 
+ (   1.00000) Y_KC(i,a) d_ce_so(R,j,b) t1(i,j,a,b) 
+ (  -1.00000) Y_KC(i,a) d_cv_so(R,i,j) t1(j,a) 
+ (   1.00000) Y_KC(i,a) d_ee_so(R,a,b) t1(i,b) 
+ (  -1.00000) Y_KC(i,a) d_va_so(R,j,x) t1(i,j,x,a) 
+ (   1.00000) Y_KC(i,a) d_ve_so(R,j,b) t1(i,j,a,b) 
+ (  -1.00000) Y_KC(i,a) d_aa_so(R,x,y) t1(i,x,a,z) cre(y) des(z) 
+ (   1.00000) Y_KC(i,a) d_aa_so(R,x,y) t1(i,z,a,x) cre(z) des(y) 
+ (   1.00000) Y_KC(i,a) d_ae_so(R,x,a) t1(i,y,x,z) cre(y) des(z) 
+ (   1.00000) Y_KC(i,a) d_ae_so(R,x,b) t1(i,y,a,b) cre(y) des(x) 
+ (  -1.00000) Y_KC(i,a) d_ca_so(R,i,x) t1(x,y,a,z) cre(y) des(z) 
+ (   1.00000) Y_KC(i,a) d_ca_so(R,j,x) t1(i,j,y,a) cre(x) des(y) 
+ (  -1.00000) Y_KC(i,a) d_cc_so(R,i,j) t1(j,x,a,y) cre(x) des(y) 
+ (  -1.00000) Y_KC(i,a) d_cv_so(R,i,j) t1(j,x,a,y) cre(x) des(y) 
+ (   1.00000) Y_KC(i,a) d_ee_so(R,a,b) t1(i,x,b,y) cre(x) des(y) 
+ (   1.00000) Y_KC(i,a) d_va_so(R,j,x) t1(i,j,y,a) cre(x) des(y) 
+
+Total terms : 19
+SQA automation time :  0.105 seconds
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 19
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY_q_ce  = einsum('ia,Rxa,ix->R', Y_KC, d_ae_so, t1_xa, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rix,xa->R', Y_KC, d_ca_so, t1_ae, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rjx,ijxa->R', Y_KC, d_ca_so, t1_xxae, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rij,ja->R', Y_KC, d_cc_so, t1_xe, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rjb,ijab->R', Y_KC, d_ce_so, t1_xxee, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rij,ja->R', Y_KC, d_cv_so, t1_ve, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rab,ib->R', Y_KC, d_ee_so, t1_xe, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rjx,ijxa->R', Y_KC, d_va_so, t1_xvae, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rjb,ijab->R', Y_KC, d_ve_so, t1_xvee, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rxy,ixaz,yz->R', Y_KC, d_aa_so, t1_xaea, rdm_ca_so, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rxy,izax,zy->R', Y_KC, d_aa_so, t1_xaea, rdm_ca_so, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rxa,iyxz,yz->R', Y_KC, d_ae_so, t1_xaaa, rdm_ca_so, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rxb,iyab,yx->R', Y_KC, d_ae_so, t1_xaee, rdm_ca_so, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rix,xyaz,yz->R', Y_KC, d_ca_so, t1_aaea, rdm_ca_so, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rjx,ijya,xy->R', Y_KC, d_ca_so, t1_xxae, rdm_ca_so, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rij,jxay,xy->R', Y_KC, d_cc_so, t1_xaea, rdm_ca_so, optimize = einsum_type)
+TY_q_ce -= einsum('ia,Rij,jxay,xy->R', Y_KC, d_cv_so, t1_vaea, rdm_ca_so, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rab,ixby,xy->R', Y_KC, d_ee_so, t1_xaea, rdm_ca_so, optimize = einsum_type)
+TY_q_ce += einsum('ia,Rjx,ijya,xy->R', Y_KC, d_va_so, t1_xvae, rdm_ca_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 7.51 seconds.

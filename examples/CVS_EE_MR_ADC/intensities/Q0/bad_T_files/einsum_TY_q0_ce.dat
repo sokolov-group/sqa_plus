@@ -1,0 +1,3 @@
+einsum equations from TY_q0_ce.dat
+
+TY[s_c:f_c, s_e:f_e]  = einsum('PQ->PQ', Y_KC__aa, optimize = einsum_type).copy()

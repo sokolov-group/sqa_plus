@@ -1,0 +1,263 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+---------------------------- Spin-Adapted CVS-EE: Sigma H1 CCEE_CA (aa) ----------------------------
+
+
+## Generating operators ...
+
+
+## Left operator terms:
+ (   0.25000) X_aaaa(i,j,a,b) cre(i) cre(j) des(b) des(a) 
+ (   1.00000) X_abab(i,j,a,b) cre(i) cre(j) des(b) des(a) 
+ (   0.25000) X_bbbb(i,j,a,b) cre(i) cre(j) des(b) des(a) 
+ (   1.00000) X_abab(i,j,b,a) cre(i) cre(j) des(b) des(a) 
+ (  -1.00000) X_abab(i,j,a,b) cre(i) cre(j) des(b) des(a) 
+ (  -1.00000) X_abab(i,j,b,a) cre(i) cre(j) des(b) des(a) 
+
+## Right operator terms:
+ (   1.00000) cre(W) des(K) 
+
+----------------------------------------- Hamiltonian (1) ------------------------------------------
+
+Commutation: Done ...
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(1), h(0)^\dag] ...
+
+## Calculating [h(1), [H(1), h(0)^\dag]] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -0.50000) X_aaaa(K,k,c,d) v(k,W,c,d) 
+ (  -2.00000) X_abab(K,k,c,d) v(k,W,c,d) 
+ (  -2.00000) X_abab(k,K,c,d) v(k,W,c,d) 
+ (   0.50000) X_aaaa(K,k,c,d) e(k) t1(k,W,c,d) 
+ (  -1.00000) X_aaaa(K,k,c,d) e(d) t1(k,W,c,d) 
+ (   0.50000) X_aaaa(K,k,c,d) h(W,w) t1(k,w,c,d) 
+ (   1.00000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   1.00000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   1.00000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   1.00000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   2.00000) X_abab(K,k,c,d) e(k) t1(k,W,c,d) 
+ (  -2.00000) X_abab(K,k,c,d) e(c) t1(k,W,c,d) 
+ (  -2.00000) X_abab(K,k,c,d) e(d) t1(k,W,c,d) 
+ (   2.00000) X_abab(k,K,c,d) e(k) t1(k,W,c,d) 
+ (  -2.00000) X_abab(k,K,c,d) e(c) t1(k,W,c,d) 
+ (  -2.00000) X_abab(k,K,c,d) e(d) t1(k,W,c,d) 
+ (   2.00000) X_abab(K,k,c,d) h(W,w) t1(k,w,c,d) 
+ (   2.00000) X_abab(k,K,c,d) h(W,w) t1(k,w,c,d) 
+ (   4.00000) X_abab(K,k,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   4.00000) X_abab(K,k,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   4.00000) X_abab(K,k,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   4.00000) X_abab(K,k,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   4.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   4.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   4.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   4.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(l,W,l,w) 
+ (   0.50000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(W,u,w,v) cre(v) des(u) 
+ (   0.50000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(W,u,w,v) cre(v) des(u) 
+ (   2.00000) X_abab(K,k,c,d) t1(k,w,c,d) v(W,u,w,v) cre(v) des(u) 
+ (   2.00000) X_abab(K,k,c,d) t1(k,w,c,d) v(W,u,w,v) cre(v) des(u) 
+ (   2.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(W,u,w,v) cre(v) des(u) 
+ (   2.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(W,u,w,v) cre(v) des(u) 
+
+Total terms : 32
+SQA automation time :  3.288 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 32 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting user-defined tensors to spin-adapted formulation ...
+Converting Sigma vector to spin-adapted formulation ...
+Converting custom vector to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 54 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+12 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) X_aaaa(K,k,c,d) v(k,c,W,d) 
+ (   0.50000) X_aaaa(K,k,c,d) v(k,d,W,c) 
+ (   2.00000) X_abab(K,k,c,d) v(k,d,W,c) 
+ (  -2.00000) X_abab(k,K,c,d) v(k,c,W,d) 
+ (  -1.00000) X_aaaa(K,k,c,d) e(d) t1(k,W,c,d) 
+ (   1.00000) X_aaaa(K,k,c,d) e(d) t1(k,W,d,c) 
+ (   0.50000) X_aaaa(K,k,c,d) e(k) t1(k,W,c,d) 
+ (  -0.50000) X_aaaa(K,k,c,d) e(k) t1(k,W,d,c) 
+ (   0.50000) X_aaaa(K,k,c,d) h(W,w) t1(k,w,c,d) 
+ (  -0.50000) X_aaaa(K,k,c,d) h(W,w) t1(k,w,d,c) 
+ (  -1.00000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(l,W,w,l) 
+ (   2.00000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(l,l,W,w) 
+ (  -1.00000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(l,W,w,l) 
+ (   2.00000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(l,l,W,w) 
+ (   1.00000) X_aaaa(K,k,c,d) t1(k,w,d,c) v(l,W,w,l) 
+ (  -2.00000) X_aaaa(K,k,c,d) t1(k,w,d,c) v(l,l,W,w) 
+ (   1.00000) X_aaaa(K,k,c,d) t1(k,w,d,c) v(l,W,w,l) 
+ (  -2.00000) X_aaaa(K,k,c,d) t1(k,w,d,c) v(l,l,W,w) 
+ (   2.00000) X_abab(K,k,c,d) e(c) t1(k,W,d,c) 
+ (   2.00000) X_abab(K,k,c,d) e(d) t1(k,W,d,c) 
+ (  -2.00000) X_abab(K,k,c,d) e(k) t1(k,W,d,c) 
+ (  -2.00000) X_abab(k,K,c,d) e(c) t1(k,W,c,d) 
+ (  -2.00000) X_abab(k,K,c,d) e(d) t1(k,W,c,d) 
+ (   2.00000) X_abab(k,K,c,d) e(k) t1(k,W,c,d) 
+ (  -2.00000) X_abab(K,k,c,d) h(W,w) t1(k,w,d,c) 
+ (   2.00000) X_abab(k,K,c,d) h(W,w) t1(k,w,c,d) 
+ (   4.00000) X_abab(K,k,c,d) t1(k,w,d,c) v(l,W,w,l) 
+ (  -8.00000) X_abab(K,k,c,d) t1(k,w,d,c) v(l,l,W,w) 
+ (   4.00000) X_abab(K,k,c,d) t1(k,w,d,c) v(l,W,w,l) 
+ (  -8.00000) X_abab(K,k,c,d) t1(k,w,d,c) v(l,l,W,w) 
+ (  -4.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(l,W,w,l) 
+ (   8.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(l,l,W,w) 
+ (  -4.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(l,W,w,l) 
+ (   8.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(l,l,W,w) 
+ (  -0.25000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(W,u,v,w) rdm(v,u) 
+ (   0.50000) X_aaaa(K,k,c,d) t1(k,w,c,d) v(W,w,u,v) rdm(u,v) 
+ (   0.25000) X_aaaa(K,k,c,d) t1(k,w,d,c) v(W,u,v,w) rdm(v,u) 
+ (  -0.50000) X_aaaa(K,k,c,d) t1(k,w,d,c) v(W,w,u,v) rdm(u,v) 
+ (   1.00000) X_abab(K,k,c,d) t1(k,w,d,c) v(W,u,v,w) rdm(v,u) 
+ (  -2.00000) X_abab(K,k,c,d) t1(k,w,d,c) v(W,w,u,v) rdm(u,v) 
+ (  -1.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(W,u,v,w) rdm(v,u) 
+ (   2.00000) X_abab(k,K,c,d) t1(k,w,c,d) v(W,w,u,v) rdm(u,v) 
+
+Total spin-integrated terms: 32
+Total spin-adapted terms: 42
+Spin-adaptation automation time :  0.265 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+16 terms removed:
+ (  -1.00000) X_aaaa(K,i,a,b) t1(i,x,a,b) v(j,W,x,j) 
+ (   2.00000) X_aaaa(K,i,a,b) t1(i,x,a,b) v(j,j,W,x) 
+ (  -1.00000) X_aaaa(K,i,a,b) t1(i,x,a,b) v(j,W,x,j) 
+ (   2.00000) X_aaaa(K,i,a,b) t1(i,x,a,b) v(j,j,W,x) 
+ (   1.00000) X_aaaa(K,i,a,b) t1(i,x,b,a) v(j,W,x,j) 
+ (  -2.00000) X_aaaa(K,i,a,b) t1(i,x,b,a) v(j,j,W,x) 
+ (   1.00000) X_aaaa(K,i,a,b) t1(i,x,b,a) v(j,W,x,j) 
+ (  -2.00000) X_aaaa(K,i,a,b) t1(i,x,b,a) v(j,j,W,x) 
+ (   4.00000) X_abab(K,i,a,b) t1(i,x,b,a) v(j,W,x,j) 
+ (  -8.00000) X_abab(K,i,a,b) t1(i,x,b,a) v(j,j,W,x) 
+ (   4.00000) X_abab(K,i,a,b) t1(i,x,b,a) v(j,W,x,j) 
+ (  -8.00000) X_abab(K,i,a,b) t1(i,x,b,a) v(j,j,W,x) 
+ (  -4.00000) X_abab(i,K,a,b) t1(i,x,a,b) v(j,W,x,j) 
+ (   8.00000) X_abab(i,K,a,b) t1(i,x,a,b) v(j,j,W,x) 
+ (  -4.00000) X_abab(i,K,a,b) t1(i,x,a,b) v(j,W,x,j) 
+ (   8.00000) X_abab(i,K,a,b) t1(i,x,a,b) v(j,j,W,x) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 26
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+sigma_KW_aa =- 1/2 * einsum('Kiab,iaWb->KW', X_aaaa, v_xeae, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kiab,ibWa->KW', X_aaaa, v_xeae, optimize = einsum_type)
+sigma_KW_aa += 2 * einsum('Kiab,ibWa->KW', X_abab, v_xeae, optimize = einsum_type)
+sigma_KW_aa -= 2 * einsum('iKab,iaWb->KW', X_abab, v_xeae, optimize = einsum_type)
+sigma_KW_aa -= einsum('Kiab,b,iWab->KW', X_aaaa, e_extern, t1_xaee, optimize = einsum_type)
+sigma_KW_aa += einsum('Kiab,b,iWba->KW', X_aaaa, e_extern, t1_xaee, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kiab,i,iWab->KW', X_aaaa, e_cvs, t1_xaee, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kiab,i,iWba->KW', X_aaaa, e_cvs, t1_xaee, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kiab,Wx,ixab->KW', X_aaaa, h_aa, t1_xaee, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kiab,Wx,ixba->KW', X_aaaa, h_aa, t1_xaee, optimize = einsum_type)
+sigma_KW_aa += 2 * einsum('Kiab,a,iWba->KW', X_abab, e_extern, t1_xaee, optimize = einsum_type)
+sigma_KW_aa += 2 * einsum('Kiab,b,iWba->KW', X_abab, e_extern, t1_xaee, optimize = einsum_type)
+sigma_KW_aa -= 2 * einsum('Kiab,i,iWba->KW', X_abab, e_cvs, t1_xaee, optimize = einsum_type)
+sigma_KW_aa -= 2 * einsum('iKab,a,iWab->KW', X_abab, e_extern, t1_xaee, optimize = einsum_type)
+sigma_KW_aa -= 2 * einsum('iKab,b,iWab->KW', X_abab, e_extern, t1_xaee, optimize = einsum_type)
+sigma_KW_aa += 2 * einsum('iKab,i,iWab->KW', X_abab, e_cvs, t1_xaee, optimize = einsum_type)
+sigma_KW_aa -= 2 * einsum('Kiab,Wx,ixba->KW', X_abab, h_aa, t1_xaee, optimize = einsum_type)
+sigma_KW_aa += 2 * einsum('iKab,Wx,ixab->KW', X_abab, h_aa, t1_xaee, optimize = einsum_type)
+sigma_KW_aa -= 1/4 * einsum('Kiab,ixab,Wyzx,zy->KW', X_aaaa, t1_xaee, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/2 * einsum('Kiab,ixab,Wxyz,yz->KW', X_aaaa, t1_xaee, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 1/4 * einsum('Kiab,ixba,Wyzx,zy->KW', X_aaaa, t1_xaee, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 1/2 * einsum('Kiab,ixba,Wxyz,yz->KW', X_aaaa, t1_xaee, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += einsum('Kiab,ixba,Wyzx,zy->KW', X_abab, t1_xaee, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= 2 * einsum('Kiab,ixba,Wxyz,yz->KW', X_abab, t1_xaee, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa -= einsum('iKab,ixab,Wyzx,zy->KW', X_abab, t1_xaee, v_aaaa, rdm_ca, optimize = einsum_type)
+sigma_KW_aa += 2 * einsum('iKab,ixab,Wxyz,yz->KW', X_abab, t1_xaee, v_aaaa, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 819.72 seconds.

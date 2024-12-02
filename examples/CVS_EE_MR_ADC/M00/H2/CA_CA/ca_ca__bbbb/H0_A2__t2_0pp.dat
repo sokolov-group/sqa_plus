@@ -1,0 +1,197 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+-------------------- Spin-Adapted CVS-EE: M00 H2 CA_CA (bb_bb) | T-Slice t2_0pp --------------------
+
+
+## Generating Term a_I^\dag a_X ... a_Y^\dag a_J ...
+
+## Left operator terms:
+ (   1.00000) cre(I) des(X) 
+
+## Right operator terms:
+ (   1.00000) cre(Y) des(J) 
+
+## Creating spin-integrated H^(0)...
+20 spin-integrated H^(0) terms created.
+
+## Creating set of spin-integrated T^{(2)} - T^{(2)\dag}...
+160 spin-integrated A^(2) terms created.
+
+## Selecting spin-integrated T^{(2)} - T{(2)^\dag} slice: t2_0pp...
+ (   1.00000) t2(aa81a,aa82a) cre(aa82a) des(aa81a) 
+ (   1.00000) t2(aa65b,aa66b) cre(aa66b) des(aa65b) 
+>>> Slice t2_0pp: 2 spin-integrated A terms selected.
+
+## Calculating [H^(0), T^{(2)} - T^{(2)\dag}]:
+>>> Slice t2_0pp: 20 spin-integrated H^(2) terms created.
+----------------------------------------------------------------------------------------------------
+
+## Calculating [H^(2), a_Y^\dag a_J] ...
+
+## Calculating [a_I^\dag a_X, [H^(2), a_Y^\dag a_J]] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) h(X,x) kdelta(I,J) t2(Y,x) 
+ (  -1.00000) h(Y,x) kdelta(I,J) t2(X,x) 
+ (   1.00000) h(Y,x) kdelta(I,J) t2(x,y) cre(y) des(X) 
+ (  -1.00000) h(x,y) kdelta(I,J) t2(Y,x) cre(y) des(X) 
+ (  -1.00000) kdelta(I,J) t2(X,x) v(Y,y,x,z) cre(z) des(y) 
+ (  -1.00000) kdelta(I,J) t2(X,x) v(Y,y,x,z) cre(z) des(y) 
+ (   1.00000) kdelta(I,J) t2(Y,x) v(X,y,x,z) cre(y) des(z) 
+ (   1.00000) kdelta(I,J) t2(Y,x) v(X,y,x,z) cre(y) des(z) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(X,x,Y,z) cre(y) des(z) 
+ (   1.00000) kdelta(I,J) t2(x,y) v(X,z,Y,x) cre(z) des(y) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(X,x,Y,z) cre(y) des(z) 
+ (   1.00000) kdelta(I,J) t2(x,y) v(X,z,Y,x) cre(z) des(y) 
+ (   1.00000) kdelta(I,J) t2(Y,x) v(x,y,z,w) cre(z) cre(w) des(X) des(y) 
+ (   0.50000) kdelta(I,J) t2(Y,x) v(x,y,z,w) cre(z) cre(w) des(X) des(y) 
+ (   1.00000) kdelta(I,J) t2(x,y) v(Y,x,z,w) cre(z) cre(w) des(X) des(y) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(Y,z,x,w) cre(y) cre(w) des(X) des(z) 
+ (   0.50000) kdelta(I,J) t2(x,y) v(Y,x,z,w) cre(z) cre(w) des(X) des(y) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(Y,z,x,w) cre(y) cre(w) des(X) des(z) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(Y,z,x,w) cre(y) cre(w) des(X) des(z) 
+
+Total terms : 19
+SQA automation time :  0.173 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 19 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 36 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+20 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   1.00000) h(X,x) kdelta(I,J) t2(Y,x) 
+ (  -1.00000) h(Y,x) kdelta(I,J) t2(X,x) 
+ (   0.50000) h(Y,x) kdelta(I,J) t2(x,y) rdm(X,y) 
+ (  -0.50000) h(x,y) kdelta(I,J) t2(Y,x) rdm(X,y) 
+ (  -1.00000) kdelta(I,J) t2(X,x) v(Y,x,y,z) rdm(y,z) 
+ (   0.50000) kdelta(I,J) t2(X,x) v(Y,y,z,x) rdm(z,y) 
+ (   1.00000) kdelta(I,J) t2(Y,x) v(X,x,y,z) rdm(y,z) 
+ (  -0.50000) kdelta(I,J) t2(Y,x) v(X,y,z,x) rdm(z,y) 
+ (  -0.50000) kdelta(I,J) t2(Y,x) v(x,y,z,w) rdm(X,z,y,w) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(X,Y,x,z) rdm(y,z) 
+ (   1.00000) kdelta(I,J) t2(x,y) v(X,Y,z,x) rdm(y,z) 
+ (  -0.50000) kdelta(I,J) t2(x,y) v(X,x,z,Y) rdm(y,z) 
+ (   0.50000) kdelta(I,J) t2(x,y) v(X,z,x,Y) rdm(y,z) 
+ (   0.50000) kdelta(I,J) t2(x,y) v(Y,x,z,w) rdm(X,z,y,w) 
+ (   0.50000) kdelta(I,J) t2(x,y) v(Y,z,w,x) rdm(X,w,z,y) 
+ (  -0.50000) kdelta(I,J) t2(x,y) v(Y,z,x,w) rdm(X,y,z,w) 
+
+Total spin-integrated terms: 19
+Total spin-adapted terms: 16
+Spin-adaptation automation time :  0.495 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 16
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+temp  = einsum('Xx,IJ,Yx->IXJY', h_aa, np.identity(ncvs), t2_aa, optimize = einsum_type)
+temp -= einsum('Yx,IJ,Xx->IXJY', h_aa, np.identity(ncvs), t2_aa, optimize = einsum_type)
+temp += 1/2 * einsum('Yx,IJ,xy,Xy->IXJY', h_aa, np.identity(ncvs), t2_aa, rdm_ca, optimize = einsum_type)
+temp -= 1/2 * einsum('xy,IJ,Yx,Xy->IXJY', h_aa, np.identity(ncvs), t2_aa, rdm_ca, optimize = einsum_type)
+temp -= einsum('IJ,Xx,Yxyz,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp += 1/2 * einsum('IJ,Xx,Yyzx,zy->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp += einsum('IJ,Yx,Xxyz,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp -= 1/2 * einsum('IJ,Yx,Xyzx,zy->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp -= 1/2 * einsum('IJ,Yx,xyzw,Xzyw->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+temp -= einsum('IJ,xy,XYxz,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp += einsum('IJ,xy,XYzx,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp -= 1/2 * einsum('IJ,xy,XxzY,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp += 1/2 * einsum('IJ,xy,XzxY,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp += 1/2 * einsum('IJ,xy,Yxzw,Xzyw->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+temp += 1/2 * einsum('IJ,xy,Yzwx,Xwzy->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+temp -= 1/2 * einsum('IJ,xy,Yzxw,Xyzw->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 1.63 seconds.

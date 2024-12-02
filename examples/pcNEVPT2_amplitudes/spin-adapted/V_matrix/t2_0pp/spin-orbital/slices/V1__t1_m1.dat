@@ -1,0 +1,151 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+-------------------------------- Spin-Orbital V(X,Y): T-Slice t1_m1 --------------------------------
+
+# Defining a^\dag_p a_q...
+
+## Creating first set of spin-orbital T - T^\dag...
+22 spin-orbital A terms created.
+
+## Creating second set of spin-orbital T - T^\dag...
+22 spin-orbital A terms created.
+
+## Selecting spin-orbital T - T^\dag slice: t1_m1...
+
+# First Amplitude Set...
+ (   0.50000) t1(cc8,aa11,ee7,ee8) cre(ee7) cre(ee8) des(aa11) des(cc8) 
+ (  -0.50000) t1(cc8,aa11,ee7,ee8) cre(cc8) cre(aa11) des(ee8) des(ee7) 
+>>> Slice t1_m1: 2 spin-orbital A terms selected.
+
+# Second Amplitude Set...
+ (   0.50000) t1(cc19,aa27,ee18,ee19) cre(ee18) cre(ee19) des(aa27) des(cc19) 
+ (  -0.50000) t1(cc19,aa27,ee18,ee19) cre(cc19) cre(aa27) des(ee19) des(ee18) 
+>>> Slice t1_m1: 2 spin-orbital A terms selected.
+
+# Creating spin-orbital [2V + [H^(0), T - T^\dag], T - T^\dag]:
+
+## Creating spin-orbital V...
+82 spin-orbital V terms created.
+
+## Creating spin-orbital H^(0)...
+6 spin-orbital H^(0) terms created.
+
+## Calculating [H^(0), T - T^\dag]:
+>>> Slice t1_m1: 10 spin-orbital terms created.
+
+## Calculating V + H^(1):
+>>> Slice t1_m1: 92 spin-orbital terms created.
+
+## Calculating [V + H^(1), T - T^\dag]:
+>>> Slice t1_m1: 10 spin-orbital terms created.
+
+## Calculating a^\dag_p a_q [V + H^(1), T - T^\dag]:
+>>> Slice t1_m1: 254 spin-orbital a^\dag_p a_q [V + H^(1), T - T^\dag] terms created.
+
+----------------------------------------------------------------------------------------------------
+
+## Calculating matrix element of t1_m1 slice of V1:
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -0.50000) t1(i,Y,a,b) v(i,x,a,b) cre(X) des(x) 
+ (  -0.50000) t1(i,x,a,b) v(i,Y,a,b) cre(X) des(x) 
+ (   0.25000) e(i) t1(i,Y,a,b) t1(i,x,a,b) cre(X) des(x) 
+ (   0.25000) e(i) t1(i,x,a,b) t1(i,Y,a,b) cre(X) des(x) 
+ (  -1.00000) e(a) t1(i,Y,a,b) t1(i,x,a,b) cre(X) des(x) 
+ (   0.25000) h(Y,x) t1(i,x,a,b) t1(i,y,a,b) cre(X) des(y) 
+ (   0.25000) h(x,y) t1(i,x,a,b) t1(i,Y,a,b) cre(X) des(y) 
+ (   0.25000) v(i,Y,i,x) t1(j,x,a,b) t1(j,y,a,b) cre(X) des(y) 
+ (   0.25000) v(i,x,i,y) t1(j,x,a,b) t1(j,Y,a,b) cre(X) des(y) 
+ (   0.50000) t1(i,x,a,b) v(i,y,a,b) cre(X) cre(x) des(Y) des(y) 
+ (   0.50000) t1(i,x,a,b) v(i,y,a,b) cre(X) cre(y) des(Y) des(x) 
+ (  -0.25000) e(i) t1(i,x,a,b) t1(i,y,a,b) cre(X) cre(x) des(Y) des(y) 
+ (  -0.25000) e(i) t1(i,x,a,b) t1(i,y,a,b) cre(X) cre(y) des(Y) des(x) 
+ (   1.00000) e(a) t1(i,x,a,b) t1(i,y,a,b) cre(X) cre(x) des(Y) des(y) 
+ (  -0.25000) h(x,y) t1(i,x,a,b) t1(i,z,a,b) cre(X) cre(y) des(Y) des(z) 
+ (  -0.25000) h(x,y) t1(i,x,a,b) t1(i,z,a,b) cre(X) cre(z) des(Y) des(y) 
+ (  -0.12500) v(Y,x,y,z) t1(i,x,a,b) t1(i,w,a,b) cre(X) cre(w) des(y) des(z) 
+ (   0.25000) v(Y,x,y,z) t1(i,y,a,b) t1(i,w,a,b) cre(X) cre(x) des(z) des(w) 
+ (  -0.12500) v(x,y,z,w) t1(i,x,a,b) t1(i,Y,a,b) cre(X) cre(y) des(z) des(w) 
+ (  -0.25000) v(i,x,i,y) t1(j,x,a,b) t1(j,z,a,b) cre(X) cre(y) des(Y) des(z) 
+ (  -0.25000) v(i,x,i,y) t1(j,x,a,b) t1(j,z,a,b) cre(X) cre(z) des(Y) des(y) 
+ (   0.12500) v(x,y,z,w) t1(i,x,a,b) t1(i,u,a,b) cre(X) cre(y) cre(u) des(Y) des(z) des(w) 
+ (   0.12500) v(x,y,z,w) t1(i,x,a,b) t1(i,u,a,b) cre(X) cre(z) cre(w) des(Y) des(y) des(u) 
+
+Total terms : 23
+SQA automation time :  0.986 seconds
+>>> Slice V1: 23 spin-orbital a^\dag_p a_q [V + H^(1), A^(1)] terms created.
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+4 terms removed:
+ (   0.25000) v(i,Y,i,x) t1(j,x,a,b) t1(j,y,a,b) rdm(X,y) 
+ (   0.25000) v(i,x,i,y) t1(j,x,a,b) t1(j,Y,a,b) rdm(X,y) 
+ (  -0.25000) v(i,x,i,y) t1(j,x,a,b) t1(j,z,a,b) rdm(X,y,Y,z) 
+ (  -0.25000) v(i,x,i,y) t1(j,x,a,b) t1(j,z,a,b) rdm(X,z,Y,y) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 19
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+V1__t1_m1 =- 1/2 * einsum('iYab,ixab,Xx->XY', t1_caee, v_caee_so, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1 -= 1/2 * einsum('ixab,iYab,Xx->XY', t1_caee, v_caee_so, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1 += 1/4 * einsum('i,iYab,ixab,Xx->XY', e_core_so, t1_caee, t1_caee, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1 += 1/4 * einsum('i,ixab,iYab,Xx->XY', e_core_so, t1_caee, t1_caee, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1 -= einsum('a,iYab,ixab,Xx->XY', e_extern_so, t1_caee, t1_caee, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1 += 1/4 * einsum('Yx,ixab,iyab,Xy->XY', h_aa_so, t1_caee, t1_caee, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1 += 1/4 * einsum('xy,ixab,iYab,Xy->XY', h_aa_so, t1_caee, t1_caee, rdm_ca_so, optimize = einsum_type)
+V1__t1_m1 += 1/2 * einsum('ixab,iyab,XxYy->XY', t1_caee, v_caee_so, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 += 1/2 * einsum('ixab,iyab,XyYx->XY', t1_caee, v_caee_so, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 -= 1/4 * einsum('i,ixab,iyab,XxYy->XY', e_core_so, t1_caee, t1_caee, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 -= 1/4 * einsum('i,ixab,iyab,XyYx->XY', e_core_so, t1_caee, t1_caee, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 += einsum('a,ixab,iyab,XxYy->XY', e_extern_so, t1_caee, t1_caee, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 -= 1/4 * einsum('xy,ixab,izab,XyYz->XY', h_aa_so, t1_caee, t1_caee, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 -= 1/4 * einsum('xy,ixab,izab,XzYy->XY', h_aa_so, t1_caee, t1_caee, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 -= 1/8 * einsum('Yxyz,ixab,iwab,Xwyz->XY', v_aaaa_so, t1_caee, t1_caee, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 += 1/4 * einsum('Yxyz,iyab,iwab,Xxzw->XY', v_aaaa_so, t1_caee, t1_caee, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 -= 1/8 * einsum('xyzw,ixab,iYab,Xyzw->XY', v_aaaa_so, t1_caee, t1_caee, rdm_ccaa_so, optimize = einsum_type)
+V1__t1_m1 += 1/8 * einsum('xyzw,ixab,iuab,XyuYzw->XY', v_aaaa_so, t1_caee, t1_caee, rdm_cccaaa_so, optimize = einsum_type)
+V1__t1_m1 += 1/8 * einsum('xyzw,ixab,iuab,XzwYyu->XY', v_aaaa_so, t1_caee, t1_caee, rdm_cccaaa_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 15.10 seconds.

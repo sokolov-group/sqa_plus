@@ -1,0 +1,188 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+------------------------------ Spin-Adapted CVS-EE: T Q1 Q_CE (aa_aa) ------------------------------
+
+
+## Generating operators ...
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) d_ae(P,A) t1(I,P) 
+ (  -1.00000) d_ca(I,x) t1(x,A) 
+ (  -1.00000) d_ca(P,Q) t1(I,P,Q,A) 
+ (  -1.00000) d_cc(I,i) t1(i,A) 
+ (   1.00000) d_ce(P,Q) t1(I,P,A,Q) 
+ (   1.00000) d_ee(A,P) t1(I,P) 
+ (   1.00000) d_aa(P,Q) t1(I,x,A,P) cre(x) des(Q) 
+ (  -1.00000) d_aa(x,P) t1(I,x,A,y) cre(P) des(y) 
+ (   1.00000) d_ae(P,A) t1(I,x,P,y) cre(x) des(y) 
+ (   1.00000) d_ae(P,A) t1(I,x,P,y) cre(x) des(y) 
+ (   1.00000) d_ae(P,Q) t1(I,x,A,Q) cre(x) des(P) 
+ (  -1.00000) d_ca(I,x) t1(x,y,A,z) cre(y) des(z) 
+ (  -1.00000) d_ca(I,x) t1(x,y,A,z) cre(y) des(z) 
+ (   1.00000) d_ca(i,Q) t1(I,i,x,A) cre(Q) des(x) 
+ (  -1.00000) d_cc(I,i) t1(i,x,A,y) cre(x) des(y) 
+ (  -1.00000) d_cc(I,i) t1(i,x,A,y) cre(x) des(y) 
+ (   1.00000) d_ee(A,P) t1(I,x,P,y) cre(x) des(y) 
+ (   1.00000) d_ee(A,P) t1(I,x,P,y) cre(x) des(y) 
+
+Total terms : 18
+SQA automation time :  0.128 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 28 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+4 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   1.00000) d_ae(P,A) t1(I,P) 
+ (  -1.00000) d_ca(I,x) t1(x,A) 
+ (  -1.00000) d_ca(P,Q) t1(I,P,Q,A) 
+ (   1.00000) d_ca(P,Q) t1(P,I,Q,A) 
+ (  -1.00000) d_cc(I,i) t1(i,A) 
+ (   1.00000) d_ce(P,Q) t1(I,P,A,Q) 
+ (  -1.00000) d_ce(P,Q) t1(P,I,A,Q) 
+ (   1.00000) d_ee(A,P) t1(I,P) 
+ (   0.50000) d_aa(P,Q) t1(I,x,A,P) rdm(Q,x) 
+ (  -0.50000) d_aa(P,Q) t1(I,x,P,A) rdm(Q,x) 
+ (  -0.50000) d_aa(x,P) t1(I,x,A,y) rdm(P,y) 
+ (   0.50000) d_aa(x,P) t1(I,x,y,A) rdm(P,y) 
+ (   1.00000) d_ae(P,A) t1(I,x,P,y) rdm(x,y) 
+ (  -0.50000) d_ae(P,A) t1(I,x,y,P) rdm(x,y) 
+ (   0.50000) d_ae(P,Q) t1(I,x,A,Q) rdm(P,x) 
+ (  -0.50000) d_ae(P,Q) t1(I,x,Q,A) rdm(P,x) 
+ (   0.50000) d_ca(I,x) t1(x,y,z,A) rdm(z,y) 
+ (  -1.00000) d_ca(I,x) t1(y,x,z,A) rdm(z,y) 
+ (   0.50000) d_ca(i,Q) t1(I,i,x,A) rdm(Q,x) 
+ (  -0.50000) d_ca(i,Q) t1(i,I,x,A) rdm(Q,x) 
+ (  -1.00000) d_cc(I,i) t1(i,x,A,y) rdm(y,x) 
+ (   0.50000) d_cc(I,i) t1(i,x,y,A) rdm(y,x) 
+ (   1.00000) d_ee(A,P) t1(I,x,P,y) rdm(x,y) 
+ (  -0.50000) d_ee(A,P) t1(I,x,y,P) rdm(x,y) 
+
+Total spin-integrated terms: 18
+Total spin-adapted terms: 24
+Spin-adaptation automation time :  0.058 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabelling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 24
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+T_q_ce  = einsum('xA,Ix->IA', d_ae, t1_xa, optimize = einsum_type)
+T_q_ce -= einsum('Ix,xA->IA', d_ca, t1_ae, optimize = einsum_type)
+T_q_ce -= einsum('ix,IixA->IA', d_ca, t1_xxae, optimize = einsum_type)
+T_q_ce += einsum('ix,iIxA->IA', d_ca, t1_xxae, optimize = einsum_type)
+T_q_ce -= einsum('Ii,iA->IA', d_cc, t1_xe, optimize = einsum_type)
+T_q_ce += einsum('ia,IiAa->IA', d_ce, t1_xxee, optimize = einsum_type)
+T_q_ce -= einsum('ia,iIAa->IA', d_ce, t1_xxee, optimize = einsum_type)
+T_q_ce += einsum('Aa,Ia->IA', d_ee, t1_xe, optimize = einsum_type)
+T_q_ce += 1/2 * einsum('xy,IzAx,yz->IA', d_aa, t1_xaea, rdm_ca, optimize = einsum_type)
+T_q_ce -= 1/2 * einsum('xy,IzxA,yz->IA', d_aa, t1_xaae, rdm_ca, optimize = einsum_type)
+T_q_ce -= 1/2 * einsum('xy,IxAz,yz->IA', d_aa, t1_xaea, rdm_ca, optimize = einsum_type)
+T_q_ce += 1/2 * einsum('xy,IxzA,yz->IA', d_aa, t1_xaae, rdm_ca, optimize = einsum_type)
+T_q_ce += einsum('xA,Iyxz,yz->IA', d_ae, t1_xaaa, rdm_ca, optimize = einsum_type)
+T_q_ce -= 1/2 * einsum('xA,Iyzx,yz->IA', d_ae, t1_xaaa, rdm_ca, optimize = einsum_type)
+T_q_ce += 1/2 * einsum('xa,IyAa,xy->IA', d_ae, t1_xaee, rdm_ca, optimize = einsum_type)
+T_q_ce -= 1/2 * einsum('xa,IyaA,xy->IA', d_ae, t1_xaee, rdm_ca, optimize = einsum_type)
+T_q_ce += 1/2 * einsum('Ix,xyzA,zy->IA', d_ca, t1_aaae, rdm_ca, optimize = einsum_type)
+T_q_ce -= einsum('Ix,yxzA,zy->IA', d_ca, t1_aaae, rdm_ca, optimize = einsum_type)
+T_q_ce += 1/2 * einsum('ix,IiyA,xy->IA', d_ca, t1_xxae, rdm_ca, optimize = einsum_type)
+T_q_ce -= 1/2 * einsum('ix,iIyA,xy->IA', d_ca, t1_xxae, rdm_ca, optimize = einsum_type)
+T_q_ce -= einsum('Ii,ixAy,yx->IA', d_cc, t1_xaea, rdm_ca, optimize = einsum_type)
+T_q_ce += 1/2 * einsum('Ii,ixyA,yx->IA', d_cc, t1_xaae, rdm_ca, optimize = einsum_type)
+T_q_ce += einsum('Aa,Ixay,xy->IA', d_ee, t1_xaea, rdm_ca, optimize = einsum_type)
+T_q_ce -= 1/2 * einsum('Aa,Ixya,xy->IA', d_ee, t1_xaae, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 12.28 seconds.
