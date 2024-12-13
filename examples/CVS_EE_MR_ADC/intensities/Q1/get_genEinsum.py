@@ -33,7 +33,7 @@ def extract_einsum_lines(file_path):
     return equations
 
 ##use
-file_path = 'TY_q1_ccaa.dat'
+file_path = 'TY_q1_caaa.dat'
 extracted_lines = extract_einsum_lines(file_path)
 
 print('einsum equations from ' + file_path) 

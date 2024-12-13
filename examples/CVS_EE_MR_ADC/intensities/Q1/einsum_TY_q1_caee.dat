@@ -1,0 +1,55 @@
+einsum equations from TY_q1_caee.dat
+
+TY[:, s_c:f_c, s_c:f_c] =- 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__abab, t1_xaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_c:f_c, s_c:f_c]  = 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__baab, t1_xaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_a:f_a, s_a:f_a] =- 1/2 * einsum('Rixab,iQab,Px->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rixab,iQba,Px->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rixab,iQba,Px->RPQ', Y_KWCD__baab, t1_xaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_a:f_a, s_a:f_a] =- 1/2 * einsum('Rixab,iQab,Px->RPQ', Y_KWCD__abab, t1_xaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_e:f_e, s_e:f_e]  = 1/2 * einsum('RixQa,iyPa,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixQa,iyaP,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixQa,iyPa,xy->RPQ', Y_KWCD__abab, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixQa,iyaP,xy->RPQ', Y_KWCD__baab, t1_xaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_e:f_e, s_e:f_e]  = 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCD__abab, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCD__baab, t1_xaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_c:f_c, s_v:f_v] =- 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__aaaa, t1_vaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__aaaa, t1_vaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__abab, t1_vaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_c:f_c, s_v:f_v]  = 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__baab, t1_vaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_c:f_c, s_a:f_a] =- 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__aaaa, t1_aaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__aaaa, t1_aaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixab,Piab,Qx->RPQ', Y_KWCD__aaaa, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixab,Piba,Qx->RPQ', Y_KWCD__aaaa, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__abab, t1_aaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixab,Piab,Qx->RPQ', Y_KWCD__baab, t1_xxee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_c:f_c, s_a:f_a] =- 1/2 * einsum('Rixab,Piba,Qx->RPQ', Y_KWCD__abab, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__baab, t1_aaee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_v:f_v, s_a:f_a]  = 1/2 * einsum('Rixab,Piab,Qx->RPQ', Y_KWCD__aaaa, t1_vxee, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixab,Piba,Qx->RPQ', Y_KWCD__aaaa, t1_vxee, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixab,Piab,Qx->RPQ', Y_KWCD__baab, t1_vxee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_v:f_v, s_a:f_a] =- 1/2 * einsum('Rixab,Piba,Qx->RPQ', Y_KWCD__abab, t1_vxee, rdm_ca, optimize = einsum_type)
+
+TY[:, s_a:f_a, s_e:f_e]  = 1/2 * einsum('RixQa,iyPa,xy->RPQ', Y_KWCD__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixQa,iyaP,xy->RPQ', Y_KWCD__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCD__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCD__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixQa,iyPa,xy->RPQ', Y_KWCD__abab, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixQa,iyaP,xy->RPQ', Y_KWCD__baab, t1_xaea, rdm_ca, optimize = einsum_type)
+
+TY[:, s_a:f_a, s_e:f_e]  = 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCD__abab, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCD__baab, t1_xaae, rdm_ca, optimize = einsum_type)

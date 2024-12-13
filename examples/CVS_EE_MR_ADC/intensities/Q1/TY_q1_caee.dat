@@ -12,13 +12,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ----------------------------------------------------------------------------------------------------
 
 
--------------------------------- Spin-Adapted CVS-EE: TY Q1 Q_CE () --------------------------------
+-------------------------------- Spin-Adapted CVS-EE: TY Q1 Q_CAEE ---------------------------------
 
 
 ## Generating operators ...
 
 
------------------------------------------------- IJ ------------------------------------------------
+--------------------------------------------- CC (aa) ----------------------------------------------
 
 ## Calculating the excitation operator [q^(0), T - T^\dag] ...
 ## Calculating the commutator...
@@ -42,18 +42,17 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,a) 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,x,a,y) cre(x) des(y) 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,x,a,y) cre(x) des(y) 
+ (  -1.00000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
+ (  -1.00000) Y_KWCD__abab(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
 
-Total terms : 3
-SQA automation time :  0.011 seconds
+Total terms : 2
+SQA automation time :  0.026 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -61,9 +60,13 @@ SQA automation time :  0.011 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
+ >>> 2 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -83,7 +86,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 4 spin-adapted terms...
+Combining 3 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -94,24 +97,24 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-1 spin-adapted terms combined.
+0 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,a) 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,x,a,y) rdm(x,y) 
- (   0.50000) Y_KC__aa(R,P,a) t1(Q,x,y,a) rdm(x,y) 
+ (  -0.50000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,a,b) rdm(x,y) 
+ (   0.50000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,b,a) rdm(x,y) 
+ (  -0.50000) Y_KWCD__abab(R,P,x,a,b) t1(Q,y,a,b) rdm(x,y) 
 
-Total spin-integrated terms: 3
+Total spin-integrated terms: 2
 Total spin-adapted terms: 3
 Spin-adaptation automation time :  0.007 seconds
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -127,12 +130,12 @@ Remaining terms: 3
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_c:f_c, s_c:f_c] =- einsum('RPa,Qa->RPQ', Y_KC__aa, t1_xe, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= einsum('RPa,Qxay,xy->RPQ', Y_KC__aa, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPa,Qxya,xy->RPQ', Y_KC__aa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] =- 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__abab, t1_xaee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
------------------------------------------------- IJ ------------------------------------------------
+--------------------------------------------- CC (bb) ----------------------------------------------
 
 ## Calculating the excitation operator [q^(0), T - T^\dag] ...
 ## Calculating the commutator...
@@ -156,18 +159,16 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,a) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,x,a,y) cre(x) des(y) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,x,a,y) cre(x) des(y) 
+ (  -1.00000) Y_KWCD__baab(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
 
-Total terms : 3
-SQA automation time :  0.017 seconds
+Total terms : 1
+SQA automation time :  0.020 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -175,9 +176,13 @@ SQA automation time :  0.017 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
+ >>> 1 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -197,7 +202,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 4 spin-adapted terms...
+Combining 1 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -208,24 +213,22 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-1 spin-adapted terms combined.
+0 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,a) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,x,a,y) rdm(x,y) 
- (   0.50000) Y_KC__bb(R,P,a) t1(Q,x,y,a) rdm(x,y) 
+ (   0.50000) Y_KWCD__baab(R,P,x,a,b) t1(Q,y,b,a) rdm(x,y) 
 
-Total spin-integrated terms: 3
-Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.006 seconds
+Total spin-integrated terms: 1
+Total spin-adapted terms: 1
+Spin-adaptation automation time :  0.002 seconds
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -236,17 +239,15 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 3
+Remaining terms: 1
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_c:f_c, s_c:f_c] =- einsum('RPa,Qa->RPQ', Y_KC__bb, t1_xe, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= einsum('RPa,Qxay,xy->RPQ', Y_KC__bb, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPa,Qxya,xy->RPQ', Y_KC__bb, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c]  = 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__baab, t1_xaee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
------------------------------------------------- IJ ------------------------------------------------
+--------------------------------------------- VV (aa) ----------------------------------------------
 
 ## Calculating the excitation operator [q^(0), T - T^\dag] ...
 ## Calculating the commutator...
@@ -270,7 +271,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -278,7 +279,7 @@ Done!
 
 
 Total terms : 0
-SQA automation time :  0.008 seconds
+SQA automation time :  0.020 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -286,9 +287,13 @@ SQA automation time :  0.008 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -319,7 +324,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -333,7 +338,7 @@ Total spin-integrated terms: 0
 Total spin-adapted terms: 0
 Spin-adaptation automation time :  0.000 seconds
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -351,7 +356,7 @@ Remaining terms: 0
 
 ----------------------------------------------------------------------------------------------------
 
------------------------------------------------- IJ ------------------------------------------------
+--------------------------------------------- VV (bb) ----------------------------------------------
 
 ## Calculating the excitation operator [q^(0), T - T^\dag] ...
 ## Calculating the commutator...
@@ -375,7 +380,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -383,7 +388,7 @@ Done!
 
 
 Total terms : 0
-SQA automation time :  0.008 seconds
+SQA automation time :  0.014 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -391,9 +396,13 @@ SQA automation time :  0.008 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -424,7 +433,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -438,7 +447,7 @@ Total spin-integrated terms: 0
 Total spin-adapted terms: 0
 Spin-adaptation automation time :  0.000 seconds
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -456,7 +465,7 @@ Remaining terms: 0
 
 ----------------------------------------------------------------------------------------------------
 
------------------------------------------------- XY ------------------------------------------------
+--------------------------------------------- AA (aa) ----------------------------------------------
 
 ## Calculating the excitation operator [q^(0), T - T^\dag] ...
 ## Calculating the commutator...
@@ -480,19 +489,17 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KC__aa(R,i,a) t1(i,Q,a,x) cre(P) des(x) 
- (   1.00000) Y_KC__aa(R,i,a) t1(i,x,a,P) cre(x) des(Q) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(i,Q,a,x) cre(P) des(x) 
- (   1.00000) Y_KC__bb(R,i,a) t1(i,x,a,P) cre(x) des(Q) 
+ (  -1.00000) Y_KWCD__aaaa(R,i,x,a,b) t1(i,Q,a,b) cre(P) des(x) 
+ (  -1.00000) Y_KWCD__baab(R,i,x,a,b) t1(i,Q,a,b) cre(P) des(x) 
 
-Total terms : 4
-SQA automation time :  0.020 seconds
+Total terms : 2
+SQA automation time :  0.043 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -500,9 +507,13 @@ SQA automation time :  0.020 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
+ >>> 2 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -522,7 +533,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 6 spin-adapted terms...
+Combining 3 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -533,7 +544,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -542,256 +553,15 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -0.50000) Y_KC__aa(R,i,a) t1(i,Q,a,x) rdm(P,x) 
- (   0.50000) Y_KC__aa(R,i,a) t1(i,Q,x,a) rdm(P,x) 
- (  -0.50000) Y_KC__aa(R,i,a) t1(i,x,P,a) rdm(Q,x) 
- (   0.50000) Y_KC__aa(R,i,a) t1(i,x,a,P) rdm(Q,x) 
- (  -0.50000) Y_KC__bb(R,i,a) t1(i,Q,a,x) rdm(P,x) 
- (   0.50000) Y_KC__bb(R,i,a) t1(i,x,a,P) rdm(Q,x) 
+ (  -0.50000) Y_KWCD__aaaa(R,i,x,a,b) t1(i,Q,a,b) rdm(P,x) 
+ (   0.50000) Y_KWCD__aaaa(R,i,x,a,b) t1(i,Q,b,a) rdm(P,x) 
+ (   0.50000) Y_KWCD__baab(R,i,x,a,b) t1(i,Q,b,a) rdm(P,x) 
 
-Total spin-integrated terms: 4
-Total spin-adapted terms: 6
-Spin-adaptation automation time :  0.012 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 6
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_a:f_a, s_a:f_a] =- 1/2 * einsum('Ria,iQax,Px->RPQ', Y_KC__aa, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Ria,iQxa,Px->RPQ', Y_KC__aa, t1_xaae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Ria,ixPa,Qx->RPQ', Y_KC__aa, t1_xaae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Ria,ixaP,Qx->RPQ', Y_KC__aa, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Ria,iQax,Px->RPQ', Y_KC__bb, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Ria,ixaP,Qx->RPQ', Y_KC__bb, t1_xaea, rdm_ca, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- XY ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (  -1.00000) Y_KC__aa(R,i,a) t1(i,Q,a,x) cre(P) des(x) 
- (   1.00000) Y_KC__aa(R,i,a) t1(i,x,a,P) cre(x) des(Q) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(i,Q,a,x) cre(P) des(x) 
- (   1.00000) Y_KC__bb(R,i,a) t1(i,x,a,P) cre(x) des(Q) 
-
-Total terms : 4
-SQA automation time :  0.020 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 6 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-0 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (  -0.50000) Y_KC__aa(R,i,a) t1(i,Q,a,x) rdm(P,x) 
- (   0.50000) Y_KC__aa(R,i,a) t1(i,x,a,P) rdm(Q,x) 
- (  -0.50000) Y_KC__bb(R,i,a) t1(i,Q,a,x) rdm(P,x) 
- (   0.50000) Y_KC__bb(R,i,a) t1(i,Q,x,a) rdm(P,x) 
- (  -0.50000) Y_KC__bb(R,i,a) t1(i,x,P,a) rdm(Q,x) 
- (   0.50000) Y_KC__bb(R,i,a) t1(i,x,a,P) rdm(Q,x) 
-
-Total spin-integrated terms: 4
-Total spin-adapted terms: 6
-Spin-adaptation automation time :  0.012 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 6
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_a:f_a, s_a:f_a] =- 1/2 * einsum('Ria,iQax,Px->RPQ', Y_KC__aa, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Ria,ixaP,Qx->RPQ', Y_KC__aa, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Ria,iQax,Px->RPQ', Y_KC__bb, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Ria,iQxa,Px->RPQ', Y_KC__bb, t1_xaae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Ria,ixPa,Qx->RPQ', Y_KC__bb, t1_xaae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Ria,ixaP,Qx->RPQ', Y_KC__bb, t1_xaea, rdm_ca, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- AB ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,P) 
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,x,P,y) cre(x) des(y) 
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,x,P,y) cre(x) des(y) 
-
-Total terms : 3
-SQA automation time :  0.016 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 4 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-1 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,P) 
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,x,P,y) rdm(y,x) 
- (  -0.50000) Y_KC__aa(R,i,Q) t1(i,x,y,P) rdm(y,x) 
-
-Total spin-integrated terms: 3
+Total spin-integrated terms: 2
 Total spin-adapted terms: 3
 Spin-adaptation automation time :  0.007 seconds
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -807,12 +577,12 @@ Remaining terms: 3
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_e:f_e, s_e:f_e]  = einsum('RiQ,iP->RPQ', Y_KC__aa, t1_xe, optimize = einsum_type)
-TY[:, s_e:f_e, s_e:f_e] += einsum('RiQ,ixPy,yx->RPQ', Y_KC__aa, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RiQ,ixyP,yx->RPQ', Y_KC__aa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] =- 1/2 * einsum('Rixab,iQab,Px->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rixab,iQba,Px->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rixab,iQba,Px->RPQ', Y_KWCD__baab, t1_xaee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
------------------------------------------------- AB ------------------------------------------------
+--------------------------------------------- AA (bb) ----------------------------------------------
 
 ## Calculating the excitation operator [q^(0), T - T^\dag] ...
 ## Calculating the commutator...
@@ -836,18 +606,16 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,P) 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,x,P,y) cre(x) des(y) 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,x,P,y) cre(x) des(y) 
+ (  -1.00000) Y_KWCD__abab(R,i,x,a,b) t1(i,Q,a,b) cre(P) des(x) 
 
-Total terms : 3
-SQA automation time :  0.016 seconds
+Total terms : 1
+SQA automation time :  0.042 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -855,9 +623,13 @@ SQA automation time :  0.016 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
+ >>> 1 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -877,7 +649,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 4 spin-adapted terms...
+Combining 1 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -888,24 +660,22 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-1 spin-adapted terms combined.
+0 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,P) 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,x,P,y) rdm(y,x) 
- (  -0.50000) Y_KC__bb(R,i,Q) t1(i,x,y,P) rdm(y,x) 
+ (  -0.50000) Y_KWCD__abab(R,i,x,a,b) t1(i,Q,a,b) rdm(P,x) 
 
-Total spin-integrated terms: 3
-Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.006 seconds
+Total spin-integrated terms: 1
+Total spin-adapted terms: 1
+Spin-adaptation automation time :  0.002 seconds
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -916,17 +686,15 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 3
+Remaining terms: 1
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_e:f_e, s_e:f_e]  = einsum('RiQ,iP->RPQ', Y_KC__bb, t1_xe, optimize = einsum_type)
-TY[:, s_e:f_e, s_e:f_e] += einsum('RiQ,ixPy,yx->RPQ', Y_KC__bb, t1_xaea, rdm_ca, optimize = einsum_type)
-TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RiQ,ixyP,yx->RPQ', Y_KC__bb, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] =- 1/2 * einsum('Rixab,iQab,Px->RPQ', Y_KWCD__abab, t1_xaee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
------------------------------------------------- IJ ------------------------------------------------
+--------------------------------------------- EE (aa) ----------------------------------------------
 
 ## Calculating the excitation operator [q^(0), T - T^\dag] ...
 ## Calculating the commutator...
@@ -950,507 +718,19 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,a) 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,x,a,y) cre(x) des(y) 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,x,a,y) cre(x) des(y) 
-
-Total terms : 3
-SQA automation time :  0.020 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 4 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-1 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,a) 
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,x,a,y) rdm(x,y) 
- (   0.50000) Y_KC__aa(R,P,a) t1(Q,x,y,a) rdm(x,y) 
-
-Total spin-integrated terms: 3
-Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.006 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 3
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_c:f_c, s_v:f_v] =- einsum('RPa,Qa->RPQ', Y_KC__aa, t1_ve, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= einsum('RPa,Qxay,xy->RPQ', Y_KC__aa, t1_vaea, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPa,Qxya,xy->RPQ', Y_KC__aa, t1_vaae, rdm_ca, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IJ ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,a) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,x,a,y) cre(x) des(y) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,x,a,y) cre(x) des(y) 
-
-Total terms : 3
-SQA automation time :  0.021 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 4 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-1 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,a) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,x,a,y) rdm(x,y) 
- (   0.50000) Y_KC__bb(R,P,a) t1(Q,x,y,a) rdm(x,y) 
-
-Total spin-integrated terms: 3
-Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.006 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 3
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_c:f_c, s_v:f_v] =- einsum('RPa,Qa->RPQ', Y_KC__bb, t1_ve, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= einsum('RPa,Qxay,xy->RPQ', Y_KC__bb, t1_vaea, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPa,Qxya,xy->RPQ', Y_KC__bb, t1_vaae, rdm_ca, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IX ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,a) 
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__aa(R,P,a) t1(Q,x,y,a) cre(x) des(y) 
- (   1.00000) Y_KC__aa(R,P,a) t1(Q,x,y,a) cre(x) des(y) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(P,i,x,a) cre(Q) des(x) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(P,i,x,a) cre(Q) des(x) 
-
-Total terms : 7
-SQA automation time :  0.041 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 10 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-1 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (  -1.00000) Y_KC__aa(R,P,a) t1(Q,a) 
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(i,P,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (   0.50000) Y_KC__aa(R,P,a) t1(Q,x,y,a) rdm(x,y) 
- (  -1.00000) Y_KC__aa(R,P,a) t1(x,Q,y,a) rdm(x,y) 
- (  -0.50000) Y_KC__aa(R,i,a) t1(P,i,x,a) rdm(Q,x) 
- (   0.50000) Y_KC__aa(R,i,a) t1(i,P,x,a) rdm(Q,x) 
- (  -0.50000) Y_KC__bb(R,i,a) t1(P,i,x,a) rdm(Q,x) 
-
-Total spin-integrated terms: 7
-Total spin-adapted terms: 9
-Spin-adaptation automation time :  0.016 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 9
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_c:f_c, s_a:f_a] =- einsum('RPa,Qa->RPQ', Y_KC__aa, t1_ae, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += einsum('Ria,PiQa->RPQ', Y_KC__aa, t1_xxae, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= einsum('Ria,iPQa->RPQ', Y_KC__aa, t1_xxae, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += einsum('Ria,PiQa->RPQ', Y_KC__bb, t1_xxae, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPa,Qxya,xy->RPQ', Y_KC__aa, t1_aaae, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= einsum('RPa,xQya,xy->RPQ', Y_KC__aa, t1_aaae, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Ria,Pixa,Qx->RPQ', Y_KC__aa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Ria,iPxa,Qx->RPQ', Y_KC__aa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Ria,Pixa,Qx->RPQ', Y_KC__bb, t1_xxae, rdm_ca, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IX ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(P,i,x,a) cre(Q) des(x) 
- (   1.00000) Y_KC__bb(R,P,a) t1(Q,x,y,a) cre(x) des(y) 
- (   1.00000) Y_KC__bb(R,P,a) t1(Q,x,y,a) cre(x) des(y) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(P,i,x,a) cre(Q) des(x) 
-
-Total terms : 7
-SQA automation time :  0.041 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 10 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-1 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(i,P,Q,a) 
- (  -0.50000) Y_KC__aa(R,i,a) t1(P,i,x,a) rdm(Q,x) 
- (   0.50000) Y_KC__bb(R,P,a) t1(Q,x,y,a) rdm(x,y) 
- (  -1.00000) Y_KC__bb(R,P,a) t1(x,Q,y,a) rdm(x,y) 
- (  -0.50000) Y_KC__bb(R,i,a) t1(P,i,x,a) rdm(Q,x) 
- (   0.50000) Y_KC__bb(R,i,a) t1(i,P,x,a) rdm(Q,x) 
-
-Total spin-integrated terms: 7
-Total spin-adapted terms: 9
-Spin-adaptation automation time :  0.015 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 9
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_c:f_c, s_a:f_a]  = einsum('Ria,PiQa->RPQ', Y_KC__aa, t1_xxae, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= einsum('RPa,Qa->RPQ', Y_KC__bb, t1_ae, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += einsum('Ria,PiQa->RPQ', Y_KC__bb, t1_xxae, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= einsum('Ria,iPQa->RPQ', Y_KC__bb, t1_xxae, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Ria,Pixa,Qx->RPQ', Y_KC__aa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPa,Qxya,xy->RPQ', Y_KC__bb, t1_aaae, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= einsum('RPa,xQya,xy->RPQ', Y_KC__bb, t1_aaae, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Ria,Pixa,Qx->RPQ', Y_KC__bb, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Ria,iPxa,Qx->RPQ', Y_KC__bb, t1_xxae, rdm_ca, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IX ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(P,i,x,a) cre(Q) des(x) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(P,i,x,a) cre(Q) des(x) 
+ (   1.00000) Y_KWCD__aaaa(R,i,x,Q,a) t1(i,y,P,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCD__aaaa(R,i,x,a,Q) t1(i,y,P,a) cre(y) des(x) 
+ (   1.00000) Y_KWCD__abab(R,i,x,Q,a) t1(i,y,P,a) cre(y) des(x) 
+ (   1.00000) Y_KWCD__baab(R,i,x,Q,a) t1(i,y,P,a) cre(y) des(x) 
 
 Total terms : 4
-SQA automation time :  0.039 seconds
+SQA automation time :  0.054 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1458,9 +738,13 @@ SQA automation time :  0.039 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
+ >>> 4 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -1491,7 +775,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -1500,713 +784,18 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(i,P,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (  -0.50000) Y_KC__aa(R,i,a) t1(P,i,x,a) rdm(Q,x) 
- (   0.50000) Y_KC__aa(R,i,a) t1(i,P,x,a) rdm(Q,x) 
- (  -0.50000) Y_KC__bb(R,i,a) t1(P,i,x,a) rdm(Q,x) 
+ (   0.50000) Y_KWCD__aaaa(R,i,x,Q,a) t1(i,y,P,a) rdm(x,y) 
+ (  -0.50000) Y_KWCD__aaaa(R,i,x,Q,a) t1(i,y,a,P) rdm(x,y) 
+ (  -0.50000) Y_KWCD__aaaa(R,i,x,a,Q) t1(i,y,P,a) rdm(x,y) 
+ (   0.50000) Y_KWCD__aaaa(R,i,x,a,Q) t1(i,y,a,P) rdm(x,y) 
+ (   0.50000) Y_KWCD__abab(R,i,x,Q,a) t1(i,y,P,a) rdm(x,y) 
+ (  -0.50000) Y_KWCD__baab(R,i,x,Q,a) t1(i,y,a,P) rdm(x,y) 
 
 Total spin-integrated terms: 4
-Total spin-adapted terms: 6
-Spin-adaptation automation time :  0.009 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 6
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_v:f_v, s_a:f_a]  = einsum('Ria,PiQa->RPQ', Y_KC__aa, t1_vxae, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] -= einsum('Ria,iPQa->RPQ', Y_KC__aa, t1_xvae, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] += einsum('Ria,PiQa->RPQ', Y_KC__bb, t1_vxae, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Ria,Pixa,Qx->RPQ', Y_KC__aa, t1_vxae, rdm_ca, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Ria,iPxa,Qx->RPQ', Y_KC__aa, t1_xvae, rdm_ca, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Ria,Pixa,Qx->RPQ', Y_KC__bb, t1_vxae, rdm_ca, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IX ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(P,i,x,a) cre(Q) des(x) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(P,i,x,a) cre(Q) des(x) 
-
-Total terms : 4
-SQA automation time :  0.032 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 6 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-0 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(i,P,Q,a) 
- (  -0.50000) Y_KC__aa(R,i,a) t1(P,i,x,a) rdm(Q,x) 
- (  -0.50000) Y_KC__bb(R,i,a) t1(P,i,x,a) rdm(Q,x) 
- (   0.50000) Y_KC__bb(R,i,a) t1(i,P,x,a) rdm(Q,x) 
-
-Total spin-integrated terms: 4
-Total spin-adapted terms: 6
-Spin-adaptation automation time :  0.009 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 6
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_v:f_v, s_a:f_a]  = einsum('Ria,PiQa->RPQ', Y_KC__aa, t1_vxae, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] += einsum('Ria,PiQa->RPQ', Y_KC__bb, t1_vxae, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] -= einsum('Ria,iPQa->RPQ', Y_KC__bb, t1_xvae, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Ria,Pixa,Qx->RPQ', Y_KC__aa, t1_vxae, rdm_ca, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Ria,Pixa,Qx->RPQ', Y_KC__bb, t1_vxae, rdm_ca, optimize = einsum_type)
-TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Ria,iPxa,Qx->RPQ', Y_KC__bb, t1_xvae, rdm_ca, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IA ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
-
-Total terms : 2
-SQA automation time :  0.027 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 3 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-0 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(P,i,a,Q) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
-
-Total spin-integrated terms: 2
-Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.003 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 3
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_c:f_c, s_e:f_e]  = einsum('Ria,PiQa->RPQ', Y_KC__aa, t1_xxee, optimize = einsum_type)
-TY[:, s_c:f_c, s_e:f_e] -= einsum('Ria,PiaQ->RPQ', Y_KC__aa, t1_xxee, optimize = einsum_type)
-TY[:, s_c:f_c, s_e:f_e] += einsum('Ria,PiQa->RPQ', Y_KC__bb, t1_xxee, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IA ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
-
-Total terms : 2
-SQA automation time :  0.027 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 3 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-0 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(P,i,a,Q) 
-
-Total spin-integrated terms: 2
-Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.003 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 3
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_c:f_c, s_e:f_e]  = einsum('Ria,PiQa->RPQ', Y_KC__aa, t1_xxee, optimize = einsum_type)
-TY[:, s_c:f_c, s_e:f_e] += einsum('Ria,PiQa->RPQ', Y_KC__bb, t1_xxee, optimize = einsum_type)
-TY[:, s_c:f_c, s_e:f_e] -= einsum('Ria,PiaQ->RPQ', Y_KC__bb, t1_xxee, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IA ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
-
-Total terms : 2
-SQA automation time :  0.024 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 3 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-0 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(P,i,a,Q) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
-
-Total spin-integrated terms: 2
-Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.003 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 3
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_v:f_v, s_e:f_e]  = einsum('Ria,PiQa->RPQ', Y_KC__aa, t1_vxee, optimize = einsum_type)
-TY[:, s_v:f_v, s_e:f_e] -= einsum('Ria,PiaQ->RPQ', Y_KC__aa, t1_vxee, optimize = einsum_type)
-TY[:, s_v:f_v, s_e:f_e] += einsum('Ria,PiQa->RPQ', Y_KC__bb, t1_vxee, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- IA ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
-
-Total terms : 2
-SQA automation time :  0.023 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 3 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-0 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,a) t1(P,i,Q,a) 
- (   1.00000) Y_KC__bb(R,i,a) t1(P,i,Q,a) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(P,i,a,Q) 
-
-Total spin-integrated terms: 2
-Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.003 seconds
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
---------------------------------------------- WARNING ----------------------------------------------
-
-Terms with a contraction over repeating dummy core indices of 2e- integrals
-will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
-
-0 terms removed:
-----------------------------------------------------------------------------------------------------
-Remaining terms: 3
-
-
---------------------------------------- genEinsum equations ----------------------------------------
-
-TY[:, s_v:f_v, s_e:f_e]  = einsum('Ria,PiQa->RPQ', Y_KC__aa, t1_vxee, optimize = einsum_type)
-TY[:, s_v:f_v, s_e:f_e] += einsum('Ria,PiQa->RPQ', Y_KC__bb, t1_vxee, optimize = einsum_type)
-TY[:, s_v:f_v, s_e:f_e] -= einsum('Ria,PiaQ->RPQ', Y_KC__bb, t1_vxee, optimize = einsum_type)
-----------------------------------------------------------------------------------------------------
-
------------------------------------------------- XA ------------------------------------------------
-
-## Calculating the excitation operator [q^(0), T - T^\dag] ...
-## Calculating the commutator...
-
-## Calculating h [q, T - T^\dag] ...
-
------------------------------------------- SQA Automation ------------------------------------------
-
-Computing expectation value with respect to virtual ...
-Done!
-----------------------------------------------------------------------------------------------------
-Normal ordering with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Computing expectation value with respect to core ...
-Done!
-----------------------------------------------------------------------------------------------------
-Contract delta function for non-dummy indices ...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
------------------------------------------- Final results -------------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,P) 
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,x,P,y) cre(x) des(y) 
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,x,P,y) cre(x) des(y) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(i,x,Q,a) cre(x) des(P) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(i,x,Q,a) cre(x) des(P) 
-
-Total terms : 5
-SQA automation time :  0.038 seconds
-
------------------------- Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
-
-----------------------------------------------------------------------------------------------------
-Convert Cre/Des objects to RDM objects...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-Converting 1e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting 2e- integrals to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting T amplitudes to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-Converting RDMs to spin-adapted formulation...
-
-Converting 1-RDMs to spin-adapted formulation...
-Converting 2-RDMs to spin-adapted formulation...
-Converting 3-RDMs to spin-adapted formulation...
-Converting 4-RDMs to spin-adapted formulation...
-Done!
-----------------------------------------------------------------------------------------------------
-
-Combining 7 spin-adapted terms...
-
-Reorder 2e- integrals in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reorder RDM tensor indices in Chemists' notation...
-Done!
-----------------------------------------------------------------------------------------------------
-Reordering indices according to core < active < virtual...
-Done!
-----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
-Done!
-----------------------------------------------------------------------------------------------------
-
-1 spin-adapted terms combined.
-----------------------------------------------------------------------------------------------------
-
--------------------------------------- Spin-adapted equations --------------------------------------
-
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,P) 
- (   1.00000) Y_KC__aa(R,i,Q) t1(i,x,P,y) rdm(y,x) 
- (  -0.50000) Y_KC__aa(R,i,Q) t1(i,x,y,P) rdm(y,x) 
- (  -0.50000) Y_KC__aa(R,i,a) t1(i,x,Q,a) rdm(P,x) 
- (   0.50000) Y_KC__aa(R,i,a) t1(i,x,a,Q) rdm(P,x) 
- (   0.50000) Y_KC__bb(R,i,a) t1(i,x,a,Q) rdm(P,x) 
-
-Total spin-integrated terms: 5
 Total spin-adapted terms: 6
 Spin-adaptation automation time :  0.013 seconds
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -2222,15 +811,15 @@ Remaining terms: 6
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_a:f_a, s_e:f_e]  = einsum('RiQ,iP->RPQ', Y_KC__aa, t1_xa, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += einsum('RiQ,ixPy,yx->RPQ', Y_KC__aa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RiQ,ixyP,yx->RPQ', Y_KC__aa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('Ria,ixQa,Px->RPQ', Y_KC__aa, t1_xaee, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('Ria,ixaQ,Px->RPQ', Y_KC__aa, t1_xaee, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('Ria,ixaQ,Px->RPQ', Y_KC__bb, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e]  = 1/2 * einsum('RixQa,iyPa,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixQa,iyaP,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCD__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixQa,iyPa,xy->RPQ', Y_KWCD__abab, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixQa,iyaP,xy->RPQ', Y_KWCD__baab, t1_xaee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
------------------------------------------------- XA ------------------------------------------------
+--------------------------------------------- EE (bb) ----------------------------------------------
 
 ## Calculating the excitation operator [q^(0), T - T^\dag] ...
 ## Calculating the commutator...
@@ -2254,20 +843,17 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,P) 
- (  -1.00000) Y_KC__aa(R,i,a) t1(i,x,Q,a) cre(x) des(P) 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,x,P,y) cre(x) des(y) 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,x,P,y) cre(x) des(y) 
- (  -1.00000) Y_KC__bb(R,i,a) t1(i,x,Q,a) cre(x) des(P) 
+ (  -1.00000) Y_KWCD__abab(R,i,x,a,Q) t1(i,y,P,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCD__baab(R,i,x,a,Q) t1(i,y,P,a) cre(y) des(x) 
 
-Total terms : 5
-SQA automation time :  0.038 seconds
+Total terms : 2
+SQA automation time :  0.044 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -2275,9 +861,13 @@ SQA automation time :  0.038 seconds
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
+ >>> 2 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
 ----------------------------------------------------------------------------------------------------
 Converting 1e- integrals to spin-adapted formulation...
 Done!
@@ -2297,7 +887,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 7 spin-adapted terms...
+Combining 2 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -2308,27 +898,373 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-1 spin-adapted terms combined.
+0 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,P) 
- (   0.50000) Y_KC__aa(R,i,a) t1(i,x,a,Q) rdm(P,x) 
- (   1.00000) Y_KC__bb(R,i,Q) t1(i,x,P,y) rdm(y,x) 
- (  -0.50000) Y_KC__bb(R,i,Q) t1(i,x,y,P) rdm(y,x) 
- (  -0.50000) Y_KC__bb(R,i,a) t1(i,x,Q,a) rdm(P,x) 
- (   0.50000) Y_KC__bb(R,i,a) t1(i,x,a,Q) rdm(P,x) 
+ (   0.50000) Y_KWCD__abab(R,i,x,a,Q) t1(i,y,a,P) rdm(x,y) 
+ (  -0.50000) Y_KWCD__baab(R,i,x,a,Q) t1(i,y,P,a) rdm(x,y) 
 
-Total spin-integrated terms: 5
-Total spin-adapted terms: 6
-Spin-adaptation automation time :  0.012 seconds
+Total spin-integrated terms: 2
+Total spin-adapted terms: 2
+Spin-adaptation automation time :  0.004 seconds
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 2
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_e:f_e, s_e:f_e]  = 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCD__abab, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCD__baab, t1_xaee, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CV (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
+ (  -1.00000) Y_KWCD__abab(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
+
+Total terms : 2
+SQA automation time :  0.058 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 2 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 3 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,a,b) rdm(x,y) 
+ (   0.50000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,b,a) rdm(x,y) 
+ (  -0.50000) Y_KWCD__abab(R,P,x,a,b) t1(Q,y,a,b) rdm(x,y) 
+
+Total spin-integrated terms: 2
+Total spin-adapted terms: 3
+Spin-adaptation automation time :  0.007 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 3
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_v:f_v] =- 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__aaaa, t1_vaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__aaaa, t1_vaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__abab, t1_vaee, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CV (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWCD__baab(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
+
+Total terms : 1
+SQA automation time :  0.043 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 1 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 1 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) Y_KWCD__baab(R,P,x,a,b) t1(Q,y,b,a) rdm(x,y) 
+
+Total spin-integrated terms: 1
+Total spin-adapted terms: 1
+Spin-adaptation automation time :  0.002 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 1
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_v:f_v]  = 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__baab, t1_vaee, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CA (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
+ (   1.00000) Y_KWCD__aaaa(R,i,x,a,b) t1(P,i,a,b) cre(Q) des(x) 
+ (  -1.00000) Y_KWCD__abab(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
+ (   1.00000) Y_KWCD__baab(R,i,x,a,b) t1(P,i,a,b) cre(Q) des(x) 
+
+Total terms : 4
+SQA automation time :  0.074 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 4 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 6 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,a,b) rdm(x,y) 
+ (   0.50000) Y_KWCD__aaaa(R,P,x,a,b) t1(Q,y,b,a) rdm(x,y) 
+ (   0.50000) Y_KWCD__aaaa(R,i,x,a,b) t1(P,i,a,b) rdm(Q,x) 
+ (  -0.50000) Y_KWCD__aaaa(R,i,x,a,b) t1(P,i,b,a) rdm(Q,x) 
+ (  -0.50000) Y_KWCD__abab(R,P,x,a,b) t1(Q,y,a,b) rdm(x,y) 
+ (   0.50000) Y_KWCD__baab(R,i,x,a,b) t1(P,i,a,b) rdm(Q,x) 
+
+Total spin-integrated terms: 4
+Total spin-adapted terms: 6
+Spin-adaptation automation time :  0.013 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -2344,11 +1280,1031 @@ Remaining terms: 6
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_a:f_a, s_e:f_e]  = einsum('RiQ,iP->RPQ', Y_KC__bb, t1_xa, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('Ria,ixaQ,Px->RPQ', Y_KC__aa, t1_xaee, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += einsum('RiQ,ixPy,yx->RPQ', Y_KC__bb, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RiQ,ixyP,yx->RPQ', Y_KC__bb, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('Ria,ixQa,Px->RPQ', Y_KC__bb, t1_xaee, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('Ria,ixaQ,Px->RPQ', Y_KC__bb, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] =- 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__aaaa, t1_aaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__aaaa, t1_aaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixab,Piab,Qx->RPQ', Y_KWCD__aaaa, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixab,Piba,Qx->RPQ', Y_KWCD__aaaa, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPxab,Qyab,xy->RPQ', Y_KWCD__abab, t1_aaee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixab,Piab,Qx->RPQ', Y_KWCD__baab, t1_xxee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 40.68 seconds.
+
+--------------------------------------------- CA (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWCD__abab(R,i,x,a,b) t1(P,i,a,b) cre(Q) des(x) 
+ (  -1.00000) Y_KWCD__baab(R,P,x,a,b) t1(Q,y,a,b) cre(y) des(x) 
+
+Total terms : 2
+SQA automation time :  0.064 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 2 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 2 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) Y_KWCD__abab(R,i,x,a,b) t1(P,i,b,a) rdm(Q,x) 
+ (   0.50000) Y_KWCD__baab(R,P,x,a,b) t1(Q,y,b,a) rdm(x,y) 
+
+Total spin-integrated terms: 2
+Total spin-adapted terms: 2
+Spin-adaptation automation time :  0.005 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 2
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_a:f_a] =- 1/2 * einsum('Rixab,Piba,Qx->RPQ', Y_KWCD__abab, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPxab,Qyba,xy->RPQ', Y_KWCD__baab, t1_aaee, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VA (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWCD__aaaa(R,i,x,a,b) t1(P,i,a,b) cre(Q) des(x) 
+ (   1.00000) Y_KWCD__baab(R,i,x,a,b) t1(P,i,a,b) cre(Q) des(x) 
+
+Total terms : 2
+SQA automation time :  0.058 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 2 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 3 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) Y_KWCD__aaaa(R,i,x,a,b) t1(P,i,a,b) rdm(Q,x) 
+ (  -0.50000) Y_KWCD__aaaa(R,i,x,a,b) t1(P,i,b,a) rdm(Q,x) 
+ (   0.50000) Y_KWCD__baab(R,i,x,a,b) t1(P,i,a,b) rdm(Q,x) 
+
+Total spin-integrated terms: 2
+Total spin-adapted terms: 3
+Spin-adaptation automation time :  0.006 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 3
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_v:f_v, s_a:f_a]  = 1/2 * einsum('Rixab,Piab,Qx->RPQ', Y_KWCD__aaaa, t1_vxee, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixab,Piba,Qx->RPQ', Y_KWCD__aaaa, t1_vxee, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixab,Piab,Qx->RPQ', Y_KWCD__baab, t1_vxee, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VA (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWCD__abab(R,i,x,a,b) t1(P,i,a,b) cre(Q) des(x) 
+
+Total terms : 1
+SQA automation time :  0.046 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 1 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 1 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.50000) Y_KWCD__abab(R,i,x,a,b) t1(P,i,b,a) rdm(Q,x) 
+
+Total spin-integrated terms: 1
+Total spin-adapted terms: 1
+Spin-adaptation automation time :  0.002 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 1
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_v:f_v, s_a:f_a] =- 1/2 * einsum('Rixab,Piba,Qx->RPQ', Y_KWCD__abab, t1_vxee, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CE (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.047 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CE (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.046 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VE (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.053 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VE (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.040 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- AE (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWCD__aaaa(R,i,x,Q,a) t1(i,y,a,P) cre(y) des(x) 
+ (   1.00000) Y_KWCD__aaaa(R,i,x,a,Q) t1(i,y,a,P) cre(y) des(x) 
+ (  -1.00000) Y_KWCD__abab(R,i,x,Q,a) t1(i,y,a,P) cre(y) des(x) 
+ (  -1.00000) Y_KWCD__baab(R,i,x,Q,a) t1(i,y,a,P) cre(y) des(x) 
+
+Total terms : 4
+SQA automation time :  0.114 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 4 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 6 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) Y_KWCD__aaaa(R,i,x,Q,a) t1(i,y,P,a) rdm(x,y) 
+ (  -0.50000) Y_KWCD__aaaa(R,i,x,Q,a) t1(i,y,a,P) rdm(x,y) 
+ (  -0.50000) Y_KWCD__aaaa(R,i,x,a,Q) t1(i,y,P,a) rdm(x,y) 
+ (   0.50000) Y_KWCD__aaaa(R,i,x,a,Q) t1(i,y,a,P) rdm(x,y) 
+ (   0.50000) Y_KWCD__abab(R,i,x,Q,a) t1(i,y,P,a) rdm(x,y) 
+ (  -0.50000) Y_KWCD__baab(R,i,x,Q,a) t1(i,y,a,P) rdm(x,y) 
+
+Total spin-integrated terms: 4
+Total spin-adapted terms: 6
+Spin-adaptation automation time :  0.014 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 6
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_a:f_a, s_e:f_e]  = 1/2 * einsum('RixQa,iyPa,xy->RPQ', Y_KWCD__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixQa,iyaP,xy->RPQ', Y_KWCD__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCD__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCD__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixQa,iyPa,xy->RPQ', Y_KWCD__abab, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixQa,iyaP,xy->RPQ', Y_KWCD__baab, t1_xaea, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- AE (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWCD__abab(R,i,x,a,Q) t1(i,y,a,P) cre(y) des(x) 
+ (   1.00000) Y_KWCD__baab(R,i,x,a,Q) t1(i,y,a,P) cre(y) des(x) 
+
+Total terms : 2
+SQA automation time :  0.066 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 2 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 2 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) Y_KWCD__abab(R,i,x,a,Q) t1(i,y,a,P) rdm(x,y) 
+ (  -0.50000) Y_KWCD__baab(R,i,x,a,Q) t1(i,y,P,a) rdm(x,y) 
+
+Total spin-integrated terms: 2
+Total spin-adapted terms: 2
+Spin-adaptation automation time :  0.004 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 2
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_a:f_a, s_e:f_e]  = 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCD__abab, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCD__baab, t1_xaae, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 79.67 seconds.

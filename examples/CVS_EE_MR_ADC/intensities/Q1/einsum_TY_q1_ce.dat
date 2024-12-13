@@ -1,4 +1,4 @@
-einsum equations from TY_q1_ce__tester.dat
+einsum equations from TY_q1_ce.dat
 
 TY[:, s_c:f_c, s_c:f_c] =- einsum('RPa,Qa->RPQ', Y_KC__aa, t1_xe, optimize = einsum_type)
 TY[:, s_c:f_c, s_c:f_c] -= einsum('RPa,Qxay,xy->RPQ', Y_KC__aa, t1_xaea, rdm_ca, optimize = einsum_type)

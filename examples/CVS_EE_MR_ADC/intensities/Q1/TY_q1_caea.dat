@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ----------------------------------------------------------------------------------------------------
 
 
--------------------------------- Spin-Adapted CVS-EE: TY Q1 Q_CCAA ---------------------------------
+-------------------------------- Spin-Adapted CVS-EE: TY Q1 Q_CAEA ---------------------------------
 
 
 ## Generating operators ...
@@ -48,21 +48,17 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,x,y) 
- (   1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,x,y) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,x,y) 
- (   1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,x,z) cre(y) des(z) 
- (  -1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,y,z) cre(x) des(z) 
- (  -1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,x,z) cre(y) des(z) 
- (   1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,y,z) cre(x) des(z) 
- (   1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,x,z) cre(y) des(z) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,y,z) cre(x) des(z) 
- (   0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,w) cre(x) cre(y) des(z) des(w) 
- (  -0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,w) cre(x) cre(y) des(z) des(w) 
- (   1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,z,w) cre(x) cre(y) des(z) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,y) cre(z) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,y) cre(z) des(x) 
+ (   1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(x) des(w) 
 
-Total terms : 12
-SQA automation time :  0.174 seconds
+Total terms : 8
+SQA automation time :  0.072 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -73,7 +69,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 12 spin-integrated terms must be processed...
+ >>> 8 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -96,7 +92,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 25 spin-adapted terms...
+Combining 17 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -111,36 +107,26 @@ Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-4 spin-adapted terms combined.
+6 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,x,y) 
- (   1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,y,x) 
- (   1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,x,y) 
- (  -1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,y,x) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,x,y) 
- (   0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,x,z) rdm(y,z) 
- (  -0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,y,z) rdm(x,z) 
- (   0.16667) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,w) rdm(x,y,w,z) 
- (  -0.16667) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,w) rdm(x,y,z,w) 
- (  -0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,x) rdm(y,z) 
- (   0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,y) rdm(x,z) 
- (  -0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,x,z) rdm(y,z) 
- (   0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,y,z) rdm(x,z) 
- (  -0.16667) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,w) rdm(x,y,w,z) 
- (   0.16667) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,x) rdm(y,z) 
- (  -0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,y) rdm(x,z) 
- (   0.50000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,x,z) rdm(y,z) 
- (  -0.16667) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,z,w) rdm(x,y,w,z) 
- (  -0.33333) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,z,y) rdm(x,z) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,w) rdm(x,w,y,z) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,y) rdm(x,z) 
+ (   0.16667) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,z,y) 
+ (   0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,y,a) rdm(x,z) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,w) rdm(x,w,y,z) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,y) rdm(x,z) 
+ (   0.33333) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,y,z) 
+ (   0.16667) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,z,y) 
 
-Total spin-integrated terms: 12
-Total spin-adapted terms: 21
-Spin-adaptation automation time :  0.084 seconds
+Total spin-integrated terms: 8
+Total spin-adapted terms: 11
+Spin-adaptation automation time :  0.073 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -153,32 +139,22 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 21
+Remaining terms: 11
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_c:f_c, s_c:f_c] =- einsum('RPixy,Qixy->RPQ', Y_KLWU__aaaa, t1_xxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += einsum('RPixy,Qiyx->RPQ', Y_KLWU__aaaa, t1_xxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += einsum('RiPxy,Qixy->RPQ', Y_KLWU__aaaa, t1_xxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= einsum('RiPxy,Qiyx->RPQ', Y_KLWU__aaaa, t1_xxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= einsum('RPixy,Qixy->RPQ', Y_KLWU__abab, t1_xxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPixy,Qixz,yz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPixy,Qiyz,xz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPixy,Qizw,xywz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPixy,Qizw,xyzw->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPixy,Qizx,yz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPixy,Qizy,xz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RiPxy,Qixz,yz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RiPxy,Qiyz,xz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RiPxy,Qizw,xywz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RiPxy,Qizw,xyzw->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RiPxy,Qizx,yz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RiPxy,Qizy,xz->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPixy,Qixz,yz->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPixy,Qizw,xywz->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/3 * einsum('RPixy,Qizw,xyzw->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPixy,Qizy,xz->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] =- 1/2 * einsum('RPxay,Qa,xy->RPQ', Y_KWCU__aaaa, t1_xe, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxay,Qzaw,xwyz->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxay,Qzay,xz->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxay,Qzwa,xwyz->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPxay,Qzwa,xwzy->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPxay,Qzya,xz->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxay,Qa,xy->RPQ', Y_KWCU__abab, t1_xe, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxay,Qzaw,xwyz->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxay,Qzay,xz->RPQ', Y_KWCU__abab, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/3 * einsum('RPxay,Qzwa,xwyz->RPQ', Y_KWCU__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxay,Qzwa,xwzy->RPQ', Y_KWCU__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- CC (bb) ----------------------------------------------
@@ -211,13 +187,11 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,x,y) 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,x,z) cre(y) des(z) 
- (   1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,y,z) cre(x) des(z) 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,z,w) cre(x) cre(y) des(z) des(w) 
+ (  -1.00000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,a,y) cre(z) des(w) 
+ (  -1.00000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(w) des(u) 
 
-Total terms : 4
-SQA automation time :  0.111 seconds
+Total terms : 2
+SQA automation time :  0.042 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -228,7 +202,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 4 spin-integrated terms must be processed...
+ >>> 2 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -251,7 +225,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 5 spin-adapted terms...
+Combining 3 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -271,15 +245,13 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,y,x) 
- (   0.50000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,y,z) rdm(x,z) 
- (  -0.33333) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,z,w) rdm(x,y,w,z) 
- (  -0.16667) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,z,x) rdm(y,z) 
+ (  -0.16667) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,w,a) rdm(y,z,u,w) 
+ (  -0.33333) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,w,a) rdm(y,z,w,u) 
+ (   0.50000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,y,a) rdm(z,w) 
 
-Total spin-integrated terms: 4
-Total spin-adapted terms: 5
-Spin-adaptation automation time :  0.017 seconds
+Total spin-integrated terms: 2
+Total spin-adapted terms: 3
+Spin-adaptation automation time :  0.013 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -292,16 +264,14 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 5
+Remaining terms: 3
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_c:f_c, s_c:f_c] =- einsum('RiPxy,Qiyx->RPQ', Y_KLWU__abab, t1_xxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RiPxy,Qiyz,xz->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/3 * einsum('RiPxy,Qizw,xywz->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RiPxy,Qizw,xyzw->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RiPxy,Qizx,yz->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] =- 1/6 * einsum('RPxay,Qzwa,yzuw->RPQ', Y_KWCU__baab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/3 * einsum('RPxay,Qzwa,yzwu->RPQ', Y_KWCU__baab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPxay,Qzya,zw->RPQ', Y_KWCU__baab, t1_xaae, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- VV (aa) ----------------------------------------------
@@ -336,7 +306,7 @@ Done!
 
 
 Total terms : 0
-SQA automation time :  0.107 seconds
+SQA automation time :  0.069 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -445,7 +415,7 @@ Done!
 
 
 Total terms : 0
-SQA automation time :  0.089 seconds
+SQA automation time :  0.036 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -552,20 +522,17 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) Y_KLWU__aaaa(R,i,j,Q,x) t1(i,j,P,x) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,x,Q) t1(i,j,P,x) 
- (   1.00000) Y_KLWU__abab(R,i,j,Q,x) t1(i,j,P,x) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,Q,x) t1(i,j,P,y) cre(x) des(y) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,x,Q) t1(i,j,P,y) cre(x) des(y) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,P,x) cre(y) des(Q) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,P,y) cre(x) des(Q) 
- (  -1.00000) Y_KLWU__abab(R,i,j,Q,x) t1(i,j,P,y) cre(x) des(y) 
- (  -1.00000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,P,y) cre(x) des(Q) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,P,z) cre(x) cre(y) des(Q) des(z) 
- (  -1.00000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,P,z) cre(x) cre(y) des(Q) des(z) 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,Q) t1(i,y,a,P) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,a,y) cre(P) des(x) 
+ (  -1.00000) Y_KWCU__baab(R,i,x,a,y) t1(i,Q,a,y) cre(P) des(z) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,a,z) cre(P) cre(y) des(x) des(z) 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,P) cre(y) cre(z) des(Q) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,a,z) cre(P) cre(y) des(x) des(z) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,P) cre(y) cre(z) des(Q) des(x) 
+ (   1.00000) Y_KWCU__baab(R,i,x,a,y) t1(i,Q,a,z) cre(P) cre(y) des(z) des(w) 
 
-Total terms : 11
-SQA automation time :  0.558 seconds
+Total terms : 8
+SQA automation time :  0.126 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -576,7 +543,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 11 spin-integrated terms must be processed...
+ >>> 8 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -599,7 +566,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 21 spin-adapted terms...
+Combining 23 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -619,31 +586,33 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (   1.00000) Y_KLWU__aaaa(R,i,j,Q,x) t1(i,j,P,x) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,Q,x) t1(j,i,P,x) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,x,Q) t1(i,j,P,x) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,x,Q) t1(j,i,P,x) 
- (   1.00000) Y_KLWU__abab(R,i,j,Q,x) t1(i,j,P,x) 
- (  -0.50000) Y_KLWU__aaaa(R,i,j,Q,x) t1(i,j,P,y) rdm(x,y) 
- (   0.50000) Y_KLWU__aaaa(R,i,j,Q,x) t1(j,i,P,y) rdm(x,y) 
- (   0.50000) Y_KLWU__aaaa(R,i,j,x,Q) t1(i,j,P,y) rdm(x,y) 
- (  -0.50000) Y_KLWU__aaaa(R,i,j,x,Q) t1(j,i,P,y) rdm(x,y) 
- (   0.50000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,P,x) rdm(Q,y) 
- (  -0.50000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,P,y) rdm(Q,x) 
- (   0.16667) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,P,z) rdm(Q,z,x,y) 
- (  -0.16667) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,P,z) rdm(Q,z,y,x) 
- (  -0.50000) Y_KLWU__aaaa(R,i,j,x,y) t1(j,i,P,x) rdm(Q,y) 
- (   0.50000) Y_KLWU__aaaa(R,i,j,x,y) t1(j,i,P,y) rdm(Q,x) 
- (  -0.16667) Y_KLWU__aaaa(R,i,j,x,y) t1(j,i,P,z) rdm(Q,z,x,y) 
- (   0.16667) Y_KLWU__aaaa(R,i,j,x,y) t1(j,i,P,z) rdm(Q,z,y,x) 
- (  -0.50000) Y_KLWU__abab(R,i,j,Q,x) t1(i,j,P,y) rdm(x,y) 
- (  -0.50000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,P,y) rdm(Q,x) 
- (   0.33333) Y_KLWU__abab(R,i,j,x,y) t1(i,j,P,z) rdm(Q,z,x,y) 
- (   0.16667) Y_KLWU__abab(R,i,j,x,y) t1(i,j,P,z) rdm(Q,z,y,x) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,Q) t1(i,y,P,a) rdm(x,y) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,Q) t1(i,y,a,P) rdm(x,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,a,y) rdm(P,x) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,a,z) rdm(P,y,x,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,a,z) rdm(P,y,z,x) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,y,a) rdm(P,x) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,z,a) rdm(P,y,x,z) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,z,a) rdm(P,y,z,x) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,P,a) rdm(Q,x,y,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,P,a) rdm(Q,x,z,y) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,P) rdm(Q,x,y,z) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,P) rdm(Q,x,z,y) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,a,z) rdm(P,y,x,z) 
+ (  -0.33333) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,a,z) rdm(P,y,z,x) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,z,a) rdm(P,y,x,z) 
+ (   0.33333) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,z,a) rdm(P,y,z,x) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,z,P,a) rdm(Q,x,y,z) 
+ (  -0.33333) Y_KWCU__abab(R,i,x,a,y) t1(i,z,P,a) rdm(Q,x,z,y) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,P) rdm(Q,x,y,z) 
+ (   0.33333) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,P) rdm(Q,x,z,y) 
+ (   0.50000) Y_KWCU__baab(R,i,x,a,y) t1(i,Q,y,a) rdm(P,z) 
+ (  -0.33333) Y_KWCU__baab(R,i,x,a,y) t1(i,Q,z,a) rdm(P,y,w,z) 
+ (  -0.16667) Y_KWCU__baab(R,i,x,a,y) t1(i,Q,z,a) rdm(P,y,z,w) 
 
-Total spin-integrated terms: 11
-Total spin-adapted terms: 21
-Spin-adaptation automation time :  0.064 seconds
+Total spin-integrated terms: 8
+Total spin-adapted terms: 23
+Spin-adaptation automation time :  0.110 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -656,32 +625,34 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 21
+Remaining terms: 23
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_a:f_a, s_a:f_a]  = einsum('RijQx,ijPx->RPQ', Y_KLWU__aaaa, t1_xxaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= einsum('RijQx,jiPx->RPQ', Y_KLWU__aaaa, t1_xxaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= einsum('RijxQ,ijPx->RPQ', Y_KLWU__aaaa, t1_xxaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += einsum('RijxQ,jiPx->RPQ', Y_KLWU__aaaa, t1_xxaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += einsum('RijQx,ijPx->RPQ', Y_KLWU__abab, t1_xxaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RijQx,ijPy,xy->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RijQx,jiPy,xy->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RijxQ,ijPy,xy->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RijxQ,jiPy,xy->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rijxy,ijPx,Qy->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Rijxy,ijPy,Qx->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rijxy,ijPz,Qzxy->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rijxy,ijPz,Qzyx->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Rijxy,jiPx,Qy->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rijxy,jiPy,Qx->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rijxy,jiPz,Qzxy->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rijxy,jiPz,Qzyx->RPQ', Y_KLWU__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RijQx,ijPy,xy->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Rijxy,ijPy,Qx->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rijxy,ijPz,Qzxy->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rijxy,ijPz,Qzyx->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] =- 1/2 * einsum('RixaQ,iyPa,xy->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Rixay,iQay,Px->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,iQaz,Pyxz->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,iQaz,Pyzx->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rixay,iQya,Px->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,iQza,Pyxz->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,iQza,Pyzx->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,izPa,Qxyz->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,izPa,Qxzy->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,izaP,Qxyz->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,izaP,Qxzy->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,iQaz,Pyxz->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixay,iQaz,Pyzx->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,iQza,Pyxz->RPQ', Y_KWCU__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixay,iQza,Pyzx->RPQ', Y_KWCU__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,izPa,Qxyz->RPQ', Y_KWCU__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixay,izPa,Qxzy->RPQ', Y_KWCU__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,izaP,Qxyz->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixay,izaP,Qxzy->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rixay,iQya,Pz->RPQ', Y_KWCU__baab, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixay,iQza,Pywz->RPQ', Y_KWCU__baab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,iQza,Pyzw->RPQ', Y_KWCU__baab, t1_xaae, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- AA (bb) ----------------------------------------------
@@ -714,13 +685,17 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KLWU__abab(R,i,j,x,Q) t1(i,j,P,x) 
- (   1.00000) Y_KLWU__abab(R,i,j,x,Q) t1(i,j,P,y) cre(x) des(y) 
- (   1.00000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,P,x) cre(y) des(Q) 
- (  -1.00000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,P,z) cre(x) cre(y) des(Q) des(z) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,Q) t1(i,y,a,P) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,a,y) cre(P) des(x) 
+ (   1.00000) Y_KWCU__baab(R,i,x,a,Q) t1(i,y,a,P) cre(y) des(z) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,a,z) cre(P) cre(y) des(x) des(z) 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,P) cre(y) cre(z) des(Q) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,a,z) cre(P) cre(y) des(x) des(z) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,P) cre(y) cre(z) des(Q) des(x) 
+ (   1.00000) Y_KWCU__baab(R,i,x,a,y) t1(i,z,a,P) cre(y) cre(z) des(Q) des(w) 
 
-Total terms : 4
-SQA automation time :  0.329 seconds
+Total terms : 8
+SQA automation time :  0.133 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -731,7 +706,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 4 spin-integrated terms must be processed...
+ >>> 8 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -754,7 +729,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 5 spin-adapted terms...
+Combining 13 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -774,15 +749,23 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (   1.00000) Y_KLWU__abab(R,i,j,x,Q) t1(j,i,P,x) 
- (  -0.50000) Y_KLWU__abab(R,i,j,x,Q) t1(j,i,P,y) rdm(x,y) 
- (  -0.50000) Y_KLWU__abab(R,i,j,x,y) t1(j,i,P,x) rdm(Q,y) 
- (   0.16667) Y_KLWU__abab(R,i,j,x,y) t1(j,i,P,z) rdm(Q,z,x,y) 
- (   0.33333) Y_KLWU__abab(R,i,j,x,y) t1(j,i,P,z) rdm(Q,z,y,x) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,a,z) rdm(P,y,x,z) 
+ (  -0.33333) Y_KWCU__aaaa(R,i,x,a,y) t1(i,Q,a,z) rdm(P,y,z,x) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,P) rdm(Q,x,y,z) 
+ (   0.33333) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,P) rdm(Q,x,z,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,Q) t1(i,y,a,P) rdm(x,y) 
+ (  -0.50000) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,a,y) rdm(P,x) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,a,z) rdm(P,y,x,z) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,Q,a,z) rdm(P,y,z,x) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,P) rdm(Q,x,y,z) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,P) rdm(Q,x,z,y) 
+ (  -0.50000) Y_KWCU__baab(R,i,x,a,Q) t1(i,y,P,a) rdm(y,z) 
+ (   0.33333) Y_KWCU__baab(R,i,x,a,y) t1(i,z,P,a) rdm(Q,w,y,z) 
+ (   0.16667) Y_KWCU__baab(R,i,x,a,y) t1(i,z,P,a) rdm(Q,w,z,y) 
 
-Total spin-integrated terms: 4
-Total spin-adapted terms: 5
-Spin-adaptation automation time :  0.017 seconds
+Total spin-integrated terms: 8
+Total spin-adapted terms: 13
+Spin-adaptation automation time :  0.061 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -795,16 +778,24 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 5
+Remaining terms: 13
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_a:f_a, s_a:f_a]  = einsum('RijxQ,jiPx->RPQ', Y_KLWU__abab, t1_xxaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RijxQ,jiPy,xy->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Rijxy,jiPx,Qy->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rijxy,jiPz,Qzxy->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rijxy,jiPz,Qzyx->RPQ', Y_KLWU__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] =- 1/6 * einsum('Rixay,iQaz,Pyxz->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixay,iQaz,Pyzx->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,izaP,Qxyz->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixay,izaP,Qxzy->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixaQ,iyaP,xy->RPQ', Y_KWCU__abab, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Rixay,iQay,Px->RPQ', Y_KWCU__abab, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,iQaz,Pyxz->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,iQaz,Pyzx->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixay,izaP,Qxyz->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,izaP,Qxzy->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RixaQ,iyPa,yz->RPQ', Y_KWCU__baab, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixay,izPa,Qwyz->RPQ', Y_KWCU__baab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixay,izPa,Qwzy->RPQ', Y_KWCU__baab, t1_xaae, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- EE (aa) ----------------------------------------------
@@ -837,9 +828,19 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,P) cre(y) des(x) 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,y) cre(z) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,Q,y) t1(i,P) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,y) cre(z) des(x) 
+ (   1.00000) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,P,y) cre(z) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(w) des(u) 
 
-Total terms : 0
-SQA automation time :  0.022 seconds
+Total terms : 10
+SQA automation time :  0.159 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -850,7 +851,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 0 spin-integrated terms must be processed...
+ >>> 10 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -873,7 +874,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 0 spin-adapted terms...
+Combining 20 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -888,15 +889,29 @@ Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-0 spin-adapted terms combined.
+6 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,P) rdm(x,y) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,w) rdm(x,w,y,z) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,y) rdm(x,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,y,z) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,y,P) rdm(x,z) 
+ (   0.50000) Y_KWCU__abab(R,i,x,Q,y) t1(i,P) rdm(x,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,w) rdm(x,w,y,z) 
+ (   0.50000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,y) rdm(x,z) 
+ (  -0.33333) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,z,y) 
+ (   0.16667) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,w,P) rdm(y,z,u,w) 
+ (   0.33333) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,w,P) rdm(y,z,w,u) 
+ (  -0.50000) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,y,P) rdm(z,w) 
 
-Total spin-integrated terms: 0
-Total spin-adapted terms: 0
-Spin-adaptation automation time :  0.000 seconds
+Total spin-integrated terms: 10
+Total spin-adapted terms: 14
+Spin-adaptation automation time :  0.085 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -909,11 +924,25 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 0
+Remaining terms: 14
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
+TY[:, s_e:f_e, s_e:f_e]  = 1/2 * einsum('RixQy,iP,xy->RPQ', Y_KWCU__aaaa, t1_xe, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixQy,izPw,xwyz->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixQy,izPy,xz->RPQ', Y_KWCU__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/6 * einsum('RixQy,izwP,xwyz->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/6 * einsum('RixQy,izwP,xwzy->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixQy,izyP,xz->RPQ', Y_KWCU__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixQy,iP,xy->RPQ', Y_KWCU__abab, t1_xe, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixQy,izPw,xwyz->RPQ', Y_KWCU__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/2 * einsum('RixQy,izPy,xz->RPQ', Y_KWCU__abab, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/3 * einsum('RixQy,izwP,xwyz->RPQ', Y_KWCU__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/6 * einsum('RixQy,izwP,xwzy->RPQ', Y_KWCU__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/6 * einsum('RixQy,izwP,yzuw->RPQ', Y_KWCU__baab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] += 1/3 * einsum('RixQy,izwP,yzwu->RPQ', Y_KWCU__baab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_e:f_e, s_e:f_e] -= 1/2 * einsum('RixQy,izyP,zw->RPQ', Y_KWCU__baab, t1_xaae, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- EE (bb) ----------------------------------------------
@@ -948,7 +977,7 @@ Done!
 
 
 Total terms : 0
-SQA automation time :  0.012 seconds
+SQA automation time :  0.018 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1055,21 +1084,17 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,x,y) 
- (   1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,x,y) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,x,y) 
- (   1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,x,z) cre(y) des(z) 
- (  -1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,y,z) cre(x) des(z) 
- (  -1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,x,z) cre(y) des(z) 
- (   1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,y,z) cre(x) des(z) 
- (   1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,x,z) cre(y) des(z) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,y,z) cre(x) des(z) 
- (   0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,w) cre(x) cre(y) des(z) des(w) 
- (  -0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,w) cre(x) cre(y) des(z) des(w) 
- (   1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,z,w) cre(x) cre(y) des(z) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,y) cre(z) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,y) cre(z) des(x) 
+ (   1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(x) des(w) 
 
-Total terms : 12
-SQA automation time :  0.320 seconds
+Total terms : 8
+SQA automation time :  0.156 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1080,7 +1105,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 12 spin-integrated terms must be processed...
+ >>> 8 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -1103,7 +1128,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 25 spin-adapted terms...
+Combining 17 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -1118,36 +1143,26 @@ Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-4 spin-adapted terms combined.
+6 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,x,y) 
- (   1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,y,x) 
- (   1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,x,y) 
- (  -1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,y,x) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,x,y) 
- (   0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,x,z) rdm(y,z) 
- (  -0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,y,z) rdm(x,z) 
- (   0.16667) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,w) rdm(x,y,w,z) 
- (  -0.16667) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,w) rdm(x,y,z,w) 
- (  -0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,x) rdm(y,z) 
- (   0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(Q,i,z,y) rdm(x,z) 
- (  -0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,x,z) rdm(y,z) 
- (   0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,y,z) rdm(x,z) 
- (  -0.16667) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,w) rdm(x,y,w,z) 
- (   0.16667) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,x) rdm(y,z) 
- (  -0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(Q,i,z,y) rdm(x,z) 
- (   0.50000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,x,z) rdm(y,z) 
- (  -0.16667) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,z,w) rdm(x,y,w,z) 
- (  -0.33333) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__abab(R,P,i,x,y) t1(Q,i,z,y) rdm(x,z) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,w) rdm(x,w,y,z) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,a,y) rdm(x,z) 
+ (   0.16667) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,z,y) 
+ (   0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,y,a) rdm(x,z) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,w) rdm(x,w,y,z) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,a,y) rdm(x,z) 
+ (   0.33333) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,y,z) 
+ (   0.16667) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,z,y) 
 
-Total spin-integrated terms: 12
-Total spin-adapted terms: 21
-Spin-adaptation automation time :  0.086 seconds
+Total spin-integrated terms: 8
+Total spin-adapted terms: 11
+Spin-adaptation automation time :  0.074 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -1160,32 +1175,22 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 21
+Remaining terms: 11
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_c:f_c, s_v:f_v] =- einsum('RPixy,Qixy->RPQ', Y_KLWU__aaaa, t1_vxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += einsum('RPixy,Qiyx->RPQ', Y_KLWU__aaaa, t1_vxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += einsum('RiPxy,Qixy->RPQ', Y_KLWU__aaaa, t1_vxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= einsum('RiPxy,Qiyx->RPQ', Y_KLWU__aaaa, t1_vxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= einsum('RPixy,Qixy->RPQ', Y_KLWU__abab, t1_vxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPixy,Qixz,yz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPixy,Qiyz,xz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPixy,Qizw,xywz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPixy,Qizw,xyzw->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPixy,Qizx,yz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPixy,Qizy,xz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RiPxy,Qixz,yz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RiPxy,Qiyz,xz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RiPxy,Qizw,xywz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RiPxy,Qizw,xyzw->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RiPxy,Qizx,yz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RiPxy,Qizy,xz->RPQ', Y_KLWU__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPixy,Qixz,yz->RPQ', Y_KLWU__abab, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPixy,Qizw,xywz->RPQ', Y_KLWU__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/3 * einsum('RPixy,Qizw,xyzw->RPQ', Y_KLWU__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPixy,Qizy,xz->RPQ', Y_KLWU__abab, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] =- 1/2 * einsum('RPxay,Qa,xy->RPQ', Y_KWCU__aaaa, t1_ve, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxay,Qzaw,xwyz->RPQ', Y_KWCU__aaaa, t1_vaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxay,Qzay,xz->RPQ', Y_KWCU__aaaa, t1_vaea, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxay,Qzwa,xwyz->RPQ', Y_KWCU__aaaa, t1_vaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPxay,Qzwa,xwzy->RPQ', Y_KWCU__aaaa, t1_vaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPxay,Qzya,xz->RPQ', Y_KWCU__aaaa, t1_vaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxay,Qa,xy->RPQ', Y_KWCU__abab, t1_ve, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxay,Qzaw,xwyz->RPQ', Y_KWCU__abab, t1_vaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxay,Qzay,xz->RPQ', Y_KWCU__abab, t1_vaea, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/3 * einsum('RPxay,Qzwa,xwyz->RPQ', Y_KWCU__abab, t1_vaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxay,Qzwa,xwzy->RPQ', Y_KWCU__abab, t1_vaae, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- CV (bb) ----------------------------------------------
@@ -1218,13 +1223,11 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,x,y) 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,x,z) cre(y) des(z) 
- (   1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,y,z) cre(x) des(z) 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,z,w) cre(x) cre(y) des(z) des(w) 
+ (  -1.00000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,a,y) cre(z) des(w) 
+ (  -1.00000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,a,w) cre(y) cre(z) des(w) des(u) 
 
-Total terms : 4
-SQA automation time :  0.216 seconds
+Total terms : 2
+SQA automation time :  0.090 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1235,7 +1238,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 4 spin-integrated terms must be processed...
+ >>> 2 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -1258,7 +1261,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 5 spin-adapted terms...
+Combining 3 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -1278,15 +1281,13 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,y,x) 
- (   0.50000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,y,z) rdm(x,z) 
- (  -0.33333) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,z,w) rdm(x,y,w,z) 
- (  -0.16667) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__abab(R,i,P,x,y) t1(Q,i,z,x) rdm(y,z) 
+ (  -0.16667) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,w,a) rdm(y,z,u,w) 
+ (  -0.33333) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,w,a) rdm(y,z,w,u) 
+ (   0.50000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,y,a) rdm(z,w) 
 
-Total spin-integrated terms: 4
-Total spin-adapted terms: 5
-Spin-adaptation automation time :  0.017 seconds
+Total spin-integrated terms: 2
+Total spin-adapted terms: 3
+Spin-adaptation automation time :  0.014 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -1299,16 +1300,14 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 5
+Remaining terms: 3
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_c:f_c, s_v:f_v] =- einsum('RiPxy,Qiyx->RPQ', Y_KLWU__abab, t1_vxaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RiPxy,Qiyz,xz->RPQ', Y_KLWU__abab, t1_vxaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/3 * einsum('RiPxy,Qizw,xywz->RPQ', Y_KLWU__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RiPxy,Qizw,xyzw->RPQ', Y_KLWU__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RiPxy,Qizx,yz->RPQ', Y_KLWU__abab, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] =- 1/6 * einsum('RPxay,Qzwa,yzuw->RPQ', Y_KWCU__baab, t1_vaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/3 * einsum('RPxay,Qzwa,yzwu->RPQ', Y_KWCU__baab, t1_vaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPxay,Qzya,zw->RPQ', Y_KWCU__baab, t1_vaae, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- CA (aa) ----------------------------------------------
@@ -1341,21 +1340,24 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,x,y) 
- (  -1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,x,y) 
- (   1.00000) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,x,y) 
- (  -1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,x,z) cre(y) des(z) 
- (   1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,y,z) cre(x) des(z) 
- (   1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,x,z) cre(y) des(z) 
- (  -1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,y,z) cre(x) des(z) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,x,z) cre(y) des(z) 
- (   1.00000) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,y,z) cre(x) des(z) 
- (  -0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,z,w) cre(x) cre(y) des(z) des(w) 
- (   0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,z,w) cre(x) cre(y) des(z) des(w) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,z,w) cre(x) cre(y) des(z) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,y,a) cre(z) des(x) 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,y,a) cre(Q) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,y,a) cre(z) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__baab(R,i,x,a,y) t1(P,i,y,a) cre(Q) des(z) 
+ (  -1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,w,a) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,w,a) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(x) des(z) 
+ (  -1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,w,a) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,w,a) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(x) des(z) 
+ (   1.00000) Y_KWCU__baab(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(z) des(w) 
 
-Total terms : 12
-SQA automation time :  0.863 seconds
+Total terms : 15
+SQA automation time :  0.240 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1366,7 +1368,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 12 spin-integrated terms must be processed...
+ >>> 15 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -1389,7 +1391,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 25 spin-adapted terms...
+Combining 34 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -1404,36 +1406,43 @@ Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-4 spin-adapted terms combined.
+6 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (   1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,x,y) 
- (  -1.00000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,y,x) 
- (  -1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,x,y) 
- (   1.00000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,y,x) 
- (  -1.00000) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,y,x) 
- (  -0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,x,z) rdm(y,z) 
- (   0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,y,z) rdm(x,z) 
- (  -0.16667) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,z,w) rdm(x,y,w,z) 
- (   0.16667) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,z,x) rdm(y,z) 
- (  -0.50000) Y_KLWU__aaaa(R,P,i,x,y) t1(i,Q,z,y) rdm(x,z) 
- (   0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,x,z) rdm(y,z) 
- (  -0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,y,z) rdm(x,z) 
- (   0.16667) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,z,w) rdm(x,y,w,z) 
- (  -0.16667) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,z,w) rdm(x,y,z,w) 
- (  -0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,z,x) rdm(y,z) 
- (   0.50000) Y_KLWU__aaaa(R,i,P,x,y) t1(i,Q,z,y) rdm(x,z) 
- (   0.50000) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,y,z) rdm(x,z) 
- (  -0.33333) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,z,w) rdm(x,y,w,z) 
- (  -0.16667) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__abab(R,P,i,x,y) t1(i,Q,z,x) rdm(y,z) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,a) rdm(x,y) 
+ (   0.16667) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,z,y) 
+ (   0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(Q,z,y,a) rdm(x,z) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(z,Q,w,a) rdm(x,w,y,z) 
+ (  -0.50000) Y_KWCU__aaaa(R,P,x,a,y) t1(z,Q,y,a) rdm(x,z) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,y,a) rdm(Q,x) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,x,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,z,x) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,P,Q,a) rdm(x,y) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,P,y,a) rdm(Q,x) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,x,z) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,z,x) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(Q,a) rdm(x,y) 
+ (   0.33333) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,y,z) 
+ (   0.16667) Y_KWCU__abab(R,P,x,a,y) t1(Q,z,w,a) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(z,Q,w,a) rdm(x,w,y,z) 
+ (  -0.50000) Y_KWCU__abab(R,P,x,a,y) t1(z,Q,y,a) rdm(x,z) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,x,z) 
+ (  -0.33333) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,z,x) 
+ (  -0.50000) Y_KWCU__abab(R,i,x,a,y) t1(i,P,Q,a) rdm(x,y) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,x,z) 
+ (   0.33333) Y_KWCU__abab(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,z,x) 
+ (   0.50000) Y_KWCU__baab(R,i,x,a,y) t1(i,P,y,a) rdm(Q,z) 
+ (  -0.33333) Y_KWCU__baab(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,w,z) 
+ (  -0.16667) Y_KWCU__baab(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,z,w) 
 
-Total spin-integrated terms: 12
-Total spin-adapted terms: 21
-Spin-adaptation automation time :  0.086 seconds
+Total spin-integrated terms: 15
+Total spin-adapted terms: 28
+Spin-adaptation automation time :  0.147 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -1446,32 +1455,39 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 21
+Remaining terms: 28
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_c:f_c, s_a:f_a]  = einsum('RPixy,iQxy->RPQ', Y_KLWU__aaaa, t1_xaaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= einsum('RPixy,iQyx->RPQ', Y_KLWU__aaaa, t1_xaaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= einsum('RiPxy,iQxy->RPQ', Y_KLWU__aaaa, t1_xaaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += einsum('RiPxy,iQyx->RPQ', Y_KLWU__aaaa, t1_xaaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= einsum('RPixy,iQyx->RPQ', Y_KLWU__abab, t1_xaaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPixy,iQxz,yz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPixy,iQyz,xz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('RPixy,iQzw,xywz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('RPixy,iQzw,xyzw->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPixy,iQzx,yz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPixy,iQzy,xz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RiPxy,iQxz,yz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RiPxy,iQyz,xz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('RiPxy,iQzw,xywz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('RiPxy,iQzw,xyzw->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RiPxy,iQzx,yz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RiPxy,iQzy,xz->RPQ', Y_KLWU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPixy,iQyz,xz->RPQ', Y_KLWU__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('RPixy,iQzw,xywz->RPQ', Y_KLWU__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('RPixy,iQzw,xyzw->RPQ', Y_KLWU__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPixy,iQzx,yz->RPQ', Y_KLWU__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] =- 1/2 * einsum('RPxay,Qa,xy->RPQ', Y_KWCU__aaaa, t1_ae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('RPxay,Qzwa,xwyz->RPQ', Y_KWCU__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('RPxay,Qzwa,xwzy->RPQ', Y_KWCU__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPxay,Qzya,xz->RPQ', Y_KWCU__aaaa, t1_aaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPxay,zQwa,xwyz->RPQ', Y_KWCU__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPxay,zQya,xz->RPQ', Y_KWCU__aaaa, t1_aaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixay,Piya,Qx->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixay,Piza,Qyxz->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixay,Piza,Qyzx->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixay,iPQa,xy->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixay,iPya,Qx->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixay,iPza,Qyxz->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixay,iPza,Qyzx->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPxay,Qa,xy->RPQ', Y_KWCU__abab, t1_ae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/3 * einsum('RPxay,Qzwa,xwyz->RPQ', Y_KWCU__abab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('RPxay,Qzwa,xwzy->RPQ', Y_KWCU__abab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPxay,zQwa,xwyz->RPQ', Y_KWCU__abab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('RPxay,zQya,xz->RPQ', Y_KWCU__abab, t1_aaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__abab, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixay,Piza,Qyxz->RPQ', Y_KWCU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('Rixay,Piza,Qyzx->RPQ', Y_KWCU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixay,iPQa,xy->RPQ', Y_KWCU__abab, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixay,iPza,Qyxz->RPQ', Y_KWCU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/3 * einsum('Rixay,iPza,Qyzx->RPQ', Y_KWCU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixay,iPya,Qz->RPQ', Y_KWCU__baab, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('Rixay,iPza,Qywz->RPQ', Y_KWCU__baab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixay,iPza,Qyzw->RPQ', Y_KWCU__baab, t1_xxae, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- CA (bb) ----------------------------------------------
@@ -1504,13 +1520,16 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,x,y) 
- (   1.00000) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,x,z) cre(y) des(z) 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,y,z) cre(x) des(z) 
- (   1.00000) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,z,w) cre(x) cre(y) des(z) des(w) 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,y,a) cre(Q) des(x) 
+ (   1.00000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,y,a) cre(z) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(x) des(z) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(x) des(z) 
+ (   1.00000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,w,a) cre(y) cre(z) des(w) des(u) 
 
-Total terms : 4
-SQA automation time :  0.544 seconds
+Total terms : 7
+SQA automation time :  0.199 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1521,7 +1540,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 4 spin-integrated terms must be processed...
+ >>> 7 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -1544,7 +1563,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 5 spin-adapted terms...
+Combining 10 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -1564,15 +1583,20 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,x,y) 
- (   0.50000) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,x,z) rdm(y,z) 
- (  -0.16667) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,z,w) rdm(x,y,w,z) 
- (  -0.33333) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,z,w) rdm(x,y,z,w) 
- (   0.50000) Y_KLWU__abab(R,i,P,x,y) t1(i,Q,z,y) rdm(x,z) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,x,z) 
+ (  -0.33333) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,z,x) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,y,a) rdm(Q,x) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,x,z) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,z,x) 
+ (  -0.16667) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,w,a) rdm(y,z,u,w) 
+ (  -0.33333) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,w,a) rdm(y,z,w,u) 
+ (   0.50000) Y_KWCU__baab(R,P,x,a,y) t1(Q,z,y,a) rdm(z,w) 
 
-Total spin-integrated terms: 4
-Total spin-adapted terms: 5
-Spin-adaptation automation time :  0.017 seconds
+Total spin-integrated terms: 7
+Total spin-adapted terms: 10
+Spin-adaptation automation time :  0.042 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -1585,16 +1609,21 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 5
+Remaining terms: 10
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_c:f_c, s_a:f_a] =- einsum('RiPxy,iQxy->RPQ', Y_KLWU__abab, t1_xaaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RiPxy,iQxz,yz->RPQ', Y_KLWU__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('RiPxy,iQzw,xywz->RPQ', Y_KLWU__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('RiPxy,iQzw,xyzw->RPQ', Y_KLWU__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
-TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RiPxy,iQzy,xz->RPQ', Y_KLWU__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a]  = 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixay,Piza,Qyxz->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('Rixay,Piza,Qyzx->RPQ', Y_KWCU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__abab, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixay,Piya,Qx->RPQ', Y_KWCU__abab, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixay,Piza,Qyxz->RPQ', Y_KWCU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixay,Piza,Qyzx->RPQ', Y_KWCU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('RPxay,Qzwa,yzuw->RPQ', Y_KWCU__baab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('RPxay,Qzwa,yzwu->RPQ', Y_KWCU__baab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('RPxay,Qzya,zw->RPQ', Y_KWCU__baab, t1_aaae, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- VA (aa) ----------------------------------------------
@@ -1627,9 +1656,16 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,y,a) cre(Q) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__baab(R,i,x,a,y) t1(P,i,y,a) cre(Q) des(z) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(x) des(z) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(x) des(z) 
+ (   1.00000) Y_KWCU__baab(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(z) des(w) 
 
-Total terms : 0
-SQA automation time :  0.608 seconds
+Total terms : 7
+SQA automation time :  0.203 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1640,7 +1676,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 0 spin-integrated terms must be processed...
+ >>> 7 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -1663,7 +1699,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 0 spin-adapted terms...
+Combining 17 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -1683,10 +1719,27 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,y,a) rdm(Q,x) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,x,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,z,x) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,P,Q,a) rdm(x,y) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,P,y,a) rdm(Q,x) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,x,z) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,z,x) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,x,z) 
+ (  -0.33333) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,z,x) 
+ (  -0.50000) Y_KWCU__abab(R,i,x,a,y) t1(i,P,Q,a) rdm(x,y) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,x,z) 
+ (   0.33333) Y_KWCU__abab(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,z,x) 
+ (   0.50000) Y_KWCU__baab(R,i,x,a,y) t1(i,P,y,a) rdm(Q,z) 
+ (  -0.33333) Y_KWCU__baab(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,w,z) 
+ (  -0.16667) Y_KWCU__baab(R,i,x,a,y) t1(i,P,z,a) rdm(Q,y,z,w) 
 
-Total spin-integrated terms: 0
-Total spin-adapted terms: 0
-Spin-adaptation automation time :  0.000 seconds
+Total spin-integrated terms: 7
+Total spin-adapted terms: 17
+Spin-adaptation automation time :  0.071 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -1699,11 +1752,28 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 0
+Remaining terms: 17
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
+TY[:, s_v:f_v, s_a:f_a]  = 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__aaaa, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixay,Piya,Qx->RPQ', Y_KWCU__aaaa, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixay,Piza,Qyxz->RPQ', Y_KWCU__aaaa, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixay,Piza,Qyzx->RPQ', Y_KWCU__aaaa, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixay,iPQa,xy->RPQ', Y_KWCU__aaaa, t1_xvae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixay,iPya,Qx->RPQ', Y_KWCU__aaaa, t1_xvae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixay,iPza,Qyxz->RPQ', Y_KWCU__aaaa, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixay,iPza,Qyzx->RPQ', Y_KWCU__aaaa, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__abab, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixay,Piza,Qyxz->RPQ', Y_KWCU__abab, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/3 * einsum('Rixay,Piza,Qyzx->RPQ', Y_KWCU__abab, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixay,iPQa,xy->RPQ', Y_KWCU__abab, t1_xvae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixay,iPza,Qyxz->RPQ', Y_KWCU__abab, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/3 * einsum('Rixay,iPza,Qyzx->RPQ', Y_KWCU__abab, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixay,iPya,Qz->RPQ', Y_KWCU__baab, t1_xvae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/3 * einsum('Rixay,iPza,Qywz->RPQ', Y_KWCU__baab, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixay,iPza,Qyzw->RPQ', Y_KWCU__baab, t1_xvae, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- VA (bb) ----------------------------------------------
@@ -1736,9 +1806,14 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,y,a) cre(Q) des(x) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(x) des(z) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) cre(Q) cre(y) des(x) des(z) 
 
-Total terms : 0
-SQA automation time :  0.442 seconds
+Total terms : 5
+SQA automation time :  0.192 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1749,7 +1824,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 0 spin-integrated terms must be processed...
+ >>> 5 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -1772,7 +1847,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 0 spin-adapted terms...
+Combining 7 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -1792,10 +1867,17 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,x,z) 
+ (  -0.33333) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,z,x) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,y,a) rdm(Q,x) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,x,z) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(P,i,z,a) rdm(Q,y,z,x) 
 
-Total spin-integrated terms: 0
-Total spin-adapted terms: 0
-Spin-adaptation automation time :  0.000 seconds
+Total spin-integrated terms: 5
+Total spin-adapted terms: 7
+Spin-adaptation automation time :  0.029 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -1808,11 +1890,18 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 0
+Remaining terms: 7
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
+TY[:, s_v:f_v, s_a:f_a]  = 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__aaaa, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixay,Piza,Qyxz->RPQ', Y_KWCU__aaaa, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/3 * einsum('Rixay,Piza,Qyzx->RPQ', Y_KWCU__aaaa, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__abab, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixay,Piya,Qx->RPQ', Y_KWCU__abab, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixay,Piza,Qyxz->RPQ', Y_KWCU__abab, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixay,Piza,Qyzx->RPQ', Y_KWCU__abab, t1_vxae, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- CE (aa) ----------------------------------------------
@@ -1845,9 +1934,11 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
 
-Total terms : 0
-SQA automation time :  0.544 seconds
+Total terms : 2
+SQA automation time :  0.159 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1858,7 +1949,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 0 spin-integrated terms must be processed...
+ >>> 2 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -1881,7 +1972,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 0 spin-adapted terms...
+Combining 4 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -1901,10 +1992,14 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,a,Q) rdm(x,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,a,Q) rdm(x,y) 
 
-Total spin-integrated terms: 0
-Total spin-adapted terms: 0
-Spin-adaptation automation time :  0.000 seconds
+Total spin-integrated terms: 2
+Total spin-adapted terms: 4
+Spin-adaptation automation time :  0.009 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -1917,11 +2012,15 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 0
+Remaining terms: 4
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
+TY[:, s_c:f_c, s_e:f_e]  = 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__aaaa, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('Rixay,PiaQ,xy->RPQ', Y_KWCU__aaaa, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__abab, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('Rixay,PiaQ,xy->RPQ', Y_KWCU__abab, t1_xxee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- CE (bb) ----------------------------------------------
@@ -1954,9 +2053,11 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
 
-Total terms : 0
-SQA automation time :  0.364 seconds
+Total terms : 2
+SQA automation time :  0.126 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -1967,7 +2068,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 0 spin-integrated terms must be processed...
+ >>> 2 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -1990,7 +2091,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 0 spin-adapted terms...
+Combining 2 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -2010,10 +2111,12 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
 
-Total spin-integrated terms: 0
-Total spin-adapted terms: 0
-Spin-adaptation automation time :  0.000 seconds
+Total spin-integrated terms: 2
+Total spin-adapted terms: 2
+Spin-adaptation automation time :  0.004 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -2026,11 +2129,13 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 0
+Remaining terms: 2
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
+TY[:, s_c:f_c, s_e:f_e]  = 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__aaaa, t1_xxee, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__abab, t1_xxee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- VE (aa) ----------------------------------------------
@@ -2063,9 +2168,11 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
 
-Total terms : 0
-SQA automation time :  0.324 seconds
+Total terms : 2
+SQA automation time :  0.138 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -2076,7 +2183,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 0 spin-integrated terms must be processed...
+ >>> 2 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -2099,7 +2206,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 0 spin-adapted terms...
+Combining 4 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -2119,10 +2226,14 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,a,Q) rdm(x,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (  -0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,a,Q) rdm(x,y) 
 
-Total spin-integrated terms: 0
-Total spin-adapted terms: 0
-Spin-adaptation automation time :  0.000 seconds
+Total spin-integrated terms: 2
+Total spin-adapted terms: 4
+Spin-adaptation automation time :  0.009 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -2135,11 +2246,15 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 0
+Remaining terms: 4
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
+TY[:, s_v:f_v, s_e:f_e]  = 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__aaaa, t1_vxee, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/2 * einsum('Rixay,PiaQ,xy->RPQ', Y_KWCU__aaaa, t1_vxee, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__abab, t1_vxee, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/2 * einsum('Rixay,PiaQ,xy->RPQ', Y_KWCU__abab, t1_vxee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- VE (bb) ----------------------------------------------
@@ -2172,9 +2287,11 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) cre(y) des(x) 
 
-Total terms : 0
-SQA automation time :  0.309 seconds
+Total terms : 2
+SQA automation time :  0.123 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -2185,7 +2302,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 0 spin-integrated terms must be processed...
+ >>> 2 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -2208,7 +2325,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 0 spin-adapted terms...
+Combining 2 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -2228,10 +2345,12 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,y) t1(P,i,Q,a) rdm(x,y) 
 
-Total spin-integrated terms: 0
-Total spin-adapted terms: 0
-Spin-adaptation automation time :  0.000 seconds
+Total spin-integrated terms: 2
+Total spin-adapted terms: 2
+Spin-adaptation automation time :  0.004 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -2244,11 +2363,13 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 0
+Remaining terms: 2
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
+TY[:, s_v:f_v, s_e:f_e]  = 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__aaaa, t1_vxee, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/2 * einsum('Rixay,PiQa,xy->RPQ', Y_KWCU__abab, t1_vxee, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- AE (aa) ----------------------------------------------
@@ -2281,20 +2402,22 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,P,x) t1(i,j,x,Q) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,x,P) t1(i,j,x,Q) 
- (  -1.00000) Y_KLWU__abab(R,i,j,P,x) t1(i,j,x,Q) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,P,x) t1(i,j,y,Q) cre(x) des(y) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,x,P) t1(i,j,y,Q) cre(x) des(y) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,x,Q) cre(y) des(P) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,y,Q) cre(x) des(P) 
- (   1.00000) Y_KLWU__abab(R,i,j,P,x) t1(i,j,y,Q) cre(x) des(y) 
- (   1.00000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,y,Q) cre(x) des(P) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,z,Q) cre(x) cre(y) des(P) des(z) 
- (   1.00000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,z,Q) cre(x) cre(y) des(P) des(z) 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,P) cre(y) des(x) 
+ (   1.00000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,y) cre(z) des(x) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,P) t1(i,y,Q,a) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,Q,y) t1(i,P) cre(y) des(x) 
+ (   1.00000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,y) cre(z) des(x) 
+ (   1.00000) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,P,y) cre(z) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,Q,a) cre(y) cre(z) des(P) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(i,z,Q,a) cre(y) cre(z) des(P) des(x) 
+ (   1.00000) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(w) des(u) 
 
-Total terms : 11
-SQA automation time :  0.506 seconds
+Total terms : 13
+SQA automation time :  0.295 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -2305,7 +2428,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 11 spin-integrated terms must be processed...
+ >>> 13 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -2328,7 +2451,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 21 spin-adapted terms...
+Combining 30 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -2343,36 +2466,39 @@ Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-0 spin-adapted terms combined.
+6 spin-adapted terms combined.
 ----------------------------------------------------------------------------------------------------
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,P,x) t1(i,j,x,Q) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,P,x) t1(j,i,x,Q) 
- (   1.00000) Y_KLWU__aaaa(R,i,j,x,P) t1(i,j,x,Q) 
- (  -1.00000) Y_KLWU__aaaa(R,i,j,x,P) t1(j,i,x,Q) 
- (   1.00000) Y_KLWU__abab(R,i,j,P,x) t1(j,i,x,Q) 
- (   0.50000) Y_KLWU__aaaa(R,i,j,P,x) t1(i,j,y,Q) rdm(x,y) 
- (  -0.50000) Y_KLWU__aaaa(R,i,j,P,x) t1(j,i,y,Q) rdm(x,y) 
- (  -0.50000) Y_KLWU__aaaa(R,i,j,x,P) t1(i,j,y,Q) rdm(x,y) 
- (   0.50000) Y_KLWU__aaaa(R,i,j,x,P) t1(j,i,y,Q) rdm(x,y) 
- (  -0.50000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,x,Q) rdm(P,y) 
- (   0.50000) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,y,Q) rdm(P,x) 
- (  -0.16667) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,z,Q) rdm(P,z,x,y) 
- (   0.16667) Y_KLWU__aaaa(R,i,j,x,y) t1(i,j,z,Q) rdm(P,z,y,x) 
- (   0.50000) Y_KLWU__aaaa(R,i,j,x,y) t1(j,i,x,Q) rdm(P,y) 
- (  -0.50000) Y_KLWU__aaaa(R,i,j,x,y) t1(j,i,y,Q) rdm(P,x) 
- (   0.16667) Y_KLWU__aaaa(R,i,j,x,y) t1(j,i,z,Q) rdm(P,z,x,y) 
- (  -0.16667) Y_KLWU__aaaa(R,i,j,x,y) t1(j,i,z,Q) rdm(P,z,y,x) 
- (  -0.50000) Y_KLWU__abab(R,i,j,P,x) t1(j,i,y,Q) rdm(x,y) 
- (  -0.50000) Y_KLWU__abab(R,i,j,x,y) t1(j,i,y,Q) rdm(P,x) 
- (   0.33333) Y_KLWU__abab(R,i,j,x,y) t1(j,i,z,Q) rdm(P,z,x,y) 
- (   0.16667) Y_KLWU__abab(R,i,j,x,y) t1(j,i,z,Q) rdm(P,z,y,x) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,P) rdm(x,y) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,w) rdm(x,w,y,z) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,P,y) rdm(x,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,y,z) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,Q,y) t1(i,z,y,P) rdm(x,z) 
+ (  -0.50000) Y_KWCU__aaaa(R,i,x,a,P) t1(i,y,Q,a) rdm(x,y) 
+ (   0.50000) Y_KWCU__aaaa(R,i,x,a,P) t1(i,y,a,Q) rdm(x,y) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,Q,a) rdm(P,x,y,z) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,Q,a) rdm(P,x,z,y) 
+ (  -0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,Q) rdm(P,x,y,z) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,Q) rdm(P,x,z,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,Q,y) t1(i,P) rdm(x,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,w) rdm(x,w,y,z) 
+ (   0.50000) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,P,y) rdm(x,z) 
+ (  -0.33333) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,z,y) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,z,Q,a) rdm(P,x,y,z) 
+ (  -0.33333) Y_KWCU__abab(R,i,x,a,y) t1(i,z,Q,a) rdm(P,x,z,y) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,Q) rdm(P,x,y,z) 
+ (   0.33333) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,Q) rdm(P,x,z,y) 
+ (   0.16667) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,w,P) rdm(y,z,u,w) 
+ (   0.33333) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,w,P) rdm(y,z,w,u) 
+ (  -0.50000) Y_KWCU__baab(R,i,x,Q,y) t1(i,z,y,P) rdm(z,w) 
 
-Total spin-integrated terms: 11
-Total spin-adapted terms: 21
-Spin-adaptation automation time :  0.065 seconds
+Total spin-integrated terms: 13
+Total spin-adapted terms: 24
+Spin-adaptation automation time :  0.131 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -2385,32 +2511,35 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 21
+Remaining terms: 24
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_a:f_a, s_e:f_e] =- einsum('RijPx,ijxQ->RPQ', Y_KLWU__aaaa, t1_xxae, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += einsum('RijPx,jixQ->RPQ', Y_KLWU__aaaa, t1_xxae, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += einsum('RijxP,ijxQ->RPQ', Y_KLWU__aaaa, t1_xxae, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= einsum('RijxP,jixQ->RPQ', Y_KLWU__aaaa, t1_xxae, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += einsum('RijPx,jixQ->RPQ', Y_KLWU__abab, t1_xxae, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RijPx,ijyQ,xy->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RijPx,jiyQ,xy->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RijxP,ijyQ,xy->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RijxP,jiyQ,xy->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('Rijxy,ijxQ,Py->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('Rijxy,ijyQ,Px->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rijxy,ijzQ,Pzxy->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rijxy,ijzQ,Pzyx->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('Rijxy,jixQ,Py->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('Rijxy,jiyQ,Px->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rijxy,jizQ,Pzxy->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rijxy,jizQ,Pzyx->RPQ', Y_KLWU__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RijPx,jiyQ,xy->RPQ', Y_KLWU__abab, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('Rijxy,jiyQ,Px->RPQ', Y_KLWU__abab, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/3 * einsum('Rijxy,jizQ,Pzxy->RPQ', Y_KLWU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rijxy,jizQ,Pzyx->RPQ', Y_KLWU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e]  = 1/2 * einsum('RixQy,iP,xy->RPQ', Y_KWCU__aaaa, t1_xa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixQy,izPw,xwyz->RPQ', Y_KWCU__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixQy,izPy,xz->RPQ', Y_KWCU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('RixQy,izwP,xwyz->RPQ', Y_KWCU__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('RixQy,izwP,xwzy->RPQ', Y_KWCU__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixQy,izyP,xz->RPQ', Y_KWCU__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixaP,iyQa,xy->RPQ', Y_KWCU__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixaP,iyaQ,xy->RPQ', Y_KWCU__aaaa, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixay,izQa,Pxyz->RPQ', Y_KWCU__aaaa, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixay,izQa,Pxzy->RPQ', Y_KWCU__aaaa, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixay,izaQ,Pxyz->RPQ', Y_KWCU__aaaa, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixay,izaQ,Pxzy->RPQ', Y_KWCU__aaaa, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixQy,iP,xy->RPQ', Y_KWCU__abab, t1_xa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixQy,izPw,xwyz->RPQ', Y_KWCU__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixQy,izPy,xz->RPQ', Y_KWCU__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('RixQy,izwP,xwyz->RPQ', Y_KWCU__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('RixQy,izwP,xwzy->RPQ', Y_KWCU__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixay,izQa,Pxyz->RPQ', Y_KWCU__abab, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('Rixay,izQa,Pxzy->RPQ', Y_KWCU__abab, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixay,izaQ,Pxyz->RPQ', Y_KWCU__abab, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/3 * einsum('Rixay,izaQ,Pxzy->RPQ', Y_KWCU__abab, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('RixQy,izwP,yzuw->RPQ', Y_KWCU__baab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/3 * einsum('RixQy,izwP,yzwu->RPQ', Y_KWCU__baab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixQy,izyP,zw->RPQ', Y_KWCU__baab, t1_xaaa, rdm_ca, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- AE (bb) ----------------------------------------------
@@ -2443,13 +2572,14 @@ Done!
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) Y_KLWU__abab(R,i,j,x,P) t1(i,j,x,Q) 
- (  -1.00000) Y_KLWU__abab(R,i,j,x,P) t1(i,j,y,Q) cre(x) des(y) 
- (  -1.00000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,x,Q) cre(y) des(P) 
- (   1.00000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,z,Q) cre(x) cre(y) des(P) des(z) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,P) t1(i,y,Q,a) cre(y) des(x) 
+ (  -1.00000) Y_KWCU__baab(R,i,x,a,P) t1(i,y,Q,a) cre(y) des(z) 
+ (  -1.00000) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,Q,a) cre(y) cre(z) des(P) des(x) 
+ (  -1.00000) Y_KWCU__abab(R,i,x,a,y) t1(i,z,Q,a) cre(y) cre(z) des(P) des(x) 
+ (  -1.00000) Y_KWCU__baab(R,i,x,a,y) t1(i,z,Q,a) cre(y) cre(z) des(P) des(w) 
 
-Total terms : 4
-SQA automation time :  0.324 seconds
+Total terms : 5
+SQA automation time :  0.143 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -2460,7 +2590,7 @@ Done!
 Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
- >>> 4 spin-integrated terms must be processed...
+ >>> 5 spin-integrated terms must be processed...
 
  >>> removing the symmetries of non-RDM spin-integrated tensors...
  >>> symmetry removal complete.
@@ -2483,7 +2613,7 @@ Converting 4-RDMs to spin-adapted formulation...
 Done!
 ----------------------------------------------------------------------------------------------------
 
-Combining 5 spin-adapted terms...
+Combining 8 spin-adapted terms...
 
 Reorder 2e- integrals in Chemists' notation...
 Done!
@@ -2503,15 +2633,18 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (   1.00000) Y_KLWU__abab(R,i,j,x,P) t1(i,j,x,Q) 
- (  -0.50000) Y_KLWU__abab(R,i,j,x,P) t1(i,j,y,Q) rdm(x,y) 
- (  -0.50000) Y_KLWU__abab(R,i,j,x,y) t1(i,j,x,Q) rdm(P,y) 
- (   0.16667) Y_KLWU__abab(R,i,j,x,y) t1(i,j,z,Q) rdm(P,z,x,y) 
- (   0.33333) Y_KLWU__abab(R,i,j,x,y) t1(i,j,z,Q) rdm(P,z,y,x) 
+ (   0.16667) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,Q) rdm(P,x,y,z) 
+ (   0.33333) Y_KWCU__aaaa(R,i,x,a,y) t1(i,z,a,Q) rdm(P,x,z,y) 
+ (   0.50000) Y_KWCU__abab(R,i,x,a,P) t1(i,y,a,Q) rdm(x,y) 
+ (  -0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,Q) rdm(P,x,y,z) 
+ (   0.16667) Y_KWCU__abab(R,i,x,a,y) t1(i,z,a,Q) rdm(P,x,z,y) 
+ (  -0.50000) Y_KWCU__baab(R,i,x,a,P) t1(i,y,Q,a) rdm(y,z) 
+ (   0.33333) Y_KWCU__baab(R,i,x,a,y) t1(i,z,Q,a) rdm(P,w,y,z) 
+ (   0.16667) Y_KWCU__baab(R,i,x,a,y) t1(i,z,Q,a) rdm(P,w,z,y) 
 
-Total spin-integrated terms: 4
-Total spin-adapted terms: 5
-Spin-adaptation automation time :  0.017 seconds
+Total spin-integrated terms: 5
+Total spin-adapted terms: 8
+Spin-adaptation automation time :  0.035 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -2524,15 +2657,18 @@ will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
 
 0 terms removed:
 ----------------------------------------------------------------------------------------------------
-Remaining terms: 5
+Remaining terms: 8
 
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-TY[:, s_a:f_a, s_e:f_e]  = einsum('RijxP,ijxQ->RPQ', Y_KLWU__abab, t1_xxae, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RijxP,ijyQ,xy->RPQ', Y_KLWU__abab, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('Rijxy,ijxQ,Py->RPQ', Y_KLWU__abab, t1_xxae, rdm_ca, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rijxy,ijzQ,Pzxy->RPQ', Y_KLWU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
-TY[:, s_a:f_a, s_e:f_e] += 1/3 * einsum('Rijxy,ijzQ,Pzyx->RPQ', Y_KLWU__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e]  = 1/6 * einsum('Rixay,izaQ,Pxyz->RPQ', Y_KWCU__aaaa, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/3 * einsum('Rixay,izaQ,Pxzy->RPQ', Y_KWCU__aaaa, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixaP,iyaQ,xy->RPQ', Y_KWCU__abab, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixay,izaQ,Pxyz->RPQ', Y_KWCU__abab, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixay,izaQ,Pxzy->RPQ', Y_KWCU__abab, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixaP,iyQa,yz->RPQ', Y_KWCU__baab, t1_xaee, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/3 * einsum('Rixay,izQa,Pwyz->RPQ', Y_KWCU__baab, t1_xaee, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixay,izQa,Pwzy->RPQ', Y_KWCU__baab, t1_xaee, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 69.38 seconds.
+> Total elapsed time: 87.93 seconds.

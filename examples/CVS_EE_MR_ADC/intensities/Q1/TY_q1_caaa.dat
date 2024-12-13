@@ -1,0 +1,3201 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+-------------------------------- Spin-Adapted CVS-EE: TY Q1 Q_CAAA ---------------------------------
+
+
+## Generating operators ...
+
+
+--------------------------------------------- CC (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,y) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,z) cre(y) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,z) cre(w) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,z) cre(w) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,u) cre(z) cre(w) des(x) des(u) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,z,u) cre(y) cre(w) des(x) des(u) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,u) cre(z) cre(w) des(x) des(u) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,z,u) cre(y) cre(w) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,u) cre(z) cre(w) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,u) cre(z) cre(w) des(x) des(u) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,z,u) cre(y) cre(w) des(x) des(u) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,v) cre(y) cre(z) cre(w) des(x) des(u) des(v) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,v) cre(y) cre(z) cre(w) des(x) des(u) des(v) 
+ (   0.50000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) cre(y) cre(z) cre(w) des(x) des(u) des(v) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) cre(y) cre(z) cre(w) des(x) des(u) des(v) 
+
+Total terms : 18
+SQA automation time :  0.149 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 18 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 52 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+24 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w) rdm(x,w,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w) rdm(x,w,z,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,y,z,w) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,z,y,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,y) rdm(x,u,w,z) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,y) rdm(x,u,z,w) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,z) rdm(x,u,w,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,z) rdm(x,u,y,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,u) rdm(x,u,z,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,z) rdm(x,w) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,z,u) rdm(x,u,y,w) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,z,y) rdm(x,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,y) rdm(x,z) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,z) rdm(x,y) 
+ (   0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w) rdm(x,w,y,z) 
+ (   0.33333) Y_KWUV__abab(R,P,x,y,z) t1(Q,w) rdm(x,w,z,y) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,w,y,z) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,w,z,y) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,y,w,z) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,z,w,y) 
+ (   0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,z,y,w) 
+ (   0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,y) rdm(x,u,w,z) 
+ (   0.33333) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,y) rdm(x,u,z,w) 
+ (   0.33333) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,z) rdm(x,u,w,y) 
+ (   0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,z) rdm(x,u,y,w) 
+ (  -0.50000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,u) rdm(x,u,z,w) 
+ (  -0.50000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,z) rdm(x,w) 
+ (  -0.50000) Y_KWUV__abab(R,P,x,y,z) t1(Q,y) rdm(x,z) 
+
+Total spin-integrated terms: 18
+Total spin-adapted terms: 28
+Spin-adaptation automation time :  2.823 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 28
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_c:f_c] =- 1/6 * einsum('RPxyz,Qw,xwyz->RPQ', Y_KWUV__aaaa, t1_xa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxyz,Qw,xwzy->RPQ', Y_KWUV__aaaa, t1_xa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPxyz,Qwuv,xuvyzw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxyz,Qwuv,xuvzyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPxyz,Qwuy,xuwz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxyz,Qwuy,xuzw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxyz,Qwuz,xuwy->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPxyz,Qwuz,xuyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxyz,Qwyu,xuzw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxyz,Qwyz,xw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPxyz,Qwzu,xuyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPxyz,Qwzy,xw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxyz,Qy,xz->RPQ', Y_KWUV__aaaa, t1_xa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/2 * einsum('RPxyz,Qz,xy->RPQ', Y_KWUV__aaaa, t1_xa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxyz,Qw,xwyz->RPQ', Y_KWUV__abab, t1_xa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/3 * einsum('RPxyz,Qw,xwzy->RPQ', Y_KWUV__abab, t1_xa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPxyz,Qwuv,xuvwyz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPxyz,Qwuv,xuvwzy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPxyz,Qwuv,xuvywz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/6 * einsum('RPxyz,Qwuv,xuvzwy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxyz,Qwuv,xuvzyw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxyz,Qwuy,xuwz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/3 * einsum('RPxyz,Qwuy,xuzw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/3 * einsum('RPxyz,Qwuz,xuwy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] += 1/6 * einsum('RPxyz,Qwuz,xuyw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxyz,Qwyu,xuzw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxyz,Qwyz,xw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_c:f_c] -= 1/2 * einsum('RPxyz,Qy,xz->RPQ', Y_KWUV__abab, t1_xa, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CC (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.093 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VV (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.106 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VV (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.091 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- AA (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,P) cre(y) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,z,P,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,P) cre(y) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,z,P,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,y,z) cre(P) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,Q,y) t1(i,P) cre(y) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,Q,y) t1(i,z,P,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P) cre(y) cre(z) des(Q) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,y,w) cre(P) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,z,w) cre(P) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,y) cre(z) cre(w) des(Q) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,z) cre(y) cre(w) des(Q) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,Q,y) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,P) cre(y) cre(z) des(Q) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,y,w) cre(P) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,y) cre(z) cre(w) des(Q) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,z) cre(y) cre(w) des(Q) des(x) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) cre(P) cre(y) cre(z) des(x) des(w) des(u) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,u) cre(y) cre(z) cre(w) des(Q) des(x) des(u) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,u) cre(y) cre(z) cre(w) des(Q) des(x) des(u) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) cre(P) cre(y) cre(z) des(x) des(w) des(u) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,u) cre(y) cre(z) cre(w) des(Q) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,u) cre(y) cre(z) cre(w) des(Q) des(x) des(u) 
+
+Total terms : 28
+SQA automation time :  0.487 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 28 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 94 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+27 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,P) rdm(x,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,z,P,w) rdm(x,w,y,z) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,z,P,y) rdm(x,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,Q,y) t1(i,z,y,P) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,P) rdm(x,y) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,z,P,w) rdm(x,w,y,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,z,P,y) rdm(x,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,z,w,P) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,z,w,P) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,Q) t1(i,z,y,P) rdm(x,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P) rdm(Q,x,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P) rdm(Q,x,z,y) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,u,w,x) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,w,x,u) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,x,u,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,y) rdm(P,z,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,y) rdm(P,z,x,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,z) rdm(P,y,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,z) rdm(P,y,x,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,y,w) rdm(P,z,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,y,w) rdm(P,z,x,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,y,z) rdm(P,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,z,w) rdm(P,y,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,z,w) rdm(P,y,x,w) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,z,y) rdm(P,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,u) rdm(Q,x,u,y,z,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,u) rdm(Q,x,u,z,y,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,y) rdm(Q,x,w,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,y) rdm(Q,x,z,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,z) rdm(Q,x,w,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,z) rdm(Q,x,y,w) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,w,z,y) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,y,w,z) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,z,y,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,y,P) rdm(Q,x,w,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,y,P) rdm(Q,x,z,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,z,P) rdm(Q,x,w,y) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,z,P) rdm(Q,x,y,w) 
+ (   0.50000) Y_KWUV__abab(R,i,x,Q,y) t1(i,P) rdm(x,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,Q,y) t1(i,z,P,w) rdm(x,w,y,z) 
+ (   0.50000) Y_KWUV__abab(R,i,x,Q,y) t1(i,z,P,y) rdm(x,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,Q,y) t1(i,z,w,P) rdm(x,w,z,y) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,P) rdm(Q,x,y,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,P) rdm(Q,x,z,y) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,u,w,x) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,w,u,x) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,w,x,u) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,x,u,w) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,y) rdm(P,z,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,y) rdm(P,z,x,w) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,y,w) rdm(P,z,w,x) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,y,w) rdm(P,z,x,w) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,u) rdm(Q,x,u,y,z,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,u) rdm(Q,x,u,z,y,w) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,y) rdm(Q,x,w,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,y) rdm(Q,x,z,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,z) rdm(Q,x,w,y) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,z) rdm(Q,x,y,w) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,w,z,y) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,y,w,z) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,y,z,w) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,z,y,w) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,y,P) rdm(Q,x,w,z) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,y,P) rdm(Q,x,z,w) 
+
+Total spin-integrated terms: 28
+Total spin-adapted terms: 67
+Spin-adaptation automation time :  4.965 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 67
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_a:f_a, s_a:f_a]  = 1/2 * einsum('RixQy,iP,xy->RPQ', Y_KWUV__aaaa, t1_xa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixQy,izPw,xwyz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixQy,izPy,xz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('RixQy,izwP,xwyz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('RixQy,izwP,xwzy->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RixQy,izyP,xz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RixyQ,iP,xy->RPQ', Y_KWUV__aaaa, t1_xa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RixyQ,izPw,xwyz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('RixyQ,izPy,xz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('RixyQ,izwP,xwyz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('RixyQ,izwP,xwzy->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixyQ,izyP,xz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iP,Qxyz->RPQ', Y_KWUV__aaaa, t1_xa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iP,Qxzy->RPQ', Y_KWUV__aaaa, t1_xa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iQwu,Pyzuwx->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iQwu,Pyzwxu->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iQwu,Pyzxuw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iQwy,Pzwx->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQwy,Pzxw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQwz,Pywx->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iQwz,Pyxw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQyw,Pzwx->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iQyw,Pzxw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Rixyz,iQyz,Px->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iQzw,Pywx->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQzw,Pyxw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('Rixyz,iQzy,Px->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwPu,Qxuyzw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwPu,Qxuzyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwPy,Qxwz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwPy,Qxzw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwPz,Qxwy->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwPz,Qxyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iwuP,Qxuwzy->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iwuP,Qxuywz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iwuP,Qxuzyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwyP,Qxwz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwyP,Qxzw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwzP,Qxwy->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwzP,Qxyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixQy,iP,xy->RPQ', Y_KWUV__abab, t1_xa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixQy,izPw,xwyz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixQy,izPy,xz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('RixQy,izwP,xwyz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('RixQy,izwP,xwzy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixyz,iP,Qxyz->RPQ', Y_KWUV__abab, t1_xa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iP,Qxzy->RPQ', Y_KWUV__abab, t1_xa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iQwu,Pyzuwx->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQwu,Pyzwux->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iQwu,Pyzwxu->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iQwu,Pyzxuw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixyz,iQwy,Pzwx->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iQwy,Pzxw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixyz,iQyw,Pzwx->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQyw,Pzxw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixyz,iwPu,Qxuyzw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwPu,Qxuzyw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixyz,iwPy,Qxwz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwPy,Qxzw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwPz,Qxwy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixyz,iwPz,Qxyw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iwuP,Qxuwzy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iwuP,Qxuywz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwuP,Qxuyzw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iwuP,Qxuzyw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixyz,iwyP,Qxwz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwyP,Qxzw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- AA (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,Q) t1(i,z,P,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,y,z) cre(P) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,y,w) cre(P) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,z,w) cre(P) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,y) cre(z) cre(w) des(Q) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,z) cre(y) cre(w) des(Q) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,Q) t1(i,z,P,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,y,w) cre(P) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,z,w) cre(P) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,y) cre(z) cre(w) des(Q) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) cre(P) cre(y) cre(z) des(x) des(w) des(u) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,P,u) cre(y) cre(z) cre(w) des(Q) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) cre(P) cre(y) cre(z) des(x) des(w) des(u) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,P,u) cre(y) cre(z) cre(w) des(Q) des(x) des(u) 
+
+Total terms : 14
+SQA automation time :  0.346 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 14 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 34 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,u,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,u,x,w) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,w,x,u) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,x,u,w) 
+ (  -0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,y,w) rdm(P,z,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,y,w) rdm(P,z,x,w) 
+ (   0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,z,w) rdm(P,y,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q,z,w) rdm(P,y,x,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,w,y,z) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,w,z,y) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,y,w,z) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,z,y,w) 
+ (   0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,y,P) rdm(Q,x,w,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,y,P) rdm(Q,x,z,w) 
+ (  -0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,z,P) rdm(Q,x,w,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,z,P) rdm(Q,x,y,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,Q) t1(i,z,w,P) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,Q) t1(i,z,w,P) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,Q) t1(i,z,y,P) rdm(x,z) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,u,w,x) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,w,x,u) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,x,u,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,u) rdm(P,y,z,x,w,u) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,z) rdm(P,y,w,x) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,w,z) rdm(P,y,x,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,y,w) rdm(P,z,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,y,w) rdm(P,z,x,w) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(i,Q,y,z) rdm(P,x) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,w,z,y) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,y,w,z) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,z,w,y) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,P) rdm(Q,x,u,z,y,w) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,y,P) rdm(Q,x,w,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,y,P) rdm(Q,x,z,w) 
+
+Total spin-integrated terms: 14
+Total spin-adapted terms: 34
+Spin-adaptation automation time :  2.003 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 34
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_a:f_a, s_a:f_a]  = 1/12 * einsum('Rixyz,iQwu,Pyzuwx->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQwu,Pyzuxw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iQwu,Pyzwxu->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iQwu,Pyzxuw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixyz,iQyw,Pzwx->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQyw,Pzxw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixyz,iQzw,Pywx->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iQzw,Pyxw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwuP,Qxuwyz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iwuP,Qxuwzy->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iwuP,Qxuywz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iwuP,Qxuzyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixyz,iwyP,Qxwz->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwyP,Qxzw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('Rixyz,iwzP,Qxwy->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwzP,Qxyw->RPQ', Y_KWUV__aaaa, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('RixyQ,izwP,xwyz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/3 * einsum('RixyQ,izwP,xwzy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/2 * einsum('RixyQ,izyP,xz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iQwu,Pyzuwx->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iQwu,Pyzwxu->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iQwu,Pyzxuw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQwu,Pyzxwu->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iQwz,Pywx->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/3 * einsum('Rixyz,iQwz,Pyxw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iQyw,Pzwx->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iQyw,Pzxw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/2 * einsum('Rixyz,iQyz,Px->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/12 * einsum('Rixyz,iwuP,Qxuwzy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iwuP,Qxuywz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwuP,Qxuzwy->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/12 * einsum('Rixyz,iwuP,Qxuzyw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] += 1/6 * einsum('Rixyz,iwyP,Qxwz->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_a:f_a] -= 1/6 * einsum('Rixyz,iwyP,Qxzw->RPQ', Y_KWUV__abab, t1_xaaa, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- EE (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.017 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- EE (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.014 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CV (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,y) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,z) cre(y) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,z) cre(w) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,z) cre(w) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,u) cre(z) cre(w) des(x) des(u) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,z,u) cre(y) cre(w) des(x) des(u) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,u) cre(z) cre(w) des(x) des(u) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,z,u) cre(y) cre(w) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,u) cre(z) cre(w) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,u) cre(z) cre(w) des(x) des(u) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,z,u) cre(y) cre(w) des(x) des(u) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,v) cre(y) cre(z) cre(w) des(x) des(u) des(v) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,v) cre(y) cre(z) cre(w) des(x) des(u) des(v) 
+ (   0.50000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) cre(y) cre(z) cre(w) des(x) des(u) des(v) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) cre(y) cre(z) cre(w) des(x) des(u) des(v) 
+
+Total terms : 18
+SQA automation time :  0.286 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 18 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 52 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+24 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w) rdm(x,w,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w) rdm(x,w,z,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,y,z,w) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,z,y,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,y) rdm(x,u,w,z) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,y) rdm(x,u,z,w) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,z) rdm(x,u,w,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,u,z) rdm(x,u,y,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,u) rdm(x,u,z,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,y,z) rdm(x,w) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,z,u) rdm(x,u,y,w) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,w,z,y) rdm(x,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,y) rdm(x,z) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(Q,z) rdm(x,y) 
+ (   0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w) rdm(x,w,y,z) 
+ (   0.33333) Y_KWUV__abab(R,P,x,y,z) t1(Q,w) rdm(x,w,z,y) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,w,y,z) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,w,z,y) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,y,w,z) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,z,w,y) 
+ (   0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,v) rdm(x,u,v,z,y,w) 
+ (   0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,y) rdm(x,u,w,z) 
+ (   0.33333) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,y) rdm(x,u,z,w) 
+ (   0.33333) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,z) rdm(x,u,w,y) 
+ (   0.16667) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,u,z) rdm(x,u,y,w) 
+ (  -0.50000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,u) rdm(x,u,z,w) 
+ (  -0.50000) Y_KWUV__abab(R,P,x,y,z) t1(Q,w,y,z) rdm(x,w) 
+ (  -0.50000) Y_KWUV__abab(R,P,x,y,z) t1(Q,y) rdm(x,z) 
+
+Total spin-integrated terms: 18
+Total spin-adapted terms: 28
+Spin-adaptation automation time :  2.938 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 28
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_v:f_v] =- 1/6 * einsum('RPxyz,Qw,xwyz->RPQ', Y_KWUV__aaaa, t1_va, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxyz,Qw,xwzy->RPQ', Y_KWUV__aaaa, t1_va, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPxyz,Qwuv,xuvyzw->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxyz,Qwuv,xuvzyw->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPxyz,Qwuy,xuwz->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxyz,Qwuy,xuzw->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxyz,Qwuz,xuwy->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPxyz,Qwuz,xuyw->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxyz,Qwyu,xuzw->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxyz,Qwyz,xw->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPxyz,Qwzu,xuyw->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPxyz,Qwzy,xw->RPQ', Y_KWUV__aaaa, t1_vaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxyz,Qy,xz->RPQ', Y_KWUV__aaaa, t1_va, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/2 * einsum('RPxyz,Qz,xy->RPQ', Y_KWUV__aaaa, t1_va, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxyz,Qw,xwyz->RPQ', Y_KWUV__abab, t1_va, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/3 * einsum('RPxyz,Qw,xwzy->RPQ', Y_KWUV__abab, t1_va, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPxyz,Qwuv,xuvwyz->RPQ', Y_KWUV__abab, t1_vaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPxyz,Qwuv,xuvwzy->RPQ', Y_KWUV__abab, t1_vaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPxyz,Qwuv,xuvywz->RPQ', Y_KWUV__abab, t1_vaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/6 * einsum('RPxyz,Qwuv,xuvzwy->RPQ', Y_KWUV__abab, t1_vaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxyz,Qwuv,xuvzyw->RPQ', Y_KWUV__abab, t1_vaaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxyz,Qwuy,xuwz->RPQ', Y_KWUV__abab, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/3 * einsum('RPxyz,Qwuy,xuzw->RPQ', Y_KWUV__abab, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/3 * einsum('RPxyz,Qwuz,xuwy->RPQ', Y_KWUV__abab, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] += 1/6 * einsum('RPxyz,Qwuz,xuyw->RPQ', Y_KWUV__abab, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxyz,Qwyu,xuzw->RPQ', Y_KWUV__abab, t1_vaaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxyz,Qwyz,xw->RPQ', Y_KWUV__abab, t1_vaaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_v:f_v] -= 1/2 * einsum('RPxyz,Qy,xz->RPQ', Y_KWUV__abab, t1_va, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CV (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+
+Total terms : 0
+SQA automation time :  0.192 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 0 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 0 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 0
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.000 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 0
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CA (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,z) cre(y) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,z) cre(Q) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,w) cre(Q) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,w) cre(Q) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,w) cre(Q) cre(z) des(x) des(w) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) cre(Q) cre(y) cre(z) des(x) des(w) des(u) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) cre(Q) cre(y) cre(z) des(x) des(w) des(u) 
+
+Total terms : 11
+SQA automation time :  0.591 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 11 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 42 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+7 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,y) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,z) rdm(x,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,z,y) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,u,w,x) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,x,u) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,x,u,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,x,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,z) rdm(Q,y,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,z) rdm(Q,y,x,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,Q) rdm(x,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,w) rdm(Q,z,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,w) rdm(Q,z,x,w) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,z) rdm(Q,x) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,Q) rdm(x,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,w) rdm(Q,y,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,w) rdm(Q,y,x,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,y) rdm(Q,x) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,y) rdm(x,z) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,y,z) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,z,y) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,u,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,u,x) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,x,u) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,x,u,w) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,w,x) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,x,w) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,Q) rdm(x,z) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,w) rdm(Q,z,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,w) rdm(Q,z,x,w) 
+
+Total spin-integrated terms: 11
+Total spin-adapted terms: 35
+Spin-adaptation automation time :  1.983 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 35
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_a:f_a]  = 1/6 * einsum('Rixyz,PiQw,xwyz->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,PiQw,xwzy->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixyz,PiQy,xz->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixyz,PiQz,xy->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,PiwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,PiwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzuwx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzwxu->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzxuw->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwy,Qzwx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piwy,Qzxw->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piwz,Qywx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwz,Qyxw->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixyz,PiyQ,xz->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piyw,Qzwx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,Piyw,Qzxw->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixyz,Piyz,Qx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixyz,PizQ,xy->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,Pizw,Qywx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Pizw,Qyxw->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixyz,Pizy,Qx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,PiQw,xwyz->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('Rixyz,PiQw,xwzy->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixyz,PiQy,xz->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,PiwQ,xwyz->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/3 * einsum('Rixyz,PiwQ,xwzy->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzuwx->RPQ', Y_KWUV__abab, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piwu,Qyzwux->RPQ', Y_KWUV__abab, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzwxu->RPQ', Y_KWUV__abab, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzxuw->RPQ', Y_KWUV__abab, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('Rixyz,Piwy,Qzwx->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwy,Qzxw->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixyz,PiyQ,xz->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/3 * einsum('Rixyz,Piyw,Qzwx->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piyw,Qzxw->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CA (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,z) cre(y) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,y) cre(z) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,z) cre(Q) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,w) cre(Q) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,w) cre(Q) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,w) cre(Q) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,z,w) cre(Q) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) cre(Q) cre(y) cre(z) des(x) des(w) des(u) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) cre(Q) cre(y) cre(z) des(x) des(w) des(u) 
+
+Total terms : 12
+SQA automation time :  0.402 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 12 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 24 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,y) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,z) rdm(x,y) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,u,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,u,x) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,x,u) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,x,u,w) 
+ (  -0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,x,w) 
+ (   0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,z) rdm(Q,y,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,z) rdm(Q,y,x,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,y) rdm(x,z) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,u,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,u,x) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,x,u) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,x,u,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,x,w) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,z,w) rdm(Q,y,w,x) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,z,w) rdm(Q,y,x,w) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,z,y) rdm(Q,x) 
+
+Total spin-integrated terms: 12
+Total spin-adapted terms: 24
+Spin-adaptation automation time :  1.032 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 24
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_a:f_a]  = 1/6 * einsum('Rixyz,PiQw,xwyz->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,PiQw,xwzy->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixyz,PiQy,xz->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixyz,PiQz,xy->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzuwx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piwu,Qyzwux->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzwxu->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzxuw->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('Rixyz,Piwy,Qzwx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwy,Qzxw->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/3 * einsum('Rixyz,Piwz,Qywx->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piwz,Qyxw->RPQ', Y_KWUV__aaaa, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,PiQw,xwyz->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/3 * einsum('Rixyz,PiQw,xwzy->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/2 * einsum('Rixyz,PiQy,xz->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzuwx->RPQ', Y_KWUV__abab, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piwu,Qyzwux->RPQ', Y_KWUV__abab, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzwxu->RPQ', Y_KWUV__abab, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzxuw->RPQ', Y_KWUV__abab, t1_xxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwy,Qzwx->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Piwy,Qzxw->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/6 * einsum('Rixyz,Pizw,Qywx->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] += 1/3 * einsum('Rixyz,Pizw,Qyxw->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_a:f_a] -= 1/2 * einsum('Rixyz,Pizy,Qx->RPQ', Y_KWUV__abab, t1_xxaa, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VA (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,z) cre(y) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,z) cre(Q) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,w) cre(Q) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,w) cre(Q) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,w) cre(Q) cre(z) des(x) des(w) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) cre(Q) cre(y) cre(z) des(x) des(w) des(u) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) cre(Q) cre(y) cre(z) des(x) des(w) des(u) 
+
+Total terms : 11
+SQA automation time :  0.487 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 11 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 42 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+7 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,y) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,z) rdm(x,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,z,y) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,u,w,x) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,x,u) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,x,u,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,x,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,z) rdm(Q,y,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,z) rdm(Q,y,x,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,Q) rdm(x,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,w) rdm(Q,z,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,w) rdm(Q,z,x,w) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,z) rdm(Q,x) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,Q) rdm(x,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,w) rdm(Q,y,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,w) rdm(Q,y,x,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,y) rdm(Q,x) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,y) rdm(x,z) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,y,z) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,z,y) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,u,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,u,x) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,x,u) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,x,u,w) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,w,x) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,x,w) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,Q) rdm(x,z) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,w) rdm(Q,z,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,w) rdm(Q,z,x,w) 
+
+Total spin-integrated terms: 11
+Total spin-adapted terms: 35
+Spin-adaptation automation time :  1.984 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 35
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_v:f_v, s_a:f_a]  = 1/6 * einsum('Rixyz,PiQw,xwyz->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,PiQw,xwzy->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixyz,PiQy,xz->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixyz,PiQz,xy->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,PiwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,PiwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzuwx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzwxu->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzxuw->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwy,Qzwx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piwy,Qzxw->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piwz,Qywx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwz,Qyxw->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixyz,PiyQ,xz->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piyw,Qzwx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,Piyw,Qzxw->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixyz,Piyz,Qx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixyz,PizQ,xy->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,Pizw,Qywx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Pizw,Qyxw->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixyz,Pizy,Qx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,PiQw,xwyz->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/3 * einsum('Rixyz,PiQw,xwzy->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixyz,PiQy,xz->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,PiwQ,xwyz->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/3 * einsum('Rixyz,PiwQ,xwzy->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzuwx->RPQ', Y_KWUV__abab, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piwu,Qyzwux->RPQ', Y_KWUV__abab, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzwxu->RPQ', Y_KWUV__abab, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzxuw->RPQ', Y_KWUV__abab, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/3 * einsum('Rixyz,Piwy,Qzwx->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwy,Qzxw->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixyz,PiyQ,xz->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/3 * einsum('Rixyz,Piyw,Qzwx->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piyw,Qzxw->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VA (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,z) cre(y) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,y) cre(z) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,z) cre(Q) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,w) cre(Q) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,w) cre(Q) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,w) cre(Q) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,z,w) cre(Q) cre(y) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) cre(Q) cre(y) cre(z) des(x) des(w) des(u) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) cre(Q) cre(y) cre(z) des(x) des(w) des(u) 
+
+Total terms : 12
+SQA automation time :  0.414 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 12 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 24 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,y) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,Q,z) rdm(x,y) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,u,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,u,x) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,x,u) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,x,u,w) 
+ (  -0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,w,x) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,x,w) 
+ (   0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,z) rdm(Q,y,w,x) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,z) rdm(Q,y,x,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,w) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,Q,y) rdm(x,z) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,u,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,u,x) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,w,x,u) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,u) rdm(Q,y,z,x,u,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,w,x) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,y) rdm(Q,z,x,w) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,z,w) rdm(Q,y,w,x) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,z,w) rdm(Q,y,x,w) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,z,y) rdm(Q,x) 
+
+Total spin-integrated terms: 12
+Total spin-adapted terms: 24
+Spin-adaptation automation time :  1.031 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 24
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_v:f_v, s_a:f_a]  = 1/6 * einsum('Rixyz,PiQw,xwyz->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,PiQw,xwzy->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixyz,PiQy,xz->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixyz,PiQz,xy->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzuwx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piwu,Qyzwux->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzwxu->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzxuw->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/3 * einsum('Rixyz,Piwy,Qzwx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwy,Qzxw->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/3 * einsum('Rixyz,Piwz,Qywx->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piwz,Qyxw->RPQ', Y_KWUV__aaaa, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,PiQw,xwyz->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/3 * einsum('Rixyz,PiQw,xwzy->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/2 * einsum('Rixyz,PiQy,xz->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzuwx->RPQ', Y_KWUV__abab, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piwu,Qyzwux->RPQ', Y_KWUV__abab, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/12 * einsum('Rixyz,Piwu,Qyzwxu->RPQ', Y_KWUV__abab, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/12 * einsum('Rixyz,Piwu,Qyzxuw->RPQ', Y_KWUV__abab, t1_vxaa, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/6 * einsum('Rixyz,Piwy,Qzwx->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Piwy,Qzxw->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/6 * einsum('Rixyz,Pizw,Qywx->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] += 1/3 * einsum('Rixyz,Pizw,Qyxw->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_a:f_a] -= 1/2 * einsum('Rixyz,Pizy,Qx->RPQ', Y_KWUV__abab, t1_vxaa, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CE (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(y,Q) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(z,Q) cre(y) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(y,z,w,Q) cre(w) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,Q) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,Q) cre(y) des(x) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(y,Q) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(y,z,w,Q) cre(w) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,Q) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(w,Q) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(y,w,u,Q) cre(z) cre(u) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(y,w,u,Q) cre(z) cre(u) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(z,w,u,Q) cre(y) cre(u) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(z,w,u,Q) cre(y) cre(u) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(w,Q) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(y,w,u,Q) cre(z) cre(u) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(y,w,u,Q) cre(z) cre(u) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,P,x,y,z) t1(z,w,u,Q) cre(y) cre(u) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) cre(y) cre(z) des(x) des(w) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(w,u,v,Q) cre(y) cre(z) cre(v) des(x) des(w) des(u) 
+ (   1.00000) Y_KWUV__aaaa(R,P,x,y,z) t1(w,u,v,Q) cre(y) cre(z) cre(v) des(x) des(w) des(u) 
+ (   0.50000) Y_KWUV__abab(R,P,x,y,z) t1(w,u,v,Q) cre(y) cre(z) cre(v) des(x) des(w) des(u) 
+ (   1.00000) Y_KWUV__abab(R,P,x,y,z) t1(w,u,v,Q) cre(y) cre(z) cre(v) des(x) des(w) des(u) 
+
+Total terms : 23
+SQA automation time :  0.385 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 23 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 66 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+27 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(w,Q) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(w,Q) rdm(x,w,z,y) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(w,u,v,Q) rdm(x,u,w,y,z,v) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(w,u,v,Q) rdm(x,u,w,z,y,v) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(w,y,u,Q) rdm(x,w,z,u) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(w,z,u,Q) rdm(x,w,y,u) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(y,Q) rdm(x,z) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(y,w,u,Q) rdm(x,w,u,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(y,w,u,Q) rdm(x,w,z,u) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(y,z,w,Q) rdm(x,w) 
+ (  -0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(z,Q) rdm(x,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(z,w,u,Q) rdm(x,w,u,y) 
+ (   0.16667) Y_KWUV__aaaa(R,P,x,y,z) t1(z,w,u,Q) rdm(x,w,y,u) 
+ (   0.50000) Y_KWUV__aaaa(R,P,x,y,z) t1(z,y,w,Q) rdm(x,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,Q) rdm(x,z) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,Q) rdm(x,y) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,y,Q) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,z,Q) rdm(x,y) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(w,Q) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,P,x,y,z) t1(w,Q) rdm(x,w,z,y) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(w,u,v,Q) rdm(x,u,w,y,z,v) 
+ (  -0.33333) Y_KWUV__abab(R,P,x,y,z) t1(w,u,v,Q) rdm(x,u,w,z,y,v) 
+ (   0.50000) Y_KWUV__abab(R,P,x,y,z) t1(w,y,u,Q) rdm(x,w,z,u) 
+ (   0.50000) Y_KWUV__abab(R,P,x,y,z) t1(y,Q) rdm(x,z) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(y,w,u,Q) rdm(x,w,u,z) 
+ (  -0.33333) Y_KWUV__abab(R,P,x,y,z) t1(y,w,u,Q) rdm(x,w,z,u) 
+ (  -0.33333) Y_KWUV__abab(R,P,x,y,z) t1(z,w,u,Q) rdm(x,w,u,y) 
+ (  -0.16667) Y_KWUV__abab(R,P,x,y,z) t1(z,w,u,Q) rdm(x,w,y,u) 
+ (   0.50000) Y_KWUV__abab(R,P,x,y,z) t1(z,y,w,Q) rdm(x,w) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,y,z) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,Q) rdm(x,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(i,P,y,Q) rdm(x,z) 
+
+Total spin-integrated terms: 23
+Total spin-adapted terms: 39
+Spin-adaptation automation time :  2.998 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 39
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_e:f_e]  = 1/6 * einsum('RPxyz,wQ,xwyz->RPQ', Y_KWUV__aaaa, t1_ae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('RPxyz,wQ,xwzy->RPQ', Y_KWUV__aaaa, t1_ae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/6 * einsum('RPxyz,wuvQ,xuwyzv->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('RPxyz,wuvQ,xuwzyv->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('RPxyz,wyuQ,xwzu->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('RPxyz,wzuQ,xwyu->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('RPxyz,yQ,xz->RPQ', Y_KWUV__aaaa, t1_ae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/6 * einsum('RPxyz,ywuQ,xwuz->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('RPxyz,ywuQ,xwzu->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('RPxyz,yzwQ,xw->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('RPxyz,zQ,xy->RPQ', Y_KWUV__aaaa, t1_ae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('RPxyz,zwuQ,xwuy->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/6 * einsum('RPxyz,zwuQ,xwyu->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('RPxyz,zywQ,xw->RPQ', Y_KWUV__aaaa, t1_aaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('Rixyz,PiwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/6 * einsum('Rixyz,PiwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('Rixyz,PiyQ,xz->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('Rixyz,PizQ,xy->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/6 * einsum('Rixyz,iPwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('Rixyz,iPwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('Rixyz,iPyQ,xz->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('Rixyz,iPzQ,xy->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('RPxyz,wQ,xwyz->RPQ', Y_KWUV__abab, t1_ae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/3 * einsum('RPxyz,wQ,xwzy->RPQ', Y_KWUV__abab, t1_ae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('RPxyz,wuvQ,xuwyzv->RPQ', Y_KWUV__abab, t1_aaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/3 * einsum('RPxyz,wuvQ,xuwzyv->RPQ', Y_KWUV__abab, t1_aaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('RPxyz,wyuQ,xwzu->RPQ', Y_KWUV__abab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('RPxyz,yQ,xz->RPQ', Y_KWUV__abab, t1_ae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('RPxyz,ywuQ,xwuz->RPQ', Y_KWUV__abab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/3 * einsum('RPxyz,ywuQ,xwzu->RPQ', Y_KWUV__abab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/3 * einsum('RPxyz,zwuQ,xwuy->RPQ', Y_KWUV__abab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('RPxyz,zwuQ,xwyu->RPQ', Y_KWUV__abab, t1_aaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('RPxyz,zywQ,xw->RPQ', Y_KWUV__abab, t1_aaae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/6 * einsum('Rixyz,PiwQ,xwyz->RPQ', Y_KWUV__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/3 * einsum('Rixyz,PiwQ,xwzy->RPQ', Y_KWUV__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('Rixyz,PiyQ,xz->RPQ', Y_KWUV__abab, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('Rixyz,iPwQ,xwyz->RPQ', Y_KWUV__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/3 * einsum('Rixyz,iPwQ,xwzy->RPQ', Y_KWUV__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('Rixyz,iPyQ,xz->RPQ', Y_KWUV__abab, t1_xxae, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- CE (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,Q) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,Q) cre(y) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,Q) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) cre(y) cre(z) des(x) des(w) 
+
+Total terms : 5
+SQA automation time :  0.266 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 5 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 7 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,y,Q) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,z,Q) rdm(x,y) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(i,P,y,Q) rdm(x,z) 
+
+Total spin-integrated terms: 5
+Total spin-adapted terms: 7
+Spin-adaptation automation time :  0.028 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 7
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_c:f_c, s_e:f_e]  = 1/6 * einsum('Rixyz,iPwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('Rixyz,iPwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('Rixyz,iPyQ,xz->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/2 * einsum('Rixyz,iPzQ,xy->RPQ', Y_KWUV__aaaa, t1_xxae, rdm_ca, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/6 * einsum('Rixyz,iPwQ,xwyz->RPQ', Y_KWUV__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] -= 1/3 * einsum('Rixyz,iPwQ,xwzy->RPQ', Y_KWUV__abab, t1_xxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_c:f_c, s_e:f_e] += 1/2 * einsum('Rixyz,iPyQ,xz->RPQ', Y_KWUV__abab, t1_xxae, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VE (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,Q) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,Q) cre(y) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,Q) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) cre(y) cre(z) des(x) des(w) 
+
+Total terms : 5
+SQA automation time :  0.275 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 5 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 14 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,Q) rdm(x,z) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,Q) rdm(x,y) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,y,Q) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,z,Q) rdm(x,y) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,y,z) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,Q) rdm(x,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(i,P,y,Q) rdm(x,z) 
+
+Total spin-integrated terms: 5
+Total spin-adapted terms: 14
+Spin-adaptation automation time :  0.057 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 14
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_v:f_v, s_e:f_e] =- 1/6 * einsum('Rixyz,PiwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/6 * einsum('Rixyz,PiwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/2 * einsum('Rixyz,PiyQ,xz->RPQ', Y_KWUV__aaaa, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/2 * einsum('Rixyz,PizQ,xy->RPQ', Y_KWUV__aaaa, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/6 * einsum('Rixyz,iPwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/6 * einsum('Rixyz,iPwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/2 * einsum('Rixyz,iPyQ,xz->RPQ', Y_KWUV__aaaa, t1_xvae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/2 * einsum('Rixyz,iPzQ,xy->RPQ', Y_KWUV__aaaa, t1_xvae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/6 * einsum('Rixyz,PiwQ,xwyz->RPQ', Y_KWUV__abab, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/3 * einsum('Rixyz,PiwQ,xwzy->RPQ', Y_KWUV__abab, t1_vxae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/2 * einsum('Rixyz,PiyQ,xz->RPQ', Y_KWUV__abab, t1_vxae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/6 * einsum('Rixyz,iPwQ,xwyz->RPQ', Y_KWUV__abab, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/3 * einsum('Rixyz,iPwQ,xwzy->RPQ', Y_KWUV__abab, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/2 * einsum('Rixyz,iPyQ,xz->RPQ', Y_KWUV__abab, t1_xvae, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- VE (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,y,Q) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,z,Q) cre(y) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,y,Q) cre(z) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(P,i,w,Q) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(P,i,w,Q) cre(y) cre(z) des(x) des(w) 
+
+Total terms : 5
+SQA automation time :  0.270 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 5 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 7 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,y,Q) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,P,z,Q) rdm(x,y) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,P,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,z) t1(i,P,y,Q) rdm(x,z) 
+
+Total spin-integrated terms: 5
+Total spin-adapted terms: 7
+Spin-adaptation automation time :  0.028 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 7
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_v:f_v, s_e:f_e]  = 1/6 * einsum('Rixyz,iPwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/6 * einsum('Rixyz,iPwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/2 * einsum('Rixyz,iPyQ,xz->RPQ', Y_KWUV__aaaa, t1_xvae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/2 * einsum('Rixyz,iPzQ,xy->RPQ', Y_KWUV__aaaa, t1_xvae, rdm_ca, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/6 * einsum('Rixyz,iPwQ,xwyz->RPQ', Y_KWUV__abab, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] -= 1/3 * einsum('Rixyz,iPwQ,xwzy->RPQ', Y_KWUV__abab, t1_xvae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_v:f_v, s_e:f_e] += 1/2 * einsum('Rixyz,iPyQ,xz->RPQ', Y_KWUV__abab, t1_xvae, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- AE (aa) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) Y_KWUV__aaaa(R,i,x,P,y) t1(i,Q) cre(y) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,P,y) t1(i,z,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,P) t1(i,Q) cre(y) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,P) t1(i,z,Q,y) cre(z) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,P,y) t1(i,Q) cre(y) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,P,y) t1(i,z,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,P,y) t1(i,z,Q,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,P,y) t1(i,z,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,P) t1(i,z,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,P) t1(i,z,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q) cre(y) cre(z) des(P) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,y) cre(z) cre(w) des(P) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,z) cre(y) cre(w) des(P) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,P,y) t1(i,z,Q,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,P,y) t1(i,z,Q,w) cre(y) cre(z) des(x) des(w) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,Q) cre(y) cre(z) des(P) des(x) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,y) cre(z) cre(w) des(P) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,z) cre(y) cre(w) des(P) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,u) cre(y) cre(z) cre(w) des(P) des(x) des(u) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,u) cre(y) cre(z) cre(w) des(P) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,u) cre(y) cre(z) cre(w) des(P) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,u) cre(y) cre(z) cre(w) des(P) des(x) des(u) 
+
+Total terms : 22
+SQA automation time :  0.458 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 22 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 66 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+20 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) Y_KWUV__aaaa(R,i,x,P,y) t1(i,Q) rdm(x,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,P,y) t1(i,z,Q,w) rdm(x,w,y,z) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,P,y) t1(i,z,Q,y) rdm(x,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,P,y) t1(i,z,w,Q) rdm(x,w,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,P,y) t1(i,z,w,Q) rdm(x,w,z,y) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,P,y) t1(i,z,y,Q) rdm(x,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,P) t1(i,Q) rdm(x,y) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,P) t1(i,z,Q,w) rdm(x,w,y,z) 
+ (  -0.50000) Y_KWUV__aaaa(R,i,x,y,P) t1(i,z,Q,y) rdm(x,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,P) t1(i,z,w,Q) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,P) t1(i,z,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__aaaa(R,i,x,y,P) t1(i,z,y,Q) rdm(x,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q) rdm(P,x,y,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,Q) rdm(P,x,z,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,u) rdm(P,x,u,y,z,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,u) rdm(P,x,u,z,y,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,y) rdm(P,x,w,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,y) rdm(P,x,z,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,z) rdm(P,x,w,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,z) rdm(P,x,y,w) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,w,z,y) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,y,w,z) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,z,y,w) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,y,Q) rdm(P,x,w,z) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,y,Q) rdm(P,x,z,w) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,z,Q) rdm(P,x,w,y) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,z,Q) rdm(P,x,y,w) 
+ (   0.50000) Y_KWUV__abab(R,i,x,P,y) t1(i,Q) rdm(x,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,P,y) t1(i,z,Q,w) rdm(x,w,y,z) 
+ (   0.50000) Y_KWUV__abab(R,i,x,P,y) t1(i,z,Q,y) rdm(x,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,P,y) t1(i,z,w,Q) rdm(x,w,y,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,P,y) t1(i,z,w,Q) rdm(x,w,z,y) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,Q) rdm(P,x,y,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,Q) rdm(P,x,z,y) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,u) rdm(P,x,u,y,z,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,u) rdm(P,x,u,z,y,w) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,y) rdm(P,x,w,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,y) rdm(P,x,z,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,z) rdm(P,x,w,y) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,z) rdm(P,x,y,w) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,w,z,y) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,y,w,z) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,y,z,w) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,z,y,w) 
+ (   0.33333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,y,Q) rdm(P,x,w,z) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,y,Q) rdm(P,x,z,w) 
+
+Total spin-integrated terms: 22
+Total spin-adapted terms: 46
+Spin-adaptation automation time :  3.003 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 46
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_a:f_a, s_e:f_e]  = 1/2 * einsum('RixPy,iQ,xy->RPQ', Y_KWUV__aaaa, t1_xe, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixPy,izQw,xwyz->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixPy,izQy,xz->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('RixPy,izwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('RixPy,izwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixPy,izyQ,xz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixyP,iQ,xy->RPQ', Y_KWUV__aaaa, t1_xe, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixyP,izQw,xwyz->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/2 * einsum('RixyP,izQy,xz->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('RixyP,izwQ,xwyz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('RixyP,izwQ,xwzy->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixyP,izyQ,xz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iQ,Pxyz->RPQ', Y_KWUV__aaaa, t1_xe, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iQ,Pxzy->RPQ', Y_KWUV__aaaa, t1_xe, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwQu,Pxuyzw->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwQu,Pxuzyw->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwQy,Pxwz->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwQy,Pxzw->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwQz,Pxwy->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwQz,Pxyw->RPQ', Y_KWUV__aaaa, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/12 * einsum('Rixyz,iwuQ,Pxuwzy->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/12 * einsum('Rixyz,iwuQ,Pxuywz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/12 * einsum('Rixyz,iwuQ,Pxuzyw->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwyQ,Pxwz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwyQ,Pxzw->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwzQ,Pxwy->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwzQ,Pxyw->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixPy,iQ,xy->RPQ', Y_KWUV__abab, t1_xe, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixPy,izQw,xwyz->RPQ', Y_KWUV__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixPy,izQy,xz->RPQ', Y_KWUV__abab, t1_xaea, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('RixPy,izwQ,xwyz->RPQ', Y_KWUV__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('RixPy,izwQ,xwzy->RPQ', Y_KWUV__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('Rixyz,iQ,Pxyz->RPQ', Y_KWUV__abab, t1_xe, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iQ,Pxzy->RPQ', Y_KWUV__abab, t1_xe, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('Rixyz,iwQu,Pxuyzw->RPQ', Y_KWUV__abab, t1_xaea, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwQu,Pxuzyw->RPQ', Y_KWUV__abab, t1_xaea, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('Rixyz,iwQy,Pxwz->RPQ', Y_KWUV__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwQy,Pxzw->RPQ', Y_KWUV__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwQz,Pxwy->RPQ', Y_KWUV__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('Rixyz,iwQz,Pxyw->RPQ', Y_KWUV__abab, t1_xaea, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/12 * einsum('Rixyz,iwuQ,Pxuwzy->RPQ', Y_KWUV__abab, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/12 * einsum('Rixyz,iwuQ,Pxuywz->RPQ', Y_KWUV__abab, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwuQ,Pxuyzw->RPQ', Y_KWUV__abab, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/12 * einsum('Rixyz,iwuQ,Pxuzyw->RPQ', Y_KWUV__abab, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/3 * einsum('Rixyz,iwyQ,Pxwz->RPQ', Y_KWUV__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwyQ,Pxzw->RPQ', Y_KWUV__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- AE (bb) ----------------------------------------------
+
+## Calculating the excitation operator [q^(0), T - T^\dag] ...
+## Calculating the commutator...
+
+## Calculating h [q, T - T^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,P) t1(i,z,Q,y) cre(z) des(x) 
+ (  -1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,y) cre(z) cre(w) des(P) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,z) cre(y) cre(w) des(P) des(x) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,P) t1(i,z,Q,w) cre(y) cre(z) des(x) des(w) 
+ (  -1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,y) cre(z) cre(w) des(P) des(x) 
+ (   1.00000) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,Q,u) cre(y) cre(z) cre(w) des(P) des(x) des(u) 
+ (   1.00000) Y_KWUV__abab(R,i,x,y,z) t1(i,w,Q,u) cre(y) cre(z) cre(w) des(P) des(x) des(u) 
+
+Total terms : 7
+SQA automation time :  0.308 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+----------------------------------------------------------------------------------------------------
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+ >>> 7 spin-integrated terms must be processed...
+
+ >>> removing the symmetries of non-RDM spin-integrated tensors...
+ >>> symmetry removal complete.
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 17 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+0 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,w,y,z) 
+ (  -0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,w,z,y) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,y,w,z) 
+ (   0.08333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,z,y,w) 
+ (   0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,y,Q) rdm(P,x,w,z) 
+ (   0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,y,Q) rdm(P,x,z,w) 
+ (  -0.33333) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,z,Q) rdm(P,x,w,y) 
+ (  -0.16667) Y_KWUV__aaaa(R,i,x,y,z) t1(i,w,z,Q) rdm(P,x,y,w) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,P) t1(i,z,w,Q) rdm(x,w,y,z) 
+ (  -0.33333) Y_KWUV__abab(R,i,x,y,P) t1(i,z,w,Q) rdm(x,w,z,y) 
+ (   0.50000) Y_KWUV__abab(R,i,x,y,P) t1(i,z,y,Q) rdm(x,z) 
+ (  -0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,w,z,y) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,y,w,z) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,z,w,y) 
+ (   0.08333) Y_KWUV__abab(R,i,x,y,z) t1(i,w,u,Q) rdm(P,x,u,z,y,w) 
+ (   0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,y,Q) rdm(P,x,w,z) 
+ (  -0.16667) Y_KWUV__abab(R,i,x,y,z) t1(i,w,y,Q) rdm(P,x,z,w) 
+
+Total spin-integrated terms: 7
+Total spin-adapted terms: 17
+Spin-adaptation automation time :  1.001 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 17
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+TY[:, s_a:f_a, s_e:f_e]  = 1/6 * einsum('Rixyz,iwuQ,Pxuwyz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/12 * einsum('Rixyz,iwuQ,Pxuwzy->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/12 * einsum('Rixyz,iwuQ,Pxuywz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/12 * einsum('Rixyz,iwuQ,Pxuzyw->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/3 * einsum('Rixyz,iwyQ,Pxwz->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwyQ,Pxzw->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('Rixyz,iwzQ,Pxwy->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwzQ,Pxyw->RPQ', Y_KWUV__aaaa, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('RixyP,izwQ,xwyz->RPQ', Y_KWUV__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/3 * einsum('RixyP,izwQ,xwzy->RPQ', Y_KWUV__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/2 * einsum('RixyP,izyQ,xz->RPQ', Y_KWUV__abab, t1_xaae, rdm_ca, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/12 * einsum('Rixyz,iwuQ,Pxuwzy->RPQ', Y_KWUV__abab, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/12 * einsum('Rixyz,iwuQ,Pxuywz->RPQ', Y_KWUV__abab, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwuQ,Pxuzwy->RPQ', Y_KWUV__abab, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/12 * einsum('Rixyz,iwuQ,Pxuzyw->RPQ', Y_KWUV__abab, t1_xaae, rdm_cccaaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] += 1/6 * einsum('Rixyz,iwyQ,Pxwz->RPQ', Y_KWUV__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+TY[:, s_a:f_a, s_e:f_e] -= 1/6 * einsum('Rixyz,iwyQ,Pxzw->RPQ', Y_KWUV__abab, t1_xaae, rdm_ccaa, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 93.01 seconds.

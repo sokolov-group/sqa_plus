@@ -8,10 +8,9 @@ q_order = 0
 import time
 start = time.time()
 
-indices_string = 'q_caaa'
-spin_indices_string = ''
+indices_string = 'q_ca'
 
-sqa_plus.options.print_header("Spin-Adapted CVS-EE: TY Q{:} {:} ({:})".format(q_order, indices_string.upper(), spin_indices_string))
+sqa_plus.options.print_header("Spin-Adapted CVS-EE: TY Q{:} {:}".format(q_order, indices_string.upper()))
 
 # Generating operators
 print("\n## Generating operators ...\n")
@@ -61,7 +60,7 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_cvs_cor])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_cvs_cor])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('IJ')
+final_indices_list.append('CC (aa)')
 TY_index.append('[:, s_c:f_c, s_c:f_c]')
 
 ## beta
@@ -69,7 +68,7 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_cvs_cor])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_cvs_cor])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('IJ')
+final_indices_list.append('CC (bb)')
 TY_index.append('[:, s_c:f_c, s_c:f_c]')
 
 # VV
@@ -77,7 +76,7 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_cvs_val])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_cvs_val])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('IJ')
+final_indices_list.append('VV (aa)')
 TY_index.append('[:, s_v:f_v, s_v:f_v]')
 
 ## beta
@@ -85,16 +84,15 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_cvs_val])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_cvs_val])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('IJ')
+final_indices_list.append('VV (bb)')
 TY_index.append('[:, s_v:f_v, s_v:f_v]')
-
 
 # AA
 p_alpha = sqa_plus.index('P', [tg_alpha, tg_act])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_act])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('XY')
+final_indices_list.append('AA (aa)')
 TY_index.append('[:, s_a:f_a, s_a:f_a]')
 
 ## beta
@@ -102,7 +100,7 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_act])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_act])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('XY')
+final_indices_list.append('AA (bb)')
 TY_index.append('[:, s_a:f_a, s_a:f_a]')
 
 # EE
@@ -110,7 +108,7 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_vir])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_vir])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('AB')
+final_indices_list.append('EE (aa)')
 TY_index.append('[:, s_e:f_e, s_e:f_e]')
 
 ## beta
@@ -118,7 +116,7 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_vir])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_vir])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('AB')
+final_indices_list.append('EE (bb)')
 TY_index.append('[:, s_e:f_e, s_e:f_e]')
 
 # CV
@@ -126,11 +124,11 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_cvs_cor])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_cvs_val])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('IJ')
+final_indices_list.append('CV (aa)')
 TY_index.append('[:, s_c:f_c, s_v:f_v]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_alpha), sqa_plus.desOp(p_alpha)]))
-final_indices_list.append('JI')
+final_indices_list.append('VC (aa)')
 TY_index.append('[:, s_c:f_c, s_v:f_v]')
 
 ## beta
@@ -138,11 +136,11 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_cvs_cor])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_cvs_val])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('IJ')
+final_indices_list.append('CV (aa)')
 TY_index.append('[:, s_c:f_c, s_v:f_v]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_beta), sqa_plus.desOp(p_beta)]))
-final_indices_list.append('JI')
+final_indices_list.append('VC (bb)')
 TY_index.append('[:, s_c:f_c, s_v:f_v]')
 
 # CA
@@ -150,11 +148,11 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_cvs_cor])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_act])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('IX')
+final_indices_list.append('CA (aa)')
 TY_index.append('[:, s_c:f_c, s_a:f_a]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_alpha), sqa_plus.desOp(p_alpha)]))
-final_indices_list.append('XI')
+final_indices_list.append('AC (aa)')
 TY_index.append('[:, s_c:f_c, s_a:f_a]')
 
 ## beta
@@ -162,11 +160,11 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_cvs_cor])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_act])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('IX')
+final_indices_list.append('CA (bb)')
 TY_index.append('[:, s_c:f_c, s_a:f_a]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_beta), sqa_plus.desOp(p_beta)]))
-final_indices_list.append('XI')
+final_indices_list.append('AC (bb)')
 TY_index.append('[:, s_c:f_c, s_a:f_a]')
 
 
@@ -175,11 +173,11 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_cvs_val])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_act])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('IX')
+final_indices_list.append('VA (aa)')
 TY_index.append('[:, s_v:f_v, s_a:f_a]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_alpha), sqa_plus.desOp(p_alpha)]))
-final_indices_list.append('XI')
+final_indices_list.append('AV (aa)')
 TY_index.append('[:, s_v:f_v, s_a:f_a]')
 
 ## beta
@@ -187,11 +185,11 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_cvs_val])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_act])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('IX')
+final_indices_list.append('VA (bb)')
 TY_index.append('[:, s_v:f_v, s_a:f_a]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_beta), sqa_plus.desOp(p_beta)]))
-final_indices_list.append('XI')
+final_indices_list.append('AV (bb)')
 TY_index.append('[:, s_v:f_v, s_a:f_a]')
 
 # CE
@@ -199,11 +197,11 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_cvs_cor])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_vir])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('CE IA: aa')
+final_indices_list.append('CE (aa)')
 TY_index.append('[:, s_c:f_c, s_e:f_e]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_alpha), sqa_plus.desOp(p_alpha)]))
-final_indices_list.append('EC AI: aa')
+final_indices_list.append('EC (aa)')
 TY_index.append('[:, s_c:f_c, s_e:f_e]')
 
 ## beta
@@ -211,11 +209,11 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_cvs_cor])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_vir])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('CE IA: bb')
+final_indices_list.append('CE (bb)')
 TY_index.append('[:, s_c:f_c, s_e:f_e]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_beta), sqa_plus.desOp(p_beta)]))
-final_indices_list.append('EC AI: bb')
+final_indices_list.append('EC (bb)')
 TY_index.append('[:, s_c:f_c, s_e:f_e]')
 
 # VE
@@ -223,11 +221,11 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_cvs_val])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_vir])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('IA')
+final_indices_list.append('VE (aa)')
 TY_index.append('[:, s_v:f_v, s_e:f_e]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_alpha), sqa_plus.desOp(p_alpha)]))
-final_indices_list.append('AI')
+final_indices_list.append('EV (aa)')
 TY_index.append('[:, s_v:f_v, s_e:f_e]')
 
 ## beta
@@ -235,11 +233,11 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_cvs_val])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_vir])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('IA')
+final_indices_list.append('VE (bb)')
 TY_index.append('[:, s_v:f_v, s_e:f_e]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_beta), sqa_plus.desOp(p_beta)]))
-final_indices_list.append('AI')
+final_indices_list.append('EV (bb)')
 TY_index.append('[:, s_v:f_v, s_e:f_e]')
 
 # AE
@@ -247,11 +245,11 @@ p_alpha = sqa_plus.index('P', [tg_alpha, tg_act])
 q_alpha = sqa_plus.index('Q', [tg_alpha, tg_vir])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_alpha), sqa_plus.desOp(q_alpha)]))
-final_indices_list.append('XA')
+final_indices_list.append('AE (aa)')
 TY_index.append('[:, s_a:f_a, s_e:f_e]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_alpha), sqa_plus.desOp(p_alpha)]))
-final_indices_list.append('AX')
+final_indices_list.append('EA (aa)')
 TY_index.append('[:, s_a:f_a, s_e:f_e]')
 
 ## beta
@@ -259,11 +257,11 @@ p_beta = sqa_plus.index('P', [tg_beta, tg_act])
 q_beta = sqa_plus.index('Q', [tg_beta, tg_vir])
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(p_beta), sqa_plus.desOp(q_beta)]))
-final_indices_list.append('XA')
+final_indices_list.append('AE (bb)')
 TY_index.append('[:, s_a:f_a, s_e:f_e]')
 
 term_q0.append(sqa_plus.term(1.0, [], [sqa_plus.creOp(q_beta), sqa_plus.desOp(p_beta)]))
-final_indices_list.append('AX')
+final_indices_list.append('EA (bb)')
 TY_index.append('[:, s_a:f_a, s_e:f_e]')
 
 if indices_string in ['q_ca']:
@@ -338,7 +336,6 @@ elif indices_string in ['q_caaa']:
     v_alpha = act_alpha_inds.new_index()
     v_beta  = act_beta_inds.new_index()
 
-
     Y_aaaa = sqa_plus.tensor('Y_KWUV__aaaa', [r, k_alpha, w_alpha, v_alpha, u_alpha])
     Y_abab = sqa_plus.tensor('Y_KWUV__abab', [r, k_alpha, w_beta,  v_alpha, u_beta])
     Y_baab = sqa_plus.tensor('Y_KWUV__baab', [r, k_beta,  w_beta,  v_alpha, u_beta])
@@ -347,16 +344,6 @@ elif indices_string in ['q_caaa']:
     Y_baba = sqa_plus.tensor('Y_KWUV__baba', [r, k_beta,  w_alpha, v_beta, u_alpha])
     Y_abba = sqa_plus.tensor('Y_KWUV__abba', [r, k_alpha, w_beta,  v_beta, u_alpha])
 
-#    term_h = [sqa_plus.term(1.0, [], [Y_aaaa, sqa_plus.creOp(u_alpha), sqa_plus.creOp(v_alpha), sqa_plus.desOp(w_alpha), sqa_plus.desOp(k_alpha)]),
-#              sqa_plus.term(1.0, [], [Y_abab, sqa_plus.creOp(u_alpha), sqa_plus.creOp(v_beta),  sqa_plus.desOp(w_beta),  sqa_plus.desOp(k_alpha)]),
-#              sqa_plus.term(1.0, [], [Y_baab, sqa_plus.creOp(u_alpha), sqa_plus.creOp(v_beta),  sqa_plus.desOp(w_alpha), sqa_plus.desOp(k_beta)]),
-#
-#              sqa_plus.term(1.0, [], [Y_bbbb, sqa_plus.creOp(u_beta), sqa_plus.creOp(v_beta), sqa_plus.desOp(w_beta), sqa_plus.desOp(k_beta)]),
-#              sqa_plus.term(1.0, [], [Y_baba, sqa_plus.creOp(u_beta), sqa_plus.creOp(v_alpha),  sqa_plus.desOp(w_alpha),  sqa_plus.desOp(k_beta)]),
-#              sqa_plus.term(1.0, [], [Y_abba, sqa_plus.creOp(u_beta), sqa_plus.creOp(v_alpha),  sqa_plus.desOp(w_beta), sqa_plus.desOp(k_alpha)])]
-
-    #Y_aaaa = Y_abab + Y_abba
-    #Y_bbbb = Y_baba + Y_baab
     term_h = [sqa_plus.term(1.0, [], [Y_aaaa, sqa_plus.creOp(u_alpha), sqa_plus.creOp(v_alpha), sqa_plus.desOp(w_alpha), sqa_plus.desOp(k_alpha)]),
               sqa_plus.term(1.0, [], [Y_abab, sqa_plus.creOp(u_alpha), sqa_plus.creOp(v_beta),  sqa_plus.desOp(w_beta),  sqa_plus.desOp(k_alpha)]),
               sqa_plus.term(1.0, [], [Y_baab, sqa_plus.creOp(u_alpha), sqa_plus.creOp(v_beta),  sqa_plus.desOp(w_alpha), sqa_plus.desOp(k_beta)]),

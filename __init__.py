@@ -17,12 +17,19 @@
 #
 # Authors: Eric Neuscamman <eric.neuscamman@gmail.com>
 #          Alexander Yu. Sokolov <alexander.y.sokolov@gmail.com>
-#  .       Koushik Chatterjee <koushikchatterjee7@gmail.com>
+#          Koushik Chatterjee <koushikchatterjee7@gmail.com>
 #          Illia Mazin <ilia.mazin@gmail.com>
 #          Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
 import sys
+
+## Check Python version
+if not (sys.version_info.major == 2 and sys.version_info.minor == 7):
+    error_msg = ("This package requires Python 2.7. The current Python version is {:}.{:}.\n".format(sys.version_info.major, sys.version_info.minor))    
+    sys.stderr.write('\n'+error_msg+'\n')
+    raise Exception(error_msg)
+
 print("""
 ----------------------------------------------------------------------------------------------------
 sqa_plus: Code generator for quasi-particle systems.

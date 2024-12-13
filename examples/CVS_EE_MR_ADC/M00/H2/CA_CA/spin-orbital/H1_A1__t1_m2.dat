@@ -1,0 +1,198 @@
+
+----------------------------------------------------------------------------------------------------
+sqa_plus: Code generator for quasi-particle systems.
+Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
+Available at https://github.com/sokolov-group/sqa_plus
+
+Licensed under the GNU General Public License v3.0;
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+----------------------------------------------------------------------------------------------------
+
+
+------------------------ Spin-Orbital CVS-EE: M00 H2 CA_CA | T-Slice t1_m2 -------------------------
+
+
+## Generating Term a_I^\dag a_X ... a_Y^\dag a_J ...
+
+## Left operator terms:
+ (   1.00000) cre(I) des(X) 
+
+## Right operator terms:
+ (   1.00000) cre(Y) des(J) 
+
+## Creating spin-orbital H^(0)...
+8 spin-orbital H^(0) terms created.
+
+## Creating first set of spin-orbital T - T^\dag...
+44 spin-orbital A^(1) terms created.
+
+## Creating second set of spin-orbital T - T^\dag...
+44 spin-orbital A^(1) terms created.
+
+## Selecting spin-orbital T - T^\dag slice: t1_m2...
+
+# First Amplitude Set...
+ (   0.25000) t1(aa37,aa38,ee20,ee21) cre(ee20) cre(ee21) des(aa38) des(aa37) 
+ (  -0.25000) t1(aa37,aa38,ee20,ee21) cre(aa37) cre(aa38) des(ee21) des(ee20) 
+>>> Slice t1_m2: 2 spin-orbital A terms selected.
+
+# Second Amplitude Set...
+ (   0.25000) t1(aa66,aa67,ee41,ee42) cre(ee41) cre(ee42) des(aa67) des(aa66) 
+ (  -0.25000) t1(aa66,aa67,ee41,ee42) cre(aa66) cre(aa67) des(ee42) des(ee41) 
+>>> Slice t1_m2: 2 spin-orbital A terms selected.
+
+# Creating spin-orbital 1/2 * [V + H^(1), T - T^\dag]:
+
+## Creating spin-orbital V...
+246 spin-orbital V terms created.
+
+## Calculating [H^(0), T - T^\dag]:
+>>> Slice t1_m2: 12 spin-orbital terms created.
+
+## Calculating V + H^(1):
+>>> Slice t1_m2: 258 spin-orbital terms created.
+
+## Calculating 1/2 * [V + H^(1), T - T^\dag]:
+>>> Slice t1_m2: 12 spin-orbital terms created.
+
+## Calculating H^(2):
+>>> Slice t1_m2: 371 spin-orbital H^(2) terms created.
+----------------------------------------------------------------------------------------------------
+
+## Calculating [H^(2), a_Y^\dag a_J] ...
+
+## Calculating [a_I^\dag a_X, [H^(2), a_Y^\dag a_J]] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   0.50000) kdelta(I,J) t1(X,x,a,b) v(Y,y,a,b) cre(x) des(y) 
+ (   0.50000) kdelta(I,J) t1(Y,x,a,b) v(X,y,a,b) cre(y) des(x) 
+ (   1.00000) e(a) kdelta(I,J) t1(X,x,a,b) t1(Y,y,a,b) cre(x) des(y) 
+ (  -0.25000) h(X,x) kdelta(I,J) t1(x,y,a,b) t1(Y,z,a,b) cre(y) des(z) 
+ (  -0.25000) h(Y,x) kdelta(I,J) t1(x,y,a,b) t1(X,z,a,b) cre(z) des(y) 
+ (  -0.25000) h(x,y) kdelta(I,J) t1(X,x,a,b) t1(Y,z,a,b) cre(y) des(z) 
+ (  -0.25000) h(x,y) kdelta(I,J) t1(Y,x,a,b) t1(X,z,a,b) cre(z) des(y) 
+ (  -0.12500) kdelta(I,J) v(X,x,y,z) t1(y,z,a,b) t1(Y,w,a,b) cre(x) des(w) 
+ (  -0.25000) kdelta(I,J) v(i,X,i,x) t1(x,y,a,b) t1(Y,z,a,b) cre(y) des(z) 
+ (  -0.25000) kdelta(I,J) v(i,X,i,x) t1(x,y,a,b) t1(Y,z,a,b) cre(y) des(z) 
+ (  -0.12500) kdelta(I,J) v(Y,x,y,z) t1(y,z,a,b) t1(X,w,a,b) cre(w) des(x) 
+ (  -0.25000) kdelta(I,J) v(i,Y,i,x) t1(x,y,a,b) t1(X,z,a,b) cre(z) des(y) 
+ (  -0.25000) kdelta(I,J) v(i,Y,i,x) t1(x,y,a,b) t1(X,z,a,b) cre(z) des(y) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(X,x,a,b) t1(Y,z,a,b) cre(y) des(z) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(Y,x,a,b) t1(X,z,a,b) cre(z) des(y) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(X,x,a,b) t1(Y,z,a,b) cre(y) des(z) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(Y,x,a,b) t1(X,z,a,b) cre(z) des(y) 
+ (   0.25000) kdelta(I,J) t1(Y,x,a,b) v(y,z,a,b) cre(y) cre(z) des(X) des(x) 
+ (   0.25000) kdelta(I,J) t1(x,y,a,b) v(Y,z,a,b) cre(x) cre(y) des(X) des(z) 
+ (   0.50000) e(a) kdelta(I,J) t1(x,y,a,b) t1(Y,z,a,b) cre(x) cre(y) des(X) des(z) 
+ (  -0.12500) h(Y,x) kdelta(I,J) t1(x,y,a,b) t1(z,w,a,b) cre(z) cre(w) des(X) des(y) 
+ (  -0.12500) h(x,y) kdelta(I,J) t1(Y,x,a,b) t1(z,w,a,b) cre(z) cre(w) des(X) des(y) 
+ (  -0.25000) h(x,y) kdelta(I,J) t1(x,z,a,b) t1(Y,w,a,b) cre(y) cre(z) des(X) des(w) 
+ (   0.12500) kdelta(I,J) v(X,x,Y,y) t1(x,z,a,b) t1(w,u,a,b) cre(w) cre(u) des(y) des(z) 
+ (   0.12500) kdelta(I,J) v(X,x,Y,y) t1(y,z,a,b) t1(w,u,a,b) cre(x) cre(z) des(w) des(u) 
+ (  -0.06250) kdelta(I,J) v(X,x,y,z) t1(Y,x,a,b) t1(w,u,a,b) cre(w) cre(u) des(y) des(z) 
+ (   0.25000) kdelta(I,J) v(X,x,y,z) t1(y,w,a,b) t1(Y,u,a,b) cre(x) cre(w) des(z) des(u) 
+ (  -0.06250) kdelta(I,J) v(Y,x,y,z) t1(X,x,a,b) t1(w,u,a,b) cre(y) cre(z) des(w) des(u) 
+ (  -0.06250) kdelta(I,J) v(Y,x,y,z) t1(y,z,a,b) t1(w,u,a,b) cre(w) cre(u) des(X) des(x) 
+ (   0.25000) kdelta(I,J) v(Y,x,y,z) t1(y,w,a,b) t1(X,u,a,b) cre(z) cre(u) des(x) des(w) 
+ (  -0.12500) kdelta(I,J) v(i,Y,i,x) t1(x,y,a,b) t1(z,w,a,b) cre(z) cre(w) des(X) des(y) 
+ (  -0.12500) kdelta(I,J) v(i,Y,i,x) t1(x,y,a,b) t1(z,w,a,b) cre(z) cre(w) des(X) des(y) 
+ (  -0.12500) kdelta(I,J) v(x,y,z,w) t1(X,x,a,b) t1(Y,u,a,b) cre(z) cre(w) des(y) des(u) 
+ (  -0.12500) kdelta(I,J) v(x,y,z,w) t1(Y,x,a,b) t1(X,u,a,b) cre(y) cre(u) des(z) des(w) 
+ (  -0.06250) kdelta(I,J) v(x,y,z,w) t1(x,y,a,b) t1(Y,u,a,b) cre(z) cre(w) des(X) des(u) 
+ (  -0.12500) kdelta(I,J) v(i,x,i,y) t1(Y,x,a,b) t1(z,w,a,b) cre(z) cre(w) des(X) des(y) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(x,z,a,b) t1(Y,w,a,b) cre(y) cre(z) des(X) des(w) 
+ (  -0.12500) kdelta(I,J) v(i,x,i,y) t1(Y,x,a,b) t1(z,w,a,b) cre(z) cre(w) des(X) des(y) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(x,z,a,b) t1(Y,w,a,b) cre(y) cre(z) des(X) des(w) 
+ (  -0.06250) kdelta(I,J) v(Y,x,y,z) t1(x,w,a,b) t1(u,v,a,b) cre(y) cre(z) cre(w) des(X) des(u) des(v) 
+ (   0.12500) kdelta(I,J) v(Y,x,y,z) t1(y,w,a,b) t1(u,v,a,b) cre(z) cre(u) cre(v) des(X) des(x) des(w) 
+ (  -0.06250) kdelta(I,J) v(x,y,z,w) t1(Y,x,a,b) t1(u,v,a,b) cre(y) cre(u) cre(v) des(X) des(z) des(w) 
+ (  -0.12500) kdelta(I,J) v(x,y,z,w) t1(x,u,a,b) t1(Y,v,a,b) cre(z) cre(w) cre(u) des(X) des(y) des(v) 
+
+Total terms : 43
+SQA automation time :  4.583 seconds
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+14 terms removed:
+ (  -0.25000) kdelta(I,J) v(i,X,i,x) t1(x,y,a,b) t1(Y,z,a,b) rdm(y,z) 
+ (  -0.25000) kdelta(I,J) v(i,X,i,x) t1(x,y,a,b) t1(Y,z,a,b) rdm(y,z) 
+ (  -0.25000) kdelta(I,J) v(i,Y,i,x) t1(x,y,a,b) t1(X,z,a,b) rdm(z,y) 
+ (  -0.25000) kdelta(I,J) v(i,Y,i,x) t1(x,y,a,b) t1(X,z,a,b) rdm(z,y) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(X,x,a,b) t1(Y,z,a,b) rdm(y,z) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(Y,x,a,b) t1(X,z,a,b) rdm(z,y) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(X,x,a,b) t1(Y,z,a,b) rdm(y,z) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(Y,x,a,b) t1(X,z,a,b) rdm(z,y) 
+ (  -0.12500) kdelta(I,J) v(i,Y,i,x) t1(x,y,a,b) t1(z,w,a,b) rdm(z,w,X,y) 
+ (  -0.12500) kdelta(I,J) v(i,Y,i,x) t1(x,y,a,b) t1(z,w,a,b) rdm(z,w,X,y) 
+ (  -0.12500) kdelta(I,J) v(i,x,i,y) t1(Y,x,a,b) t1(z,w,a,b) rdm(z,w,X,y) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(x,z,a,b) t1(Y,w,a,b) rdm(y,z,X,w) 
+ (  -0.12500) kdelta(I,J) v(i,x,i,y) t1(Y,x,a,b) t1(z,w,a,b) rdm(z,w,X,y) 
+ (  -0.25000) kdelta(I,J) v(i,x,i,y) t1(x,z,a,b) t1(Y,w,a,b) rdm(y,z,X,w) 
+----------------------------------------------------------------------------------------------------
+Remaining terms: 29
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+temp  = 1/2 * einsum('IJ,Xxab,Yyab,xy->IXJY', np.identity(ncvs_so), t1_aaee, v_aaee_so, rdm_ca_so, optimize = einsum_type)
+temp += 1/2 * einsum('IJ,Yxab,Xyab,yx->IXJY', np.identity(ncvs_so), t1_aaee, v_aaee_so, rdm_ca_so, optimize = einsum_type)
+temp += einsum('a,IJ,Xxab,Yyab,xy->IXJY', e_extern_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ca_so, optimize = einsum_type)
+temp -= 1/4 * einsum('Xx,IJ,xyab,Yzab,yz->IXJY', h_aa_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ca_so, optimize = einsum_type)
+temp -= 1/4 * einsum('Yx,IJ,xyab,Xzab,zy->IXJY', h_aa_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ca_so, optimize = einsum_type)
+temp -= 1/4 * einsum('xy,IJ,Xxab,Yzab,yz->IXJY', h_aa_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ca_so, optimize = einsum_type)
+temp -= 1/4 * einsum('xy,IJ,Yxab,Xzab,zy->IXJY', h_aa_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ca_so, optimize = einsum_type)
+temp -= 1/8 * einsum('IJ,Xxyz,yzab,Ywab,xw->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ca_so, optimize = einsum_type)
+temp -= 1/8 * einsum('IJ,Yxyz,yzab,Xwab,wx->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ca_so, optimize = einsum_type)
+temp += 1/4 * einsum('IJ,Yxab,yzab,yzXx->IXJY', np.identity(ncvs_so), t1_aaee, v_aaee_so, rdm_ccaa_so, optimize = einsum_type)
+temp += 1/4 * einsum('IJ,xyab,Yzab,xyXz->IXJY', np.identity(ncvs_so), t1_aaee, v_aaee_so, rdm_ccaa_so, optimize = einsum_type)
+temp += 1/2 * einsum('a,IJ,xyab,Yzab,xyXz->IXJY', e_extern_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/8 * einsum('Yx,IJ,xyab,zwab,zwXy->IXJY', h_aa_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/8 * einsum('xy,IJ,Yxab,zwab,zwXy->IXJY', h_aa_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/4 * einsum('xy,IJ,xzab,Ywab,yzXw->IXJY', h_aa_so, np.identity(ncvs_so), t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp += 1/8 * einsum('IJ,XxYy,xzab,wuab,wuyz->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp += 1/8 * einsum('IJ,XxYy,yzab,wuab,xzwu->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/16 * einsum('IJ,Xxyz,Yxab,wuab,wuyz->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp += 1/4 * einsum('IJ,Xxyz,ywab,Yuab,xwzu->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/16 * einsum('IJ,Yxyz,Xxab,wuab,yzwu->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/16 * einsum('IJ,Yxyz,yzab,wuab,wuXx->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp += 1/4 * einsum('IJ,Yxyz,ywab,Xuab,zuxw->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/8 * einsum('IJ,xyzw,Xxab,Yuab,zwyu->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/8 * einsum('IJ,xyzw,Yxab,Xuab,yuzw->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/16 * einsum('IJ,xyzw,xyab,Yuab,zwXu->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_ccaa_so, optimize = einsum_type)
+temp -= 1/16 * einsum('IJ,Yxyz,xwab,uvab,yzwXuv->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_cccaaa_so, optimize = einsum_type)
+temp += 1/8 * einsum('IJ,Yxyz,ywab,uvab,zuvXxw->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_cccaaa_so, optimize = einsum_type)
+temp -= 1/16 * einsum('IJ,xyzw,Yxab,uvab,yuvXzw->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_cccaaa_so, optimize = einsum_type)
+temp -= 1/8 * einsum('IJ,xyzw,xuab,Yvab,zwuXyv->IXJY', np.identity(ncvs_so), v_aaaa_so, t1_aaee, t1_aaee, rdm_cccaaa_so, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 88.04 seconds.
