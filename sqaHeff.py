@@ -2844,15 +2844,16 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
         T_deex.append(T2_deex)
 
         if (order == 2 and internal_excitations):
+            t1_ten_asymm = [symmetry((1,0), -1)]
             act_1 = act_alpha_inds.new_index()
             act_2 = act_alpha_inds.new_index()
-            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_asymm)
             T1_ex  = term(1.0, [], [t1_ten, creOp(act_2), desOp(act_1)])
             T_ex.append(T1_ex)
 
             act_1 = act_beta_inds.new_index()
             act_2 = act_beta_inds.new_index()
-            t1_ten = tensor(tname, [act_1, act_2], t1_ten_symm)
+            t1_ten = tensor(tname, [act_1, act_2], t1_ten_asymm)
             T1_ex  = term(1.0, [], [t1_ten, creOp(act_2), desOp(act_1)])
             T_ex.append(T1_ex)
 
