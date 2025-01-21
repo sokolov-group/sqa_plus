@@ -135,3 +135,6 @@ dmypy.json
 *nfs*
 *delete*
 .DS_Store
+
+## ignore messy cvs-ee files for now
+examples/CVS_EE_MR_ADC/
