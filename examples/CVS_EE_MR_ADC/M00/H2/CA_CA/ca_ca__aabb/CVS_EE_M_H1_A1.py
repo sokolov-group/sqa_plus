@@ -7,7 +7,7 @@ import time
 start = time.time()
 
 spin_indices_string = 'aa_bb'
-selected_amplitude = 't1_p1p'
+selected_amplitude = 't1_p2'
 
 sqa_plus.options.print_header("Spin-Adapted CVS-EE: M00 H2 CA_CA ({:}) - T-Slice {:}".format(spin_indices_string, selected_amplitude))
 

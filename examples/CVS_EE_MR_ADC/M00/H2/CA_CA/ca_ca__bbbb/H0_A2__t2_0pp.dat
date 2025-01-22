@@ -66,27 +66,27 @@ Done!
 ------------------------------------------ Final results -------------------------------------------
 
  (   1.00000) h(X,x) kdelta(I,J) t2(Y,x) 
- (  -1.00000) h(Y,x) kdelta(I,J) t2(X,x) 
+ (   1.00000) h(Y,x) kdelta(I,J) t2(X,x) 
  (   1.00000) h(Y,x) kdelta(I,J) t2(x,y) cre(y) des(X) 
  (  -1.00000) h(x,y) kdelta(I,J) t2(Y,x) cre(y) des(X) 
- (  -1.00000) kdelta(I,J) t2(X,x) v(Y,y,x,z) cre(z) des(y) 
- (  -1.00000) kdelta(I,J) t2(X,x) v(Y,y,x,z) cre(z) des(y) 
+ (   1.00000) kdelta(I,J) t2(X,x) v(Y,y,x,z) cre(z) des(y) 
+ (   1.00000) kdelta(I,J) t2(X,x) v(Y,y,x,z) cre(z) des(y) 
  (   1.00000) kdelta(I,J) t2(Y,x) v(X,y,x,z) cre(y) des(z) 
  (   1.00000) kdelta(I,J) t2(Y,x) v(X,y,x,z) cre(y) des(z) 
  (  -1.00000) kdelta(I,J) t2(x,y) v(X,x,Y,z) cre(y) des(z) 
- (   1.00000) kdelta(I,J) t2(x,y) v(X,z,Y,x) cre(z) des(y) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(X,z,Y,x) cre(z) des(y) 
  (  -1.00000) kdelta(I,J) t2(x,y) v(X,x,Y,z) cre(y) des(z) 
- (   1.00000) kdelta(I,J) t2(x,y) v(X,z,Y,x) cre(z) des(y) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(X,z,Y,x) cre(z) des(y) 
  (   1.00000) kdelta(I,J) t2(Y,x) v(x,y,z,w) cre(z) cre(w) des(X) des(y) 
  (   0.50000) kdelta(I,J) t2(Y,x) v(x,y,z,w) cre(z) cre(w) des(X) des(y) 
- (   1.00000) kdelta(I,J) t2(x,y) v(Y,x,z,w) cre(z) cre(w) des(X) des(y) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(Y,x,z,w) cre(z) cre(w) des(X) des(y) 
  (  -1.00000) kdelta(I,J) t2(x,y) v(Y,z,x,w) cre(y) cre(w) des(X) des(z) 
- (   0.50000) kdelta(I,J) t2(x,y) v(Y,x,z,w) cre(z) cre(w) des(X) des(y) 
+ (  -0.50000) kdelta(I,J) t2(x,y) v(Y,x,z,w) cre(z) cre(w) des(X) des(y) 
  (  -1.00000) kdelta(I,J) t2(x,y) v(Y,z,x,w) cre(y) cre(w) des(X) des(z) 
  (  -1.00000) kdelta(I,J) t2(x,y) v(Y,z,x,w) cre(y) cre(w) des(X) des(z) 
 
 Total terms : 19
-SQA automation time :  0.173 seconds
+SQA automation time :  0.169 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
@@ -141,25 +141,25 @@ Done!
 -------------------------------------- Spin-adapted equations --------------------------------------
 
  (   1.00000) h(X,x) kdelta(I,J) t2(Y,x) 
- (  -1.00000) h(Y,x) kdelta(I,J) t2(X,x) 
+ (   1.00000) h(Y,x) kdelta(I,J) t2(X,x) 
  (   0.50000) h(Y,x) kdelta(I,J) t2(x,y) rdm(X,y) 
  (  -0.50000) h(x,y) kdelta(I,J) t2(Y,x) rdm(X,y) 
- (  -1.00000) kdelta(I,J) t2(X,x) v(Y,x,y,z) rdm(y,z) 
- (   0.50000) kdelta(I,J) t2(X,x) v(Y,y,z,x) rdm(z,y) 
+ (   1.00000) kdelta(I,J) t2(X,x) v(Y,x,y,z) rdm(y,z) 
+ (  -0.50000) kdelta(I,J) t2(X,x) v(Y,y,z,x) rdm(z,y) 
  (   1.00000) kdelta(I,J) t2(Y,x) v(X,x,y,z) rdm(y,z) 
  (  -0.50000) kdelta(I,J) t2(Y,x) v(X,y,z,x) rdm(z,y) 
  (  -0.50000) kdelta(I,J) t2(Y,x) v(x,y,z,w) rdm(X,z,y,w) 
  (  -1.00000) kdelta(I,J) t2(x,y) v(X,Y,x,z) rdm(y,z) 
- (   1.00000) kdelta(I,J) t2(x,y) v(X,Y,z,x) rdm(y,z) 
- (  -0.50000) kdelta(I,J) t2(x,y) v(X,x,z,Y) rdm(y,z) 
+ (  -1.00000) kdelta(I,J) t2(x,y) v(X,Y,z,x) rdm(y,z) 
+ (   0.50000) kdelta(I,J) t2(x,y) v(X,x,z,Y) rdm(y,z) 
  (   0.50000) kdelta(I,J) t2(x,y) v(X,z,x,Y) rdm(y,z) 
  (   0.50000) kdelta(I,J) t2(x,y) v(Y,x,z,w) rdm(X,z,y,w) 
  (   0.50000) kdelta(I,J) t2(x,y) v(Y,z,w,x) rdm(X,w,z,y) 
- (  -0.50000) kdelta(I,J) t2(x,y) v(Y,z,x,w) rdm(X,y,z,w) 
+ (   0.50000) kdelta(I,J) t2(x,y) v(Y,z,x,w) rdm(X,y,z,w) 
 
 Total spin-integrated terms: 19
 Total spin-adapted terms: 16
-Spin-adaptation automation time :  0.495 seconds
+Spin-adaptation automation time :  0.485 seconds
 ----------------------------------------------------------------------------------------------------
 Dummy indices relabeling...
 Done!
@@ -178,20 +178,20 @@ Remaining terms: 16
 --------------------------------------- genEinsum equations ----------------------------------------
 
 temp  = einsum('Xx,IJ,Yx->IXJY', h_aa, np.identity(ncvs), t2_aa, optimize = einsum_type)
-temp -= einsum('Yx,IJ,Xx->IXJY', h_aa, np.identity(ncvs), t2_aa, optimize = einsum_type)
+temp += einsum('Yx,IJ,Xx->IXJY', h_aa, np.identity(ncvs), t2_aa, optimize = einsum_type)
 temp += 1/2 * einsum('Yx,IJ,xy,Xy->IXJY', h_aa, np.identity(ncvs), t2_aa, rdm_ca, optimize = einsum_type)
 temp -= 1/2 * einsum('xy,IJ,Yx,Xy->IXJY', h_aa, np.identity(ncvs), t2_aa, rdm_ca, optimize = einsum_type)
-temp -= einsum('IJ,Xx,Yxyz,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
-temp += 1/2 * einsum('IJ,Xx,Yyzx,zy->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp += einsum('IJ,Xx,Yxyz,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp -= 1/2 * einsum('IJ,Xx,Yyzx,zy->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
 temp += einsum('IJ,Yx,Xxyz,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
 temp -= 1/2 * einsum('IJ,Yx,Xyzx,zy->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
 temp -= 1/2 * einsum('IJ,Yx,xyzw,Xzyw->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
 temp -= einsum('IJ,xy,XYxz,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
-temp += einsum('IJ,xy,XYzx,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
-temp -= 1/2 * einsum('IJ,xy,XxzY,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp -= einsum('IJ,xy,XYzx,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
+temp += 1/2 * einsum('IJ,xy,XxzY,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
 temp += 1/2 * einsum('IJ,xy,XzxY,yz->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ca, optimize = einsum_type)
 temp += 1/2 * einsum('IJ,xy,Yxzw,Xzyw->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
 temp += 1/2 * einsum('IJ,xy,Yzwx,Xwzy->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
-temp -= 1/2 * einsum('IJ,xy,Yzxw,Xyzw->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
+temp += 1/2 * einsum('IJ,xy,Yzxw,Xyzw->IXJY', np.identity(ncvs), t2_aa, v_aaaa, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 1.63 seconds.
+> Total elapsed time: 1.59 seconds.
