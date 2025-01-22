@@ -48,7 +48,6 @@ def convertSpinIntegratedToAdapted(terms_si, remove_5rdms = False):
     if remove_5rdms:
        terms_si = remove_5RDM_objects(terms_si) 
 
-###    dummyLabel(terms_si, memory_check = False)
     dummyLabel(terms_si)
     len_terms_si = len(terms_si)
     sys.stdout.flush()
@@ -156,28 +155,6 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
             _terms_credes[term_credes_ind].tensors = [tens for tens in term_credes.tensors if tens not in credes_ops]
             ten_rdm = creDesTensor(credes_ops, trans_rdm)
             _terms_credes[term_credes_ind].tensors.append(ten_rdm)
-
-####    terms_generator = iter(_terms_credes)
-####    for term_credes in enumerate(terms_generator):
-####
-####        print(term_credes)
-####
-####        ## List for storing cre/des operators
-####        credes_ops = []
-####
-####        ## Append all cre/des operators to list
-####        for tens_credes in term_credes[1].tensors:
-####            if isinstance(tens_credes, creOp) or isinstance(tens_credes, desOp):
-####                credes_ops.append(tens_credes)
-####
-####        ## Modify term in list to use creDesTensor object instead of cre/des objects
-####        if credes_ops:
-####            new_tensors = [tens for tens in term_credes[1].tensors if tens not in credes_ops]
-####            ## Create creDesTensor 
-####            ten_rdm = creDesTensor(credes_ops, trans_rdm)
-####            new_tensors.append(ten_rdm)
-####            ## Update tensors
-####            term_credes[1].tensors = new_tensors
 
     sys.stdout.flush()
     print("Done!")
@@ -5740,8 +5717,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 def remove_si_tensors_symmetries(_terms_si):
     "Remove Symmetries of non-RDM Spin-Integrated Tensors"
 
-    print('\n >>> removing the symmetries of non-RDM spin-integrated tensors...')
-
     for _term_ind, _term_si in enumerate(_terms_si):
         for _tensor_ind, _tensor_si in enumerate(_term_si.tensors):
 
@@ -5760,7 +5735,6 @@ def remove_si_tensors_symmetries(_terms_si):
             elif _tensor_si.name in ['t1', 't2'] and len(_tensor_si.indices) in [2, 4]:
                 _terms_si[_term_ind].tensors[_tensor_ind].symmetries = []
 
-    print(' >>> symmetry removal complete.')
     sys.stdout.flush()
 
 def update_sa_tensors_symmetries(_terms_sa):
