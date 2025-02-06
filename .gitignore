@@ -135,3 +135,6 @@ dmypy.json
 *nfs*
 *delete*
 .DS_Store
+
+# unpolished eqn file
+examples/CVS_EE_MR_ADC/
