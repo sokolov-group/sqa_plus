@@ -10,17 +10,23 @@
 # limitations under the License.
 #
 # Author: Ilia Mazin <ilia.mazin@gmail.com>
+#         Donna Odhiambo <donna.odhiambo@proton.me>
 #
+
+import sys, time
+import itertools
 
 import numpy as np
 
 from sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from sqaTerm import term
-from sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type
+from sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type, is_cvs_index_type
 
+from sqaMatrixBlock import dummyLabel, reorder_tensor_indices
 from sqaOptions import options
 
 def genIntermediates(input_terms, ind_str = None, custom_path = None):
+    "Generate Intermediate Terms for Tensor Rank Reduction."
 
     # Import options from sqaOptions class
     trans_rdm = options.genIntermediates.trans_rdm
@@ -29,11 +35,15 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     if factor_depth < 0 or not isinstance(factor_depth, int):
         raise ValueError('Invalid factor depth provided -- provide integer value that is >= 0')
 
+    startTime = time.time()
+    options.print_header('Generating Intermediate Tensors (factor depth = {:})'.format(factor_depth))
+    sys.stdout.flush()
+
     # Make list of integers to append to 'INT' string below
     interm_name_list = np.arange(1, 10000)
 
     # Create new list of terms that will modify input terms and expand them in terms of intermediates:
-    mod_term_list = []
+    modified_term_list = []
 
     # Create list for storing intermediates
     intermediates = []
@@ -59,53 +69,57 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                 tensor_indices_list.append([ind for ind in t.indices])
 
         # Turn cre/des operators into RDM, if they exist
-        if (len(credes_list) > 0):
+        #if (len(credes_list) > 0):
+        if credes_list:
             rdm_tensor = creDesTensor(credes_list, trans_rdm)
             tensorlist.append(rdm_tensor)
             tensor_indices_list.append([ind for ind in rdm_tensor.indices])
 
         # Create einsum string and dictionary of index sizes
         lhs_str = []
-        sizes_dict = dict()
+        sizes_dict = {}
 
         # Loop through lists of indices for each tensor in term
         for ind_list in tensor_indices_list:
 
             # Make LHS string
-            lhs_str.append(''.join([i.name for i in ind_list]))
+            lhs_str.append(''.join(i.name for i in ind_list))
 
             # Define lengths of unique indices
-            for i in ind_list:
+            for ind in ind_list:
 
                 # Only add new indices to dictionary of index sizes
-                if i.name not in sizes_dict.keys():
+                if ind.name not in sizes_dict:
 
                     size = None
 
                     # Weigh size of index by subspace
-                    if is_active_index_type(i):
+                    if is_active_index_type(ind):
                         size = 2
-                    elif is_core_index_type(i):
+                    elif is_core_index_type(ind) or is_cvs_core_index_type(ind) or is_cvs_valence_index_type(ind):
+                    #elif is_core_index_type(ind):
                         size = 4
                     else:
                         size = 6
 
                     # Add key/value pair
-                    sizes_dict[i.name] = size
+                    sizes_dict[ind.name] = size
 
         # Make einsum string
         einsum_string = str(','.join(lhs_str) + '->' + ind_str)
+        #einsum_string = '{},->{}'.format(','.join(lhs_str), ind_str)
 
         # Construct dummy tensors for term in order to assess contraction path
         dummy_tens = []
 
-        for t in tensorlist:
-            dims = []
+        #for t in tensorlist:
+        #    dims = []
 
-            for index in t.indices:
-                dims.append(sizes_dict[index.name])
+        #    for index in t.indices:
+        #        dims.append(sizes_dict[index.name])
 
-            dummy_tens.append(np.empty(tuple(dims)))
+        #    dummy_tens.append(np.empty(tuple(dims)))
+        dummy_tens = [np.empty(tuple(sizes_dict[idx.name] for idx in t.indices)) for t in tensorlist]
 
         # Compute most efficient contraction path
         path_info = np.einsum_path(einsum_string, *dummy_tens)
@@ -145,7 +159,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                 for contract in contract_order:
 
                     tens_inds       = [lhs_str[i] for i in contract]
-                    contracted_inds = ''.join([lhs_str[i] for i in contract])
+                    contracted_inds = ''.join(lhs_str[i] for i in contract)
 
                     # Construct string out of indices not contracted over
                     int_ind = ''
@@ -236,14 +250,17 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                 tensorlist.append(loop_tensor)
 
             pre_factor *= scale_factor_total
-            mod_term_list.append(term(pre_factor, [], tensorlist))
+            modified_term_list.append(term(pre_factor, [], tensorlist))
 
         # Scaling of contraction cannot be optimized
         else:
-            mod_term_list.append(in_term)
+            modified_term_list.append(in_term)
 
-    return mod_term_list, intermediates
-
+    print("\nTotal intermediates generated: {:}".format(len(intermediates)))
+    print("Intermediate generation time :  {:.3f} seconds".format(time.time() - startTime))
+    options.print_divider()
+    sys.stdout.flush()
+    return modified_term_list, intermediates
 
 def make_canonical(int_term, trans_rdm):
 
