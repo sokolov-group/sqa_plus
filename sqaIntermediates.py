@@ -25,6 +25,8 @@ from sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_
 from sqaMatrixBlock import dummyLabel, reorder_tensor_indices
 from sqaOptions import options
 
+from sqaSpinAdapted import convert_credes_to_rdm 
+
 def genIntermediates(input_terms, ind_str = None, custom_path = None):
     "Generate Intermediate Terms for Tensor Rank Reduction."
 
@@ -48,32 +50,38 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     # Create list for storing intermediates
     intermediates = []
 
+    # Convert Cre/Des Objects to RDM Objects
+    convert_credes_to_rdm(input_terms, trans_rdm) 
+
     # Iterate through every term in list of terms
-    for in_term in input_terms:
+    for _term in input_terms:
 
         # Create lists for all tensors
-        tensorlist          = []
-        tensor_indices_list = []
-        credes_list         = []
-        pre_factor          = in_term.numConstant
+##        tensorlist          = []
+##        tensor_indices_list = []
+##        credes_list         = []
+        pre_factor          = _term.numConstant
 
-        # Reformat the names of the tensors from SQA
-        for t in in_term.tensors:
+##        # Reformat the names of the tensors from SQA
+##        for t in in_term.tensors:
+##
+##            # Separate cre/des operators to make into RDMs
+##            if (isinstance(t, creOp) or isinstance(t, desOp)):
+##                credes_list.append(t)
+##
+##            else:
+##                tensorlist.append(t)
+##                tensor_indices_list.append([ind for ind in t.indices])
+##
+##        # Turn cre/des operators into RDM, if they exist
+##        #if (len(credes_list) > 0):
+##        if credes_list:
+##            rdm_tensor = creDesTensor(credes_list, trans_rdm)
+##            tensorlist.append(rdm_tensor)
+##            tensor_indices_list.append([ind for ind in rdm_tensor.indices])
 
-            # Separate cre/des operators to make into RDMs
-            if (isinstance(t, creOp) or isinstance(t, desOp)):
-                credes_list.append(t)
-
-            else:
-                tensorlist.append(t)
-                tensor_indices_list.append([ind for ind in t.indices])
-
-        # Turn cre/des operators into RDM, if they exist
-        #if (len(credes_list) > 0):
-        if credes_list:
-            rdm_tensor = creDesTensor(credes_list, trans_rdm)
-            tensorlist.append(rdm_tensor)
-            tensor_indices_list.append([ind for ind in rdm_tensor.indices])
+        tensorlist = list(_term.tensors)
+        tensor_indices_list = [list(t.indices) for t in _term.tensors]
 
         # Create einsum string and dictionary of index sizes
         lhs_str = []
@@ -96,8 +104,8 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                     # Weigh size of index by subspace
                     if is_active_index_type(ind):
                         size = 2
-                    elif is_core_index_type(ind) or is_cvs_core_index_type(ind) or is_cvs_valence_index_type(ind):
-                    #elif is_core_index_type(ind):
+                    #elif is_core_index_type(ind) or is_cvs_core_index_type(ind) or is_cvs_valence_index_type(ind):
+                    elif is_core_index_type(ind):
                         size = 4
                     else:
                         size = 6
@@ -110,7 +118,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         #einsum_string = '{},->{}'.format(','.join(lhs_str), ind_str)
 
         # Construct dummy tensors for term in order to assess contraction path
-        dummy_tens = []
+        #dummy_tens = []
 
         #for t in tensorlist:
         #    dims = []
@@ -254,7 +262,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
         # Scaling of contraction cannot be optimized
         else:
-            modified_term_list.append(in_term)
+            modified_term_list.append(_term)
 
     print("\nTotal intermediates generated: {:}".format(len(intermediates)))
     print("Intermediate generation time :  {:.3f} seconds".format(time.time() - startTime))
