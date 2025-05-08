@@ -33,35 +33,39 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     # Import options from sqaOptions class
     trans_rdm = options.genIntermediates.trans_rdm
     factor_depth = options.genIntermediates.factor_depth
+    opt_einsum = options.genIntermediates.opt_einsum
+
+    if opt_einsum:
+        import opt_einsum as oe
 
     if factor_depth < 0 or not isinstance(factor_depth, int):
         raise ValueError('Invalid factor depth provided -- provide integer value that is >= 0')
 
     startTime = time.time()
-    options.print_header('Generating Intermediate Tensors (factor depth = {:})'.format(factor_depth))
+    options.print_header('Generating Intermediate Tensors | Factor Depth = {:}'.format(factor_depth))
     sys.stdout.flush()
 
     # Make list of integers to append to 'INT' string below
-    interm_name_list = np.arange(1, 10000)
+    int_name_list = np.arange(1, 10000)
 
-    # Create new list of terms that will modify input terms and expand them in terms of intermediates:
+    # Initialize list for modified input terms that will use intermediate tensors
     modified_term_list = []
 
-    # Create list for storing intermediates
+    # Initialize list for intermediate tensors
     intermediates = []
 
     # Convert Cre/Des Objects to RDM Objects
     convert_credes_to_rdm(input_terms, trans_rdm) 
-
+    
     # Iterate through every term in list of terms
     for _term in input_terms:
 
-        # Create lists for all tensors
+##        # Create lists for all tensors
 ##        tensorlist          = []
 ##        tensor_indices_list = []
 ##        credes_list         = []
-        pre_factor          = _term.numConstant
-
+##        pre_factor          = _term.numConstant
+##
 ##        # Reformat the names of the tensors from SQA
 ##        for t in in_term.tensors:
 ##
@@ -80,17 +84,19 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 ##            tensorlist.append(rdm_tensor)
 ##            tensor_indices_list.append([ind for ind in rdm_tensor.indices])
 
-        tensorlist = list(_term.tensors)
-        tensor_indices_list = [list(t.indices) for t in _term.tensors]
+        # Create lists for tensors
+        tensorList = list(_term.tensors)
+        tensorIndicesList = [list(t.indices) for t in _term.tensors]
+        prefactor = _term.numConstant
 
         # Create einsum string and dictionary of index sizes
         lhs_str = []
         sizes_dict = {}
 
         # Loop through lists of indices for each tensor in term
-        for ind_list in tensor_indices_list:
+        for ind_list in tensorIndicesList:
 
-            # Make LHS string
+            # Make string of indices for left-hand side expression
             lhs_str.append(''.join(i.name for i in ind_list))
 
             # Define lengths of unique indices
@@ -98,20 +104,16 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
                 # Only add new indices to dictionary of index sizes
                 if ind.name not in sizes_dict:
-
-                    size = None
-
+                    ##TODO: this weighs core_valence and core_cvs equally, should that be the case? if not, also make changes to assign_space_rank
                     # Weigh size of index by subspace
                     if is_active_index_type(ind):
-                        size = 2
-                    #elif is_core_index_type(ind) or is_cvs_core_index_type(ind) or is_cvs_valence_index_type(ind):
-                    elif is_core_index_type(ind):
-                        size = 4
+                        sizes_dict[ind.name] = 2
+                    elif is_core_index_type(ind): 
+                        sizes_dict[ind.name] = 4
+                    elif is_virtual_index_type(ind):
+                        sizes_dict[ind.name] = 6
                     else:
-                        size = 6
-
-                    # Add key/value pair
-                    sizes_dict[ind.name] = size
+                        raise Exception('Index does not belong to a valid orbital subspace')
 
         # Make einsum string
         einsum_string = str(','.join(lhs_str) + '->' + ind_str)
@@ -127,17 +129,24 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         #        dims.append(sizes_dict[index.name])
 
         #    dummy_tens.append(np.empty(tuple(dims)))
-        dummy_tens = [np.empty(tuple(sizes_dict[idx.name] for idx in t.indices)) for t in tensorlist]
+        dummy_tens = [np.empty(tuple(sizes_dict[idx.name] for idx in t.indices)) for t in tensorList]
 
         # Compute most efficient contraction path
-        path_info = np.einsum_path(einsum_string, *dummy_tens)
 
         # TODO: WHICH EINSUM? OPT OR NUMPY?
-        # Isolate intermediate contractions from opt_einsum info
-        naive          = int(path_info[1].split('\n')[1].split()[-1])
-        opt            = int(path_info[1].split('\n')[2].split()[-1])
-
         # Determine if opt_einsum will improve scaling of contraction
+        # Isolate intermediate contractions from opt_einsum info
+        if opt_einsum:
+            # using FLOP count to compare
+            path_info = oe.contract_path(einsum_string, *dummy_tens, optimize="greedy")
+            naive     = path_info[1].naive_cost
+            opt       = path_info[1].opt_cost
+        else:
+            # using scaling to compare
+            path_info = np.einsum_path(einsum_string, *dummy_tens)
+            naive     = int(path_info[1].split('\n')[1].split()[-1])
+            opt       = int(path_info[1].split('\n')[2].split()[-1])
+
         if naive > opt:
 
             # If an order of contracting tensors is specified
@@ -187,11 +196,18 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             else:
 
                 # Save tuples that indicate optimized order of contracting tensors
-                contract_order = [contract for contract in path_info[0][1:1 + factor_depth]]
+                if opt_einsum:
+                    contract_order = [contract for contract in path_info[0][0:0 + factor_depth]]
+                else:
+                    contract_order = [contract for contract in path_info[0][1:1 + factor_depth]]
 
                 # Determine contraction path and indices of intermediates
-                split_path     = path_info[1].split('\n')[10:10 + factor_depth]
-                int_indices    = [str(line).split()[1].split('->')[1] for line in split_path]
+                if opt_einsum:
+                    all_int_indices = [inds[2].split('->')[1] for inds in path_info[1].contraction_list]
+                    int_indices = all_int_indices[0:0 + factor_depth]
+                else:
+                    split_path     = path_info[1].split('\n')[10:10 + factor_depth]
+                    int_indices    = [str(line).split()[1].split('->')[1] for line in split_path]
 
             # Define scale outside of loop
             scale_factor_total = 1.0
@@ -200,10 +216,10 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             for num, contract in enumerate(contract_order):
 
                 # Make intermediate name
-                tensor_name = 'INT' + str(interm_name_list[0])
+                tensor_name = 'INT' + str(int_name_list[0])
 
-                # Determine which tensors from tensorlist are being contracted
-                tens_contract = [tensorlist[i] for i in contract]
+                # Determine which tensors from tensorList are being contracted
+                tens_contract = [tensorList[i] for i in contract]
 
                 # Use the external string to modify indexType of the indices in tensors wrt the intermediate term
                 new_tensors, def_indices, loop_indices = get_int_indices(tens_contract, int_indices[num])
@@ -233,7 +249,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                         print(int_term)
                         print('')
                     intermediates.append([int_term, int_tensor])
-                    interm_name_list = interm_name_list[1:]
+                    int_name_list = int_name_list[1:]
 
                 # Once intermediates list is not empty, check all other intermediates for redundancy against the list
                 else:
@@ -248,17 +264,17 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                             print('')
 
                         intermediates.append([int_term, int_tensor])
-                        interm_name_list = interm_name_list[1:]
+                        int_name_list = int_name_list[1:]
 
-                # Modify 'tensorlist' for einsum's contract_path function
-                tensorlist = [tens for tens in tensorlist if tens not in tens_contract]
+                # Modify 'tensorList' for einsum's contract_path function
+                tensorList = [tens for tens in tensorList if tens not in tens_contract]
 
                 # Append representation of INT tensor w/ dummy/external indices defined wrt full contraction
                 loop_tensor = tensor(int_tensor.name, loop_indices, [])
-                tensorlist.append(loop_tensor)
+                tensorList.append(loop_tensor)
 
-            pre_factor *= scale_factor_total
-            modified_term_list.append(term(pre_factor, [], tensorlist))
+            prefactor *= scale_factor_total
+            modified_term_list.append(term(prefactor, [], tensorList))
 
         # Scaling of contraction cannot be optimized
         else:
@@ -323,7 +339,7 @@ def make_canonical(int_term, trans_rdm):
             # Get index of symmetry for convenience
             ind_sym = allowed_sym[0].index(list(canon_order))
 
-            # Keep track of pre_factor
+            # Keep track of prefactor
             scale_factor  *= float(allowed_sym[1][ind_sym])
 
             # If modifying RDM tensor, create the sorted tensor correctly

@@ -127,6 +127,7 @@ class sqaOptions(object):
         self.genIntermediates = lambda:None
         self.genIntermediates.trans_rdm = False
         self.genIntermediates.factor_depth = 1
+        self.genIntermediates.opt_einsum = False
 
         # convertSpinIntegratedToAdapted options
         self.convertSpinIntegratedToAdapted = lambda:None
