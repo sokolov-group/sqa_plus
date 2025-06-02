@@ -60,30 +60,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     # Iterate through every term in list of terms
     for _term in input_terms:
 
-##        # Create lists for all tensors
-##        tensorlist          = []
-##        tensor_indices_list = []
-##        credes_list         = []
-##        pre_factor          = _term.numConstant
-##
-##        # Reformat the names of the tensors from SQA
-##        for t in in_term.tensors:
-##
-##            # Separate cre/des operators to make into RDMs
-##            if (isinstance(t, creOp) or isinstance(t, desOp)):
-##                credes_list.append(t)
-##
-##            else:
-##                tensorlist.append(t)
-##                tensor_indices_list.append([ind for ind in t.indices])
-##
-##        # Turn cre/des operators into RDM, if they exist
-##        #if (len(credes_list) > 0):
-##        if credes_list:
-##            rdm_tensor = creDesTensor(credes_list, trans_rdm)
-##            tensorlist.append(rdm_tensor)
-##            tensor_indices_list.append([ind for ind in rdm_tensor.indices])
-
         # Create lists for tensors
         tensorList = list(_term.tensors)
         tensorIndicesList = [list(t.indices) for t in _term.tensors]
@@ -104,7 +80,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
                 # Only add new indices to dictionary of index sizes
                 if ind.name not in sizes_dict:
-                    ##TODO: this weighs core_valence and core_cvs equally, should that be the case? if not, also make changes to assign_space_rank
                     # Weigh size of index by subspace
                     if is_active_index_type(ind):
                         sizes_dict[ind.name] = 2
@@ -117,19 +92,10 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
         # Make einsum string
         einsum_string = str(','.join(lhs_str) + '->' + ind_str)
-        #einsum_string = '{},->{}'.format(','.join(lhs_str), ind_str)
 
         # Construct dummy tensors for term in order to assess contraction path
-        #dummy_tens = []
-
-        #for t in tensorlist:
-        #    dims = []
-
-        #    for index in t.indices:
-        #        dims.append(sizes_dict[index.name])
-
-        #    dummy_tens.append(np.empty(tuple(dims)))
-        dummy_tens = [np.empty(tuple(sizes_dict[idx.name] for idx in t.indices)) for t in tensorList]
+        #dummy_tens = [np.empty(tuple(sizes_dict[idx.name] for idx in t.indices)) for t in tensorList]
+        dummy_tens = [np.random.rand(*(sizes_dict[idx.name] for idx in t.indices)) for t in tensorList]
 
         # Compute most efficient contraction path
 
@@ -157,16 +123,21 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
                 ################
                 # Check that requested contractions are in-range
-                for con, contract in enumerate(contract_order):
+                valid_order = []
+
+                for contract in contract_order:
 
                     # Check that contraction path can be performed
                     i_ind, j_ind = contract
 
                     if j_ind >= len(lhs_str):
                         options.print_header("WARNING")
-                        print("Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
+                        print("Not enough tensors for contraction: %s. It will be ignored..." % str(contract))
                         options.print_divider()
-                        contract_order.pop(con)
+                    else:
+                        valid_order.append(contract)
+
+                contract_order = valid_order
                 ################
 
                 # Make list of indices for all intermediates
@@ -176,20 +147,24 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                 for contract in contract_order:
 
                     tens_inds       = [lhs_str[i] for i in contract]
-                    contracted_inds = ''.join(lhs_str[i] for i in contract)
+                    #contracted_inds = ''.join(lhs_str[i] for i in contract)
+                    contracted_inds = ''.join(tens_inds)
 
-                    # Construct string out of indices not contracted over
-                    int_ind = ''
-
-                    for i in contracted_inds:
-                        if contracted_inds.count(i) == 1:
-                            int_ind += i
+                    # Construct string out of indices that appear once (not contracted over)
+#                    int_ind = ''
+#
+#                    for i in contracted_inds:
+#                        if contracted_inds.count(i) == 1:
+#                            int_ind += i
+                    int_ind = ''.join(i for i in contracted_inds if contracted_inds.count(i) == 1)
 
                     # Append to list of intermediate indices
                     int_indices.append(int_ind)
 
-                    # Modify lhs_string to include intermediate indices
-                    lhs_str = [inds for inds in lhs_str if inds not in tens_inds]
+                    # Modify lhs_string to include intermediate indices and removed contracted ones
+#                    lhs_str = [inds for inds in lhs_str if inds not in tens_inds]
+                    for i in sorted(contract, reverse=True):
+                        lhs_str.pop(i)
                     lhs_str.append(int_ind)
 
             # Standard procedure for generating contraction path
@@ -221,10 +196,10 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                 # Determine which tensors from tensorList are being contracted
                 tens_contract = [tensorList[i] for i in contract]
 
-                # Use the external string to modify indexType of the indices in tensors wrt the intermediate term
+                # Modify indexType of tensors to external/dummy based on the intermediate term
                 new_tensors, def_indices, loop_indices = get_int_indices(tens_contract, int_indices[num])
 
-                # Construct intermediate term w/ updated tensor
+                # Construct intermediate term with updated tensor
                 int_term = term(1.0, [], new_tensors)
 
                 # Canonicalize term and tensor representation of intermediate and update scale factor
@@ -280,6 +255,21 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         else:
             modified_term_list.append(_term)
 
+#######
+    ## MAKE INDICES EXTERNAL IN MODIFIED TERM LIST
+    options.genEinsum.keep_user_defined_dummy_names = True
+    for tensor_term in modified_term_list:
+        for _tensor in tensor_term.tensors:
+            for _index in _tensor.indices:
+
+                index_name = _index.name
+                mymap = map(lambda idx: index_name in idx, int_indices)
+
+                if mymap[0]:
+                    _index.isSummed = False 
+                    _index.userDefined = True
+#######
+
     print("\nTotal intermediates generated: {:}".format(len(intermediates)))
     print("Intermediate generation time :  {:.3f} seconds".format(time.time() - startTime))
     options.print_divider()
@@ -305,42 +295,42 @@ def make_canonical(int_term, trans_rdm):
 
     ### RE-ARRANGE THE INDICES WITHIN EACH TENSOR IN THE TERM
     # Continue canonicalizing after modifying RDM tensors
-    for t_ind, t in enumerate(int_term.tensors):
+#    for t_ind, t in enumerate(int_term.tensors):
+    for t in int_term.tensors:
+        n_inds = len(t.indices)
 
-        # Keep track of path rank for each tensor
-        loop_path_rank  = path_rank[:len(t.indices)]
-        loop_space_rank = space_rank[:len(t.indices)]
+        # Slice rank info for this tensor
+        loop_path_rank  = path_rank[:n_inds]
+        loop_space_rank = space_rank[:n_inds]
 
-        # Modify path rank for RDM des operators
-        if isinstance(t, creDesTensor):
-           for i, op in enumerate(t.ops):
-               if isinstance(op, desOp):
-                   loop_path_rank[i] += 100
+##      TODO: figure out what this block does?
+##        # Modify path rank for RDM to prioritize destruction operators
+##        if isinstance(t, creDesTensor):
+##           for i, op in enumerate(t.ops):
+##               if isinstance(op, desOp):
+##                   loop_path_rank[i] += 100
 
-        # Create final ranking for tensor
-        final_rank = []
+        # Create final ranking for tensor by combining path & space rank
+        final_rank = [path + space for path, space in zip(loop_path_rank, loop_space_rank)]
 
-        for i in range(len(t.indices)):
-            final_rank.append(loop_path_rank[i] + loop_space_rank[i])
+        # Update ranks
+        path_rank  = path_rank[n_inds:]
+        space_rank = space_rank[n_inds:]
 
-        # Cut used elements of rank lists
-        path_rank  = path_rank[len(t.indices):]
-        space_rank = space_rank[len(t.indices):]
-
-        # Generate permutation of indices to canonical order
-        canon_order = np.argsort(final_rank)
+        # Canonical order by rank
+        canon_order = np.argsort(final_rank).tolist()
 
         # Get symmetry information from sqa_tensor
-        allowed_sym  = t.symPermutes()
+        symPerms, symFactors  = t.symPermutes()
 
         # Only modify tensors with appropriate symmetry
-        if list(canon_order) in allowed_sym[0]:
+        if canon_order in symPerms:
 
             # Get index of symmetry for convenience
-            ind_sym = allowed_sym[0].index(list(canon_order))
+            symInd = symPerms.index(canon_order)
 
             # Keep track of prefactor
-            scale_factor  *= float(allowed_sym[1][ind_sym])
+            scale_factor  *= float(symFactors[symInd])
 
             # If modifying RDM tensor, create the sorted tensor correctly
             if isinstance(t, creDesTensor):
@@ -360,8 +350,9 @@ def make_canonical(int_term, trans_rdm):
         else:
             canon_tensor_list.append(t)
 
-    # Form term with tensors w/ canonicalized indices
+    # Rebuild term with tensors w/ canonicalized indices
     canon_index_term = term(1.0, [], canon_tensor_list)
+
     if options.verbose:
         print('----- WRT INDICES IN TENSORS OF TERM -----')
         print(canon_index_term)
@@ -553,43 +544,72 @@ def get_int_indices(sqa_tensor_list, ext_string):
     ext_ind_list  = []
     loop_ind_list = []
 
+    # Create sets to avoid dublicates
+    ext_names = set()
+    loop_names = set()
+
     # Iterate through tensors
-    for tens_ind, t in enumerate(new_tensor_list):
+    for t in new_tensor_list:
+        #print("{:}".format(t))
 
         # Iterate through indices
-        for ind_ind, i in enumerate(t.indices):
+        for ind in t.indices:
 
-            # Find index objects in tensors that are external wrt intermediate definition
-            if i.name in ext_string:
+            # Define index as an external index
+            if ind.name in ext_string:
+                ind.isSummed = False
 
-                # Create index list to define a tensor object wrt overall contraction
-                if not loop_ind_list:
-                    loop_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
+                # ext_ind_list: holds tensor object wrt intermediate definition
+                if ind.name not in ext_names:
+                    ext_ind_list.append(ind)
+                    ext_names.add(ind.name)
 
-                # If there are indices in the list, ensure there are no duplicates
-                else:
-                    exist_ind = [ind.name for ind in loop_ind_list]
+                # loop_ind_list: holds tensor object wrt overall contraction
+                if ind.name not in loop_names:
+                    loop_ind_list.append(ind)
+                    loop_names.add(ind.name)
 
-                    if i.name not in exist_ind:
-                        loop_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
-
-                # Define index as an external index
-                new_tensor_list[tens_ind].indices[ind_ind].isSummed = False
-
-                # Create index list to define a tensor object wrt intermediate definition
-                if not ext_ind_list:
-                    ext_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
-
-                # If there are indices in the list, ensure there are no duplicates
-                else:
-                    exist_ind = [ind.name for ind in ext_ind_list]
-
-                    if i.name not in exist_ind:
-                        ext_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
-
-            # If the index is not external, ensure it is a dummy index
+            # Define index as a dummy index
             else:
-                new_tensor_list[tens_ind].indices[ind_ind].isSummed = True
+                ind.isSummed = True
+
+#    # Iterate through tensors
+#    for tens_ind, t in enumerate(new_tensor_list):
+#
+#        # Iterate through indices
+#        for ind_ind, i in enumerate(t.indices):
+#
+#            # Find index objects in tensors that are external wrt intermediate definition
+#            if i.name in ext_string:
+#
+#                # Create index list to define a tensor object wrt overall contraction
+#                if not loop_ind_list:
+#                    loop_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
+#
+#                # If there are indices in the list, ensure there are no duplicates
+#                else:
+#                    exist_ind = [ind.name for ind in loop_ind_list]
+#
+#                    if i.name not in exist_ind:
+#                        loop_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
+#
+#                # Define index as an external index
+#                new_tensor_list[tens_ind].indices[ind_ind].isSummed = False
+#
+#                # Create index list to define a tensor object wrt intermediate definition
+#                if not ext_ind_list:
+#                    ext_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
+#
+#                # If there are indices in the list, ensure there are no duplicates
+#                else:
+#                    exist_ind = [ind.name for ind in ext_ind_list]
+#
+#                    if i.name not in exist_ind:
+#                        ext_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
+#
+#            # If the index is not external, ensure it is a dummy index
+#            else:
+#                new_tensor_list[tens_ind].indices[ind_ind].isSummed = True
 
     return new_tensor_list, ext_ind_list, loop_ind_list
 
