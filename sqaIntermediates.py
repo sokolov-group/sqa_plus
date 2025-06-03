@@ -13,18 +13,14 @@
 #         Donna Odhiambo <donna.odhiambo@proton.me>
 #
 
-##TODO: combine assign_path_rank and assign_space_rank?
-
 import sys, time
-import itertools
 
 import numpy as np
 
 from sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from sqaTerm import term
-from sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type, is_cvs_index_type
+from sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type, get_spatial_index_type
 
-from sqaMatrixBlock import dummyLabel, reorder_tensor_indices
 from sqaOptions import options
 
 from sqaSpinAdapted import convert_credes_to_rdm 
@@ -52,6 +48,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
     # Initialize lists
     intermediates = []      # intermediate tensors
+    all_int_indices = []    # intermediate index string
     modified_term_list = [] # modified input terms that will use intermediate tensors
 
     # Convert Cre/Des Objects to RDM Objects
@@ -87,7 +84,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                     elif is_virtual_index_type(ind):
                         sizes_dict[ind.name] = 6
                     else:
-                        raise Exception('Index does not belong to a valid orbital subspace')
+                        raise ValueError('Index does not belong to a valid orbital subspace')
 
         # Make einsum string
         einsum_string = str(','.join(lhs_str) + '->' + ind_str)
@@ -229,23 +226,20 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
             prefactor *= scale_factor_total
             modified_term_list.append(term(prefactor, [], tensorList))
+            all_int_indices.append(int_indices)
 
-#######
     ## MAKE INDICES EXTERNAL IN MODIFIED TERM LIST
     options.genEinsum.keep_user_defined_dummy_names = True
-    for tensor_term in modified_term_list:
+    for tensor_term, int_indices in zip(modified_term_list, all_int_indices):
         for _tensor in tensor_term.tensors:
             for _index in _tensor.indices:
 
                 index_name = _index.name
 
-                ##TODO: should this be "in" or "=="?
-                if any(index_name in idx for idx in int_indices):
+                if any(index_name == idx for idx in int_indices):
                     _index.isSummed = False 
                     _index.userDefined = True
  
-#######
-
     print("\nTotal intermediates generated: {:}".format(len(intermediates)))
     print("Intermediate generation time :  {:.3f} seconds".format(time.time() - startTime))
     options.print_divider()
@@ -354,45 +348,44 @@ def canonicalize_rdm(sqa_term, trans_rdm):
 
     # Check all tensors in term to find RDM
     for t_ind, t in enumerate(sqa_term.tensors):
+        n_inds = len(t.indices)
 
         # Keep track of the path rank for each tensor
-        loop_path_rank = path_rank[:len(t.indices)]
+        loop_path_rank = path_rank[:n_inds]
 
         ## IF TENSOR IS AN RDM ##
         if isinstance(t, creDesTensor):
 
             # Extract cre/des operators from creDesTensor
-            rdm_ops = [op for op in t.ops]
+            #rdm_ops = [op for op in t.ops]
+            rdm_ops = t.ops
 
             # Initialize count variables
             cre_ext = 0
             des_ext = 0
 
             # Count how many cre/des operators have external indices
-            for op, rank in zip(rdm_ops, loop_path_rank):
-                if isinstance(op, creOp) and rank >= 50:
-                    cre_ext += 1
-
-                elif isinstance(op, desOp) and rank >= 50:
-                    des_ext += 1
+            cre_ext = sum(isinstance(op, creOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
+            des_ext = sum(isinstance(op, desOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
 
             # Reverse order of indices if there are more dummy des operators
             if (cre_ext < des_ext) and (not trans_rdm):
-                rdm_ops.reverse()
+                #rdm_ops.reverse()
                 reversed_rdm_ops = []
 
-                for op in rdm_ops:
+                for op in reversed(rdm_ops):
                    if isinstance(op, desOp):
                        reversed_rdm_ops.append(creOp(op.indices))
 
                    elif isinstance(op, creOp):
                        reversed_rdm_ops.append(desOp(op.indices))
 
-                sqa_term.tensors.pop(t_ind)
-                sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, trans_rdm))
+                #sqa_term.tensors.pop(t_ind)
+                #sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, trans_rdm))
+                sqa_term.tensors[t_ind] = creDesTensor(reversed_rdm_ops, trans_rdm)
 
         # Remove used path ranks elements
-        path_rank = path_rank[len(t.indices):]
+        path_rank = path_rank[n_inds:]
 
     return sqa_term
 
@@ -456,62 +449,48 @@ def assign_space_rank(sqa_term):
 
 def check_intermediates(interm_list, int_term, int_tensor):
 
+    # Set flag for redundancy check
     isRedundant = False
 
     if options.verbose:
         print('CHECKING ' + str(int_tensor.name) + '...')
 
     # Check every intermediate in the existing list
-    for i, (list_term, list_tensor) in enumerate(interm_list):
+    for list_term, list_tensor in interm_list:
 
         # Compare the amount of tensors in each term
-        if len(list_term.tensors) == len(int_term.tensors):
+        if len(list_term.tensors) != len(int_term.tensors):
+            continue
 
-            # Compare the names of the tensors that make up each term
-            if [t.name for t in list_term.tensors] == [t.name for t in int_term.tensors]:
+        # Compare the names of the tensors that make up each term
+        #if [t.name for t in list_term.tensors] != [t.name for t in int_term.tensors]:
+        if any(t1.name != t2.name or t1.indices != t2.indices for t1, t2 in zip(list_term.tensors, int_term.tensors)):
+            continue
 
-                # Last check is to compare the indices of the tensors
-                list_p_rank = assign_path_rank(list_term)
-                int_p_rank  = assign_path_rank(int_term)
+        # Compare the ranks of the tensors that make up each term
+        same_path_rank = assign_path_rank(list_term) == assign_path_rank(int_term)
+        same_space_rank = assign_space_rank(list_term) == assign_space_rank(int_term)
 
-                list_space_rank = assign_space_rank(list_term)
-                int_space_rank  = assign_space_rank(int_term)
+        # Check orbital subspaces of intermediate tensor
+        int_spatial_types = [get_spatial_index_type(ind.indType) for ind in list_tensor.indices]
+        tensor_spatial_types = [get_spatial_index_type(ind.indType) for ind in int_tensor.indices]
 
-                # Check subspace of indices of intermediate tensor
-                list_tensor_indices = []
-                for i_list in list_tensor.indices:
-                    if is_core_index_type(i_list):
-                        list_tensor_indices.append('c')
-                    elif is_active_index_type(i_list):
-                        list_tensor_indices.append('a')
-                    elif is_virtual_index_type(i_list):
-                        list_tensor_indices.append('v')
-
-                int_tensor_indices = []
-                for i_int in int_tensor.indices:
-                    if is_core_index_type(i_int):
-                        int_tensor_indices.append('c')
-                    elif is_active_index_type(i_int):
-                        int_tensor_indices.append('a')
-                    elif is_virtual_index_type(i_int):
-                        int_tensor_indices.append('v')
-
-                if (list_p_rank == int_p_rank) and (list_space_rank == int_space_rank) and (list_tensor_indices == int_tensor_indices):
-
-                    # Modify input term and return existing stored intermediate
-                    isRedundant     = True
-                    if options.verbose:
-                        print('------------------------------')
-                        print(str(int_tensor.name) + ' IS REDUNDANT. NEXT INT CHECKED WILL HAVE THE SAME NAME')
-                        print('STORED INTERMEDIATE TERM')
-                        print(list_tensor.name)
-                        print(list_term)
-                        print('------------------------------')
-                        print('')
-
-                    int_term        = list_term.copy()
-                    int_tensor.name = list_tensor.name
-                    break
+        same_indices = int_spatial_types == tensor_spatial_types
+            
+        if same_path_rank and same_space_rank and same_indices:
+            isRedundant = True
+            # Modify input term and return existing stored intermediate
+            if options.verbose:
+                print('------------------------------')
+                print(str(int_tensor.name) + ' IS REDUNDANT. NEXT INT CHECKED WILL HAVE THE SAME NAME')
+                print('STORED INTERMEDIATE TERM')
+                print(list_tensor.name)
+                print(list_term)
+                print('------------------------------')
+                print('')
+            int_term        = list_term.copy()
+            #int_tensor.name = list_tensor.name
+            int_tensor = tensor(list_tensor.name, int_tensor.indices, [])
 
     return int_term, int_tensor, isRedundant
 
