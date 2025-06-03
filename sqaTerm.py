@@ -469,7 +469,7 @@ class term:
                         for k in range(len(tenList[-1].indices)):
                             if tenList[-1].indices[k].isSummed:
                                 tenList[-1].indices[k] = map[tenList[-1].indices[k].tup()]
-                        factor *= tenList[-1].sortIndeces()
+                        factor *= (tenList[-1].sortIndices())[0]
                         for ind in tenList[-1].indices:
                             indexList.append(ind)
 
@@ -509,7 +509,7 @@ class term:
                         for k in range(len(tenList[-1].indices)):
                             if tenList[-1].indices[k].isSummed:
                                 tenList[-1].indices[k] = map[tenList[-1].indices[k].tup()]
-                        factor *= tenList[-1].sortIndeces()
+                        factor *= (tenList[-1].sortIndices())[0]
                         for ind in tenList[-1].indices:
                             indexList.append(ind)
 
@@ -571,7 +571,7 @@ class term:
                         for k in range(len(tenList[-1].indices)):
                             if tenList[-1].indices[k].isSummed:
                                 tenList[-1].indices[k] = map[tenList[-1].indices[k].tup()]
-                        factor *= tenList[-1].sortIndeces()
+                        factor *= (tenList[-1].sortIndices())[0]
                         for ind in tenList[-1].indices:
                             indexList.append(ind)
 
@@ -661,7 +661,7 @@ class term:
                 t = nameGroups[gCount][gPerms[gCount][tCount]]
 
                 # Get the tensor's symmetry permutations
-                (symPerms,factors) = t.symPermutes()
+                (symPerms,factors,conjugates) = t.symPermutes()
 
                 # Compute gCount and tCount for the next job
                 next_gCount = gCount
@@ -988,7 +988,7 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
                 if tcopy.indices[j].tup() in map.keys():
                     tcopy.indices[j] = map[tcopy.indices[j].tup()]
             # Keep track of the sign produced by sorting the tensor's indices
-            sign *= tcopy.sortIndeces()
+            sign *= (tcopy.sortIndices())[0]
             newTensorList.append(tcopy)
             for ind in tcopy.indices:
                 indexList.append(ind)
@@ -1076,7 +1076,7 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
     else:
 
         # Get the tensor's symmetry permutations
-        (symPerms,factors) = tenList[tenCount].symPermutes()
+        (symPerms,factors,conjugates) = tenList[tenCount].symPermutes()
 
         # Make a copy of the tensor to be processed
         t = tenList[tenCount].copy()

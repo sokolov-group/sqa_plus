@@ -36,7 +36,7 @@ class symmetry:
 
     #------------------------------------------------------------------------------------------------
 
-    def __init__(self,pattern,factor):
+    def __init__(self,pattern,factor,conj=False):
         patternError = False
         if type(pattern) != type((1,2)):
             patternError = True
@@ -61,7 +61,10 @@ class symmetry:
             self.factor = float(factor)
         else:
             raise TypeError("factor must be a float or an int.")
-
+        if (conj ==  True):
+          self.conjugate = True
+        else:
+          self.conjugate = False
     #------------------------------------------------------------------------------------------------
     
     def __cmp__(self,other):
@@ -80,7 +83,7 @@ class symmetry:
 
     def copy(self):
         "Returns a copy of the symmetry"
-        return symmetry(self.pattern, self.factor)
+        return symmetry(self.pattern, self.factor, self.conjugate)
 
     #------------------------------------------------------------------------------------------------
 

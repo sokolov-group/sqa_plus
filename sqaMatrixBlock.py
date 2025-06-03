@@ -481,7 +481,7 @@ def reorder_tensor_indices(_terms):
                     elif is_virtual_index_type(ind):
                         original_rank.append(0)
 
-                permutes_indices, permutes_factors = unordered_tensor.symPermutes()
+                permutes_indices, permutes_factors, permutes_conjugates = unordered_tensor.symPermutes()
                 permutes_rank = []
 
                 for permute_indices in permutes_indices:

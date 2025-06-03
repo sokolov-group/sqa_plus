@@ -146,15 +146,18 @@ class tensor:
         # Otherwise, compute the permutations and corresponding factors
         tuples = [range(len(self.indices))]
         factors = [1]
+        conjugates = [False]
         allFound = False
         while not allFound:
             allFound = True
             newTuples = []
             newFactors = []
+            newConjugate = []
             for j in range(len(tuples)):
                 for sym in self.symmetries:
                     newTuples.append([])
                     newFactors.append(sym.factor * factors[j])
+                    newConjugate.append(sym.conjugate ^ conjugates[j])
                     for i in sym.pattern:
                         newTuples[-1].append(tuples[j][i])
             while len(newTuples) > 0:
@@ -167,28 +170,30 @@ class tensor:
                     allFound = False
                     tuples.append(newTuples[0])
                     factors.append(newFactors[0])
+                    conjugates.append(newConjugate[0])
                     #print tuples[-1]
-                del(newTuples[0],newFactors[0])
+                del(newTuples[0],newFactors[0],newConjugate[0])
 
         # Save the results for later so they don't need to be computed again
-        self.permutations, self.factors = tuples, factors
+        self.permutations, self.factors, self.conjugates = tuples, factors, conjugates
 
-        return (self.permutations,self.factors)
+        return (self.permutations,self.factors, self.conjugates)
 
     #------------------------------------------------------------------------------------------------
 
-    def sortIndeces(self):
+    def sortIndices(self):
         "Sorts the indices alphabetically within the constraints of symmetry and returns the resulting factor."
 
         # If the tensor has no symmetry, do nothing
         if len(self.symmetries) == 0:
-            return 1
+            return 1, False
 
         # Get the permutation tuples allowed by symmetry and the corresponding factors
-        tuples,factors = [],[]
-        (tup,fac) = self.symPermutes()
+        tuples,factors,conjugates = [],[],[]
+        (tup,fac,conj) = self.symPermutes()
         tuples.extend(tup)
         factors.extend(fac)
+        conjugates.extend(conj)
 
         # Score the different permutations and select the winner
         scores = []
@@ -204,7 +209,7 @@ class tensor:
             i = 0
             while i < len(scores):
                 if scores[i] < maxScore:
-                    del(scores[i],tuples[i],factors[i])
+                    del(scores[i],tuples[i],factors[i],conjugates[i])
                 else:
                     i += 1
             if len(scores) == 0:
@@ -225,11 +230,11 @@ class tensor:
                 raise RuntimeError("Scoring system did not produce unique winner.")
 
         # Sort indices in the uniquely determined order and return the resulting factor
-        newIndeces = []
+        newIndices = []
         for i in range(len(tuples[0])):
-            newIndeces.append(self.indices[tuples[0][i]])
-        self.indices = newIndeces
-        return factors[0]
+            newIndices.append(self.indices[tuples[0][i]])
+        self.indices = newIndices
+        return factors[0], conjugates[0]
 
     #------------------------------------------------------------------------------------------------
 
@@ -342,7 +347,7 @@ class sfExOp(tensor):
             self.indices.append( i.copy() )
 
         # Initialize permutations and factors
-        (self.permutations,self.factors) = (None,None)
+        (self.permutations,self.factors, self.conjugates) = (None,None,None)
 
         # Initialize symmetries
         self.symmetries = []
@@ -559,7 +564,7 @@ class creDesTensor_original(tensor):
             raise TypeError(TypeErrorMessage)
 
         # Initialize permutations and factors
-        (self.permutations,self.factors) = (None,None)
+        (self.permutations,self.factors,self.conjugates) = (None,None,None)
 
         # Build the index list and count the number of creation operators
         self.nCre = 0
@@ -667,7 +672,7 @@ class creOp(tensor):
         self.indices = [inputIndex]
 
         # Initialize permutations and factors
-        (self.permutations,self.factors) = (None,None)
+        (self.permutations,self.factors,self.conjugates) = (None,None,None)
 
     #------------------------------------------------------------------------------------------------
 
@@ -734,7 +739,7 @@ class desOp(tensor):
         self.indices = [inputIndex]
 
         # Initialize permutations and factors
-        (self.permutations,self.factors) = (None,None)
+        (self.permutations,self.factors,self.conjugates) = (None,None,None)
 
     #------------------------------------------------------------------------------------------------
 
