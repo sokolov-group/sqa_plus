@@ -423,9 +423,6 @@ class creDesTensor(tensor):
         # Initialize name
         self.trans_rdm = trans_rdm
 
-        # Initialize list of cre/des operators
-        self.ops = ops
-
         # Initialize permutations and factors
         (self.permutations, self.factors) = (None, None)
 
