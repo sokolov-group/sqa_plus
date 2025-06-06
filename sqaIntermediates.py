@@ -26,7 +26,23 @@ from sqaOptions import options
 from sqaSpinAdapted import convert_credes_to_rdm 
 
 def genIntermediates(input_terms, ind_str = None, custom_path = None):
-    "Generate Intermediate Terms for Tensor Rank Reduction."
+    """
+    Generate Intermediate Terms for Tensor Rank Reduction.
+
+    This function analyzes a list of input tensor contraction terms and generates intermediate tensors
+    to reduce computational cost. Using either a user-specified contraction order or NumPy's einsum_path, intermediates
+    are formed up to the specified factorization depth.
+
+    Args:
+        input_terms (list): List of term objects representing tensor contractions.
+        ind_str (str, optional): String specifying the output indices for the contraction.
+        custom_path (list, optional): User-defined contraction order as a list of tensor index pairs.
+
+    Returns:
+        tuple:
+            - modified_term_list (list): List of terms with intermediates inserted.
+            - intermediates (list): List of unique intermediate terms and their tensor representations.
+    """
 
     # Import options from sqaOptions class
     trans_rdm = options.genIntermediates.trans_rdm
@@ -52,6 +68,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     modified_term_list = [] # modified input terms that will use intermediate tensors
 
     # Convert Cre/Des Objects to RDM Objects
+    options.print_divider()
     convert_credes_to_rdm(input_terms, trans_rdm) 
     
     for _term in input_terms:
@@ -87,6 +104,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                         raise ValueError('Index does not belong to a valid orbital subspace')
 
         # Make einsum string
+        ind_str = ind_str or ""
         einsum_string = str(','.join(lhs_str) + '->' + ind_str)
 
         # Construct dummy tensors for term in order to assess contraction path
@@ -104,9 +122,16 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             opt       = path_info[1].opt_cost
         else:
             # using scaling to compare
-            path_info = np.einsum_path(einsum_string, *dummy_tens)
+            path_info = np.einsum_path(einsum_string, *dummy_tens, optimize="greedy")
             naive     = int(path_info[1].split('\n')[1].split()[-1])
             opt       = int(path_info[1].split('\n')[2].split()[-1])
+
+        # Print contraction path information
+        if options.verbose:
+            print('Einsum Contraction Path:')
+            print(path_info[1])
+            print('Naive Cost: {:}, Optimized Cost: {:}'.format(naive, opt))
+            print('')
 
         # Append terms to modified term list if scaling of contraction cannot be optimized
         if naive <= opt:
@@ -118,10 +143,11 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         ### GENERATE CONTRACTION PATH
         # Check if contraction order has been specified
         if custom_path:
+
             # Initialize intermediates indices list
             int_indices = []
 
-            # Make copy of user-defined contraction order
+            # Set user-defined path to be the contraction order
             contract_order = custom_path[:]
 
             # Check that requested contractions are in-range
@@ -172,7 +198,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         for num, contract in enumerate(contract_order):
 
             # Make intermediate name
-            tensor_name = 'INT' + str(int_name_list.pop(0))
+            tensor_name = 'INT{:02d}'.format(int_name_list.pop(0))
 
             # Determine which tensors from tensorList are being contracted
             tens_contract = [tensorList[i] for i in contract]
@@ -209,6 +235,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             # Once intermediates list is not empty, check all other intermediates for redundancy against the list
             else:
                 int_term, int_tensor, isRedundant = check_intermediates(intermediates, int_term, int_tensor)
+
                 # Only append unique intermediate terms to the list of intermediates
                 if not isRedundant:
                     if options.verbose:
@@ -221,11 +248,13 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
             # Modify 'tensorList' for einsum's contract_path function
             tensorList = [tens for tens in tensorList if tens not in tens_contract]
-            # Append representation of INT tensor w/ dummy/external indices defined wrt full contraction
-            tensorList.append(tensor(int_tensor.name, loop_indices, []))
 
+            # Store INT tensor to 'tensorList' and modified einsum expression to 'modified_term_list'
+            tensorList.append(tensor(int_tensor.name, loop_indices, []))
             prefactor *= scale_factor_total
             modified_term_list.append(term(prefactor, [], tensorList))
+
+            # Append intermediate indices to 'all_int_indices'
             all_int_indices.append(int_indices)
 
     ## MAKE INDICES EXTERNAL IN MODIFIED TERM LIST
@@ -241,11 +270,13 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                     _index.userDefined = True
  
     print("\nTotal intermediates generated: {:}".format(len(intermediates)))
+    print("Total modified terms: {:}".format(len(modified_term_list)))
     print("Intermediate generation time :  {:.3f} seconds".format(time.time() - startTime))
     options.print_divider()
     sys.stdout.flush()
     return modified_term_list, intermediates
 
+##TODO: combine rank_sort_term & rank_name_term into one function
 def make_canonical(int_term, trans_rdm):
 
     # Canonicalize any RDM tensors present
@@ -269,12 +300,12 @@ def make_canonical(int_term, trans_rdm):
         loop_path_rank  = path_rank[:n_inds]
         loop_space_rank = space_rank[:n_inds]
 
-##      TODO: figure out what this block does?
-        # Modify path rank for RDM to prioritize destruction operators
-        if isinstance(t, creDesTensor):
-           for i, op in enumerate(t.ops):
-               if isinstance(op, desOp):
-                   loop_path_rank[i] += 100
+##      TODO: Is this block necessary for SO version?
+#        # Modify path rank for RDM to prioritize destruction operators
+#        if isinstance(t, creDesTensor):
+#           for i, op in enumerate(t.ops):
+#               if isinstance(op, desOp):
+#                   loop_path_rank[i] += 100
 
         # Create final ranking for tensor by combining path & space rank
         final_rank = [path + space for path, space in zip(loop_path_rank, loop_space_rank)]
@@ -368,21 +399,22 @@ def canonicalize_rdm(sqa_term, trans_rdm):
             cre_ext = sum(isinstance(op, creOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
             des_ext = sum(isinstance(op, desOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
 
-            # Reverse order of indices if there are more dummy des operators
-            if (cre_ext < des_ext) and (not trans_rdm):
-                #rdm_ops.reverse()
-                reversed_rdm_ops = []
-
-                for op in reversed(rdm_ops):
-                   if isinstance(op, desOp):
-                       reversed_rdm_ops.append(creOp(op.indices))
-
-                   elif isinstance(op, creOp):
-                       reversed_rdm_ops.append(desOp(op.indices))
-
-                #sqa_term.tensors.pop(t_ind)
-                #sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, trans_rdm))
-                sqa_term.tensors[t_ind] = creDesTensor(reversed_rdm_ops, trans_rdm)
+##      TODO: Is this block necessary for SO version? It introduces bugs into SA.
+#            # Reverse order of indices if there are more dummy des operators
+#            if (cre_ext < des_ext) and (not trans_rdm):
+#                #rdm_ops.reverse()
+#                reversed_rdm_ops = []
+#
+#                for op in reversed(rdm_ops):
+#                   if isinstance(op, desOp):
+#                       reversed_rdm_ops.append(creOp(op.indices))
+#
+#                   elif isinstance(op, creOp):
+#                       reversed_rdm_ops.append(desOp(op.indices))
+#
+#                #sqa_term.tensors.pop(t_ind)
+#                #sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, trans_rdm))
+#                sqa_term.tensors[t_ind] = creDesTensor(reversed_rdm_ops, trans_rdm)
 
         # Remove used path ranks elements
         path_rank = path_rank[n_inds:]
@@ -489,8 +521,8 @@ def check_intermediates(interm_list, int_term, int_tensor):
                 print('------------------------------')
                 print('')
             int_term        = list_term.copy()
-            #int_tensor.name = list_tensor.name
-            int_tensor = tensor(list_tensor.name, int_tensor.indices, [])
+            int_tensor.name = list_tensor.name
+            #int_tensor = tensor(list_tensor.name, int_tensor.indices, [])
 
     return int_term, int_tensor, isRedundant
 
@@ -510,7 +542,6 @@ def get_int_indices(sqa_tensor_list, ext_string):
 
     # Iterate through tensors
     for t in new_tensor_list:
-        #print("{:}".format(t))
 
         # Iterate through indices
         for ind in t.indices:
