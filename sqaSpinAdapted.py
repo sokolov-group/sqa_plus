@@ -43,22 +43,39 @@ def convertSpinIntegratedToAdapted(terms_si):
 
     # Convert Cre/Des Objects to RDM Objects
     options.print_divider()
+    ##### DEBUG AREA ######
+    print("Number of terms before convert_credes_to_rdm:", len(terms_si))
     convert_credes_to_rdm(terms_si, trans_rdm = trans_rdm)
 
+    print("Number of terms after convert_credes_to_rdm:", len(terms_si))
     dummyLabel(terms_si)
     len_terms_si = len(terms_si)
+
+    print("Number of terms after dummyLabel:", len(terms_si))
 
     # Temporarily remove spin-integrated symmetries of non-RDM tensors
     remove_si_tensors_symmetries(terms_si)
 
+    print("Number of terms after remove_si_tensors_symmetries:", len(terms_si))
+
     # Convert 1e- integrals to Spin-Adapted Formulation
     terms_sa = convert_h1e_si_to_sa(terms_si)
+    print("Number of terms after convert_h1e_si_to_sa:", len(terms_sa))
 
     # Convert 2e- integrals to Spin-Adapted Formulation
     terms_sa = convert_v2e_si_to_sa(terms_sa)
+    print("Number of terms after convert_v2e_si_to_sa:", len(terms_sa))
+
+    for p in terms_sa:
+        print(p)
 
     # Convert T amplitudes to Spin-Adapted Formulation
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
+    print("Number of terms after convert_t_amplitudes_si_to_sa:", len(terms_sa))
+
+    for p in terms_sa:
+        print(p)
+    exit()
 
     # Convert custom tensors using user-defined Spin-Adapted Functions
     if custom_functions:
@@ -86,11 +103,17 @@ def convertSpinIntegratedToAdapted(terms_si):
                 term_sa.isInCanonicalForm = False
                 term_sa.makeCanonical()
 
+    print("Number of terms after improve_3rdms_combinations:", len(terms_sa))
+
     # Convert RDMs to Spin-Adapted Formulation
     terms_sa = convert_rdms_si_to_sa(terms_sa)
 
+    print("Number of terms after convert_rdms_si_to_sa:", len(terms_sa))
+
     # Update Spin-Adapted Symmetries in tensors
     update_sa_tensors_symmetries(terms_sa, trans_rdm)
+
+    print("Number of terms after update_sa_tensors_symmetries:", len(terms_sa))
 
     # Combine Spin-Adapted Terms
     options.print_divider()
@@ -100,6 +123,12 @@ def convertSpinIntegratedToAdapted(terms_si):
     num_terms_sa = len(terms_sa)
     print("\nCombining {:} spin-adapted terms...\n".format(num_terms_sa))
     combineTerms(terms_sa)
+
+    print("Number of terms after combineTerms:", len(terms_sa))
+
+    exit()
+
+    ##### DEBUG AREA ######
 
     # Reorder tensors to Chemist's Notation
     reorder_v2e_indices_notation(terms_sa)
@@ -148,6 +177,9 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
         if credes_ops:
             _terms_credes[term_credes_ind].tensors = [tens for tens in term_credes.tensors if tens not in credes_ops]
             ten_rdm = creDesTensor(credes_ops, trans_rdm)
+            print(ten_rdm)
+            for p in ten_rdm.symmetries:
+                print(str(p))
             _terms_credes[term_credes_ind].tensors.append(ten_rdm)
 
     print("Done!")
