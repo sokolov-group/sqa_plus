@@ -66,8 +66,8 @@ def convertSpinIntegratedToAdapted(terms_si):
     terms_sa = convert_v2e_si_to_sa(terms_sa)
     print("Number of terms after convert_v2e_si_to_sa:", len(terms_sa))
 
-    for p in terms_sa:
-        print(p)
+    #for p in terms_sa:
+    #    print(p)
 
     # Convert T amplitudes to Spin-Adapted Formulation
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
@@ -75,7 +75,7 @@ def convertSpinIntegratedToAdapted(terms_si):
 
     for p in terms_sa:
         print(p)
-    exit()
+    # exit()
 
     # Convert custom tensors using user-defined Spin-Adapted Functions
     if custom_functions:
@@ -126,7 +126,7 @@ def convertSpinIntegratedToAdapted(terms_si):
 
     print("Number of terms after combineTerms:", len(terms_sa))
 
-    exit()
+    #exit()
 
     ##### DEBUG AREA ######
 
@@ -5479,7 +5479,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
         tens_t2_ind = []
 
         for ten_ind, ten in enumerate(term_t2_si.tensors):
-            if ten.name[0] == 't' and len(ten.indices) == 4:
+            if ten.name[0] == 't' and len(ten.indices) == 4 and ten.name != 'trdm':
                 tens_t2.append(ten)
                 tens_t2_ind.append(ten_ind)
 
