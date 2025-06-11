@@ -5401,13 +5401,15 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
     inds_aa = [options.alpha_type, options.alpha_type]
     inds_bb = [options.beta_type,  options.beta_type]
 
+    t_amp_tensor_name = ['t1', 't2', 't3', 't4']
+
     # Convert One-Body Amplitudes
     terms_t1_sa = []
     for term_t1_si in _terms_t_si:
         term_t1_sa = term_t1_si.copy()
 
         for ten_ind, ten in enumerate(term_t1_sa.tensors):
-            if ten.name[0] == 't' and len(ten.indices) == 2:
+            if ten.name in t_amp_tensor_name and len(ten.indices) == 2:
                 ten_t1_spin_inds = [get_spin_index_type(ind) for ind in ten.indices]
 
                 if options.verbose:
@@ -5447,7 +5449,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
         tens_t2_ind = []
 
         for ten_ind, ten in enumerate(term_t2_si.tensors):
-            if ten.name[0] == 't' and len(ten.indices) == 4 and ten.name != 'trdm':
+            if ten.name in t_amp_tensor_name and len(ten.indices) == 4:
                 tens_t2.append(ten)
                 tens_t2_ind.append(ten_ind)
 
