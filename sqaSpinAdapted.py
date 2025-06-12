@@ -35,6 +35,7 @@ def convertSpinIntegratedToAdapted(terms_si):
     custom_functions = options.convertSpinIntegratedToAdapted.custom_functions
     improve_3rdms_combinations = options.convertSpinIntegratedToAdapted.improve_3rdms_combinations
     improve_4rdms_combinations = options.convertSpinIntegratedToAdapted.improve_4rdms_combinations
+    trans_rdm = options.genEinsum.trans_rdm
 
     startTime = time.time()
     options.print_header("Converting Spin-Integrated Tensors to Spin-Adapted")
@@ -42,7 +43,7 @@ def convertSpinIntegratedToAdapted(terms_si):
 
     # Convert Cre/Des Objects to RDM Objects
     options.print_divider()
-    convert_credes_to_rdm(terms_si, trans_rdm = False)
+    convert_credes_to_rdm(terms_si, trans_rdm = trans_rdm)
 
     dummyLabel(terms_si)
     len_terms_si = len(terms_si)
@@ -89,7 +90,7 @@ def convertSpinIntegratedToAdapted(terms_si):
     terms_sa = convert_rdms_si_to_sa(terms_sa)
 
     # Update Spin-Adapted Symmetries in tensors
-    update_sa_tensors_symmetries(terms_sa)
+    update_sa_tensors_symmetries(terms_sa, trans_rdm)
 
     # Combine Spin-Adapted Terms
     options.print_divider()
@@ -102,7 +103,7 @@ def convertSpinIntegratedToAdapted(terms_si):
 
     # Reorder tensors to Chemist's Notation
     reorder_v2e_indices_notation(terms_sa)
-    reorder_rdm_indices_notation(terms_sa)
+    reorder_rdm_indices_notation(terms_sa, trans_rdm)
     options.chemists_notation = True
 
     reorder_tensor_indices(terms_sa)
@@ -197,7 +198,7 @@ def reorder_v2e_indices_notation(_terms_v2e):
     sys.stdout.flush()
     return
 
-def reorder_rdm_indices_notation(_terms_rdm):
+def reorder_rdm_indices_notation(_terms_rdm, trans_rdm = False):
     print("Reorder RDM tensor indices in Chemists' notation...")
     sys.stdout.flush()
 
@@ -214,12 +215,20 @@ def reorder_rdm_indices_notation(_terms_rdm):
         rdm_tensors_ind = []
 
         ## Define indices symmetries
-        rdm2_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
+        if trans_rdm: 
+            rdm2_symm = [symmetry((1,0,3,2), 1)]
 
-        rdm3_symm = [symmetry((1,0,2,4,3,5), 1), symmetry((0,2,1,3,5,4), 1), symmetry((3,4,5,0,1,2), 1)]
+            rdm3_symm = [symmetry((1,0,2,4,3,5), 1), symmetry((0,2,1,3,5,4), 1)]
 
-        rdm4_symm = [symmetry((1,0,2,3,5,4,6,7), 1), symmetry((0,2,1,3,4,6,5,7), 1),
-                     symmetry((0,1,3,2,4,5,7,6), 1), symmetry((4,5,6,7,0,1,2,3), 1)]
+            rdm4_symm = [symmetry((1,0,2,3,5,4,6,7), 1), symmetry((0,2,1,3,4,6,5,7), 1),
+                         symmetry((0,1,3,2,4,5,7,6), 1)]
+        else:
+            rdm2_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
+
+            rdm3_symm = [symmetry((1,0,2,4,3,5), 1), symmetry((0,2,1,3,5,4), 1), symmetry((3,4,5,0,1,2), 1)]
+
+            rdm4_symm = [symmetry((1,0,2,3,5,4,6,7), 1), symmetry((0,2,1,3,4,6,5,7), 1),
+                         symmetry((0,1,3,2,4,5,7,6), 1), symmetry((4,5,6,7,0,1,2,3), 1)]
 
         ## Append all RDM objects to list
         for ten_rdm_ind, ten_rdm in enumerate(term_rdm.tensors):
@@ -5392,13 +5401,15 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
     inds_aa = [options.alpha_type, options.alpha_type]
     inds_bb = [options.beta_type,  options.beta_type]
 
+    t_amp_tensor_name = ['t1', 't2', 't3', 't4']
+
     # Convert One-Body Amplitudes
     terms_t1_sa = []
     for term_t1_si in _terms_t_si:
         term_t1_sa = term_t1_si.copy()
 
         for ten_ind, ten in enumerate(term_t1_sa.tensors):
-            if ten.name[0] == 't' and len(ten.indices) == 2:
+            if ten.name in t_amp_tensor_name and len(ten.indices) == 2:
                 ten_t1_spin_inds = [get_spin_index_type(ind) for ind in ten.indices]
 
                 if options.verbose:
@@ -5438,7 +5449,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
         tens_t2_ind = []
 
         for ten_ind, ten in enumerate(term_t2_si.tensors):
-            if ten.name[0] == 't' and len(ten.indices) == 4:
+            if ten.name in t_amp_tensor_name and len(ten.indices) == 4:
                 tens_t2.append(ten)
                 tens_t2_ind.append(ten_ind)
 
@@ -5725,7 +5736,7 @@ def remove_si_tensors_symmetries(_terms_si):
             elif _tensor_si.name in ['t1', 't2'] and len(_tensor_si.indices) in [2, 4]:
                 _terms_si[_term_ind].tensors[_tensor_ind].symmetries = []
 
-def update_sa_tensors_symmetries(_terms_sa):
+def update_sa_tensors_symmetries(_terms_sa, trans_rdm = False):
     "Update Symmetries of Spin-Adapted Tensors"
 
     # Define Spin-Adapted Symmetries
@@ -5737,11 +5748,17 @@ def update_sa_tensors_symmetries(_terms_sa):
     t1_sa_symm = [symmetry((1,0), 1)]
     t2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
 
-    rdm1_sa_symm = [symmetry((1,0), 1)]
-    rdm2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((3,2,1,0), 1)]
-    rdm3_sa_symm = [symmetry((1,0,2,3,5,4), 1), symmetry((0,2,1,4,3,5), 1), symmetry((5,4,3,2,1,0), 1)]
-    rdm4_sa_symm = [symmetry((1,0,2,3,4,5,7,6), 1), symmetry((0,2,1,3,4,6,5,7), 1), symmetry((0,1,3,2,5,4,6,7), 1),
-                    symmetry((7,6,5,4,3,2,1,0), 1)]
+    if trans_rdm:
+        rdm1_sa_symm = []
+        rdm2_sa_symm = [symmetry((1,0,3,2), 1)]
+        rdm3_sa_symm = [symmetry((1,0,2,3,5,4), 1), symmetry((0,2,1,4,3,5), 1)]
+        rdm4_sa_symm = [symmetry((1,0,2,3,4,5,7,6), 1), symmetry((0,2,1,3,4,6,5,7), 1), symmetry((0,1,3,2,5,4,6,7), 1)]
+    else:
+        rdm1_sa_symm = [symmetry((1,0), 1)]
+        rdm2_sa_symm = [symmetry((1,0,3,2), 1), symmetry((3,2,1,0), 1)]
+        rdm3_sa_symm = [symmetry((1,0,2,3,5,4), 1), symmetry((0,2,1,4,3,5), 1), symmetry((5,4,3,2,1,0), 1)]
+        rdm4_sa_symm = [symmetry((1,0,2,3,4,5,7,6), 1), symmetry((0,2,1,3,4,6,5,7), 1), symmetry((0,1,3,2,5,4,6,7), 1),
+                        symmetry((7,6,5,4,3,2,1,0), 1)]
 
     for _term_ind, _term_sa in enumerate(_terms_sa):
         for _tensor_ind, _tensor_sa in enumerate(_term_sa.tensors):
