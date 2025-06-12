@@ -268,6 +268,9 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                 if any(index_name == idx for idx in int_indices):
                     _index.isSummed = False 
                     _index.userDefined = True
+
+    ## RENUMBERING FOR INTERMEDIATES
+    renumber_intermediates(modified_term_list, intermediates)
  
     print("\nTotal intermediates generated: {:}".format(len(intermediates)))
     print("Total modified terms: {:}".format(len(modified_term_list)))
@@ -619,3 +622,23 @@ def make_names(name_list):
         unicode_names.append(p)
 
     return unicode_names
+
+def renumber_intermediates(mod_term_list, int_term_list):
+
+    # Initialize intermediate name map
+    name_map = {}
+
+    # Reassign INT names to avoid gaps in numbering
+    for i, (_term, _tensor) in enumerate(int_term_list):
+        new_name = 'INT{:02d}'.format(i+1)
+        old_name = _tensor.name
+
+        name_map[old_name] = new_name
+        _tensor.name = new_name
+
+    # Update tensor names in modified_term_list to use renumbered intermediates
+    for _term in mod_term_list:
+        for _tensor in _term.tensors:
+            if _tensor.name in name_map:
+                _tensor.name = name_map[_tensor.name]
+
