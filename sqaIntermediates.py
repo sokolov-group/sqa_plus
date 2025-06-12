@@ -276,7 +276,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     sys.stdout.flush()
     return modified_term_list, intermediates
 
-##TODO: combine rank_sort_term & rank_name_term into one function
+##TODO: combine rank_sort_term & name_sort_term into one function
 def make_canonical(int_term, trans_rdm):
 
     # Canonicalize any RDM tensors present
@@ -300,12 +300,11 @@ def make_canonical(int_term, trans_rdm):
         loop_path_rank  = path_rank[:n_inds]
         loop_space_rank = space_rank[:n_inds]
 
-##      TODO: Is this block necessary for SO version?
-#        # Modify path rank for RDM to prioritize destruction operators
-#        if isinstance(t, creDesTensor):
-#           for i, op in enumerate(t.ops):
-#               if isinstance(op, desOp):
-#                   loop_path_rank[i] += 100
+        # Ensure normal-ordering for RDMs by prioritizing desOp in path rank
+        if isinstance(t, creDesTensor):
+           for i, op in enumerate(t.ops):
+               if isinstance(op, desOp):
+                   loop_path_rank[i] += 100
 
         # Create final ranking for tensor by combining path & space rank
         final_rank = [path + space for path, space in zip(loop_path_rank, loop_space_rank)]
@@ -495,7 +494,6 @@ def check_intermediates(interm_list, int_term, int_tensor):
             continue
 
         # Compare the names of the tensors that make up each term
-        #if [t.name for t in list_term.tensors] != [t.name for t in int_term.tensors]:
         if any(t1.name != t2.name or t1.indices != t2.indices for t1, t2 in zip(list_term.tensors, int_term.tensors)):
             continue
 
@@ -511,6 +509,7 @@ def check_intermediates(interm_list, int_term, int_tensor):
             
         if same_path_rank and same_space_rank and same_indices:
             isRedundant = True
+
             # Modify input term and return existing stored intermediate
             if options.verbose:
                 print('------------------------------')
@@ -522,7 +521,7 @@ def check_intermediates(interm_list, int_term, int_tensor):
                 print('')
             int_term        = list_term.copy()
             int_tensor.name = list_tensor.name
-            #int_tensor = tensor(list_tensor.name, int_tensor.indices, [])
+            break
 
     return int_term, int_tensor, isRedundant
 
