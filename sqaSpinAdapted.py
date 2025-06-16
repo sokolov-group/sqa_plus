@@ -136,8 +136,9 @@ def convertSpinIntegratedToAdapted(terms_si, remove_5rdms = False):
 
 def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
     "Convert Cre/Des Objects to RDM Objects"
-
-    print("Convert Cre/Des objects to RDM objects...")
+    
+    if options.verbose:
+        print("Convert Cre/Des objects to RDM objects...")
     sys.stdout.flush()
 
     for term_credes_ind, term_credes in enumerate(_terms_credes):
@@ -157,8 +158,9 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
             _terms_credes[term_credes_ind].tensors.append(ten_rdm)
 
     sys.stdout.flush()
-    print("Done!")
-    options.print_divider()
+    if options.verbose:
+        print("Done!")
+        options.print_divider()
     return
 
 def reorder_v2e_indices_notation(_terms_v2e):
