@@ -49,6 +49,9 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     factor_depth = options.genIntermediates.factor_depth
     opt_einsum = options.genIntermediates.opt_einsum
 
+    if len(input_terms) == 0:
+        raise Exception('List of input terms is empty.')
+
     if opt_einsum:
         import opt_einsum as oe
 
@@ -57,6 +60,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
     startTime = time.time()
     options.print_header('Generating Intermediate Tensors | Factor Depth = {:}'.format(factor_depth))
+    options.print_divider()
     sys.stdout.flush()
 
     # Create list of integers to form unique names of 'INT'
@@ -68,7 +72,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     modified_term_list = [] # modified input terms that will use intermediate tensors
 
     # Convert Cre/Des Objects to RDM Objects
-    options.print_divider()
     convert_credes_to_rdm(input_terms, trans_rdm) 
     
     for _term in input_terms:
@@ -108,8 +111,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         einsum_string = str(','.join(lhs_str) + '->' + ind_str)
 
         # Construct dummy tensors for term in order to assess contraction path
-        #dummy_tens = [np.empty(tuple(sizes_dict[idx.name] for idx in t.indices)) for t in tensorList]
-        dummy_tens = [np.random.rand(*(sizes_dict[idx.name] for idx in t.indices)) for t in tensorList]
+        dummy_tens = [np.empty(tuple(sizes_dict[idx.name] for idx in t.indices)) for t in tensorList]
 
         # Compute most efficient contraction path
 
@@ -257,6 +259,10 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             # Append intermediate indices to 'all_int_indices'
             all_int_indices.append(int_indices)
 
+    if len(intermediates) == 0:
+        options.print_header("NO INTERMEDIATES WERE FOUND!")
+        return input_terms, None
+ 
     ## MAKE INDICES EXTERNAL IN MODIFIED TERM LIST
     options.genEinsum.keep_user_defined_dummy_names = True
     for tensor_term, int_indices in zip(modified_term_list, all_int_indices):
@@ -271,8 +277,8 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
     ## RENUMBERING FOR INTERMEDIATES
     renumber_intermediates(modified_term_list, intermediates)
- 
-    print("\nTotal intermediates generated: {:}".format(len(intermediates)))
+
+    print("Total intermediates generated: {:}".format(len(intermediates)))
     print("Total modified terms: {:}".format(len(modified_term_list)))
     print("Intermediate generation time :  {:.3f} seconds".format(time.time() - startTime))
     options.print_divider()
@@ -496,8 +502,17 @@ def check_intermediates(interm_list, int_term, int_tensor):
         if len(list_term.tensors) != len(int_term.tensors):
             continue
 
-        # Compare the names of the tensors that make up each term
-        if any(t1.name != t2.name or t1.indices != t2.indices for t1, t2 in zip(list_term.tensors, int_term.tensors)):
+        # Compare the tensors via canonical einsum strings
+        lhs1 = [''.join(i.name for i in t.indices) for t in list_term.tensors]
+        lhs2 = [''.join(i.name for i in t.indices) for t in int_term.tensors]
+
+        rhs1 = ''.join(i.name for i in list_tensor.indices)
+        rhs2 = ''.join(i.name for i in int_tensor.indices)
+        
+        list_canon = canonicalize_einsum_indices(lhs1, rhs1)
+        int_canon = canonicalize_einsum_indices(lhs2, rhs2)
+        
+        if list_canon != int_canon:
             continue
 
         # Compare the ranks of the tensors that make up each term
@@ -642,3 +657,22 @@ def renumber_intermediates(mod_term_list, int_term_list):
             if _tensor.name in name_map:
                 _tensor.name = name_map[_tensor.name]
 
+
+def canonicalize_einsum_indices(lhs_list, rhs_str):
+
+    canon_chars = list('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    mapping = {}
+    next_char_idx = 0
+
+    # Process indices in lhs and rhs
+    for idx_str in lhs_list + [rhs_str]:
+        for char in idx_str:
+            if char not in mapping:
+                mapping[char] = canon_chars[next_char_idx]
+                next_char_idx += 1
+
+    # Apply mapping to create canonical forms
+    lhs_canon = [''.join(mapping[char] for char in part) for part in lhs_list]
+    rhs_canon = ''.join(mapping[char] for char in rhs_str)
+    return (lhs_canon, rhs_canon)
+   
