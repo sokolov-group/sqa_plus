@@ -128,6 +128,10 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             naive     = int(path_info[1].split('\n')[1].split()[-1])
             opt       = int(path_info[1].split('\n')[2].split()[-1])
 
+        contract_limit = len(path_info[0][1:])
+        if contract_limit <= factor_depth:
+            print('WARN: The factor_depth requested may produce erroneous intermediates. Proceed with caution...')
+
         # Print contraction path information
         if options.verbose:
             print('Einsum Contraction Path:')
@@ -251,13 +255,15 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             # Modify 'tensorList' for einsum's contract_path function
             tensorList = [tens for tens in tensorList if tens not in tens_contract]
 
-            # Store INT tensor to 'tensorList' and modified einsum expression to 'modified_term_list'
+            # Store INT tensor to 'tensorList'
             tensorList.append(tensor(int_tensor.name, loop_indices, []))
-            prefactor *= scale_factor_total
-            modified_term_list.append(term(prefactor, [], tensorList))
 
-            # Append intermediate indices to 'all_int_indices'
-            all_int_indices.append(int_indices)
+        # Scale terms and store modified einsum expression
+        prefactor *= scale_factor_total
+        modified_term_list.append(term(prefactor, [], tensorList))
+
+        # Append intermediate indices to 'all_int_indices'
+        all_int_indices.append(int_indices[-1])
 
     if len(intermediates) == 0:
         options.print_header("NO INTERMEDIATES WERE FOUND!")
