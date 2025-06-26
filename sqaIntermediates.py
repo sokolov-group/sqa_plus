@@ -72,7 +72,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     modified_term_list = [] # modified input terms that will use intermediate tensors
 
     # Convert Cre/Des Objects to RDM Objects
-    convert_credes_to_rdm(input_terms, trans_rdm) 
+    convert_credes_to_rdm(input_terms, trans_rdm)
     
     for _term in input_terms:
 
@@ -295,8 +295,9 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 def make_canonical(int_term, trans_rdm):
 
     # Canonicalize any RDM tensors present
-    if any(isinstance(t, creDesTensor) for t in int_term.tensors):
-        int_term = canonicalize_rdm(int_term, trans_rdm)
+    if options.spin_orbital:
+        if any(isinstance(t, creDesTensor) for t in int_term.tensors):
+            int_term = canonicalize_rdm(int_term, trans_rdm)
 
     # Create ranking of indices based on the contraction path
     path_rank  = assign_path_rank(int_term)
@@ -402,7 +403,6 @@ def canonicalize_rdm(sqa_term, trans_rdm):
         if isinstance(t, creDesTensor):
 
             # Extract cre/des operators from creDesTensor
-            #rdm_ops = [op for op in t.ops]
             rdm_ops = t.ops
 
             # Initialize count variables
@@ -413,22 +413,18 @@ def canonicalize_rdm(sqa_term, trans_rdm):
             cre_ext = sum(isinstance(op, creOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
             des_ext = sum(isinstance(op, desOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
 
-##      TODO: Is this block necessary for SO version? It introduces bugs into SA.
-#            # Reverse order of indices if there are more dummy des operators
-#            if (cre_ext < des_ext) and (not trans_rdm):
-#                #rdm_ops.reverse()
-#                reversed_rdm_ops = []
-#
-#                for op in reversed(rdm_ops):
-#                   if isinstance(op, desOp):
-#                       reversed_rdm_ops.append(creOp(op.indices))
-#
-#                   elif isinstance(op, creOp):
-#                       reversed_rdm_ops.append(desOp(op.indices))
-#
-#                #sqa_term.tensors.pop(t_ind)
-#                #sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, trans_rdm))
-#                sqa_term.tensors[t_ind] = creDesTensor(reversed_rdm_ops, trans_rdm)
+            # Reverse order of indices if there are more dummy des operators
+            if (cre_ext < des_ext) and (not trans_rdm):
+                reversed_rdm_ops = []
+
+                for op in reversed(rdm_ops):
+                   if isinstance(op, desOp):
+                       reversed_rdm_ops.append(creOp(op.indices))
+
+                   elif isinstance(op, creOp):
+                       reversed_rdm_ops.append(desOp(op.indices))
+
+                sqa_term.tensors[t_ind] = creDesTensor(reversed_rdm_ops, trans_rdm)
 
         # Remove used path ranks elements
         path_rank = path_rank[n_inds:]
@@ -492,7 +488,7 @@ def assign_space_rank(sqa_term):
 
     return space_rank_list
 
-
+##TODO: implement contraction signature to avoid false redundancies produced by INT terms when factor_depth > 1
 def check_intermediates(interm_list, int_term, int_tensor):
 
     # Set flag for redundancy check
