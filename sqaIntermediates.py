@@ -396,35 +396,30 @@ def canonicalize_rdm(sqa_term, trans_rdm):
     for t_ind, t in enumerate(sqa_term.tensors):
         n_inds = len(t.indices)
 
+        # Skip processing non-RDM tensors
+        if not isinstance(t, creDesTensor):
+            path_rank = path_rank[n_inds:]
+            continue
+
         # Keep track of the path rank for each tensor
         loop_path_rank = path_rank[:n_inds]
 
-        ## IF TENSOR IS AN RDM ##
-        if isinstance(t, creDesTensor):
+        # Extract cre/des operators from creDesTensor
+        rdm_ops = t.ops
 
-            # Extract cre/des operators from creDesTensor
-            rdm_ops = t.ops
+        # Count how many cre/des operators have external indices
+        cre_ext = sum(isinstance(op, creOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
+        des_ext = sum(isinstance(op, desOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
 
-            # Initialize count variables
-            cre_ext = 0
-            des_ext = 0
+        # Reverse order of indices if there are more dummy des operators
+        if (cre_ext < des_ext) and (not trans_rdm):
+            reversed_rdm_ops = []
 
-            # Count how many cre/des operators have external indices
-            cre_ext = sum(isinstance(op, creOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
-            des_ext = sum(isinstance(op, desOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
+            for op in reversed(rdm_ops):
+                new_op = creOp(op.indices) if isinstance(op, desOp) else desOp(op.indices)
+                reversed_rdm_ops.append(new_op)
 
-            # Reverse order of indices if there are more dummy des operators
-            if (cre_ext < des_ext) and (not trans_rdm):
-                reversed_rdm_ops = []
-
-                for op in reversed(rdm_ops):
-                   if isinstance(op, desOp):
-                       reversed_rdm_ops.append(creOp(op.indices))
-
-                   elif isinstance(op, creOp):
-                       reversed_rdm_ops.append(desOp(op.indices))
-
-                sqa_term.tensors[t_ind] = creDesTensor(reversed_rdm_ops, trans_rdm)
+            sqa_term.tensors[t_ind] = creDesTensor(reversed_rdm_ops, trans_rdm)
 
         # Remove used path ranks elements
         path_rank = path_rank[n_inds:]
