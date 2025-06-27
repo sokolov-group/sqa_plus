@@ -70,10 +70,12 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     intermediates = []      # intermediate tensors
     all_int_indices = []    # intermediate index string
     modified_term_list = [] # modified input terms that will use intermediate tensors
+    term_data = []          # data for each input term to be processed
 
     # Convert Cre/Des Objects to RDM Objects
     convert_credes_to_rdm(input_terms, trans_rdm)
     
+    # Iterate through input terms to prepare data for contraction
     for _term in input_terms:
 
         # Create lists for tensors
@@ -81,37 +83,31 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         tensorIndicesList = [list(t.indices) for t in _term.tensors]
         prefactor = _term.numConstant
 
-        # Initialize einsum string and dictionary of index sizes
-        lhs_str = []
-        sizes_dict = {}
+        # Build einsum string and sizes dictionary
+        lhs_str, sizes_dict = build_einsum_string(tensorIndicesList)
 
-        # Iterate through lists of indices lists for each tensor in _term
-        for ind_list in tensorIndicesList:
+        term_data.append({
+            'term': _term,
+            'tensorList': tensorList,
+            'prefactor': prefactor,
+            'lhs_str': lhs_str,
+            'sizes_dict': sizes_dict
+        })
 
-            # Append string of indices for left-hand side expression
-            lhs_str.append(''.join(i.name for i in ind_list))
+    # Create list of dummy tensors for assessing contraction path
+    dummy_tensor_list = create_dummy_tensors([data['lhs_str'] for data in term_data], [data['sizes_dict'] for data in term_data])
 
-            # Define lengths of unique indices
-            for ind in ind_list:
-
-                # Only add new indices to dictionary of index sizes
-                if ind.name not in sizes_dict:
-                    # Weigh size of index by subspace
-                    if is_active_index_type(ind):
-                        sizes_dict[ind.name] = 2
-                    elif is_core_index_type(ind): 
-                        sizes_dict[ind.name] = 4
-                    elif is_virtual_index_type(ind):
-                        sizes_dict[ind.name] = 6
-                    else:
-                        raise ValueError('Index does not belong to a valid orbital subspace')
+    # Generate intermediates
+    for term_idx, (term_info, dummy_tens) in enumerate(zip(term_data, dummy_tensor_list)):
+        _term = term_info['term']
+        tensorList = term_info['tensorList']
+        prefactor = term_info['prefactor']
+        lhs_str = term_info['lhs_str']
+        sizes_dict = term_info['sizes_dict']
 
         # Make einsum string
         ind_str = ind_str or ""
         einsum_string = str(','.join(lhs_str) + '->' + ind_str)
-
-        # Construct dummy tensors for term in order to assess contraction path
-        dummy_tens = [np.empty(tuple(sizes_dict[idx.name] for idx in t.indices)) for t in tensorList]
 
         # Compute most efficient contraction path
 
@@ -128,10 +124,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             naive     = int(path_info[1].split('\n')[1].split()[-1])
             opt       = int(path_info[1].split('\n')[2].split()[-1])
 
-        contract_limit = len(path_info[0][1:])
-        if contract_limit <= factor_depth:
-            print('WARN: The factor_depth requested may produce erroneous intermediates. Proceed with caution...')
-
         # Print contraction path information
         if options.verbose:
             print('Einsum Contraction Path:')
@@ -144,7 +136,11 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             modified_term_list.append(_term)
             continue
 
-        # If scaling can be optimized, form intermediates as follows:
+        ### DEBUG: Show warning if factor_depth is larger than the number of tensors
+        contract_limit = len(path_info[0][1:])
+        if contract_limit <= factor_depth:
+            print('WARN: The factor_depth requested may produce erroneous intermediates. Proceed with caution...')
+        ### DEBUG END
 
         ### GENERATE CONTRACTION PATH
         # Check if contraction order has been specified
@@ -673,3 +669,49 @@ def canonicalize_einsum_indices(lhs_list, rhs_str):
     rhs_canon = ''.join(mapping[char] for char in rhs_str)
     return (lhs_canon, rhs_canon)
    
+def build_einsum_string(tensorIndicesList):
+
+    # Initialize einsum string and dictionary of index sizes
+    lhs_str = []
+    sizes_dict = {}
+
+    # Iterate through lists of indices lists
+    for ind_list in tensorIndicesList:
+
+        # Append string of indices for left-hand side expression
+        lhs_str.append(''.join(i.name for i in ind_list))
+
+        # Define lengths of unique indices
+        for ind in ind_list:
+
+            # Only add new indices to dictionary of index sizes
+            if ind.name not in sizes_dict:
+                # Weigh size of index by subspace
+                if is_active_index_type(ind):
+                    sizes_dict[ind.name] = 2
+                elif is_core_index_type(ind):
+                    sizes_dict[ind.name] = 4
+                elif is_virtual_index_type(ind):
+                    sizes_dict[ind.name] = 6
+                else:
+                    raise ValueError('Index does not belong to a valid orbital subspace')
+
+    return lhs_str, sizes_dict
+
+def create_dummy_tensors(lhs_str_list, sizes_dict_list):
+
+    # Initialize list to hold all dummy tensors
+    dummy_batch = []
+
+    # Loop through lhs_str and sizes_dict pairs
+    for lhs_str, sizes_dict in zip(lhs_str_list, sizes_dict_list):
+        term_tensors = []
+
+        # Create dummy tensors based on sizes_dict
+        for tensor_indices in lhs_str:
+            shape = tuple(sizes_dict[idx] for idx in tensor_indices)
+            term_tensors.append(np.empty(shape, dtype='f4'))
+
+        dummy_batch.append(term_tensors)
+
+    return dummy_batch
