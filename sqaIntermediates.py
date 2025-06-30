@@ -66,6 +66,9 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     # Create list of integers to form unique names of 'INT'
     int_name_list = list(np.arange(1, 10000))
 
+    # Set index string for output indices
+    ind_str = ind_str or ""
+
     # Initialize lists
     intermediates = []      # intermediate tensors
     all_int_indices = []    # intermediate index string
@@ -106,7 +109,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         sizes_dict = term_info['sizes_dict']
 
         # Make einsum string
-        ind_str = ind_str or ""
         einsum_string = str(','.join(lhs_str) + '->' + ind_str)
 
         # Compute most efficient contraction path
@@ -179,17 +181,17 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         # Use standard contraction path if none has been specified
         else:
 
-            # Save tuples that indicate optimized order of contracting tensors
             if opt_einsum:
+                # Save tuples that indicate optimized order of contracting tensors
                 contract_order = [contract for contract in path_info[0][0:0 + factor_depth]]
-            else:
-                contract_order = [contract for contract in path_info[0][1:1 + factor_depth]]
-
-            # Determine contraction path and indices of intermediates
-            if opt_einsum:
+                # Determine contraction path and indices of intermediates
                 all_int_indices = [inds[2].split('->')[1] for inds in path_info[1].contraction_list]
                 int_indices = all_int_indices[0:0 + factor_depth]
+
             else:
+                # Save tuples that indicate optimized order of contracting tensors
+                contract_order = [contract for contract in path_info[0][1:1 + factor_depth]]
+                # Determine contraction path and indices of intermediates
                 split_path     = path_info[1].split('\n')[10:10 + factor_depth]
                 int_indices    = [str(line).split()[1].split('->')[1] for line in split_path]
 
@@ -222,7 +224,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
             # Update indices after canonicalizing term
             new_tensors, def_indices, loop_indices = get_int_indices(int_term.tensors, int_indices[num])
-            # Define intermediate tensor wrt to definition
+            # Construct intermediate tensor with updated indices
             int_tensor = tensor(tensor_name, def_indices, [])
 
             # Append intermediate term
@@ -259,7 +261,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         modified_term_list.append(term(prefactor, [], tensorList))
 
         # Append intermediate indices to 'all_int_indices'
-        all_int_indices.append(int_indices[-1])
+        all_int_indices.append(int_indices[-1] if int_indices else [])
 
     if len(intermediates) == 0:
         options.print_header("NO INTERMEDIATES WERE FOUND!")
@@ -267,13 +269,13 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
  
     ## MAKE INDICES EXTERNAL IN MODIFIED TERM LIST
     options.genEinsum.keep_user_defined_dummy_names = True
-    for tensor_term, int_indices in zip(modified_term_list, all_int_indices):
+    for tensor_term, int_indices_list in zip(modified_term_list, all_int_indices):
         for _tensor in tensor_term.tensors:
             for _index in _tensor.indices:
 
                 index_name = _index.name
 
-                if any(index_name == idx for idx in int_indices):
+                if any(index_name == idx for idx in int_indices_list):
                     _index.isSummed = False 
                     _index.userDefined = True
 
@@ -407,7 +409,7 @@ def canonicalize_rdm(sqa_term, trans_rdm):
         cre_ext = sum(isinstance(op, creOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
         des_ext = sum(isinstance(op, desOp) and rank >= 50 for op, rank in zip(rdm_ops, loop_path_rank))
 
-        # Reverse order of indices if there are more dummy des operators
+        # Reverse order of indices if there are more external des operators
         if (cre_ext < des_ext) and (not trans_rdm):
             reversed_rdm_ops = []
 
@@ -549,15 +551,16 @@ def get_int_indices(sqa_tensor_list, ext_string):
     # Create sets to avoid dublicates
     ext_names = set()
     loop_names = set()
+    ext_string_set = set(ext_string)
 
     # Iterate through tensors
     for t in new_tensor_list:
 
-        # Iterate through indices
+        # Iterate through indices and determine if they are external or dummy
         for ind in t.indices:
 
-            # Define index as an external index
-            if ind.name in ext_string:
+            # External indices
+            if ind.name in ext_string_set:
                 ind.isSummed = False
 
                 # ext_ind_list: holds tensor object wrt intermediate definition
@@ -570,7 +573,7 @@ def get_int_indices(sqa_tensor_list, ext_string):
                     loop_ind_list.append(ind)
                     loop_names.add(ind.name)
 
-            # Define index as a dummy index
+            # Dummy indices
             else:
                 ind.isSummed = True
 
