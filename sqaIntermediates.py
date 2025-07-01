@@ -141,7 +141,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         ### DEBUG: Show warning if factor_depth is larger than the number of tensors
         contract_limit = len(path_info[0][1:])
         if contract_limit <= factor_depth:
-            print('WARN: The factor_depth requested may produce erroneous intermediates. Proceed with caution...')
+            print('WARN: The factor_depth requested for term {:} may produce erroneous intermediates. Proceed with caution...'.format(term_idx))
         ### DEBUG END
 
         ### GENERATE CONTRACTION PATH
@@ -202,7 +202,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         for num, contract in enumerate(contract_order):
 
             # Make intermediate name
-            tensor_name = 'INT{:02d}'.format(int_name_list.pop(0))
+            tensor_name = 'INT{:04d}'.format(int_name_list.pop(0))
 
             # Determine which tensors from tensorList are being contracted
             tens_contract = [tensorList[i] for i in contract]
@@ -647,12 +647,20 @@ def renumber_intermediates(mod_term_list, int_term_list):
         name_map[old_name] = new_name
         _tensor.name = new_name
 
+        # Update tensor names in intermediates to use renumbered intermediates (only needed for factor_depth > 1)
+        for _term_tensor in _term.tensors:
+            if _term_tensor.name in name_map:
+                if options.verbose:
+                    print('<<< Term, Tensor Pair: {}, {}'.format(_term, _tensor))
+                _term_tensor.name = name_map[_term_tensor.name]
+                if options.verbose:
+                    print('>>> Term, Tensor Pair: {}, {}'.format(_term, _tensor))
+
     # Update tensor names in modified_term_list to use renumbered intermediates
     for _term in mod_term_list:
         for _tensor in _term.tensors:
             if _tensor.name in name_map:
                 _tensor.name = name_map[_tensor.name]
-
 
 def canonicalize_einsum_indices(lhs_list, rhs_str):
 
