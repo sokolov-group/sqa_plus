@@ -18,8 +18,8 @@
 # Author: Eric Neuscamman <eric.neuscamman@gmail.com>
 #
 
-from sqaTensor import tensor, sfExOp, creOp, desOp
-from sqaOptions import options
+from .sqaTensor import tensor, sfExOp, creOp, desOp
+from .sqaOptions import options
 import time
 
 alpha_type = options.alpha_type

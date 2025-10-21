@@ -20,15 +20,15 @@
 #
 
 import sys, time
-from sqaTensor import kroneckerDelta, sfExOp, creOp, desOp
-from sqaTerm import term, termChop, combineTerms
-from sqaMisc import makeTuples, allDifferent
-from sqaSymmetry import symmetry
-from sqaOptions import options
+from .sqaTensor import kroneckerDelta, sfExOp, creOp, desOp
+from .sqaTerm import term, termChop, combineTerms
+from .sqaMisc import makeTuples, allDifferent
+from .sqaSymmetry import symmetry
+from .sqaOptions import options
 
-from sqaNormalOrder import normalOrder
+from .sqaNormalOrder import normalOrder
 
-from sqaIndex import get_spatial_index_type, get_spin_index_type, \
+from .sqaIndex import get_spatial_index_type, get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type, \
                      is_cvs_core_index_type, is_cvs_valence_index_type
 

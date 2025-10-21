@@ -18,11 +18,11 @@
 # Author: Eric Neuscamman <eric.neuscamman@gmail.com>
 #
 
-from sqaTensor import tensor, kroneckerDelta, creOp, desOp, sfExOp
-from sqaTerm import term, sortOps
-from sqaIndex import index
-from sqaMisc import makeTuples, allDifferent, makePermutations
-from sqaOptions import options
+from .sqaTensor import tensor, kroneckerDelta, creOp, desOp, sfExOp
+from .sqaTerm import term, sortOps
+from .sqaIndex import index
+from .sqaMisc import makeTuples, allDifferent, makePermutations
+from .sqaOptions import options
 
 
 #--------------------------------------------------------------------------------------------------

@@ -14,11 +14,11 @@
 
 import numpy as np
 
-from sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
-from sqaTerm import term
-from sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type
+from .sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
+from .sqaTerm import term
+from .sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type
 
-from sqaOptions import options
+from .sqaOptions import options
 
 def genIntermediates(input_terms, ind_str = None, custom_path = None):
 

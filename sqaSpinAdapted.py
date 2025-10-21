@@ -21,12 +21,12 @@
 import sys, time
 import itertools
 
-from sqaMatrixBlock import dummyLabel, reorder_tensor_indices
-from sqaIndex import get_spatial_index_type, get_spin_index_type, is_cvs_index_type
-from sqaTerm import combineTerms, termChop
-from sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
-from sqaOptions import options
-from sqaSymmetry import symmetry
+from .sqaMatrixBlock import dummyLabel, reorder_tensor_indices
+from .sqaIndex import get_spatial_index_type, get_spin_index_type, is_cvs_index_type
+from .sqaTerm import combineTerms, termChop
+from .sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
+from .sqaOptions import options
+from .sqaSymmetry import symmetry
 
 def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."

@@ -21,13 +21,13 @@
 
 import sys
 
-from sqaIndex import index, get_spatial_index_type, is_core_index_type, is_active_index_type, is_virtual_index_type
-from sqaTensor import tensor, creOp, desOp, creDesTensor
-from sqaTerm import term
-from sqaSymmetry import symmetry
-from sqaCommutator import commutator
-from sqaIndexList import indexLists
-from sqaOptions import options
+from .sqaIndex import index, get_spatial_index_type, is_core_index_type, is_active_index_type, is_virtual_index_type
+from .sqaTensor import tensor, creOp, desOp, creDesTensor
+from .sqaTerm import term
+from .sqaSymmetry import symmetry
+from .sqaCommutator import commutator
+from .sqaIndexList import indexLists
+from .sqaOptions import options
 
 def Heff(order = 0, internal_excitations = True):
     "Construct effective Hamiltonian (L)."

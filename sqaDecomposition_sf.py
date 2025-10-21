@@ -21,11 +21,11 @@
 # Canonical Transformation theory with respect to spin-free operators.
 #
 
-from sqaIndex import index
-from sqaTensor import tensor, sfExOp
-from sqaTerm import term, multiplyTerms, termChop
-from sqaMisc import makePermutations, get_num_perms
-from sqaOptions import options
+from .sqaIndex import index
+from .sqaTensor import tensor, sfExOp
+from .sqaTerm import term, multiplyTerms, termChop
+from .sqaMisc import makePermutations, get_num_perms
+from .sqaOptions import options
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------

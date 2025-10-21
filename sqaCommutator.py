@@ -21,8 +21,8 @@
 # between terms or lists of terms.
 #
 
-from sqaTerm import term, combineTerms, multiplyTerms, termChop
-from sqaNormalOrder import normalOrder
+from .sqaTerm import term, combineTerms, multiplyTerms, termChop
+from .sqaNormalOrder import normalOrder
 
 def commutator(leftInput, rightInput, contract = True, combine = True):
 

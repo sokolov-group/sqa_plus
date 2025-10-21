@@ -39,8 +39,8 @@
 #    - kroneckerDelta is a two-index tensor representing the Kronecker delta function.
 #
 
-from sqaIndex import index
-from sqaSymmetry import symmetry
+from .sqaIndex import index
+from .sqaSymmetry import symmetry
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------

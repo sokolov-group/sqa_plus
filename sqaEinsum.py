@@ -14,14 +14,14 @@
 #         Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
-from sqaIndex import get_spin_index_type, \
+from .sqaIndex import get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type, \
                      is_cvs_core_index_type, is_cvs_valence_index_type, \
                      is_alpha_index_type, is_beta_index_type
 
-from sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
-from sqaMatrixBlock import dummyLabel
-from sqaOptions import options
+from .sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
+from .sqaMatrixBlock import dummyLabel
+from .sqaOptions import options
 
 def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
               trans_indices_string = None, intermediate_list = None, help = False, **tensor_rename):
@@ -909,77 +909,77 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
      tex.append(constant+r'\:'+name)
 
 
- if print_default:
-    print r'\documentclass{article}'
-    print r'\usepackage{amsmath}'
-    print r'\begin{document}'
-    print ''
-    print ''
-#    print r"\begin{equation}"
-    print r"\begin{align*}"
-    print lhs
-    for i in tex:
-#      print " & "+i+' \\\\'
-      print(" & "+i+r'\\')
-    print r"\end{align*}"
-#    print r"\end{equation}"
-    print ''
-    print ''
-    print r'\end{document}'
-
-
- ### write to a file ###
-# if not output:
-#  # texfile = r'latex_output.tex'
-#   texfile = r'latex_output'
-# else:
-#   texfile = output
- output = open(texfile+r'.tex', "w")
- output.write(r'\documentclass{article}')
- output.write("\n")
- output.write(r'\usepackage{amsmath}')
- output.write("\n")
- output.write(r'\begin{document}')
- output.write("\n")
- output.write('')
- output.write("\n")
- output.write('')
- output.write("\n")
-# output.write(r"\begin{equation*}")
- output.write(r"\begin{align*}")
- output.write("\n")
- output.write(lhs)
- for i in tex:
-#   output.write(" & "+i+' \\\\')
-   output.write(" & "+i+r'\\')
-   output.write("\n")
- output.write(r"\end{align*}")
- output.write("\n")
-# print r"\end{equation*}"
- output.write('')
- output.write("\n")
- output.write('')
- output.write("\n")
- output.write(r'\end{document}')
-
-# os.system("pdflatex latex_output.tex")
- procs = []
- try:
-     pread, pwrite = os.pipe()
-     cmd = ['pdflatex', texfile+r'.tex']
-#     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-     proc = subprocess.Popen(cmd, stdout=pwrite, stderr=subprocess.STDOUT)
-     procs.append(proc)
-     os.close(pwrite)
-     os.close(pread)
-
- except OSError as e:
-   #  sys.exit()
-     print 'Latex compilation error ...'
-
-# pdf()
-# proc_cleanup(procs)
- return
+# if print_default:
+#    print r'\documentclass{article}'
+#    print r'\usepackage{amsmath}'
+#    print r'\begin{document}'
+#    print ''
+#    print ''
+##    print r"\begin{equation}"
+#    print r"\begin{align*}"
+#    print lhs
+#    for i in tex:
+##      print " & "+i+' \\\\'
+#      print(" & "+i+r'\\')
+#    print r"\end{align*}"
+##    print r"\end{equation}"
+#    print ''
+#    print ''
+#    print r'\end{document}'
+#
+#
+# ### write to a file ###
+## if not output:
+##  # texfile = r'latex_output.tex'
+##   texfile = r'latex_output'
+## else:
+##   texfile = output
+# output = open(texfile+r'.tex', "w")
+# output.write(r'\documentclass{article}')
+# output.write("\n")
+# output.write(r'\usepackage{amsmath}')
+# output.write("\n")
+# output.write(r'\begin{document}')
+# output.write("\n")
+# output.write('')
+# output.write("\n")
+# output.write('')
+# output.write("\n")
+## output.write(r"\begin{equation*}")
+# output.write(r"\begin{align*}")
+# output.write("\n")
+# output.write(lhs)
+# for i in tex:
+##   output.write(" & "+i+' \\\\')
+#   output.write(" & "+i+r'\\')
+#   output.write("\n")
+# output.write(r"\end{align*}")
+# output.write("\n")
+## print r"\end{equation*}"
+# output.write('')
+# output.write("\n")
+# output.write('')
+# output.write("\n")
+# output.write(r'\end{document}')
+#
+## os.system("pdflatex latex_output.tex")
+# procs = []
+# try:
+#     pread, pwrite = os.pipe()
+#     cmd = ['pdflatex', texfile+r'.tex']
+##     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+#     proc = subprocess.Popen(cmd, stdout=pwrite, stderr=subprocess.STDOUT)
+#     procs.append(proc)
+#     os.close(pwrite)
+#     os.close(pread)
+#
+# except OSError as e:
+#   #  sys.exit()
+#     print 'Latex compilation error ...'
+#
+## pdf()
+## proc_cleanup(procs)
+# return
 
 def einsum_help():
     print("""\n        HELP :: 

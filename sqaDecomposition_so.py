@@ -18,11 +18,11 @@
 # Author: Eric Neuscamman <eric.neuscamman@gmail.com>
 #
 
-from sqaIndex import index
-from sqaTensor import tensor, creOp, desOp
-from sqaTerm import term, multiplyTerms, termChop
-from sqaMisc import makePermutations, get_num_perms, assign_rdm_types
-from sqaOptions import options
+from .sqaIndex import index
+from .sqaTensor import tensor, creOp, desOp
+from .sqaTerm import term, multiplyTerms, termChop
+from .sqaMisc import makePermutations, get_num_perms, assign_rdm_types
+from .sqaOptions import options
 
 
 #--------------------------------------------------------------------------------------------------

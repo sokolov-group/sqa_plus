@@ -40,7 +40,7 @@
 # Note that while the type groups can be inputted as a list of lists of strings,
 # they are actually stored as a tuple of tuples of strings.
 
-from sqaOptions import options
+from .sqaOptions import options
 
 class index:
 	"A class for tensor and operator indices."
