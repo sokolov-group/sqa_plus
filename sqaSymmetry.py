@@ -31,6 +31,9 @@
 # if you swap the tensor's last two indices, the result is equal to -1
 # times the original tensor.
 
+from functools import total_ordering
+
+@total_ordering
 class symmetry:
     "A class representing symmetries in a tensor's indices"
 
@@ -85,10 +88,23 @@ class symmetry:
 
     #------------------------------------------------------------------------------------------------
     
-    def __cmp__(self,other):
-        if not isinstance(other,symmetry):
+    #def __cmp__(self,other):
+    #    if not isinstance(other,symmetry):
+    #        raise TypeError("can only compare a symmetry object to other symmetry objects")
+    #    return cmp(self.pattern,other.pattern)
+
+
+    def __eq__(self, other):
+        if not isinstance(other, symmetry):
             raise TypeError("can only compare a symmetry object to other symmetry objects")
-        return cmp(self.pattern,other.pattern)
+        else:
+            return self.pattern == other.pattern
+
+    def __lt__(self, other):
+        if not isinstance(other, symmetry):
+            raise TypeError("can only compare a symmetry object to other symmetry objects")
+        else:
+            return self.pattern < other.pattern
 
     #------------------------------------------------------------------------------------------------
     

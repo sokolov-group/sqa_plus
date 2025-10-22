@@ -40,8 +40,10 @@
 # Note that while the type groups can be inputted as a list of lists of strings,
 # they are actually stored as a tuple of tuples of strings.
 
+from functools import total_ordering
 from .sqaOptions import options
 
+@total_ordering
 class index:
 	"A class for tensor and operator indices."
 
@@ -81,16 +83,30 @@ class index:
 		else:
 			self.userDefined = userDefined
 
-	def __cmp__(self,other):
-		if (not isinstance(other,index)):
+	#def __cmp__(self,other):
+	#	if (not isinstance(other,index)):
+	#		raise ValueError("can only compare index class with other index class objects.")
+	#	retval = cmp(self.isSummed, other.isSummed)
+	#	if retval != 0:
+	#		return retval
+	#	retval = cmp(self.name, other.name)
+	#	if retval != 0:
+	#		return retval
+	#	return cmp(self.indType, other.indType)
+
+	def __eq__(self, other):
+		if not isinstance(other,index):
+			raise False
+		return (self.isSummed == other.isSummed and self.name == other.name and self.indType == other.indType)
+ 
+	def __lt__(self, other):
+		if not isinstance(other,index):
 			raise ValueError("can only compare index class with other index class objects.")
-		retval = cmp(self.isSummed, other.isSummed)
-		if retval != 0:
-			return retval
-		retval = cmp(self.name, other.name)
-		if retval != 0:
-			return retval
-		return cmp(self.indType, other.indType)
+		if self.isSummed != other.isSummed:
+			return self.isSummed < other.isSummed
+		if self.name != other.name:
+			return self.name < other.name
+		return self.indType < other.indType
 
 	def tup(self):
 		"Returns a tuple representation of the index. The return object in unmutable and thus can be used as a dictionary key."
