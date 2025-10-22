@@ -491,7 +491,8 @@ class term:
                 fcList.append(t)
             else:
                 ncList.append(t)
-        fcList.sort(lambda x,y: cmp(x.name,y.name))
+        #fcList.sort(lambda x,y: cmp(x.name,y.name))
+        fcList.sort(key=lambda x: x.name)
 
         nameGroups = []
         uniqueNames = []
@@ -501,7 +502,8 @@ class term:
             else:
                 uniqueNames.append(t.name)
                 nameGroups.append([t])
-        nameGroups.sort(lambda x,y: cmp(len(x),len(y)))
+        #nameGroups.sort(lambda x,y: cmp(len(x),len(y)))
+        nameGroups.sort(key=lambda x: len(x))
         for t in ncList:
             nameGroups.append([t])
         del(uniqueNames,fcList,ncList,t)
@@ -713,7 +715,8 @@ class term:
                         withoutMapped.append(i)
                     else:
                         withMapped.append((leastMapped,i))
-                withMapped.sort(lambda x,y: cmp(x[0],y[0]))
+                #withMapped.sort(lambda x,y: cmp(x[0],y[0]))
+                withMapped.sort(key=lambda x: x[0])
                 withMapped = [i[1] for i in withMapped]
                 if len(withoutMapped) <= 1:
                     jobStack.append((map,gCount,tCount,aCount,gPerms + [withMapped + withoutMapped]))
@@ -822,7 +825,8 @@ class term:
         if len(fcList) > 0:
 
             # Sort the freely commuting tensors by name
-            fcList.sort(lambda x,y: cmp(x.name,y.name))
+            #fcList.sort(lambda x,y: cmp(x.name,y.name))
+            fcList.sort(key=lambda x: x.name)
 
             # For the freely commuting tensors, compile a list of unique tensor names and the number of times they occur
             uniqueNames = []
