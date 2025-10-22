@@ -25,6 +25,7 @@
 # For example, the Hamiltonian in second quantization can be written as a list of terms.
 #
 
+from functools import total_ordering
 import threading
 from .sqaIndex import index
 from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
@@ -36,6 +37,7 @@ import time
 #--------------------------------------------------------------------------------------------------
 
 
+@total_ordering
 class term:
     "A class for terms used in operator algebra. Each term is a multiplicative string of constants, tensors, and operators."
 
@@ -63,61 +65,130 @@ class term:
 
     #------------------------------------------------------------------------------------------------
 
-    def __cmp__(self,other):
-        if not isinstance(other,term):
+    #def __cmp__(self,other):
+    #    if not isinstance(other,term):
+    #        raise TypeError("term object can only be compared to other term objects.")
+
+    #    # sort by number of loose creation operators first
+    #    retval = cmp(self.nCreOps(),other.nCreOps())
+    #    if retval != 0:
+    #        return retval
+
+    #    # next sort by number of loose destruction operators
+    #    retval = cmp(self.nDesOps(),other.nDesOps())
+    #    if retval != 0:
+    #        return retval
+
+    #    # next sort by the orders of the spin free excitation operators
+    #    retval = cmp(self.sfExOp_ranks(),other.sfExOp_ranks())
+    #    if retval != 0:
+    #        return retval
+
+    #    # next sort by the number of constants
+    #    retval = cmp(len(self.constants),len(other.constants))
+    #    if retval != 0:
+    #        return retval
+
+    #    # next sort by the number of tensors
+    #    retval = cmp(len(self.tensors),len(other.tensors))
+    #    if retval != 0:
+    #        return retval
+
+    #    # next sort by the tensors' names
+    #    retval = cmp([t.name for t in self.tensors], [t.name for t in other.tensors])
+    #    if retval != 0:
+    #        return retval
+
+    #    # next sort by the tensors
+    #    retval = cmp(self.tensors,other.tensors)
+    #    if retval != 0:
+    #        return retval
+
+    #    # next sort by the constants
+    #    retval = cmp(self.constants,other.constants)
+    #    if retval != 0:
+    #        return retval
+
+    #    # finally compare the numerical constants
+    #    numDiff = self.numConstant - other.numConstant
+    #    if abs(numDiff) < 1e-6:
+    #        return 0
+    #    elif numDiff < 0:
+    #        return -1
+    #    elif numDiff > 0:
+    #        return 1
+    #    else:
+    #        raise RuntimeError("Failure in comparison of terms' numeric constants.")
+    #    return numDiff
+
+    def __eq__(self, other):
+        if not isinstance(other, term):
+            return False
+
+        # sort by number of loose creation operators first
+        if self.nCreOps() != other.nCreOps():
+            return False
+        # next sort by number of loose destruction operators
+        if self.nDesOps() != other.nDesOps():
+            return False
+        # next sort by the orders of the spin free excitation operators
+        if self.sfExOp_ranks() != other.sfExOp_ranks():
+            return False
+        # next sort by the number of constants
+        if len(self.constants) != len(other.constants):
+            return False
+        # next sort by the number of tensors
+        if len(self.tensors) != len(other.tensors):
+            return False
+        # next sort by the tensors' names
+        if [t.name for t in self.tensors] != [t.name for t in other.tensors]:
+            return False
+        # next sort by the tensors
+        if self.tensors != other.tensors:
+            return False
+        # next sort by the constants
+        if self.constants != other.constants:
+            return False
+        # finally compare the numerical constants
+        numDiff = self.numConstant - other.numConstant
+        return abs(numDiff) < 1e-6
+
+    def __lt__(self, other):
+        if not isinstance(other, term):
             raise TypeError("term object can only be compared to other term objects.")
 
         # sort by number of loose creation operators first
-        retval = cmp(self.nCreOps(),other.nCreOps())
-        if retval != 0:
-            return retval
-
+        if self.nCreOps() != other.nCreOps():
+            return self.nCreOps() < other.nCreOps()
         # next sort by number of loose destruction operators
-        retval = cmp(self.nDesOps(),other.nDesOps())
-        if retval != 0:
-            return retval
-
+        if self.nDesOps() != other.nDesOps():
+            return self.nDesOps() < other.nDesOps()
         # next sort by the orders of the spin free excitation operators
-        retval = cmp(self.sfExOp_ranks(),other.sfExOp_ranks())
-        if retval != 0:
-            return retval
-
+        if self.sfExOp_ranks() != other.sfExOp_ranks():
+            return self.sfExOp_ranks() < other.sfExOp_ranks()
         # next sort by the number of constants
-        retval = cmp(len(self.constants),len(other.constants))
-        if retval != 0:
-            return retval
-
+        if len(self.constants) != len(other.constants):
+            return len(self.constants) < len(other.constants)
         # next sort by the number of tensors
-        retval = cmp(len(self.tensors),len(other.tensors))
-        if retval != 0:
-            return retval
-
+        if len(self.tensors) != len(other.tensors):
+            return len(self.tensors) < len(other.tensors)
         # next sort by the tensors' names
-        retval = cmp([t.name for t in self.tensors], [t.name for t in other.tensors])
-        if retval != 0:
-            return retval
-
+        self_names = [t.name for t in self.tensors]
+        other_names = [t.name for t in other.tensors]
+        if self_names != other_names:
+            return self_names < other_names
         # next sort by the tensors
-        retval = cmp(self.tensors,other.tensors)
-        if retval != 0:
-            return retval
-
+        if self.tensors != other.tensors:
+            return self.tensors < other.tensors
         # next sort by the constants
-        retval = cmp(self.constants,other.constants)
-        if retval != 0:
-            return retval
-
+        if self.constants != other.constants:
+            return self.constants < other.constants
         # finally compare the numerical constants
         numDiff = self.numConstant - other.numConstant
-        if abs(numDiff) < 1e-6:
-            return 0
-        elif numDiff < 0:
-            return -1
-        elif numDiff > 0:
-            return 1
-        else:
-            raise RuntimeError("Failure in comparison of terms' numeric constants.")
-        return numDiff
+        if abs(numDiff) >= 1e-6:
+            return numDiff < 0
+
+        return False
 
     #------------------------------------------------------------------------------------------------
 
