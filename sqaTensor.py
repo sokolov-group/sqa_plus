@@ -68,7 +68,7 @@ class tensor:
 
         # Process indices
         indicesError = "indices must be a list of index objects"
-        if not isinstance(indices, type([])):
+        if not isinstance(indices, list):
             raise TypeError(indicesError)
         for i in indices:
             if not isinstance(i, index):
@@ -77,7 +77,7 @@ class tensor:
 
         # Process symmetries
         symmetryError = "symmetries must be a list of symmetry objects"
-        if not isinstance(symmetries, type([])):
+        if not isinstance(symmetries, list):
             raise TypeError(symmetryError)
         for sym in symmetries:
             if not isinstance(sym, symmetry):
@@ -173,7 +173,8 @@ class tensor:
 #            return (self.permutations,self.factors)
         
         # Otherwise, compute the permutations and corresponding factors
-        tuples = [range(len(self.indices))]
+        #tuples = [range(len(self.indices))]
+        tuples = [list(range(len(self.indices)))]
         factors = [1]
         allFound = False
         while not allFound:
@@ -197,7 +198,7 @@ class tensor:
                     tuples.append(newTuples[0])
                     factors.append(newFactors[0])
                     #print tuples[-1]
-                del(newTuples[0],newFactors[0])
+                del(newTuples[0], newFactors[0])
 
         # Save the results for later so they don't need to be computed again
         self.permutations, self.factors = tuples, factors
