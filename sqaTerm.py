@@ -888,92 +888,43 @@ def process_chunk(terms_chunk):
         term.makeCanonical(rename_user_defined=False)
     return terms_chunk
  
-def combineTerms(termList, maxThreads = None):
+def combineTerms(termList, maxProcesses = None):
     "Combines any like terms in termList"
 
     if not termList:
         return
 
-    if maxThreads is None:
-        maxThreads = cpu_count()
+    if maxProcesses is None:
+        maxProcesses = cpu_count()
     else:
-        maxThreads = max(1, maxThreads)
+        maxProcesses = max(1, maxProcesses)
 
     if options.verbose:
         print('')
         print('Combining like terms:')
         print('Converting %i terms to canonical form...' %(len(termList)))
-        print('Using max threads %i' %(maxThreads))
+        print('Using max threads %i' %(maxProcesses))
 
     startTime = time.time()
 
     # Put the terms in termList into their canonical (unique) forms
-    if maxThreads > 1 and len(termList) > 100:
+    if maxProcesses > 1 and len(termList) > 100:
         # Process in chunks to reduce serialization overhead
-        chunk_size = max(1, len(termList) // (maxThreads * 4))
+        chunk_size = max(1, len(termList) // (maxProcesses * 4))
         chunk_size = min(chunk_size, len(termList))
         chunks = [termList[i:i+chunk_size] for i in range(0, len(termList), chunk_size)]
 
         # Process in parallel
-        with Pool(processes=maxThreads) as pool:
+        with Pool(processes=maxProcesses) as pool:
             processed_chunks = pool.map(process_chunk, chunks)
 
         # Flatten results
         termList[:] = [term for chunk in processed_chunks for term in chunk]
 
-        ### Initialize counters and locks
-        ##termCount = [0]
-        ##printCount = [0]
-        ##tLock = threading.Lock()
-        ##pLock = threading.Lock()
-
-        ### Define function to use in threads
-        ##def threadFunc(nTerms):
-
-        ##    batchSize = 100
-
-        ##    # Get first batch
-        ##    tLock.acquire()
-        ##    i = termCount[0]
-        ##    termCount[0] += batchSize
-        ##    tLock.release()
-        ##    k = i + batchSize
-
-        ##    while i < nTerms:
-
-        ##        termList[i].makeCanonical(rename_user_defined = False)
-
-#       ##         pLock.acquire()
-#       ##         print '%6i    %s' %(printCount[0],str(termList[i]))
-#       ##         printCount[0] += 1
-#       ##         pLock.release()
-
-        ##        i += 1
-
-        ##        if i == k:
-        ##            # Get next batch
-        ##            tLock.acquire()
-        ##            i = termCount[0]
-        ##            termCount[0] += batchSize
-        ##            tLock.release()
-        ##            k = i + batchSize
-
-        ### Start threads
-        ##threads = []
-        ##nTerms = len(termList)
-        ##for i in range(maxThreads):
-        ##    threads.append(threading.Thread(target=threadFunc, args=(nTerms,)))
-        ##    threads[-1].start()
-
-        ### Wait for the threads to finish
-        ##for thread in threads:
-        ##    thread.join()
-
     else:
         # Convert the terms to canonical form in the main thread
         for i in range(len(termList)):
             if options.verbose:
-                #print '%6i    %s' %(i,str(termList[i]))
                 print('%6i    %s' %(i,str(termList[i])))
             termList[i].makeCanonical(rename_user_defined = False)
 
@@ -981,30 +932,23 @@ def combineTerms(termList, maxThreads = None):
     termList.sort()
 
     # Combine any terms with the same canonical form
-    i = 0
-    while i < len(termList)-1:
-        if termList[i].sameForm(termList[i+1]):
-            termList[i+1] += termList[i]
-            del(termList[i])
+    newTermList = []
+    current = termList[0]
+    for i in range(1, len(termList)):
+        if (current.constants == termList[i].constants) and (current.tensors == termList[i].tensors):
+            current.numConstant += termList[i].numConstant
         else:
-            i += 1
+            newTermList.append(current)
+            current = termList[i]
+
+    newTermList.append(current)
+    termList[:] = newTermList
 
     # Rename user defined dummy indices
     for _term in termList:
         for _tensor in _term.tensors:
             for _ind in range(len(_tensor.indices)):
                 _tensor.indices[_ind].rename()
-
-#    i = 0
-#    while i < len(termList)-1:
-#        j = i + 1
-#        while j < len(termList):
-#            if termList[j].sameForm(termList[i]):
-#                termList[i] += termList[j]
-#                del(termList[j#            else:
-#            else:
-#                j += 1
-#        i += 1
 
     # Remove terms with coefficients of zero
     termChop(termList)
