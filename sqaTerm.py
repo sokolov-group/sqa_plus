@@ -26,7 +26,6 @@
 #
 
 from functools import total_ordering
-#import threading
 from multiprocessing import Pool, cpu_count
 from .sqaIndex import index
 from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
@@ -47,19 +46,19 @@ class term:
     def __init__(self, numConstant, constList, tensorList, isInCanonicalForm = False):
         self.constants = []
         self.tensors = []
-        if type(numConstant) == type(1.0) or type(numConstant) == type(1):
+        if isinstance(numConstant, (int, float)):
             self.numConstant = float(numConstant)
         else:
             raise TypeError("numConstant must be given as a float or an int.")
         for c in constList:
-            if type(c) != type('a'):
+            if not isinstance(c, str):
                 raise TypeError("constList must be a list of strings")
             self.constants.append(c)
         for t in tensorList:
             if not isinstance(t, tensor):
                 raise TypeError("tensorList must be a list of tensor objects")
             self.tensors.append(t.copy())
-        if type(isInCanonicalForm) == type(True):
+        if isinstance(isInCanonicalForm, bool):
             self.isInCanonicalForm = isInCanonicalForm
         else:
             raise TypeError("if specified, isInCanonicalForm must be True or False")
@@ -259,7 +258,7 @@ class term:
 
     def scale(self, factor):
         "Multiplies the term by factor."
-        if type(factor) == type(1.0) or type(factor) == type(1):
+        if isinstance(factor, (int, float)):
             self.numConstant *= factor
         else:
             raise ValueError("factor must an integer or float")
@@ -492,7 +491,6 @@ class term:
                 fcList.append(t)
             else:
                 ncList.append(t)
-        #fcList.sort(lambda x,y: cmp(x.name,y.name))
         fcList.sort(key=lambda x: x.name)
 
         nameGroups = []
@@ -503,7 +501,6 @@ class term:
             else:
                 uniqueNames.append(t.name)
                 nameGroups.append([t])
-        #nameGroups.sort(lambda x,y: cmp(len(x),len(y)))
         nameGroups.sort(key=lambda x: len(x))
         for t in ncList:
             nameGroups.append([t])
@@ -716,7 +713,6 @@ class term:
                         withoutMapped.append(i)
                     else:
                         withMapped.append((leastMapped,i))
-                #withMapped.sort(lambda x,y: cmp(x[0],y[0]))
                 withMapped.sort(key=lambda x: x[0])
                 withMapped = [i[1] for i in withMapped]
                 if len(withoutMapped) <= 1:
@@ -985,7 +981,7 @@ def multiplyTerms(t1,t2):
 def termChop(termList, tolerance = 1e-6):
     "Removes any terms with zero constant factors from termList."
     TypeErrorMessage = "termList must be a list of terms"
-    if type(termList) != type([]):
+    if not isinstance(termList, list):
         raise TypeError(TypeErrorMessage)
     i = 0
     while i < len(termList):
@@ -1224,7 +1220,7 @@ def removeCoreOpPairs(inList):
     """
 
     # prepare input argument
-    if type(inList) != type([]):
+    if not isinstance(inList, list):
         raise TypeError("input must be a list of terms")
 
     # loop over input terms
