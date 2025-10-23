@@ -118,13 +118,9 @@ def dummyLabel(_terms, keep_user_defined_dummy_names = True):
         virtInd = list('abcdefgh')
 
         if keep_user_defined_dummy_names:
-            for reserved_index_name in user_defined_indices:
-                if reserved_index_name in coreInd:
-                    coreInd.remove(reserved_index_name)
-                elif reserved_index_name in actvInd:
-                    actvInd.remove(reserved_index_name)
-                elif reserved_index_name in virtInd:
-                    virtInd.remove(reserved_index_name)
+            coreInd = [c for c in coreInd if c not in user_defined_indices]
+            actvInd = [a for a in actvInd if a not in user_defined_indices]
+            virtInd = [v for v in virtInd if v not in user_defined_indices]
 
         if options.verbose:
             _term_unlabeled = _term.copy()
@@ -141,16 +137,13 @@ def dummyLabel(_terms, keep_user_defined_dummy_names = True):
                 if (index_summed and 
                     ((keep_user_defined_dummy_names and not index_user_defined)
                       or not keep_user_defined_dummy_names)):
-                    if index_name not in mymap.keys():
+                    if index_name not in mymap:
                         if is_core_index_type(index_type):
-                            mymap[index_name] = coreInd[0]
-                            coreInd.pop(0)
+                            mymap[index_name] = coreInd.pop(0)
                         elif is_active_index_type(index_type):
-                            mymap[index_name] = actvInd[0]
-                            actvInd.pop(0)
+                            mymap[index_name] = actvInd.pop(0)
                         elif is_virtual_index_type(index_type):
-                            mymap[index_name] = virtInd[0]
-                            virtInd.pop(0)
+                            mymap[index_name] = virtInd.pop(0)
 
                     # Update the label
                     _terms[_term_ind].tensors[_tensor_ind].indices[_index_ind].name = mymap[index_name]
