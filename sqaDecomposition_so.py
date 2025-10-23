@@ -39,7 +39,7 @@ def decomp_3rdms_to_2rdms_so(inTerms, d3name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
         raise TypeError("d1_aa must be a tensor with 2 indices")
@@ -110,7 +110,7 @@ def decomp_4rdms_to_2rdms_so(inTerms, d4name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
         raise TypeError("d1_aa must be a tensor with 2 indices")
@@ -181,7 +181,7 @@ def decomp_4rdms_to_3rdms_so(inTerms, d4name, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
         raise TypeError("d1_aa must be a tensor with 2 indices")
@@ -949,7 +949,7 @@ def decomp_3ops_to_2ops_2rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
         raise TypeError("d1_aa must be a tensor with 2 indices")
@@ -1035,7 +1035,7 @@ def decomp_4ops_to_2ops_2rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
         raise TypeError("d1_aa must be a tensor with 2 indices")
@@ -1123,7 +1123,7 @@ def decomp_3ops_to_2ops_3rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
         raise TypeError("d1_aa must be a tensor with 2 indices")
@@ -1217,7 +1217,7 @@ def decomp_4ops_to_2ops_3rdms_so(inTerms, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_aba
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1_aa, tensor) ) or (len(d1_aa.indices) != 2):
         raise TypeError("d1_aa must be a tensor with 2 indices")
@@ -1313,7 +1313,7 @@ def decomp_3op_to_2op_2rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
     TypeErrorMessage = "op must be a list of three creOp objects followed by three desOp objects."
 
     # Check input
-    if type(op) != type([]) or len(op) != 6 or \
+    if not instance(op, list) or len(op) != 6 or \
          not (isinstance(op[0], creOp) and isinstance(op[1], creOp) and isinstance(op[2], creOp) and \
                     isinstance(op[3], desOp) and isinstance(op[4], desOp) and isinstance(op[5], desOp)):
         raise TypeError(TypeErrorMessage)
@@ -1499,7 +1499,7 @@ def decomp_4op_to_2op_2rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
     TypeErrorMessage = "op must be a list of four creOp objects followed by four desOp objects."
 
     # Check input
-    if type(op) != type([]) or len(op) != 8 or \
+    if not isinstance(op, list) or len(op) != 8 or \
          not (isinstance(op[0], creOp) and isinstance(op[1], creOp) and \
                     isinstance(op[2], creOp) and isinstance(op[3], creOp) and \
                     isinstance(op[4], desOp) and isinstance(op[5], desOp) and \
@@ -1718,7 +1718,7 @@ def decomp_3op_to_2op_3rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab, d3_aa
     TypeErrorMessage = "op must be a list of three creOp objects followed by three desOp objects."
 
     # Check input
-    if type(op) != type([]) or len(op) != 6 or \
+    if not isinstance(op, list) or len(op) != 6 or \
          not (isinstance(op[0], creOp) and isinstance(op[1], creOp) and isinstance(op[2], creOp) and \
                     isinstance(op[3], desOp) and isinstance(op[4], desOp) and isinstance(op[5], desOp)):
         raise TypeError(TypeErrorMessage)
