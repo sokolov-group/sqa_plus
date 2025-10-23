@@ -150,7 +150,8 @@ term3 = []
 term4 = []
 
 # Get perturbation operator
-V = sqa.getV()
+#V = sqa.getV()
+V = sqa.Vperturbation()
 
 # Multiply every term in V by the operators in term2, store as term3
 for v in V:
