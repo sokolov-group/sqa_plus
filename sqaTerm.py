@@ -26,7 +26,8 @@
 #
 
 from functools import total_ordering
-import threading
+#import threading
+from multiprocessing import Pool, cpu_count
 from .sqaIndex import index
 from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
 from .sqaMisc import makePermutations
@@ -882,67 +883,91 @@ class term:
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
-
-def combineTerms(termList, maxThreads = 1):
+def process_chunk(terms_chunk):
+    for term in terms_chunk:
+        term.makeCanonical(rename_user_defined=False)
+    return terms_chunk
+ 
+def combineTerms(termList, maxThreads = None):
     "Combines any like terms in termList"
+
+    if not termList:
+        return
+
+    if maxThreads is None:
+        maxThreads = cpu_count()
+    else:
+        maxThreads = max(1, maxThreads)
 
     if options.verbose:
         print('')
         print('Combining like terms:')
         print('Converting %i terms to canonical form...' %(len(termList)))
+        print('Using max threads %i' %(maxThreads))
 
     startTime = time.time()
 
     # Put the terms in termList into their canonical (unique) forms
-    if maxThreads > 1:
+    if maxThreads > 1 and len(termList) > 100:
+        # Process in chunks to reduce serialization overhead
+        chunk_size = max(1, len(termList) // (maxThreads * 4))
+        chunk_size = min(chunk_size, len(termList))
+        chunks = [termList[i:i+chunk_size] for i in range(0, len(termList), chunk_size)]
 
-        # Initialize counters and locks
-        termCount = [0]
-        printCount = [0]
-        tLock = threading.Lock()
-        pLock = threading.Lock()
+        # Process in parallel
+        with Pool(processes=maxThreads) as pool:
+            processed_chunks = pool.map(process_chunk, chunks)
 
-        # Define function to use in threads
-        def threadFunc(nTerms):
+        # Flatten results
+        termList[:] = [term for chunk in processed_chunks for term in chunk]
 
-            batchSize = 100
+        ### Initialize counters and locks
+        ##termCount = [0]
+        ##printCount = [0]
+        ##tLock = threading.Lock()
+        ##pLock = threading.Lock()
 
-            # Get first batch
-            tLock.acquire()
-            i = termCount[0]
-            termCount[0] += batchSize
-            tLock.release()
-            k = i + batchSize
+        ### Define function to use in threads
+        ##def threadFunc(nTerms):
 
-            while i < nTerms:
+        ##    batchSize = 100
 
-                termList[i].makeCanonical(rename_user_defined = False)
+        ##    # Get first batch
+        ##    tLock.acquire()
+        ##    i = termCount[0]
+        ##    termCount[0] += batchSize
+        ##    tLock.release()
+        ##    k = i + batchSize
 
-#                pLock.acquire()
-#                print '%6i    %s' %(printCount[0],str(termList[i]))
-#                printCount[0] += 1
-#                pLock.release()
+        ##    while i < nTerms:
 
-                i += 1
+        ##        termList[i].makeCanonical(rename_user_defined = False)
 
-                if i == k:
-                    # Get next batch
-                    tLock.acquire()
-                    i = termCount[0]
-                    termCount[0] += batchSize
-                    tLock.release()
-                    k = i + batchSize
+#       ##         pLock.acquire()
+#       ##         print '%6i    %s' %(printCount[0],str(termList[i]))
+#       ##         printCount[0] += 1
+#       ##         pLock.release()
 
-        # Start threads
-        threads = []
-        nTerms = len(termList)
-        for i in range(maxThreads):
-            threads.append(threading.Thread(target=threadFunc, args=(nTerms,)))
-            threads[-1].start()
+        ##        i += 1
 
-        # Wait for the threads to finish
-        for thread in threads:
-            thread.join()
+        ##        if i == k:
+        ##            # Get next batch
+        ##            tLock.acquire()
+        ##            i = termCount[0]
+        ##            termCount[0] += batchSize
+        ##            tLock.release()
+        ##            k = i + batchSize
+
+        ### Start threads
+        ##threads = []
+        ##nTerms = len(termList)
+        ##for i in range(maxThreads):
+        ##    threads.append(threading.Thread(target=threadFunc, args=(nTerms,)))
+        ##    threads[-1].start()
+
+        ### Wait for the threads to finish
+        ##for thread in threads:
+        ##    thread.join()
 
     else:
         # Convert the terms to canonical form in the main thread
