@@ -199,7 +199,7 @@ def convert_ops_to_rdms_so(inTerms, name, ord = 0):
     """
 
     # Check that the name is a string
-    if type(name) != type('a'):
+    if not isinstance(name, str):
         raise TypeError('name must be a string')
 
     # Process each term

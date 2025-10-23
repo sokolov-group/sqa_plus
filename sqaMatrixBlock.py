@@ -107,7 +107,7 @@ def dummyLabel(_terms, keep_user_defined_dummy_names = True):
     # Import options from sqaOptions class
     user_defined_indices = options.user_defined_indices
 
-    print("Dummy indices relabelling...")
+    print("Dummy indices relabeling...")
     sys.stdout.flush()
 
     for _term_ind, _term in enumerate(_terms):

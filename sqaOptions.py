@@ -28,7 +28,7 @@ class sqaSpinBasis(object):
         return (instance.spin_basis == self.spin_basis)
 
     def __set__(self, instance, value):
-        if type(value) == type(True):
+        if isinstance(value, bool):
             if value:
                 instance.spin_basis = self.spin_basis
             if value == 'spin_adapted':
@@ -49,7 +49,7 @@ class sqaTensorNotation(object):
         return (instance.tensors_notation == self.tensors_notation)
 
     def __set__(self, instance, value):
-        if type(value) == type(True):
+        if isinstance(value, bool):
             if value:
                 instance.tensors_notation = self.tensors_notation
         else:
@@ -139,7 +139,7 @@ class sqaOptions(object):
             self.user_defined_indices.append(name)
 
     def add_spin_adaptation_custom_function(self, custom_function):
-        if type(custom_function) in (list, set, tuple):
+        if isinstance(custom_function, (list, set, tuple)):
             self.convertSpinIntegratedToAdapted.custom_functions.extend(custom_function)
         else:
             self.convertSpinIntegratedToAdapted.custom_functions.append(custom_function)
