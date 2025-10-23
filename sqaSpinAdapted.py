@@ -355,15 +355,20 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                 ten_v2e_inds = [get_spatial_index_type(ind) for ind in ten_v2e.indices]
                 ten_v2e_spin_inds = [get_spin_index_type(ind) for ind in ten_v2e.indices]
 
+                pair1_equal = ten_v2e_inds[0] == ten_v2e_inds[1]
+                pair2_equal = ten_v2e_inds[2] == ten_v2e_inds[3]
+
                 ten_v2e_tens_sa = []
                 const_v2e_tens_sa = []
 
-                if ((ten_v2e_inds[0] == ten_v2e_inds[1] == ten_v2e_inds[2] == ten_v2e_inds[3]) or
+                #if ((ten_v2e_inds[0] == ten_v2e_inds[1] == ten_v2e_inds[2] == ten_v2e_inds[3]) or
 
-                   (((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3]) and
-                     (ten_v2e_inds[0] != ten_v2e_inds[2]) and (ten_v2e_inds[1] != ten_v2e_inds[3])) or
+                #   (((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3]) and
+                #     (ten_v2e_inds[0] != ten_v2e_inds[2]) and (ten_v2e_inds[1] != ten_v2e_inds[3])) or
 
-                    ((ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3])))):
+                #    ((ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3])))):
+
+                if pair2_equal:
 
                     if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: v2e(p,q,r,s)
@@ -405,7 +410,8 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                         ten_v2e_tens_sa.append(ten_v2e_sa)
                         const_v2e_tens_sa.append(const_v2e_sa)
 
-                elif (ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3]):
+                #elif (ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3]):
+                elif (not pair1_equal) and (not pair2_equal):
 
                     if options.cvs_approach:
                         ten_v2e_cvs_inds = [is_cvs_index_type(ind) for ind in ten_v2e.indices]
@@ -492,7 +498,8 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                             ten_v2e_tens_sa.append(ten_v2e_sa)
                             const_v2e_tens_sa.append(const_v2e_sa)
 
-                elif ((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3])):
+                #elif ((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3])):
+                elif pair1_equal and (not pair2_equal):
                     if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                         ten_v2e_sa = ten_v2e.copy()
@@ -5466,10 +5473,14 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                 ten_t2_inds = [get_spatial_index_type(ind) for ind in ten_t2.indices]
                 ten_t2_spin_inds = [get_spin_index_type(ind) for ind in ten_t2.indices]
 
+                pair1_equal = ten_t2_inds[0] == ten_t2_inds[1]
+                pair2_equal = ten_t2_inds[2] == ten_t2_inds[3]
+
                 ten_t2_tens_sa = []
                 const_t2_tens_sa = []
 
-                if (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
+                #if (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
+                if pair1_equal and pair2_equal:
 
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
@@ -5510,7 +5521,8 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                elif (ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
+                #elif (ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
+                elif not pair1_equal and pair2_equal:
 
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
@@ -5551,7 +5563,8 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                elif (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3]):
+                #elif (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3]):
+                elif pair1_equal and not pair2_equal:
 
                     if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
@@ -5592,7 +5605,8 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                elif ((ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3])):
+                #elif ((ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3])):
+                elif not pair1_equal and not pair2_equal:
 
                     if options.cvs_approach:
                         ten_t2_cvs_inds = [is_cvs_index_type(ind) for ind in ten_t2.indices]
