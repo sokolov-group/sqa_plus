@@ -60,6 +60,8 @@ def convertSpinIntegratedToAdapted(terms_si):
     # Convert T amplitudes to Spin-Adapted Formulation
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
 
+    ##TODO: make a canonicalize_spin function
+
     # Convert custom tensors using user-defined Spin-Adapted Functions
     if custom_functions:
         options.print_divider()
@@ -290,25 +292,25 @@ def convert_h1e_si_to_sa(_terms_h1e_si):
     # Convert 1e- objects in each term
     terms_h1e_sa = []
     for term_h1e_si in _terms_h1e_si:
-        ## Select the 1e- object
-        ten_h1e = False
-        for ten in term_h1e_si.tensors:
-            if ten.name == 'h' and len(ten.indices) == 2:
-                ten_h1e = ten
+        ## Select 1e- objects
+        #ten_h1e = False
+        #for ten in term_h1e_si.tensors:
+        #    if ten.name == 'h' and len(ten.indices) == 2:
+        #        ten_h1e = ten
 
-        if ten_h1e:
-            ten_h1e_spin_inds = [get_spin_index_type(ind) for ind in ten_h1e.indices]
+        ten_h1e = next((ten for ten in term_h1e_si.tensors if ten.name == 'h' and len(ten.indices) == 2), None)
 
-            if ten_h1e_spin_inds in [inds_aa, inds_bb]:
-                term_h1e_sa = term_h1e_si.copy()
-                terms_h1e_sa.append(term_h1e_sa)
-
-            else:
-                term_h1e_sa = term_h1e_si.copy()
-                term_h1e_sa.scale(0.0)
-                terms_h1e_sa.append(term_h1e_sa)
-        else:
+        if not ten_h1e:
             terms_h1e_sa.append(term_h1e_si)
+            continue
+
+        ten_h1e_spin_inds = [get_spin_index_type(ind) for ind in ten_h1e.indices]
+        term_h1e_sa = term_h1e_si.copy()
+
+        if ten_h1e_spin_inds not in [inds_aa, inds_bb]:
+            term_h1e_sa.scale(0.0)
+
+        terms_h1e_sa.append(term_h1e_sa)
 
     termChop(terms_h1e_sa)
 
@@ -411,7 +413,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                         const_v2e_tens_sa.append(const_v2e_sa)
 
                 #elif (ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3]):
-                elif (not pair1_equal) and (not pair2_equal):
+                elif not pair1_equal and not pair2_equal:
 
                     if options.cvs_approach:
                         ten_v2e_cvs_inds = [is_cvs_index_type(ind) for ind in ten_v2e.indices]
@@ -499,7 +501,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                             const_v2e_tens_sa.append(const_v2e_sa)
 
                 #elif ((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3])):
-                elif pair1_equal and (not pair2_equal):
+                elif pair1_equal and not pair2_equal:
                     if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
                         ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                         ten_v2e_sa = ten_v2e.copy()
@@ -583,6 +585,7 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
 
     options.print_divider()
     print("Converting RDMs to spin-adapted formulation...\n")
+    sys.stdout.flush()
 
     # Convert One-Body RDMs
     print("Converting 1-RDMs to spin-adapted formulation...")
