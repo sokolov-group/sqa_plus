@@ -27,6 +27,7 @@
 
 from functools import total_ordering
 from multiprocessing import Pool, cpu_count
+from collections import deque
 from .sqaIndex import index
 from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
 from .sqaMisc import makePermutations
@@ -304,13 +305,6 @@ class term:
                         if typeString in i1.indType[j]:
                             typeOverlap[-1].append(typeString)
 
-#                for l0 in i0.indType:
-#                    typeOverlap.append([])
-#                    for s0 in l0:
-#                        for l1 in i1.indType:
-#                            if s0 in l1:
-#                                typeOverlap[-1].append(s0)
-
                 # If there is no overlap between any of the type groups, the delta function is zero
                 if ( len(i0.indType) > 0 or len(i1.indType) > 0 ) and [] in typeOverlap:
                     self.numConstant = 0.0
@@ -479,33 +473,26 @@ class term:
         self.constants.sort()
 
         # If there are no tensors in the term then skip the tensor sorting.
-        if len(self.tensors) == 0:
+        if not self.tensors:
             self.isInCanonicalForm = True
             return
 
         # Sort the freely commuting tensors by number and name
-        fcList = []
-        ncList = []
-        for t in self.tensors:
-            if t.freelyCommutes:
-                fcList.append(t)
-            else:
-                ncList.append(t)
+        fcList = [t for t in self.tensors if t.freelyCommutes]
+        ncList = [t for t in self.tensors if not t.freelyCommutes]
         fcList.sort(key=lambda x: x.name)
-
+ 
         nameGroups = []
-        uniqueNames = []
         for t in fcList:
-            if t.name in uniqueNames:
-                nameGroups[-1].append(t)
-            else:
-                uniqueNames.append(t.name)
+            if (not nameGroups) or (nameGroups[-1][0].name != t.name):
                 nameGroups.append([t])
+            else:
+                nameGroups[-1].append(t)
         nameGroups.sort(key=lambda x: len(x))
         for t in ncList:
             nameGroups.append([t])
-        del(uniqueNames,fcList,ncList,t)
-
+        del(fcList, ncList, t)
+ 
         # Generate an alphabet for use in renaming indices
         # This is done to avoid renaming with an index name already in use.
         # Should try using numbers, i.e. '1', '2', '3', etc.
@@ -518,7 +505,8 @@ class term:
         bestScore = [-1]
         nTopScore = 0
         # job format:    (map, gCount, tCount, aCount, gPerms)
-        jobStack = [({},0,0,0,[])]
+        #jobStack = [({},0,0,0,[])]
+        jobStack = deque([({}, 0, 0, 0, [])])
         while jobStack:
 
             # get the next job
@@ -721,7 +709,7 @@ class term:
                     for perm in makePermutations(len(withoutMapped)):
                         new_gPerm = withMapped + [withoutMapped[i] for i in perm]
                         jobStack.append((map,gCount,tCount,aCount,gPerms + [new_gPerm]))
-                    del(new_gPerm,perm)
+                #    del(new_gPerm,perm)
                 del(withMapped,withoutMapped,leastMapped)
 
             # If continuing an existing group, schedule a new job for each equivelent ordering
@@ -803,6 +791,7 @@ class term:
         self.isInCanonicalForm = True
 
     #------------------------------------------------------------------------------------------------
+
 
     def getCandidateTensorLists(self):
         """
