@@ -477,21 +477,22 @@ class term:
             self.isInCanonicalForm = True
             return
 
-        # Sort the freely commuting tensors by number and name
+        # Sort the freely commuting tensors by name
         fcList = [t for t in self.tensors if t.freelyCommutes]
         ncList = [t for t in self.tensors if not t.freelyCommutes]
-        fcList.sort(key=lambda x: x.name)
- 
-        nameGroups = []
+
+        nameGroups = {}
         for t in fcList:
-            if (not nameGroups) or (nameGroups[-1][0].name != t.name):
-                nameGroups.append([t])
-            else:
-                nameGroups[-1].append(t)
-        nameGroups.sort(key=lambda x: len(x))
-        for t in ncList:
-            nameGroups.append([t])
-        del(fcList, ncList, t)
+            if t.name not in nameGroups:
+                nameGroups[t.name] = []
+            nameGroups[t.name].append(t)
+
+        # Sort further by tensor subclass and length (use name as tie-breaker)
+        sort_key = lambda item: (item[1][0].__class__.__name__, len(item[1]), item[0])
+        nameGroups = [group for _, group in sorted(nameGroups.items(), key=sort_key)]
+
+        # Add non-commuting tensors as individual groups
+        nameGroups.extend([[t] for t in ncList])
  
         # Generate an alphabet for use in renaming indices
         # This is done to avoid renaming with an index name already in use.
@@ -539,6 +540,16 @@ class term:
                     for j in range(i+1,len(indexList)):
                         if indexList[i] < indexList[j]:
                             score[-1] += 1
+
+                ## Check for perfect score (early termination)
+                #max_possible_score = [len(indexList) - i - 1 for i in range(len(indexList)-1)]
+                #if score == max_possible_score:
+                #    bestScore = score
+                #    bestMap = map
+                #    best_factor = factor
+                #    best_tensor_list = tenList
+                #    nTopScore = 1
+                #    break
 
                 # If the current score is the best score, save the result
                 if score > bestScore:
@@ -760,14 +771,9 @@ class term:
 
         # Create an index mapping that converts to a canonical alphabet, i.e. a-z
         alphabet = list('abcdefghijklmnopqrstuvwxyz')
+        filtered_alphabet = [c for c in alphabet if c not in options.user_defined_indices]
 
-        filtered_alphabet = []
-        for character in alphabet:
-            if character not in options.user_defined_indices:
-                filtered_alphabet.append(character)
-        alphabet = filtered_alphabet
-
-        if len(alphabet) < len(bestMap):
+        if len(filtered_alphabet) < len(bestMap):
             raise RuntimeError("Alphabet smaller than number of indices, no more names left!")
         canonMap = {}
         while bestMap.keys():
@@ -775,7 +781,7 @@ class term:
             for key in bestMap.keys():
                 if bestMap[key] == minVal:
                     canonMap[bestMap[key].tup()] = bestMap[key].copy()
-                    canonMap[bestMap[key].tup()].name = alphabet.pop(0)
+                    canonMap[bestMap[key].tup()].name = filtered_alphabet.pop(0)
                     del bestMap[key]
                     break
 
@@ -791,7 +797,6 @@ class term:
         self.isInCanonicalForm = True
 
     #------------------------------------------------------------------------------------------------
-
 
     def getCandidateTensorLists(self):
         """
@@ -900,7 +905,7 @@ def combineTerms(termList, maxProcesses = None):
         chunks = [termList[i:i+chunk_size] for i in range(0, len(termList), chunk_size)]
 
         # Process in parallel
-        with Pool(processes=maxProcesses) as pool:
+        with Pool(processes=maxProcesses, maxtasksperchild=1) as pool:
             processed_chunks = pool.map(process_chunk, chunks)
 
         # Flatten results
