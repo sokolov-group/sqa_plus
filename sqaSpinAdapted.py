@@ -27,7 +27,8 @@ from .sqaTerm import combineTerms, termChop
 from .sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from .sqaOptions import options
 from .sqaSymmetry import symmetry
-
+    
+##TODO: make a canonicalize_spin function
 def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
@@ -59,8 +60,6 @@ def convertSpinIntegratedToAdapted(terms_si):
 
     # Convert T amplitudes to Spin-Adapted Formulation
     terms_sa = convert_t_amplitudes_si_to_sa(terms_sa)
-
-    ##TODO: make a canonicalize_spin function
 
     # Convert custom tensors using user-defined Spin-Adapted Functions
     if custom_functions:
@@ -293,11 +292,6 @@ def convert_h1e_si_to_sa(_terms_h1e_si):
     terms_h1e_sa = []
     for term_h1e_si in _terms_h1e_si:
         ## Select 1e- objects
-        #ten_h1e = False
-        #for ten in term_h1e_si.tensors:
-        #    if ten.name == 'h' and len(ten.indices) == 2:
-        #        ten_h1e = ten
-
         ten_h1e = next((ten for ten in term_h1e_si.tensors if ten.name == 'h' and len(ten.indices) == 2), None)
 
         if not ten_h1e:
@@ -323,14 +317,8 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
     options.print_divider()
     print("Converting 2e- integrals to spin-adapted formulation...")
 
-    # Define 2e- indices lists
-    inds_aaaa = [options.alpha_type, options.alpha_type, options.alpha_type, options.alpha_type]
-    inds_bbbb = [options.beta_type,  options.beta_type,  options.beta_type,  options.beta_type]
-
-    inds_abab = [options.alpha_type, options.beta_type,  options.alpha_type, options.beta_type]
-    inds_baba = [options.beta_type,  options.alpha_type, options.beta_type,  options.alpha_type]
-    inds_abba = [options.alpha_type, options.beta_type,  options.beta_type,  options.alpha_type]
-    inds_baab = [options.beta_type,  options.alpha_type, options.alpha_type, options.beta_type]
+    # Define spin map for 2e- indices
+    spin_map = {options.alpha_type: 'a', options.beta_type: 'b'}
 
     # Convert 2e- objects in each term
     terms_v2e_sa = []
@@ -357,22 +345,17 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                 ten_v2e_inds = [get_spatial_index_type(ind) for ind in ten_v2e.indices]
                 ten_v2e_spin_inds = [get_spin_index_type(ind) for ind in ten_v2e.indices]
 
+                spin_pattern = ''.join(spin_map[s] for s in ten_v2e_spin_inds)
+
                 pair1_equal = ten_v2e_inds[0] == ten_v2e_inds[1]
                 pair2_equal = ten_v2e_inds[2] == ten_v2e_inds[3]
 
                 ten_v2e_tens_sa = []
                 const_v2e_tens_sa = []
 
-                #if ((ten_v2e_inds[0] == ten_v2e_inds[1] == ten_v2e_inds[2] == ten_v2e_inds[3]) or
-
-                #   (((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3]) and
-                #     (ten_v2e_inds[0] != ten_v2e_inds[2]) and (ten_v2e_inds[1] != ten_v2e_inds[3])) or
-
-                #    ((ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] == ten_v2e_inds[3])))):
-
                 if pair2_equal:
 
-                    if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
+                    if spin_pattern in ('aaaa', 'bbbb'):
                         ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                         ten_v2e_sa = ten_v2e.copy()
                         const_v2e_sa = 1.0
@@ -388,7 +371,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                         ten_v2e_tens_sa.append(ten_v2e_sa)
                         const_v2e_tens_sa.append(const_v2e_sa)
 
-                    elif ten_v2e_spin_inds in [inds_abab, inds_baba]:
+                    elif spin_pattern in ('abab', 'baba'):
                         ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                         ten_v2e_sa = ten_v2e.copy()
                         const_v2e_sa = 1.0
@@ -396,7 +379,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                         ten_v2e_tens_sa.append(ten_v2e_sa)
                         const_v2e_tens_sa.append(const_v2e_sa)
 
-                    elif ten_v2e_spin_inds in [inds_abba, inds_baab]:
+                    elif spin_pattern in ('abba', 'baab'):
                         ## Spin-Adapted 2e- term: v2e(p,q,s,r)
                         ten_v2e_sa = ten_v2e.copy()
                         ten_v2e_sa.indices = [ten_v2e_sa.indices[i] for i in [0, 1, 3, 2]]
@@ -412,14 +395,13 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                         ten_v2e_tens_sa.append(ten_v2e_sa)
                         const_v2e_tens_sa.append(const_v2e_sa)
 
-                #elif (ten_v2e_inds[0] != ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3]):
                 elif not pair1_equal and not pair2_equal:
 
                     if options.cvs_approach:
                         ten_v2e_cvs_inds = [is_cvs_index_type(ind) for ind in ten_v2e.indices]
 
                     if options.cvs_approach and (ten_v2e_cvs_inds[0] == ten_v2e_cvs_inds[1]):
-                        if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
+                        if spin_pattern in ('aaaa', 'bbbb'):
                             ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                             ten_v2e_sa = ten_v2e.copy()
                             const_v2e_sa = 1.0
@@ -435,7 +417,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                             ten_v2e_tens_sa.append(ten_v2e_sa)
                             const_v2e_tens_sa.append(const_v2e_sa)
 
-                        elif ten_v2e_spin_inds in [inds_abab, inds_baba]:
+                        elif spin_pattern in ('abab', 'baba'):
                             ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                             ten_v2e_sa = ten_v2e.copy()
                             const_v2e_sa = 1.0
@@ -443,7 +425,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                             ten_v2e_tens_sa.append(ten_v2e_sa)
                             const_v2e_tens_sa.append(const_v2e_sa)
 
-                        elif ten_v2e_spin_inds in [inds_abba, inds_baab]:
+                        elif spin_pattern in ('abba', 'baab'):
                             ## Spin-Adapted 2e- term: v2e(q,p,r,s)
                             ten_v2e_sa = ten_v2e.copy()
                             ten_v2e_sa.indices = [ten_v2e_sa.indices[i] for i in [1, 0, 2, 3]]
@@ -460,7 +442,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                             const_v2e_tens_sa.append(const_v2e_sa)
 
                     else:
-                        if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
+                        if spin_pattern in ('aaaa', 'bbbb'):
                             ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                             ten_v2e_sa = ten_v2e.copy()
                             const_v2e_sa = 1.0
@@ -476,7 +458,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                             ten_v2e_tens_sa.append(ten_v2e_sa)
                             const_v2e_tens_sa.append(const_v2e_sa)
 
-                        elif ten_v2e_spin_inds in [inds_abab, inds_baba]:
+                        elif spin_pattern in ('abab', 'baba'):
                             ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                             ten_v2e_sa = ten_v2e.copy()
                             const_v2e_sa = 1.0
@@ -484,7 +466,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                             ten_v2e_tens_sa.append(ten_v2e_sa)
                             const_v2e_tens_sa.append(const_v2e_sa)
 
-                        elif ten_v2e_spin_inds in [inds_abba, inds_baab]:
+                        elif spin_pattern in ('abba', 'baab'):
                             ## Spin-Adapted 2e- term: v2e(p,q,s,r)
                             ten_v2e_sa = ten_v2e.copy()
                             ten_v2e_sa.indices = [ten_v2e_sa.indices[i] for i in [0, 1, 3, 2]]
@@ -500,9 +482,8 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                             ten_v2e_tens_sa.append(ten_v2e_sa)
                             const_v2e_tens_sa.append(const_v2e_sa)
 
-                #elif ((ten_v2e_inds[0] == ten_v2e_inds[1]) and (ten_v2e_inds[2] != ten_v2e_inds[3])):
                 elif pair1_equal and not pair2_equal:
-                    if ten_v2e_spin_inds in [inds_aaaa, inds_bbbb]:
+                    if spin_pattern in ('aaaa', 'bbbb'):
                         ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                         ten_v2e_sa = ten_v2e.copy()
                         const_v2e_sa = 1.0
@@ -518,7 +499,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                         ten_v2e_tens_sa.append(ten_v2e_sa)
                         const_v2e_tens_sa.append(const_v2e_sa)
 
-                    elif ten_v2e_spin_inds in [inds_abab, inds_baba]:
+                    elif spin_pattern in ('abab', 'baba'):
                         ## Spin-Adapted 2e- term: v2e(p,q,r,s)
                         ten_v2e_sa = ten_v2e.copy()
                         const_v2e_sa = 1.0
@@ -526,7 +507,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
                         ten_v2e_tens_sa.append(ten_v2e_sa)
                         const_v2e_tens_sa.append(const_v2e_sa)
 
-                    elif ten_v2e_spin_inds in [inds_abba, inds_baab]:
+                    elif spin_pattern in ('abba', 'baab'):
                         ## Spin-Adapted 2e- term: v2e(q,p,r,s)
                         ten_v2e_sa = ten_v2e.copy()
                         ten_v2e_sa.indices = [ten_v2e_sa.indices[i] for i in [1, 0, 2, 3]]
@@ -5407,9 +5388,8 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
     options.print_divider()
     print("Converting T amplitudes to spin-adapted formulation...")
 
-    # Define 1e- indices lists
-    inds_aa = [options.alpha_type, options.alpha_type]
-    inds_bb = [options.beta_type,  options.beta_type]
+    # Define spin map for 1e- and 2e- indices
+    spin_map = {options.alpha_type: 'a', options.beta_type: 'b'}
 
     t_amp_tensor_name = ['t1', 't2', 't3', 't4']
 
@@ -5421,11 +5401,12 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
         for ten_ind, ten in enumerate(term_t1_sa.tensors):
             if ten.name in t_amp_tensor_name and len(ten.indices) == 2:
                 ten_t1_spin_inds = [get_spin_index_type(ind) for ind in ten.indices]
+                spin_pattern = ''.join(spin_map[s] for s in ten_t1_spin_inds)
 
                 if options.verbose:
                     print("\n<<< {:}".format(term_t1_si))
 
-                if ten_t1_spin_inds in [inds_aa, inds_bb]:
+                if spin_patten in ('aa', 'bb'):
                     ten_t1 = ten.copy()
                     consts_t1_sa_prod = 1.0
                     term_t1_sa.tensors[ten_ind] = ten_t1
@@ -5441,15 +5422,6 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
         terms_t1_sa.append(term_t1_sa)
 
     termChop(terms_t1_sa)
-
-    # Define 2e- indices lists
-    inds_aaaa = [options.alpha_type, options.alpha_type, options.alpha_type, options.alpha_type]
-    inds_bbbb = [options.beta_type,  options.beta_type,  options.beta_type,  options.beta_type]
-
-    inds_abab = [options.alpha_type, options.beta_type,  options.alpha_type, options.beta_type]
-    inds_baba = [options.beta_type,  options.alpha_type, options.beta_type,  options.alpha_type]
-    inds_abba = [options.alpha_type, options.beta_type,  options.beta_type,  options.alpha_type]
-    inds_baab = [options.beta_type,  options.alpha_type, options.alpha_type, options.beta_type]
 
     # Convert Two-Body Amplitudes
     terms_t2_sa = []
@@ -5475,6 +5447,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
 
                 ten_t2_inds = [get_spatial_index_type(ind) for ind in ten_t2.indices]
                 ten_t2_spin_inds = [get_spin_index_type(ind) for ind in ten_t2.indices]
+                spin_pattern = ''.join(spin_map[s] for s in ten_t2_spin_inds)
 
                 pair1_equal = ten_t2_inds[0] == ten_t2_inds[1]
                 pair2_equal = ten_t2_inds[2] == ten_t2_inds[3]
@@ -5482,10 +5455,9 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                 ten_t2_tens_sa = []
                 const_t2_tens_sa = []
 
-                #if (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
                 if pair1_equal and pair2_equal:
 
-                    if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
+                    if spin_pattern in ('aaaa', 'bbbb'):
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten_t2 = ten_t2.copy()
                         const_t2 = 1.0
@@ -5501,7 +5473,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                    elif ten_t2_spin_inds in [inds_abab, inds_baba]:
+                    elif spin_pattern in ('abab', 'baba'):
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten_t2 = ten_t2.copy()
                         const_t2 = 1.0
@@ -5509,7 +5481,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                    elif ten_t2_spin_inds in [inds_abba, inds_baab]:
+                    elif spin_pattern in ('abba', 'baab'):
                         ten_t2 = ten_t2.copy()
                         ten_t2.indices = [ten_t2.indices[i] for i in [0, 1, 3, 2]]
                         const_t2 = - 1.0
@@ -5524,10 +5496,9 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                #elif (ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] == ten_t2_inds[3]):
                 elif not pair1_equal and pair2_equal:
 
-                    if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
+                    if spin_pattern in ('aaaa', 'bbbb'):
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten_t2 = ten_t2.copy()
                         const_t2 = 1.0
@@ -5543,7 +5514,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                    elif ten_t2_spin_inds in [inds_abab, inds_baba]:
+                    elif spin_pattern in ('abab', 'baba'):
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten_t2 = ten_t2.copy()
                         const_t2 = 1.0
@@ -5551,7 +5522,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                    elif ten_t2_spin_inds in [inds_abba, inds_baab]:
+                    elif spin_pattern in ('abba', 'baab'):
                         ten_t2 = ten_t2.copy()
                         ten_t2.indices = [ten_t2.indices[i] for i in [0, 1, 3, 2]]
                         const_t2 = - 1.0
@@ -5566,10 +5537,9 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                #elif (ten_t2_inds[0] == ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3]):
                 elif pair1_equal and not pair2_equal:
 
-                    if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
+                    if spin_pattern in ('aaaa', 'bbbb'):
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten_t2 = ten_t2.copy()
                         const_t2 = 1.0
@@ -5585,7 +5555,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                    elif ten_t2_spin_inds in [inds_abab, inds_baba]:
+                    elif spin_pattern in ('abab', 'baba'):
                         ## Spin-Adapted 2e- term: t(p,q,r,s)
                         ten_t2 = ten_t2.copy()
                         const_t2 = 1.0
@@ -5593,7 +5563,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                    elif ten_t2_spin_inds in [inds_abba, inds_baab]:
+                    elif spin_pattern in ('abba', 'baab'):
                         ten_t2 = ten_t2.copy()
                         ten_t2.indices = [ten_t2.indices[i] for i in [1, 0, 2, 3]]
                         const_t2 = - 1.0
@@ -5608,14 +5578,14 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                         ten_t2_tens_sa.append(ten_t2)
                         const_t2_tens_sa.append(const_t2)
 
-                #elif ((ten_t2_inds[0] != ten_t2_inds[1]) and (ten_t2_inds[2] != ten_t2_inds[3])):
                 elif not pair1_equal and not pair2_equal:
 
                     if options.cvs_approach:
                         ten_t2_cvs_inds = [is_cvs_index_type(ind) for ind in ten_t2.indices]
 
                     if options.cvs_approach and (ten_t2_cvs_inds[0] == ten_t2_cvs_inds[1]):
-                        if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
+
+                        if spin_pattern in ('aaaa', 'bbbb'):
                             ## Spin-Adapted 2e- term: t(p,q,r,s)
                             ten_t2 = ten_t2.copy()
                             const_t2 = 1.0
@@ -5631,7 +5601,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                             ten_t2_tens_sa.append(ten_t2)
                             const_t2_tens_sa.append(const_t2)
 
-                        elif ten_t2_spin_inds in [inds_abab, inds_baba]:
+                        elif spin_pattern in ('abab', 'baba'):
                             ## Spin-Adapted 2e- term: t(p,q,r,s)
                             ten_t2 = ten_t2.copy()
                             const_t2 = 1.0
@@ -5639,7 +5609,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                             ten_t2_tens_sa.append(ten_t2)
                             const_t2_tens_sa.append(const_t2)
 
-                        elif ten_t2_spin_inds in [inds_abba, inds_baab]:
+                        elif spin_pattern in ('abba', 'baab'):
                             ## Spin-Adapted 2e- term: t(q,p,r,s)
                             ten_t2 = ten_t2.copy()
                             ten_t2.indices = [ten_t2.indices[i] for i in [1, 0, 2, 3]]
@@ -5656,7 +5626,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                             const_t2_tens_sa.append(const_t2)
 
                     else:
-                        if ten_t2_spin_inds in [inds_aaaa, inds_bbbb]:
+                        if spin_pattern in ('aaaa', 'bbbb'):
                             ## Spin-Adapted 2e- term: t(p,q,r,s)
                             ten_t2 = ten_t2.copy()
                             const_t2 = 1.0
@@ -5672,7 +5642,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                             ten_t2_tens_sa.append(ten_t2)
                             const_t2_tens_sa.append(const_t2)
 
-                        elif ten_t2_spin_inds in [inds_abab, inds_baba]:
+                        elif spin_pattern in ('abab', 'baba'):
                             ## Spin-Adapted 2e- term: t(p,q,r,s)
                             ten_t2 = ten_t2.copy()
                             const_t2 = 1.0
@@ -5680,7 +5650,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
                             ten_t2_tens_sa.append(ten_t2)
                             const_t2_tens_sa.append(const_t2)
 
-                        elif ten_t2_spin_inds in [inds_abba, inds_baab]:
+                        elif spin_pattern in ('abba', 'baab'):
                             ten_t2 = ten_t2.copy()
                             ten_t2.indices = [ten_t2.indices[i] for i in [0, 1, 3, 2]]
                             const_t2 = - 1.0
@@ -5730,6 +5700,7 @@ def convert_t_amplitudes_si_to_sa(_terms_t_si):
     termChop(terms_t2_sa)
 
     print("Done!")
+    sys.stdout.flush()
     return terms_t2_sa
 
 def remove_si_tensors_symmetries(_terms_si):
@@ -5807,3 +5778,4 @@ def update_sa_tensors_symmetries(_terms_sa, trans_rdm = False):
 
             elif isinstance(_tensor_sa, creDesTensor) and len(_tensor_sa.indices) == 8:
                 _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm4_sa_symm
+
