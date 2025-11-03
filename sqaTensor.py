@@ -168,42 +168,68 @@ class tensor:
     def symPermutes(self, force = False):
         "Returns the index permutations and resulting factors allowed by the tensor's symmetry"
 
-#        # If the result is already known, return it
-#        if not force and self.permutations != None and self.factors != None:
-#            return (self.permutations,self.factors)
-        
-        # Otherwise, compute the permutations and corresponding factors
-        #tuples = [range(len(self.indices))]
-        tuples = [list(range(len(self.indices)))]
+###        # If the result is already known, return it
+###        if not force and self.permutations != None and self.factors != None:
+###            return (self.permutations,self.factors)
+##        
+##        # Otherwise, compute the permutations and corresponding factors
+##        #tuples = [range(len(self.indices))]
+##        tuples = [list(range(len(self.indices)))]
+##        factors = [1]
+##        allFound = False
+##        while not allFound:
+##            allFound = True
+##            newTuples = []
+##            newFactors = []
+##            for j in range(len(tuples)):
+##                for sym in self.symmetries:
+##                    newTuples.append([])
+##                    newFactors.append(sym.factor * factors[j])
+##                    for i in sym.pattern:
+##                        newTuples[-1].append(tuples[j][i])
+##            while len(newTuples) > 0:
+##                isNew = True
+##                for tup in tuples:
+##                    if tup == newTuples[0]:
+##                        isNew = False
+##                        break
+##                if isNew:
+##                    allFound = False
+##                    tuples.append(newTuples[0])
+##                    factors.append(newFactors[0])
+##                    #print tuples[-1]
+##                del(newTuples[0], newFactors[0])
+##
+##        # Save the results for later so they don't need to be computed again
+##        self.permutations, self.factors = tuples, factors
+##
+##        return (self.permutations,self.factors)
+
+        # Compute the permutations and corresponding factors
+        permutations = [list(range(len(self.indices)))]
         factors = [1]
-        allFound = False
-        while not allFound:
-            allFound = True
-            newTuples = []
-            newFactors = []
-            for j in range(len(tuples)):
-                for sym in self.symmetries:
-                    newTuples.append([])
-                    newFactors.append(sym.factor * factors[j])
-                    for i in sym.pattern:
-                        newTuples[-1].append(tuples[j][i])
-            while len(newTuples) > 0:
-                isNew = True
-                for tup in tuples:
-                    if tup == newTuples[0]:
-                        isNew = False
-                        break
-                if isNew:
-                    allFound = False
-                    tuples.append(newTuples[0])
-                    factors.append(newFactors[0])
-                    #print tuples[-1]
-                del(newTuples[0], newFactors[0])
+        known_perm = {tuple(permutations[0])}
 
+        idx = 0
+        while idx < len(permutations):
+            perm = permutations[idx]
+            factor = factors[idx]
+    
+            # Generate new permutations
+            for sym in self.symmetries:
+                new_perm = [perm[i] for i in sym.pattern]
+                new_perm_tuple = tuple(new_perm)
+    
+                if new_perm_tuple not in known_perm:
+                    known_perm.add(new_perm_tuple)
+                    permutations.append(new_perm)
+                    factors.append(sym.factor * factor)
+   
+            idx += 1 
+    
         # Save the results for later so they don't need to be computed again
-        self.permutations, self.factors = tuples, factors
-
-        return (self.permutations,self.factors)
+        self.permutations, self.factors = permutations, factors
+        return permutations, factors        
 
     #------------------------------------------------------------------------------------------------
 
@@ -485,7 +511,7 @@ class creDesTensor(tensor):
     def __init__(self, ops, trans_rdm = False, symmetries = False):
 
         TypeErrorMessage = "ops must be a normal ordered list of creOp and desOp objects"
-        if not type(ops) == type([]):
+        if not isinstance(ops, list):
             raise TypeError(TypeErrorMessage)
 
         # Initialize list of cre/des operators
@@ -493,9 +519,10 @@ class creDesTensor(tensor):
 
         # Initialize name
         self.trans_rdm = trans_rdm
-
-        # Initialize list of cre/des operators
-        self.ops = ops
+        if trans_rdm:
+            self.name = 'trdm'
+        else:
+            self.name = 'rdm'
 
         # Initialize permutations and factors
         (self.permutations, self.factors) = (None, None)
@@ -511,17 +538,17 @@ class creDesTensor(tensor):
         for op in ops:
 
             # Ensure normal-ordering
-            if (not isinstance(op, creOp)) and (not isinstance(op, desOp)):
+            if not isinstance(op, (creOp, desOp)):
                 raise TypeError(TypeErrorMessage)
 
             if isinstance(op, desOp):
                 self.nDes += 1
                 desFlag = True
 
-            if isinstance(op, creOp):
-                self.nCre += 1
+            elif isinstance(op, creOp):
                 if desFlag:
                     raise TypeError(TypeErrorMessage)
+                self.nCre += 1
 
             self.indices.append(op.indices[0].copy())
 
@@ -532,32 +559,44 @@ class creDesTensor(tensor):
         if symmetries:
             self.symmetries = symmetries
         else:
+##            self.symmetries = []
+##            if len(self.indices) > 1:
+##                #swapValues = range(len(self.indices)-1)
+##
+##                #if self.nCre > 0:
+##                #    del(swapValues[self.nCre-1])
+##
+##                swapValues = list(range(len(self.indices)-1))
+##                if self.nCre > 0:
+##                    del swapValues[self.nCre-1]
+##
+##                for i in swapValues:
+##                    if i == 0:
+##                        temp_tup = (1,)
+##                    else:
+##                        temp_tup = (0,)
+##
+##                    for j in range(1,len(self.indices)):
+##                        if j == i:
+##                            temp_tup = temp_tup + (i+1,)
+##                        elif j == i+1:
+##                            temp_tup = temp_tup + (i,)
+##                        else:
+##                            temp_tup = temp_tup + (j,)
+##
+##                    self.symmetries.append(symmetry(temp_tup, -1))
+
             self.symmetries = []
-            if len(self.indices) > 1:
-                #swapValues = range(len(self.indices)-1)
-
-                #if self.nCre > 0:
-                #    del(swapValues[self.nCre-1])
-
-                swapValues = list(range(len(self.indices)-1))
+            n = len(self.indices)
+            if n > 1:
+                swap_values = list(range(n - 1))
                 if self.nCre > 0:
-                    del swapValues[self.nCre-1]
+                    del swap_values[self.nCre - 1]
 
-                for i in swapValues:
-                    if i == 0:
-                        temp_tup = (1,)
-                    else:
-                        temp_tup = (0,)
-
-                    for j in range(1,len(self.indices)):
-                        if j == i:
-                            temp_tup = temp_tup + (i+1,)
-                        elif j == i+1:
-                            temp_tup = temp_tup + (i,)
-                        else:
-                            temp_tup = temp_tup + (j,)
-
-                    self.symmetries.append(symmetry(temp_tup, -1))
+                for i in swap_values:
+                    pattern = list(range(n))
+                    pattern[i], pattern[i + 1] = i + 1, i
+                    self.symmetries.append(symmetry(tuple(pattern), -1))
 
             # Add bra/ket symmetries for ground-state RDMs
             if (len(self.indices) % 2 == 0) and self.trans_rdm == False:
@@ -568,12 +607,6 @@ class creDesTensor(tensor):
             if (len(self.indices) % 2 != 0) and self.trans_rdm == False:
                 print ('trans_rdm flag is set to True, but an ODD number of cre/des operators are present. Switching trans_rdm flag to TRUE !!')
                 self.trans_rdm == True
-
-        # Initialize name
-        if trans_rdm:
-            self.name = 'trdm'
-        else:
-            self.name = 'rdm'
 
     #def __cmp__(self,other):
 
@@ -773,7 +806,8 @@ class creOp(tensor):
     def __init__(self, indices):
 
         # Initialize index
-        if type(indices) == type([]) and len(indices) == 1 and isinstance(indices[0], index):
+        #if type(indices) == type([]) and len(indices) == 1 and isinstance(indices[0], index):
+        if isinstance(indices, list) and len(indices) == 1 and isinstance(indices[0], index):
             inputIndex = indices[0].copy()
         elif isinstance(indices, index):
             inputIndex = indices.copy()
@@ -860,7 +894,8 @@ class desOp(tensor):
     def __init__(self, indices):
 
         # Initialize index
-        if type(indices) == type([]) and len(indices) == 1 and isinstance(indices[0], index):
+        #if type(indices) == type([]) and len(indices) == 1 and isinstance(indices[0], index):
+        if isinstance(indices, list) and len(indices) == 1 and isinstance(indices[0], index):
             inputIndex = indices[0].copy()
         elif isinstance(indices, index):
             inputIndex = indices.copy()
