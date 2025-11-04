@@ -70,22 +70,18 @@ def convertSpinIntegratedToAdapted(terms_si):
             terms_sa = convert_custom_si_to_sa(terms_sa)
         print("Done!")
 
+    #TODO: move this pre-processing into convert_rdms_si_to_sa
     # Convert RDMs to Canonical Form before Spin-Adaptation
     if improve_3rdms_combinations or improve_4rdms_combinations:
         for term_sa in terms_sa:
-            has_high_rdms = False
             for tensor_sa in term_sa.tensors:
-                if improve_3rdms_combinations:
-                    if isinstance(tensor_sa, creDesTensor) and len(tensor_sa.indices) == 6:
-                        has_high_rdms = True
+                if isinstance(tensor_sa, creDesTensor) and (
+                    (improve_3rdms_combinations and len(tensor_sa.indices) == 6) or
+                    (improve_4rdms_combinations and len(tensor_sa.indices) == 8)):
 
-                elif improve_4rdms_combinations:
-                    if isinstance(tensor_sa, creDesTensor) and len(tensor_sa.indices) == 8:
-                        has_high_rdms = True
-
-            if has_high_rdms:
-                term_sa.isInCanonicalForm = False
-                term_sa.makeCanonical()
+                    term_sa.isInCanonicalForm = False
+                    term_sa.makeCanonical()
+                    break
 
     # Convert RDMs to Spin-Adapted Formulation
     terms_sa = convert_rdms_si_to_sa(terms_sa)
@@ -135,21 +131,17 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
     print("Convert Cre/Des objects to RDM objects...")
     sys.stdout.flush()
 
-    for term_credes_ind, term_credes in enumerate(_terms_credes):
-
-        ## List for storing cre/des operators
-        credes_ops = []
+    for term_credes in _terms_credes:
 
         ## Append all cre/des operators to list
-        for tens_credes in term_credes.tensors:
-            if isinstance(tens_credes, creOp) or isinstance(tens_credes, desOp):
-                credes_ops.append(tens_credes)
+        credes_ops = [t for t in term_credes.tensors if isinstance(t, (creOp, desOp))]
+        if not credes_ops:
+            continue
+    
+        other_tensors = [t for t in term_credes.tensors if not isinstance(t, (creOp, desOp))]
 
         ## Modify term in list to use creDesTensor object instead of cre/des objects
-        if credes_ops:
-            _terms_credes[term_credes_ind].tensors = [tens for tens in term_credes.tensors if tens not in credes_ops]
-            ten_rdm = creDesTensor(credes_ops, trans_rdm)
-            _terms_credes[term_credes_ind].tensors.append(ten_rdm)
+        term_credes.tensors = other_tensors + [creDesTensor(credes_ops, trans_rdm)]
 
     print("Done!")
     options.print_divider()
