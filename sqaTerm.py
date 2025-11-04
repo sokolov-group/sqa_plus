@@ -66,62 +66,6 @@ class term:
 
     #------------------------------------------------------------------------------------------------
 
-    #def __cmp__(self,other):
-    #    if not isinstance(other,term):
-    #        raise TypeError("term object can only be compared to other term objects.")
-
-    #    # sort by number of loose creation operators first
-    #    retval = cmp(self.nCreOps(),other.nCreOps())
-    #    if retval != 0:
-    #        return retval
-
-    #    # next sort by number of loose destruction operators
-    #    retval = cmp(self.nDesOps(),other.nDesOps())
-    #    if retval != 0:
-    #        return retval
-
-    #    # next sort by the orders of the spin free excitation operators
-    #    retval = cmp(self.sfExOp_ranks(),other.sfExOp_ranks())
-    #    if retval != 0:
-    #        return retval
-
-    #    # next sort by the number of constants
-    #    retval = cmp(len(self.constants),len(other.constants))
-    #    if retval != 0:
-    #        return retval
-
-    #    # next sort by the number of tensors
-    #    retval = cmp(len(self.tensors),len(other.tensors))
-    #    if retval != 0:
-    #        return retval
-
-    #    # next sort by the tensors' names
-    #    retval = cmp([t.name for t in self.tensors], [t.name for t in other.tensors])
-    #    if retval != 0:
-    #        return retval
-
-    #    # next sort by the tensors
-    #    retval = cmp(self.tensors,other.tensors)
-    #    if retval != 0:
-    #        return retval
-
-    #    # next sort by the constants
-    #    retval = cmp(self.constants,other.constants)
-    #    if retval != 0:
-    #        return retval
-
-    #    # finally compare the numerical constants
-    #    numDiff = self.numConstant - other.numConstant
-    #    if abs(numDiff) < 1e-6:
-    #        return 0
-    #    elif numDiff < 0:
-    #        return -1
-    #    elif numDiff > 0:
-    #        return 1
-    #    else:
-    #        raise RuntimeError("Failure in comparison of terms' numeric constants.")
-    #    return numDiff
-
     def __eq__(self, other):
         if not isinstance(other, term):
             return False
@@ -906,6 +850,7 @@ def combineTerms(termList, maxProcesses = None):
 
         # Process in parallel
         with Pool(processes=maxProcesses, maxtasksperchild=1) as pool:
+        #with Pool(processes=maxProcesses) as pool:
             processed_chunks = pool.map(process_chunk, chunks)
 
         # Flatten results
