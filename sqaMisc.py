@@ -71,19 +71,16 @@ def allDifferent(x):
 
 
 def makePermutations(n):
-    "Returns a list of all permutations of the order of the integers 0, 1, ..., n-1"
-    if n == 1:
-        return [[0]]
-    outlist = []
-    for i in range(n):
-        temp = makePermutations(n-1)
-        for j in range(len(temp)):
-            for k in range(len(temp[j])):
-                if temp[j][k] >= i:
-                    temp[j][k] += 1
-            outlist.append(temp[j])
-            outlist[-1].insert(0,i)
-    return outlist
+    """
+    Returns a list of all permutations of the integers 0, 1, ..., n-1 
+    """
+    if n == 0:
+        return [[]]
+    perms = []
+    for perm in makePermutations(n-1):
+        for i in range(n):
+            perms.append(perm[:i] + [n-1] + perm[i:])
+    return perms
 
 
 #--------------------------------------------------------------------------------------------------
