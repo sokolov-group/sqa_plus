@@ -10,14 +10,15 @@
 # limitations under the License.
 #
 # Author: Ilia Mazin <ilia.mazin@gmail.com>
+#         Donna Odhiambo <donna.odhiambo@proton.me>
 #
 
+import sys
 import numpy as np
 
 from .sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from .sqaTerm import term
 from .sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type
-
 from .sqaOptions import options
 
 def genIntermediates(input_terms, ind_str = None, custom_path = None):
@@ -26,11 +27,21 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     trans_rdm = options.genIntermediates.trans_rdm
     factor_depth = options.genIntermediates.factor_depth
 
-    if factor_depth < 0 or not isinstance(factor_depth, int):
-        raise ValueError('Invalid factor depth provided -- provide integer value that is >= 0')
+    if not input_terms:
+        raise ValueError('No input terms provided for intermediate generation.') 
 
-    # Make list of integers to append to 'INT' string below
-    interm_name_list = np.arange(1, 10000)
+    if factor_depth < 0 or not isinstance(factor_depth, int):
+        raise ValueError('Invalid factor depth, must use non-negative integer value.')
+
+    options.print_header('Generating Intermediate Tensors | Factor Depth = {:}'.format(factor_depth))
+    options.print_divider()
+    sys.stdout.flush()
+
+    # Set index string for output indices
+    ind_str = ind_str or ""
+
+    # Create list of integers to form unique names of 'INT'    
+    int_name_list = np.arange(1, 10000)
 
     # Create new list of terms that will modify input terms and expand them in terms of intermediates:
     mod_term_list = []
@@ -78,7 +89,8 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             for i in ind_list:
 
                 # Only add new indices to dictionary of index sizes
-                if i.name not in sizes_dict.keys():
+                #if i.name not in sizes_dict.keys():
+                if i.name not in sizes_dict:
 
                     size = None
 
@@ -178,7 +190,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             for num, contract in enumerate(contract_order):
 
                 # Make intermediate name
-                tensor_name = 'INT' + str(interm_name_list[0])
+                tensor_name = 'INT' + str(int_name_list[0])
 
                 # Determine which tensors from tensorlist are being contracted
                 tens_contract = [tensorlist[i] for i in contract]
@@ -211,7 +223,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                         print(int_term)
                         print('')
                     intermediates.append([int_term, int_tensor])
-                    interm_name_list = interm_name_list[1:]
+                    int_name_list = int_name_list[1:]
 
                 # Once intermediates list is not empty, check all other intermediates for redundancy against the list
                 else:
@@ -226,7 +238,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                             print('')
 
                         intermediates.append([int_term, int_tensor])
-                        interm_name_list = interm_name_list[1:]
+                        int_name_list = int_name_list[1:]
 
                 # Modify 'tensorlist' for einsum's contract_path function
                 tensorlist = [tens for tens in tensorlist if tens not in tens_contract]
@@ -402,8 +414,8 @@ def assign_path_rank(sqa_term):
         all_ind_list.extend(''.join([i.name for i in t.indices]))
 
     index_dict = {}
-    repeat_ind = range(50)
-    unique_ind = range(50,100)
+    repeat_ind = list(range(50))
+    unique_ind = list(range(50,100))
 
     for inds in tensor_indices:
         for char in inds:
@@ -413,7 +425,7 @@ def assign_path_rank(sqa_term):
 
             # Define unique values for repeating indices
             else:
-                if not index_dict.has_key(char):
+                if char not in index_dict:
                     index_dict[char] = repeat_ind[0]
                     repeat_ind.pop(0)
 
