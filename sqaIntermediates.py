@@ -19,7 +19,7 @@ import opt_einsum as oe
 
 from .sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from .sqaTerm import term
-from .sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type
+from .sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type, get_spatial_index_type
 from .sqaOptions import options
 
 def genIntermediates(input_terms, ind_str = None, custom_path = None):
@@ -84,7 +84,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         if custom_path:
 
             # Check that requested contractions are in-range
-            contract_order = [(i, j) for i, j in custom_path if j < len(lhs_str)]
+            contract_order = [(i,j) for i,j in custom_path if max(i,j) < len(lhs_str)]
             if len(contract_order) < len(custom_path):
                 options.print_header("WARNING")
                 print(f"Not enough tensors for contraction, skipping term {_term}")
@@ -121,7 +121,8 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         for num, contract in enumerate(contract_order):
 
             # Make intermediate name
-            tensor_name = 'INT{:04d}'.format(int_name_list.pop(0))
+            #tensor_name = 'INT{:04d}'.format(int_name_list.pop(0))
+            tensor_name = 'INT{:02d}'.format(int_name_list.pop(0))
 
             # Determine which tensors from tensor_list are being contracted
             tens_contract = [tensor_list[i] for i in contract]
@@ -179,6 +180,10 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         prefactor *= scale_factor_total
         mod_term_list.append(term(prefactor, [], tensor_list))
 
+    if not intermediates:
+        options.print_header("NO INTERMEDIATES WERE FOUND!")
+        return input_terms, None
+ 
     return mod_term_list, intermediates
 
 def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
@@ -225,6 +230,7 @@ def build_sizes_dict(tensor_indices):
             # Build dictionary of index sizes
             if ind.name in sizes_dict:
                 continue
+
             if is_active_index_type(ind):
                 sizes_dict[ind.name] = 2
             elif is_core_index_type(ind):
@@ -280,10 +286,9 @@ def make_canonical(int_term, trans_rdm):
            for i, op in enumerate(t.ops):
                if isinstance(op, desOp):
                    tensor_path[i] += 100
-
-        combined_rank = [path + space for path, space in zip(tensor_path, tensor_space)]
-
+        
         # Generate permutation of indices to canonical order
+        combined_rank = [path + space for path, space in zip(tensor_path, tensor_space)]
         canon_order = np.argsort(combined_rank).tolist()
 
         # Get symmetry information from sqa_tensor
@@ -340,7 +345,6 @@ def make_canonical(int_term, trans_rdm):
 
     return canon_term, prefactor
 
-
 def canonicalize_rdm(sqa_term, trans_rdm):
 
     # Find path rank of indices in term
@@ -386,7 +390,6 @@ def assign_path_rank(sqa_term):
     '''
     Assign rank of indices based on status as dummy index or not.
     '''
-
     # Tensor indices
     tensor_indices = [''.join(i.name for i in t.indices) for t in sqa_term.tensors]
     all_indices = ''.join(tensor_indices)
@@ -435,69 +438,60 @@ def assign_space_rank(sqa_term):
 
 
 def check_intermediates(interm_list, int_term, int_tensor):
-
+    '''
+    Check for redundacies in intermediate tensors
+    '''
     isRedundant = False
 
     if options.verbose:
         print('CHECKING ' + str(int_tensor.name) + '...')
 
+    int_p_rank = assign_path_rank(int_term)
+    int_space_rank  = assign_space_rank(int_term)
+    int_tensor_indices = [get_spatial_index_type(ind.indType) for ind in int_tensor.indices]
+
     # Check every intermediate in the existing list
-    for i, (list_term, list_tensor) in enumerate(interm_list):
+    for list_term, list_tensor in interm_list:
 
         # Compare the amount of tensors in each term
         if len(list_term.tensors) == len(int_term.tensors):
+            continue
 
-            # Compare the names of the tensors that make up each term
-            if [t.name for t in list_term.tensors] == [t.name for t in int_term.tensors]:
+        # Compare the names of the tensors that make up each term
+        if [t.name for t in list_term.tensors] == [t.name for t in int_term.tensors]:
+            continue
 
-                # Last check is to compare the indices of the tensors
-                list_p_rank = assign_path_rank(list_term)
-                int_p_rank  = assign_path_rank(int_term)
+        # Last check is to compare the indices of the tensors
+        list_p_rank = assign_path_rank(list_term)
+        list_space_rank = assign_space_rank(list_term)
+        # Check subspace of indices of intermediate tensor
+        list_tensor_indices = [get_spatial_index_type(ind.indType) for ind in list_tensor.indices]
 
-                list_space_rank = assign_space_rank(list_term)
-                int_space_rank  = assign_space_rank(int_term)
+        if (list_p_rank == int_p_rank) and (list_space_rank == int_space_rank) and (list_tensor_indices == int_tensor_indices):
 
-                # Check subspace of indices of intermediate tensor
-                list_tensor_indices = []
-                for i_list in list_tensor.indices:
-                    if is_core_index_type(i_list):
-                        list_tensor_indices.append('c')
-                    elif is_active_index_type(i_list):
-                        list_tensor_indices.append('a')
-                    elif is_virtual_index_type(i_list):
-                        list_tensor_indices.append('v')
+            # Modify input term and return existing stored intermediate
+            isRedundant = True
 
-                int_tensor_indices = []
-                for i_int in int_tensor.indices:
-                    if is_core_index_type(i_int):
-                        int_tensor_indices.append('c')
-                    elif is_active_index_type(i_int):
-                        int_tensor_indices.append('a')
-                    elif is_virtual_index_type(i_int):
-                        int_tensor_indices.append('v')
+            if options.verbose:
+                print('------------------------------')
+                print(str(int_tensor.name) + ' IS REDUNDANT. NEXT INT CHECKED WILL HAVE THE SAME NAME')
+                print('STORED INTERMEDIATE TERM')
+                print(list_tensor.name)
+                print(list_term)
+                print('------------------------------')
+                print('')
 
-                if (list_p_rank == int_p_rank) and (list_space_rank == int_space_rank) and (list_tensor_indices == int_tensor_indices):
-
-                    # Modify input term and return existing stored intermediate
-                    isRedundant     = True
-                    if options.verbose:
-                        print('------------------------------')
-                        print(str(int_tensor.name) + ' IS REDUNDANT. NEXT INT CHECKED WILL HAVE THE SAME NAME')
-                        print('STORED INTERMEDIATE TERM')
-                        print(list_tensor.name)
-                        print(list_term)
-                        print('------------------------------')
-                        print('')
-
-                    int_term        = list_term.copy()
-                    int_tensor.name = list_tensor.name
-                    break
+            int_term        = list_term.copy()
+            int_tensor.name = list_tensor.name
+            break
 
     return int_term, int_tensor, isRedundant
 
 
 def get_int_indices(sqa_tensor_list, ext_string):
-
+    '''
+    Set internal(dummy) and external indices for intermediate tensors.
+    '''
     # Make copy of tensor list to modify
     new_tensor_list = sqa_tensor_list[:]
 
@@ -505,46 +499,32 @@ def get_int_indices(sqa_tensor_list, ext_string):
     ext_ind_list  = []
     loop_ind_list = []
 
-    # Iterate through tensors
-    for tens_ind, t in enumerate(new_tensor_list):
+    # Create sets to avoid duplicates
+    ext_names = set()
+    loop_names = set()
 
-        # Iterate through indices
-        for ind_ind, i in enumerate(t.indices):
+    # Iterate through tensor indices
+    for t in new_tensor_list:
+        for ind in t.indices:
 
-            # Find index objects in tensors that are external wrt intermediate definition
-            if i.name in ext_string:
+            # External indices
+            if ind.name in ext_string:
+                ind.isSummed = False
 
-                # Create index list to define a tensor object wrt overall contraction
-                if not loop_ind_list:
-                    loop_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
+                if ind.name not in ext_names:
+                    ext_ind_list.append(ind)
+                    ext_names.add(ind.name)
 
-                # If there are indices in the list, ensure there are no duplicates
-                else:
-                    exist_ind = [ind.name for ind in loop_ind_list]
+                if ind.name not in loop_names:
+                    loop_ind_list.append(ind)
+                    loop_names.add(ind.name)
 
-                    if i.name not in exist_ind:
-                        loop_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
-
-                # Define index as an external index
-                new_tensor_list[tens_ind].indices[ind_ind].isSummed = False
-
-                # Create index list to define a tensor object wrt intermediate definition
-                if not ext_ind_list:
-                    ext_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
-
-                # If there are indices in the list, ensure there are no duplicates
-                else:
-                    exist_ind = [ind.name for ind in ext_ind_list]
-
-                    if i.name not in exist_ind:
-                        ext_ind_list.append(new_tensor_list[tens_ind].indices[ind_ind])
-
-            # If the index is not external, ensure it is a dummy index
+            # Dummy indices
             else:
-                new_tensor_list[tens_ind].indices[ind_ind].isSummed = True
+                ind.isSummed = True
 
     return new_tensor_list, ext_ind_list, loop_ind_list
-
+ 
 
 def rank_sort_term(sqa_term):
     '''
