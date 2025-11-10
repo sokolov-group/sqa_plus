@@ -251,7 +251,7 @@ def build_dummy_tensors(lhs_str, sizes_dict):
 
 def make_canonical(int_term, trans_rdm):
     '''
-    Canonicalize the indices of tensors in a term.
+    Canonicalize tensor indices in a term.
     '''
     # Additional canonicalization for RDM tensors
     if any(isinstance(t, creDesTensor) for t in int_term.tensors):
@@ -547,9 +547,11 @@ def get_int_indices(sqa_tensor_list, ext_string):
 
 
 def rank_sort_term(sqa_term):
-
+    '''
+    Sort term tensors by rank.
+    '''
     # Determine rank of tensors in term
-    rank_list    = [len(t.indices) for t in sqa_term.tensors]
+    rank_list = [len(t.indices) for t in sqa_term.tensors]
 
     if rank_list.count(rank_list[0]) == len(rank_list):
         rank_sorted_term = sqa_term.copy()
@@ -563,50 +565,31 @@ def rank_sort_term(sqa_term):
 
 
 def name_sort_term(sqa_term, rank_list):
-
+    '''
+    Sort term tensors by name.
+    ''' 
     # Make list of sqa tensors to create new term sorted by name within each rank
     sorted_tensors = []
-    unique_ranks   = set(rank_list)
+    unique_ranks   = sorted(set(rank_list), reverse=True)
 
-    # Preserve descending rank
-    while unique_ranks:
+    for rank in unique_ranks:
 
-        # Make list for tensors with current maximum rank
-        max_rank_tensors = []
+        # Collect tensors with current rank
+        rank_tensors = [tens for tens in sqa_term.tensors if len(tens.indices) == rank]
 
-        # Iterate through tensors
-        for tens in sqa_term.tensors:
-
-            # Append tensors with the largest rank to a list
-            if len(tens.indices) == max(unique_ranks):
-                max_rank_tensors.append(tens)
-
-        # Sort the tensors of max rank by name
-        names_to_sort = make_names([tens.name for tens in max_rank_tensors])
+        # Sort by name
+        names_to_sort = make_names([tens.name for tens in rank_tensors])
         name_sort     = np.argsort(names_to_sort)[::-1]
 
-        max_rank_tensors = [max_rank_tensors[i] for i in name_sort]
-        sorted_tensors.extend(max_rank_tensors)
+        sorted_tensors.extend([rank_tensors[i] for i in name_sort])
 
-        # Remove maximum rank in this loop
-        unique_ranks.remove(max(unique_ranks))
-
-    name_sorted_term = term(1.0, [], sorted_tensors)
-
-    return name_sorted_term
+    return term(1.0, [], sorted_tensors)
 
 
 def make_names(name_list):
+    '''
+    Make unique value for each name. 
+    '''
+    from functools import reduce
+    return [reduce(lambda p, c: p * 255 + ord(c), name, 0) for name in name_list]
 
-    # Make unique value for each name
-    unicode_names = []
-    for n in name_list:
-        p = 0
-
-        for l in range(len(n)):
-            p *= 255
-            p += ord(n[l])
-
-        unicode_names.append(p)
-
-    return unicode_names
