@@ -15,6 +15,8 @@
 
 import sys
 import numpy as np
+import opt_einsum as oe
+import cotengra as ctg
 
 from .sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from .sqaTerm import term
@@ -37,234 +39,243 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     options.print_divider()
     sys.stdout.flush()
 
-    # Set index string for output indices
-    ind_str = ind_str or ""
-
     # Create list of integers to form unique names of 'INT'    
     int_name_list = np.arange(1, 10000)
 
-    # Create new list of terms that will modify input terms and expand them in terms of intermediates:
-    mod_term_list = []
+    # Initialize container lists
+    intermediates = []      # intermediate tensors
+    all_int_indices = []    # intermediate index string
+    mod_term_list = []      # modified term list that will use intermediate tensors
+    term_data = []          # data for each input term to be processed
 
-    # Create list for storing intermediates
-    intermediates = []
+    # Convert cre/desOps to RDMs
+    convert_credes_to_rdm(input_terms)
 
     # Iterate through every term in list of terms
-    for in_term in input_terms:
+    for _term in input_terms:
 
         # Create lists for all tensors
-        tensorlist          = []
-        tensor_indices_list = []
-        credes_list         = []
-        pre_factor          = in_term.numConstant
+        prefactor = _term.numConstant
+        tensor_list = _term.tensors
+        tensor_indices_list = [list(t.indices) for t in _term.tensors]
 
-        # Reformat the names of the tensors from SQA
-        for t in in_term.tensors:
-
-            # Separate cre/des operators to make into RDMs
-            if (isinstance(t, creOp) or isinstance(t, desOp)):
-                credes_list.append(t)
-
-            else:
-                tensorlist.append(t)
-                tensor_indices_list.append([ind for ind in t.indices])
-
-        # Turn cre/des operators into RDM, if they exist
-        if (len(credes_list) > 0):
-            rdm_tensor = creDesTensor(credes_list, trans_rdm)
-            tensorlist.append(rdm_tensor)
-            tensor_indices_list.append([ind for ind in rdm_tensor.indices])
-
-        # Create einsum string and dictionary of index sizes
-        lhs_str = []
-        sizes_dict = dict()
-
-        # Loop through lists of indices for each tensor in term
-        for ind_list in tensor_indices_list:
-
-            # Make LHS string
-            lhs_str.append(''.join([i.name for i in ind_list]))
-
-            # Define lengths of unique indices
-            for i in ind_list:
-
-                # Only add new indices to dictionary of index sizes
-                #if i.name not in sizes_dict.keys():
-                if i.name not in sizes_dict:
-
-                    size = None
-
-                    # Weigh size of index by subspace
-                    if is_active_index_type(i):
-                        size = 2
-                    elif is_core_index_type(i):
-                        size = 4
-                    else:
-                        size = 6
-
-                    # Add key/value pair
-                    sizes_dict[i.name] = size
-
-        # Make einsum string
-        einsum_string = str(','.join(lhs_str) + '->' + ind_str)
+        # Build einsum string and sizes dictionary
+        lhs_str, einsum_string = build_einsum_string(tensor_indices_list, ind_str)
+        sizes_dict = build_sizes_dict(tensor_indices_list)
 
         # Construct dummy tensors for term in order to assess contraction path
-        dummy_tens = []
-
-        for t in tensorlist:
-            dims = []
-
-            for index in t.indices:
-                dims.append(sizes_dict[index.name])
-
-            dummy_tens.append(np.empty(tuple(dims)))
+        dummy_tens = build_dummy_tensors(lhs_str, sizes_dict)
 
         # Compute most efficient contraction path
-        path_info = np.einsum_path(einsum_string, *dummy_tens)
+        optimizer = oe.DynamicProgramming(
+            minimize='size',    # minimize largest intermediate tensor size
+            search_outer=True,  # search through outer products as well
+            cost_cap=False,     # don't use cost-capping strategy
+        )
+        #optimizer = 'random-greedy'
+        optimizer = ctg.HyperOptimizer(minimize="combo")
 
-        # TODO: WHICH EINSUM? OPT OR NUMPY?
-        # Isolate intermediate contractions from opt_einsum info
-        naive          = int(path_info[1].split('\n')[1].split()[-1])
-        opt            = int(path_info[1].split('\n')[2].split()[-1])
+        path, path_info = oe.contract_path(einsum_string, *dummy_tens, optimize=optimizer)
+        naive = path_info.naive_cost
+        opt = path_info.opt_cost
 
-        # Determine if opt_einsum will improve scaling of contraction
-        if naive > opt:
+        # Append terms to modified term list if scaling of contraction cannot be optimized
+        if opt >= naive:
+            mod_term_list.append(_term)
+            continue
 
-            # If an order of contracting tensors is specified
-            if custom_path:
+        # If an order of contracting tensors is specified
+        if custom_path:
+            contract_order = custom_path[:]
 
-                # Make copy of user-defined contraction order
-                contract_order = custom_path[:]
+            ################
+            # Check that requested contractions are in-range
+            for con, contract in enumerate(contract_order):
 
-                ################
-                # Check that requested contractions are in-range
-                for con, contract in enumerate(contract_order):
+                # Check that contraction path can be performed
+                i_ind, j_ind = contract
 
-                    # Check that contraction path can be performed
-                    i_ind, j_ind = contract
+                if j_ind >= len(lhs_str):
+                    options.print_header("WARNING")
+                    print("Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
+                    options.print_divider()
+                    contract_order.pop(con)
+            ################
 
-                    if j_ind >= len(lhs_str):
-                        options.print_header("WARNING")
-                        print("Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
-                        options.print_divider()
-                        contract_order.pop(con)
-                ################
+            # Make list of indices for all intermediates
+            int_indices = []
 
-                # Make list of indices for all intermediates
-                int_indices = []
+            # Get all indices involved in contraction
+            for contract in contract_order:
 
-                # Get all indices involved in contraction
-                for contract in contract_order:
+                tens_inds       = [lhs_str[i] for i in contract]
+                contracted_inds = ''.join([lhs_str[i] for i in contract])
 
-                    tens_inds       = [lhs_str[i] for i in contract]
-                    contracted_inds = ''.join([lhs_str[i] for i in contract])
+                # Construct string out of indices not contracted over
+                int_ind = ''
 
-                    # Construct string out of indices not contracted over
-                    int_ind = ''
+                for i in contracted_inds:
+                    if contracted_inds.count(i) == 1:
+                        int_ind += i
 
-                    for i in contracted_inds:
-                        if contracted_inds.count(i) == 1:
-                            int_ind += i
+                # Append to list of intermediate indices
+                int_indices.append(int_ind)
 
-                    # Append to list of intermediate indices
-                    int_indices.append(int_ind)
+                # Modify lhs_string to include intermediate indices
+                lhs_str = [inds for inds in lhs_str if inds not in tens_inds]
+                lhs_str.append(int_ind)
 
-                    # Modify lhs_string to include intermediate indices
-                    lhs_str = [inds for inds in lhs_str if inds not in tens_inds]
-                    lhs_str.append(int_ind)
+        # Standard procedure for generating contraction path
+        else:
 
-            # Standard procedure for generating contraction path
-            else:
+            # Save tuples that indicate optimized order of contracting tensors
+            contract_order = [contract for contract in path[:factor_depth]]
 
-                # Save tuples that indicate optimized order of contracting tensors
-                contract_order = [contract for contract in path_info[0][1:1 + factor_depth]]
+            # Determine contraction path and indices of intermediates
+            int_indices = [contract[2].split('->')[1] for contract in path_info.contraction_list][:factor_depth] 
 
-                # Determine contraction path and indices of intermediates
-                split_path     = path_info[1].split('\n')[10:10 + factor_depth]
-                int_indices    = [str(line).split()[1].split('->')[1] for line in split_path]
+        # Define scale outside of loop
+        scale_factor_total = 1.0
 
-            # Define scale outside of loop
-            scale_factor_total = 1.0
+        # Create intermediate
+        for num, contract in enumerate(contract_order):
 
-            # Create intermediate
-            for num, contract in enumerate(contract_order):
+            # Make intermediate name
+            tensor_name = 'INT' + str(int_name_list[0])
 
-                # Make intermediate name
-                tensor_name = 'INT' + str(int_name_list[0])
+            # Determine which tensors from tensor_list are being contracted
+            tens_contract = [tensor_list[i] for i in contract]
 
-                # Determine which tensors from tensorlist are being contracted
-                tens_contract = [tensorlist[i] for i in contract]
+            # Use the external string to modify indexType of the indices in tensors wrt the intermediate term
+            new_tensors, def_indices, loop_indices = get_int_indices(tens_contract, int_indices[num])
 
-                # Use the external string to modify indexType of the indices in tensors wrt the intermediate term
-                new_tensors, def_indices, loop_indices = get_int_indices(tens_contract, int_indices[num])
+            # Construct intermediate term w/ updated tensor
+            int_term = term(1.0, [], new_tensors)
 
-                # Construct intermediate term w/ updated tensor
-                int_term = term(1.0, [], new_tensors)
+            # Canonicalize term and tensor representation of intermediate and update scale factor
+            if options.verbose:
+                print(tensor_name)
+                print(int_term)
+                print('CANONICALIZING...')
 
-                # Canonicalize term and tensor representation of intermediate and update scale factor
+            int_term, scale_factor = make_canonical(int_term, trans_rdm)
+            scale_factor_total *= scale_factor
+
+            # Update indices after canonicalizing term
+            new_tensors, def_indices, loop_indices = get_int_indices(int_term.tensors, int_indices[num])
+
+            # Define intermediate tensor wrt to definition
+            int_tensor = tensor(tensor_name, def_indices, [])
+
+            # Append the first intermediate automatically
+            if not intermediates:
                 if options.verbose:
-                    print(tensor_name)
+                    print(int_tensor.name)
                     print(int_term)
-                    print('CANONICALIZING...')
+                    print('')
+                intermediates.append([int_term, int_tensor])
+                int_name_list = int_name_list[1:]
 
-                int_term, scale_factor = make_canonical(int_term, trans_rdm)
-                scale_factor_total *= scale_factor
+            # Once intermediates list is not empty, check all other intermediates for redundancy against the list
+            else:
+                int_term, int_tensor, isRedundant = check_intermediates(intermediates, int_term, int_tensor)
 
-                # Update indices after canonicalizing term
-                new_tensors, def_indices, loop_indices = get_int_indices(int_term.tensors, int_indices[num])
-
-                # Define intermediate tensor wrt to definition
-                int_tensor = tensor(tensor_name, def_indices, [])
-
-                # Append the first intermediate automatically
-                if not intermediates:
+                # Only append unique intermediate terms to the list of intermediates
+                if not isRedundant:
                     if options.verbose:
+                        print('FOUND UNIQUE INTERMEDIATE')
                         print(int_tensor.name)
                         print(int_term)
                         print('')
+
                     intermediates.append([int_term, int_tensor])
                     int_name_list = int_name_list[1:]
 
-                # Once intermediates list is not empty, check all other intermediates for redundancy against the list
-                else:
-                    int_term, int_tensor, isRedundant = check_intermediates(intermediates, int_term, int_tensor)
+            # Modify 'tensor+list' for einsum's contract_path function
+            tensor_list = [tens for tens in tensor_list if tens not in tens_contract]
 
-                    # Only append unique intermediate terms to the list of intermediates
-                    if not isRedundant:
-                        if options.verbose:
-                            print('FOUND UNIQUE INTERMEDIATE')
-                            print(int_tensor.name)
-                            print(int_term)
-                            print('')
+            # Append representation of INT tensor w/ dummy/external indices defined wrt full contraction
+            loop_tensor = tensor(int_tensor.name, loop_indices, [])
+            tensor_list.append(loop_tensor)
 
-                        intermediates.append([int_term, int_tensor])
-                        int_name_list = int_name_list[1:]
-
-                # Modify 'tensorlist' for einsum's contract_path function
-                tensorlist = [tens for tens in tensorlist if tens not in tens_contract]
-
-                # Append representation of INT tensor w/ dummy/external indices defined wrt full contraction
-                loop_tensor = tensor(int_tensor.name, loop_indices, [])
-                tensorlist.append(loop_tensor)
-
-            pre_factor *= scale_factor_total
-            mod_term_list.append(term(pre_factor, [], tensorlist))
-
-        # Scaling of contraction cannot be optimized
-        else:
-            mod_term_list.append(in_term)
+        prefactor *= scale_factor_total
+        mod_term_list.append(term(prefactor, [], tensor_list))
 
     return mod_term_list, intermediates
 
+def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
+    '''
+    Convert cre/des operator objects to RDM objects.
+    '''
+    for term_credes in _terms_credes:
+
+        ## Append all cre/des operators to list
+        credes_ops = [t for t in term_credes.tensors if isinstance(t, (creOp, desOp))]
+        if not credes_ops:
+            continue
+    
+        other_tensors = [t for t in term_credes.tensors if not isinstance(t, (creOp, desOp))]
+
+        ## Modify term in list to use creDesTensor object instead of cre/des objects
+        term_credes.tensors = other_tensors + [creDesTensor(credes_ops, trans_rdm)]
+
+    return
+
+def build_einsum_string(tensor_indices, ind_str):
+    '''
+    Build einsum strings.
+    '''
+    # Append string of indices for left-hand side expression
+    inputs = [''.join(i.name for i in ind_list) for ind_list in tensor_indices]
+
+    # Set index string for output indices
+    output = "" if not ind_str else ind_str
+
+    # Make einsum string
+    einsum_str = "{}->{}".format(",".join(inputs), output)
+
+    return inputs, einsum_str
+ 
+def build_sizes_dict(tensor_indices):
+    '''
+    Build dictionary of index sizes.
+    '''
+    # Iterate through lists of tensor indices
+    sizes_dict = {}
+    for ind_list in tensor_indices:
+        for ind in ind_list:
+            # Build dictionary of index sizes
+            if ind.name in sizes_dict:
+                continue
+            if is_active_index_type(ind):
+                sizes_dict[ind.name] = 2
+            elif is_core_index_type(ind):
+                sizes_dict[ind.name] = 4
+            elif is_virtual_index_type(ind):
+                sizes_dict[ind.name] = 6
+            else:
+                raise ValueError(f"Index {ind} does not belong to a valid orbital subspace")
+
+    return sizes_dict
+
+def build_dummy_tensors(lhs_str, sizes_dict):
+    '''
+    Build dummy tensors for assessing contraction path.
+    '''
+    # Create dummy tensors based on sizes_dict
+    dummy_tensors = []
+    for tensor_indices in lhs_str:
+        shape = tuple(sizes_dict[idx] for idx in tensor_indices)
+        #dummy_tensors.append(np.empty(shape, dtype='f4'))
+        dummy_tensors.append(np.random.rand(*shape))
+
+    return dummy_tensors
 
 def make_canonical(int_term, trans_rdm):
 
     # Additional canonicalization for RDM tensors
-    for tens in [ten for ten in int_term.tensors]:
-
-        if isinstance(tens, creDesTensor):
-            int_term = canonicalize_rdm(int_term, trans_rdm)
-            break
+    if any(isinstance(t, creDesTensor) for t in int_term.tensors):
+        int_term = canonicalize_rdm(int_term, trans_rdm)
 
     # Create ranking of indices based on the contraction path
     path_rank  = assign_path_rank(int_term)
@@ -310,7 +321,7 @@ def make_canonical(int_term, trans_rdm):
             # Get index of symmetry for convenience
             ind_sym = allowed_sym[0].index(list(canon_order))
 
-            # Keep track of pre_factor
+            # Keep track of prefactor
             scale_factor  *= float(allowed_sym[1][ind_sym])
 
             # If modifying RDM tensor, create the sorted tensor correctly
@@ -359,46 +370,37 @@ def canonicalize_rdm(sqa_term, trans_rdm):
     path_rank  = assign_path_rank(sqa_term)
 
     # Check all tensors in term to find RDM
+    tensor_start = 0
     for t_ind, t in enumerate(sqa_term.tensors):
+        n_inds = len(t.indices)
+
+        # Skip processing non-RDM tensors
+        if not isinstance(t, creDesTensor):
+            tensor_start += n_inds
+            continue
 
         # Keep track of the path rank for each tensor
-        loop_path_rank = path_rank[:len(t.indices)]
+        tensor_path_rank = path_rank[tensor_start:tensor_start + n_inds]
 
-        ## IF TENSOR IS AN RDM ##
-        if isinstance(t, creDesTensor):
+        # Extract cre/des operators from creDesTensor
+        rdm_ops = t.ops
 
-            # Extract cre/des operators from creDesTensor
-            rdm_ops = [op for op in t.ops]
+        # Count how many cre/des operators have external indices
+        cre_ext = sum(isinstance(op, creOp) and rank >= 50 for op, rank in zip(rdm_ops, tensor_path_rank))
+        des_ext = sum(isinstance(op, desOp) and rank >= 50 for op, rank in zip(rdm_ops, tensor_path_rank))
 
-            # Initialize count variables
-            cre_ext = 0
-            des_ext = 0
+        # Reverse order of indices if there are more external des operators
+        if (cre_ext < des_ext) and (not trans_rdm):
+            reversed_rdm_ops = []
 
-            # Count how many cre/des operators have external indices
-            for op, rank in zip(rdm_ops, loop_path_rank):
-                if isinstance(op, creOp) and rank >= 50:
-                    cre_ext += 1
+            for op in reversed(rdm_ops):
+                new_op = creOp(op.indices) if isinstance(op, desOp) else desOp(op.indices)
+                reversed_rdm_ops.append(new_op)
 
-                elif isinstance(op, desOp) and rank >= 50:
-                    des_ext += 1
+            sqa_term.tensors[t_ind] = creDesTensor(reversed_rdm_ops, trans_rdm)
 
-            # Reverse order of indices if there are more dummy des operators
-            if (cre_ext < des_ext) and (not trans_rdm):
-                rdm_ops.reverse()
-                reversed_rdm_ops = []
-
-                for op in rdm_ops:
-                   if isinstance(op, desOp):
-                       reversed_rdm_ops.append(creOp(op.indices))
-
-                   elif isinstance(op, creOp):
-                       reversed_rdm_ops.append(desOp(op.indices))
-
-                sqa_term.tensors.pop(t_ind)
-                sqa_term.tensors.append(creDesTensor(reversed_rdm_ops, trans_rdm))
-
-        # Remove used path ranks elements
-        path_rank = path_rank[len(t.indices):]
+        # Update tensor start index for next tensor
+        tensor_start += n_inds
 
     return sqa_term
 
