@@ -16,7 +16,6 @@
 import sys
 import numpy as np
 import opt_einsum as oe
-import cotengra as ctg
 
 from .sqaTensor import tensor, creOp, desOp, kroneckerDelta, creDesTensor
 from .sqaTerm import term
@@ -40,15 +39,13 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     sys.stdout.flush()
 
     # Create list of integers to form unique names of 'INT'    
-    int_name_list = np.arange(1, 10000)
+    int_name_list = list(np.arange(1, 10000))
 
     # Initialize container lists
     intermediates = []      # intermediate tensors
-    all_int_indices = []    # intermediate index string
     mod_term_list = []      # modified term list that will use intermediate tensors
-    term_data = []          # data for each input term to be processed
 
-    # Convert cre/desOps to RDMs
+    # Convert creOp/desOp objects to RDMs
     convert_credes_to_rdm(input_terms)
 
     # Iterate through every term in list of terms
@@ -73,12 +70,11 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             cost_cap=False,     # don't use cost-capping strategy
         )
         #optimizer = 'random-greedy'
-        optimizer = ctg.HyperOptimizer(minimize="combo")
 
         path, path_info = oe.contract_path(einsum_string, *dummy_tens, optimize=optimizer)
+        opt   = path_info.opt_cost
         naive = path_info.naive_cost
-        opt = path_info.opt_cost
-
+        
         # Append terms to modified term list if scaling of contraction cannot be optimized
         if opt >= naive:
             mod_term_list.append(_term)
@@ -86,43 +82,27 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
         # If an order of contracting tensors is specified
         if custom_path:
-            contract_order = custom_path[:]
 
-            ################
             # Check that requested contractions are in-range
-            for con, contract in enumerate(contract_order):
-
-                # Check that contraction path can be performed
-                i_ind, j_ind = contract
-
-                if j_ind >= len(lhs_str):
-                    options.print_header("WARNING")
-                    print("Not enough tensors for contraction: %s. Will be ignored..." % str(contract))
-                    options.print_divider()
-                    contract_order.pop(con)
-            ################
+            contract_order = [(i, j) for i, j in custom_path if j < len(lhs_str)]
+            if len(contract_order) < len(custom_path):
+                options.print_header("WARNING")
+                print(f"Not enough tensors for contraction, skipping term {_term}")
 
             # Make list of indices for all intermediates
             int_indices = []
-
-            # Get all indices involved in contraction
-            for contract in contract_order:
-
-                tens_inds       = [lhs_str[i] for i in contract]
-                contracted_inds = ''.join([lhs_str[i] for i in contract])
-
-                # Construct string out of indices not contracted over
-                int_ind = ''
-
-                for i in contracted_inds:
-                    if contracted_inds.count(i) == 1:
-                        int_ind += i
-
-                # Append to list of intermediate indices
+            for i_ind, j_ind in contract_order:
+                # Get indices from tensors being contracted
+                contracted_inds = lhs_str[i_ind] + lhs_str[j_ind]
+                
+                # Keep only indices appearing once (not contracted over)
+                int_ind = ''.join(i for i in contracted_inds if contracted_inds.count(i) == 1)
                 int_indices.append(int_ind)
+                
+                # Remove contracted tensors from lhs_str and add intermediate
+                lhs_str.pop(max(i_ind, j_ind))
+                lhs_str.pop(min(i_ind, j_ind))
 
-                # Modify lhs_string to include intermediate indices
-                lhs_str = [inds for inds in lhs_str if inds not in tens_inds]
                 lhs_str.append(int_ind)
 
         # Standard procedure for generating contraction path
@@ -141,7 +121,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         for num, contract in enumerate(contract_order):
 
             # Make intermediate name
-            tensor_name = 'INT' + str(int_name_list[0])
+            tensor_name = 'INT{:04d}'.format(int_name_list.pop(0))
 
             # Determine which tensors from tensor_list are being contracted
             tens_contract = [tensor_list[i] for i in contract]
@@ -174,7 +154,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                     print(int_term)
                     print('')
                 intermediates.append([int_term, int_tensor])
-                int_name_list = int_name_list[1:]
 
             # Once intermediates list is not empty, check all other intermediates for redundancy against the list
             else:
@@ -189,7 +168,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                         print('')
 
                     intermediates.append([int_term, int_tensor])
-                    int_name_list = int_name_list[1:]
 
             # Modify 'tensor+list' for einsum's contract_path function
             tensor_list = [tens for tens in tensor_list if tens not in tens_contract]
@@ -272,7 +250,9 @@ def build_dummy_tensors(lhs_str, sizes_dict):
     return dummy_tensors
 
 def make_canonical(int_term, trans_rdm):
-
+    '''
+    Canonicalize the indices of tensors in a term.
+    '''
     # Additional canonicalization for RDM tensors
     if any(isinstance(t, creDesTensor) for t in int_term.tensors):
         int_term = canonicalize_rdm(int_term, trans_rdm)
@@ -283,46 +263,40 @@ def make_canonical(int_term, trans_rdm):
 
     # Store list of tensors that are in canonical order to create a canonicalized term
     canon_tensor_list = []
-    scale_factor      = int_term.numConstant
+    prefactor = int_term.numConstant
 
     ### RE-ARRANGE THE INDICES WITHIN EACH TENSOR IN THE TERM
     # Continue canonicalizing after modifying RDM tensors
-    for t_ind, t in enumerate(int_term.tensors):
+    tensor_start = 0
+    for t in int_term.tensors:
+        n_inds = len(t.indices)
 
-        # Keep track of path rank for each tensor
-        loop_path_rank  = path_rank[:len(t.indices)]
-        loop_space_rank = space_rank[:len(t.indices)]
+        # Slice path and space ranks for the current tensor
+        tensor_path = path_rank[tensor_start:tensor_start + n_inds]
+        tensor_space = space_rank[tensor_start:tensor_start + n_inds]
 
-        # Modify path rank for RDM des operators
+        # Ensure normal-ordering for RDMs by prioritizing desOp in path rank
         if isinstance(t, creDesTensor):
            for i, op in enumerate(t.ops):
                if isinstance(op, desOp):
-                   loop_path_rank[i] += 100
+                   tensor_path[i] += 100
 
-        # Create final ranking for tensor
-        final_rank = []
-
-        for i in range(len(t.indices)):
-            final_rank.append(loop_path_rank[i] + loop_space_rank[i])
-
-        # Cut used elements of rank lists
-        path_rank  = path_rank[len(t.indices):]
-        space_rank = space_rank[len(t.indices):]
+        combined_rank = [path + space for path, space in zip(tensor_path, tensor_space)]
 
         # Generate permutation of indices to canonical order
-        canon_order = np.argsort(final_rank)
+        canon_order = np.argsort(combined_rank).tolist()
 
         # Get symmetry information from sqa_tensor
-        allowed_sym  = t.symPermutes()
+        symPerms, symFactors  = t.symPermutes()
 
         # Only modify tensors with appropriate symmetry
-        if list(canon_order) in allowed_sym[0]:
+        if canon_order in symPerms:
 
             # Get index of symmetry for convenience
-            ind_sym = allowed_sym[0].index(list(canon_order))
+            ind = symPerms.index(canon_order)
 
             # Keep track of prefactor
-            scale_factor  *= float(allowed_sym[1][ind_sym])
+            prefactor *= float(symFactors[ind])
 
             # If modifying RDM tensor, create the sorted tensor correctly
             if isinstance(t, creDesTensor):
@@ -341,6 +315,9 @@ def make_canonical(int_term, trans_rdm):
         # Append tensor w/ unpermuted indices
         else:
             canon_tensor_list.append(t)
+
+        # Update tensor start index for next tensor
+        tensor_start += n_inds
 
     # Form term with tensors w/ canonicalized indices
     canon_index_term = term(1.0, [], canon_tensor_list)
@@ -361,7 +338,7 @@ def make_canonical(int_term, trans_rdm):
         print('----- WRT TENSORS IN TERM BY NAME -----')
         print(canon_term)
 
-    return canon_term, scale_factor
+    return canon_term, prefactor
 
 
 def canonicalize_rdm(sqa_term, trans_rdm):
@@ -406,34 +383,36 @@ def canonicalize_rdm(sqa_term, trans_rdm):
 
 
 def assign_path_rank(sqa_term):
+    '''
+    Assign rank of indices based on status as dummy index or not.
+    '''
 
-    # Store whether indices of tensors in term are being contracted over or not
-    tensor_indices = []
-    all_ind_list   = []
+    # Tensor indices
+    tensor_indices = [''.join(i.name for i in t.indices) for t in sqa_term.tensors]
+    all_indices = ''.join(tensor_indices)
 
-    for t in sqa_term.tensors:
-        tensor_indices.append(''.join([i.name for i in t.indices]))
-        all_ind_list.extend(''.join([i.name for i in t.indices]))
-
+    # Count occurrences of each index
+    index_counts = {char: all_indices.count(char) for char in set(all_indices)}
+    
+    # Assign ranks: repeated indices get 0-49, unique indices get 50-99
     index_dict = {}
-    repeat_ind = list(range(50))
-    unique_ind = list(range(50,100))
-
+    repeat_rank = 0
+    unique_rank = 50
+    
     for inds in tensor_indices:
         for char in inds:
-            if (''.join(tensor_indices).count(char) == 1) and (len(inds) > 1):
-                index_dict[char] = unique_ind[0]
-                unique_ind.pop(0)
+            if char not in index_dict:
+                # Unique index
+                if index_counts[char] == 1 and len(inds) > 1:
+                    index_dict[char] = unique_rank
+                    unique_rank += 1
 
-            # Define unique values for repeating indices
-            else:
-                if char not in index_dict:
-                    index_dict[char] = repeat_ind[0]
-                    repeat_ind.pop(0)
-
-    path_rank_list = [index_dict[ind] for ind in all_ind_list]
-
-    return path_rank_list
+                # Repeated index
+                else:
+                    index_dict[char] = repeat_rank
+                    repeat_rank += 1
+    
+    return [index_dict[char] for char in all_indices]
 
 
 def assign_space_rank(sqa_term):
