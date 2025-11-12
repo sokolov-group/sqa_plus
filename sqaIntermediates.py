@@ -35,7 +35,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         raise ValueError('Invalid factor depth, must use non-negative integer value.')
 
     options.print_header('Generating Intermediate Tensors | Factor Depth = {:}'.format(factor_depth))
-    options.print_divider()
     sys.stdout.flush()
 
     # Create list of integers to form unique names of 'INT'    
@@ -49,7 +48,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     convert_credes_to_rdm(input_terms)
 
     # Iterate through every term in list of terms
-    for _term in input_terms:
+    for _term_ind, _term in enumerate(input_terms, start=1):
 
         # Create lists for all tensors
         prefactor = _term.numConstant
@@ -86,12 +85,12 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             # Check that requested contractions are in-range
             contract_order = [(i,j) for i,j in custom_path if max(i,j) < len(lhs_str)]
             if len(contract_order) < len(custom_path):
-                options.print_header("WARNING")
-                print(f"Not enough tensors for contraction, skipping term {_term}")
+                print(f"WARNING: Not enough tensors for requested contraction, skipping term {_term_ind}.")
 
             # Make list of indices for all intermediates
             int_indices = []
             for i_ind, j_ind in contract_order:
+
                 # Get indices from tensors being contracted
                 contracted_inds = lhs_str[i_ind] + lhs_str[j_ind]
                 
@@ -135,9 +134,9 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
             # Canonicalize term and tensor representation of intermediate and update scale factor
             if options.verbose:
-                print(tensor_name)
-                print(int_term)
-                print('CANONICALIZING...')
+                print('------------------------------')
+                print(f'CANONICALIZING {tensor_name}:')
+                print(f'{int_term}')
 
             int_term, scale_factor = make_canonical(int_term, trans_rdm)
             scale_factor_total *= scale_factor
@@ -145,35 +144,21 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             # Update indices after canonicalizing term
             new_tensors, def_indices, loop_indices = get_int_indices(int_term.tensors, int_indices[num])
 
-            # Define intermediate tensor wrt to definition
+            # Define intermediate tensor wrt to new indices
             int_tensor = tensor(tensor_name, def_indices, [])
 
-            # Append the first intermediate automatically
+            # Check intermediates for redundancy
             if not intermediates:
-                if options.verbose:
-                    print(int_tensor.name)
-                    print(int_term)
-                    print('')
                 intermediates.append([int_term, int_tensor])
-
-            # Once intermediates list is not empty, check all other intermediates for redundancy against the list
             else:
                 int_term, int_tensor, isRedundant = check_intermediates(intermediates, int_term, int_tensor)
-
-                # Only append unique intermediate terms to the list of intermediates
                 if not isRedundant:
-                    if options.verbose:
-                        print('FOUND UNIQUE INTERMEDIATE')
-                        print(int_tensor.name)
-                        print(int_term)
-                        print('')
-
                     intermediates.append([int_term, int_tensor])
 
-            # Modify 'tensor+list' for einsum's contract_path function
+            # Modify 'tensor_list' for einsum's contract_path function
             tensor_list = [tens for tens in tensor_list if tens not in tens_contract]
 
-            # Append representation of INT tensor w/ dummy/external indices defined wrt full contraction
+            # Append representation of INT tensor with internal/external indices defined wrt to full contraction
             loop_tensor = tensor(int_tensor.name, loop_indices, [])
             tensor_list.append(loop_tensor)
 
@@ -260,8 +245,9 @@ def make_canonical(int_term, trans_rdm):
     Canonicalize tensor indices in a term.
     '''
     # Additional canonicalization for RDM tensors
-    if any(isinstance(t, creDesTensor) for t in int_term.tensors):
-        int_term = canonicalize_rdm(int_term, trans_rdm)
+    if options.spin_orbital:
+        if any(isinstance(t, creDesTensor) for t in int_term.tensors):
+            int_term = canonicalize_rdm(int_term, trans_rdm)
 
     # Create ranking of indices based on the contraction path
     path_rank  = assign_path_rank(int_term)
@@ -441,51 +427,41 @@ def check_intermediates(interm_list, int_term, int_tensor):
     '''
     Check for redundacies in intermediate tensors
     '''
-    isRedundant = False
-
     if options.verbose:
-        print('CHECKING ' + str(int_tensor.name) + '...')
+        print(f'\nCHECKING REDUNDANCY OF {int_tensor.name}...')
 
-    int_p_rank = assign_path_rank(int_term)
+    int_path_rank = assign_path_rank(int_term)
     int_space_rank  = assign_space_rank(int_term)
-    int_tensor_indices = [get_spatial_index_type(ind.indType) for ind in int_tensor.indices]
+    int_tensor_types = [get_spatial_index_type(ind.indType) for ind in int_tensor.indices]
 
     # Check every intermediate in the existing list
     for list_term, list_tensor in interm_list:
 
         # Compare the amount of tensors in each term
-        if len(list_term.tensors) == len(int_term.tensors):
+        if len(list_term.tensors) != len(int_term.tensors):
             continue
 
         # Compare the names of the tensors that make up each term
-        if [t.name for t in list_term.tensors] == [t.name for t in int_term.tensors]:
+        if [t.name for t in list_term.tensors] != [t.name for t in int_term.tensors]:
             continue
 
         # Last check is to compare the indices of the tensors
-        list_p_rank = assign_path_rank(list_term)
+        list_path_rank = assign_path_rank(list_term)
         list_space_rank = assign_space_rank(list_term)
-        # Check subspace of indices of intermediate tensor
-        list_tensor_indices = [get_spatial_index_type(ind.indType) for ind in list_tensor.indices]
+        list_tensor_types = [get_spatial_index_type(ind.indType) for ind in list_tensor.indices]
 
-        if (list_p_rank == int_p_rank) and (list_space_rank == int_space_rank) and (list_tensor_indices == int_tensor_indices):
-
+        if (list_path_rank == int_path_rank and list_space_rank == int_space_rank and list_tensor_types == int_tensor_types):
             # Modify input term and return existing stored intermediate
-            isRedundant = True
-
             if options.verbose:
-                print('------------------------------')
-                print(str(int_tensor.name) + ' IS REDUNDANT. NEXT INT CHECKED WILL HAVE THE SAME NAME')
-                print('STORED INTERMEDIATE TERM')
-                print(list_tensor.name)
-                print(list_term)
-                print('------------------------------')
-                print('')
-
-            int_term        = list_term.copy()
+                print(f'REDUNDANCY FOUND. {int_tensor.name} IS EQUAL TO {list_tensor.name}.')
+            int_term = list_term.copy()
             int_tensor.name = list_tensor.name
-            break
+            return int_term, int_tensor, True
 
-    return int_term, int_tensor, isRedundant
+    if options.verbose:
+        print('INTERMEDIATE IS UNIQUE.')
+
+    return int_term, int_tensor, False
 
 
 def get_int_indices(sqa_tensor_list, ext_string):
