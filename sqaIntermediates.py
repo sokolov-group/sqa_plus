@@ -43,6 +43,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     # Initialize container lists
     intermediates = []      # intermediate tensors
     mod_term_list = []      # modified term list that will use intermediate tensors
+    all_int_indices = []    # intermediate index string
 
     # Convert creOp/desOp objects to RDMs
     convert_credes_to_rdm(input_terms)
@@ -108,10 +109,11 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         else:
 
             # Save tuples that indicate optimized order of contracting tensors
-            contract_order = [contract for contract in path[:factor_depth]]
+            contract_order = [contraction for contraction in path[:factor_depth]]
 
             # Determine contraction path and indices of intermediates
-            int_indices = [contract[2].split('->')[1] for contract in path_info.contraction_list][:factor_depth] 
+            ##contraction_paths = list(contraction[2] for contraction in path_info.contraction_list)
+            int_indices = [contraction[2].split('->')[1] for contraction in path_info.contraction_list][:factor_depth]
 
         # Define scale outside of loop
         scale_factor_total = 1.0
@@ -165,9 +167,15 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         prefactor *= scale_factor_total
         mod_term_list.append(term(prefactor, [], tensor_list))
 
+        # Append intermediate indices to 'all_int_indices'
+        all_int_indices.append(int_indices[-1] if int_indices else [])
+
     if not intermediates:
         options.print_header("NO INTERMEDIATES WERE FOUND!")
         return input_terms, None
+
+    options.genEinsum.keep_user_defined_dummy_names = True
+    finalize_dummy_indices(mod_term_list, all_int_indices)
  
     return mod_term_list, intermediates
 
@@ -451,9 +459,10 @@ def check_intermediates(interm_list, int_term, int_tensor):
         list_tensor_types = [get_spatial_index_type(ind.indType) for ind in list_tensor.indices]
 
         if (list_path_rank == int_path_rank and list_space_rank == int_space_rank and list_tensor_types == int_tensor_types):
-            # Modify input term and return existing stored intermediate
             if options.verbose:
                 print(f'REDUNDANCY FOUND. {int_tensor.name} IS EQUAL TO {list_tensor.name}.')
+
+            # Modify input term and return existing stored intermediate
             int_term = list_term.copy()
             int_tensor.name = list_tensor.name
             return int_term, int_tensor, True
@@ -462,7 +471,6 @@ def check_intermediates(interm_list, int_term, int_tensor):
         print('INTERMEDIATE IS UNIQUE.')
 
     return int_term, int_tensor, False
-
 
 def get_int_indices(sqa_tensor_list, ext_string):
     '''
@@ -541,11 +549,22 @@ def name_sort_term(sqa_term, rank_list):
 
     return term(1.0, [], sorted_tensors)
 
-
 def make_names(name_list):
     '''
     Make unique value for each name. 
     '''
     from functools import reduce
     return [reduce(lambda p, c: p * 255 + ord(c), name, 0) for name in name_list]
+
+def finalize_dummy_indices(term_list, indices_list):
+    '''
+    Finalize intermediate indices in term list as user-defined and not summed.
+    '''
+    for _term, int_indices_list in zip(term_list, indices_list):
+        for _tensor in _term.tensors:
+            for _index in _tensor.indices:
+                index_name = _index.name
+                if index_name in int_indices_list:
+                    _index.isSummed = False
+                    _index.userDefined = True
 
