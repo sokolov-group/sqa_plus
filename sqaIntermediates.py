@@ -112,7 +112,6 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
             contract_order = [contraction for contraction in path[:factor_depth]]
 
             # Determine contraction path and indices of intermediates
-            ##contraction_paths = list(contraction[2] for contraction in path_info.contraction_list)
             int_indices = [contraction[2].split('->')[1] for contraction in path_info.contraction_list][:factor_depth]
 
         # Define scale outside of loop
@@ -122,8 +121,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         for num, contract in enumerate(contract_order):
 
             # Make intermediate name
-            #tensor_name = 'INT{:04d}'.format(int_name_list.pop(0))
-            tensor_name = 'INT{:02d}'.format(int_name_list.pop(0))
+            tensor_name = 'INT{:04d}'.format(int_name_list.pop(0))
 
             # Determine which tensors from tensor_list are being contracted
             tens_contract = [tensor_list[i] for i in contract]
@@ -177,12 +175,11 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     options.genEinsum.keep_user_defined_dummy_names = True
     finalize_dummy_indices(mod_term_list, all_int_indices)
  
+    renumber_intermediates(mod_term_list, intermediates)
     return mod_term_list, intermediates
 
 def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
-    '''
-    Convert cre/des operator objects to RDM objects.
-    '''
+    """Convert creation/destruction operators to RDMs."""
     for term_credes in _terms_credes:
 
         ## Append all cre/des operators to list
@@ -195,12 +192,8 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
         ## Modify term in list to use creDesTensor object instead of cre/des objects
         term_credes.tensors = other_tensors + [creDesTensor(credes_ops, trans_rdm)]
 
-    return
-
 def build_einsum_string(tensor_indices, ind_str):
-    '''
-    Build einsum strings.
-    '''
+    """Build einsum strings."""
     # Append string of indices for left-hand side expression
     inputs = [''.join(i.name for i in ind_list) for ind_list in tensor_indices]
 
@@ -213,9 +206,7 @@ def build_einsum_string(tensor_indices, ind_str):
     return inputs, einsum_str
  
 def build_sizes_dict(tensor_indices):
-    '''
-    Build dictionary of index sizes.
-    '''
+    """Build dictionary of index sizes."""
     # Iterate through lists of tensor indices
     sizes_dict = {}
     for ind_list in tensor_indices:
@@ -236,10 +227,7 @@ def build_sizes_dict(tensor_indices):
     return sizes_dict
 
 def build_dummy_tensors(lhs_str, sizes_dict):
-    '''
-    Build dummy tensors for assessing contraction path.
-    '''
-    # Create dummy tensors based on sizes_dict
+    """Build dummy tensors for assessing contraction path."""
     dummy_tensors = []
     for tensor_indices in lhs_str:
         shape = tuple(sizes_dict[idx] for idx in tensor_indices)
@@ -249,9 +237,7 @@ def build_dummy_tensors(lhs_str, sizes_dict):
     return dummy_tensors
 
 def make_canonical(int_term, trans_rdm):
-    '''
-    Canonicalize tensor indices in a term.
-    '''
+    """Canonicalize tensor indices in a term."""
     # Additional canonicalization for RDM tensors
     if options.spin_orbital:
         if any(isinstance(t, creDesTensor) for t in int_term.tensors):
@@ -340,7 +326,7 @@ def make_canonical(int_term, trans_rdm):
     return canon_term, prefactor
 
 def canonicalize_rdm(sqa_term, trans_rdm):
-
+    """Canonicalize rdm tensor indices in a term."""
     # Find path rank of indices in term
     path_rank  = assign_path_rank(sqa_term)
 
@@ -381,9 +367,7 @@ def canonicalize_rdm(sqa_term, trans_rdm):
 
 
 def assign_path_rank(sqa_term):
-    '''
-    Assign rank of indices based on status as dummy index or not.
-    '''
+    """Assign rank of indices based on if external or internal(dummy)."""
     # Tensor indices
     tensor_indices = [''.join(i.name for i in t.indices) for t in sqa_term.tensors]
     all_indices = ''.join(tensor_indices)
@@ -413,7 +397,7 @@ def assign_path_rank(sqa_term):
 
 
 def assign_space_rank(sqa_term):
-
+    """Assign rank of indices based on subspace."""
     # Store subspace information for all tensors in term
     space_rank_list = []
 
@@ -432,9 +416,7 @@ def assign_space_rank(sqa_term):
 
 
 def check_intermediates(interm_list, int_term, int_tensor):
-    '''
-    Check for redundacies in intermediate tensors
-    '''
+    """Check for redundacies in intermediate tensors."""
     if options.verbose:
         print(f'\nCHECKING REDUNDANCY OF {int_tensor.name}...')
 
@@ -473,9 +455,7 @@ def check_intermediates(interm_list, int_term, int_tensor):
     return int_term, int_tensor, False
 
 def get_int_indices(sqa_tensor_list, ext_string):
-    '''
-    Set internal(dummy) and external indices for intermediate tensors.
-    '''
+    """Set internal(dummy) and external indices for intermediate tensors."""
     # Make copy of tensor list to modify
     new_tensor_list = sqa_tensor_list[:]
 
@@ -511,9 +491,7 @@ def get_int_indices(sqa_tensor_list, ext_string):
  
 
 def rank_sort_term(sqa_term):
-    '''
-    Sort term tensors by rank.
-    '''
+    """Sort term tensors by rank."""
     # Determine rank of tensors in term
     rank_list = [len(t.indices) for t in sqa_term.tensors]
 
@@ -529,9 +507,7 @@ def rank_sort_term(sqa_term):
 
 
 def name_sort_term(sqa_term, rank_list):
-    '''
-    Sort term tensors by name.
-    ''' 
+    """Sort term tensors by name."""
     # Make list of sqa tensors to create new term sorted by name within each rank
     sorted_tensors = []
     unique_ranks   = sorted(set(rank_list), reverse=True)
@@ -550,16 +526,12 @@ def name_sort_term(sqa_term, rank_list):
     return term(1.0, [], sorted_tensors)
 
 def make_names(name_list):
-    '''
-    Make unique value for each name. 
-    '''
+    """Make unique value for each name."""
     from functools import reduce
     return [reduce(lambda p, c: p * 255 + ord(c), name, 0) for name in name_list]
 
 def finalize_dummy_indices(term_list, indices_list):
-    '''
-    Finalize intermediate indices in term list as user-defined and not summed.
-    '''
+    """Finalize intermediate indices in term list as user-defined and not summed."""
     for _term, int_indices_list in zip(term_list, indices_list):
         for _tensor in _term.tensors:
             for _index in _tensor.indices:
@@ -567,4 +539,29 @@ def finalize_dummy_indices(term_list, indices_list):
                 if index_name in int_indices_list:
                     _index.isSummed = False
                     _index.userDefined = True
+
+def renumber_intermediates(modified_terms, intermediate_terms):
+    """ Reassign names of intermediate tensors to avoid numerical gaps."""
+    # Intermediate name map
+    name_map = {}
+
+    # Assign new sequential names to intermediate tensors
+    for index, (_term, _tensor) in enumerate(intermediate_terms, start=1):
+        old_name = _tensor.name
+        new_name = f"INT{index:02d}"
+        name_map[old_name] = new_name
+        _tensor.name = new_name
+
+        # If intermediate term references other intermediates (factor_depth > 1), update those names too
+        for inner_tensor in _term.tensors:
+            if inner_tensor.name in name_map:
+                #print(f"<<< Updating Term-Tensor Pair: {_term}, {_tensor}")
+                inner_tensor.name = name_map[inner_tensor.name]
+                #print(f">>> Updated Term-Tensor Pair: {_term}, {_tensor}")
+
+    # Apply renaming to intermediates in modified_terms
+    for _term in modified_terms:
+        for _tensor in _term.tensors:
+            if _tensor.name in name_map:
+                _tensor.name = name_map[_tensor.name]
 
