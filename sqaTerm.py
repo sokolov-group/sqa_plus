@@ -430,9 +430,9 @@ class term:
                 nameGroups[t.name] = []
             nameGroups[t.name].append(t)
 
-        # Sort within groups by index name
-        for group in nameGroups.values():
-            group.sort(key=lambda t: tuple(str(ind.name) for ind in t.indices))
+        ## Sort within groups by index name
+        #for group in nameGroups.values():
+        #    group.sort(key=lambda t: tuple(str(ind.name) for ind in t.indices))
 
         # Sort further by tensor subclass and length (use name as tie-breaker)
         sort_key = lambda item: (item[1][0].__class__.__name__, len(item[1]), item[0])
@@ -441,6 +441,10 @@ class term:
         # Add non-commuting tensors as individual groups
         nameGroups.extend([[t] for t in ncList])
  
+        # Sort within groups by index name
+        for group in nameGroups:
+            group.sort(key=lambda t: tuple(str(ind.name) for ind in t.indices))
+
         # Generate an alphabet for use in renaming indices
         # This is done to avoid renaming with an index name already in use.
         # Should try using numbers, i.e. '1', '2', '3', etc.
@@ -458,7 +462,7 @@ class term:
         while jobStack:
 
             # get the next job
-            current_map,gCount,tCount,aCount,gPerms = jobStack.pop()
+            current_map, gCount, tCount, aCount, gPerms = jobStack.pop()
 
             # If there are no name groups remaining, compute the score
             if gCount == len(nameGroups):
@@ -694,15 +698,6 @@ class term:
 #            #raise RuntimeError("%i candidates tied for the top score." %nTopScore)
 #            print "WARNING: %i candidates tied for the top score." %nTopScore
 
-
-        # Set the tensor list as the list with the 'best' index naming and ordering
-        if best_tensor_list is not None:
-            self.tensors = best_tensor_list 
-
-        # Apply the factor produced from the canonical ordering
-        if best_factor is not None:
-            self.scale(best_factor)
-
         if bestMap is None:
             bestMap = current_map
 
@@ -712,25 +707,23 @@ class term:
 
         if len(filtered_alphabet) < len(bestMap):
             raise RuntimeError("Alphabet smaller than number of indices, no more names left!")
+
         canonMap = {}
-        while bestMap.keys():
-            minVal = min(bestMap.values())
-            for key in bestMap.keys():
-                if bestMap[key] == minVal:
-                    canonMap[bestMap[key].tup()] = bestMap[key].copy()
-                    canonMap[bestMap[key].tup()].name = filtered_alphabet.pop(0)
-                    del bestMap[key]
-                    break
+        for _, val in sorted(bestMap.items(), key=lambda kv: kv[1].name):
+            canonMap[val.tup()] = val.copy()
+            canonMap[val.tup()].name = filtered_alphabet.pop(0)
 
         # Rename the indices using the canonical mapping
-        for t in self.tensors:
+        for t in best_tensor_list:
             for i in range(len(t.indices)):
                 if t.indices[i].tup() in canonMap.keys():
                     t.indices[i] = canonMap[t.indices[i].tup()].copy()
                 if rename_user_defined and t.indices[i].userDefined:
                     t.indices[i].rename()
 
-        # Turn on the canonical form flag to avoid calling this function again unnecessarily
+        # Finalize results
+        self.tensors = best_tensor_list 
+        self.scale(best_factor)
         self.isInCanonicalForm = True
 
     #------------------------------------------------------------------------------------------------
