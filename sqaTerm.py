@@ -493,8 +493,11 @@ class term:
                 elif score == bestScore:
                     nTopScore += 1
 
+                continue
+
             # If only cre/des operators remain, sort them and compute the score
-            elif min([ (len(group) == 1 and isinstance(group[0], (creOp, desOp))) for group in nameGroups[gCount:] ]):
+            #if min([ (len(group) == 1 and isinstance(group[0], (creOp, desOp))) for group in nameGroups[gCount:] ]):
+            if all([ (len(group) == 1 and isinstance(group[0], (creOp, desOp))) for group in nameGroups[gCount:] ]):
                 # Compute a new tensor list in which any dummy indices are given their
                 # new names and all indices are sorted.
                 # Also compute a list of these ordered indices.
@@ -545,9 +548,11 @@ class term:
                 elif score == bestScore:
                     nTopScore += 1
 
+                continue
+
             # If only a sfExOp remains, sort its indices and compute the score
             #group_is_last = (gCount == len(nameGroups) - 1)
-            elif (gCount == len(nameGroups)-1) and (len(nameGroups[gCount]) == 1) and isinstance(nameGroups[gCount][0], sfExOp):
+            if (gCount == len(nameGroups)-1) and (len(nameGroups[gCount]) == 1) and isinstance(nameGroups[gCount][0], sfExOp):
 
                 # Compute a new tensor list in which any dummy indices are given their
                 # new names and all indices are sorted.
@@ -610,9 +615,11 @@ class term:
                 elif score == bestScore:
                     nTopScore += 1
 
+                continue
+
             # If starting a new name group, sort the group's names based on the input mapping
             # and schedule a new job for each permutation of the tensors with no index assignments
-            elif len(gPerms) <= gCount:
+            if len(gPerms) <= gCount:
                 withMapped = []
                 withoutMapped = []
                 for i in range(len(nameGroups[gCount])):
@@ -632,37 +639,35 @@ class term:
                     for perm in makePermutations(len(withoutMapped)):
                         new_gPerm = withMapped + [withoutMapped[i] for i in perm]
                         jobStack.append((current_map,gCount,tCount,aCount,gPerms + [new_gPerm]))
-                #    del(new_gPerm,perm)
-                del(withMapped,withoutMapped,leastMapped)
+
+                continue
 
             # If continuing an existing group, schedule a new job for each equivelent ordering
             # of the current tensor's indices
-            else:
+            # Give the current tensor a convenient name
+            t = nameGroups[gCount][gPerms[gCount][tCount]]
 
-                # Give the current tensor a convenient name
-                t = nameGroups[gCount][gPerms[gCount][tCount]]
+            # Get the tensor's symmetry permutations
+            (symPerms,factors) = t.symPermutes()
 
-                # Get the tensor's symmetry permutations
-                (symPerms,factors) = t.symPermutes()
+            # Compute gCount and tCount for the next job
+            next_gCount = gCount
+            next_tCount = tCount + 1
+            if next_tCount == len(nameGroups[gCount]):
+                next_gCount += 1
+                next_tCount = 0
 
-                # Compute gCount and tCount for the next job
-                next_gCount = gCount
-                next_tCount = tCount + 1
-                if next_tCount == len(nameGroups[gCount]):
-                    next_gCount += 1
-                    next_tCount = 0
-
-                # For each of the tensor's symmetry-equivelent index orderings, create mappings for any
-                # un-mapped dummy indices and schedule a new job
-                for perm in symPerms:
-                    nNewMaps = 0
-                    newMap = {}
-                    newMap.update(current_map)
-                    for ind in [t.indices[perm[i]] for i in range(len(t.indices))]:
-                        if ind.isSummed and ind.tup() not in newMap:
-                            newMap[ind.tup()] = index(alphabet[aCount+nNewMaps], ind.indType, ind.isSummed, ind.userDefined)
-                            nNewMaps += 1
-                    jobStack.append((newMap,next_gCount,next_tCount,aCount+nNewMaps,gPerms))
+            # For each of the tensor's symmetry-equivelent index orderings, create mappings for any
+            # un-mapped dummy indices and schedule a new job
+            for perm in symPerms:
+                nNewMaps = 0
+                newMap = {}
+                newMap.update(current_map)
+                for ind in [t.indices[perm[i]] for i in range(len(t.indices))]:
+                    if ind.isSummed and ind.tup() not in newMap:
+                        newMap[ind.tup()] = index(alphabet[aCount+nNewMaps], ind.indType, ind.isSummed, ind.userDefined)
+                        nNewMaps += 1
+                jobStack.append((newMap,next_gCount,next_tCount,aCount+nNewMaps,gPerms))
 
 #        # Check to see that only one candidate achieved the top score
 #        if nTopScore > 1:
