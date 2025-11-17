@@ -430,10 +430,6 @@ class term:
                 nameGroups[t.name] = []
             nameGroups[t.name].append(t)
 
-        ## Sort within groups by index name
-        #for group in nameGroups.values():
-        #    group.sort(key=lambda t: tuple(str(ind.name) for ind in t.indices))
-
         # Sort further by tensor subclass and length (use name as tie-breaker)
         sort_key = lambda item: (item[1][0].__class__.__name__, len(item[1]), item[0])
         nameGroups = [group for _, group in sorted(nameGroups.items(), key=sort_key)]
@@ -441,9 +437,10 @@ class term:
         # Add non-commuting tensors as individual groups
         nameGroups.extend([[t] for t in ncList])
  
-        # Sort within groups by index name
+        # Sort within all groups by index type and name
+        sort_key = lambda t: (tuple(ind.indType for ind in t.indices), tuple(str(ind.name) for ind in t.indices))
         for group in nameGroups:
-            group.sort(key=lambda t: tuple(str(ind.name) for ind in t.indices))
+            group.sort(key=sort_key)
 
         # Generate an alphabet for use in renaming indices
         # This is done to avoid renaming with an index name already in use.
@@ -669,10 +666,9 @@ class term:
                         nNewMaps += 1
                 jobStack.append((newMap,next_gCount,next_tCount,aCount+nNewMaps,gPerms))
 
-#        # Check to see that only one candidate achieved the top score
-#        if nTopScore > 1:
-#            #raise RuntimeError("%i candidates tied for the top score." %nTopScore)
-#            print "WARNING: %i candidates tied for the top score." %nTopScore
+        # Check to see that only one candidate achieved the top score
+        #if nTopScore > 1:
+        #    print(f'WARNING: {nTopScore} candidates have tied for the top score.')
 
         if bestMap is None:
             bestMap = current_map
