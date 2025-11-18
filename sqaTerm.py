@@ -431,6 +431,7 @@ class term:
             nameGroups[t.name].append(t)
 
         # Sort further by tensor subclass and length (use name as tie-breaker)
+        ##sort_key = lambda item: (item[1][0].__class__.__name__, len(item[1]), item[0], tuple(ind.indType for ind in item[1][0].indices))
         sort_key = lambda item: (item[1][0].__class__.__name__, len(item[1]), item[0])
         nameGroups = [group for _, group in sorted(nameGroups.items(), key=sort_key)]
 
@@ -439,6 +440,7 @@ class term:
  
         # Sort within all groups by index type and name
         sort_key = lambda t: (tuple(ind.indType for ind in t.indices), tuple(str(ind.name) for ind in t.indices))
+        ##sort_key = lambda t: (t.__class__.__name__, len(t.indices), t.name, tuple(ind.indType for ind in t.indices), tuple(str(ind.name) for ind in t.indices))
         for group in nameGroups:
             group.sort(key=sort_key)
 
@@ -451,7 +453,7 @@ class term:
         best_tensor_list = None
         best_factor = None
         bestMap = None
-        bestScore = [-1]
+        bestScore = None
         nTopScore = 0
         # job format:    (map, gCount, tCount, aCount, gPerms)
         #jobStack = [({},0,0,0,[])]
@@ -472,14 +474,17 @@ class term:
 
                 # Compute a score based on how alphabetical the indices are
                 score = []
-                for i in range(len(indexList)-1):
-                    score.append(0)
-                    for j in range(i+1,len(indexList)):
+                n_ind = len(indexList)
+                for i in range(n_ind-1):
+                    count = 0
+                    for j in range(i+1, n_ind):
                         if indexList[i] < indexList[j]:
-                            score[-1] += 1
+                            count += 1
+                    score.append(count)
 
                 # If the current score is the best score, save the result
-                if score > bestScore:
+                #if score > bestScore:
+                if (bestScore is None) or (score > bestScore):
                     nTopScore = 1
                     bestScore = score
                     bestMap = current_map
@@ -493,7 +498,6 @@ class term:
                 continue
 
             # If only cre/des operators remain, sort them and compute the score
-            #if min([ (len(group) == 1 and isinstance(group[0], (creOp, desOp))) for group in nameGroups[gCount:] ]):
             if all([ (len(group) == 1 and isinstance(group[0], (creOp, desOp))) for group in nameGroups[gCount:] ]):
                 # Compute a new tensor list in which any dummy indices are given their
                 # new names and all indices are sorted.
@@ -527,14 +531,17 @@ class term:
 
                 # Compute a score based on how alphabetical the indices are
                 score = []
-                for i in range(len(indexList)-1):
-                    score.append(0)
-                    for j in range(i+1,len(indexList)):
+                n_ind = len(indexList)
+                for i in range(n_ind-1):
+                    count = 0
+                    for j in range(i+1, n_ind):
                         if indexList[i] < indexList[j]:
-                            score[-1] += 1
+                            count += 1
+                    score.append(count)
 
                 # If the current score is the best score, save the result
-                if score > bestScore:
+                #if score > bestScore:
+                if (bestScore is None) or (score > bestScore):
                     nTopScore = 1
                     bestScore = score
                     bestMap = current_map
@@ -594,14 +601,17 @@ class term:
 
                 # Compute a score based on how alphabetical the indices are
                 score = []
-                for i in range(len(indexList)-1):
-                    score.append(0)
-                    for j in range(i+1,len(indexList)):
+                n_ind = len(indexList)
+                for i in range(n_ind-1):
+                    count = 0
+                    for j in range(i+1, n_ind):
                         if str(indexList[i].name) < str(indexList[j].name):
-                            score[-1] += 1
+                            count += 1
+                    score.append(count)
 
                 # If the current score is the best score, save the result
-                if score > bestScore:
+                #if score > bestScore:
+                if (bestScore is None) or (score > bestScore):
                     nTopScore = 1
                     bestScore = score
                     bestMap = current_map
