@@ -28,14 +28,11 @@ from .sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from .sqaOptions import options
 from .sqaSymmetry import symmetry
     
-##TODO: make a canonicalize_spin function
 def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
-    # Check if settings were done by argumments or by the options class
+    # Fetch settings from sqaOptions class
     custom_functions = options.convertSpinIntegratedToAdapted.custom_functions
-    improve_3rdms_combinations = options.convertSpinIntegratedToAdapted.improve_3rdms_combinations
-    improve_4rdms_combinations = options.convertSpinIntegratedToAdapted.improve_4rdms_combinations
     trans_rdm = options.genEinsum.trans_rdm
 
     startTime = time.time()
@@ -43,7 +40,6 @@ def convertSpinIntegratedToAdapted(terms_si):
     sys.stdout.flush()
 
     # Convert Cre/Des Objects to RDM Objects
-    options.print_divider()
     convert_credes_to_rdm(terms_si, trans_rdm = trans_rdm)
 
     dummyLabel(terms_si)
@@ -70,18 +66,13 @@ def convertSpinIntegratedToAdapted(terms_si):
             terms_sa = convert_custom_si_to_sa(terms_sa)
         print("Done!")
 
-    #TODO: move this pre-processing into convert_rdms_si_to_sa
     # Convert RDMs to Canonical Form before Spin-Adaptation
-    if improve_3rdms_combinations or improve_4rdms_combinations:
-        for term_sa in terms_sa:
-            for tensor_sa in term_sa.tensors:
-                if isinstance(tensor_sa, creDesTensor) and (
-                    (improve_3rdms_combinations and len(tensor_sa.indices) == 6) or
-                    (improve_4rdms_combinations and len(tensor_sa.indices) == 8)):
-
-                    term_sa.isInCanonicalForm = False
-                    term_sa.makeCanonical()
-                    break
+    for term_sa in terms_sa:
+        for tensor_sa in term_sa.tensors:
+            if isinstance(tensor_sa, creDesTensor) and len(tensor_sa.indices) in (6, 8):
+                term_sa.isInCanonicalForm = False
+                term_sa.makeCanonical()
+                break
 
     # Convert RDMs to Spin-Adapted Formulation
     terms_sa = convert_rdms_si_to_sa(terms_sa)
@@ -142,6 +133,14 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
 
         ## Modify term in list to use creDesTensor object instead of cre/des objects
         term_credes.tensors = other_tensors + [creDesTensor(credes_ops, trans_rdm)]
+
+        # Remove terms with n-RDM objects when n>4
+        if len(credes_ops) > 8:
+            term_credes.scale(0.0)
+            if options.verbose:
+                print(f'High-RDM object {term_credes} removed.')
+
+    termChop(_terms_credes)
 
     print("Done!")
     options.print_divider()

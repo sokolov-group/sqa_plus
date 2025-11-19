@@ -131,8 +131,6 @@ class sqaOptions(object):
         # convertSpinIntegratedToAdapted options
         self.convertSpinIntegratedToAdapted = lambda:None
         self.convertSpinIntegratedToAdapted.custom_functions = []
-        self.convertSpinIntegratedToAdapted.improve_3rdms_combinations = True
-        self.convertSpinIntegratedToAdapted.improve_4rdms_combinations = True
 
     def add_user_defined_index(self, name):
         if name not in self.user_defined_indices:
