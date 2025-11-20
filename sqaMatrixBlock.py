@@ -73,13 +73,13 @@ def matrixBlock(terms):
     # If (remove_trans_rdm_constant = True) => Remove those constant terms
     if (remove_trans_rdm_constant):
         for trm in fTerms:
-            iremove = True
-            for i in range(len(trm.tensors)):
-                t = trm.tensors[i]
-                if (isinstance(t, creOp) or isinstance(t, desOp)):
-                   iremove = False
-            if (iremove):
+            # Check if any tensor is a creation/destruction operator
+            has_Op = any(isinstance(t, (creOp, desOp)) for t in trm.tensors)
+
+            # If no creation/destruction operators, set the constant to zero
+            if not has_Op:
                 trm.numConstant = 0.0
+
         termChop(fTerms)
 
     # Reorder tensor indices: (core < active < virtual) order
@@ -168,10 +168,7 @@ def filterVirtual(_terms):
 
                 index_type = t_tensor.indices[t_tensor_index].indType
 
-                if isinstance(t_tensor, desOp):
-                    if is_virtual_index_type(index_type):
-                        t_term.numConstant = 0.0
-                elif isinstance(t_tensor, creOp):
+                if isinstance(t_tensor, (creOp, desOp)):
                     if is_virtual_index_type(index_type):
                         t_term.numConstant = 0.0
 
@@ -198,10 +195,7 @@ def filterCore(_terms):
 
                 index_type = t_tensor.indices[t_tensor_index].indType
 
-                if isinstance(t_tensor, desOp):
-                    if is_core_index_type(index_type):
-                        t_term.numConstant = 0.0
-                elif isinstance(t_tensor, creOp):
+                if isinstance(t_tensor, (creOp, desOp)):
                     if is_core_index_type(index_type):
                         t_term.numConstant = 0.0
 
@@ -243,7 +237,7 @@ def normOrderCor(_term):
     has_creDesOps = False
     has_sfExOps = False
     for _tensor in _term.tensors:
-        if isinstance(_tensor, creOp) or isinstance(_tensor, desOp):
+        if isinstance(_tensor, (creOp, desOp)):
             has_creDesOps = True
         elif isinstance(_tensor, sfExOp):
             has_sfExOps = True
@@ -259,7 +253,7 @@ def normOrderCor(_term):
         ops = []
         nonOps = []
         for _tensor in _term.tensors:
-            if isinstance(_tensor, creOp) or isinstance(_tensor, desOp):
+            if isinstance(_tensor, (creOp, desOp)):
                 ops.append(_tensor.copy())
             else:
                 nonOps.append(_tensor.copy())
@@ -501,7 +495,7 @@ def reorder_tensor_indices(_terms):
                 order_factor = permutes_factors[permutes_rank_ind]
 
                 # Legacy ordering to obtain spin-orbital Prism integrals exceptions
-                if (ordered_tensor.name in ['v', 't1', 't2']) and legacy_ordering and not chemists_notation:
+                if (ordered_tensor.name in ['t1', 't2']) and legacy_ordering and not chemists_notation:
 
                     inds_ccae = [options.core_type,   options.core_type,   options.active_type, options.virtual_type]
                     inds_caae = [options.core_type,   options.active_type, options.active_type, options.virtual_type]
