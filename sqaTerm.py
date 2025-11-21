@@ -50,14 +50,15 @@ class term:
             self.numConstant = float(numConstant)
         else:
             raise TypeError("numConstant must be given as a float or an int.")
-        for c in constList:
-            if not isinstance(c, str):
-                raise TypeError("constList must be a list of strings")
-            self.constants.append(c)
-        for t in tensorList:
-            if not isinstance(t, tensor):
-                raise TypeError("tensorList must be a list of tensor objects")
-            self.tensors.append(t.copy())
+
+        if not all(isinstance(c, str) for c in constList):
+            raise TypeError("constList must be a list of strings.")
+        self.constants.extend(constList)
+
+        if not all(isinstance(t, tensor) for t in tensorList):
+            raise TypeError("tensorList must be a list of tensor objects.")
+        self.tensors.extend(t.copy() for t in tensorList)
+
         if isinstance(isInCanonicalForm, bool):
             self.isInCanonicalForm = isInCanonicalForm
         else:
@@ -172,30 +173,21 @@ class term:
 
     def nCreOps(self):
         "Returns the number of loose creation operators in the term"
-        retval = 0
-        for t in self.tensors:
-            if isinstance(t, creOp):
-                retval += 1
+        retval = sum(isinstance(t, creOp) for t in self.tensors)
         return retval
 
     #------------------------------------------------------------------------------------------------
 
     def nDesOps(self):
         "Returns the number of loose destruction operators in the term"
-        retval = 0
-        for t in self.tensors:
-            if isinstance(t, desOp):
-                retval += 1
+        retval = sum(isinstance(t, desOp) for t in self.tensors)
         return retval
 
     #------------------------------------------------------------------------------------------------
 
     def sfExOp_ranks(self):
         "Returns a list of the ranks of the spin free excitation operators in the term"
-        retval = []
-        for t in self.tensors:
-            if isinstance(t, sfExOp):
-                retval.append(len(t.indices)/2)
+        retval = [len(t.indices)/2 for t in self.tensors if isinstance(t, sfExOp)]
         return retval
 
     #------------------------------------------------------------------------------------------------
@@ -306,7 +298,7 @@ class term:
         desFlag    = False
         sfExFlag = False
         for t in self.tensors:
-            if ( isinstance(t,creOp) or isinstance(t,sfExOp) ) and ( desFlag or sfExFlag ):
+            if isinstance(t, (creOp, sfExOp)) and ( desFlag or sfExFlag ):
                 return False
             if isinstance(t, creOp):
                 creFlag = True
@@ -483,7 +475,6 @@ class term:
                     score.append(count)
 
                 # If the current score is the best score, save the result
-                #if score > bestScore:
                 if (bestScore is None) or (score > bestScore):
                     nTopScore = 1
                     bestScore = score
@@ -540,7 +531,6 @@ class term:
                     score.append(count)
 
                 # If the current score is the best score, save the result
-                #if score > bestScore:
                 if (bestScore is None) or (score > bestScore):
                     nTopScore = 1
                     bestScore = score
@@ -610,7 +600,6 @@ class term:
                     score.append(count)
 
                 # If the current score is the best score, save the result
-                #if score > bestScore:
                 if (bestScore is None) or (score > bestScore):
                     nTopScore = 1
                     bestScore = score
@@ -726,7 +715,7 @@ class term:
                     if t_src.indices[i].isSummed:
                         t_src.indices[i] = current_map[t_src.indices[i].tup()]
                 # Sort tensor indices and accumulate factor
-                factor *= t_src.sortIndeces()
+                factor *= t_src.sortIndices()
                 # Store sorted indices and tensor
                 for ind in t_src.indices:
                     indexList.append(ind)
@@ -960,7 +949,7 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
                 if tcopy.indices[j].tup() in map.keys():
                     tcopy.indices[j] = map[tcopy.indices[j].tup()]
             # Keep track of the sign produced by sorting the tensor's indices
-            sign *= tcopy.sortIndeces()
+            sign *= tcopy.sortIndices()
             newTensorList.append(tcopy)
             for ind in tcopy.indices:
                 indexList.append(ind)

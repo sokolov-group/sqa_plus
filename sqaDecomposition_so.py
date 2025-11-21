@@ -367,7 +367,7 @@ def decomp_3rdm_to_2rdm_so(d3, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
     # Combine like terms
     for t in decomp:
         for ten in t.tensors:
-            t.scale(ten.sortIndeces())
+            t.scale(ten.sortIndices())
         t.tensors.sort()
     decomp.sort()
     i = 0
@@ -1464,7 +1464,7 @@ def decomp_3op_to_2op_2rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
             i += 1
         temp = t.tensors[0:i]
         for ten in temp:
-            t.scale(ten.sortIndeces())
+            t.scale(ten.sortIndices())
         temp.sort()
         temp.extend(t.tensors[i:])
         t.tensors = temp
@@ -1683,7 +1683,7 @@ def decomp_4op_to_2op_2rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab):
             i += 1
         temp = t.tensors[0:i]
         for ten in temp:
-            t.scale(ten.sortIndeces())
+            t.scale(ten.sortIndices())
         temp.sort()
         temp.extend(t.tensors[i:])
         t.tensors = temp
@@ -1872,7 +1872,7 @@ def decomp_3op_to_2op_3rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab, d3_aa
             i += 1
         temp = t.tensors[0:i]
         for ten in temp:
-            t.scale(ten.sortIndeces())
+            t.scale(ten.sortIndices())
         temp.sort()
         temp.extend(t.tensors[i:])
         t.tensors = temp
@@ -2094,7 +2094,7 @@ def decomp_4op_to_2op_3rdm_so(op, d1_aa, d1_bb, d2_aaaa, d2_bbbb, d2_abab, d3_aa
             i += 1
         temp = t.tensors[0:i]
         for ten in temp:
-            t.scale(ten.sortIndeces())
+            t.scale(ten.sortIndices())
         temp.sort()
         temp.extend(t.tensors[i:])
         t.tensors = temp

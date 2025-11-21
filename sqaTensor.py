@@ -174,58 +174,47 @@ class tensor:
 
     #------------------------------------------------------------------------------------------------
 
-    def sortIndeces(self):
-        "Sorts the indices alphabetically within the constraints of symmetry and returns the resulting factor."
+    def sortIndices(self):
+        "Sort indices alphabetically within symmetry constraints. Returns the resulting symmetry factor."
 
         # If the tensor has no symmetry, do nothing
-        if len(self.symmetries) == 0:
+        if not self.symmetries:
             return 1
 
-        # Get the permutation tuples allowed by symmetry and the corresponding factors
-        tuples,factors = [],[]
-        (tup,fac) = self.symPermutes()
-        tuples.extend(tup)
-        factors.extend(fac)
+        # Get allowed symmetry permutations and corresponding factors
+        tuples, factors = map(list, self.symPermutes())
+        scores = [0] * len(tuples)
+        n_ind = len(self.indices)
 
         # Score the different permutations and select the winner
-        scores = []
-        for tup in tuples:
-            scores.append(0)
-        for i in range(len(self.indices)-1):
-            for j in range(i+1,len(self.indices)):
-                for k in range(len(tuples)):
-                    if self.indices[tuples[k][i]] < self.indices[tuples[k][j]]:
-                        scores[k] += 1
-            # At each iteration, determine the max score and keep only the tuples with that score
-            maxScore = max(scores)
-            i = 0
-            while i < len(scores):
-                if scores[i] < maxScore:
-                    del(scores[i],tuples[i],factors[i])
-                else:
-                    i += 1
-            if len(scores) == 0:
+        for i in range(n_ind - 1):
+            for j in range(i+1, n_ind):
+                for p, tup in enumerate(tuples):
+                    if self.indices[tup[i]] < self.indices[tup[j]]:
+                        scores[p] += 1
+
+            # Determine max score and keep only tuples with that score
+            max_score = max(scores)
+            keep = [p for p, s in enumerate(scores) if s == max_score]
+            tuples = [tuples[p] for p in keep]
+            factors = [factors[p] for p in keep]
+            scores = [scores[p] for p in keep]
+
+            if not tuples:
                 break
 
-        # Raise an error if a unique winner was not found
-        if len(scores) > 1:
-            unique = True
-            for i in range(1,len(scores)):
-                for j in range(len(tuples[i])):
-                    if self.indices[tuples[i][j]] != self.indices[tuples[0][j]]:
-                        unique = False
-                        break
-                if not unique:
-                    break
-            if not unique:
-                print("No unique winner produced when sorting the indices of tensor %s" %(str(self)))
-                raise RuntimeError("Scoring system did not produce unique winner.")
+        # Raise an error if no unique winner found
+        if len(tuples) > 1:
+            ref = [self.indices[p] for p in tuples[0]]
 
-        # Sort indices in the uniquely determined order and return the resulting factor
-        newIndeces = []
-        for i in range(len(tuples[0])):
-            newIndeces.append(self.indices[tuples[0][i]])
-        self.indices = newIndeces
+            for tup in tuples[1:]:
+                compare = [self.indices[p] for p in tup]
+                if any(i != j for i,j in zip(compare, ref)):
+                    msg = f"No unique winner produced when sorting indices of tensor {self!s}"
+                    raise RuntimeError("Scoring system did not produce unique winner.\n" + msg)
+
+        # Set the sorted indices and return factor
+        self.indices = [self.indices[p] for p in tuples[0]]
         return factors[0]
 
     #------------------------------------------------------------------------------------------------
