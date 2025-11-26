@@ -26,7 +26,7 @@ from .sqaOptions import options
 def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
               trans_indices_string = None, intermediate_list = None, help = False, **tensor_rename):
 
-    # Check if settings were done by argumments or by the options class
+    # Check if settings were done by arguments or by the sqaOptions class
     if not lhs_string:
         lhs_string = options.genEinsum.lhs_string
 
@@ -133,7 +133,7 @@ def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
 
         # Append all cre/des operators to list
         for tens in term.tensors:
-            if isinstance(tens, creOp) or isinstance(tens, desOp):
+            if isinstance(tens, (creOp, desOp)):
                 credes_ops.append(tens)
 
         # Modify term in list to use creDesTensor object instead of cre/des objects
@@ -787,17 +787,22 @@ def append_spin_integrated_slice(tens, tens_name, tens_indices):
     # Append slices to tensor name
     tens_name += to_append
 
+    #to_append = '_'
+    #for spin_ind_type in spin_ind_types:
+    #    if spin_ind_type == options.alpha_type:
+    #        to_append += 'a'
+    #    elif spin_ind_type == options.beta_type:
+    #        to_append += 'b'
+    #tens_name += to_append
+
     return tens_name
 
 def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = True):
 
- if not output:
-  # texfile = r'latex_output.tex'
-   texfile = r'output_default'
- else:
-   texfile = output
+    texfile = output if output else 'output_default'
 
- print("""\n----------------------- SQA LATEX ----------------------------
+    header = f"""  
+----------------------- SQA LATEX ----------------------------
     _____ ____    ___   __
    / ___// __ \  /   | / /____  _  __
    \__ \/ / / / / /| |/ __/ _ \| |/_/  Translate to Latex format and generate pdf
@@ -805,181 +810,162 @@ def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, pr
  /____/\___\_\/_/  |_\__/\___/_/|_|    date:  April 28, 2019
                                        VERSION : 1
  Copyright (C) 2018-2020  Koushik Chatterjee (koushikchatterjee7@gmail.com)
- 
- Tex file : %s
- PDF file : %s
---------------------------------------------------------------""" % (texfile+r'.tex', texfile+r'.pdf'))
 
- modifier_tensor = {
-     'bold': lambda s: r'\boldsymbol{'+s+r'}',
-     'hat': lambda s: r'\hat{'+s+r'}',
-     'bra': lambda s: r'\langle\Psi_{'+s+r'}\lvert',
-     'ket': lambda s: r'\rvert\Psi_{'+s+r'}\rangle',
-#     'gamma': lambda s: r'\Gamma',
-     'kdelta': lambda s: r'\delta',
-     'cre': lambda s: r'\hat{'+s+r'}^{\dagger}',
-     'des': lambda s: r'\hat{'+s+r'}',
- }
-# t_modifier = lambda s: r'\boldsymbol{'+s+r'}'
- t_modifier = lambda s: s
+ Tex file : {texfile}.tex
+ PDF file : {texfile}.pdf
+--------------------------------------------------------------
+    """
+    print(header)
 
- if not lhs:
-  lhs = 'M={}'
- else:
-  lhs = t_modifier(lhs)+r'={}'
+    modifier_tensor = {
+        'bold': lambda s: rf'\boldsymbol{{{s}}}',
+        'hat': lambda s: rf'\hat{{{s}}}',
+        'bra': lambda s: rf'\langle\Psi_{{{s}}}\lvert',
+        'ket': lambda s: rf'\rvert\Psi_{{{s}}}\rangle',
+        #'gamma': lambda s: r'\Gamma',
+        'kdelta': lambda s: r'\delta',
+        'cre': lambda s: rf'\hat{{{s}}}^{{\dagger}}',
+        'des': lambda s: rf'\hat{{{s}}}',
+        'rdm': lambda s: r'\gamma',
+    }
 
- tex = []
+    #t_modifier = lambda s: r'\boldsymbol{'+s+r'}'
+    t_modifier = lambda s: s
 
- for term in terms:
+    lhs = 'M={}' if not lhs else f'{t_modifier(lhs)}={{}}'
 
-     constant = ''
-     if (term.numConstant == 1.0):
-        constant = " + "
-     elif (term.numConstant == -1.0):
-        constant = " - "
-     else:
-        constant = " %s " % str(term.numConstant)
-        if (term.numConstant > 0):
-            
-#          constant += " %s " % str(Fraction(Decimal('term.numConstant')))
-          constant = " +%s " % str(term.numConstant)
-#
-     cre_count = 0
-     des_count = 0
-     credes = ''
-     name = ''
-     gamma = ''
-     for i in range(len(term.tensors)):
+    tex = []
 
-         tens = term.tensors[i]
-         s = tens.name
-     #    credes = None
-     #    name = ''
+    for term in terms:
 
-         supers = ''
-         subs   = ''
-         index = len(tens.indices)
-         if (index == 1):
-            subs   = tens.indices[0].name
-         elif(index == 2):
-            supers = tens.indices[0].name
-            subs   = tens.indices[1].name
-         elif (index == 4):
-            supers = tens.indices[0].name+tens.indices[1].name
-            subs   = tens.indices[2].name+tens.indices[3].name
+        # Sign of coefficient
+        if term.numConstant == 1.0:
+            constant = " + "
+        elif term.numConstant == -1.0:
+            constant = " - "
+        elif term.numConstant > 0:
+            constant = f" +{term.numConstant} "
+        else:
+            constant = f" {term.numConstant} "
 
-         else:
-             raise Exception("Not implemented ...")
+        credes_ops = ''
+        tensor_names = ''
+        gamma = ''
 
-         if not (isinstance(tens, creOp) or isinstance(tens, desOp)):
-            if (s == 'gamma'):
-               bra = modifier_tensor['bra']('0')
-               ket = modifier_tensor['ket']('0')
-               ind1 = modifier_tensor['cre'](supers)
-               ind2 = modifier_tensor['des'](subs)
-               gamma += bra+ind1+ind2+ket+"\:"
+        for tens in term.tensors:
+            tensor_name = tens.name
+            names = [idx.name for idx in tens.indices]
+
+            # Extract superscript and subscript indices based on number of indices
+            n_indices = len(tens.indices)
+            if n_indices == 1:
+                superscripts = ''
+                subscripts = names[0]
+            elif n_indices == 2:
+                superscripts = names[0]
+                subscripts = names[1]
+            elif n_indices == 4:
+                superscripts = ''.join(names[:2])
+                subscripts = ''.join(names[2:4])
+            elif n_indices == 6:
+                superscripts = ''.join(names[:3])
+                subscripts = ''.join(names[3:6])
+            elif n_indices == 8:
+                superscripts = ''.join(names[:4])
+                subscripts = ''.join(names[4:8])
             else:
-               if s in modifier_tensor:
-                  name += modifier_tensor[s](s)
-               else:
-                  name += t_modifier(s)
+                raise Exception(f"Not implemented: {n_indices}-index {tensor_name}...")
+ 
+            if isinstance(tens, (creOp, desOp)):
+                credes_ops += modifier_tensor[tensor_name](subscripts)
 
-               name += "^{%s}" % " ".join(supers)
-               name += "_{%s}" % " ".join(subs)
-               name +="\:"
-         else:
-            if (isinstance(tens, creOp)):
-               cre_count += 1
-            if (isinstance(tens, desOp)):
-               des_count += 1
-            credes += modifier_tensor[s](subs)
+            elif tensor_name == 'gamma':
+                bra = modifier_tensor['bra']('0')
+                ket = modifier_tensor['ket']('0')
+                creation_op = modifier_tensor['cre'](superscripts)
+                destruction_op = modifier_tensor['des'](subscripts)
+                gamma += bra + creation_op + destruction_op + ket + r"\:"
 
-     if(len(gamma) > 0):
-        name += gamma
-     if (len(credes) > 0):
-         ind = r'0'
-         if not indbra:
-            indbra = ind
-         if not indket:
-            indket = ind
-         bra = modifier_tensor['bra'](indbra)
-         ket = modifier_tensor['ket'](indket)
-         name += bra+credes+ket
+            else:
+                if tensor_name in modifier_tensor:
+                    tensor_names += modifier_tensor[tensor_name](tensor_name)
+                else:
+                    tensor_names += t_modifier(tensor_name)
 
-     tex.append(constant+r'\:'+name)
+                tensor_names += f"^{{{' '.join(superscripts)}}}"
+                tensor_names += f"_{{{' '.join(subscripts)}}}"
+                tensor_names += r"\:"
 
+        # Append gamma expression if present
+        if gamma:
+            tensor_names += gamma
 
-# if print_default:
-#    print r'\documentclass{article}'
-#    print r'\usepackage{amsmath}'
-#    print r'\begin{document}'
-#    print ''
-#    print ''
-##    print r"\begin{equation}"
-#    print r"\begin{align*}"
-#    print lhs
-#    for i in tex:
-##      print " & "+i+' \\\\'
-#      print(" & "+i+r'\\')
-#    print r"\end{align*}"
-##    print r"\end{equation}"
-#    print ''
-#    print ''
-#    print r'\end{document}'
-#
-#
-# ### write to a file ###
-## if not output:
-##  # texfile = r'latex_output.tex'
-##   texfile = r'latex_output'
-## else:
-##   texfile = output
-# output = open(texfile+r'.tex', "w")
-# output.write(r'\documentclass{article}')
-# output.write("\n")
-# output.write(r'\usepackage{amsmath}')
-# output.write("\n")
-# output.write(r'\begin{document}')
-# output.write("\n")
-# output.write('')
-# output.write("\n")
-# output.write('')
-# output.write("\n")
-## output.write(r"\begin{equation*}")
-# output.write(r"\begin{align*}")
-# output.write("\n")
-# output.write(lhs)
-# for i in tex:
-##   output.write(" & "+i+' \\\\')
-#   output.write(" & "+i+r'\\')
-#   output.write("\n")
-# output.write(r"\end{align*}")
-# output.write("\n")
-## print r"\end{equation*}"
-# output.write('')
-# output.write("\n")
-# output.write('')
-# output.write("\n")
-# output.write(r'\end{document}')
-#
-## os.system("pdflatex latex_output.tex")
-# procs = []
-# try:
-#     pread, pwrite = os.pipe()
-#     cmd = ['pdflatex', texfile+r'.tex']
-##     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-#     proc = subprocess.Popen(cmd, stdout=pwrite, stderr=subprocess.STDOUT)
-#     procs.append(proc)
-#     os.close(pwrite)
-#     os.close(pread)
-#
-# except OSError as e:
-#   #  sys.exit()
-#     print 'Latex compilation error ...'
-#
-## pdf()
-## proc_cleanup(procs)
-# return
+        # Wrap creation/destruction operators in bra-ket notation if present
+        if credes_ops:
+            ind = '0'
+            bra_index = indbra if indbra else ind
+            ket_index = indket if indket else ind
+
+            bra = modifier_tensor['bra'](bra_index)
+            ket = modifier_tensor['ket'](ket_index)
+            tensor_names += bra + credes_ops + ket
+
+        # Combine constant and tensor expression
+        tex.append(constant + r'\:' + tensor_names)
+
+    # Print to console if requested
+    if print_default:
+        print(r'\documentclass{article}')
+        print(r'\usepackage{amsmath}')
+        print(r'\begin{document}')
+        print('')
+        print('')
+        print(r"\begin{align*}")
+        print(lhs)
+        for term_latex in tex:
+            print(f" & {term_latex}" + r'\\')
+        print(r"\end{align*}")
+        print('')
+        print('')
+        print(r'\end{document}')
+
+    # Write to file
+    with open(f'{texfile}.tex', "w") as output_file:
+        output_file.write(r'\documentclass{article}')
+        output_file.write("\n")
+        output_file.write(r'\usepackage{amsmath}')
+        output_file.write("\n")
+        output_file.write(r'\begin{document}')
+        output_file.write("\n")
+        output_file.write("\n")
+        output_file.write(r"\begin{align*}")
+        output_file.write("\n")
+        output_file.write(lhs)
+        output_file.write("\n")
+
+        for term_latex in tex:
+            output_file.write(f" & {term_latex}" + r'\\')
+            output_file.write("\n")
+
+        output_file.write(r"\end{align*}")
+        output_file.write("\n")
+        output_file.write("\n")
+        output_file.write(r'\end{document}')
+
+    # Compile PDF
+    import subprocess
+    try:
+        result = subprocess.run(
+            ['pdflatex', '-interaction=nonstopmode', f'{texfile}.tex'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True, check=False)
+        if result.returncode != 0:
+            print(f'LaTeX compilation failed with return code {result.returncode}')
+    except Exception as e:
+        print(f'LaTeX compilation error: {e}')
+
+    return
 
 def einsum_help():
     print("""\n        HELP :: 
