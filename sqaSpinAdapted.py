@@ -137,8 +137,7 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
         # Remove terms with n-RDM objects when n>4
         if len(credes_ops) > 8:
             term_credes.scale(0.0)
-            if options.verbose:
-                print(f'High-RDM object {term_credes} removed.')
+            print(f'Warn: High-RDM object {term_credes} removed.')
 
     termChop(_terms_credes)
 
@@ -740,7 +739,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                 ten_rdm3_tens_sa = []
                 const_rdm3_tens_sa = []
 
-                #if ten_rdm3_spin_inds in [inds_aaaaaa, inds_bbbbbb]:
                 if spin_pattern in ('aaaaaa', 'bbbbbb'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -765,7 +763,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_aabbaa, inds_bbaabb]:
                 elif spin_pattern in ('aabbaa', 'bbaabb'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -798,7 +795,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_aababa, inds_bbabab]:
                 elif spin_pattern in ('aababa', 'bbabab'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -831,7 +827,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_aabaab, inds_bbabba]:
                 elif spin_pattern in ('aabaab', 'bbabba'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -864,7 +859,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_ababaa, inds_bababb]:
                 elif spin_pattern in ('ababaa', 'bababb'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -897,7 +891,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_abaaba, inds_babbab]:
                 elif spin_pattern in ('abaaba', 'babbab'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -930,7 +923,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_abaaab, inds_babbba]:
                 elif spin_pattern in ('abaaab', 'babbba'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -963,7 +955,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_baabaa, inds_abbabb]:
                 elif spin_pattern in ('baabaa', 'abbabb'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -996,7 +987,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_baaaba, inds_abbbab]:
                 elif spin_pattern in ('baaaba', 'abbbab'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -1029,7 +1019,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm3_tens_sa.append(ten_rdm3_sa)
                     const_rdm3_tens_sa.append(const_rdm3_sa)
 
-                #elif ten_rdm3_spin_inds in [inds_baaaab, inds_abbbba]:
                 elif spin_pattern in ('baaaab', 'abbbba'):
                     ## Spin-Adapted RDM term: rdm(u,v,w,z,y,x)
                     ten_rdm3_sa = ten_rdm3.copy()
@@ -1134,7 +1123,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                 ten_rdm4_tens_sa = []
                 const_rdm4_tens_sa = []
 
-                #if ten_rdm4_spin_inds in [inds_aaaaaaaa, inds_bbbbbbbb]:
                 if spin_pattern in ('aaaaaaaa', 'bbbbbbbb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -1248,7 +1236,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aaabbaaa, inds_bbbaabbb]:
                 elif spin_pattern in ('aaabbaaa', 'bbbaabbb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -1362,7 +1349,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aaababaa, inds_bbbababb]:
                 elif spin_pattern in ('aaababaa', 'bbbababb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -1476,7 +1462,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aaabaaba, inds_bbbabbab]:
                 elif spin_pattern in ('aaabaaba', 'bbbabbab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -1590,7 +1575,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aaabaaab, inds_bbbabbba]:
                 elif spin_pattern in ('aaabaaab', 'bbbabbba'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -1704,7 +1688,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aababaaa, inds_bbababbb]:
                 elif spin_pattern in ('aababaaa', 'bbababbb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -1818,7 +1801,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabaabaa, inds_bbabbabb]:
                 elif spin_pattern in ('aabaabaa', 'bbabbabb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -1932,7 +1914,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabaaaba, inds_bbabbbab]:
                 elif spin_pattern in ('aabaaaba', 'bbabbbab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2046,7 +2027,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabaaaab, inds_bbabbbba]:
                 elif spin_pattern in ('aabaaaab', 'bbabbbba'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2160,7 +2140,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_abaabaaa, inds_babbabbb]:
                 elif spin_pattern in ('abaabaaa', 'babbabbb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2274,7 +2253,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_abaaabaa, inds_babbbabb]:
                 elif spin_pattern in ('abaaabaa', 'babbbabb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2388,7 +2366,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_abaaaaba, inds_babbbbab]:
                 elif spin_pattern in ('abaaaaba', 'babbbbab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2502,7 +2479,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_abaaaaab, inds_babbbbba]:
                 elif spin_pattern in ('abaaaaab', 'babbbbba'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2616,7 +2592,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baaabaaa, inds_abbbabbb]:
                 elif spin_pattern in ('baaabaaa', 'abbbabbb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2730,7 +2705,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baaaabaa, inds_abbbbabb]:
                 elif spin_pattern in ('baaaabaa', 'abbbbabb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2844,7 +2818,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baaaaaba, inds_abbbbbab]:
                 elif spin_pattern in ('baaaaaba', 'abbbbbab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -2958,7 +2931,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baaaaaab, inds_abbbbbba]:
                 elif spin_pattern in ('baaaaaab', 'abbbbbba'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3072,7 +3044,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabbbbaa, inds_bbaaaabb]:
                 elif spin_pattern in ('aabbbbaa', 'bbaaaabb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3186,7 +3157,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabbbaba, inds_bbaaabab]:
                 elif spin_pattern in ('aabbbaba', 'bbaaabab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3300,7 +3270,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabbbaab, inds_bbaaabba]:
                 elif spin_pattern in ('aabbbaab', 'bbaaabba'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3414,7 +3383,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabbabba, inds_bbaabaab]:
                 elif spin_pattern in ('aabbabba', 'bbaabaab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3528,7 +3496,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabbabab, inds_bbaababa]:
                 elif spin_pattern in ('aabbabab', 'bbaababa'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3642,7 +3609,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_aabbaabb, inds_bbaabbaa]:
                 elif spin_pattern in ('aabbaabb', 'bbaabbaa'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3756,7 +3722,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_ababbbaa, inds_babaaabb]:
                 elif spin_pattern in ('ababbbaa', 'babaaabb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3870,7 +3835,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_ababbaba, inds_babaabab]:
                 elif spin_pattern in ('ababbaba', 'babaabab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -3984,7 +3948,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_ababbaab, inds_babaabba]:
                 elif spin_pattern in ('ababbaab', 'babaabba'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -4098,7 +4061,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_abababba, inds_bababaab]:
                 elif spin_pattern in ('abababba', 'bababaab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -4212,7 +4174,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_abababab, inds_babababa]:
                 elif spin_pattern in ('abababab', 'babababa'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -4326,7 +4287,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_ababaabb, inds_bababbaa]:
                 elif spin_pattern in ('ababaabb', 'bababbaa'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -4440,7 +4400,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baabbbaa, inds_abbaaabb]:
                 elif spin_pattern in ('baabbbaa', 'abbaaabb'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -4554,7 +4513,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baabbaba, inds_abbaabab]:
                 elif spin_pattern in ('baabbaba', 'abbaabab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -4668,7 +4626,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baabbaab, inds_abbaabba]:
                 elif spin_pattern in ('baabbaab', 'abbaabba'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -4782,7 +4739,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baababba, inds_abbabaab]:
                 elif spin_pattern in ('baababba', 'abbabaab'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -4896,7 +4852,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baababab, inds_abbababa]:
                 elif spin_pattern in ('baababab', 'abbababa'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
@@ -5010,7 +4965,6 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
                     ten_rdm4_tens_sa.append(ten_rdm4_sa)
                     const_rdm4_tens_sa.append(const_rdm4_sa)
 
-                #elif ten_rdm4_spin_inds in [inds_baabaabb, inds_abbabbaa]:
                 elif spin_pattern in ('baabaabb', 'abbabbaa'):
                     ## Spin-Adapted RDM term: rdm(p,q,r,s,v,u,w,t)
                     ten_rdm4_sa = ten_rdm4.copy()
