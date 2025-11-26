@@ -27,6 +27,7 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
     # Import options from sqaOptions class
     trans_rdm = options.genIntermediates.trans_rdm
     factor_depth = options.genIntermediates.factor_depth
+    greedy_opt = options.genIntermediates.greedy
 
     if not input_terms:
         raise ValueError('No input terms provided for intermediate generation.') 
@@ -36,6 +37,16 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
     options.print_header('Generating Intermediate Tensors | Factor Depth = {:}'.format(factor_depth))
     sys.stdout.flush()
+
+    # Select optimizing path approach
+    if greedy_opt:
+        optimizer = 'random-greedy'
+    else:
+        optimizer = oe.DynamicProgramming(
+            minimize='size',    # minimize largest intermediate tensor size
+            search_outer=True,  # search through outer products as well
+            cost_cap=False,     # don't use cost-capping strategy
+        )
 
     # Create list of integers to form unique names of 'INT'    
     int_name_list = list(np.arange(1, 10000))
@@ -56,31 +67,10 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         tensor_list = _term.tensors
         tensor_indices_list = [list(t.indices) for t in _term.tensors]
 
-        # Build einsum string and sizes dictionary
+        # Build einsum strings
         lhs_str, einsum_string = build_einsum_string(tensor_indices_list, ind_str)
-        sizes_dict = build_sizes_dict(tensor_indices_list)
 
-        # Construct dummy tensors for term in order to assess contraction path
-        dummy_tens = build_dummy_tensors(lhs_str, sizes_dict)
-
-        # Compute most efficient contraction path
-        optimizer = oe.DynamicProgramming(
-            minimize='size',    # minimize largest intermediate tensor size
-            search_outer=True,  # search through outer products as well
-            cost_cap=False,     # don't use cost-capping strategy
-        )
-        #optimizer = 'random-greedy'
-
-        path, path_info = oe.contract_path(einsum_string, *dummy_tens, optimize=optimizer)
-        opt   = path_info.opt_cost
-        naive = path_info.naive_cost
-        
-        # Append terms to modified term list if scaling of contraction cannot be optimized
-        if opt >= naive:
-            mod_term_list.append(_term)
-            continue
-
-        # If an order of contracting tensors is specified
+        # Compute intermediates if order of contracting tensors is specified
         if custom_path:
 
             # Check that requested contractions are in-range
@@ -105,8 +95,29 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
                 lhs_str.append(int_ind)
 
-        # Standard procedure for generating contraction path
+        # If unspecified, use opt_einsum to compute contraction path
         else:
+
+            # Build sizes dictionary
+            sizes_dict = build_sizes_dict(tensor_indices_list)
+
+            # Construct dummy tensors for term in order to assess contraction path
+            dummy_tens = build_dummy_tensors(lhs_str, sizes_dict)
+
+            # Compute most efficient contraction path
+            path, path_info = oe.contract_path(einsum_string, *dummy_tens, optimize=optimizer)
+            opt   = path_info.opt_cost
+            naive = path_info.naive_cost
+
+            # Append terms to modified term list if scaling of contraction cannot be optimized
+            if opt >= naive:
+                if options.verbose:
+                    print(f"Contraction cannot be optimized, skipping term {_term_ind}.")
+                mod_term_list.append(_term)
+                continue
+
+            if options.verbose:
+                print(f'\n> Intermediate will be created for term {_term_ind}, reducing operations by {path_info.speedup:.2f}x.')
 
             # Save tuples that indicate optimized order of contracting tensors
             contract_order = [contraction for contraction in path[:factor_depth]]
@@ -239,7 +250,7 @@ def build_dummy_tensors(lhs_str, sizes_dict):
 def make_canonical(int_term, trans_rdm):
     """Canonicalize tensor indices in a term."""
     # Additional canonicalization for RDM tensors
-    if options.spin_orbital:
+    if not options.spin_adapted:
         if any(isinstance(t, creDesTensor) for t in int_term.tensors):
             int_term = canonicalize_rdm(int_term, trans_rdm)
 
@@ -434,7 +445,7 @@ def check_intermediates(interm_list, int_term, int_tensor):
         # Compare the names of the tensors that make up each term
         if [t.name for t in list_term.tensors] != [t.name for t in int_term.tensors]:
             continue
-
+    
         # Last check is to compare the indices of the tensors
         list_path_rank = assign_path_rank(list_term)
         list_space_rank = assign_space_rank(list_term)
