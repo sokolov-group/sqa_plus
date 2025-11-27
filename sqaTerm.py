@@ -317,12 +317,13 @@ class term:
         self.makeCanonical_non_recursive(rename_user_defined)
         return
 
+    ## DEAD CODE
+    def makeCanonical_recursive(self, rename_user_defined = True):
+        "Converts the term to a unique canonical form using a recursive algorithm."
+
         # If the tensor is already in canonical form, do nothing
         if self.isInCanonicalForm:
             return
-
-#        print "Converting to canonical form:"
-#        print self
 
         # If the term is not normal ordered, raise an error
         if not self.isNormalOrdered():
@@ -1101,30 +1102,31 @@ def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
 
 def sortOps(unsortedOps, returnPermutation = False):
     """
-    Sorts a list of creation/destruction operators into normal order and alphebetically.
-    Performs no contractions.    Returns the overall sign resulting from the sort and the sorted operator list.
+    Sorts a list of creation/destruction operators into normal order and alphabetically, without performing contractions.
+    Returns the overall sign resulting from the sort and the sorted operator list. Optionally also returns the permutation.
     """
-    sortedOps = unsortedOps + []
+    sortedOps = list(unsortedOps)
+    n_ops = len(unsortedOps)
+
     i = 0
     sign = 1
+
     if returnPermutation:
-        perm = range(len(unsortedOps))
-    while i < len(sortedOps)-1:
+        perm = list(range(n_ops))
+
+    while i < n_ops-1:
         if sortedOps[i] <= sortedOps[i+1]:
-             i += 1
+            i += 1
         else:
-            temp = sortedOps[i]
-            sortedOps[i] = sortedOps[i+1]
-            sortedOps[i+1] = temp
+            sortedOps[i], sortedOps[i+1] = sortedOps[i+1], sortedOps[i]
             if returnPermutation:
-                temp = perm[i]
-                perm[i] = perm[i+1]
-                perm[i+1] = temp
+                perm[i], perm[i+1] = perm[i+1], perm[i]
             i = 0
             sign *= -1
+
     if returnPermutation:
-        return (sign,sortedOps,perm)
-    return (sign,sortedOps)
+        return sign, sortedOps, perm
+    return sign, sortedOps
 
 
 #--------------------------------------------------------------------------------------------------
@@ -1280,7 +1282,7 @@ def removeCoreOps_sf(inList):
 
             # find the spin-free excitation operator
             op = None
-            for i in xrange(len(t.tensors)):
+            for i in range(len(t.tensors)):
                 if isinstance(t.tensors[i], sfExOp):
                     op = t.tensors[i]
                     opPos = i
@@ -1303,7 +1305,7 @@ def removeCoreOps_sf(inList):
 
             # find a core index
             cInd = None
-            for i in xrange(2*order):
+            for i in range(2*order):
                 if op.indices[i].indType == (options.core_type,):
                     cInd = op.indices[i]
                     break
@@ -1319,7 +1321,7 @@ def removeCoreOps_sf(inList):
             # count the number of times the targeted core index appears among creation and destruction operators
             nCre = 0
             nDes = 0
-            for i in xrange(order):
+            for i in range(order):
                 if op.indices[i] == cInd:
                     nCre += 1
                 if op.indices[order+i] == cInd:
@@ -1331,7 +1333,7 @@ def removeCoreOps_sf(inList):
                 continue
 
             # organize the operator's indices into vertical pairs of cre/des operator indices
-            pairs = [ [op.indices[i],op.indices[order+i]] for i in xrange(order)]
+            pairs = [ [op.indices[i],op.indices[order+i]] for i in range(order)]
 
             # print out the initial term
             if options.verbose:
