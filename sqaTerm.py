@@ -28,6 +28,8 @@
 from functools import total_ordering
 from multiprocessing import Pool, cpu_count
 from collections import deque
+from itertools import islice, count
+
 from .sqaIndex import index
 from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
 from .sqaMisc import makePermutations
@@ -139,28 +141,17 @@ class term:
 
     def __str__(self):
 
-        # numerical constant
-        retval = " (%10.5f) " %self.numConstant
-
-        # non-numerical constants
-        for i in range(len(self.constants)):
-            retval += self.constants[i] + " "
-
-        # tensors
-        for t in self.tensors:
-            retval += str(t) + " "
-        
-        return retval
+        retval = [f" ({self.numConstant:10.5f})", " ".join(self.constants), " ".join(str(t) for t in self.tensors)]
+        return " ".join(filter(None, retval))
 
     #------------------------------------------------------------------------------------------------
 
     def __add__(self,other):
-        "Adds the terms self and other.    Only works if the constants, tensors, and operators of two terms all match."
-        if self.sameForm(other):
-            retval = self.copy()
-            retval.numConstant += other.numConstant
-        else:
+        "Adds the terms self and other. Only works if the constants, tensors, and operators of two terms all match."
+        if not self.sameForm(other):
             raise RuntimeError("self and other must have the same constants, tensors, and operators")
+        retval = self.copy()
+        retval.numConstant += other.numConstant
         return retval
 
     #------------------------------------------------------------------------------------------------
@@ -194,14 +185,13 @@ class term:
 
     def scale(self, factor):
         "Multiplies the term by factor."
-        if isinstance(factor, (int, float)):
-            self.numConstant *= factor
-        else:
+        if not isinstance(factor, (int, float)):
             raise ValueError("factor must an integer or float")
+        self.numConstant *= factor
 
     #------------------------------------------------------------------------------------------------
 
-    def sameForm(self,other):
+    def sameForm(self, other):
         "Determines whether the terms are of the same form."
         self.makeCanonical()
         other.makeCanonical()
@@ -222,7 +212,7 @@ class term:
             if isinstance(t, kroneckerDelta) and (t.indices[0] == t.indices[1]) and (t.indices[0].userDefined == t.indices[1].userDefined):
                 del(self.tensors[i])
 
-            # If the term is a delta funciton with contractable indices, contract them and remove the delta func
+            # If the term is a delta function with contractable indices, contract them and remove the delta func
             elif isinstance(t, kroneckerDelta) and (t.indices[0].isSummed or t.indices[1].isSummed):
                 i0 = t.indices[0]
                 i1 = t.indices[1]
@@ -268,51 +258,37 @@ class term:
     #------------------------------------------------------------------------------------------------
 
     def generateAlphabet(self):
-        "Returns a list of strings that shares no elements with the term's index names."
+        """ Returns a list of strings that share no elements with the term's index names. """
 
-        # Compile list of index names in self
-        usedNames = []
-        for t in self.tensors:
-            for i in t.indices:
-                if i.userDefined:
-                    i.name = 'user_' + i.userDefined
-                if not (i.name in usedNames):
-                    usedNames.append(i.name)
+        # Set of index names used in self
+        used_names = {
+            (f"user_{idx.userDefined}" if idx.userDefined else idx.name)
+            for t in self.tensors
+            for idx in t.indices
+        }
 
-        # Generate an alphabet with no elements overlapping with usedNames
-        alphabet = []
-        i = 0
-        while len(alphabet) < len(usedNames):
-            if not (str(i) in usedNames):
-                alphabet.append(str(i))
-            i += 1
+        # Generate an alphabet with no elements overlapping with used_names
+        alphabet = list(
+            islice((idx for idx in map(str, count()) if idx not in used_names), len(used_names))
+        )
 
         return alphabet
 
     #------------------------------------------------------------------------------------------------
 
     def isNormalOrdered(self):
-        "Returns true if the term is in normal order and false otherwise"
-
-        creFlag    = False 
-        desFlag    = False
-        sfExFlag = False
+        """ Returns True if term is normal-ordered, False otherwise. """
+        seen_tensor_types = set()
         for t in self.tensors:
-            if isinstance(t, (creOp, sfExOp)) and ( desFlag or sfExFlag ):
+            if isinstance(t, (creOp, sfExOp)) and seen_tensor_types.intersection((desOp, sfExOp)):
                 return False
-            if isinstance(t, creOp):
-                creFlag = True
-            if isinstance(t, desOp):
-                desFlag = True
-            if isinstance(t, sfExOp):
-                sfExFlag = True
+            seen_tensor_types.add(type(t))
         return True
 
     #------------------------------------------------------------------------------------------------
 
     def makeCanonical(self, rename_user_defined = True):
-        "Converts the term to a unique canonical form."
-
+        """ Converts the term to a unique canonical form. """
         # Use the non recursive function
         self.makeCanonical_non_recursive(rename_user_defined)
         return
@@ -885,15 +861,7 @@ def combineTerms(termList, maxProcesses = None):
 def multiplyTerms(t1,t2):
     if (not isinstance(t1,term)) or (not isinstance(t2,term)):
         raise TypeError("t1 and t2 must be of type term")
-    numConst = t1.numConstant * t2.numConstant
-    constList = []
-    constList.extend(t1.constants)
-    constList.extend(t2.constants)
-    tensorList = []
-    tensorList.extend(t1.tensors)
-    tensorList.extend(t2.tensors)
-    return term(numConst,constList,tensorList)
-
+    return term(t1.numConstant*t2.numConstant, t1.constants+t2.constants, t1.tensors+t2.tensors)
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -904,15 +872,11 @@ def termChop(termList, tolerance = 1e-6):
     TypeErrorMessage = "termList must be a list of terms"
     if not isinstance(termList, list):
         raise TypeError(TypeErrorMessage)
-    i = 0
-    while i < len(termList):
-        if not isinstance(termList[i],term):
-            raise TypeError(TypeErrorMessage)
-        if abs(termList[i].numConstant) < tolerance:
-            del(termList[i])
-        else:
-            i += 1
 
+    if not all(isinstance(t, term) for t in termList):
+        raise TypeError(TypeErrorMessage)
+
+    termList[:] = [t for t in termList if abs(t.numConstant) >= tolerance]
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -1468,15 +1432,3 @@ def removeVirtOps_sf(inList):
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
-def count_ind(x):
-        num_ind = 0
-        for tensor in x.tensors:
-                num_ind += len(tensor.indices)
-        return num_ind    
-
-def make_str(x):
-        ind_str = ''
-        for tensor in x.tensors:
-                for ind in tensor.indices:
-                        ind_str += ind.name
-        return ind_str 
