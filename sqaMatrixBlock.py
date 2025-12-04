@@ -58,7 +58,7 @@ def matrixBlock(terms):
     fTerms = normalOrderCore(nterms)
     del(nterms)
 
-    # Evaluate Kroneker delta
+    # Evaluate Kronecker delta
     for t in fTerms:
         t.contractDeltaFuncs()
 
@@ -71,15 +71,11 @@ def matrixBlock(terms):
     contractDeltaFuncs_nondummy(fTerms)
 
     # If (remove_trans_rdm_constant = True) => Remove those constant terms
-    if (remove_trans_rdm_constant):
+    if remove_trans_rdm_constant:
         for trm in fTerms:
-            # Check if any tensor is a creation/destruction operator
-            has_Op = any(isinstance(t, (creOp, desOp)) for t in trm.tensors)
-
             # If no creation/destruction operators, set the constant to zero
-            if not has_Op:
+            if not any(isinstance(t, (creOp, desOp)) for t in trm.tensors):
                 trm.numConstant = 0.0
-
         termChop(fTerms)
 
     # Reorder tensor indices: (core < active < virtual) order
@@ -163,14 +159,16 @@ def filterVirtual(_terms):
     sys.stdout.flush()
 
     for t_term in _terms:
-        for t_tensor in t_term.tensors:
-            for t_tensor_index in range(len(t_tensor.indices)):
-
-                index_type = t_tensor.indices[t_tensor_index].indType
-
-                if isinstance(t_tensor, (creOp, desOp)):
-                    if is_virtual_index_type(index_type):
-                        t_term.numConstant = 0.0
+        # Collect all indices for cre/desOp in t_term
+        cre_des_indices = (
+            ind
+            for t_tensor in t_term.tensors
+            if isinstance(t_tensor, (creOp, desOp))
+            for ind in t_tensor.indices
+        )
+        # Set t_term to 0 if any indices are virtual type
+        if any(is_virtual_index_type(ind.indType) for ind in cre_des_indices):
+            t_term.numConstant = 0.0
 
     if options.verbose:
         print("")
@@ -190,14 +188,16 @@ def filterCore(_terms):
     sys.stdout.flush()
 
     for t_term in _terms:
-        for t_tensor in t_term.tensors:
-            for t_tensor_index in range(len(t_tensor.indices)):
-
-                index_type = t_tensor.indices[t_tensor_index].indType
-
-                if isinstance(t_tensor, (creOp, desOp)):
-                    if is_core_index_type(index_type):
-                        t_term.numConstant = 0.0
+        # Collect all indices for cre/desOp in t_term
+        cre_des_indices = (
+            ind
+            for t_tensor in t_term.tensors
+            if isinstance(t_tensor, (creOp, desOp))
+            for ind in t_tensor.indices
+        )
+        # Set t_term to 0 if any indices are core type
+        if any(is_core_index_type(ind.indType) for ind in cre_des_indices):
+            t_term.numConstant = 0.0
 
     if options.verbose:
         print("")
@@ -413,16 +413,17 @@ def contractDeltaFuncs_nondummy(_terms):
     sys.stdout.flush()
 
     for term in _terms:
-        for i in range(len(term.tensors)):
-            t = term.tensors[i]
+        for t in term.tensors:
+            if not isinstance(t, kroneckerDelta):
+                continue
 
-            if isinstance(t, kroneckerDelta):
-                i0 = t.indices[0]
-                i1 = t.indices[1]
-                if not (i0.isSummed and i1.isSummed):
-                    if not ((get_spatial_index_type(i0) == get_spatial_index_type(i1)) and
-                            (get_spin_index_type(i0) == get_spin_index_type(i1))):
-                        term.numConstant = 0.0
+            i0, i1 = t.indices[0], t.indices[1]
+            both_summed = i0.isSummed and i1.isSummed
+            spatial_match = get_spatial_index_type(i0) == get_spatial_index_type(i1)
+            spin_match = get_spin_index_type(i0) == get_spin_index_type(i1)
+            if not both_summed and not (spatial_match and spin_match):
+                term.numConstant = 0.0
+                break
 
     termChop(_terms)
 
