@@ -108,48 +108,39 @@ class index:
 #
 # Author: Carlos E. V. de Moura <carlosevmoura@gmail.com>
 
-def is_spin_integrated_index_type(indices_types):
+def is_spin_integrated_index_type(indice_types):
     """Returns True if indices contain spin-integrated (alpha or beta) types."""
-    if isinstance(indices_types, index):
-        indices_types = indices_types.indType
+    if isinstance(indice_types, index):
+        indice_types = indice_types.indType
+    return any(ind in (options.alpha_type, options.beta_type) for ind in indice_types)
 
-    return any(ind in (options.alpha_type, options.beta_type) for ind in indices_types)
-
-def get_spin_index_type(indices_types):
+def get_spin_index_type(indice_types):
     """Returns spin index type of indices."""
-    if isinstance(indices_types, index):
-        indices_types = indices_types.indType
+    if isinstance(indice_types, index):
+        indice_types = indice_types.indType
+    return next((ind for ind in indice_types if ind in (options.alpha_type, options.beta_type)), '')
 
-    for ind in indices_types:
-        if ind in (options.alpha_type, options.beta_type):
-            return ind
-    return ''
-
-def get_spatial_index_type(indices_types):
+def get_spatial_index_type(indice_types):
     """Returns spatial index type of indices."""
-    if isinstance(indices_types, index):
-        indices_types = indices_types.indType
+    if isinstance(indice_types, index):
+        indice_types = indice_types.indType
+    return next((ind for ind in indice_types if ind not in (options.alpha_type, options.beta_type)), '')
 
-    for ind in indices_types:
-        if ind not in (options.alpha_type, options.beta_type):
-            return ind
-    return ''
-
-def is_index_type(indices_types, target_index_type):
+def is_index_type(indice_types, target_index_types):
     """Returns True of any index matches one in target_index_types."""
-    return any(ind in target_index_type for ind in indices_types)
+    return any(ind in target_index_types for ind in indice_types)
 
 def is_core_index_type(index_type):
     """Returns True of any index is a core type."""
     spatial_index_type = get_spatial_index_type(index_type)
     core_types = (options.core_type, options.cvs_core_type, options.cvs_valence_type)
-    return any(is_index_type(spatial_index_type, core_index_type) for core_index_type in core_types)
+    return any(is_index_type(spatial_index_type, ct) for ct in core_types)
 
 def is_cvs_index_type(index_type):
     """Returns True of any index is a cvs type."""
     spatial_index_type = get_spatial_index_type(index_type)
     cvs_types = (options.cvs_core_type, options.cvs_valence_type)
-    return any(is_index_type(spatial_index_type, cvs_index_type) for cvs_index_type in cvs_types)
+    return any(is_index_type(spatial_index_type, ct) for ct in cvs_types)
 
 def is_cvs_core_index_type(index_type):
     """Returns True of any index is a cvs core type."""

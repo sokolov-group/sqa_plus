@@ -61,7 +61,7 @@ term5 = sqa.matrixBlock(term4)
 
 test1_string_output = ''
 for t in term5:
-    test1_string_output += str(t) + '\n'
+    test1_string_output += str(t) + ' \n'
 
 test1_correct_answer = " (  -1.00000) v(I,Y,J,X) \n" + \
                        " (   1.00000) kdelta(X,Y) v(I,x,J,y) rdm(x,y) \n" + \
@@ -74,11 +74,7 @@ test1_correct_answer = " (  -1.00000) v(I,Y,J,X) \n" + \
 print("\n> Test 1 output:\n")
 print(test1_string_output)
 
-if test1_string_output == test1_correct_answer:
-    print(">> Test 1 passed!\n")
-else:
-    print(">> Test 1 failed!\n")
-
+print(">> Test 1 passed!\n" if test1_string_output == test1_correct_answer else ">> Test 1 failed!\n")
 print("({:.3f} seconds) \n".format(time.time() - startTime))
 
 # Test 2: Construction of the overlap matrix for an M_01 sector of the effective Hamiltonian matrix
@@ -109,7 +105,7 @@ term4 = sqa.matrixBlock(term3)
 
 test2_string_output = ''
 for t in term4:
-    test2_string_output += str(t) + '\n'
+    test2_string_output += str(t) + ' \n'
 
 test2_correct_answer = " (  -1.00000) kdelta(I,J) kdelta(U,X) cre(Z) des(Y) \n" + \
                        " (   1.00000) kdelta(I,J) kdelta(X,Z) cre(U) des(Y) \n" + \
@@ -118,11 +114,7 @@ test2_correct_answer = " (  -1.00000) kdelta(I,J) kdelta(U,X) cre(Z) des(Y) \n" 
 print("\n> Test 2 output:\n")
 print(test2_string_output)
 
-if test2_string_output == test2_correct_answer:
-    print(">> Test 2 passed!\n")
-else:
-    print(">> Test 2 failed!\n")
-
+print(">> Test 2 passed!\n" if test2_string_output == test2_correct_answer else ">> Test 2 failed!\n")
 print("({:.3f} seconds) \n".format(time.time() - startTime))
 
 # Test 3: Multiply perturbation operator by single excitation operators from either side
@@ -166,19 +158,23 @@ term5 = sqa.matrixBlock(term4)
 
 test3_string_output = ''
 for t in term5:
-    test3_string_output += str(t) + '\n'
+    test3_string_output += str(t) + ' \n'
 
-test3_correct_answer = " (  -1.00000) v(x,B,J,A) cre(X) des(x) \n" + \
-                       " (  -1.00000) h(J,x) kdelta(A,B) cre(X) des(x) \n" + \
-                       " (   1.00000) kdelta(A,B) v(i,x,J,i) cre(X) des(x) \n" + \
-                       " (   0.50000) kdelta(A,B) v(x,y,J,z) cre(X) cre(z) des(x) des(y) \n"
+### old test3 answer!
+##test3_correct_answer = " (  -1.00000) v(x,B,J,A) cre(X) des(x) \n" + \
+##                       " (  -1.00000) h(J,x) kdelta(A,B) cre(X) des(x) \n" + \
+##                       " (   1.00000) kdelta(A,B) v(i,x,J,i) cre(X) des(x) \n" + \
+##                       " (   0.50000) kdelta(A,B) v(x,y,J,z) cre(X) cre(z) des(x) des(y) \n"
+
+### new test3 answer
+test3_correct_answer = " (  -1.00000) v(J,A,x,B) cre(X) des(x) \n" + \
+                       " (  -1.00000) kdelta(A,B) h(J,x) cre(X) des(x) \n" + \
+                       " (   1.00000) kdelta(A,B) v(J,i,i,x) cre(X) des(x) \n" + \
+                       " (   0.50000) kdelta(A,B) v(J,x,y,z) cre(X) cre(x) des(y) des(z) \n"
 
 print("\n> Test 3 output:\n")
 print(test3_string_output)
 
-if test3_string_output == test3_correct_answer:
-    print(">> Test 3 passed!\n")
-else:
-     print(">> Test 3 failed!\n")
+print(">> Test 3 passed!\n" if test3_string_output == test3_correct_answer else ">> Test 3 failed!\n")
 
 print("({:.3f} seconds) \n".format(time.time() - startTime))
