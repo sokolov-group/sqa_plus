@@ -301,11 +301,12 @@ class sfExOp(tensor):
 
     def __init__(self, indices):
         # Check that there are an even number of indices
-        if len(indices)/2 != (len(indices)+1)/2:
+        #if len(indices)/2 != (len(indices)+1)/2:
+        if len(indices) % 2 != 0:
             raise ValueError("A spin free excitation operator (the sfExOp class) must have an even number of indices")
 
         # Initialize order
-        self.order = len(indices)/2
+        self.order = len(indices)//2
 
         # Initialize name
         self.name = "E%i" %self.order

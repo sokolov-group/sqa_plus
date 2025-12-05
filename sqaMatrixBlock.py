@@ -352,59 +352,53 @@ def normOrderCor(_term):
 
 def sortOpsCore(_unsorted_ops, returnPermutation = False):
     """
-    Sorts a list of creation/destruction operators into normal order and alphabetically.
-    Performs no contractions.  Returns the overall sign resulting from the sort and the sorted operator list.
+    Sorts a list of creation/destruction operators into normal order and alphabetically, without performing contractions.
+    Returns the overall sign resulting from the sort and the sorted operator list.
     """
-    sorted_ops = _unsorted_ops + []
-    i = 0
+    sorted_ops = list(_unsorted_ops)
+    n_ops = len(sorted_ops)
     sign = 1
 
+    perm = None
     if returnPermutation:
-        perm = range(len(_unsorted_ops))
+        perm = list(range(n_ops))
 
-    while i < len(sorted_ops)-1:
-        if isinstance(sorted_ops[i], creOp) and is_core_index_type(sorted_ops[i].indices[0]):
+    i = 0
+    while i < n_ops-1:
+        # Bubble core creation operators to the right
+        current_op = sorted_ops[i]
+        if isinstance(current_op, creOp) and is_core_index_type(current_op.indices[0]):
             j = i
-            for k in range(i,(len(sorted_ops)-1)):
-                if isinstance(sorted_ops[k+1], creOp) and is_core_index_type(sorted_ops[k+1].indices[0]):
-                    i += 1
-                    j = i
-                else:
-                    i = j
-                    break
-            if ((i+1) > (len(sorted_ops)-1)):
+            while j+1 < n_ops and isinstance(sorted_ops[j+1], creOp) and is_core_index_type(sorted_ops[j+1].indices[0]):
+                j += 1
+            if j+1 >= n_ops:
                 break
 
-            temp = sorted_ops[i]
-            sorted_ops[i] = sorted_ops[i+1]
-            sorted_ops[i+1] = temp
-
-            if returnPermutation:
-                temp = perm[i]
-                perm[i] = perm[i+1]
-                perm[i+1] = temp
-            i = 0
+            sorted_ops[j], sorted_ops[j+1] = sorted_ops[j+1], sorted_ops[j]
             sign *= -1
+            if perm is not None:
+                perm[j], perm[j+1] = perm[j+1], perm[j]
 
-        elif isinstance(sorted_ops[i+1], desOp) and is_core_index_type(sorted_ops[i+1].indices[0]):
-            temp = sorted_ops[i]
-            sorted_ops[i] = sorted_ops[i+1]
-            sorted_ops[i+1] = temp
-
-            if returnPermutation:
-                temp = perm[i+1]
-                perm[i+1] = perm[i]
-                perm[i] = temp
             i = 0
+            continue
+
+        # Bubble core destruction operators to the left
+        next_op = sorted_ops[i+1]
+        if isinstance(next_op, desOp) and is_core_index_type(next_op.indices[0]):
+            sorted_ops[i], sorted_ops[i+1] = next_op, current_op
             sign *= -1
-            if (sorted_ops[i+1].name == sorted_ops[i].name):
+            if perm is not None:
+                perm[i], perm[i+1] = perm[i+1], perm[i]
+
+            if sorted_ops[i+1].name == sorted_ops[i].name:
                 break
-        else:
-            i += 1
 
-    if returnPermutation:
-        return (sign, sorted_ops, perm)
-    return (sign, sorted_ops)
+            i = 0
+            continue
+
+        i += 1
+
+    return (sign, sorted_ops) if not returnPermutation else (sign, sorted_ops, perm)
 
 def contractDeltaFuncs_nondummy(_terms):
     "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."

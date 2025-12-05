@@ -67,7 +67,7 @@ sqa_plus.combineTerms(test1_output)
 
 test1_string_output = ''
 for t in test1_output:
-    test1_string_output += str(t) + '\n'
+    test1_string_output += str(t) + ' \n'
 test1_correct_answer =  " (  -1.00000) kdelta(j1,j3) kdelta(j2,j4) \n" + \
                         " (   1.00000) kdelta(j1,j4) kdelta(j2,j3) \n" + \
                         " (   1.00000) kdelta(j1,j3) cre(j4) des(j2) \n" + \
@@ -102,7 +102,7 @@ sqa_plus.combine_transpose(test2_output)
 
 test2_string_output = ''
 for t in test2_output:
-    test2_string_output += str(t) + '\n'
+    test2_string_output += str(t) + ' \n'
 test2_correct_answer = \
                                              " (   4.00000) a2(a,b,c,d) h1(a,e) cre(c) cre(d) des(b) des(e) \n" + \
                                              " (  -4.00000) a2(a,b,c,d) h1(c,e) cre(d) cre(e) des(a) des(b) \n"
@@ -151,7 +151,7 @@ test3_output = sqa_plus.commutator(h2_aaaa_term, a2_abab_terms)
 
 test3_string_output = ''
 for t in test3_output:
-    test3_string_output += str(t) + '\n'
+    test3_string_output += str(t) + ' \n'
     test3_ind_list = []
     for ten in t.tensors:
         for ind in ten.indices:
@@ -209,7 +209,7 @@ test4_output = sqa_plus.normalOrder(test4_term)
 sqa_plus.combineTerms(test4_output)
 test4_string_output = ""
 for t in test4_output:
-    test4_string_output += str(t) + '\n'
+    test4_string_output += str(t) + ' \n'
 test4_correct_answer =  " (   1.00000) kdelta(i1,i2) kdelta(i4,i6) kdelta(i5,i7) E2(i0,i3,i8,i9) \n" + \
                         " (   1.00000) kdelta(i1,i2) kdelta(i4,i7) kdelta(i5,i6) E2(i0,i3,i9,i8) \n" + \
                         " (   1.00000) kdelta(i1,i3) kdelta(i4,i6) kdelta(i5,i7) E2(i0,i2,i9,i8) \n" + \
@@ -271,7 +271,7 @@ test5_output = sqa_plus.commutator(test5_hterm, test5_aterms)
 
 test5_string_output = ""
 for t in test5_output:
-    test5_string_output += str(t) + '\n'
+    test5_string_output += str(t) + ' \n'
     test5_ind_list = []
     for ten in t.tensors:
         for ind in ten.indices:
@@ -396,7 +396,7 @@ sqa_plus.removeCoreOpPairs(test6_terms)
 
 test6_string_output = ""
 for t in test6_terms:
-  test6_string_output += str(t) + "\n"
+  test6_string_output += str(t) + " \n"
 
 test6_correct_answer = \
 " (   1.00000) \n" + \
