@@ -234,114 +234,124 @@ def normOrderCor(_term):
         raise TypeError("Input term must be of class term")
 
     # determine what types of operators the term contains
-    has_creDesOps = False
-    has_sfExOps = False
-    for _tensor in _term.tensors:
-        if isinstance(_tensor, (creOp, desOp)):
-            has_creDesOps = True
-        elif isinstance(_tensor, sfExOp):
-            has_sfExOps = True
+    has_creDesOps = any(isinstance(_tensor, (creOp, desOp)) for _tensor in _term.tensors)
+    has_sfExOps = any(isinstance(_tensor, sfExOp) for _tensor in _term.tensors)
 
     # If term has both creation/destruction operators and spin free excitation operators raise an error
     if has_creDesOps and has_sfExOps:
         raise RuntimeError("Normal ordering not implemented when both creOp/desOp and sfExOp tensors are present")
 
-    # Normal ordering for creOp/desOp
-    elif has_creDesOps:
-
-        # Separate the cre/des operators from other tensors
-        ops = []
-        nonOps = []
-        for _tensor in _term.tensors:
-            if isinstance(_tensor, (creOp, desOp)):
-                ops.append(_tensor.copy())
-            else:
-                nonOps.append(_tensor.copy())
-
-        # Generate all contraction pairs
-        contractionPairs = []
-        for i in range(len(ops)):
-            iTerm = ops[i]
-            iType = iTerm.indices[0].indType
-
-            for j in range(i+1,len(ops)):
-                jTerm = ops[j]
-                jType = jTerm.indices[0].indType
-
-                if isinstance(iTerm, creOp) and isinstance(jTerm, desOp):
-                    if is_core_index_type(iType) or is_core_index_type(jType):
-                        contractionPairs.append((i,j));
-
-        # Determine maximum contraction order
-        creCount = 0
-        maxConOrder = 0
-        for i in range(len(ops)-1,-1,-1):
-            iTerm = ops[i]
-            if isinstance(iTerm, desOp):
-                creCount +=1
-            elif isinstance(iTerm, creOp) and creCount > 0:
-                maxConOrder += 1
-                creCount -= 1
-        del(creCount,iTerm)
-
-        # Generate all contractions
-        contractions = []
-        for i in range(maxConOrder+1):
-            subCons = makeTuples(i,contractionPairs)
-            j = 0
-            while j < len(subCons):
-                creOpTags = []
-                desOpTags = []
-                for k in range(i):
-                    creOpTags.append(subCons[j][k][1])
-                    desOpTags.append(subCons[j][k][0])
-                if allDifferent(creOpTags) and allDifferent(desOpTags):
-                    j += 1
-                else:
-                    del(subCons[j])
-            for j in range(len(subCons)):
-                contractions.append(subCons[j])
-        del(subCons,creOpTags,desOpTags,contractionPairs)
-
-        # For each contraction, generate the resulting term
-        ordered_terms = []
-        for contraction in contractions:
-            conSign = 1
-            deltaFuncs = []
-            subOpString = []
-            subOpString.extend(ops)
-            for conPair in contraction:
-                index1 = ops[conPair[0]].indices[0]
-                index2 = ops[conPair[1]].indices[0]
-                deltaFuncs.append(kroneckerDelta([index1,index2]))
-                subOpString[conPair[0]] = 'contracted'
-                subOpString[conPair[1]] = 'contracted'
-                for q in subOpString[conPair[0]+1:conPair[1]]:
-                    if not (q is 'contracted'):
-                        conSign *= -1
-            i = 0
-            while i < len(subOpString):
-                if subOpString[i] is 'contracted':
-                    del(subOpString[i])
-                else:
-                    i += 1
-            (sortSign, sortedOps) = sortOpsCore(subOpString)
-            totalSign = conSign * sortSign
-
-            ordered_tensors = []
-            ordered_tensors.extend(nonOps)
-            ordered_tensors.extend(deltaFuncs)
-            ordered_tensors.extend(sortedOps)
-            ordered_terms.append(term(totalSign * _term.numConstant, _term.constants, ordered_tensors))
-
-    # Normal ordering for sfExOps
-    elif has_sfExOps:
-        # Make separate lists of the spin free excitation operators and other tensors
+    # Normal ordering for spin-free excitation operators
+    if has_sfExOps:
         raise Exception('This code does not support for now')
 
-    else:
-        ordered_terms = []
-        ordered_terms = [_term]
+    # If no creation/destruction operators present, do nothing
+    if not has_creDesOps:
+        return [_term]
+
+    # Perform normal ordering for creation/destruction operators #
+
+    # Separate cre/desOp from other tensors
+    ops = [_tensor.copy() for _tensor in _term.tensors if isinstance(_tensor, (creOp, desOp))]
+    nonOps = [_tensor.copy() for _tensor in _term.tensors if not isinstance(_tensor, (creOp, desOp))]
+
+    # Generate all contraction pairs
+    contractionPairs = [
+        (i, j)
+        for i in range(len(ops))
+        for j in range(i+1, len(ops))
+        if isinstance(ops[i], creOp) and isinstance(ops[j], desOp)
+        and (is_core_index_type(ops[i].indices[0].indType) or is_core_index_type(ops[j].indices[0].indType))
+    ]
+
+    # Determine maximum contraction order
+    creCount = 0
+    maxConOrder = 0
+    for iTerm in reversed(ops):
+        if isinstance(iTerm, desOp):
+            creCount += 1
+        elif isinstance(iTerm, creOp) and creCount > 0:
+            maxConOrder += 1
+            creCount -= 1
+
+    # Generate all contractions
+    # contractions = []
+    # for i in range(maxConOrder+1):
+    #     subCons = makeTuples(i,contractionPairs)
+    #     j = 0
+    #     while j < len(subCons):
+    #         creOpTags = []
+    #         desOpTags = []
+    #         for k in range(i):
+    #             creOpTags.append(subCons[j][k][1])
+    #             desOpTags.append(subCons[j][k][0])
+    #         if allDifferent(creOpTags) and allDifferent(desOpTags):
+    #             j += 1
+    #         else:
+    #             del(subCons[j])
+    #     for j in range(len(subCons)):
+    #         contractions.append(subCons[j])
+    # #del(subCons,creOpTags,desOpTags,contractionPairs)
+
+    # Generate all contractions
+    contractions = []
+    for i in range(maxConOrder + 1):
+        subCons = makeTuples(i, contractionPairs)
+        # Filter to keep only valid contractions (no duplicate tags)
+        for con in subCons:
+            creOpTags = [con[k][1] for k in range(i)]
+            desOpTags = [con[k][0] for k in range(i)]
+            if allDifferent(creOpTags) and allDifferent(desOpTags):
+                contractions.append(con)
+
+    # For each contraction, generate the resulting term
+    # ordered_terms = []
+    # for contraction in contractions:
+    #     conSign = 1
+    #     deltaFuncs = []
+    #     subOpString = []
+    #     subOpString.extend(ops)
+    #     for conPair in contraction:
+    #         index1 = ops[conPair[0]].indices[0]
+    #         index2 = ops[conPair[1]].indices[0]
+    #         deltaFuncs.append(kroneckerDelta([index1,index2]))
+    #         subOpString[conPair[0]] = 'contracted'
+    #         subOpString[conPair[1]] = 'contracted'
+    #         for q in subOpString[conPair[0]+1:conPair[1]]:
+    #             if not (q is 'contracted'):
+    #                 conSign *= -1
+    #     i = 0
+    #     while i < len(subOpString):
+    #         if subOpString[i] is 'contracted':
+    #             del(subOpString[i])
+    #         else:
+    #             i += 1
+    #     sortSign, sortedOps = sortOpsCore(subOpString)
+    #     totalSign = conSign * sortSign
+
+    # For each contraction, generate the resulting term
+    ordered_terms = []
+    for contraction in contractions:
+        conSign = 1
+        deltaFuncs = []
+        subOpString = list(ops)
+
+        for conPair in contraction:
+            index1 = ops[conPair[0]].indices[0]
+            index2 = ops[conPair[1]].indices[0]
+            deltaFuncs.append(kroneckerDelta([index1, index2]))
+            subOpString[conPair[0]] = 'contracted'
+            subOpString[conPair[1]] = 'contracted'
+            # Count sign flips
+            conSign *= (-1) ** sum(1 for q in subOpString[conPair[0]+1:conPair[1]] if q != 'contracted')
+
+        # Remove contracted operators
+        subOpString = [op for op in subOpString if op != 'contracted']
+        sortSign, sortedOps = sortOpsCore(subOpString)
+        totalSign = conSign * sortSign
+
+        ordered_tensors = nonOps + deltaFuncs + sortedOps
+        ordered_terms.append(term(totalSign * _term.numConstant, _term.constants, ordered_tensors))
 
     if options.verbose:
         print("Terms after normal ordering:")
