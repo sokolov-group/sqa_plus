@@ -142,10 +142,11 @@ def dummyLabel(_terms, keep_user_defined_dummy_names = True):
                             mymap[index_name] = virtInd.pop(0)
 
                     # Update the label
-                    _terms[_term_ind].tensors[_tensor_ind].indices[_index_ind].name = mymap[index_name]
+                    ##_terms[_term_ind].tensors[_tensor_ind].indices[_index_ind].name = mymap[index_name]
+                    _tensor.indices[_index_ind].name = mymap[index_name]
 
         if options.verbose:
-            print("{:} ---> {:}".format(_term_unlabeled, _terms[_term_ind]))
+            print(f"{_term_unlabeled} ---> {_term}")
 
     print("Done!")
     options.print_divider()
@@ -275,59 +276,15 @@ def normOrderCor(_term):
             creCount -= 1
 
     # Generate all contractions
-    # contractions = []
-    # for i in range(maxConOrder+1):
-    #     subCons = makeTuples(i,contractionPairs)
-    #     j = 0
-    #     while j < len(subCons):
-    #         creOpTags = []
-    #         desOpTags = []
-    #         for k in range(i):
-    #             creOpTags.append(subCons[j][k][1])
-    #             desOpTags.append(subCons[j][k][0])
-    #         if allDifferent(creOpTags) and allDifferent(desOpTags):
-    #             j += 1
-    #         else:
-    #             del(subCons[j])
-    #     for j in range(len(subCons)):
-    #         contractions.append(subCons[j])
-    # #del(subCons,creOpTags,desOpTags,contractionPairs)
-
-    # Generate all contractions
     contractions = []
     for i in range(maxConOrder + 1):
         subCons = makeTuples(i, contractionPairs)
         # Filter to keep only valid contractions (no duplicate tags)
-        for con in subCons:
-            creOpTags = [con[k][1] for k in range(i)]
-            desOpTags = [con[k][0] for k in range(i)]
-            if allDifferent(creOpTags) and allDifferent(desOpTags):
-                contractions.append(con)
-
-    # For each contraction, generate the resulting term
-    # ordered_terms = []
-    # for contraction in contractions:
-    #     conSign = 1
-    #     deltaFuncs = []
-    #     subOpString = []
-    #     subOpString.extend(ops)
-    #     for conPair in contraction:
-    #         index1 = ops[conPair[0]].indices[0]
-    #         index2 = ops[conPair[1]].indices[0]
-    #         deltaFuncs.append(kroneckerDelta([index1,index2]))
-    #         subOpString[conPair[0]] = 'contracted'
-    #         subOpString[conPair[1]] = 'contracted'
-    #         for q in subOpString[conPair[0]+1:conPair[1]]:
-    #             if not (q is 'contracted'):
-    #                 conSign *= -1
-    #     i = 0
-    #     while i < len(subOpString):
-    #         if subOpString[i] is 'contracted':
-    #             del(subOpString[i])
-    #         else:
-    #             i += 1
-    #     sortSign, sortedOps = sortOpsCore(subOpString)
-    #     totalSign = conSign * sortSign
+        contractions.extend([
+            con for con in subCons
+            if allDifferent([con[k][1] for k in range(i)]) and
+               allDifferent([con[k][0] for k in range(i)])
+        ])
 
     # For each contraction, generate the resulting term
     ordered_terms = []
