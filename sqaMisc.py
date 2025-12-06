@@ -21,6 +21,7 @@
 from .sqaTensor import tensor, sfExOp, creOp, desOp
 from .sqaOptions import options
 import time
+from itertools import combinations, permutations
 
 alpha_type = options.alpha_type
 beta_type = options.beta_type
@@ -29,41 +30,49 @@ beta_type = options.beta_type
 #--------------------------------------------------------------------------------------------------
 
 
-def makeTuples(n,inList):
-    "Returns a list of all n-tuples that can be formed from the elements of inList.\n" + \
-    "Warning: behavior may be crazy if inList consists of mutable objects."
-    outList = []
-    if n == 0:
-        return [[]]
-    if n == len(inList):
-        return [inList]
-    if n == 1:
-        for i in range(len(inList)):
-            outList.append([inList[i]])
-        return outList
-    tempList = []
-    for i in range(len(inList)-n+1):
-        tempList.append(inList[i])
-    index = 0
-    for i in range(len(tempList)):
-        subList = makeTuples(n-1,inList[i+1:])
-        for j in range(len(subList)):
-            outList.append([tempList[i]])
-            for k in range(len(subList[j])):
-                outList[-1].append(subList[j][k])
-    return outList
+# def makeTuples(n,inList):
+#     "Returns a list of all n-tuples that can be formed from the elements of inList.\n" + \
+#     "Warning: behavior may be crazy if inList consists of mutable objects."
+#     outList = []
+#     if n == 0:
+#         return [[]]
+#     if n == len(inList):
+#         return [inList]
+#     if n == 1:
+#         for i in range(len(inList)):
+#             outList.append([inList[i]])
+#         return outList
+#     tempList = []
+#     for i in range(len(inList)-n+1):
+#         tempList.append(inList[i])
+#     index = 0
+#     for i in range(len(tempList)):
+#         subList = makeTuples(n-1,inList[i+1:])
+#         for j in range(len(subList)):
+#             outList.append([tempList[i]])
+#             for k in range(len(subList[j])):
+#                 outList[-1].append(subList[j][k])
+#     return outList
 
+def makeTuples(n, inList):
+    """
+    Returns a list of all n-tuples that can be formed from the elements of inList.
+    """
+    return [list(combo) for combo in combinations(inList, n)]
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
 
 def allDifferent(x):
-    "Returns True if all the elements of x are different and False otherwise."
-    for i in range(len(x)):
-        if x[i] in x[i+1:]:
-            return False
-    return True
+    """
+    Returns True if all the elements of x are different and False otherwise.
+    """
+    # for i in range(len(x)):
+    #     if x[i] in x[i+1:]:
+    #         return False
+    # return True
+    return len(x) == len(set(x))
 
 
 #--------------------------------------------------------------------------------------------------
@@ -72,15 +81,16 @@ def allDifferent(x):
 
 def makePermutations(n):
     """
-    Returns a list of all permutations of the integers 0, 1, ..., n-1 
+    Returns a list of all permutations of the integers 0, 1, ..., n-1. 
     """
-    if n == 0:
-        return [[]]
-    perms = []
-    for perm in makePermutations(n-1):
-        for i in range(n):
-            perms.append(perm[:i] + [n-1] + perm[i:])
-    return perms
+    # if n == 0:
+    #     return [[]]
+    # perms = []
+    # for perm in makePermutations(n-1):
+    #     for i in range(n):
+    #         perms.append(perm[:i] + [n-1] + perm[i:])
+    # return perms
+    return [list(perm) for perm in permutations(range(n))]
 
 
 #--------------------------------------------------------------------------------------------------
@@ -91,20 +101,24 @@ def get_num_perms(ti,bi):
     """
     Returns the number of permutations between two lists of the integers 0 to N.
     """
+    # x = []
+    # for i in range(len(ti)):
+    #     x.append([ti[i],bi[i]])
+    # x.sort(lambda a,b: cmp(a[1],b[1]))
+    # for i in range(len(x)):
+    #     x[i] = x[i][0]
 
-    x = []
-    for i in range(len(ti)):
-        x.append([ti[i],bi[i]])
-    x.sort(lambda a,b: cmp(a[1],b[1]))
-    for i in range(len(x)):
-        x[i] = x[i][0]
+    # Sort ti by bi and extract reordered ti
+    x = [t for t, _ in sorted(zip(ti, bi), key=lambda p: p[1])]
+
+    # Count the number of swaps needed to sort the array
     i = 0
     n_perms = 0
     while i < len(x)-1:
         if x[i] != i:
+            # Swap elements
             t = x[i]
-            x[i] = x[t]
-            x[t] = t
+            x[i], x[t] = x[t], x[i]
             n_perms += 1
         else:
             i += 1
