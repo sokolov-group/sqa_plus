@@ -207,53 +207,56 @@ class term:
         i = 0
         while i < len(self.tensors):
             t = self.tensors[i]
-            
-            # If the term is a delta funciton with a repeated index, remove it
-            if isinstance(t, kroneckerDelta) and (t.indices[0] == t.indices[1]) and (t.indices[0].userDefined == t.indices[1].userDefined):
-                del(self.tensors[i])
 
-            # If the term is a delta function with contractable indices, contract them and remove the delta func
-            elif isinstance(t, kroneckerDelta) and (t.indices[0].isSummed or t.indices[1].isSummed):
-                i0 = t.indices[0]
-                i1 = t.indices[1]
-
-                # Check that the indices have the same number of type groups
-                if len(i0.indType) != len(i1.indType):
-                    raise RuntimeError("Cannot contract indices %s, %s.    They have different numbers of type groups." %(str(i0), str(i1)))
-
-                # Determine the type of the new index based on the overlap between
-                # the types of the two indices
-                typeOverlap = []
-                for j in range(len(i0.indType)):
-                    typeOverlap.append([])
-                    for typeString in i0.indType[j]:
-                        if typeString in i1.indType[j]:
-                            typeOverlap[-1].append(typeString)
-
-                # If there is no overlap between any of the type groups, the delta function is zero
-                if ( len(i0.indType) > 0 or len(i1.indType) > 0 ) and [] in typeOverlap:
-                    self.numConstant = 0.0
-                    return
-
-                # Create the new index
-                if not i0.isSummed:
-                    newIndex = index(i0.name, typeOverlap, i0.isSummed, i0.userDefined)
-                else:
-                    newIndex = index(i1.name, typeOverlap, i1.isSummed, i1.userDefined)
-
-                # Remove the delta function
-                del(self.tensors[i])
-
-                # Excecute the index replacement
-                for ten in self.tensors:
-                    for j in range(len(ten.indices)):
-                        if ten.indices[j] in [i0,i1]:
-                            ten.indices[j] = newIndex.copy()
-
-            # Otherwise move on to the next tensor
-            else:
+            # Skip non-kronecker delta functions
+            if not isinstance(t, kroneckerDelta):
                 i += 1
+                continue
 
+            # Kronecker delta indices
+            i0, i1 = t.indices[0], t.indices[1]
+
+            # Remove delta functions with a repeated index
+            if (i0 == i1) and (i0.userDefined == i1.userDefined):
+                del self.tensors[i]
+                continue
+
+            # Skip delta functions with no contractible indices
+            if not (i0.isSummed or i1.isSummed):
+                i += 1
+                continue
+
+            # Perform contraction for delta functions with contractible indices
+            # Validate that indices are compatible
+            if len(i0.indType) != len(i1.indType):
+                raise RuntimeError(f"Cannot contract indices {i0}, {i1}. They have different numbers of type groups.")
+
+            # Determine new index type based on type overlap
+            typeOverlap = [
+                [typeString for typeString in i0.indType[j] if typeString in i1.indType[j]]
+                for j in range(len(i0.indType))
+            ]
+
+            # If no overlap, then delta function is zero
+            if (len(i0.indType) > 0 or len(i1.indType) > 0) and [] in typeOverlap:
+                self.numConstant = 0.0
+                return
+
+            # Create the new index
+            if not i0.isSummed:
+                newIndex = index(i0.name, typeOverlap, i0.isSummed, i0.userDefined)
+            else:
+                newIndex = index(i1.name, typeOverlap, i1.isSummed, i1.userDefined)
+
+            # Remove the delta function
+            del self.tensors[i]
+
+            # Replace old indices with new index
+            for ten in self.tensors:
+                ten.indices = [
+                    newIndex.copy() if old_idx in (i0, i1) else old_idx
+                    for old_idx in ten.indices
+                ]
 
     #------------------------------------------------------------------------------------------------
 
