@@ -28,7 +28,7 @@
 from functools import total_ordering
 from multiprocessing import Pool, cpu_count
 from collections import deque
-from itertools import islice, count
+from itertools import islice, count, groupby
 
 from .sqaIndex import index
 from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
@@ -396,25 +396,24 @@ class term:
         fcList = [t for t in self.tensors if t.freelyCommutes]
         ncList = [t for t in self.tensors if not t.freelyCommutes]
 
-        nameGroups = {}
-        for t in fcList:
-            if t.name not in nameGroups:
-                nameGroups[t.name] = []
-            nameGroups[t.name].append(t)
+        fcList.sort(key=lambda t: t.name)
 
-        # Sort further by tensor subclass and length (use name as tie-breaker)
-        ##sort_key = lambda item: (item[1][0].__class__.__name__, len(item[1]), item[0], tuple(ind.indType for ind in item[1][0].indices))
-        sort_key = lambda item: (item[1][0].__class__.__name__, len(item[1]), item[0])
-        nameGroups = [group for _, group in sorted(nameGroups.items(), key=sort_key)]
+        nameGroups = [list(group) for _, group in groupby(fcList, key=lambda t: t.name)]
+
+        # Sort groups further by tensor subclass and group length (use name as tie-breaker)
+        nameGroups.sort(key=lambda g: (g[0].__class__.__name__, len(g), g[0].name))
 
         # Add non-commuting tensors as individual groups
         nameGroups.extend([[t] for t in ncList])
- 
-        # Sort within all groups by index type and name
-        sort_key = lambda t: (tuple(ind.indType for ind in t.indices), tuple(str(ind.name) for ind in t.indices))
-        ##sort_key = lambda t: (t.__class__.__name__, len(t.indices), t.name, tuple(ind.indType for ind in t.indices), tuple(str(ind.name) for ind in t.indices))
+
+        ## Sort within all groups by index type and name
+        #sort_key = lambda t: (tuple(ind.indType for ind in t.indices), tuple(str(ind.name) for ind in t.indices))
+        #for group in nameGroups:
+        #    group.sort(key=sort_key)
+
+        # Sort within all groups by tensor length and spatial type
         for group in nameGroups:
-            group.sort(key=sort_key)
+            group.sort(key=lambda t: (len(t.indices), list(str(ind.name) for ind in t.indices)))
 
         # Generate an alphabet for use in renaming indices
         # This is done to avoid renaming with an index name already in use.
