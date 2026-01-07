@@ -22,7 +22,11 @@ from .sqaTerm import term
 from .sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type, get_spatial_index_type
 from .sqaOptions import options
 
+MAX_INT_SIZE = 6
+
 def genIntermediates(input_terms, ind_str = None, custom_path = None):
+
+    #options.verbose = True
 
     # Import options from sqaOptions class
     trans_rdm = options.genIntermediates.trans_rdm
@@ -116,14 +120,19 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
                 mod_term_list.append(_term)
                 continue
 
-            if options.verbose:
-                print(f'\n> Intermediate will be created for term {_term_ind}, reducing operations by {path_info.speedup:.2f}x.')
-
             # Save tuples that indicate optimized order of contracting tensors
             contract_order = [contraction for contraction in path[:factor_depth]]
 
             # Determine contraction path and indices of intermediates
             int_indices = [contraction[2].split('->')[1] for contraction in path_info.contraction_list][:factor_depth]
+
+            if options.verbose:
+                print(f'\n> Intermediate will be created for term {_term_ind}, reducing operations by {path_info.speedup:.2f}x.')
+
+        if any(len(item) > MAX_INT_SIZE for item in int_indices):
+            print(f"Intermediate size exceeds maximum, skipping term {_term_ind}.")
+            mod_term_list.append(_term)
+            continue
 
         # Define scale outside of loop
         scale_factor_total = 1.0
@@ -434,6 +443,7 @@ def check_intermediates(interm_list, int_term, int_tensor):
     int_path_rank = assign_path_rank(int_term)
     int_space_rank  = assign_space_rank(int_term)
     int_tensor_types = [get_spatial_index_type(ind.indType) for ind in int_tensor.indices]
+    #int_canon = canonicalize_einsum_indices(int_term, int_tensor)
 
     # Check every intermediate in the existing list
     for list_term, list_tensor in interm_list:
@@ -445,7 +455,13 @@ def check_intermediates(interm_list, int_term, int_tensor):
         # Compare the names of the tensors that make up each term
         if [t.name for t in list_term.tensors] != [t.name for t in int_term.tensors]:
             continue
-    
+
+        # Compare canonicalized indices of INT expressions
+        int_canon  = canonicalize_einsum_indices(int_term, int_tensor)
+        list_canon = canonicalize_einsum_indices(list_term, list_tensor)
+        if int_canon != list_canon:
+            continue
+
         # Last check is to compare the indices of the tensors
         list_path_rank = assign_path_rank(list_term)
         list_space_rank = assign_space_rank(list_term)
@@ -576,3 +592,22 @@ def renumber_intermediates(modified_terms, intermediate_terms):
             if _tensor.name in name_map:
                 _tensor.name = name_map[_tensor.name]
 
+def canonicalize_einsum_indices(sqa_term, sqa_tensor):
+    lhs_list = [''.join(i.name for i in t.indices) for t in sqa_term.tensors]
+    rhs_str = ''.join(i.name for i in sqa_tensor.indices)
+
+    canon_chars = list('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    mapping = {}
+    next_char_idx = 0
+
+    # Process indices in lhs and rhs
+    for idx_str in lhs_list + [rhs_str]:
+        for char in idx_str:
+            if char not in mapping:
+                mapping[char] = canon_chars[next_char_idx]
+                next_char_idx += 1
+
+    # Apply mapping to create canonical forms
+    lhs_canon = [''.join(mapping[char] for char in part) for part in lhs_list]
+    rhs_canon = ''.join(mapping[char] for char in rhs_str)
+    return (lhs_canon, rhs_canon)
