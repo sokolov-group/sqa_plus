@@ -171,3 +171,18 @@ def is_beta_index_type(index_type):
     """Returns True of any index is a beta-spin type."""
     spin_index_type = get_spin_index_type(index_type)
     return is_index_type(spin_index_type, options.beta_type)
+
+def ind_type_order(indice_types):
+    """Return an ordering integer for spatial index types: core < active < virtual < other."""
+    if isinstance(indice_types, index):
+        indice_types = indice_types.indType
+
+    if is_cvs_core_index_type(indice_types) or is_core_index_type(indice_types):
+        return 0
+    if is_cvs_valence_index_type(indice_types):
+        return 1
+    if is_active_index_type(indice_types):
+        return 2
+    if is_virtual_index_type(indice_types):
+        return 3
+    return 4

@@ -27,14 +27,8 @@ from .sqaNormalOrder import normalOrder
 def commutator(leftInput, rightInput, contract = True, combine = True):
 
     # Convert inputs that are terms into lists of terms
-    if isinstance(leftInput,term):
-        leftTerms = [leftInput]
-    else:
-        leftTerms = leftInput
-    if isinstance(rightInput,term):
-        rightTerms = [rightInput]
-    else:
-        rightTerms = rightInput
+    leftTerms  = [leftInput]  if isinstance(leftInput, term)  else leftInput
+    rightTerms = [rightInput] if isinstance(rightInput, term) else rightInput
 
     # Check input integrity
     TypeErrorMessage = "commutator inputs must be terms or lists of terms"
@@ -43,22 +37,22 @@ def commutator(leftInput, rightInput, contract = True, combine = True):
     if not all(isinstance(t, term) for t in leftTerms + rightTerms):
         raise TypeError(TypeErrorMessage)
 
-    # Construct terms resulting from the commutator
-    preNOTerms = [] #terms before normal ordering
-    for lterm in leftTerms:
-        for rterm in rightTerms:
-            preNOTerms.append( multiplyTerms(lterm,rterm) )
-            preNOTerms.append( multiplyTerms(rterm,lterm) )
-            preNOTerms[-1].scale(-1)
+    # Construct terms resulting from the commutator (before normal ordering)
+    preNOTerms = []
+    for l in leftTerms:
+        for r in rightTerms:
+            preNOTerms.append(multiplyTerms(l, r))
+            pdt = multiplyTerms(r, l)
+            pdt.scale(-1)
+            preNOTerms.append(pdt)
 
     # For each term, apply Wick's theorem to convert it to normal order
-    noTerms = [] #terms after normal ordering
+    noTerms = []
     for t in preNOTerms:
         noTerms.extend(normalOrder(t))
     del(preNOTerms)
 
-    # Contract any delta functions resulting from the normal ordering,
-    # unless told not to
+    # Contract any delta functions resulting from the normal ordering
     if contract:
         for t in noTerms:
             t.contractDeltaFuncs()
