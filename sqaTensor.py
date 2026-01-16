@@ -119,13 +119,18 @@ class tensor:
     #------------------------------------------------------------------------------------------------
 
     def __str__(self):
-        retval = self.name + "("
-        for i in range(len(self.indices)):
-            retval += self.indices[i].name #+ " " + str(self.indices[i].type)
-            if i < len(self.indices)-1:
-                retval += ","
-        retval += ")"
-        return retval
+        #retval = self.name + "("
+        #for i in range(len(self.indices)):
+        #    retval += self.indices[i].name #+ " " + str(self.indices[i].type)
+        #    if i < len(self.indices)-1:
+        #        retval += ","
+        #retval += ")"
+        #return retval
+        indices_str = ",".join(index.name for index in self.indices)
+        return f"{self.name}({indices_str})"
+
+    def __repr__(self):
+        return str(self)
 
     #------------------------------------------------------------------------------------------------
 
@@ -301,7 +306,6 @@ class sfExOp(tensor):
 
     def __init__(self, indices):
         # Check that there are an even number of indices
-        #if len(indices)/2 != (len(indices)+1)/2:
         if len(indices) % 2 != 0:
             raise ValueError("A spin free excitation operator (the sfExOp class) must have an even number of indices")
 
@@ -312,9 +316,7 @@ class sfExOp(tensor):
         self.name = "E%i" %self.order
 
         # Initialize indices
-        self.indices = []
-        for i in indices:
-            self.indices.append( i.copy() )
+        self.indices = [i.copy() for i in indices]
 
         # Initialize permutations and factors
         (self.permutations,self.factors) = (None,None)
@@ -322,23 +324,19 @@ class sfExOp(tensor):
         # Initialize symmetries
         self.symmetries = []
         for i in range(self.order-1):
-            if i == 0:
-                temp_tup = (1,)
-            else:
-                temp_tup = (0,)
-            for j in range(1,2*self.order):
+            temp = [1] if i == 0 else [0]
+            for j in range(1, 2*self.order):
                 if j == i:
-                    temp_tup = temp_tup + (i+1,)
-                elif j == i+1:
-                    temp_tup = temp_tup + (i,)
-                elif j == i+self.order:
-                    temp_tup = temp_tup + (i+1+self.order,)
-                elif j == i+1+self.order:
-                    temp_tup = temp_tup + (i+self.order,)
+                    temp.append(i + 1)
+                elif j == i + 1:
+                    temp.append(i)
+                elif j == i + self.order:
+                    temp.append(i + 1 + self.order)
+                elif j == i + 1 + self.order:
+                    temp.append(i + self.order)
                 else:
-                    temp_tup = temp_tup + (j,)
-            self.symmetries.append(symmetry(temp_tup, 1))
-                    
+                    temp.append(j)
+            self.symmetries.append(symmetry(tuple(temp), 1))
 
     #------------------------------------------------------------------------------------------------
 
@@ -413,8 +411,7 @@ class creDesTensor(tensor):
             if isinstance(op, desOp):
                 self.nDes += 1
                 desFlag = True
-
-            elif isinstance(op, creOp):
+            else:
                 if desFlag:
                     raise TypeError(TypeErrorMessage)
                 self.nCre += 1
@@ -510,11 +507,11 @@ class creDesTensor_original(tensor):
         self.indices = []
         desFlag = False
         for op in ops:
-            if (not isinstance(op, creOp)) and (not isinstance(op, desOp)):
+            if not isinstance(op, (creOp, desOp)):
                 raise TypeError(TypeErrorMessage)
             if isinstance(op, desOp):
                 desFlag = True
-            if isinstance(op, creOp):
+            else:
                 self.nCre += 1
                 if desFlag:
                     raise TypeError(TypeErrorMessage)
@@ -522,23 +519,20 @@ class creDesTensor_original(tensor):
 
         # Initialize symmetries
         self.symmetries = []
-        swapValues = range(len(self.indices)-1)
+        swapValues = list(range(len(self.indices) - 1))
         if self.nCre > 0:
-            del(swapValues[self.nCre-1])
+            swapValues.pop(self.nCre - 1)
         for i in swapValues:
-            if i == 0:
-                temp_tup = (1,)
-            else:
-                temp_tup = (0,)
-            for j in range(1,len(self.indices)):
+            temp = [1] if i == 0 else [0]
+            for j in range(1, len(self.indices)):
                 if j == i:
-                    temp_tup = temp_tup + (i+1,)
+                    temp.append(i + 1)
                 elif j == i+1:
-                    temp_tup = temp_tup + (i,)
+                    temp.append(i)
                 else:
-                    temp_tup = temp_tup + (j,)
-            self.symmetries.append(symmetry(temp_tup, -1))
-                    
+                    temp.append(j)
+            self.symmetries.append(symmetry(tuple(temp), -1))
+
     #------------------------------------------------------------------------------------------------
 
     def __eq__(self, other):
