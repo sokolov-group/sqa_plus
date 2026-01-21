@@ -102,6 +102,13 @@ class index:
         if isinstance(self.userDefined, str):
             self.name = self.userDefined
 
+    def  __repr__(self):
+        return f"Index_{self.name}({', '.join(x[0] for x in self.indType)})"
+
+        #greek_map = {"alpha": "\u03B1", "beta": "\u03B2"}
+        #name_map = {name[0]: greek_map.get(name[0], name[0]) for name in self.indType}
+        #return f"{self.name}({', '.join(name_map[name[0]] for name in self.indType)})"
+
 # SecondQuantizationAlgebra Plus
 #
 # Functions implemented to automate test index types
