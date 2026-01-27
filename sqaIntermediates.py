@@ -22,7 +22,7 @@ from .sqaTerm import term
 from .sqaIndex import is_core_index_type, is_active_index_type, is_virtual_index_type, get_spatial_index_type
 from .sqaOptions import options
 
-MAX_INT_SIZE = 6
+MAX_INT_SIZE = 10 #6
 
 def genIntermediates(input_terms, ind_str = None, custom_path = None):
 
@@ -47,7 +47,8 @@ def genIntermediates(input_terms, ind_str = None, custom_path = None):
         optimizer = 'random-greedy'
     else:
         optimizer = oe.DynamicProgramming(
-            minimize='size',    # minimize largest intermediate tensor size
+            minimize='flops',    # minimize total FLOP count
+            #minimize='size',    # minimize largest intermediate tensor size
             search_outer=True,  # search through outer products as well
             cost_cap=False,     # don't use cost-capping strategy
         )
