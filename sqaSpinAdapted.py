@@ -39,6 +39,13 @@ def convertSpinIntegratedToAdapted(terms_si):
     options.print_header("Converting Spin-Integrated Tensors to Spin-Adapted")
     sys.stdout.flush()
 
+    if not terms_si:
+        print("No terms provided for spin-adaption.")
+        options.print_divider()
+        sys.stdout.flush()
+        return
+        #return terms_si
+
     # Convert Cre/Des Objects to RDM Objects
     convert_credes_to_rdm(terms_si, trans_rdm = trans_rdm)
 

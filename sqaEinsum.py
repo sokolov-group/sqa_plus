@@ -26,6 +26,12 @@ from .sqaOptions import options
 def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
               trans_indices_string = None, intermediate_list = None, help = False, **tensor_rename):
 
+    if not terms:
+        options.print_header("genEinsum equations")
+        print('No terms provided for einsum equations.')
+        options.print_divider()
+        return
+
     # Check if settings were done by arguments or by the sqaOptions class
     if not lhs_string:
         lhs_string = options.genEinsum.lhs_string
