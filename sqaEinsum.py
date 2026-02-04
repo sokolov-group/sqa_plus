@@ -23,31 +23,35 @@ from .sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
 from .sqaMatrixBlock import dummyLabel
 from .sqaOptions import options
 
-def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
-              trans_indices_string = None, intermediate_list = None, help = False, **tensor_rename):
-
+def genEinsum(
+    terms,
+    lhs_string=None,
+    indices_string=None,
+    suffix=None,
+    trans_indices_string=None,
+    intermediate_list=None,
+    help=False,
+    **tensor_rename,
+):
+ 
     if not terms:
         options.print_header("genEinsum equations")
         print('No terms provided for einsum equations.')
         options.print_divider()
         return
 
-    # Check if settings were done by arguments or by the sqaOptions class
-    if not lhs_string:
-        lhs_string = options.genEinsum.lhs_string
+    # Use defaults if options not provided in arguments or set by sqaOptions class
+    lhs_string = lhs_string or options.genEinsum.lhs_string or "temp"
+    indices_string = indices_string or options.genEinsum.indices_string
+    trans_indices_string = trans_indices_string or options.genEinsum.trans_indices_string
+    intermediate_list = intermediate_list or options.genEinsum.intermediate_list
+    suffix = suffix or options.genEinsum.suffix
 
-    if not indices_string:
-        indices_string = options.genEinsum.indices_string
+    # spin-orbital suffix
+    if suffix is None and options.spin_orbital:
+        suffix = "so"
 
-    if not trans_indices_string:
-        trans_indices_string = options.genEinsum.trans_indices_string
-
-    if not suffix:
-        suffix = options.genEinsum.suffix
-
-    if not intermediate_list:
-        intermediate_list = options.genEinsum.intermediate_list
-
+    # Configuration options
     trans_rdm = options.genEinsum.trans_rdm
     remove_trans_rdm_constant = options.genEinsum.remove_trans_rdm_constant
     remove_core_integrals = options.genEinsum.remove_core_integrals
@@ -60,92 +64,44 @@ def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
         dummyLabel(terms, keep_user_defined_dummy_names)
 
     # Store custom names if provided by user
-    custom_names = []
-    if tensor_rename:
-        for old_name, new_name in tensor_rename.items():
-            custom_names.append((old_name, new_name))
-
-    # Default to 'temp' as name of matrix being created w/ einsum function
-    if not lhs_string:
-        lhs_string = 'temp'
-
-    # Default to spin-orbital suffix if not defined by user
-    if not suffix and options.spin_orbital:
-        suffix = 'so'
+    custom_names = list(tensor_rename.items()) if tensor_rename else []
 
     ################################################
     # IF PROVIDED, PRINT EINSUMS FOR INT TERMS
     ################################################
+    trans_int = []
+    removed_int = []
+    int_einsum_list = []
+
     if intermediate_list:
 
-        # Create empty to list to store einsum expressions for provided intermediate terms
-        int_einsum_list = []
-
-        # Determined which intermediates are defined w/ trans_rdm contraction
-        trans_int = []
+        # Process intermediates with transition RDM contractions
         if trans_rdm:
             trans_int = get_trans_intermediates(intermediate_list)
 
-        # If using effective Hamiltonian, remove double-counted contributions to core terms
+        # Remove double-counted contributions to core terms
         if remove_core_integrals:
-            intermediate_list, removed_int = remove_core_int(intermediate_list, int_terms = True)
+            intermediate_list, removed_int = remove_core_int(intermediate_list, int_terms=True)
 
-        # Iterate through the list of provided intermediates
-        for int_ind, (int_term, int_tensor) in enumerate(intermediate_list):
-
-            # Pass tensors of term to function to create string representation of contraction indices and tensor names
-            int_tensor_inds, int_tensor_names = get_tensor_info(intermediate_list[int_ind][0].tensors, trans_indices_string,
-                                                                ''.join([i.name for i in intermediate_list[int_ind][1].indices]),
-                                                                suffix, trans_int, custom_names)
-
-            # Rename intermediates in tensor definitions
-            if custom_names:
-                if 'INT' in [x for x,y in custom_names]:
-                    new_name = make_custom_name(int_tensor, custom_names)
-                    int_einsum = new_name + ' = '
-
-            else:
-                int_einsum = int_tensor.name + ' = '
-
-            # Define term for either optEinsum or built-in Numpy 'einsum' function
-            if opt_einsum_terms:
-                int_einsum += 'einsum('
-            else:
-                int_einsum += 'np.einsum('
-
-            # Add contraction and tensor info
-            int_tensor_info = (', '.join([str("'") + int_tensor_inds + str("'")] + int_tensor_names))
-            int_einsum += int_tensor_info
-
-            # Add optimize flag to einsum if enabled
-            if optimize and opt_einsum_terms:
-                int_einsum += ', optimize = einsum_type)'
-            elif optimize and not opt_einsum_terms:
-                int_einsum += ', optimize = True)'
-            else:
-                int_einsum += ')'
-
-            # Append einsum definition to list, returned at the end of function
+        # Generate einsum for each intermediate
+        for int_term, int_tensor in intermediate_list:
+            int_einsum = _build_intermediate_einsum(
+                int_term,
+                int_tensor,
+                trans_indices_string,
+                suffix,
+                trans_int,
+                custom_names,
+                opt_einsum_terms,
+                optimize,
+            )
             int_einsum_list.append(int_einsum)
 
     ################################################
     # GENERATE EINSUM EXPRESSIONS FOR PROVIDED TERMS
     ################################################
-    ## CONVERT ALL CRE/DES OBJECTS to CREDESTENSOR OBJECT
-    for term_ind, term in enumerate(terms):
-
-        # List for storing cre/des operators
-        credes_ops = []
-
-        # Append all cre/des operators to list
-        for tens in term.tensors:
-            if isinstance(tens, (creOp, desOp)):
-                credes_ops.append(tens)
-
-        # Modify term in list to use creDesTensor object instead of cre/des objects
-        if credes_ops:
-            terms[term_ind].tensors = [ten for ten in terms[term_ind].tensors if ten not in credes_ops]
-            terms[term_ind].tensors.append(creDesTensor(credes_ops, trans_rdm))
+    # Convert Cre/Des Objects to RDM Objects
+    _convert_credes_to_rdm(terms, trans_rdm)
 
     # Constants terms in CAS blocks are removed by default, print warning
     if trans_rdm and remove_trans_rdm_constant and intermediate_list and trans_int:
@@ -246,6 +202,59 @@ def genEinsum(terms, lhs_string = None, indices_string = None, suffix = None,
         return int_einsum_list, einsum_list
     else:
         return einsum_list
+
+def _build_intermediate_einsum(
+    int_term,
+    int_tensor,
+    trans_indices_string,
+    suffix,
+    trans_int,
+    custom_names,
+    opt_einsum_terms,
+    optimize,
+):
+    """Build einsum expression for an intermediate tensor."""
+
+    # Get tensor information
+    int_tensor_inds, int_tensor_names = get_tensor_info(
+        int_term.tensors,
+        trans_indices_string,
+        "".join([i.name for i in int_tensor.indices]),
+        suffix,
+        trans_int,
+        custom_names,
+    )
+
+    # Define tensor name for intermediate
+    if custom_names and "INT" in [old for old, _ in custom_names]:
+        tensor_name = make_custom_name(int_tensor, custom_names)
+    else:
+        tensor_name = int_tensor.name
+
+    # Build einsum expression
+    einsum_func = "einsum(" if opt_einsum_terms else "np.einsum("
+    tensor_info = ", ".join([f"'{int_tensor_inds}'"] + int_tensor_names)
+
+    # Add optimize flag
+    if optimize:
+        opt_flag = ", optimize = einsum_type)" if opt_einsum_terms else ", optimize = True)"
+    else:
+        opt_flag = ")"
+
+    return f"{tensor_name} = {einsum_func}{tensor_info}{opt_flag}"
+
+def _convert_credes_to_rdm(terms, trans_rdm):
+    """Convert creOp/desOp objects to creDesTensor objects."""
+
+    for term_credes in terms:
+
+        # Append all cre/des operators to list
+        credes_ops = [tens for tens in term_credes.tensors if isinstance(tens, (creOp, desOp))]
+
+        # Modify term in list to use creDesTensor object instead of cre/des objects
+        if credes_ops:
+            other_tensors = [tens for tens in term_credes.tensors if tens not in credes_ops]
+            term_credes.tensors = other_tensors + [creDesTensor(credes_ops, trans_rdm)]
 
 def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, trans_int = None, custom_names = None):
 
