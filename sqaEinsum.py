@@ -23,6 +23,8 @@ from .sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
 from .sqaMatrixBlock import dummyLabel
 from .sqaOptions import options
 
+from fractions import Fraction
+
 def genEinsum(
     terms,
     lhs_string=None,
@@ -48,7 +50,7 @@ def genEinsum(
     suffix = suffix or options.genEinsum.suffix
 
     # spin-orbital suffix
-    if suffix is None and options.spin_orbital:
+    if not suffix and options.spin_orbital:
         suffix = "so"
 
     # Configuration options
@@ -104,87 +106,32 @@ def genEinsum(
     _convert_credes_to_rdm(terms, trans_rdm)
 
     # Constants terms in CAS blocks are removed by default, print warning
-    if trans_rdm and remove_trans_rdm_constant and intermediate_list and trans_int:
-        terms, const_terms = remove_trans_rdm_const(terms, trans_int)
-
-    elif trans_rdm and remove_trans_rdm_constant:
-        terms, const_terms = remove_trans_rdm_const(terms)
+    if trans_rdm and remove_trans_rdm_constant:
+        args = (terms, trans_int) if (intermediate_list and trans_int) else (terms,)
+        terms, const_terms = remove_trans_rdm_const(*args)
 
     # If using effective Hamiltonian, remove double-counted contributions to core terms
-    if intermediate_list and remove_core_integrals and removed_int:
-        terms, core_terms = remove_core_int(terms, removed_int)
-
-    elif remove_core_integrals:
-        terms, core_terms = remove_core_int(terms)
-
-    # Create empty list for storing einsums
+    if remove_core_integrals:
+        args = (terms, removed_int) if (intermediate_list and removed_int) else (terms,)
+        terms, core_terms = remove_core_int(*args)
+ 
+    # Generate einsum expressions for each term
     einsum_list = []
 
-    # Iterate through terms and create einsum expressions
     for term_ind, term in enumerate(terms):
-
-        ## PROCEED WITH GENERATING EINSUMS
-        # Start to define einsum string
-        einsum = lhs_string + ' '
-
-        # Determine sign of term
-        pos = True
-        if term.numConstant < 0:
-            pos = False
-
-        # Set up equals sign for first term and rest of terms
-        if term_ind == 0 and pos:
-            einsum += ' = '
-        elif term_ind == 0 and not pos:
-            einsum += '=- '
-        elif term_ind != 0 and pos:
-            einsum += '+= '
-        elif term_ind != 0 and not pos:
-            einsum += '-= '
-
-        # Add appropriate scaling factor
-        if round(abs(term.numConstant), 15) != 1.0:
-            from fractions import Fraction
-
-            frac_constant = Fraction(abs(term.numConstant)).limit_denominator()
-            if round(float(frac_constant), 12) == round(abs(term.numConstant), 12):
-                einsum = einsum + str(abs(frac_constant)) + ' * '
-            else:
-                einsum = einsum + str(abs(term.numConstant)) + ' * '
-
-        # Define term for either optEinsum or built-in Numpy 'einsum' function
-        if opt_einsum_terms:
-            einsum += 'einsum('
-        else:
-            einsum += 'np.einsum('
-
-        # Pass tensors of term to function to create string representation of contraction indices and tensor names
-        if trans_rdm and intermediate_list:
-            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_indices_string, indices_string,
-                                                        suffix, trans_int, custom_names)
-        else:
-            tensor_inds, tensor_names = get_tensor_info(term.tensors, trans_indices_string, indices_string,
-                                                        suffix, custom_names)
-
-        # Add contraction and tensor info
-        tensor_info = (', '.join([str("'") + tensor_inds + str("'")] + tensor_names))
-        einsum += tensor_info
-
-        # Add optimize flag to einsum if enabled
-        if optimize and opt_einsum_terms:
-            einsum += ', optimize = einsum_type)'
-        elif optimize and not opt_einsum_terms:
-            einsum += ', optimize = True)'
-        else:
-            einsum += ')'
-
-        # Append a '.copy()' function call if the term is made up of only one tensor
-        if len(term.tensors) == 1:
-            einsum += '.copy()'
-
-        # Append completed einsum to list
-        if not 'none' in einsum:
-            einsum_list.append(einsum)
+        einsum = _build_term_einsum(
+            term,
+            term_ind,
+            lhs_string,
+            trans_indices_string,
+            indices_string,
+            suffix,
+            trans_int if (trans_rdm and intermediate_list) else None,
+            custom_names,
+            opt_einsum_terms,
+            optimize,
+        )
+        einsum_list.append(einsum)
 
     if intermediate_list:
         options.print_header("genEinsum intermediates")
@@ -255,6 +202,68 @@ def _convert_credes_to_rdm(terms, trans_rdm):
         if credes_ops:
             other_tensors = [tens for tens in term_credes.tensors if tens not in credes_ops]
             term_credes.tensors = other_tensors + [creDesTensor(credes_ops, trans_rdm)]
+
+def _build_term_einsum(
+    term,
+    term_ind,
+    lhs_string,
+    trans_indices_string,
+    indices_string,
+    suffix,
+    trans_int,
+    custom_names,
+    opt_einsum_terms,
+    optimize,
+):
+    """Build einsum expression for a single term."""
+
+    # Set up equals sign for first term and rest of terms
+    is_negative = term.numConstant < 0
+    if term_ind == 0:
+        assign_op = "=- " if is_negative else " = "
+    else:
+        assign_op = "-= " if is_negative else "+= "
+
+    einsum = f"{lhs_string} {assign_op}"
+
+    # Add scaling factor
+    abs_constant = abs(term.numConstant)
+    if round(abs_constant, 15) != 1.0:
+        frac_constant = Fraction(abs_constant).limit_denominator()
+        if round(float(frac_constant), 12) == round(abs_constant, 12):
+            einsum += f"{frac_constant} * "
+        else:
+            einsum += f"{abs_constant} * "
+
+    # Build einsum function call
+    einsum_func = "einsum(" if opt_einsum_terms else "np.einsum("
+    einsum += einsum_func
+
+    # Get tensor information
+    tensor_inds, tensor_names = get_tensor_info(
+        term.tensors,
+        trans_indices_string,
+        indices_string,
+        suffix,
+        trans_int,
+        custom_names,
+    )
+
+    # Add tensor information
+    tensor_info = ", ".join([f"'{tensor_inds}'"] + tensor_names)
+    einsum += tensor_info
+
+    # Add optimize flag
+    if optimize:
+        opt_flag = ", optimize = einsum_type)" if opt_einsum_terms else ", optimize = True)"
+    else:
+        opt_flag = ")"
+
+    # Append copy function call for single-tensor terms
+    if len(term.tensors) == 1:
+        opt_flag += '.copy()'
+
+    return einsum + opt_flag
 
 def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, trans_int = None, custom_names = None):
 
