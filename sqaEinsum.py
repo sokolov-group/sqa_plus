@@ -265,27 +265,34 @@ def _build_term_einsum(
 
     return einsum + opt_flag
 
-def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, trans_int = None, custom_names = None):
+def get_tensor_info(
+    sqa_tensors,
+    trans_indices_string,
+    indices_string,
+    suffix,
+    trans_int=None,
+    custom_names=None
+):
 
     # Import settings from options class
     spin_integrated_tensors = options.genEinsum.spin_integrated_tensors
     cvs_tensors = options.genEinsum.cvs_tensors
 
-    # Pre-define list of names of tensors used in SQA and make list to store any new tensor 'types'
+    # Make a list out of the user-provided external indices
+    cvs_indices_list = options.genEinsum.cvs_indices_list
+    cvs_indices_list = list(cvs_indices_list) if isinstance(cvs_indices_list, str) else cvs_indices_list
+
+    val_indices_list = options.genEinsum.valence_indices_list
+    val_indices_list = list(val_indices_list) if isinstance(val_indices_list, str) else val_indices_list
+
+    # Process tensors
     tensor_names = []
     tensor_inds  = []
 
-    # Make a list out of the user-provided external indices
-    cvs_indices_list = options.genEinsum.cvs_indices_list
-    if isinstance(cvs_indices_list, str):
-        cvs_indices_list = list(cvs_indices_list)
-
-    valence_indices_list = options.genEinsum.valence_indices_list
-    if isinstance(valence_indices_list, str):
-        valence_indices_list = list(valence_indices_list)
-
-    # Iterate through all the provided tensors
     for tens in sqa_tensors:
+
+        tensor_name = None
+
         # Handle special case of kroneckerDelta (kdelta) object
         if isinstance(tens, kroneckerDelta):
             tensor_name = 'np.identity('
@@ -293,13 +300,13 @@ def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, t
             # Determine orbital space of kdelta
             if (is_core_index_type(tens.indices[0]) and is_core_index_type(tens.indices[1])):
                 if cvs_tensors:
-                    if cvs_indices_list and valence_indices_list:
+                    if cvs_indices_list and val_indices_list:
                         if (tens.indices[0].name in cvs_indices_list) and (tens.indices[1].name in cvs_indices_list):
                             orb_space = 'ncvs'
-                        elif (tens.indices[0].name in valence_indices_list) and (tens.indices[1].name in valence_indices_list):
+                        elif (tens.indices[0].name in val_indices_list) and (tens.indices[1].name in val_indices_list):
                             orb_space = 'nval'
-                        elif (((tens.indices[0].name not in cvs_indices_list) and (tens.indices[0].name not in valence_indices_list)) and
-                            ((tens.indices[1].name not in cvs_indices_list) and (tens.indices[1].name not in valence_indices_list))):
+                        elif (((tens.indices[0].name not in cvs_indices_list) and (tens.indices[0].name not in val_indices_list)) and
+                            ((tens.indices[1].name not in cvs_indices_list) and (tens.indices[1].name not in val_indices_list))):
                             orb_space = 'ncore'
                         else:
                             orb_space = 'none'
@@ -312,10 +319,10 @@ def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, t
                         else:
                             orb_space = 'none'
 
-                    elif valence_indices_list:
-                        if (tens.indices[0].name in valence_indices_list) and (tens.indices[1].name in valence_indices_list):
+                    elif val_indices_list:
+                        if (tens.indices[0].name in val_indices_list) and (tens.indices[1].name in val_indices_list):
                             orb_space = 'nval'
-                        elif (((tens.indices[0].name not in valence_indices_list)) and ((tens.indices[1].name not in valence_indices_list))):
+                        elif (((tens.indices[0].name not in val_indices_list)) and ((tens.indices[1].name not in val_indices_list))):
                             orb_space = 'ncore'
                         else:
                             orb_space = 'none'
@@ -357,10 +364,10 @@ def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, t
             # Determine orbital space of energies
             if is_core_index_type(tens.indices[0]):
                 if cvs_tensors:
-                    if cvs_indices_list and valence_indices_list:
+                    if cvs_indices_list and val_indices_list:
                         if tens.indices[0].name in cvs_indices_list:
                             orb_space = 'cvs'
-                        elif tens.indices[0].name in valence_indices_list:
+                        elif tens.indices[0].name in val_indices_list:
                             orb_space = 'val'
                         else:
                             orb_space = 'core'
@@ -369,8 +376,8 @@ def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, t
                             orb_space = 'cvs'
                         else:
                             orb_space = 'core'
-                    elif valence_indices_list:
-                        if tens.indices[0].name in valence_indices_list:
+                    elif val_indices_list:
+                        if tens.indices[0].name in val_indices_list:
                             orb_space = 'val'
                         else:
                             orb_space = 'core'
@@ -436,10 +443,10 @@ def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, t
                     tensor_name += 'a'
                 elif is_core_index_type(tens.indices[i]):
                     if cvs_tensors:
-                        if cvs_indices_list and valence_indices_list:
+                        if cvs_indices_list and val_indices_list:
                             if (tens.indices[i].name in cvs_indices_list):
                                 tensor_name += 'x'
-                            elif (tens.indices[i].name in valence_indices_list):
+                            elif (tens.indices[i].name in val_indices_list):
                                 tensor_name += 'v'
                             else:
                                 tensor_name += 'c'
@@ -448,8 +455,8 @@ def get_tensor_info(sqa_tensors, trans_indices_string, indices_string, suffix, t
                                 tensor_name += 'x'
                             else:
                                 tensor_name += 'c'
-                        elif valence_indices_list:
-                            if (tens.indices[i].name in valence_indices_list):
+                        elif val_indices_list:
+                            if (tens.indices[i].name in val_indices_list):
                                 tensor_name += 'v'
                             else:
                                 tensor_name += 'c'
@@ -742,9 +749,9 @@ def append_CVS_slice(tens, tens_name, tens_indices, suffix):
     if isinstance(cvs_indices_list, str):
         cvs_indices_list = list(cvs_indices_list)
 
-    valence_indices_list = options.genEinsum.valence_indices_list
-    if isinstance(valence_indices_list, str):
-        valence_indices_list = list(valence_indices_list)
+    val_indices_list = options.genEinsum.valence_indices_list
+    if isinstance(val_indices_list, str):
+        val_indices_list = list(val_indices_list)
 
     tens_indices = list(tens_indices)
 
@@ -776,7 +783,7 @@ def append_CVS_slice(tens, tens_name, tens_indices, suffix):
                 if ind in cvs_indices_list:
                     to_append += ':' + ncvs_string + ','
 
-                elif ind in valence_indices_list:
+                elif ind in val_indices_list:
                     to_append +=  ncvs_string + ':,'
 
                 # Ignore non-CVS indices
