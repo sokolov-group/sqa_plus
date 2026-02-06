@@ -12,13 +12,19 @@
 # Author: Koushik Chatterjee <koushikchatterjee7@gmail.com>
 #         Ilia Mazin <ilia.mazin@gmail.com>
 #         Carlos E. V. de Moura <carlosevmoura@gmail.com>
+#         Donna H. Odhiambo <donna.odhiambo@proton.me>
 #
 
-from .sqaIndex import get_spin_index_type, \
-                     is_core_index_type, is_active_index_type, is_virtual_index_type, \
-                     is_cvs_core_index_type, is_cvs_valence_index_type, \
-                     is_alpha_index_type, is_beta_index_type
-
+from .sqaIndex import (
+    get_spin_index_type,
+    is_core_index_type,
+    is_active_index_type,
+    is_virtual_index_type,
+    is_cvs_core_index_type,
+    is_cvs_valence_index_type,
+    is_alpha_index_type,
+    is_beta_index_type,
+)
 from .sqaTensor import creOp, desOp, kroneckerDelta, creDesTensor
 from .sqaMatrixBlock import dummyLabel
 from .sqaOptions import options
@@ -470,7 +476,7 @@ def get_tensor_info(
 
 def remove_core_int(terms, removed_int = None, int_terms = False):
 
-    # Remove terms from standard term list
+    # ===== STANDARD TERM PROCESSING =====
     if not int_terms:
         options.print_header("WARNING")
         print('Terms with a contraction over repeating dummy core indices of 2e- integrals')
@@ -481,64 +487,55 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
         core_terms = []
 
         # Separate out the terms that have redundant 2e- integral contractions over core space
-        for term_ind, term in enumerate(terms):
-            coreTerm = False
-            for tens_ind, tens in enumerate(term.tensors):
-                if tens.name == 'v':
-                    if _has_repeated_indices(tens):
-                        coreTerm = True
-                        break
+        for term in terms:
 
-                elif removed_int and (tens.name in removed_int):
-                    coreTerm = True
-                    break
+            # Check for redundant integrals and removed intermediates
+            coreTerm = any(
+                (tens.name == 'v' and _has_repeated_indices(tens)) or
+                (removed_int and tens.name in removed_int)
+                for tens in term.tensors
+            )
 
-            # Append to either list based on coreTerm flag
-            if not coreTerm:
-                kept_terms.append(terms[term_ind])
-
+            # Append to either list
+            if coreTerm:
+                core_terms.append(term)
             else:
-                core_terms.append(terms[term_ind])
+                kept_terms.append(term)
 
-        print('')
-        print(str(len(core_terms)) + ' terms removed:')
+        print(f"\n{len(core_terms)} terms removed:")
         for term in core_terms:
             print(term)
 
         options.print_divider()
-        print('Remaining terms: ' + str(len(kept_terms)))
-        print('')
+        print(f"Remaining terms: {len(kept_terms)}\n")
 
         return kept_terms, core_terms
 
-    # Filter through intermediate definitions
+    # ===== INTERMEDIATE TERM PROCESSING =====
     else:
         options.print_header("WARNING")
         print('Intermediate tensors defined w/ contractions over repeating dummy core indices of')
         print('2e- integrals will be removed. Set "remove_core_integrals" flag to FALSE to preserve definitions')
 
         # Track which tensor definitions are removed and kept
-        removed_int   = []
+        removed_int = list(removed_int) if removed_int else []
         removed_terms = []
 
         # Determine which intermediate definitions to remove
-        for int_ind, (int_term, int_tensor) in enumerate(terms):
-            for tens in int_term.tensors:
+        for (int_term, int_tensor) in terms:
 
-                # If intermediate is defined w/ 2e- integral
-                if tens.name == 'v':
-                    if _has_repeated_indices(tens):
-                        removed_int.append(int_tensor.name)
-                        removed_terms.append(terms[int_ind])
-                        break
+            # Check for redundant integrals and removed intermediates
+            coreTerm = any(
+                (tens.name == 'v' and _has_repeated_indices(tens)) or
+                (removed_int and tens.name in removed_int)
+                for tens in int_term.tensors
+            )
 
-                # If intermediate is defined in terms of one of the intermediates to be removed
-                elif tens.name in removed_int:
-                    removed_int.append(int_tensor.name)
-                    removed_terms.append(terms[int_ind])
-                    break
+            # Append to either list
+            if coreTerm:
+                removed_int.append(int_tensor.name)
+                removed_terms.append((int_term, int_tensor))
 
-        # If some intermediate definitions were removed
         if removed_int:
             print(f"\n{len(removed_int)} definitions removed:")
             for tens_name, (term, _) in zip(removed_int, removed_terms):
@@ -548,9 +545,8 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
         print('')
 
         # Returned shortened intermediate list
-        terms = [t for t in terms if t not in removed_terms]
-
-        return terms, removed_int
+        filtered_terms = [t for t in terms if t not in removed_terms]
+        return filtered_terms, removed_int
 
 def _has_repeated_indices(tensor):
 
