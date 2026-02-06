@@ -41,6 +41,7 @@ def genEinsum(
     help=False,
     **tensor_rename,
 ):
+    """Generate einsum expressions."""
  
     if not terms:
         options.print_header("genEinsum equations")
@@ -279,6 +280,7 @@ def get_tensor_info(
     trans_int=None,
     custom_names=None
 ):
+    """Generate tensor names and indices and names for einsum expressions."""
 
     # Import settings from options class
     spin_integrated_tensors = options.genEinsum.spin_integrated_tensors
@@ -475,6 +477,7 @@ def get_tensor_info(
     return tensor_inds, tensor_names
 
 def remove_core_int(terms, removed_int = None, int_terms = False):
+    """Remove terms with redundant dummy core indices."""
 
     # ===== STANDARD TERM PROCESSING =====
     if not int_terms:
@@ -548,9 +551,10 @@ def remove_core_int(terms, removed_int = None, int_terms = False):
         filtered_terms = [t for t in terms if t not in removed_terms]
         return filtered_terms, removed_int
 
-def _has_repeated_indices(tensor):
+def _has_repeated_indices(v2e):
+    """Check 2e- integrals for repeated indices in phys or chem notation."""
 
-    indices = [ind.name for ind in tensor.indices]
+    indices = [ind.name for ind in v2e.indices]
 
     if options.physicists_notation:
         return (indices[0] == indices[2] or
@@ -568,6 +572,7 @@ def _has_repeated_indices(tensor):
 
 
 def remove_trans_rdm_const(terms, trans_int_list = None):
+    """Remove constant terms without transition RDMs."""
 
     options.print_header("WARNING")
     print('Terms w/o transRDM tensor in the expression will be removed. Set "remove_trans_rdm_constant"')
@@ -606,6 +611,7 @@ def remove_trans_rdm_const(terms, trans_int_list = None):
     return trans_rdm_terms, const_terms
 
 def get_trans_intermediates(intermediate_list):
+    """Get intermediates that have transition RDMs."""
 
     trans_int_list = []
 
@@ -626,6 +632,7 @@ def get_trans_intermediates(intermediate_list):
     return trans_int_list
 
 def make_custom_name(sqa_tensor, rename_tuple):
+    """Make custom names for tensors."""
 
     old_name = [old for old, new in rename_tuple]
 
@@ -637,6 +644,7 @@ def make_custom_name(sqa_tensor, rename_tuple):
         return rename_tuple[rename_index][1]
 
 def append_CVS_slice(tens, tens_name, tens_indices, suffix):
+    """Append CVS slicing to tensor name."""
 
     # Make a list out of the user-provided external indices
     cvs_indices_list = options.genEinsum.cvs_indices_list
@@ -679,6 +687,7 @@ def append_CVS_slice(tens, tens_name, tens_indices, suffix):
     return tens_name + slice_str
 
 def append_spin_integrated_slice(tens, tens_name, tens_indices):
+    """Append spin indices to tensor name."""
 
     # List of spin index types
     spin_ind_types = [get_spin_index_type(ind) for ind in tens.indices]
@@ -699,10 +708,11 @@ def append_spin_integrated_slice(tens, tens_name, tens_indices):
 
 
 def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = True):
+    """Create LaTeX format output of einsum expressions."""
 
     texfile = output if output else 'output_default'
 
-    header = f"""  
+    header = rf"""
 ----------------------- SQA LATEX ----------------------------
     _____ ____    ___   __
    / ___// __ \  /   | / /____  _  __
