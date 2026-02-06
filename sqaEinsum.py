@@ -586,61 +586,50 @@ def remove_trans_rdm_const(terms, trans_int_list = None):
     trans_rdm_terms = []
 
     # Remove terms without tRDM tensors in r.h.s.
-    for term_ind, term in enumerate(terms):
+    for term in terms:
         creDes = False
+        tens_list = [t.name for t in term.tensors]
 
-        for tensor in term.tensors:
-#            if isinstance(tensor, creOp) or isinstance(tensor, desOp) or isinstance(tensor, creDesTensor):
-            if isinstance(tensor, creDesTensor) and tensor.trans_rdm:
-                creDes = True
-                break
+        # Check for direct tRDM dependency
+        if any(isinstance(t, creDesTensor) and t.trans_rdm for t in term.tensors):
+            creDes = True
 
-            elif trans_int_list:
-                tens_list = [tns.name for tns in term.tensors]
-                for trans_int in trans_int_list:
-                    if trans_int in tens_list:
-                        creDes = True
-                        break
+        # Check for indirect tRDM dependency
+        elif trans_int_list and any(t_int in tens_list for t_int in trans_int_list):
+            creDes = True
 
-        # Append to either list based on creDes flag
-        if not creDes:
-            const_terms.append(terms[term_ind])
-
+        # Append term to either list
+        if creDes:
+            trans_rdm_terms.append(term)
         else:
-            trans_rdm_terms.append(terms[term_ind])
+            const_terms.append(term)
 
-    print('')
-    print(str(len(const_terms)) + ' terms removed:')
+    print(f"\n{len(const_terms)} terms removed:")
     for term in const_terms:
         print(term)
 
     options.print_divider()
-    print('Remaining terms: ' + str(len(trans_rdm_terms)))
-    print('')
+    print(f"Remaining terms: {len(trans_rdm_terms)}\n")
 
     return trans_rdm_terms, const_terms
 
 def get_trans_intermediates(intermediate_list):
 
-    # Store which intermediates are contracted over transition index
     trans_int_list = []
 
     # Iterate through list of intermediates
     for int_term, int_tensor in intermediate_list:
-
-        # Make list of tensors that define intermediates
         ten_list = [t.name for t in int_term.tensors]
 
-        # Check if one of the tensors is a tRDM
+        # Check intermediate tensors for direct tRDM dependency
         if 'trdm' in ten_list:
              trans_int_list.append(int_tensor.name)
 
-        # If an intermediate is defined in terms of another intermediate, make sure that intermediate
-        # isn't defined w/ a tRDM
-        elif trans_int_list:
-             for trans_int in trans_int_list:
-                 if trans_int in ten_list:
-                     trans_int_list.append(int_tensor.name)
+        # Check intermediate tensors for indirect tRDM dependency
+        # i.e., being defined wrt to a tRDM intermediate
+        elif trans_int_list and any(t_int in ten_list for t_int in trans_int_list):
+            if int_tensor.name not in trans_int_list:
+                trans_int_list.append(int_tensor.name)
 
     return trans_int_list
 
@@ -650,13 +639,10 @@ def make_custom_name(sqa_tensor, rename_tuple):
 
     if sqa_tensor.name[:3] == 'INT':
         rename_index = old_name.index('INT')
-        new_name = rename_tuple[rename_index][1] + sqa_tensor.name[3:]
-
+        return rename_tuple[rename_index][1] + sqa_tensor.name[3:]
     else:
         rename_index = old_name.index(sqa_tensor.name)
-        new_name = rename_tuple[rename_index][1]
-
-    return new_name
+        return rename_tuple[rename_index][1]
 
 def append_CVS_slice(tens, tens_name, tens_indices, suffix):
 
