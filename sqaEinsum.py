@@ -293,7 +293,7 @@ def get_tensor_info(
 
         tensor_name = None
 
-        # Handle special case of kroneckerDelta (kdelta) object
+        # ===== KRONECKER DELTA =====
         if isinstance(tens, kroneckerDelta):
             idx0, idx1 = tens.indices[0], tens.indices[1]
             idx0_name, idx1_name = idx0.name, idx1.name
@@ -333,66 +333,8 @@ def get_tensor_info(
             if custom_names and "kdelta" in [old for old, _ in custom_names]:
                 tensor_name = make_custom_name(tens, custom_names) + '_'
 
-##                if cvs_tensors:
-##                    if cvs_indices_list and val_indices_list:
-##                        if (tens.indices[0].name in cvs_indices_list) and (tens.indices[1].name in cvs_indices_list):
-##                            orb_space = 'ncvs'
-##                        elif (tens.indices[0].name in val_indices_list) and (tens.indices[1].name in val_indices_list):
-##                            orb_space = 'nval'
-##                        elif (((tens.indices[0].name not in cvs_indices_list) and (tens.indices[0].name not in val_indices_list)) and
-##                            ((tens.indices[1].name not in cvs_indices_list) and (tens.indices[1].name not in val_indices_list))):
-##                            orb_space = 'ncore'
-##                        else:
-##                            orb_space = 'none'
-##
-##                    elif cvs_indices_list:
-##                        if (tens.indices[0].name in cvs_indices_list) and (tens.indices[1].name in cvs_indices_list):
-##                            orb_space = 'ncvs'
-##                        elif (((tens.indices[0].name not in cvs_indices_list)) and ((tens.indices[1].name not in cvs_indices_list))):
-##                            orb_space = 'ncore'
-##                        else:
-##                            orb_space = 'none'
-##
-##                    elif val_indices_list:
-##                        if (tens.indices[0].name in val_indices_list) and (tens.indices[1].name in val_indices_list):
-##                            orb_space = 'nval'
-##                        elif (((tens.indices[0].name not in val_indices_list)) and ((tens.indices[1].name not in val_indices_list))):
-##                            orb_space = 'ncore'
-##                        else:
-##                            orb_space = 'none'
-##
-##                    else:
-##                        if is_cvs_core_index_type(tens.indices[0]):
-##                            orb_space = 'ncvs'
-##                        elif is_cvs_valence_index_type(tens.indices[0]):
-##                            orb_space = 'nval'
-##                        else:
-##                            orb_space = 'ncore'
-##                else:
-##                    orb_space = 'ncore'
-##
-##            elif (is_active_index_type(tens.indices[0]) and is_active_index_type(tens.indices[1])):
-##                orb_space = 'ncas'
-##
-##            elif (is_virtual_index_type(tens.indices[0]) and is_virtual_index_type(tens.indices[1])):
-##                orb_space = 'nextern'
-##
-##            else:
-##                raise TypeError('WARNING: The indices of the kronecker delta term do not belong to the same orbital sub-space')
-##
-##            if suffix:
-##                orb_space += '_' + suffix
-##            tensor_name += orb_space + ')'
-##
-##            # Rename if custom name is provided
-##            if custom_names:
-##                if ('kdelta') in [x for x,y in custom_names]:
-##                    new_name = make_custom_name(tens, custom_names)
-##                    tensor_name = new_name + '_'
-
-        # Handle special case of orbital energy vector
+        # ===== ORBITAL ENERGY =====
         elif len(tens.indices) == 1 and tens.name.lower() == 'e':
-
             idx, idx_name = tens.indices[0], tens.indices[0].name
 
             # Determine orbital space
@@ -422,49 +364,7 @@ def get_tensor_info(
             if custom_names and 'e' in [old.lower() for old, _ in custom_names]:
                 tensor_name = make_custom_name(tens, custom_names)
 
-            ### Determine orbital space of energies
-            ##if is_core_index_type(tens.indices[0]):
-            ##    if cvs_tensors:
-            ##        if cvs_indices_list and val_indices_list:
-            ##            if tens.indices[0].name in cvs_indices_list:
-            ##                orb_space = 'cvs'
-            ##            elif tens.indices[0].name in val_indices_list:
-            ##                orb_space = 'val'
-            ##            else:
-            ##                orb_space = 'core'
-            ##        elif cvs_indices_list:
-            ##            if tens.indices[0].name in cvs_indices_list:
-            ##                orb_space = 'cvs'
-            ##            else:
-            ##                orb_space = 'core'
-            ##        elif val_indices_list:
-            ##            if tens.indices[0].name in val_indices_list:
-            ##                orb_space = 'val'
-            ##            else:
-            ##                orb_space = 'core'
-            ##        else:
-            ##            if is_cvs_core_index_type(tens.indices[0]):
-            ##                orb_space = 'cvs'
-            ##            elif is_cvs_valence_index_type(tens.indices[0]):
-            ##                orb_space = 'val'
-            ##            else:
-            ##                orb_space = 'core'
-            ##    else:
-            ##        orb_space = 'core'
-
-            ##elif is_virtual_index_type(tens.indices[0]):
-            ##    orb_space = 'extern'
-
-            ##if suffix:
-            ##    orb_space += '_' + suffix
-            ##tensor_name += orb_space
-
-            ### Rename if custom name is provided
-            ##if custom_names:
-            ##    if ('e' or 'E') in [x for x,y in custom_names]:
-            ##        tensor_name = make_custom_name(tens, custom_names)
-
-        # Handle special case of RDM tensor
+        # ===== RDMs =====
         elif isinstance(tens, creDesTensor):
 
             # Modify name of RDM to reflect particle number
@@ -483,33 +383,7 @@ def get_tensor_info(
             if custom_names and 'rdm' in [old for old, _ in custom_names]:
                 tensor_name = make_custom_name(tens, custom_names)
 
-            ### Modify name of RDM to reflect particle number
-            ##for op in tens.ops:
-            ##    if isinstance(op, creOp):
-            ##        tensor_name += 'c'
-            ##    elif isinstance(op, desOp):
-            ##        tensor_name += 'a'
-
-            ### Append spin-integrated suffix if required
-            ##if spin_integrated_tensors:
-            ##    spin_suffix = '_'
-            ##    for i in range(len(tens.indices)):
-            ##        if is_alpha_index_type(tens.indices[i]):
-            ##            spin_suffix += 'a'
-            ##        elif is_beta_index_type(tens.indices[i]):
-            ##            spin_suffix += 'b'
-            ##    tensor_name += spin_suffix
-
-            ### Append suffix
-            ##if suffix:
-            ##    tensor_name += '_' + suffix
-
-            ### Rename if custom name is provided
-            ##if custom_names:
-            ##    if ('rdm') in [x for x,y in custom_names]:
-            ##        tensor_name = make_custom_name(tens, custom_names)
-
-        # Name integrals and amplitudes
+        # ===== INTEGRALS/AMPLITUDES =====
         elif tens.name in ('h', 'v', 't1', 't2'):
             tensor_name = tens.name + '_'
 
@@ -550,64 +424,8 @@ def get_tensor_info(
                 if tens.name in [old for old,_ in custom_names]:
                     tensor_name = make_custom_name(tens, custom_names)
 
-####
-##            # Append letter representing orbital subspace of indices
-##            for i in range(len(tens.indices)):
-##                if is_active_index_type(tens.indices[i]):
-##                    tensor_name += 'a'
-##                elif is_core_index_type(tens.indices[i]):
-##                    if cvs_tensors:
-##                        if cvs_indices_list and val_indices_list:
-##                            if (tens.indices[i].name in cvs_indices_list):
-##                                tensor_name += 'x'
-##                            elif (tens.indices[i].name in val_indices_list):
-##                                tensor_name += 'v'
-##                            else:
-##                                tensor_name += 'c'
-##                        elif cvs_indices_list:
-##                            if (tens.indices[i].name in cvs_indices_list):
-##                                tensor_name += 'x'
-##                            else:
-##                                tensor_name += 'c'
-##                        elif val_indices_list:
-##                            if (tens.indices[i].name in val_indices_list):
-##                                tensor_name += 'v'
-##                            else:
-##                                tensor_name += 'c'
-##                        else:
-##                            if is_cvs_core_index_type(tens.indices[i]):
-##                                tensor_name += 'x'
-##                            elif is_cvs_valence_index_type(tens.indices[i]):
-##                                tensor_name += 'v'
-##                            else:
-##                                tensor_name += 'c'
-##                    else:
-##                        tensor_name += 'c'
-##                else:
-##                    tensor_name += 'e'
-##
-##            # Append spin-integrated suffix if required
-##            if spin_integrated_tensors:
-##                spin_suffix = '_'
-##                for i in range(len(tens.indices)):
-##                    if is_alpha_index_type(tens.indices[i]):
-##                        spin_suffix += 'a'
-##                    elif is_beta_index_type(tens.indices[i]):
-##                        spin_suffix += 'b'
-##                tensor_name += spin_suffix
-##
-##            # Append suffix
-##            if not (tens.name == 't1' or tens.name == 't2') and suffix:
-##                tensor_name += '_' + suffix
-##
-##            # Rename if custom name is provided
-##            if custom_names:
-##                if tens.name in [x for x,y in custom_names]:
-##                    tensor_name = make_custom_name(tens, custom_names)
-
-        # Intermediate/custom tensors
+        # ===== INTERMEDIATES/CUSTOM TENSORS =====
         else:
-
             tensor_name = tens.name
 
             # Append spin-integrated suffix if required
@@ -625,24 +443,22 @@ def get_tensor_info(
         # Create indices of tensor as string
         indices = ''.join(i.name for i in tens.indices)
 
-        # Append 'slices' to appropiate dimensions of spin-integrated tensors
+        # Append spin-integrated slicing
         if options.spin_integrated and not options.genEinsum.spin_integrated_tensors:
             tensor_name = append_spin_integrated_slice(tens, tensor_name, indices)
 
-        # Append 'slices' to appropiate dimensions of tensors w/ CVS core indices
+        # Append CVS slicing
         if cvs_indices_list and not cvs_tensors:
             tensor_name = append_CVS_slice(tens, tensor_name, indices, suffix)
 
-        # Append name of tensor (after and modifications due to special cases)
         tensor_names.append(tensor_name)
 
-        # Append transition state index to appropriate set of indices
+        # Append transition state index
         if isinstance(tens, creDesTensor) and tens.trans_rdm:
             indices = trans_indices_string + indices
         elif trans_int and tens.name in trans_int:
             indices = trans_indices_string + indices
 
-        # Append completed index string to list
         tensor_inds.append(indices)
 
     # Build complete index string with arrow notation
@@ -650,21 +466,6 @@ def get_tensor_info(
     if trans_indices_string or indices_string:
         tensor_inds += '->' + (trans_indices_string or '') + (indices_string or '')
  
-    ### Convert list of indices into one comma-separated string and prepare to append external index string
-    ##tensor_inds = ','.join(tensor_inds)
-
-    ### Check if rhs string or transition index is provided before adding arrow
-    ##if trans_indices_string or indices_string:
-    ##    tensor_inds += '->'
-
-    ### Append transition index first, if present
-    ##if trans_indices_string:
-    ##    tensor_inds += trans_indices_string
-
-    ### Append rhs string, if provided
-    ##if indices_string:
-    ##    tensor_inds += indices_string
-
     return tensor_inds, tensor_names
 
 def remove_core_int(terms, removed_int = None, int_terms = False):
