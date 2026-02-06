@@ -668,81 +668,57 @@ def append_CVS_slice(tens, tens_name, tens_indices, suffix):
     val_indices_list = options.genEinsum.valence_indices_list
     if isinstance(val_indices_list, str):
         val_indices_list = list(val_indices_list)
+    elif val_indices_list is None: ## convert to list for iteration
+        val_indices_list = []
 
     tens_indices = list(tens_indices)
 
     # Check whether tensor name needs an additional slice
-    num_cvs = len([ind for ind in tens_indices if ind in cvs_indices_list])
+    num_cvs = sum(1 for ind in tens_indices if ind in cvs_indices_list)
+
+    # Early exit
+    if num_cvs == 0:
+        return tens_name
 
     # Define ncvs string
-    ncvs_string = 'ncvs'
-    if suffix is not None:
-        ncvs_string += '_' + suffix
+    ncvs_string = f"ncvs_{suffix}" if suffix else "ncvs"
 
-    if num_cvs > 0:
+    # Special condition for Kronecker delta
+    if isinstance(tens, kroneckerDelta):
+        return f"np.identity({ncvs_string})"
 
-        # Special condition for Kronecker delta
-        if isinstance(tens, kroneckerDelta):
-
-            tens_name = 'np.identity(' + ncvs_string + ')'
-
-        # Add slices
+    # Build slice string
+    slices = []
+    for ind in tens_indices:
+        if ind in cvs_indices_list:
+            slices.append(f":{ncvs_string}")
+        elif ind in val_indices_list:
+            slices.append(f"{ncvs_string}:")
         else:
+            slices.append(":")
 
-            # Make 'starting' string to append to appropriate tensors
-            to_append = '['
-
-            # Iterate through all indices of tensor
-            for ind in tens_indices:
-
-                # Append slice through CVS indices
-                if ind in cvs_indices_list:
-                    to_append += ':' + ncvs_string + ','
-
-                elif ind in val_indices_list:
-                    to_append +=  ncvs_string + ':,'
-
-                # Ignore non-CVS indices
-                else:
-                    to_append += ':,'
-
-            # Remove extra comma and append end bracket
-            to_append = to_append[:-1] + ']'
-
-            # Append slices to tensor name
-            tens_name += to_append
-
-    return tens_name
+    slice_str = "[" + ",".join(slices) + "]"
+    return tens_name + slice_str
 
 def append_spin_integrated_slice(tens, tens_name, tens_indices):
 
     # List of spin index types
     spin_ind_types = [get_spin_index_type(ind) for ind in tens.indices]
 
-    to_append = '['
-
-    # Iterate through all indices of tensor
+    # Build slice string
+    slices = []
     for spin_ind_type in spin_ind_types:
         if spin_ind_type == options.alpha_type:
-            to_append += '::2,'
+            slices.append("::2")
         elif spin_ind_type == options.beta_type:
-            to_append += '1::2,'
+            slices.append("1::2")
 
-    # Remove extra comma and append end bracket
-    to_append = to_append[:-1] + ']'
+    if not slices:
+        return tens_name
 
-    # Append slices to tensor name
-    tens_name += to_append
+    slice_str = "[" + ",".join(slices) + "]"
+    return tens_name + slice_str
 
-    #to_append = '_'
-    #for spin_ind_type in spin_ind_types:
-    #    if spin_ind_type == options.alpha_type:
-    #        to_append += 'a'
-    #    elif spin_ind_type == options.beta_type:
-    #        to_append += 'b'
-    #tens_name += to_append
-
-    return tens_name
 
 def sqalatex(terms, lhs = None, output = None, indbra = False, indket = None, print_default = True):
 
