@@ -19,10 +19,8 @@
 #
 
 from .sqaTensor import kroneckerDelta, creOp, desOp, sfExOp
-#from .sqaTensor import tensor, kroneckerDelta, creOp, desOp, sfExOp
 from .sqaTerm import term, sortOps
 from .sqaMisc import makeTuples, allDifferent, makePermutations
-from .sqaOptions import options
 
 
 #--------------------------------------------------------------------------------------------------
@@ -31,9 +29,6 @@ from .sqaOptions import options
 
 def normalOrder(inTerm):
     "Returns a list of terms resulting from normal ordering the operators in inTerm."
-
-#    if options.verbose:
-#        print "converting to normal order:  %s" %(str(inTerm))
 
     # check that inTerm is a term
     if not isinstance(inTerm, term):

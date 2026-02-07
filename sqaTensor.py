@@ -119,13 +119,6 @@ class tensor:
     #------------------------------------------------------------------------------------------------
 
     def __str__(self):
-        #retval = self.name + "("
-        #for i in range(len(self.indices)):
-        #    retval += self.indices[i].name #+ " " + str(self.indices[i].type)
-        #    if i < len(self.indices)-1:
-        #        retval += ","
-        #retval += ")"
-        #return retval
         indices_str = ",".join(index.name for index in self.indices)
         return f"{self.name}({indices_str})"
 
@@ -160,7 +153,7 @@ class tensor:
         while idx < len(permutations):
             perm = permutations[idx]
             factor = factors[idx]
-    
+
             # Generate new permutations
             for sym in self.symmetries:
                 new_perm = [perm[i] for i in sym.pattern]
@@ -170,12 +163,12 @@ class tensor:
                     known_perm.add(new_perm_tuple)
                     permutations.append(new_perm)
                     factors.append(sym.factor * factor)
-   
-            idx += 1 
-    
+
+            idx += 1
+
         # Save the results for later so they don't need to be computed again
         self.permutations, self.factors = permutations, factors
-        return permutations, factors        
+        return permutations, factors
 
     #------------------------------------------------------------------------------------------------
 
@@ -251,9 +244,7 @@ class kroneckerDelta(tensor):
     def __init__(self,indices):
         if len(indices) != 2:
             raise ValueError("The kronecker delta function takes exactly two indices")
-        self.indices = []
-        for i in indices:
-            self.indices.append( i.copy() )
+        self.indices = [i.copy() for i in indices]
         (self.permutations,self.factors) = (None,None)
 
     #------------------------------------------------------------------------------------------------
@@ -277,7 +268,7 @@ class kroneckerDelta(tensor):
             return False
         else:
             raise TypeError("A kroneckerDelta may only be compared to another tensor")
- 
+
     #------------------------------------------------------------------------------------------------
 
     def copy(self):
@@ -344,7 +335,7 @@ class sfExOp(tensor):
         if isinstance(other, sfExOp):
             return (self.name == other.name and self.indices == other.indices and self.symmetries == other.symmetries)
         return False
-    
+
     # sfExOp class is less than the creOp, desOp, and creDesTensor classes
     def __lt__(self, other):
         if isinstance(other, sfExOp):
@@ -359,7 +350,7 @@ class sfExOp(tensor):
             return False
         else:
             raise TypeError("An sfExOp object may only be compared to another tensor")
- 
+
     #------------------------------------------------------------------------------------------------
 
     def copy(self):
@@ -451,7 +442,7 @@ class creDesTensor(tensor):
         if isinstance(other, creDesTensor):
             return (self.name == other.name and self.indices == other.indices and self.symmetries == other.symmetries)
         return False
-    
+
     # creDesTensor class is less than the creOp and desOp classes
     def __lt__(self, other):
         if isinstance(other, creDesTensor):
@@ -466,7 +457,7 @@ class creDesTensor(tensor):
             return False
         else:
             raise TypeError("A creDesTensor object may only be compared to another tensor")
- 
+
     def copy(self):
         ops = []
 
@@ -539,7 +530,7 @@ class creDesTensor_original(tensor):
         if isinstance(other, creDesTensor):
             return (self.name == other.name and self.indices == other.indices and self.symmetries == other.symmetries)
         return False
-    
+
     # creDesTensor class is less than the creOp and desOp classes
     def __lt__(self, other):
         if isinstance(other, creDesTensor):
@@ -554,7 +545,7 @@ class creDesTensor_original(tensor):
             return False
         else:
             raise TypeError("A creDesTensor object may only be compared to another tensor")
- 
+
     #------------------------------------------------------------------------------------------------
 
     def copy(self):
@@ -605,7 +596,7 @@ class creOp(tensor):
         if isinstance(other, creOp):
             return (self.name == other.name and self.indices == other.indices and self.symmetries == other.symmetries)
         return False
-    
+
     # creOp class is less than the desOp class
     def __lt__(self, other):
         if isinstance(other, creOp):
@@ -620,7 +611,7 @@ class creOp(tensor):
             return False
         else:
             raise TypeError("An creOp object may only be compared to another tensor")
- 
+
     #------------------------------------------------------------------------------------------------
 
     def copy(self):
@@ -679,7 +670,7 @@ class desOp(tensor):
             return False
         else:
             raise TypeError("An desOp object may only be compared to another tensor")
- 
+
     #------------------------------------------------------------------------------------------------
 
     def copy(self):

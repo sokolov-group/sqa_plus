@@ -27,7 +27,7 @@ from .sqaTerm import combineTerms, termChop
 from .sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from .sqaOptions import options
 from .sqaSymmetry import symmetry
-    
+
 def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
@@ -44,7 +44,6 @@ def convertSpinIntegratedToAdapted(terms_si):
         options.print_divider()
         sys.stdout.flush()
         return
-        #return terms_si
 
     # Convert Cre/Des Objects to RDM Objects
     convert_credes_to_rdm(terms_si, trans_rdm = trans_rdm)
@@ -135,7 +134,7 @@ def convert_credes_to_rdm(_terms_credes, trans_rdm = False):
         credes_ops = [t for t in term_credes.tensors if isinstance(t, (creOp, desOp))]
         if not credes_ops:
             continue
-    
+
         other_tensors = [t for t in term_credes.tensors if not isinstance(t, (creOp, desOp))]
 
         ## Modify term in list to use creDesTensor object instead of cre/des objects
@@ -359,7 +358,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
 
                         ten_v2e_tens_sa.append(ten_v2e_sa)
                         const_v2e_tens_sa.append(const_v2e_sa)
-                
+
                         ## Spin-Adapted 2e- term: v2e(p,q,s,r)
                         ten_v2e_sa = ten_v2e.copy()
                         ten_v2e_sa.indices = [ten_v2e_sa.indices[i] for i in [0, 1, 3, 2]]
