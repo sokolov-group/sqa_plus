@@ -372,15 +372,15 @@ class creDesTensor(tensor):
         if not isinstance(ops, list):
             raise TypeError(TypeErrorMessage)
 
+        if any(not isinstance(op, (creOp, desOp)) for op in ops):
+            raise TypeError(TypeErrorMessage)
+
         # Initialize list of cre/des operators
         self.ops = ops
 
         # Initialize name
         self.trans_rdm = trans_rdm
-        if trans_rdm:
-            self.name = 'trdm'
-        else:
-            self.name = 'rdm'
+        self.name = 'trdm' if trans_rdm else 'rdm'
 
         # Initialize permutations and factors
         (self.permutations, self.factors) = (None, None)
@@ -393,18 +393,14 @@ class creDesTensor(tensor):
         self.indices = []
         desFlag = False
 
+        # Ensure normal-ordering
         for op in ops:
-
-            # Ensure normal-ordering
-            if not isinstance(op, (creOp, desOp)):
-                raise TypeError(TypeErrorMessage)
-
             if isinstance(op, desOp):
                 self.nDes += 1
                 desFlag = True
+            elif desFlag:
+                raise TypeError(TypeErrorMessage)
             else:
-                if desFlag:
-                    raise TypeError(TypeErrorMessage)
                 self.nCre += 1
 
             self.indices.append(op.indices[0].copy())
@@ -428,15 +424,15 @@ class creDesTensor(tensor):
                     pattern[i], pattern[i + 1] = i + 1, i
                     self.symmetries.append(symmetry(tuple(pattern), -1))
 
-            # Add bra/ket symmetries for ground-state RDMs
-            if (len(self.indices) % 2 == 0) and self.trans_rdm == False:
-                reversed_range = tuple(range(len(self.indices))[::-1])
-                self.symmetries.append(symmetry(reversed_range, 1))
-
-            # Print warning if number of indices is odd and trans_rdm is False
-            if (len(self.indices) % 2 != 0) and self.trans_rdm == False:
-                print ('trans_rdm flag is set to True, but an ODD number of cre/des operators are present. Switching trans_rdm flag to TRUE !!')
-                self.trans_rdm == True
+            if not self.trans_rdm:
+                # Add bra/ket symmetries for ground-state RDMs
+                if self.nInd % 2 == 0:
+                    reversed_range = tuple(range(self.nInd - 1, -1, -1))
+                    self.symmetries.append(symmetry(reversed_range, 1))
+                # Print warning if number of indices is odd and trans_rdm is False
+                else:
+                    print('WARN: trans_rdm set to False with odd number of cre/des operators, switching trans_rdm to True!')
+                    self.trans_rdm = True
 
     def __eq__(self, other):
         if isinstance(other, creDesTensor):

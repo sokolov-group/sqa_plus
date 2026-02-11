@@ -405,7 +405,7 @@ class term:
                         op.indices[0] = current_map[op.indices[0].tup()]
 
                 # Sort the operators and apply the resulting sign
-                (sign, opList) = sortOps(opList)
+                sign, opList = sortOps(opList)
                 factor *= sign
 
                 # Add the operators' indices to the ordered list of indices.
@@ -474,8 +474,6 @@ class term:
                 tenList.append(t)
 
                 # Add the sfExOp's indices to the ordered index list
-                #for i in t.indices:
-                #    indexList.append(i)
                 indexList.extend([i for i in t.indices])
 
                 # Compute a score based on how alphabetical the indices are
@@ -582,7 +580,7 @@ class term:
                     t.indices[i].rename()
 
         # Finalize results
-        self.tensors = best_tensor_list 
+        self.tensors = best_tensor_list
         self.scale(best_factor)
         self.isInCanonicalForm = True
 
@@ -618,7 +616,7 @@ def process_chunk(terms_chunk):
     for term in terms_chunk:
         term.makeCanonical(rename_user_defined=False)
     return terms_chunk
- 
+
 def combineTerms(termList, maxProcesses = None):
     "Combines any like terms in termList"
 
