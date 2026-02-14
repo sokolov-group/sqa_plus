@@ -403,11 +403,11 @@ def get_tensor_info(
                     if cvs_tensors:
                         if cvs_indices_list and val_indices_list:
                             tensor_name += ('x' if idx_name in cvs_indices_list else 
-                                            'v' if idx_name in valence_indices_list else 'c')
+                                            'v' if idx_name in val_indices_list else 'c')
                         elif cvs_indices_list:
                             tensor_name += 'x' if idx_name in cvs_indices_list else 'c'
                         elif val_indices_list:
-                            tensor_name += 'v' if idx_name in valence_indices_list else 'c'
+                            tensor_name += 'v' if idx_name in val_indices_list else 'c'
                         else:
                             tensor_name += ('x' if is_cvs_core_index_type(idx) else 
                                             'v' if is_cvs_valence_index_type(idx) else 'c')

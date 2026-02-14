@@ -77,9 +77,9 @@ class index:
 
     def __eq__(self, other):
         if not isinstance(other,index):
-            raise False
+            raise ValueError("can only compare index class with other index class objects.")
         return (self.isSummed == other.isSummed and self.name == other.name and self.indType == other.indType)
- 
+
     def __lt__(self, other):
         if not isinstance(other,index):
             raise ValueError("can only compare index class with other index class objects.")
