@@ -27,8 +27,8 @@
 
 from functools import total_ordering
 from multiprocessing import Pool, cpu_count
-from collections import deque
-from itertools import islice, count, groupby
+from collections import deque, defaultdict
+from itertools import islice, count
 
 from .sqaIndex import index, ind_type_order
 from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
@@ -321,16 +321,23 @@ class term:
         fcList = [t for t in self.tensors if t.freelyCommutes]
         ncList = [t for t in self.tensors if not t.freelyCommutes]
 
-        fcList.sort(key=lambda t: t.name)
-        fcGroups = [list(group) for _, group in groupby(fcList, key=lambda t: t.name)]
+        fcGroups = defaultdict(list)
+        for t in fcList:
+            fcGroups[t.name].append(t)
+        fcGroups = list(fcGroups.values())
 
-        # Sort within all groups by tensor length and spatial type
-        for group in fcGroups:
-            if len(group) > 1:
-                group.sort(key=lambda t: tuple(ind_type_order(ind.indType) for ind in t.indices))
+        # external group sort
+        def group_key(g):
+            return g[0].__class__.__name__, len(g), g[0].name
 
-        # Sort groups further by tensor subclass and group length (use name as tie-breaker)
-        fcGroups.sort(key=lambda group: (group[0].__class__.__name__, len(group), group[0].name))
+        # internal group sort
+        def element_key(t):
+            score = [ind_type_order(ind.indType) for ind in t.indices]
+            sorted_score = sorted(score)
+            return len(t.indices), tuple(sorted_score), tuple(score)
+
+        fcGroups = [sorted(g, key=element_key) for g in fcGroups]
+        fcGroups = sorted(fcGroups, key=group_key)
 
         # Add non-commuting tensors as individual groups
         nameGroups = fcGroups + [[t] for t in ncList]

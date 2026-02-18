@@ -105,10 +105,6 @@ class index:
     def  __repr__(self):
         return f"Index_{self.name}({', '.join(x[0] for x in self.indType)})"
 
-        #greek_map = {"alpha": "\u03B1", "beta": "\u03B2"}
-        #name_map = {name[0]: greek_map.get(name[0], name[0]) for name in self.indType}
-        #return f"{self.name}({', '.join(name_map[name[0]] for name in self.indType)})"
-
 # SecondQuantizationAlgebra Plus
 #
 # Functions implemented to automate test index types
@@ -184,12 +180,16 @@ def ind_type_order(indice_types):
     if isinstance(indice_types, index):
         indice_types = indice_types.indType
 
-    if is_cvs_core_index_type(indice_types) or is_core_index_type(indice_types):
-        return 0
-    if is_cvs_valence_index_type(indice_types):
-        return 1
-    if is_active_index_type(indice_types):
-        return 2
-    if is_virtual_index_type(indice_types):
-        return 3
-    return 4
+    type_check_map = [
+        (is_cvs_core_index_type, 0),
+        (is_cvs_valence_index_type, 1),
+        (is_core_index_type, 2),
+        (is_active_index_type, 3),
+        (is_virtual_index_type, 4),
+    ]
+
+    for type_func, result in type_check_map:
+        if type_func(indice_types):
+            return result
+    return 5
+
