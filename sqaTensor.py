@@ -40,6 +40,7 @@
 #
 
 from functools import total_ordering
+from itertools import dropwhile
 from .sqaIndex import index
 from .sqaSymmetry import symmetry
 
@@ -369,33 +370,23 @@ class creDesTensor(tensor):
         self.trans_rdm = trans_rdm
         self.name = 'trdm' if trans_rdm else 'rdm'
 
-        # Count creation/destruction operators and build index list
         self.ops = ops
-        self.nCre = 0
-        self.nDes = 0
-        self.indices = []
-        des_flag = False
 
-        # Ensure normal-ordering
-        for op in ops:
-            if isinstance(op, desOp):
-                self.nDes += 1
-                des_flag = True
-            elif des_flag:
-                raise TypeError("ops must be a normal ordered list of creOp and desOp objects")
-            else:
-                self.nCre += 1
+        # Ensure normal-ordering (no creOp after any desOp)
+        if any(isinstance(op, creOp) for op in dropwhile(lambda op: not isinstance(op, desOp), ops)):
+            raise TypeError("ops must be a normal ordered list of creOp and desOp objects")
 
-            self.indices.append(op.indices[0].copy())
+        # Count creation/destruction operators and build index list
+        self.nCre = sum(1 for op in ops if isinstance(op, creOp))
+        self.nDes = sum(1 for op in ops if isinstance(op, desOp))
 
-        # Create count of total indices
-        self.nInd = self.nCre + self.nDes
+        self.indices = [op.indices[0].copy() for op in ops]
 
         # Initialize symmetries
         self._init_symmetries(symmetries)
 
     def _init_symmetries(self, symmetries):
-        """Initialize symmetries for creation/destruction tensor."""
+        """Initialize symmetries for RDM tensor."""
         if symmetries:
             self.symmetries = symmetries
         else:
@@ -414,8 +405,9 @@ class creDesTensor(tensor):
 
             # Add bra/ket symmetries for ground-state RDMs
             if not self.trans_rdm:
-                if self.nInd % 2 == 0:
-                    reversed_range = tuple(range(self.nInd - 1, -1, -1))
+                nInd = len(self.indices)
+                if nInd % 2 == 0:
+                    reversed_range = tuple(range(nInd - 1, -1, -1))
                     self.symmetries.append(symmetry(reversed_range, 1))
                 else:
                     print('WARN: trans_rdm set to False with odd number of cre/des operators, switching trans_rdm to True!')
