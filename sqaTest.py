@@ -13,168 +13,174 @@
 #          Koushik Chatterjee <koushikchatterjee7@gmail.com>
 #          Ilia Mazin <ilia.mazin@gmail.com>
 #          Carlos E. V. de Moura <carlosevmoura@gmail.com>
+#          Donna Odhiambo <donna.odhiambo@proton.me>
 #
 
+import pytest
 import sqa_plus as sqa
-import time
 
-# Define operator types
-tg_c = sqa.options.core_type
-tg_a = sqa.options.active_type
-tg_v = sqa.options.virtual_type
-tg_g = tg_c + tg_a + tg_v
+# Helper Function
+def format_term_output(terms):
+    """Format list of terms into a string output."""
+    return ''.join(str(term) + ' \n' for term in terms)
 
-# Define indices
-dummy = True
+# ============================================================================
+# Test 1: Double Commutator Evaluation (M_00 Block)
+# ============================================================================
 
-# Test 1: Double commutator evaluation for a first order contribution to the M_00 block of the effective Hamiltonian matrix
-print("\n# Starting Test 1:\n")
-startTime = time.time()
+@pytest.fixture
+def test_m00_op():
+    """
+    LHS: cre(I) des(X)
+    RHS: cre(Y) des(J)
+    """
+    tg_c = sqa.options.core_type
+    tg_a = sqa.options.active_type
 
-# Create left hand side operator list
-i = sqa.index('I', [tg_c])
-x = sqa.index('X', [tg_a])
+    i = sqa.index('I', [tg_c])
+    x = sqa.index('X', [tg_a])
+    j = sqa.index('J', [tg_c])
+    y = sqa.index('Y', [tg_a])
 
-l_op  = [sqa.creOp(i), sqa.desOp(x)]
+    term_left  = sqa.term(1.0, [], [sqa.creOp(i), sqa.desOp(x)])
+    term_right = sqa.term(1.0, [], [sqa.creOp(y), sqa.desOp(j)])
 
-# Create right hand side operator list
-j = sqa.index('J', [tg_c])
-y = sqa.index('Y', [tg_a])
+    return term_left, term_right
 
-r_op  = [sqa.creOp(y), sqa.desOp(j)]
+expected_output_m00 = (
+    " (  -1.00000) v(I,Y,J,X) \n"
+    " (   1.00000) kdelta(X,Y) v(I,x,J,y) rdm(x,y) \n"
+    " (   1.00000) v(I,Y,J,x) cre(x) des(X) \n"
+    " (   1.00000) v(I,x,J,X) cre(Y) des(x) \n"
+    " (  -1.00000) kdelta(X,Y) v(I,x,J,y) cre(y) des(x) \n"
+    " (  -1.00000) v(I,x,J,y) rdm(x,y) cre(Y) des(X) \n"
+    " (  -1.00000) v(I,x,J,y) cre(Y) cre(y) des(X) des(x) \n"
+)
 
-# Define order of the effective Hamiltonian
-effH = []
-effH = sqa.Heff(1)
+def test_double_commutator_m00_block(test_m00_op):
+    """
+    Test 1: Double commutator evaluation for a first order contribution
+    to the M_00 block of the effective Hamiltonian matrix.
+    """
+    term_left, term_right = test_m00_op
 
-# Define terms from operator lists
-term1 = sqa.term(1.0, [], r_op)
-term2 = sqa.term(1.0, [], l_op)
+    # Define order of the effective Hamiltonian
+    effH = sqa.Heff(1)
 
-print("> First Commutator...")
-term3 = sqa.commutator(effH, term1)
+    # Perform first commutator
+    inner_commutator = sqa.commutator(effH, term_right)
 
-print("> Second Commutator...")
-term4 = sqa.commutator(term2, term3)
+    # Perform second commutator
+    outer_commutator = sqa.commutator(term_left, inner_commutator)
 
-term5 = sqa.matrixBlock(term4)
+    result = sqa.matrixBlock(outer_commutator)
+    output = format_term_output(result)
 
-test1_string_output = ''
-for t in term5:
-    test1_string_output += str(t) + ' \n'
+    assert output == expected_output_m00, (
+        f"\nExpected:\n{expected_output_m00}\n\n"
+        f"Got:\n{output}"
+    )
 
-test1_correct_answer = " (  -1.00000) v(I,Y,J,X) \n" + \
-                       " (   1.00000) kdelta(X,Y) v(I,x,J,y) rdm(x,y) \n" + \
-                       " (   1.00000) v(I,Y,J,x) cre(x) des(X) \n" + \
-                       " (   1.00000) v(I,x,J,X) cre(Y) des(x) \n" + \
-                       " (  -1.00000) kdelta(X,Y) v(I,x,J,y) cre(y) des(x) \n" + \
-                       " (  -1.00000) v(I,x,J,y) rdm(x,y) cre(Y) des(X) \n" + \
-                       " (  -1.00000) v(I,x,J,y) cre(Y) cre(y) des(X) des(x) \n"
 
-print("\n> Test 1 output:\n")
-print(test1_string_output)
+# ============================================================================
+# Test 2: Overlap Matrix (M_01 Block)
+# ============================================================================
 
-print(">> Test 1 passed!\n" if test1_string_output == test1_correct_answer else ">> Test 1 failed!\n")
-print("({:.3f} seconds) \n".format(time.time() - startTime))
+@pytest.fixture
+def test_m01_op():
+    """
+    LHS: cre(I) des(X)
+    RHS: cre(Z) cre(U) des(Y) des(J)
+    """
+    tg_c = sqa.options.core_type
+    tg_a = sqa.options.active_type
 
-# Test 2: Construction of the overlap matrix for an M_01 sector of the effective Hamiltonian matrix
-print("\n# Starting Test 2:\n")
-startTime = time.time()
+    i = sqa.index('I', [tg_c])
+    x = sqa.index('X', [tg_a])
+    j = sqa.index('J', [tg_c])
+    y = sqa.index('Y', [tg_a])
+    z = sqa.index('Z', [tg_a])
+    u = sqa.index('U', [tg_a])
 
-# Create left hand side operator list
-i = sqa.index('I', [tg_c])
-x = sqa.index('X', [tg_a])
+    term_left  = sqa.term(1.0, [], [sqa.creOp(i), sqa.desOp(x)])
+    term_right = sqa.term(1.0, [], [sqa.creOp(z), sqa.creOp(u), sqa.desOp(y), sqa.desOp(j)])
 
-l_op  = [sqa.creOp(i), sqa.desOp(x)]
+    return term_left, term_right
 
-# Create right hand side operator list
-j = sqa.index('J', [tg_c])
-y = sqa.index('Y', [tg_a])
-z = sqa.index('Z', [tg_a])
-u = sqa.index('U', [tg_a])
+expected_output_m01 = (
+    " (  -1.00000) kdelta(I,J) kdelta(U,X) cre(Z) des(Y) \n"
+    " (   1.00000) kdelta(I,J) kdelta(X,Z) cre(U) des(Y) \n"
+    " (  -1.00000) kdelta(I,J) cre(U) cre(Z) des(X) des(Y) \n"
+)
 
-r_op  = [sqa.creOp(z), sqa.creOp(u), sqa.desOp(y), sqa.desOp(j)]
+def test_overlap_matrix_m01_sector(test_m01_op):
+    """
+    Test construction of the overlap matrix for a
+    M_01 sector of the effective Hamiltonian matrix.
+    """
+    term_left, term_right = test_m01_op
 
-# Define terms from operator lists
-term1 = sqa.term(1.0, [], l_op)
-term2 = sqa.term(1.0, [], r_op)
+    # Perform commutator
+    result_commutator = sqa.commutator(term_left, term_right)
 
-# Perform commutator
-term3 = sqa.commutator(term1, term2)
-term4 = sqa.matrixBlock(term3)
+    result = sqa.matrixBlock(result_commutator)
+    output = format_term_output(result)
 
-test2_string_output = ''
-for t in term4:
-    test2_string_output += str(t) + ' \n'
+    assert output == expected_output_m01, (
+        f"\nExpected:\n{expected_output_m01}\n\n"
+        f"Got:\n{output}"
+    )
 
-test2_correct_answer = " (  -1.00000) kdelta(I,J) kdelta(U,X) cre(Z) des(Y) \n" + \
-                       " (   1.00000) kdelta(I,J) kdelta(X,Z) cre(U) des(Y) \n" + \
-                       " (  -1.00000) kdelta(I,J) cre(U) cre(Z) des(X) des(Y) \n"
+# ============================================================================
+# Test 3: Operator Multiplication
+# ============================================================================
 
-print("\n> Test 2 output:\n")
-print(test2_string_output)
+@pytest.fixture
+def test_V_op():
+    """
+    LHS: cre(X) des(A)
+    RHS: cre(B) des(J)
+    """
+    tg_c = sqa.options.core_type
+    tg_a = sqa.options.active_type
+    tg_v = sqa.options.virtual_type
 
-print(">> Test 2 passed!\n" if test2_string_output == test2_correct_answer else ">> Test 2 failed!\n")
-print("({:.3f} seconds) \n".format(time.time() - startTime))
+    x = sqa.index('X', [tg_a])
+    a = sqa.index('A', [tg_v])
+    j = sqa.index('J', [tg_c])
+    b = sqa.index('B', [tg_v])
 
-# Test 3: Multiply perturbation operator by single excitation operators from either side
-print("\n# Starting Test 3:\n")
-startTime = time.time()
+    term_left  = sqa.term(1.0, [], [sqa.creOp(x), sqa.desOp(a)])
+    term_right = sqa.term(1.0, [], [sqa.creOp(b), sqa.desOp(j)])
 
-# Create left hand side operator list
-x = sqa.index('X', [tg_a])
-a = sqa.index('A', [tg_v])
+    return term_left, term_right
 
-l_op = [sqa.creOp(x), sqa.desOp(a)]
+expected_output_V = (
+    " (  -1.00000) v(J,A,x,B) cre(X) des(x) \n"
+    " (  -1.00000) kdelta(A,B) h(J,x) cre(X) des(x) \n"
+    " (   1.00000) kdelta(A,B) v(J,i,i,x) cre(X) des(x) \n"
+    " (   0.50000) kdelta(A,B) v(J,x,y,z) cre(X) cre(x) des(y) des(z) \n"
+)
 
-# Create right hand side operator list
-j = sqa.index('J', [tg_c])
-b = sqa.index('B', [tg_v])
+def test_perturbation_operator_multiplication(test_V_op):
+    """
+    Test multiplication of perturbation operator by
+    single excitation operators from either side.
+    """
+    term_left, term_right = test_V_op
 
-r_op = [sqa.creOp(b), sqa.desOp(j)]
+    V = sqa.Vperturbation()
 
-# Define terms from operator lists
-term1 = sqa.term(1.0, [], r_op)
-term2 = sqa.term(1.0, [], l_op)
+    # Perform multiplication: LHS*V*RHS
+    product = [
+        sqa.multiplyTerms(sqa.multiplyTerms(term_left, term_v), term_right)
+        for term_v in V
+    ]
 
-# Create empty lists to store products
-term3 = []
-term4 = []
+    result = sqa.matrixBlock(product)
+    output = format_term_output(result)
 
-# Get perturbation operator
-#V = sqa.getV()
-V = sqa.Vperturbation()
-
-# Multiply every term in V by the operators in term2, store as term3
-for v in V:
-    term3.append(sqa.multiplyTerms(term2, v))
-
-# Multiply every product stored in term3 by the operators in term1
-for t in term3:
-    term4.append(sqa.multiplyTerms(t, term1))
-
-term5 = []
-term5 = sqa.matrixBlock(term4)
-
-test3_string_output = ''
-for t in term5:
-    test3_string_output += str(t) + ' \n'
-
-### old test3 answer!
-##test3_correct_answer = " (  -1.00000) v(x,B,J,A) cre(X) des(x) \n" + \
-##                       " (  -1.00000) h(J,x) kdelta(A,B) cre(X) des(x) \n" + \
-##                       " (   1.00000) kdelta(A,B) v(i,x,J,i) cre(X) des(x) \n" + \
-##                       " (   0.50000) kdelta(A,B) v(x,y,J,z) cre(X) cre(z) des(x) des(y) \n"
-
-### new test3 answer
-test3_correct_answer = " (  -1.00000) v(J,A,x,B) cre(X) des(x) \n" + \
-                       " (  -1.00000) kdelta(A,B) h(J,x) cre(X) des(x) \n" + \
-                       " (   1.00000) kdelta(A,B) v(J,i,i,x) cre(X) des(x) \n" + \
-                       " (   0.50000) kdelta(A,B) v(J,x,y,z) cre(X) cre(x) des(y) des(z) \n"
-
-print("\n> Test 3 output:\n")
-print(test3_string_output)
-
-print(">> Test 3 passed!\n" if test3_string_output == test3_correct_answer else ">> Test 3 failed!\n")
-
-print("({:.3f} seconds) \n".format(time.time() - startTime))
+    assert output == expected_output_V, (
+        f"\nExpected:\n{expected_output_V}\n\n"
+        f"Got:\n{output}"
+    )
