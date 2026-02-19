@@ -1057,38 +1057,57 @@ def removeVirtOps_sf(inList):
     Removes from inList any terms containing a spin-free operator with a virtual index.
     """
 
-    if options.verbose:
-        print("removing terms containing a spin-free operator with a virtual index...")
-        print("")
-
-    # loop over the terms in inList
-    i = 0
-    while i < len(inList):
-
-        # ensure that each element of inList is a term object
-        if not isinstance(inList[i], term):
-            raise TypeError("inList must be a list of term objects")
-
-        # determine if the term's spin-free excitation operators have any virtual indices
-        hasVirtual = False
-        for ten in inList[i].tensors:
-            if isinstance(ten, sfExOp):
-                for ind in ten.indices:
-                    if options.virtual_type in ind.indType:
-                        hasVirtual = True
-
-        # remove the term if a spin-free excitation operator had a virtual index
-        if hasVirtual:
-            if options.verbose:
-                print(" removing term: ", inList[i])
-            del inList[i]
-
-        # otherwise, move to the next term
-        else:
-            i += 1
+    from .sqaIndex import is_virtual_index_type
 
     if options.verbose:
-        print("")
+        print("removing terms containing a spin-free operator with a virtual index...\n")
+
+    if not all(isinstance(t, term) for t in inList):
+        raise TypeError("inList must be a list of term objects")
+
+    # Filter out sfExOp terms with virtual indices and log removals
+    terms_to_remove = [
+        t for t in inList
+        if any(
+            is_virtual_index_type(ind)
+            for ten in t.tensors if isinstance(ten, sfExOp)
+            for ind in ten.indices)
+    ]
+
+    if options.verbose:
+        for t in terms_to_remove:
+            print(" removing term: ", t)
+
+    inList[:] = [t for t in inList if t not in terms_to_remove]
+
+    # # loop over the terms in inList
+    # i = 0
+    # while i < len(inList):
+
+    #     # ensure that each element of inList is a term object
+    #     if not isinstance(inList[i], term):
+    #         raise TypeError("inList must be a list of term objects")
+
+    #     # determine if the term's spin-free excitation operators have any virtual indices
+    #     hasVirtual = False
+    #     for ten in inList[i].tensors:
+    #         if isinstance(ten, sfExOp):
+    #             for ind in ten.indices:
+    #                 if options.virtual_type in ind.indType:
+    #                     hasVirtual = True
+
+    #     # remove the term if a spin-free excitation operator had a virtual index
+    #     if hasVirtual:
+    #         if options.verbose:
+    #             print(" removing term: ", inList[i])
+    #         del inList[i]
+
+    #     # otherwise, move to the next term
+    #     else:
+    #         i += 1
+
+    # if options.verbose:
+    #     print("")
 
 
 #--------------------------------------------------------------------------------------------------
