@@ -68,11 +68,19 @@ class index:
 
         # Initialize index types
         indexError = "indexType must be a list/tuple of lists/tuples of strings"
+        if not isinstance(indexType, (list, tuple)):
+            raise TypeError(indexError)
+
         indType = []
         for group in indexType:
             if not isinstance(group, (list, tuple)) or not all(isinstance(s, str) for s in group):
                 raise TypeError(indexError)
             indType.append(tuple(sorted(group)))
+
+        # Check for multiple spin-index types
+        if (options.alpha_type in indType) and (options.beta_type in indType):
+                raise ValueError("indexType cannot have more than one spin-index type")
+
         self.indType = tuple(indType)
 
     def __eq__(self, other):
