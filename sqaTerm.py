@@ -544,15 +544,11 @@ class term:
     def _update_best_state(self, best_state, ten_list, index_list, factor, current_map):
         """Update best state if current candidate is better."""
         # Compute a score for index_list based on how alphabetical the indices are
-        ## TODO: use_name bool is True for sfExOp case, false otherwise
-        ##       is this correct or remnant of old code?
         score = []
-        use_name = False
         for i in range(len(index_list) - 1):
             count = sum(
                 1 for j in range(i + 1, len(index_list))
-                if (str(index_list[i].name) if use_name else index_list[i]) < 
-                   (str(index_list[j].name) if use_name else index_list[j])
+                if index_list[i] < index_list[j]
             )
             score.append(count)
 
