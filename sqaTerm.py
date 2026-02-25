@@ -299,32 +299,30 @@ class term:
     #------------------------------------------------------------------------------------------------
 
     def makeCanonical_non_recursive(self, rename_user_defined = True):
-        "Converts the term to a unique canonical form using a non-recursive algorithm."
+        """Converts the term to a unique canonical form using a non-recursive algorithm."""
 
-        # If the tensor is already in canonical form, do nothing
+        # Early exit checks
         if self.isInCanonicalForm:
             return
 
-        # If the term is not normal ordered, raise an error
-        if not self.isNormalOrdered():
-            raise RuntimeError("A term must have normal ordered operators to be converted to canonical form.")
-
-        # Sort the constants
-        self.constants.sort()
-
-        # If there are no tensors in the term then skip the tensor sorting.
         if not self.tensors:
             self.isInCanonicalForm = True
             return
 
-        # Sort the freely commuting tensors by name
-        fcList = [t for t in self.tensors if t.freelyCommutes]
-        ncList = [t for t in self.tensors if not t.freelyCommutes]
+        if not self.isNormalOrdered():
+            raise RuntimeError("A term must have normal ordered operators to be converted to canonical form.")
 
-        fcGroups = defaultdict(list)
-        for t in fcList:
-            fcGroups[t.name].append(t)
-        fcGroups = list(fcGroups.values())
+        # Sort constants
+        self.constants.sort()
+
+        # Partition tensors based on commutation properties
+        fc_list = [t for t in self.tensors if t.freelyCommutes]
+        nc_list = [t for t in self.tensors if not t.freelyCommutes]
+
+        # Sort freely commuting tensors
+        fc_groups = defaultdict(list)
+        for t in fc_list:
+            fc_groups[t.name].append(t)
 
         # external group sort
         def group_key(g):
@@ -333,266 +331,194 @@ class term:
         # internal group sort
         def element_key(t):
             score = [ind_type_order(ind.indType) for ind in t.indices]
-            sorted_score = sorted(score)
-            return len(t.indices), tuple(sorted_score), tuple(score)
+            return len(t.indices), tuple(sorted(score)), tuple(score)
 
-        fcGroups = [sorted(g, key=element_key) for g in fcGroups]
-        fcGroups = sorted(fcGroups, key=group_key)
+        fc_groups = [sorted(g, key=element_key) for g in fc_groups.values()]
+        fc_groups = sorted(fc_groups, key=group_key)
 
         # Add non-commuting tensors as individual groups
-        nameGroups = fcGroups + [[t] for t in ncList]
+        name_groups = fc_groups + [[t] for t in nc_list]
 
-        # Generate an alphabet for use in renaming indices
-        # This is done to avoid renaming with an index name already in use.
-        # Should try using numbers, i.e. '1', '2', '3', etc.
+        # Generate alphabet for renaming indices
         alphabet = self.generateAlphabet()
 
+        # Initialize best state tracking
+        best_state = {
+            'tensor_list': None,
+            'factor': None,
+            'map': None,
+            'score': None,
+            'index_list': None,
+            'count': 0,
+        }
+
+        job_stack = deque([({}, 0, 0, 0, [])])
+
         # Determine the best ordering and index mapping
-        best_tensor_list = None
-        best_factor = None
-        bestMap = None
-        bestScore = None
-        nTopScore = 0
-        # job format:    (map, gCount, tCount, aCount, gPerms)
-        #jobStack = [({},0,0,0,[])]
-        jobStack = deque([({}, 0, 0, 0, [])])
-        while jobStack:
+        while job_stack:
+            current_map, g_count, t_count, a_count, g_perms = job_stack.pop()
 
-            # get the next job
-            current_map, gCount, tCount, aCount, gPerms = jobStack.pop()
-
-            # If there are no name groups remaining, compute the score
-            if gCount == len(nameGroups):
-
-                # Compute tensor list with sorted indices, index list, and sort factor
-                tenList, indexList, factor = self.get_tensor_list(nameGroups, gPerms, current_map)
-
-                # Compute a score based on how alphabetical the indices are
-                score = []
-                n_ind = len(indexList)
-                for i in range(n_ind-1):
-                    count = 0
-                    for j in range(i+1, n_ind):
-                        if indexList[i] < indexList[j]:
-                            count += 1
-                    score.append(count)
-
-                # If the current score is the best score, save the result
-                if (bestScore is None) or (score > bestScore):
-                    nTopScore = 1
-                    bestScore = score
-                    bestMap = current_map
-                    best_factor = factor
-                    best_tensor_list = tenList
-
-                # If the current score ties for the best, count the number of best scores
-                elif score == bestScore:
-                    nTopScore += 1
-
+            # ===== Terminal Case: All Groups Processed =====
+            if g_count == len(name_groups):
+                ten_list, index_list, factor = self._get_tensor_list(name_groups, g_perms, current_map)
+                self._update_best_state(best_state, ten_list, index_list, factor, current_map)
                 continue
 
-            # If only cre/des operators remain, sort them and compute the score
-            if all([ (len(group) == 1 and isinstance(group[0], (creOp, desOp))) for group in nameGroups[gCount:] ]):
+            # ===== Case: Only creOp/desOp Tensors Left =====
+            if all(len(group) == 1 and isinstance(group[0], (creOp, desOp)) for group in name_groups[g_count:]):
+                ten_list, index_list, factor = self._get_tensor_list(name_groups[:g_count], g_perms, current_map)
 
-                # Compute tensor list with sorted indices, index list, and sort factor
-                tenList, indexList, factor = self.get_tensor_list(nameGroups[:gCount], gPerms, current_map)
+                # Process ops
+                op_list = [name_groups[i][0].copy() for i in range(g_count, len(name_groups))]
+                new_maps_count = 0
 
-                # Apply the input mapping to the creation/destruction operators
-                # Create and apply a new mapping for any new dummy indices
-                opList = [nameGroups[i][0].copy() for i in range(gCount,len(nameGroups))]
-                nNewMaps = 0
-                for op in opList:
+                for op in op_list:
                     if op.indices[0].tup() in current_map:
                         op.indices[0] = current_map[op.indices[0].tup()]
                     elif op.indices[0].isSummed:
-                        temp_map = current_map.copy()
-                        temp_map[op.indices[0].tup()] = index(alphabet[aCount+nNewMaps], op.indices[0].indType, op.indices[0].isSummed, op.indices[0].userDefined)
-                        current_map = temp_map
-                        nNewMaps += 1
+                        current_map[op.indices[0].tup()] = index(
+                            alphabet[a_count + new_maps_count],
+                            op.indices[0].indType,
+                            op.indices[0].isSummed,
+                            op.indices[0].userDefined
+                        )
                         op.indices[0] = current_map[op.indices[0].tup()]
+                        new_maps_count += 1
 
-                # Sort the operators and apply the resulting sign
-                sign, opList = sortOps(opList)
+                sign, op_list = sortOps(op_list)
                 factor *= sign
 
-                # Add the operators' indices to the ordered list of indices.
-                # Also add the sorted operators to the new tensor list.
-                for op in opList:
-                    indexList.append(op.indices[0])
-                    tenList.append(op)
+                index_list.extend(op.indices[0] for op in op_list)
+                ten_list.extend(op_list)
 
-                # Compute a score based on how alphabetical the indices are
-                score = []
-                n_ind = len(indexList)
-                for i in range(n_ind-1):
-                    count = 0
-                    for j in range(i+1, n_ind):
-                        if indexList[i] < indexList[j]:
-                            count += 1
-                    score.append(count)
-
-                # If the current score is the best score, save the result
-                if (bestScore is None) or (score > bestScore):
-                    nTopScore = 1
-                    bestScore = score
-                    bestMap = current_map
-                    best_factor = factor
-                    best_tensor_list = tenList
-
-                # If the current score ties for the best, count the number of best scores
-                elif score == bestScore:
-                    nTopScore += 1
-
+                self._update_best_state(best_state, ten_list, index_list, factor, current_map)
                 continue
 
-            # If only a sfExOp remains, sort its indices and compute the score
-            #group_is_last = (gCount == len(nameGroups) - 1)
-            if (gCount == len(nameGroups)-1) and (len(nameGroups[gCount]) == 1) and isinstance(nameGroups[gCount][0], sfExOp):
+            # ===== Case: Single sfExOp Tensor Left =====
+            if (g_count == len(name_groups) - 1 and len(name_groups[g_count]) == 1 and
+                isinstance(name_groups[g_count][0], sfExOp)):
 
-                # Compute tensor list with sorted indices, index list, and sort factor
-                tenList, indexList, factor = self.get_tensor_list(nameGroups[:gCount], gPerms, current_map)
+                ten_list, index_list, factor = self._get_tensor_list(name_groups[:g_count], g_perms, current_map)
 
-                # Apply the input mapping to the sfExOp
-                # Create and apply a new mapping for any new dummy indices
-                t = nameGroups[gCount][0].copy()
-                nNewMaps = 0
+                t = name_groups[g_count][0].copy()
+                new_maps_count = 0
+
                 for i in range(len(t.indices)):
                     if t.indices[i].tup() in current_map:
                         t.indices[i] = current_map[t.indices[i].tup()]
                     elif t.indices[i].isSummed:
-                        temp_map = current_map.copy()
-                        temp_map[t.indices[i].tup()] = index(alphabet[aCount+nNewMaps], t.indices[i].indType, t.indices[i].isSummed, t.indices[i].userDefined)
-                        current_map = temp_map
-                        nNewMaps += 1
+                        current_map[t.indices[i].tup()] = index(
+                            alphabet[a_count + new_maps_count],
+                            t.indices[i].indType,
+                            t.indices[i].isSummed,
+                            t.indices[i].userDefined
+                        )
                         t.indices[i] = current_map[t.indices[i].tup()]
+                        new_maps_count += 1
 
-                # Sort the indices of the sfExOp (go go gadget bubble sort!)
+                # Sort sfExOp indices using bubble sort
                 i = 0
                 while i < t.order-1:
                     if t.indices[i] > t.indices[i+1]:
                         t.indices[i], t.indices[i+1] = t.indices[i+1], t.indices[i]
                         j = i + t.order
-                        t.indices[j], t.indices[j + 1] = t.indices[j + 1], t.indices[j]
+                        t.indices[j], t.indices[j+1] = t.indices[j+1], t.indices[j]
                         i = 0
                     else:
                         i += 1
 
-                # Add the sfExOp to the new tensor list
-                tenList.append(t)
+                ten_list.append(t)
+                index_list.extend(t.indices)
 
-                # Add the sfExOp's indices to the ordered index list
-                indexList.extend([i for i in t.indices])
-
-                # Compute a score based on how alphabetical the indices are
-                score = []
-                n_ind = len(indexList)
-                for i in range(n_ind-1):
-                    count = 0
-                    for j in range(i+1, n_ind):
-                        if str(indexList[i].name) < str(indexList[j].name):
-                            count += 1
-                    score.append(count)
-
-                # If the current score is the best score, save the result
-                if (bestScore is None) or (score > bestScore):
-                    nTopScore = 1
-                    bestScore = score
-                    bestMap = current_map
-                    best_factor = factor
-                    best_tensor_list = tenList
-
-                # If the current score ties for the best, count the number of best scores
-                elif score == bestScore:
-                    nTopScore += 1
-
+                self._update_best_state(best_state, ten_list, index_list, factor, current_map)
                 continue
 
-            # If starting a new name group, sort the group's names based on the input mapping
-            # and schedule a new job for each permutation of the tensors with no index assignments
-            if len(gPerms) <= gCount:
-                withMapped = []
-                withoutMapped = []
-                for i in range(len(nameGroups[gCount])):
-                    leastMapped = False
-                    for ind in nameGroups[gCount][i].indices:
-                        if (ind.tup() in current_map) and ((leastMapped is False) or (current_map[ind.tup()] < leastMapped)):
-                            leastMapped = current_map[ind.tup()]
-                    if leastMapped is False:
-                        withoutMapped.append(i)
+            # ===== Start New Name Group =====
+            if len(g_perms) <= g_count:
+                with_mapped = []
+                without_mapped = []
+
+                for i, tensor in enumerate(name_groups[g_count]):
+                    least_mapped = False
+                    for ind in tensor.indices:
+                        if ind.tup() in current_map:
+                            mapped_val = current_map[ind.tup()]
+                            if least_mapped is False or mapped_val < least_mapped:
+                                least_mapped = mapped_val
+
+                    if least_mapped is False:
+                        without_mapped.append(i)
                     else:
-                        withMapped.append((leastMapped,i))
-                withMapped.sort(key=lambda x: x[0])
-                withMapped = [i[1] for i in withMapped]
-                if len(withoutMapped) <= 1:
-                    jobStack.append((current_map,gCount,tCount,aCount,gPerms + [withMapped + withoutMapped]))
+                        with_mapped.append((least_mapped, i))
+
+                with_mapped.sort(key=lambda x: x[0])
+                #sorted_indices = [i[1] for i in with_mapped] + without_mapped
+
+                if len(without_mapped) <= 1:
+                    sorted_indices = [i[1] for i in with_mapped] + without_mapped
+                    job_stack.append((current_map, g_count, t_count, a_count, g_perms + [sorted_indices]))
                 else:
-                    for perm in makePermutations(len(withoutMapped)):
-                        new_gPerm = withMapped + [withoutMapped[i] for i in perm]
-                        jobStack.append((current_map,gCount,tCount,aCount,gPerms + [new_gPerm]))
+                    for perm in makePermutations(len(without_mapped)):
+                        new_perm = [i[1] for i in with_mapped] + [without_mapped[j] for j in perm]
+                        job_stack.append((current_map, g_count, t_count, a_count, g_perms + [new_perm]))
 
                 continue
 
-            # If continuing an existing group, schedule a new job for each equivelent ordering
-            # of the current tensor's indices
-            # Give the current tensor a convenient name
-            t = nameGroups[gCount][gPerms[gCount][tCount]]
+            # ===== Continue Existing Group =====
+            t = name_groups[g_count][g_perms[g_count][t_count]]
+            sym_perms, _ = t.symPermutes()
 
-            # Get the tensor's symmetry permutations
-            (symPerms,factors) = t.symPermutes()
+            next_g_count = g_count
+            next_t_count = t_count + 1
+            if next_t_count == len(name_groups[g_count]):
+                next_g_count += 1
+                next_t_count = 0
 
-            # Compute gCount and tCount for the next job
-            next_gCount = gCount
-            next_tCount = tCount + 1
-            if next_tCount == len(nameGroups[gCount]):
-                next_gCount += 1
-                next_tCount = 0
+            # Schedule new jobs for each symmetry-equivalent index ordering of current tensor, t
+            for perm in sym_perms:
+                new_map = dict(current_map)
+                new_maps_count = 0
 
-            # For each of the tensor's symmetry-equivelent index orderings, create mappings for any
-            # un-mapped dummy indices and schedule a new job
-            for perm in symPerms:
-                nNewMaps = 0
-                newMap = {}
-                newMap.update(current_map)
                 for ind in [t.indices[perm[i]] for i in range(len(t.indices))]:
-                    if ind.isSummed and ind.tup() not in newMap:
-                        newMap[ind.tup()] = index(alphabet[aCount+nNewMaps], ind.indType, ind.isSummed, ind.userDefined)
-                        nNewMaps += 1
-                jobStack.append((newMap,next_gCount,next_tCount,aCount+nNewMaps,gPerms))
+                    if ind.isSummed and ind.tup() not in new_map:
+                        new_map[ind.tup()] = index(
+                            alphabet[a_count + new_maps_count],
+                            ind.indType,
+                            ind.isSummed,
+                            ind.userDefined
+                        )
+                        new_maps_count += 1
 
-        # Check to see that only one candidate achieved the top score
-        #if nTopScore > 1:
-        #    print(f'WARNING: {nTopScore} candidates have tied for the top score.')
+                job_stack.append((new_map, next_g_count, next_t_count, a_count + new_maps_count, g_perms))
 
-        if bestMap is None:
-            bestMap = current_map
+        # Finalize canonical alphabet mapping
+        best_map = best_state['map'] or {}
+        alphabet_list = list('abcdefghijklmnopqrstuvwxyz')
+        filtered_alphabet = [c for c in alphabet_list if c not in options.user_defined_indices]
 
-        # Create an index mapping that converts to a canonical alphabet, i.e. a-z
-        alphabet = list('abcdefghijklmnopqrstuvwxyz')
-        filtered_alphabet = [c for c in alphabet if c not in options.user_defined_indices]
-
-        if len(filtered_alphabet) < len(bestMap):
+        if len(filtered_alphabet) < len(best_map):
             raise RuntimeError("Alphabet smaller than number of indices, no more names left!")
 
-        canonMap = {}
-        for _, val in sorted(bestMap.items(), key=lambda kv: kv[1].name):
-            canonMap[val.tup()] = val.copy()
-            canonMap[val.tup()].name = filtered_alphabet.pop(0)
+        canon_map = {}
+        for _, val in sorted(best_map.items(), key=lambda kv: kv[1].name):
+            canon_map[val.tup()] = val.copy()
+            canon_map[val.tup()].name = filtered_alphabet.pop(0)
 
-        # Rename the indices using the canonical mapping
-        for t in best_tensor_list:
+        # Apply canonical mapping to final tensor list
+        for t in (best_state['tensor_list'] or []):
             for i in range(len(t.indices)):
-                if t.indices[i].tup() in canonMap:
-                    t.indices[i] = canonMap[t.indices[i].tup()].copy()
+                if t.indices[i].tup() in canon_map:
+                    t.indices[i] = canon_map[t.indices[i].tup()].copy()
                 if rename_user_defined and t.indices[i].userDefined:
                     t.indices[i].rename()
 
         # Finalize results
-        self.tensors = best_tensor_list
-        self.scale(best_factor)
+        self.tensors = best_state['tensor_list'] or []
+        if best_state['factor'] is not None:
+            self.scale(best_state['factor'])
         self.isInCanonicalForm = True
 
-
-    def get_tensor_list(self, nameGroups, gPerms, current_map):
+    def _get_tensor_list(self, nameGroups, gPerms, current_map):
         """Compute a new tensor list with renamed dummy indices, a list of the ordered dummy indices,
         and the multiplicative factor generated by sorting the indices."""
         tenList = []
@@ -611,10 +537,37 @@ class term:
                 # Sort tensor indices and accumulate factor
                 factor *= t_src.sortIndices()
                 # Store sorted indices and tensor
-                for ind in t_src.indices:
-                    indexList.append(ind)
+                indexList.extend(t_src.indices)
                 tenList.append(t_src)
         return tenList, indexList, factor
+
+    def _update_best_state(self, best_state, ten_list, index_list, factor, current_map):
+        """Update best state if current candidate is better."""
+        # Compute a score for index_list based on how alphabetical the indices are
+        ## TODO: use_name bool is True for sfExOp case, false otherwise
+        ##       is this correct or remnant of old code?
+        score = []
+        use_name = False
+        for i in range(len(index_list) - 1):
+            count = sum(
+                1 for j in range(i + 1, len(index_list))
+                if (str(index_list[i].name) if use_name else index_list[i]) < 
+                   (str(index_list[j].name) if use_name else index_list[j])
+            )
+            score.append(count)
+
+        # Update state tracker 
+        if best_state['score'] is None or score > best_state['score']:
+            best_state.update({
+                'tensor_list': ten_list,
+                'factor': factor,
+                'map': current_map,
+                'score': score,
+                'index_list': index_list,
+                'count': 1
+            })
+        elif score == best_state['score']:
+            best_state['count'] += 1
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
