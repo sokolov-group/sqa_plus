@@ -57,7 +57,7 @@ def test_ee_h0h0_einsum(test_m00_op):
     term_left, term_right = test_m00_op
 
     # Define order of the effective Hamiltonian
-    effH = sqa.Heff(1)
+    effH = sqa.Heff(2)
 
     # Perform first commutator
     inner_commutator = sqa.commutator(effH, term_right)
