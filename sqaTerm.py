@@ -42,7 +42,7 @@ import time
 @total_ordering
 class term:
     "A class for terms used in operator algebra. Each term is a multiplicative string of constants, tensors, and operators."
-
+    TOL = 1e-6
     #------------------------------------------------------------------------------------------------
 
     def __init__(self, numConstant, constList, tensorList, isInCanonicalForm = False):
@@ -68,74 +68,43 @@ class term:
 
     #------------------------------------------------------------------------------------------------
 
+    def _comparison_key(self):
+        """
+        Return tuple for comparison:
+        (nr creOps, nr desOps, sfExOp ranks, nr constants, nr tensors, tensor names, tensors, constants)
+        """
+        return (
+            self.nCreOps(),
+            self.nDesOps(),
+            self.sfExOp_ranks(),
+            len(self.constants),
+            len(self.tensors),
+            tuple(t.name for t in self.tensors),
+            tuple(self.tensors),
+            tuple(self.constants),
+        )
+
     def __eq__(self, other):
         if not isinstance(other, term):
-            return False
+            raise TypeError("term object can only be compared to other term objects.")
 
-        # sort by number of loose creation operators first
-        if self.nCreOps() != other.nCreOps():
-            return False
-        # next sort by number of loose destruction operators
-        if self.nDesOps() != other.nDesOps():
-            return False
-        # next sort by the orders of the spin free excitation operators
-        if self.sfExOp_ranks() != other.sfExOp_ranks():
-            return False
-        # next sort by the number of constants
-        if len(self.constants) != len(other.constants):
-            return False
-        # next sort by the number of tensors
-        if len(self.tensors) != len(other.tensors):
-            return False
-        # next sort by the tensors' names
-        if [t.name for t in self.tensors] != [t.name for t in other.tensors]:
-            return False
-        # next sort by the tensors
-        if self.tensors != other.tensors:
-            return False
-        # next sort by the constants
-        if self.constants != other.constants:
-            return False
-        # finally compare the numerical constants
-        numDiff = self.numConstant - other.numConstant
-        return abs(numDiff) < 1e-6
+        # compare keys and numerical constants
+        return (
+            self._comparison_key() == other._comparison_key() and
+            abs(self.numConstant - other.numConstant) < term.TOL
+        )
 
     def __lt__(self, other):
         if not isinstance(other, term):
             raise TypeError("term object can only be compared to other term objects.")
 
-        # sort by number of loose creation operators first
-        if self.nCreOps() != other.nCreOps():
-            return self.nCreOps() < other.nCreOps()
-        # next sort by number of loose destruction operators
-        if self.nDesOps() != other.nDesOps():
-            return self.nDesOps() < other.nDesOps()
-        # next sort by the orders of the spin free excitation operators
-        if self.sfExOp_ranks() != other.sfExOp_ranks():
-            return self.sfExOp_ranks() < other.sfExOp_ranks()
-        # next sort by the number of constants
-        if len(self.constants) != len(other.constants):
-            return len(self.constants) < len(other.constants)
-        # next sort by the number of tensors
-        if len(self.tensors) != len(other.tensors):
-            return len(self.tensors) < len(other.tensors)
-        # next sort by the tensors' names
-        self_names = [t.name for t in self.tensors]
-        other_names = [t.name for t in other.tensors]
-        if self_names != other_names:
-            return self_names < other_names
-        # next sort by the tensors
-        if self.tensors != other.tensors:
-            return self.tensors < other.tensors
-        # next sort by the constants
-        if self.constants != other.constants:
-            return self.constants < other.constants
-        # finally compare the numerical constants
-        numDiff = self.numConstant - other.numConstant
-        if abs(numDiff) >= 1e-6:
-            return numDiff < 0
+        if self._comparison_key() != other._comparison_key():
+            return self._comparison_key() < other._comparison_key()
 
-        return False
+        # if keys equal, compare numerical constants
+        if abs(self.numConstant - other.numConstant) < term.TOL:
+            return False
+        return self.numConstant < other.numConstant
 
     #------------------------------------------------------------------------------------------------
 
@@ -178,7 +147,8 @@ class term:
 
     def sfExOp_ranks(self):
         "Returns a list of the ranks of the spin free excitation operators in the term"
-        retval = [len(t.indices)/2 for t in self.tensors if isinstance(t, sfExOp)]
+        #retval = [len(t.indices)/2 for t in self.tensors if isinstance(t, sfExOp)]
+        retval = [t.order for t in self.tensors if isinstance(t, sfExOp)]
         return retval
 
     #------------------------------------------------------------------------------------------------
@@ -452,7 +422,6 @@ class term:
                         with_mapped.append((least_mapped, i))
 
                 with_mapped.sort(key=lambda x: x[0])
-                #sorted_indices = [i[1] for i in with_mapped] + without_mapped
 
                 if len(without_mapped) <= 1:
                     sorted_indices = [i[1] for i in with_mapped] + without_mapped
@@ -661,7 +630,7 @@ def multiplyTerms(t1,t2):
 #--------------------------------------------------------------------------------------------------
 
 
-def termChop(termList, tolerance = 1e-6):
+def termChop(termList):
     "Removes any terms with zero constant factors from termList."
     TypeErrorMessage = "termList must be a list of terms"
     if not isinstance(termList, list):
@@ -670,7 +639,7 @@ def termChop(termList, tolerance = 1e-6):
     if not all(isinstance(t, term) for t in termList):
         raise TypeError(TypeErrorMessage)
 
-    termList[:] = [t for t in termList if abs(t.numConstant) >= tolerance]
+    termList[:] = [t for t in termList if abs(t.numConstant) >= term.TOL]
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
