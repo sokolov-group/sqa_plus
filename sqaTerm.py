@@ -539,82 +539,81 @@ class term:
 #--------------------------------------------------------------------------------------------------
 
 def process_chunk(terms_chunk):
-    for term in terms_chunk:
-        term.makeCanonical(rename_user_defined=False)
+    for t in terms_chunk:
+        t.makeCanonical(rename_user_defined = False)
     return terms_chunk
 
-def combineTerms(termList, maxProcesses = None):
-    "Combines any like terms in termList"
+def combineTerms(term_list, max_processes = None):
+    """Combines like terms in list of terms."""
 
-    if not termList:
+    if not term_list:
         return
 
-    if maxProcesses is None:
-        maxProcesses = cpu_count()
+    if max_processes is None:
+        max_processes = cpu_count()
     else:
-        maxProcesses = max(1, maxProcesses)
+        max_processes = max(1, max_processes)
 
     if options.verbose:
         print('')
         print('Combining like terms:')
-        print('Converting %i terms to canonical form...' %(len(termList)))
-        print('Using max threads %i' %(maxProcesses))
+        print('Converting %i terms to canonical form...' %(len(term_list)))
+        print('Using max threads %i' %(max_processes))
 
-    startTime = time.time()
+    start_time = time.time()
 
     # Put the terms in termList into their canonical (unique) forms
-    if maxProcesses > 1 and len(termList) > 100:
+    if max_processes > 1 and len(term_list) > 100:
         # Process in chunks to reduce serialization overhead
-        chunk_size = max(1, len(termList) // (maxProcesses * 4))
-        chunk_size = min(chunk_size, len(termList))
-        chunks = [termList[i:i+chunk_size] for i in range(0, len(termList), chunk_size)]
+        chunk_size = max(1, len(term_list) // (max_processes * 4))
+        #chunk_size = min(chunk_size, len(termList))
+        chunks = [term_list[i:i+chunk_size] for i in range(0, len(term_list), chunk_size)]
 
         # Process in parallel
-        with Pool(processes=maxProcesses, maxtasksperchild=1) as pool:
+        with Pool(processes=max_processes, maxtasksperchild=1) as pool:
         #with Pool(processes=maxProcesses) as pool:
             processed_chunks = pool.map(process_chunk, chunks)
 
         # Flatten results
-        termList[:] = [term for chunk in processed_chunks for term in chunk]
+        term_list[:] = [t for chunk in processed_chunks for t in chunk]
 
     else:
         # Convert the terms to canonical form in the main thread
-        for i in range(len(termList)):
+        for i in range(len(term_list)):
             if options.verbose:
-                print('%6i    %s' %(i,str(termList[i])))
-            termList[i].makeCanonical(rename_user_defined = False)
+                print('%6i    %s' %(i,str(term_list[i])))
+            term_list[i].makeCanonical(rename_user_defined = False)
 
     # Sort the terms
-    termList.sort()
+    term_list.sort()
 
     # Combine any terms with the same canonical form
-    newTermList = []
-    current = termList[0]
-    for i in range(1, len(termList)):
-        if (current.constants == termList[i].constants) and (current.tensors == termList[i].tensors):
-            current.numConstant += termList[i].numConstant
+    new_term_list = []
+    current = term_list[0]
+    for i in range(1, len(term_list)):
+        if (current.constants == term_list[i].constants) and (current.tensors == term_list[i].tensors):
+            current.numConstant += term_list[i].numConstant
         else:
-            newTermList.append(current)
-            current = termList[i]
+            new_term_list.append(current)
+            current = term_list[i]
 
-    newTermList.append(current)
-    termList[:] = newTermList
+    new_term_list.append(current)
+    term_list[:] = new_term_list
 
     # Rename user defined dummy indices
-    for _term in termList:
+    for _term in term_list:
         for _tensor in _term.tensors:
             for _ind in range(len(_tensor.indices)):
                 _tensor.indices[_ind].rename()
 
     # Remove terms with coefficients of zero
-    termChop(termList)
+    termChop(term_list)
 
     if options.verbose:
-        print("Finished combining terms in %.3f seconds" %(time.time() - startTime))
-        print("")
+        print("Finished combining terms in %.3f seconds\n" %(time.time() - start_time))
 
     # Sort the terms
-    termList.sort()
+    term_list.sort()
 
 
 #--------------------------------------------------------------------------------------------------
