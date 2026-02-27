@@ -555,56 +555,52 @@ def combineTerms(term_list, max_processes = None):
         max_processes = max(1, max_processes)
 
     if options.verbose:
-        print('')
-        print('Combining like terms:')
+        print('\nCombining like terms:')
         print('Converting %i terms to canonical form...' %(len(term_list)))
         print('Using max threads %i' %(max_processes))
 
     start_time = time.time()
 
-    # Put the terms in termList into their canonical (unique) forms
-    if max_processes > 1 and len(term_list) > 100:
-        # Process in chunks to reduce serialization overhead
-        chunk_size = max(1, len(term_list) // (max_processes * 4))
-        #chunk_size = min(chunk_size, len(termList))
-        chunks = [term_list[i:i+chunk_size] for i in range(0, len(term_list), chunk_size)]
+    # Canonicalize terms
+    n_terms = len(term_list)
+    if max_processes > 1 and n_terms > 100:
+        # Process chunks in parallel to reduce serialization overhead
+        chunk_size = max(1, n_terms // (max_processes * 4))
+        chunks = [term_list[i:i+chunk_size] for i in range(0, n_terms, chunk_size)]
 
-        # Process in parallel
         with Pool(processes=max_processes, maxtasksperchild=1) as pool:
-        #with Pool(processes=maxProcesses) as pool:
             processed_chunks = pool.map(process_chunk, chunks)
 
         # Flatten results
         term_list[:] = [t for chunk in processed_chunks for t in chunk]
 
     else:
-        # Convert the terms to canonical form in the main thread
-        for i in range(len(term_list)):
+        # Convert terms in serial
+        for i, t in enumerate(term_list, start = 1):
             if options.verbose:
-                print('%6i    %s' %(i,str(term_list[i])))
-            term_list[i].makeCanonical(rename_user_defined = False)
+                print('%6i    %s' % (i, t))
+            t.makeCanonical(rename_user_defined = False)
 
     # Sort the terms
     term_list.sort()
 
     # Combine any terms with the same canonical form
     new_term_list = []
-    current = term_list[0]
-    for i in range(1, len(term_list)):
-        if (current.constants == term_list[i].constants) and (current.tensors == term_list[i].tensors):
-            current.numConstant += term_list[i].numConstant
+    for t in term_list:
+        if (new_term_list and
+            new_term_list[-1].constants == t.constants and
+            new_term_list[-1].tensors == t.tensors
+        ):
+            new_term_list[-1].numConstant += t.numConstant
         else:
-            new_term_list.append(current)
-            current = term_list[i]
-
-    new_term_list.append(current)
+            new_term_list.append(t)
     term_list[:] = new_term_list
 
     # Rename user defined dummy indices
     for _term in term_list:
         for _tensor in _term.tensors:
-            for _ind in range(len(_tensor.indices)):
-                _tensor.indices[_ind].rename()
+            for idx in _tensor.indices:
+                idx.rename()
 
     # Remove terms with coefficients of zero
     termChop(term_list)
