@@ -51,8 +51,6 @@ from .sqaSymmetry import symmetry
 class tensor:
     """A class to represent tensors in operator algebra. Integrals and density matrices are examples."""
 
-    #------------------------------------------------------------------------------------------------
-
     freelyCommutes = True
 
     def __init__(self, name, indices=None, symmetries=None):
@@ -211,25 +209,12 @@ class tensor:
         self.indices = [self.indices[p] for p in tuples[0]]
         return factors[0]
 
-    #------------------------------------------------------------------------------------------------
-
-    ## DEAD CODE ##
-    ## def hasIndex(self,i):
-    ##     """Returns True if i is one of the tensor's indices and False otherwise."""
-    ##     if not isinstance(i,index):
-    ##         raise TypeError("i must be of the index class")
-    ##     return (i in self.indices)
-
-    #------------------------------------------------------------------------------------------------
-
-
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
 @total_ordering
 class kroneckerDelta(tensor):
     """A tensor representation of the kronecker delta function."""
-    #------------------------------------------------------------------------------------------------
 
     freelyCommutes = True
 
@@ -245,10 +230,6 @@ class kroneckerDelta(tensor):
         self.symmetries = [symmetry((1, 0), 1)]
 
     #------------------------------------------------------------------------------------------------
-
-    # def _comparison_key(self):
-    #     """kroneckerDelta comparison key - used for ordering"""
-    #     return (self.name, self.indices, self.symmetries)
 
     def __eq__(self, other):
         if isinstance(other, kroneckerDelta):
@@ -285,11 +266,7 @@ class sfExOp(tensor):
     Note that the indices i,j,k,l refer to spacial orbitals and sigma,tau refer to spins.
     """
 
-    #------------------------------------------------------------------------------------------------
-
     freelyCommutes = False
-
-    #------------------------------------------------------------------------------------------------
 
     def __init__(self, indices):
         # Check that there are an even number of indices
@@ -323,10 +300,6 @@ class sfExOp(tensor):
             self.symmetries.append(symmetry(tuple(pattern), 1))
 
     #------------------------------------------------------------------------------------------------
-
-    # def _comparison_key(self):
-    #     """sfExOp comparison key - used for ordering"""
-    #     return (self.name, self.indices, self.symmetries)
 
     def __eq__(self, other):
         if isinstance(other, sfExOp):
@@ -415,10 +388,6 @@ class creDesTensor(tensor):
 
     #------------------------------------------------------------------------------------------------
 
-    # def _comparison_key(self):
-    #     """creDesTensor comparison key - used for ordering"""
-    #     return (self.name, self.indices, self.symmetries)
-
     def __eq__(self, other):
         if isinstance(other, creDesTensor):
             return self._comparison_key() == other._comparison_key()
@@ -475,10 +444,6 @@ class creOp(tensor):
 
     #------------------------------------------------------------------------------------------------
 
-    # def _comparison_key(self):
-    #     """creOp comparison key - used for ordering"""
-    #     return (self.name, self.indices, self.symmetries)
-
     def __eq__(self, other):
         if isinstance(other, creOp):
             return self._comparison_key() == other._comparison_key()
@@ -530,10 +495,6 @@ class desOp(tensor):
         self.symmetries = []
 
     #------------------------------------------------------------------------------------------------
-
-    # def _comparison_key(self):
-    #     """desOp comparison key - used for ordering"""
-    #     return (self.name, self.indices, self.symmetries)
 
     def __eq__(self, other):
         if isinstance(other, desOp):
