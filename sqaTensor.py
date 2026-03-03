@@ -405,12 +405,8 @@ class creDesTensor(tensor):
 
     def copy(self):
         ops = []
-
-        for i in range(self.nCre):
-            ops.append(creOp(self.indices[i]))
-
-        for i in range(self.nCre,len(self.indices)):
-            ops.append(desOp(self.indices[i]))
+        ops.extend(creOp(self.indices[i]) for i in range(self.nCre))
+        ops.extend(desOp(self.indices[i]) for i in range(self.nCre, len(self.indices)))
 
         return creDesTensor(list(ops), self.trans_rdm, self.symmetries)
 
