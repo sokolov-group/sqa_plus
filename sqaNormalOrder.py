@@ -32,7 +32,7 @@ def normalOrder(inTerm):
 
     # check that inTerm is a term
     if not isinstance(inTerm, term):
-        raise TypeError("inTerm must be of class term")
+        raise TypeError("inTerm must be of class term, not %s" % type(inTerm))
 
     # determine what types of operators the term contains
     has_creDesOps = any(isinstance(t, (creOp, desOp)) for t in inTerm.tensors)
