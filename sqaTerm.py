@@ -147,7 +147,6 @@ class term:
 
     def sfExOp_ranks(self):
         "Returns a list of the ranks of the spin free excitation operators in the term"
-        #retval = [len(t.indices)/2 for t in self.tensors if isinstance(t, sfExOp)]
         retval = [t.order for t in self.tensors if isinstance(t, sfExOp)]
         return retval
 
@@ -672,7 +671,7 @@ def sortOps(unsortedOps, returnPermutation = False):
 #--------------------------------------------------------------------------------------------------
 
 
-def removeCoreOpPairs(inList):
+def removeCoreOpPairs(term_list):
     """
     Removes pairs of core creation and core destruction operators corresponding to the same core index.
     Does not remove a pair if it's creation or destruction operator is repeated.
@@ -680,101 +679,68 @@ def removeCoreOpPairs(inList):
     The terms must be in normal order.
     """
 
+    from .sqaIndex import is_core_index_type
+
     # prepare input argument
-    if not isinstance(inList, list):
+    if not isinstance(term_list, list):
         raise TypeError("input must be a list of terms")
 
-    # loop over input terms
-    for t in inList:
+    if not all(isinstance(t, term) for t in term_list):
+        raise TypeError("inList must be a list of term objects")
 
-        # Check that the term is indeed a term
-        if not isinstance(t, term):
-            raise TypeError("input must be a term or list of terms")
+    if not all(t.isNormalOrdered() for t in term_list):
+        raise ValueError("core index removal function only works for normal ordered terms")
 
-        # Check that the term is normal ordered
-        if not t.isNormalOrdered():
-            raise ValueError("core index removal function only works for normal ordered terms")
+    for t in term_list:
 
         # Initialize a counter for unremoved creation operators
-        creCount = 0
+        cre_count = 0
 
-        # Loop over the term's tensors
         i = 0
         while i < len(t.tensors):
+            cre_op_tensor = t.tensors[i]
 
-            # Initialize flags
-            operatorsRemoved = False
-            repeatedCreOp = False
-            repeatedDesOp = False
-
-            # if the tensor is a core creation operator
-            if isinstance(t.tensors[i], creOp) and options.core_type in t.tensors[i].indices[0].indType:
-
-                # Check whether the creation operator is a repeat of an earlier creation operator
-                for k in range(i):
-                    if t.tensors[k] == t.tensors[i]:
-                        repeatedCreOp = True
-
-                # If a repeat, move to the next tensor
-                if not repeatedCreOp:
-
-                    # otherwise...
-                    
-                    # create the matching destruction operator
-                    matchingDesOp = desOp(t.tensors[i].indices[0])
-
-                    # search for the matching destruction operator
-                    for j in range(i+1,len(t.tensors)):
-
-                        # if a repeat of the creation operator is found, move to the next tensor
-                        if t.tensors[j] == t.tensors[i]:
-                            break
-
-                        # if the matching destruction operator is found
-                        if t.tensors[j] == matchingDesOp:
-
-                            # initialize a counter for the number of operator commutations necessary to move the
-                            # matching creation and destruction operators to the begining and end of the term,
-                            # respectively
-                            commCount = creCount
-
-                            # count the number of destruction operators after the matching destruction operator
-                            for k in range(j+1, len(t.tensors)):
-                                if isinstance(t.tensors[k], desOp):
-                                    commCount += 1
-
-                                # while counting, check whether a repeat of the matching destruction operator is present
-                                if t.tensors[k] == t.tensors[j]:
-                                    repeatedDesOp = True
-
-                            # if there is a repeat of the matching destruction operator, move to the next tensor
-                            if repeatedDesOp:
-                                break
-
-                            # scale the term by the factor resulting from commuting the creation operator and
-                            # matching destruction operator to the beginning and end of the term, respectively
-                            t.scale((-1)**commCount)
-
-                            # delete the creation and matching destruction operators
-                            del t.tensors[j]
-                            del t.tensors[i]
-
-                            # set the operator removal flag to true
-                            operatorsRemoved = True
-
-                            # move to the next tensor
-                            break
-
-            # If no operators were removed...
-            if not operatorsRemoved:
-
-                # If the current tensor is a creation operator, increase the creation operator count
-                if isinstance(t.tensors[i], creOp):
-                    creCount += 1
-
-                # increment the index
+            # if tensor is not core creOp, move on
+            if not (isinstance(cre_op_tensor, creOp) and is_core_index_type(cre_op_tensor)):
                 i += 1
+                continue
 
+            # if core creOp is a repeat, skip
+            if any(t.tensors[k] == cre_op_tensor for k in range(i)):
+                cre_count += 1
+                i += 1
+                continue
+
+            matching_des_op = desOp(cre_op_tensor.indices[0])
+
+            # Search for the matching desOp
+            j = -1
+            for idx in range(i + 1, len(t.tensors)):
+                if t.tensors[idx] == cre_op_tensor:  # repeated creOp blocks match
+                    break
+                if t.tensors[idx] == matching_des_op:
+                    j = idx
+                    break
+
+            if j == -1:
+                cre_count += 1
+                i += 1
+                continue
+
+            # Skip if the matching destruction operator is repeated after j
+            if any(t.tensors[k] == matching_des_op for k in range(j + 1, len(t.tensors))):
+                cre_count += 1
+                i += 1
+                continue
+
+            # Scale by commutation sign, then delete the matched pair
+            des_ops_after_j = sum(
+                1 for k in range(j + 1, len(t.tensors)) if isinstance(t.tensors[k], desOp)
+            )
+            t.scale((-1) ** (cre_count + des_ops_after_j))
+
+            del t.tensors[j]
+            del t.tensors[i]
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -993,36 +959,6 @@ def removeVirtOps_sf(inList):
             print(" removing term: ", t)
 
     inList[:] = [t for t in inList if t not in terms_to_remove]
-
-    # # loop over the terms in inList
-    # i = 0
-    # while i < len(inList):
-
-    #     # ensure that each element of inList is a term object
-    #     if not isinstance(inList[i], term):
-    #         raise TypeError("inList must be a list of term objects")
-
-    #     # determine if the term's spin-free excitation operators have any virtual indices
-    #     hasVirtual = False
-    #     for ten in inList[i].tensors:
-    #         if isinstance(ten, sfExOp):
-    #             for ind in ten.indices:
-    #                 if options.virtual_type in ind.indType:
-    #                     hasVirtual = True
-
-    #     # remove the term if a spin-free excitation operator had a virtual index
-    #     if hasVirtual:
-    #         if options.verbose:
-    #             print(" removing term: ", inList[i])
-    #         del inList[i]
-
-    #     # otherwise, move to the next term
-    #     else:
-    #         i += 1
-
-    # if options.verbose:
-    #     print("")
-
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
