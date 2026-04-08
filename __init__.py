@@ -68,7 +68,6 @@ from .sqaMisc import (
   makeTuples,       
   assign_rdm_types, 
   combine_transpose,
-  convert_ops_to_rdms_so
 )
 
 from .sqaDecomposition_sf import (
