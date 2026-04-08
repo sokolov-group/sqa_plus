@@ -701,7 +701,7 @@ def removeCoreOpPairs(term_list):
             cre_op_tensor = t.tensors[i]
 
             # if tensor is not core creOp, move on
-            if not (isinstance(cre_op_tensor, creOp) and is_core_index_type(cre_op_tensor.indices[0]))
+            if not (isinstance(cre_op_tensor, creOp) and is_core_index_type(cre_op_tensor.indices[0])):
                 i += 1
                 continue
 
@@ -748,11 +748,11 @@ def removeCoreOpPairs(term_list):
 
 def removeCoreOps_sf(term_list):
     """
-    Removes core indices from inList's terms' spin-free excitation operators.
+    Remove core indices from spin-free excitation operators in term_list.
     This function assumes that the spin-free operators will be converted to density matrices
-    by taking their expectation value immediately after this function is finished.
-    Terms that have a zero expectation value due to the nature of their spin-free operator's core
-    indices are deleted from inList.
+    by taking their expectation value immediately after this function.
+    Terms with zero expectation value due to the nature of their spin-free operator's core
+    indices are deleted from term_list.
     """
 
     if options.verbose:
@@ -761,176 +761,127 @@ def removeCoreOps_sf(term_list):
 
     from .sqaIndex import is_core_index_type
 
-    # prepare input argument
     if not isinstance(term_list, list):
         raise TypeError("input must be a list of terms")
-
     if not all(isinstance(t, term) for t in term_list):
         raise TypeError("term_list must be a list of term objects")
-
     if not all(t.isNormalOrdered() for t in term_list):
         raise ValueError("core index removal function only works for normal ordered terms")
 
-    # loop repeatedly through the terms until no core indices are left
-    hasCore = True
-    while hasCore:
-
-        hasCore = False
-
-        # process each term
+    has_core = True
+    while has_core:
+        has_core = False
         t_num = 0
-        while t_num < len(term_list):
 
-            # use a short name for the current term
+        while t_num < len(term_list):
             t = term_list[t_num]
 
-            # check for spin-orbital creation and destruction operators
-            for ten in t.tensors:
-                if isinstance(ten, creOp) or isinstance(ten, desOp):
-                    raise TypeError("input terms may not contain creOp or desOp objects")
+            if any(isinstance(ten, (creOp, desOp)) for ten in t.tensors):
+                raise TypeError("input terms may not contain creOp or desOp objects")
 
-            # find the spin-free excitation operator
-            op = None
-            for i in range(len(t.tensors)):
-                if isinstance(t.tensors[i], sfExOp):
-                    op = t.tensors[i]
-                    opPos = i
+            # Find the spin-free excitation operator, if any
+            op_pos = next((i for i, ten in enumerate(t.tensors) if isinstance(ten, sfExOp)), None)
 
-            # if there is no spin-free excitation operator, skip the term
-            if op is None:
+            if op_pos is None:
                 t_num += 1
                 continue
 
-            # ensure the sfExOp has no indices with multiple type groups or a type group with core and non-core types
+            op = t.tensors[op_pos]
+
+            # Validate index type groups
             for ind in op.indices:
                 if len(ind.indType) > 1:
-                    raise ValueError("index %s in term (%s) has more than one type group:    %s" %(ind.name, str(t), str(typeGroup)))
+                    raise ValueError("index %s in term (%s) has more than one type group:    %s" % (ind.name, str(t), str(ind.indType)))
                 for typeGroup in ind.indType:
                     if options.core_type[0] in typeGroup and len(typeGroup) > 1:
-                        raise ValueError("index %s in term (%s) has a type group including core and non-core types:    %s" %(ind.name, str(t), str(typeGroup)))
+                        raise ValueError("index %s in term (%s) has a type group including core and non-core types:    %s" % (ind.name, str(t), str(typeGroup)))
 
-            # compute the operator's order
-            order = len(op.indices)/2
+            order = len(op.indices) // 2
 
-            # find a core index
-            cInd = None
-            for i in range(2*order):
-                if op.indices[i].indType == (options.core_type,):
-                    cInd = op.indices[i]
-                    break
+            # Find the first core index
+            c_ind = next((op.indices[i] for i in range(2 * order) if op.indices[i].indType == (options.core_type,)), None)
 
-            # if there are no core indices, move to the next term
-            if cInd is None:
+            if c_ind is None:
                 t_num += 1
                 continue
 
-            # if there is a core index, request another loop through the terms because all core indices have not been found
-            hasCore = True
+            # A core index exists, request another pass through the terms
+            has_core = True
 
-            # count the number of times the targeted core index appears among creation and destruction operators
-            nCre = 0
-            nDes = 0
-            for i in range(order):
-                if op.indices[i] == cInd:
-                    nCre += 1
-                if op.indices[order+i] == cInd:
-                    nDes += 1
+            n_cre = sum(1 for i in range(order) if op.indices[i] == c_ind)
+            n_des = sum(1 for i in range(order) if op.indices[order + i] == c_ind)
 
-            # if the term is equal to zero, remove it and move to the next term
-            if nCre != nDes or nCre > 2 or nDes > 2:
+            if n_cre != n_des or n_cre > 2 or n_des > 2:
                 del term_list[t_num]
                 continue
 
-            # organize the operator's indices into vertical pairs of cre/des operator indices
-            pairs = [ [op.indices[i],op.indices[order+i]] for i in range(order)]
+            pairs = [[op.indices[i], op.indices[order + i]] for i in range(order)]
 
-            # print out the initial term
             if options.verbose:
                 print("    initial term: ", t)
-#                print "verticle pairs: ",
-#                for p in pairs:
-#                    print " [%s,%s]" %(p[0].name, p[1].name),
-#                print ""
 
-            # make sure the number of pairs is equal to the operator's order
             if len(pairs) != order:
                 raise ValueError("number of pairs not equal to operator's order")
 
-            # determine the new operator's indices.
-            # record how many pairs there were with both elements equal to the targeted core operator
-            nMatch = 0
-            topUnmatched = []
-            botUnmatched = []
-            i = order-1
+            # Partition pairs by how they relate to the core index
+            n_match = 0
+            top_unmatched = []
+            bot_unmatched = []
+            i = order - 1
             while i >= 0:
-                if pairs[i][0] == cInd and pairs[i][1] == cInd:
+                if pairs[i][0] == c_ind and pairs[i][1] == c_ind:
                     del pairs[i]
-                    nMatch += 1
-                elif pairs[i][0] == cInd:
-                    botUnmatched.append(pairs.pop(i)[1])
-                elif pairs[i][1] == cInd:
-                    topUnmatched.append(pairs.pop(i)[0])
+                    n_match += 1
+                elif pairs[i][0] == c_ind:
+                    bot_unmatched.append(pairs.pop(i)[1])
+                elif pairs[i][1] == c_ind:
+                    top_unmatched.append(pairs.pop(i)[0])
                 i -= 1
-            newIndices = []
-            newIndices.extend(topUnmatched)
-            for p in pairs:
-                newIndices.append(p[0])
-            newIndices.extend(botUnmatched)
-            for p in pairs:
-                newIndices.append(p[1])
 
-            # replace the old operator with the new operator in which the targeted core index has been removed
-            if len(newIndices) > 0:
-                t.tensors[opPos] = sfExOp(newIndices)
-            # if there are no indices left after the core index's removal, remove the old operator
+            new_indices = (
+                top_unmatched
+                + [p[0] for p in pairs]
+                + bot_unmatched
+                + [p[1] for p in pairs]
+            )
+
+            if new_indices:
+                t.tensors[op_pos] = sfExOp(new_indices)
             else:
-                del t.tensors[opPos]
+                del t.tensors[op_pos]
 
-            # apply the appropriate constant factor
-            if     nCre == 1 and nMatch == 1:
-                t.scale(2.0)
-            elif nCre == 1 and nMatch == 0:
-                t.scale(-1.0)
-            elif nCre == 2 and nMatch == 2:
-                t.scale(2.0)
-            elif nCre == 2 and nMatch == 1:
-                t.scale(-1.0)
-            elif nCre == 2 and nMatch == 0:
-                t.scale(1.0)
-            else:
-                raise ValueError("unexpected values:    nCre = %i, nMatch = %i" %(nCre, nMatch))
+            scale_map = {
+                (1, 1):  2.0,
+                (1, 0): -1.0,
+                (2, 2):  2.0,
+                (2, 1): -1.0,
+                (2, 0):  1.0,
+            }
+            scale = scale_map.get((n_cre, n_match))
+            if scale is None:
+                raise ValueError("unexpected values:    nCre = %i, nMatch = %i" % (n_cre, n_match))
+            t.scale(scale)
 
-            # print out the final term
             if options.verbose:
-#                print "    topUnmatched: ",
-#                for p in topUnmatched:
-#                    print " %s" %(p.name),
-#                print ""
-#                print "    botUnmatched: ",
-#                for p in botUnmatched:
-#                    print " %s" %(p.name),
-#                print ""
                 print("        final term: ", t)
 
-            # for the special case of two unmatched pairs, the result is a sum of two different operators.
-            # the first replaced the original operator, and the second is added here.
-            if nCre == 2 and nMatch == 0:
+            # Special case: two unmatched pairs produce a second term with swapped top indices
+            if n_cre == 2 and n_match == 0:
+                if len(new_indices) < 4:
+                    raise ValueError(
+                        "expected at least 4 remaining indices for nCre == 2 and nMatch == 0 case, "
+                        "but only %i are present" % len(new_indices)
+                    )
                 term_list.append(t.copy())
-                if len(newIndices) < 4:
-                    raise ValueError("expected at least 4 remaining indices for nCre == 2 and nMatch == 0 case, but only %i are present" %len(newIndices))
-                (newIndices[0], newIndices[1]) = (newIndices[1], newIndices[0])
-                term_list[-1].tensors[opPos] = sfExOp(newIndices)
-                # print out the additional final term
+                new_indices[0], new_indices[1] = new_indices[1], new_indices[0]
+                term_list[-1].tensors[op_pos] = sfExOp(new_indices)
                 if options.verbose:
                     print("2nd final term: ", term_list[-1])
 
-            # print a blank line
             if options.verbose:
                 print("")
 
-            # increment the index to the next term
             t_num += 1
-
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
