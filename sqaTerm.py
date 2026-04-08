@@ -701,7 +701,7 @@ def removeCoreOpPairs(term_list):
             cre_op_tensor = t.tensors[i]
 
             # if tensor is not core creOp, move on
-            if not (isinstance(cre_op_tensor, creOp) and is_core_index_type(cre_op_tensor)):
+            if not (isinstance(cre_op_tensor, creOp) and is_core_index_type(cre_op_tensor.indices[0]))
                 i += 1
                 continue
 
@@ -746,7 +746,7 @@ def removeCoreOpPairs(term_list):
 #--------------------------------------------------------------------------------------------------
 
 
-def removeCoreOps_sf(inList):
+def removeCoreOps_sf(term_list):
     """
     Removes core indices from inList's terms' spin-free excitation operators.
     This function assumes that the spin-free operators will be converted to density matrices
@@ -759,6 +759,18 @@ def removeCoreOps_sf(inList):
         print("removing core creation and destruction operators in preperation for conversion to RDMs by an expectation value...")
         print("")
 
+    from .sqaIndex import is_core_index_type
+
+    # prepare input argument
+    if not isinstance(term_list, list):
+        raise TypeError("input must be a list of terms")
+
+    if not all(isinstance(t, term) for t in term_list):
+        raise TypeError("term_list must be a list of term objects")
+
+    if not all(t.isNormalOrdered() for t in term_list):
+        raise ValueError("core index removal function only works for normal ordered terms")
+
     # loop repeatedly through the terms until no core indices are left
     hasCore = True
     while hasCore:
@@ -767,18 +779,10 @@ def removeCoreOps_sf(inList):
 
         # process each term
         t_num = 0
-        while t_num < len(inList):
+        while t_num < len(term_list):
 
             # use a short name for the current term
-            t = inList[t_num]
-
-            # check that t is a term
-            if not isinstance(t, term):
-                raise TypeError("inList must be a list of term objects")
-
-            # check for normal ordering
-            if not t.isNormalOrdered():
-                raise ValueError("input terms must be normal ordered")
+            t = term_list[t_num]
 
             # check for spin-orbital creation and destruction operators
             for ten in t.tensors:
@@ -834,7 +838,7 @@ def removeCoreOps_sf(inList):
 
             # if the term is equal to zero, remove it and move to the next term
             if nCre != nDes or nCre > 2 or nDes > 2:
-                del inList[t_num]
+                del term_list[t_num]
                 continue
 
             # organize the operator's indices into vertical pairs of cre/des operator indices
@@ -911,14 +915,14 @@ def removeCoreOps_sf(inList):
             # for the special case of two unmatched pairs, the result is a sum of two different operators.
             # the first replaced the original operator, and the second is added here.
             if nCre == 2 and nMatch == 0:
-                inList.append(t.copy())
+                term_list.append(t.copy())
                 if len(newIndices) < 4:
                     raise ValueError("expected at least 4 remaining indices for nCre == 2 and nMatch == 0 case, but only %i are present" %len(newIndices))
                 (newIndices[0], newIndices[1]) = (newIndices[1], newIndices[0])
-                inList[-1].tensors[opPos] = sfExOp(newIndices)
+                term_list[-1].tensors[opPos] = sfExOp(newIndices)
                 # print out the additional final term
                 if options.verbose:
-                    print("2nd final term: ", inList[-1])
+                    print("2nd final term: ", term_list[-1])
 
             # print a blank line
             if options.verbose:
