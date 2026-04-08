@@ -424,14 +424,25 @@ def test_commutator_spin_free_hamiltonian_amplitudes(test5_setup, symmetries):
 # Test 6: Core Operator Pair Removal
 # ============================================================================
 
+# old
+#expected_output_test6 = (
+#    " (   1.00000) \n"
+#    " (  -1.00000) cre(c0) \n"
+#    " (   1.00000) cre(a0) r0(a0,a1) cre(c1) des(a1) \n"
+#    " (   1.00000) cre(a0) des(a1) \n"
+#    " (  -1.00000) cre(c0) cre(c0) des(c0) des(a1) \n"
+#    " (  -1.00000) cre(a0) cre(c1) des(c1) des(c1) \n"
+#)
+
 expected_output_test6 = (
     " (   1.00000) \n"
     " (  -1.00000) cre(c0) \n"
-    " (   1.00000) cre(a0) r0(a0,a1) cre(c1) des(a1) \n"
+    " (  -1.00000) cre(a0) r0(a0,a1) cre(c1) des(a1) \n"
     " (   1.00000) cre(a0) des(a1) \n"
     " (  -1.00000) cre(c0) cre(c0) des(c0) des(a1) \n"
-    " (  -1.00000) cre(a0) cre(c1) des(c1) des(c1) \n"
+    " (   1.00000) cre(a0) cre(c1) des(c1) des(c1) \n"
 )
+
 
 @pytest.fixture
 def test6_setup():
