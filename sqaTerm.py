@@ -686,7 +686,7 @@ def removeCoreOpPairs(term_list):
         raise TypeError("input must be a list of terms")
 
     if not all(isinstance(t, term) for t in term_list):
-        raise TypeError("inList must be a list of term objects")
+        raise TypeError("term_list must be a list of term objects")
 
     if not all(t.isNormalOrdered() for t in term_list):
         raise ValueError("core index removal function only works for normal ordered terms")
@@ -887,9 +887,9 @@ def removeCoreOps_sf(term_list):
 #--------------------------------------------------------------------------------------------------
 
 
-def removeVirtOps_sf(inList):
+def removeVirtOps_sf(term_list):
     """
-    Removes from inList any terms containing a spin-free operator with a virtual index.
+    Removes from term_list any terms containing a spin-free operator with a virtual index.
     """
 
     from .sqaIndex import is_virtual_index_type
@@ -897,12 +897,12 @@ def removeVirtOps_sf(inList):
     if options.verbose:
         print("removing terms containing a spin-free operator with a virtual index...\n")
 
-    if not all(isinstance(t, term) for t in inList):
-        raise TypeError("inList must be a list of term objects")
+    if not all(isinstance(t, term) for t in term_list):
+        raise TypeError("term_list must be a list of term objects")
 
     # Filter out sfExOp terms with virtual indices and log removals
     terms_to_remove = [
-        t for t in inList
+        t for t in term_list
         if any(
             is_virtual_index_type(ind)
             for ten in t.tensors if isinstance(ten, sfExOp)
@@ -913,7 +913,7 @@ def removeVirtOps_sf(inList):
         for t in terms_to_remove:
             print(" removing term: ", t)
 
-    inList[:] = [t for t in inList if t not in terms_to_remove]
+    term_list[:] = [t for t in term_list if t not in terms_to_remove]
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
