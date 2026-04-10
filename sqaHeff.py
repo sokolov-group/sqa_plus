@@ -34,74 +34,44 @@ def Heff(order = 0, internal_excitations = True):
 
     options.print_header("Hamiltonian ({:})".format(order))
     sys.stdout.flush()
-    #   order = 0 : L(0) = H(0)
-    #   order = 1 : L(1) = V + [H(0), T(1) - T'(1)]
-    #   order = 2 : L(2) = [H(0), (T(2) - T'(2))] + 1/2 * [(V + L(1)), (T(1) - T'(1))]
 
-    if (order == 0):
-        # L(0) = H(0)
+    # L(0) = H(0)
+    if order == 0:
+
         L = dyallH()
 
-    elif (order == 1):
-        # L(1) = V + [H(0),T(1) - T'(1)]
-        L = []
+    # L(1) = V + [H(0), T(1) - T'(1)]
+    elif order == 1:
 
-        effH = dyallH()
-
-        V = Vperturbation()
-
-        L.extend(V)
-
-        T1 = Tamplitude(1)
-
-        com1 = commutator(effH, T1)
+        L = Vperturbation()
+        L.extend(commutator(dyallH(), Tamplitude(1)))
         print("Commutation: Done ...")
-        sys.stdout.flush()
 
-        L.extend(com1)
-
-    elif (order == 2):
-        # L(2) = [H(0),T(2) - T'(2)]+ 1/2 [V + L(1),T(1) - T'(1)]
-        L = []
-
+    # L(2) = [H(0), T(2) - T'(2)]+ 1/2 * [V + L(1), T(1) - T'(1)]
+    elif order == 2:
         effH = dyallH()
-
+        T1 = Tamplitude(1)
         T2 = Tamplitude(2, internal_excitations)
 
-        com1 = commutator(effH, T2)
+        # [H(0), T(2) - T'(2)]
+        L = commutator(effH, T2)
         print("First Commutation: Done ...")
-        sys.stdout.flush()
 
-        L.extend(com1)
-
-        V = Vperturbation()
-
-        T1 = Tamplitude(1)
-
-        com2 = commutator(V, T1)
+        # [V, T(1) - T'(1)]
+        L.extend(commutator(Vperturbation(), T1))
         print("Second Commutation: Done ...")
         sys.stdout.flush()
 
-        L.extend(com2)
-
-        effH = dyallH()
-
-        T1_1 = Tamplitude(1)
-
-        com3 = commutator(effH, T1_1)
-
-        T1_2 = Tamplitude(1)
-
-        com4 = commutator(com3, T1_2)
-        print("Third Commutation: Done ...")
-        sys.stdout.flush()
-
-        for t in com4:
+        # 1/2 [[H(0), T(1) - T'(1)], T(1) - T'(1)]
+        inner_comm = commutator(effH, T1)
+        outer_comm = commutator(inner_comm, T1)
+        for t in outer_comm:
             t.scale(0.5)
-        L.extend(com4)
+        L.extend(outer_comm)
+        print("Third Commutation: Done ...")
 
     else:
-        raise Exception('Unknown type of effective Hamiltonian of order = %s' % (order))
+        raise ValueError(f'Unknown effective Hamiltonian order: {order}')
 
     print("Done ...")
     options.print_divider()
