@@ -549,7 +549,7 @@ def combineTerms(term_list, max_processes = None):
         return
 
     if max_processes is None:
-        max_processes = cpu_count()
+        max_processes = int(cpu_count()/2)
     else:
         max_processes = max(1, max_processes)
 
