@@ -30,7 +30,7 @@ from .sqaIndexList import indexLists
 from .sqaOptions import options
 
 def Heff(order = 0, internal_excitations = True):
-    "Construct effective Hamiltonian (L)."
+    """Construct effective Hamiltonian (L)."""
 
     options.print_header("Hamiltonian ({:})".format(order))
     sys.stdout.flush()
@@ -47,7 +47,7 @@ def Heff(order = 0, internal_excitations = True):
         L.extend(commutator(dyallH(), Tamplitude(1)))
         print("Commutation: Done ...")
 
-    # L(2) = [H(0), T(2) - T'(2)]+ 1/2 * [V + L(1), T(1) - T'(1)]
+    # L(2) = [H(0), T(2) - T'(2)] + 1/2 * [V + L(1), T(1) - T'(1)]
     elif order == 2:
         effH = dyallH()
         T1 = Tamplitude(1)
@@ -58,7 +58,8 @@ def Heff(order = 0, internal_excitations = True):
         print("First Commutation: Done ...")
 
         # [V, T(1) - T'(1)]
-        L.extend(commutator(Vperturbation(), T1))
+        V = Vperturbation()
+        L.extend(commutator(V, T1))
         print("Second Commutation: Done ...")
         sys.stdout.flush()
 
@@ -79,10 +80,10 @@ def Heff(order = 0, internal_excitations = True):
     return L
 
 def dyallH():
-    "Construct Dyall Hamiltonian operator."
+    """Construct Dyall Hamiltonian operator."""
 
     def dyallH_spin_orbital():
-        "Construct spin-orbital Dyall Hamiltonian operator."
+        """Construct spin-orbital Dyall Hamiltonian operator."""
 
         cor_inds = indexLists.core
         act_inds = indexLists.active
@@ -132,7 +133,7 @@ def dyallH():
         return DyallH
 
     def dyallH_spin_integrated():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        """Construct spin-integrated Dyall Hamiltonian operator."""
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -199,7 +200,7 @@ def dyallH():
         return DyallH
 
     def dyallH_spin_integrated_explicit_cases():
-        "Construct spin-integrated Dyall Hamiltonian operator."
+        """Construct spin-integrated Dyall Hamiltonian operator."""
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -319,7 +320,7 @@ def dyallH():
         return DyallH
 
     def dyallH_cvs_spin_orbital():
-        "Construct spin-orbital Dyall Hamiltonian operator using CVS approach."
+        """Construct spin-orbital Dyall Hamiltonian operator using CVS approach."""
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -372,7 +373,7 @@ def dyallH():
         return DyallH
 
     def dyallH_cvs_spin_integrated():
-        "Construct spin-integrated Dyall Hamiltonian operator using CVS approach."
+        """Construct spin-integrated Dyall Hamiltonian operator using CVS approach."""
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -441,7 +442,7 @@ def dyallH():
         return DyallH
 
     def dyallH_cvs_spin_integrated_explicit_cases():
-        "Construct spin-integrated Dyall Hamiltonian operator using CVS approach."
+        """Construct spin-integrated Dyall Hamiltonian operator using CVS approach."""
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -616,10 +617,10 @@ def dyallH():
     return dyallH
 
 def dyallH_act():
-    "Construct Dyall Hamiltonian active-space operator."
+    """Construct Dyall Hamiltonian active-space operator."""
 
     def dyallH_act_spin_orbital():
-        "Construct spin-orbital Dyall Hamiltonian active-space operator."
+        """Construct spin-orbital Dyall Hamiltonian active-space operator."""
 
         cor_inds = indexLists.core
         act_inds = indexLists.active
@@ -650,7 +651,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_spin_integrated():
-        "Construct spin-integrated Dyall Hamiltonian active-space operator."
+        """Construct spin-integrated Dyall Hamiltonian active-space operator."""
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -695,7 +696,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_spin_integrated_explicit_cases():
-        "Construct spin-integrated Dyall Hamiltonian active-space operator."
+        """Construct spin-integrated Dyall Hamiltonian active-space operator."""
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -787,7 +788,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_cvs_spin_orbital():
-        "Construct spin-orbital Dyall Hamiltonian active-space operator using CVS approach."
+        """Construct spin-orbital Dyall Hamiltonian active-space operator using CVS approach."""
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -820,7 +821,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_cvs_spin_integrated():
-        "Construct spin-orbital Dyall Hamiltonian active-space operator using CVS approach."
+        """Construct spin-orbital Dyall Hamiltonian active-space operator using CVS approach."""
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -873,7 +874,7 @@ def dyallH_act():
         return DyallH_act
 
     def dyallH_act_cvs_spin_integrated_explicit_cases():
-        "Construct spin-integrated Dyall Hamiltonian active-space operator using CVS approach."
+        """Construct spin-integrated Dyall Hamiltonian active-space operator using CVS approach."""
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -1012,10 +1013,10 @@ def dyallH_act():
     return dyallH_act
 
 def Tamplitude(order = 1, internal_excitations = True, only_excitations = False, only_deexcitations = False):
-    "Construct cluster operator: T - T^\dag; where T = T1 + T2"
+    """Construct cluster operator: T - T^\\dag; where T = T1 + T2"""
 
     def Tamplitude_spin_orbital(order, internal_excitations):
-        "Construct spin-orbital T amplitudes operator."
+        """Construct spin-orbital T amplitudes operator."""
 
         cor_inds = indexLists.core
         act_inds = indexLists.active
@@ -1160,7 +1161,7 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
         return (T_ex, T_deex)
 
     def Tamplitude_spin_integrated(order, internal_excitations):
-        "Construct spin-integrated T amplitudes operator."
+        """Construct spin-integrated T amplitudes operator."""
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -1570,7 +1571,7 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
         return (T_ex, T_deex)
 
     def Tamplitude_spin_integrated_explicit_cases(order, internal_excitations):
-        "Construct spin-integrated T amplitudes operator."
+        """Construct spin-integrated T amplitudes operator."""
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -2150,7 +2151,7 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
         return (T_ex, T_deex)
 
     def Tamplitude_cvs_spin_orbital(order, internal_excitations):
-        "Construct spin-orbital T amplitudes operator using CVS approach."
+        """Construct spin-orbital T amplitudes operator using CVS approach."""
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -2334,7 +2335,7 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
         return (T_ex, T_deex)
 
     def Tamplitude_cvs_spin_integrated(order, internal_excitations):
-        "Construct spin-integrated T amplitudes operator using CVS approach."
+        """Construct spin-integrated T amplitudes operator using CVS approach."""
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -2830,7 +2831,7 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
         return (T_ex, T_deex)
 
     def Tamplitude_cvs_spin_integrated_explicit_cases(order, internal_excitations):
-        "Construct spin-integrated T amplitudes operator using CVS approach."
+        """Construct spin-integrated T amplitudes operator using CVS approach."""
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -4192,10 +4193,10 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
     return T
 
 def Vperturbation():
-    "Construct perturbation operator V."
+    """Construct perturbation operator V."""
 
     def Vperturbation_spin_orbital():
-        "Construct spin-orbital perturbation operator V."
+        """Construct spin-orbital perturbation operator V."""
 
         cor_inds = indexLists.core
         act_inds = indexLists.active
@@ -4319,7 +4320,7 @@ def Vperturbation():
         return V
 
     def Vperturbation_spin_integrated():
-        "Construct spin-integrated perturbation operator V."
+        """Construct spin-integrated perturbation operator V."""
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -4597,7 +4598,7 @@ def Vperturbation():
         return V
 
     def Vperturbation_spin_integrated_explicit_cases():
-        "Construct spin-integrated perturbation operator V."
+        """Construct spin-integrated perturbation operator V."""
 
         cor_alpha_inds = indexLists.core_alpha
         act_alpha_inds = indexLists.active_alpha
@@ -5099,7 +5100,7 @@ def Vperturbation():
         return V
 
     def Vperturbation_cvs_spin_orbital():
-        "Construct spin-orbital perturbation operator V using CVS approach."
+        """Construct spin-orbital perturbation operator V using CVS approach."""
 
         cvs_cor_inds = indexLists.cvs_core
         cvs_val_inds = indexLists.cvs_valence
@@ -5242,7 +5243,7 @@ def Vperturbation():
         return V
 
     def Vperturbation_cvs_spin_integrated():
-        "Construct spin-integrated perturbation operator V using CVS approach."
+        """Construct spin-integrated perturbation operator V using CVS approach."""
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
@@ -5567,7 +5568,7 @@ def Vperturbation():
         return V
 
     def Vperturbation_cvs_spin_integrated_explicit_cases():
-        "Construct spin-integrated perturbation operator V using CVS approach."
+        """Construct spin-integrated perturbation operator V using CVS approach."""
 
         cvs_cor_alpha_inds = indexLists.cvs_core_alpha
         cvs_val_alpha_inds = indexLists.cvs_valence_alpha
