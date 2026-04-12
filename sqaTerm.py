@@ -26,7 +26,7 @@
 #
 
 from functools import total_ordering
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool, cpu_count, get_context
 from collections import deque, defaultdict
 from itertools import islice, count
 
@@ -35,6 +35,8 @@ from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
 from .sqaMisc import makePermutations
 from .sqaOptions import options
 import time
+
+from .worker import process_chunk
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
@@ -537,11 +539,6 @@ class term:
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
-def process_chunk(terms_chunk):
-    for t in terms_chunk:
-        t.makeCanonical(rename_user_defined = False)
-    return terms_chunk
-
 def combineTerms(term_list, max_processes = None):
     """Combines like terms in list of terms."""
 
@@ -567,7 +564,7 @@ def combineTerms(term_list, max_processes = None):
         chunk_size = max(1, n_terms // (max_processes * 4))
         chunks = [term_list[i:i+chunk_size] for i in range(0, n_terms, chunk_size)]
 
-        with Pool(processes=max_processes, maxtasksperchild=1) as pool:
+        with get_context("fork").Pool(processes=max_processes, maxtasksperchild=1) as pool:
             processed_chunks = pool.map(process_chunk, chunks)
 
         # Flatten results
