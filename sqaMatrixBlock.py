@@ -32,6 +32,9 @@ from .sqaIndex import get_spatial_index_type, get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type, \
                      is_cvs_core_index_type, is_cvs_valence_index_type
 
+from .utils import log_timing
+
+@log_timing
 def matrixBlock(terms):
     "Construct matrix block."
 

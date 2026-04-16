@@ -29,6 +29,9 @@ Available at https://github.com/sokolov-group/sqa_plus
 """
 __version__ = "1.0.0"
 
+from .utils import setup_logging
+setup_logging()
+
 from .sqaOptions import options
 
 from .sqaIndex import index

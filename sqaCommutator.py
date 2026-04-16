@@ -24,6 +24,9 @@
 from .sqaTerm import term, combineTerms, multiplyTerms, termChop
 from .sqaNormalOrder import normalOrder
 
+from .utils import log_timing
+
+@log_timing
 def commutator(leftInput, rightInput, contract = True, combine = True):
 
     # Convert inputs that are terms into lists of terms
@@ -64,5 +67,5 @@ def commutator(leftInput, rightInput, contract = True, combine = True):
     if combine:
         combineTerms(noTerms)
 
-    # Return result
     return noTerms
+

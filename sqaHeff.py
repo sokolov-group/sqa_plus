@@ -29,6 +29,9 @@ from .sqaCommutator import commutator
 from .sqaIndexList import indexLists
 from .sqaOptions import options
 
+from .utils import log_timing
+
+@log_timing
 def Heff(order = 0, internal_excitations = True):
     """Construct effective Hamiltonian (L)."""
 
@@ -79,6 +82,7 @@ def Heff(order = 0, internal_excitations = True):
     sys.stdout.flush()
     return L
 
+@log_timing
 def dyallH():
     """Construct Dyall Hamiltonian operator."""
 
@@ -1012,6 +1016,7 @@ def dyallH_act():
 
     return dyallH_act
 
+@log_timing
 def Tamplitude(order = 1, internal_excitations = True, only_excitations = False, only_deexcitations = False):
     """Construct cluster operator: T - T^\\dag; where T = T1 + T2"""
 
@@ -4192,6 +4197,7 @@ def Tamplitude(order = 1, internal_excitations = True, only_excitations = False,
 
     return T
 
+@log_timing
 def Vperturbation():
     """Construct perturbation operator V."""
 
