@@ -1,7 +1,7 @@
 import sqa_plus
 sqa_plus.options.spin_integrated = True
 
-amplitude_string = 't1_m1p'
+amplitude_string = 't1_p1p'
 
 import time
 start = time.time()
@@ -85,7 +85,7 @@ t2_symm = [sqa_plus.symmetry((1,0,2,3), -1), sqa_plus.symmetry((0,1,3,2), -1)]
 
 ## Define terms
 if amplitude_string == 't1_0':
-    print("## Create T: t1_{ij}^{ab} a_a^\dag a_b^\dag a_j a_i ...\n")
+    print("## Create T: t1_{ij}^{ab} a_a^\\dag a_b^\\dag a_j a_i ...\n")
 
     t1_aaaa = sqa_plus.tensor("t1", [i_alpha, j_alpha, a_alpha, b_alpha], t2_symm)
     t1_abab = sqa_plus.tensor("t1", [i_alpha, j_beta,  a_alpha, b_beta],  t2_symm)
@@ -98,7 +98,7 @@ if amplitude_string == 't1_0':
     e_string = 'e_0'
 
 elif amplitude_string == 't1_0p':
-    print("## Create T: t1_{ix}^{ay} a_a^\dag a_y^\dag a_x a_i ...\n")
+    print("## Create T: t1_{ix}^{ay} a_a^\\dag a_y^\\dag a_x a_i ...\n")
 
     t1_aa = sqa_plus.tensor("t1", [i_alpha, a_alpha], t1_symm)
     t1_bb = sqa_plus.tensor("t1", [i_beta,  a_beta],  t1_symm)
@@ -132,7 +132,7 @@ elif amplitude_string == 't1_0p':
     e_string = 'e_0p'
 
 elif amplitude_string == 't1_m1':
-    print("## Create T: t1_{ix}^{ab} a_a^\dag a_b^\dag a_x a_i ...\n")
+    print("## Create T: t1_{ix}^{ab} a_a^\\dag a_b^\\dag a_x a_i ...\n")
 
     t1_aaaa = sqa_plus.tensor("t1", [i_alpha, x_alpha, a_alpha, b_alpha], t2_symm)
     t1_abab = sqa_plus.tensor("t1", [i_alpha, x_beta,  a_alpha, b_beta],  t2_symm)
@@ -147,7 +147,7 @@ elif amplitude_string == 't1_m1':
     e_string = 'e_m1'
 
 elif amplitude_string == 't1_p1':
-    print("## Create T: t1_{ij}^{ax} a_a^\dag a_x^\dag a_j a_i ...\n")
+    print("## Create T: t1_{ij}^{ax} a_a^\\dag a_x^\\dag a_j a_i ...\n")
 
     t1_aaaa = sqa_plus.tensor("t1", [i_alpha, j_alpha, a_alpha, x_alpha], t2_symm)
     t1_abab = sqa_plus.tensor("t1", [i_alpha, j_beta,  a_alpha, x_beta],  t2_symm)
@@ -162,7 +162,7 @@ elif amplitude_string == 't1_p1':
     e_string = 'e_p1'
 
 elif amplitude_string == 't1_m2':
-    print("## Create T: t1_{xy}^{ab} a_a^\dag a_b^\dag a_y a_x ...\n")
+    print("## Create T: t1_{xy}^{ab} a_a^\\dag a_b^\\dag a_y a_x ...\n")
 
     t1_aaaa = sqa_plus.tensor("t1", [x_alpha, y_alpha, a_alpha, b_alpha], t2_symm)
     t1_abab = sqa_plus.tensor("t1", [x_alpha, y_beta,  a_alpha, b_beta],  t2_symm)
@@ -177,7 +177,7 @@ elif amplitude_string == 't1_m2':
     e_string = 'e_m2'
 
 elif amplitude_string == 't1_p2':
-    print("## Create T: t1_{ij}^{xy} a_x^\dag a_y^\dag a_j a_i ...\n")
+    print("## Create T: t1_{ij}^{xy} a_x^\\dag a_y^\\dag a_j a_i ...\n")
 
     t1_aaaa = sqa_plus.tensor("t1", [i_alpha, j_alpha, x_alpha, y_alpha], t2_symm)
     t1_abab = sqa_plus.tensor("t1", [i_alpha, j_beta,  x_alpha, y_beta],  t2_symm)
@@ -190,8 +190,8 @@ elif amplitude_string == 't1_p2':
     e_string = 'e_p2'
 
 elif amplitude_string == 't1_m1p':
-    print("## Create T: t1_{x}^{a} a_a^\dag a_x ...\n")
-    print("## Create T: t1_{xy}^{az} a_a^\dag a_z^\dag a_y a_x ...\n")
+    print("## Create T: t1_{x}^{a} a_a^\\dag a_x ...\n")
+    print("## Create T: t1_{xy}^{az} a_a^\\dag a_z^\\dag a_y a_x ...\n")
 
     t1_aa = sqa_plus.tensor("t1", [x_alpha, a_alpha])
     t1_bb = sqa_plus.tensor("t1", [x_beta,  a_beta])
@@ -219,8 +219,8 @@ elif amplitude_string == 't1_m1p':
     e_string = 'e_m1p'
 
 elif amplitude_string == 't1_p1p':
-    print("## Create T: t1_{i}^{x} a_x^\dag a_i ...\n")
-    print("## Create T: t1_{iz}^{xy} a_x^\dag a_y^\dag a_z a_i ...\n")
+    print("## Create T: t1_{i}^{x} a_x^\\dag a_i ...\n")
+    print("## Create T: t1_{iz}^{xy} a_x^\\dag a_y^\\dag a_z a_i ...\n")
 
     t1_aa = sqa_plus.tensor("t1", [i_alpha, x_alpha], t1_symm)
     t1_bb = sqa_plus.tensor("t1", [i_beta,  x_beta],  t1_symm)

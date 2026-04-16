@@ -56,7 +56,7 @@ t2_symm = [sqa_plus.symmetry((1,0,2,3), -1), sqa_plus.symmetry((0,1,3,2), -1)]
 
 ## Define terms
 if amplitude_string == 't1_0':
-    print("## Create T: t1_{ij}^{ab} a_a^\dag a_b^\dag a_j a_i ...\n")
+    print("## Create T: t1_{ij}^{ab} a_a^\\dag a_b^\\dag a_j a_i ...\n")
 
     t1 = sqa_plus.tensor("t1", [i, j, a, b], t2_symm)
 
@@ -65,7 +65,7 @@ if amplitude_string == 't1_0':
     e_string = 'e_0'
 
 elif amplitude_string == 't1_0p':
-    print("## Create T: t1_{ix}^{ay} a_a^\dag a_y^\dag a_x a_i ...\n")
+    print("## Create T: t1_{ix}^{ay} a_a^\\dag a_y^\\dag a_x a_i ...\n")
 
     t1 = sqa_plus.tensor("t1", [i, a], t1_symm)
     t2 = sqa_plus.tensor("t1", [i, x, a, y], t2_symm)
@@ -79,7 +79,7 @@ elif amplitude_string == 't1_0p':
     e_string = 'e_0p'
 
 elif amplitude_string == 't1_m1':
-    print("## Create T: t1_{ix}^{ab} a_a^\dag a_b^\dag a_x a_i ...\n")
+    print("## Create T: t1_{ix}^{ab} a_a^\\dag a_b^\\dag a_x a_i ...\n")
 
     t1 = sqa_plus.tensor("t1", [i, x, a, b], t2_symm)
 
@@ -88,7 +88,7 @@ elif amplitude_string == 't1_m1':
     e_string = 'e_m1'
 
 elif amplitude_string == 't1_p1':
-    print("## Create T: t1_{ij}^{ax} a_a^\dag a_x^\dag a_j a_i ...\n")
+    print("## Create T: t1_{ij}^{ax} a_a^\\dag a_x^\\dag a_j a_i ...\n")
 
     t1 = sqa_plus.tensor("t1", [i, j, a, x], t2_symm)
 
@@ -97,7 +97,7 @@ elif amplitude_string == 't1_p1':
     e_string = 'e_p1'
 
 elif amplitude_string == 't1_m2':
-    print("## Create T: t1_{xy}^{ab} a_a^\dag a_b^\dag a_y a_x ...\n")
+    print("## Create T: t1_{xy}^{ab} a_a^\\dag a_b^\\dag a_y a_x ...\n")
 
     t1 = sqa_plus.tensor("t1", [x, y, a, b], t2_symm)
 
@@ -106,7 +106,7 @@ elif amplitude_string == 't1_m2':
     e_string = 'e_m2'
 
 elif amplitude_string == 't1_p2':
-    print("## Create T: t1_{ij}^{xy} a_x^\dag a_y^\dag a_j a_i ...\n")
+    print("## Create T: t1_{ij}^{xy} a_x^\\dag a_y^\\dag a_j a_i ...\n")
 
     t1 = sqa_plus.tensor("t1", [i, j, x, y], t2_symm)
 
@@ -115,8 +115,8 @@ elif amplitude_string == 't1_p2':
     e_string = 'e_p2'
 
 elif amplitude_string == 't1_m1p':
-    print("## Create T: t1_{x}^{a} a_a^\dag a_x ...\n")
-    print("## Create T: t1_{xy}^{az} a_a^\dag a_z^\dag a_y a_x ...\n")
+    print("## Create T: t1_{x}^{a} a_a^\\dag a_x ...\n")
+    print("## Create T: t1_{xy}^{az} a_a^\\dag a_z^\\dag a_y a_x ...\n")
 
     t1 = sqa_plus.tensor("t1", [x, a], t1_symm)
     t2 = sqa_plus.tensor("t1", [x, y, a, z], t2_symm)
@@ -130,8 +130,8 @@ elif amplitude_string == 't1_m1p':
     e_string = 'e_m1p'
 
 elif amplitude_string == 't1_p1p':
-    print("## Create T: t1_{i}^{x} a_x^\dag a_i ...\n")
-    print("## Create T: t1_{iz}^{xy} a_x^\dag a_y^\dag a_z a_i ...\n")
+    print("## Create T: t1_{i}^{x} a_x^\\dag a_i ...\n")
+    print("## Create T: t1_{iz}^{xy} a_x^\\dag a_y^\\dag a_z a_i ...\n")
 
     t1 = sqa_plus.tensor("t1", [i, x], t1_symm)
     t2 = sqa_plus.tensor("t1", [i, z, x, y], t2_symm)

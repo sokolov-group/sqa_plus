@@ -71,7 +71,7 @@ des_z_beta  = sqa_plus.desOp(z_beta)
 ## Define terms
 if amplitude_string == 't1_0p':
     if s_block_string == 'S12':
-        print("## Create S12: a_X^\dag a_Y ...\n")
+        print("## Create S12: a_X^\\dag a_Y ...\n")
 
         terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])]
 
@@ -80,7 +80,7 @@ if amplitude_string == 't1_0p':
 
     elif s_block_string == 'S22':
         if spin_cases_string == 'aa_aa':
-            print("## Create S22: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_X^\\dag a_Y^\\dag a_Z a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha, cre_z_alpha, des_w_alpha])]
 
@@ -88,7 +88,7 @@ if amplitude_string == 't1_0p':
             final_indices_string = 'XYWZ'
 
         elif spin_cases_string == 'aa_bb':
-            print("## Create S22: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_X^\\dag a_Y^\\dag a_Z a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha, cre_z_beta, des_w_beta])]
 
@@ -96,7 +96,7 @@ if amplitude_string == 't1_0p':
             final_indices_string = 'XYWZ'
 
         elif spin_cases_string == 'ba_ba':
-            print("## Create S22: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_X^\\dag a_Y^\\dag a_Z a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_x_beta, des_y_alpha, cre_z_alpha, des_w_beta])]
 
@@ -104,7 +104,7 @@ if amplitude_string == 't1_0p':
             final_indices_string = 'XYWZ'
 
 elif amplitude_string == 't1_m1':
-    print("## Create S11: a_X^\dag a_Y ...\n")
+    print("## Create S11: a_X^\\dag a_Y ...\n")
 
     terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])]
 
@@ -112,7 +112,7 @@ elif amplitude_string == 't1_m1':
     final_indices_string = 'XY'
 
 elif amplitude_string == 't1_p1':
-    print("## Create S11: a_X a_Y^\dag ...\n")
+    print("## Create S11: a_X a_Y^\\dag ...\n")
 
     terms_S = [sqa_plus.term(1.0, [], [des_x_alpha, cre_y_alpha])]
 
@@ -120,7 +120,7 @@ elif amplitude_string == 't1_p1':
     final_indices_string = 'XY'
 
 elif amplitude_string == 't1_m2':
-    print("## Create S: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+    print("## Create S: a_X^\\dag a_Y^\\dag a_Z a_W ...\n")
 
     terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, cre_y_beta, des_z_beta, des_w_alpha])]
 
@@ -128,7 +128,7 @@ elif amplitude_string == 't1_m2':
     final_indices_string = 'XYWZ'
 
 elif amplitude_string == 't1_p2':
-    print("## Create S: a_X a_Y a_Z^\dag a_W^\dag ...\n")
+    print("## Create S: a_X a_Y a_Z^\\dag a_W^\\dag ...\n")
 
     terms_S = [sqa_plus.term(1.0, [], [des_x_alpha, des_y_beta, cre_z_beta, cre_w_alpha])]
 
@@ -137,7 +137,7 @@ elif amplitude_string == 't1_p2':
 
 elif amplitude_string == 't1_m1p':
     if s_block_string == 'S11':
-        print("## Create S11: a_X^\dag a_Y ...\n")
+        print("## Create S11: a_X^\\dag a_Y ...\n")
 
         terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, des_y_alpha])]
 
@@ -145,7 +145,7 @@ elif amplitude_string == 't1_m1p':
         final_indices_string = 'XY'
 
     elif s_block_string == 'S12':
-        print("## Create S12: a_X^\dag a_Y^\dag a_Z a_W ...\n")
+        print("## Create S12: a_X^\\dag a_Y^\\dag a_Z a_W ...\n")
 
         terms_S = [sqa_plus.term(1.0, [], [cre_x_alpha, cre_y_beta, des_z_beta, des_w_alpha])]
 
@@ -154,7 +154,7 @@ elif amplitude_string == 't1_m1p':
 
     elif s_block_string == 'S22':
         if spin_cases_string == 'aaa_aaa':
-            print("## Create S22: a_U^\dag a_V^\dag a_X a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_U^\\dag a_V^\\dag a_X a_Y^\\dag a_Z a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_u_alpha, cre_v_alpha, des_x_alpha, cre_y_alpha, des_z_alpha, des_w_alpha])]
 
@@ -162,7 +162,7 @@ elif amplitude_string == 't1_m1p':
             final_indices_string = 'UVXWZY'
 
         elif spin_cases_string == 'abb_abb':
-            print("## Create S22: a_U^\dag a_V^\dag a_X a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_U^\\dag a_V^\\dag a_X a_Y^\\dag a_Z a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_u_alpha, cre_v_beta, des_x_beta, cre_y_beta, des_z_beta, des_w_alpha])]
 
@@ -171,7 +171,7 @@ elif amplitude_string == 't1_m1p':
 
 elif amplitude_string == 't1_p1p':
     if s_block_string == 'S11':
-        print("## Create S11: a_X a_Y^\dag ...\n")
+        print("## Create S11: a_X a_Y^\\dag ...\n")
 
         terms_S = [sqa_plus.term(1.0, [], [des_x_alpha, cre_y_alpha])]
 
@@ -179,7 +179,7 @@ elif amplitude_string == 't1_p1p':
         final_indices_string = 'XY'
 
     elif s_block_string == 'S12':
-        print("## Create S12: a_X a_Y^\dag a_Z a_W ...\n")
+        print("## Create S12: a_X a_Y^\\dag a_Z a_W ...\n")
 
         terms_S = [sqa_plus.term(1.0, [], [des_x_alpha, cre_y_alpha, cre_z_beta, des_w_beta])]
 
@@ -188,7 +188,7 @@ elif amplitude_string == 't1_p1p':
 
     elif s_block_string == 'S22':
         if spin_cases_string == 'aaa_aaa':
-            print("## Create S22: a_U^\dag a_V a_X a_Y^\dag a_Z^\dag a_W ...\n")
+            print("## Create S22: a_U^\\dag a_V a_X a_Y^\\dag a_Z^\\dag a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_u_alpha, des_v_alpha, des_x_alpha, cre_y_alpha, cre_z_alpha, des_w_alpha])]
 
@@ -196,7 +196,7 @@ elif amplitude_string == 't1_p1p':
             final_indices_string = 'UVXWZY'
 
         elif spin_cases_string == 'bba_bba':
-            print("## Create S22: a_U^\dag a_V^\dag a_X a_Y^\dag a_Z a_W ...\n")
+            print("## Create S22: a_U^\\dag a_V^\\dag a_X a_Y^\\dag a_Z a_W ...\n")
 
             terms_S = [sqa_plus.term(1.0, [], [cre_u_beta, des_v_beta, des_x_alpha, cre_y_alpha, cre_z_beta, des_w_beta])]
 
