@@ -34,8 +34,8 @@ from .sqaIndex import index, ind_type_order
 from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
 from .sqaMisc import makePermutations
 from .sqaOptions import options
-import time
 
+from .utils import log_timing
 from .worker import process_chunk
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -539,6 +539,7 @@ class term:
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
+@log_timing
 def combineTerms(term_list, max_processes = None):
     """Combines like terms in list of terms."""
 
@@ -554,8 +555,6 @@ def combineTerms(term_list, max_processes = None):
         print('\nCombining like terms:')
         print('Converting %i terms to canonical form...' %(len(term_list)))
         print('Using max threads %i' %(max_processes))
-
-    start_time = time.time()
 
     # Canonicalize terms
     n_terms = len(term_list)
@@ -600,9 +599,6 @@ def combineTerms(term_list, max_processes = None):
 
     # Remove terms with coefficients of zero
     termChop(term_list)
-
-    if options.verbose:
-        print("Finished combining terms in %.3f seconds\n" %(time.time() - start_time))
 
     # Sort the terms
     term_list.sort()
