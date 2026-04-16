@@ -27,7 +27,9 @@ from .sqaTerm import combineTerms, termChop
 from .sqaTensor import creOp, desOp, creDesTensor, kroneckerDelta
 from .sqaOptions import options
 from .sqaSymmetry import symmetry
+from .utils import log_timing
 
+@log_timing
 def convertSpinIntegratedToAdapted(terms_si):
     "Convert Spin-Integrated Terms to Spin-Adapted Quantities."
 
@@ -557,6 +559,7 @@ def convert_v2e_si_to_sa(_terms_v2e_si):
     print("Done!")
     return terms_v2e_sa
 
+@log_timing
 def convert_rdms_si_to_sa(_terms_rdm_si):
     "Convert RDM Objects from Spin-Integrated to Spin-Adapted"
 
