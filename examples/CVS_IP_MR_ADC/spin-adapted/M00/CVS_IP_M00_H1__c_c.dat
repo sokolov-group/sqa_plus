@@ -1,0 +1,105 @@
+
+----------------------------------- Spin-Adapted CVS-IP: M00 H1 ------------------------------------
+
+
+## Generating Term a_I^\dag a_J ...
+
+
+----------------------------------------- Hamiltonian (1) ------------------------------------------
+
+Commutation: Done ...
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculate the commutator [H(1), a_J^\dag] ...
+
+## Calculate a_I [H(1), a_J^\dag] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (  -1.00000) v(J,x,I,y) rdm(x,y)
+ (  -1.00000) v(J,x,I,y) rdm(x,y)
+ (   1.00000) v(J,x,I,y) cre(y) des(x)
+ (   1.00000) v(J,x,I,y) cre(y) des(x)
+
+Total terms : 4
+SQA automation time :  0.108 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 6 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+6 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+
+Total spin-integrated terms: 4
+Total spin-adapted terms: 0
+Spin-adaptation automation time :  0.004 seconds
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+No terms provided for einsum equations.
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 8.29 seconds.
