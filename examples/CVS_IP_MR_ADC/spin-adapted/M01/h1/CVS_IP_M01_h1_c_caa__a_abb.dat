@@ -1,0 +1,132 @@
+
+----------------------------------- Spin-Adapted CVS-IP: M01 H1 ------------------------------------
+
+
+## Generating operators ...
+
+##  Left Op:  (   1.00000) des(I)
+## Right Op:  (   1.00000) cre(K) cre(W) des(Z)
+
+----------------------------------------- Hamiltonian (1) ------------------------------------------
+
+Commutation: Done ...
+Done ...
+----------------------------------------------------------------------------------------------------
+## Calculating the commutator [H(0), a_S^\dag a_T^\dag a_U] ...
+
+## Calculating a_Q [H(0), a_S^\dag a_T^\dag a_U] ...
+
+------------------------------------------ SQA Automation ------------------------------------------
+
+Computing expectation value with respect to virtual ...
+Done!
+----------------------------------------------------------------------------------------------------
+Normal ordering with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Computing expectation value with respect to core ...
+Done!
+----------------------------------------------------------------------------------------------------
+Contract delta function for non-dummy indices ...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+------------------------------------------ Final results -------------------------------------------
+
+ (   1.00000) v(K,x,I,Z) cre(W) des(x)
+ (  -1.00000) v(K,x,I,y) rdm(x,y) cre(W) des(Z)
+ (  -1.00000) v(K,x,I,y) rdm(x,y) cre(W) des(Z)
+ (  -1.00000) v(K,x,I,y) cre(W) cre(y) des(Z) des(x)
+ (  -1.00000) v(K,x,I,y) cre(W) cre(y) des(Z) des(x)
+
+Total terms : 5
+SQA automation time :  9.039 seconds
+
+------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
+
+Convert Cre/Des objects to RDM objects...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Converting 1e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting 2e- integrals to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting T amplitudes to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+Converting RDMs to spin-adapted formulation...
+
+Converting 1-RDMs to spin-adapted formulation...
+Converting 2-RDMs to spin-adapted formulation...
+Converting 3-RDMs to spin-adapted formulation...
+Converting 4-RDMs to spin-adapted formulation...
+Done!
+----------------------------------------------------------------------------------------------------
+
+Combining 10 spin-adapted terms...
+
+Reorder 2e- integrals in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reorder RDM tensor indices in Chemists' notation...
+Done!
+----------------------------------------------------------------------------------------------------
+Reordering indices according to core < active < virtual...
+Done!
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+4 spin-adapted terms combined.
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------- Spin-adapted equations --------------------------------------
+
+ (   0.50000) v(I,K,Z,x) rdm(W,x)
+ (   0.50000) v(I,K,x,y) rdm(W,x,Z,y)
+ (  -0.33333) v(I,x,y,K) rdm(W,y,Z,x)
+ (  -0.16667) v(I,x,y,K) rdm(W,y,x,Z)
+ (  -0.50000) v(I,K,x,y) rdm(x,y) rdm(W,Z)
+ (   0.25000) v(I,x,y,K) rdm(y,x) rdm(W,Z)
+
+Total spin-integrated terms: 5
+Total spin-adapted terms: 6
+Spin-adaptation automation time :  0.012 seconds
+----------------------------------------------------------------------------------------------------
+Dummy indices relabeling...
+Done!
+----------------------------------------------------------------------------------------------------
+
+--------------------------------------------- WARNING ----------------------------------------------
+
+Terms with a contraction over repeating dummy core indices of 2e- integrals
+will be removed. Set "remove_core_integrals" flag to FALSE to preserve terms
+
+0 terms removed:
+----------------------------------------------------------------------------------------------------
+Remaining terms: 6
+
+
+--------------------------------------- genEinsum equations ----------------------------------------
+
+M_c_caa_a_abb  = 1/2 * einsum('IKZx,Wx->IKWZ', v_xxaa, rdm_ca, optimize = einsum_type)
+M_c_caa_a_abb += 1/2 * einsum('IKxy,WxZy->IKWZ', v_xxaa, rdm_ccaa, optimize = einsum_type)
+M_c_caa_a_abb -= 1/3 * einsum('IxyK,WyZx->IKWZ', v_xaax, rdm_ccaa, optimize = einsum_type)
+M_c_caa_a_abb -= 1/6 * einsum('IxyK,WyxZ->IKWZ', v_xaax, rdm_ccaa, optimize = einsum_type)
+M_c_caa_a_abb -= 1/2 * einsum('IKxy,xy,WZ->IKWZ', v_xxaa, rdm_ca, rdm_ca, optimize = einsum_type)
+M_c_caa_a_abb += 1/4 * einsum('IxyK,yx,WZ->IKWZ', v_xaax, rdm_ca, rdm_ca, optimize = einsum_type)
+----------------------------------------------------------------------------------------------------
+> Total elapsed time: 19.54 seconds.
