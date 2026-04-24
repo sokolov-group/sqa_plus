@@ -31,7 +31,7 @@ terms_VT_si = sqa_plus.matrixBlock(terms_VT)
 terms_VT_sa = sqa_plus.convertSpinIntegratedToAdapted(terms_VT_si)
 
 # Generate numpy code 
-result = sqa_plus.genEinsum(terms_VT_sa, "")
+result = sqa_plus.genEinsum(terms_VT_sa)
 
 end = time.time()
 print("> Total elapsed time: {:.2f} seconds.".format(end - start))
