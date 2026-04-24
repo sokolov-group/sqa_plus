@@ -218,10 +218,10 @@ print(term_left)
 terms_Heff = sqa_plus.Heff(order_Heff)
 
 ## Calculating the commutator
-print("## Calculating the commutator [H(0), a_S^\dag a_T^\dag a_U] ...")
+print("## Calculating the commutator [H(0), a_S^\\dag a_T^\\dag a_U] ...")
 terms_commutator = sqa_plus.commutator(terms_Heff, terms_right)
 
-print("\n## Calculating a_P^\dag a_Q a_R [H(0), a_S^\dag a_T^\dag a_U] ...")
+print("\n## Calculating a_P^\\dag a_Q a_R [H(0), a_S^\\dag a_T^\\dag a_U] ...")
 terms_IP_M11 = []
 for term_commutator in terms_commutator:
     terms_IP_M11.append(sqa_plus.multiplyTerms(term_commutator, term_left))
