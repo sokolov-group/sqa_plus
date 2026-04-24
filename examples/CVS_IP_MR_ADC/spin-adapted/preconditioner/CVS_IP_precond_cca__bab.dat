@@ -1,22 +1,11 @@
 
-----------------------------------------------------------------------------------------------------
-sqa_plus: Code generator for quasi-particle systems.
-Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
-Available at https://github.com/sokolov-group/sqa_plus
-
-Licensed under the GNU General Public License v3.0;
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------------------------
-
-
 ------------------------------- Spin-Adapted Preconditioner cca bab --------------------------------
 
 
 ## Generating operators ...
 
+##  Left Op:  (   1.00000) cre(Y) des(L) des(K)
+## Right Op:  (   1.00000) cre(I) cre(J) des(X)
 
 ----------------------------------------- Hamiltonian (0) ------------------------------------------
 
@@ -43,33 +32,32 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) h(X,Y) kdelta(I,K) kdelta(J,L) 
- (   1.00000) e(I) kdelta(I,K) kdelta(J,L) kdelta(X,Y) 
- (   1.00000) e(J) kdelta(I,K) kdelta(J,L) kdelta(X,Y) 
- (  -1.00000) e(I) kdelta(I,K) kdelta(J,L) cre(Y) des(X) 
- (  -1.00000) e(J) kdelta(I,K) kdelta(J,L) cre(Y) des(X) 
- (   1.00000) h(X,x) kdelta(I,K) kdelta(J,L) cre(Y) des(x) 
- (  -1.00000) v(X,x,Y,y) kdelta(I,K) kdelta(J,L) cre(x) des(y) 
- (  -1.00000) v(X,x,Y,y) kdelta(I,K) kdelta(J,L) cre(x) des(y) 
- (  -1.00000) v(X,x,y,z) kdelta(I,K) kdelta(J,L) cre(Y) cre(x) des(y) des(z) 
- (  -0.50000) v(X,x,y,z) kdelta(I,K) kdelta(J,L) cre(Y) cre(x) des(y) des(z) 
+ (  -1.00000) kdelta(I,K) kdelta(J,L) h(X,Y)
+ (   1.00000) kdelta(I,K) kdelta(J,L) kdelta(X,Y) e(I)
+ (   1.00000) kdelta(I,K) kdelta(J,L) kdelta(X,Y) e(J)
+ (  -1.00000) kdelta(I,K) kdelta(J,L) e(I) cre(Y) des(X)
+ (  -1.00000) kdelta(I,K) kdelta(J,L) e(J) cre(Y) des(X)
+ (   1.00000) kdelta(I,K) kdelta(J,L) h(X,x) cre(Y) des(x)
+ (  -1.00000) kdelta(I,K) kdelta(J,L) v(X,x,Y,y) cre(x) des(y)
+ (  -1.00000) kdelta(I,K) kdelta(J,L) v(X,x,Y,y) cre(x) des(y)
+ (  -1.00000) kdelta(I,K) kdelta(J,L) v(X,x,y,z) cre(Y) cre(x) des(y) des(z)
+ (  -0.50000) kdelta(I,K) kdelta(J,L) v(X,x,y,z) cre(Y) cre(x) des(y) des(z)
 
 Total terms : 10
-SQA automation time :  0.863 seconds
+SQA automation time :  0.300 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
-----------------------------------------------------------------------------------------------------
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -102,7 +90,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -111,19 +99,19 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) h(X,Y) kdelta(I,K) kdelta(J,L) 
- (   1.00000) e(I) kdelta(I,K) kdelta(J,L) kdelta(X,Y) 
- (   1.00000) e(J) kdelta(I,K) kdelta(J,L) kdelta(X,Y) 
- (  -0.50000) e(I) kdelta(I,K) kdelta(J,L) rdm(X,Y) 
- (  -0.50000) e(J) kdelta(I,K) kdelta(J,L) rdm(X,Y) 
- (   0.50000) h(X,x) kdelta(I,K) kdelta(J,L) rdm(Y,x) 
- (  -1.00000) v(X,Y,x,y) kdelta(I,K) kdelta(J,L) rdm(x,y) 
- (   0.50000) v(X,x,y,Y) kdelta(I,K) kdelta(J,L) rdm(y,x) 
- (   0.50000) v(X,x,y,z) kdelta(I,K) kdelta(J,L) rdm(Y,y,x,z) 
+ (  -1.00000) kdelta(I,K) kdelta(J,L) h(X,Y)
+ (  -0.50000) kdelta(I,K) kdelta(J,L) e(I) rdm(X,Y)
+ (  -0.50000) kdelta(I,K) kdelta(J,L) e(J) rdm(X,Y)
+ (   0.50000) kdelta(I,K) kdelta(J,L) h(X,x) rdm(Y,x)
+ (   1.00000) kdelta(I,K) kdelta(J,L) kdelta(X,Y) e(I)
+ (   1.00000) kdelta(I,K) kdelta(J,L) kdelta(X,Y) e(J)
+ (  -1.00000) kdelta(I,K) kdelta(J,L) v(X,Y,x,y) rdm(x,y)
+ (   0.50000) kdelta(I,K) kdelta(J,L) v(X,x,y,Y) rdm(y,x)
+ (   0.50000) kdelta(I,K) kdelta(J,L) v(X,x,y,z) rdm(Y,y,x,z)
 
 Total spin-integrated terms: 10
 Total spin-adapted terms: 9
-Spin-adaptation automation time :  0.281 seconds
+Spin-adaptation automation time :  0.093 seconds
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- WARNING ----------------------------------------------
@@ -141,14 +129,14 @@ Done!
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-precond_cca =- einsum('XY,II,JJ->IJXY', h_aa, np.identity(ncvs), np.identity(ncvs), optimize = einsum_type)
-precond_cca += einsum('I,II,JJ,XY->IJXY', e_cvs, np.identity(ncvs), np.identity(ncvs), np.identity(ncas), optimize = einsum_type)
-precond_cca += einsum('J,II,JJ,XY->IJXY', e_cvs, np.identity(ncvs), np.identity(ncvs), np.identity(ncas), optimize = einsum_type)
-precond_cca -= 1/2 * einsum('I,II,JJ,XY->IJXY', e_cvs, np.identity(ncvs), np.identity(ncvs), rdm_ca, optimize = einsum_type)
-precond_cca -= 1/2 * einsum('J,II,JJ,XY->IJXY', e_cvs, np.identity(ncvs), np.identity(ncvs), rdm_ca, optimize = einsum_type)
-precond_cca += 1/2 * einsum('Xx,II,JJ,Yx->IJXY', h_aa, np.identity(ncvs), np.identity(ncvs), rdm_ca, optimize = einsum_type)
-precond_cca -= einsum('XYxy,II,JJ,xy->IJXY', v_aaaa, np.identity(ncvs), np.identity(ncvs), rdm_ca, optimize = einsum_type)
-precond_cca += 1/2 * einsum('XxyY,II,JJ,yx->IJXY', v_aaaa, np.identity(ncvs), np.identity(ncvs), rdm_ca, optimize = einsum_type)
-precond_cca += 1/2 * einsum('Xxyz,II,JJ,Yyxz->IJXY', v_aaaa, np.identity(ncvs), np.identity(ncvs), rdm_ccaa, optimize = einsum_type)
+precond_cca__bab =- einsum('II,JJ,XY->IJXY', np.identity(ncvs), np.identity(ncvs), h_aa, optimize = einsum_type)
+precond_cca__bab -= 1/2 * einsum('II,JJ,I,XY->IJXY', np.identity(ncvs), np.identity(ncvs), e_cvs, rdm_ca, optimize = einsum_type)
+precond_cca__bab -= 1/2 * einsum('II,JJ,J,XY->IJXY', np.identity(ncvs), np.identity(ncvs), e_cvs, rdm_ca, optimize = einsum_type)
+precond_cca__bab += 1/2 * einsum('II,JJ,Xx,Yx->IJXY', np.identity(ncvs), np.identity(ncvs), h_aa, rdm_ca, optimize = einsum_type)
+precond_cca__bab += einsum('II,JJ,XY,I->IJXY', np.identity(ncvs), np.identity(ncvs), np.identity(ncas), e_cvs, optimize = einsum_type)
+precond_cca__bab += einsum('II,JJ,XY,J->IJXY', np.identity(ncvs), np.identity(ncvs), np.identity(ncas), e_cvs, optimize = einsum_type)
+precond_cca__bab -= einsum('II,JJ,XYxy,xy->IJXY', np.identity(ncvs), np.identity(ncvs), v_aaaa, rdm_ca, optimize = einsum_type)
+precond_cca__bab += 1/2 * einsum('II,JJ,XxyY,yx->IJXY', np.identity(ncvs), np.identity(ncvs), v_aaaa, rdm_ca, optimize = einsum_type)
+precond_cca__bab += 1/2 * einsum('II,JJ,Xxyz,Yyxz->IJXY', np.identity(ncvs), np.identity(ncvs), v_aaaa, rdm_ccaa, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 1.25 seconds.
+> Total elapsed time: 0.42 seconds.

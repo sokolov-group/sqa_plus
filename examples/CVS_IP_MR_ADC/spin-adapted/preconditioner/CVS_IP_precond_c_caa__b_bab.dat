@@ -1,25 +1,20 @@
 
-----------------------------------------------------------------------------------------------------
-sqa_plus: Code generator for quasi-particle systems.
-Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
-Available at https://github.com/sokolov-group/sqa_plus
-
-Licensed under the GNU General Public License v3.0;
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------------------------
-
-
 ----------------------------- Spin-Adapted Preconditioner c_caa b_bab ------------------------------
 
 
 ## Generating operators ...
 
+##  Left Op:  (   1.00000) des(K)
+## Right Op:  (   1.00000) cre(I) cre(X) des(Y)
 
 ----------------------------------------- Hamiltonian (0) ------------------------------------------
 
+Done ...
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------- Hamiltonian (1) ------------------------------------------
+
+Commutation: Done ...
 Done ...
 ----------------------------------------------------------------------------------------------------
 ## Calculating the commutator [H(0), a_S^\dag a_T^\dag a_U] ...
@@ -43,34 +38,38 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (   1.00000) e(I) kdelta(I,K) cre(X) des(Y) 
- (   1.00000) h(X,x) kdelta(I,K) cre(x) des(Y) 
- (  -1.00000) h(Y,x) kdelta(I,K) cre(X) des(x) 
- (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y) 
- (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y) 
- (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y) 
- (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y) 
- (  -0.50000) kdelta(I,K) v(X,x,y,z) cre(y) cre(z) des(Y) des(x) 
- (  -1.00000) kdelta(I,K) v(X,x,y,z) cre(y) cre(z) des(Y) des(x) 
- (   1.00000) kdelta(I,K) v(Y,x,y,z) cre(X) cre(x) des(y) des(z) 
- (   0.50000) kdelta(I,K) v(Y,x,y,z) cre(X) cre(x) des(y) des(z) 
+ (   1.00000) v(I,x,K,Y) cre(X) des(x)
+ (   1.00000) kdelta(I,K) e(I) cre(X) des(Y)
+ (   1.00000) kdelta(I,K) h(X,x) cre(x) des(Y)
+ (  -1.00000) kdelta(I,K) h(Y,x) cre(X) des(x)
+ (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y)
+ (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y)
+ (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y)
+ (   2.00000) kdelta(I,K) v(i,X,i,x) cre(x) des(Y)
+ (  -1.00000) v(I,x,K,y) rdm(x,y) cre(X) des(Y)
+ (  -1.00000) v(I,x,K,y) rdm(x,y) cre(X) des(Y)
+ (  -1.00000) v(I,x,K,y) cre(X) cre(y) des(Y) des(x)
+ (  -1.00000) v(I,x,K,y) cre(X) cre(y) des(Y) des(x)
+ (  -0.50000) kdelta(I,K) v(X,x,y,z) cre(y) cre(z) des(Y) des(x)
+ (  -1.00000) kdelta(I,K) v(X,x,y,z) cre(y) cre(z) des(Y) des(x)
+ (   1.00000) kdelta(I,K) v(Y,x,y,z) cre(X) cre(x) des(y) des(z)
+ (   0.50000) kdelta(I,K) v(Y,x,y,z) cre(X) cre(x) des(y) des(z)
 
-Total terms : 11
-SQA automation time :  0.144 seconds
+Total terms : 16
+SQA automation time :  9.905 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
-----------------------------------------------------------------------------------------------------
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -103,7 +102,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -113,7 +112,7 @@ Done!
 -------------------------------------- Spin-adapted equations --------------------------------------
 
 
-Total spin-integrated terms: 11
+Total spin-integrated terms: 16
 Total spin-adapted terms: 0
 Spin-adaptation automation time :  0.004 seconds
 ----------------------------------------------------------------------------------------------------
@@ -133,5 +132,6 @@ Done!
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
+No terms provided for einsum equations.
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.27 seconds.
+> Total elapsed time: 20.50 seconds.
