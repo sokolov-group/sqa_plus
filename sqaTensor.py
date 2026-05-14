@@ -331,7 +331,7 @@ class creDesTensor(tensor):
 
     freelyCommutes = False
 
-    def __init__(self, ops, trans_rdm=False, symmetries=None):
+    def __init__(self, ops, trans_rdm=False, symmetries=None, name=None):
 
         if not isinstance(ops, list) or any(not isinstance(op, (creOp, desOp)) for op in ops):
             raise TypeError("ops must be a normal ordered list of creOp and desOp objects")
@@ -341,7 +341,10 @@ class creDesTensor(tensor):
         self.factors = None
 
         self.trans_rdm = trans_rdm
-        self.name = 'trdm' if trans_rdm else 'rdm'
+        if name is None:
+            self.name = 'trdm' if trans_rdm else 'rdm'
+        else:
+            self.name = name
 
         self.ops = ops
 
@@ -360,9 +363,7 @@ class creDesTensor(tensor):
 
     def _init_symmetries(self, symmetries):
         """Initialize symmetries for RDM tensor."""
-        if symmetries:
-            self.symmetries = symmetries
-        else:
+        if symmetries is None or symmetries is False:
             self.symmetries = []
             n = len(self.indices)
 
@@ -385,6 +386,8 @@ class creDesTensor(tensor):
                 else:
                     print('WARN: trans_rdm set to False with odd number of cre/des operators, switching trans_rdm to True!')
                     self.trans_rdm = True
+        else:
+            self.symmetries = symmetries
 
     #------------------------------------------------------------------------------------------------
 
@@ -408,7 +411,11 @@ class creDesTensor(tensor):
         ops.extend(creOp(self.indices[i]) for i in range(self.nCre))
         ops.extend(desOp(self.indices[i]) for i in range(self.nCre, len(self.indices)))
 
-        return creDesTensor(list(ops), self.trans_rdm, self.symmetries)
+        name = None
+        if self.name not in ('rdm', 'trdm'):
+            name = self.name
+
+        return creDesTensor(list(ops), self.trans_rdm, self.symmetries, name)
 
 
 #--------------------------------------------------------------------------------------------------

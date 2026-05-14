@@ -82,8 +82,11 @@ def convertSpinIntegratedToAdapted(terms_si):
                 term_sa.makeCanonical()
                 break
 
-    # Convert RDMs to Spin-Adapted Formulation
+    # Convert standard (integer) RDMs to Spin-Adapted Formulation
     terms_sa = convert_rdms_si_to_sa(terms_sa)
+
+    # Convert half-transition RDMs to Spin-Adapted Formulation
+    terms_sa = convert_half_rdms_si_to_sa(terms_sa)
 
     # Update Spin-Adapted Symmetries in tensors
     update_sa_tensors_symmetries(terms_sa, trans_rdm)
@@ -221,6 +224,7 @@ def reorder_rdm_indices_notation(_terms_rdm, trans_rdm = False):
 
             rdm4_symm = [symmetry((1,0,2,3,5,4,6,7), 1), symmetry((0,2,1,3,4,6,5,7), 1),
                          symmetry((0,1,3,2,4,5,7,6), 1)]
+
         else:
             rdm2_symm = [symmetry((1,0,3,2), 1), symmetry((2,3,0,1), 1)]
 
@@ -567,11 +571,11 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
     print("Converting RDMs to spin-adapted formulation...\n")
     sys.stdout.flush()
 
-    # Convert One-Body RDMs
-    print("Converting 1-RDMs to spin-adapted formulation...")
-
     # Define spin map for 1e-, 2e-, 3e-, and 4e- indices
     spin_map = {options.alpha_type: 'a', options.beta_type: 'b'}
+
+    # Convert One-Body RDMs
+    print("Converting 1-RDMs to spin-adapted formulation...")
 
     terms_rdm1_sa = []
     for term_rdm1_si in _terms_rdm_si:
@@ -5133,6 +5137,328 @@ def convert_rdms_si_to_sa(_terms_rdm_si):
     print("Done!")
     return terms_rdm4_sa
 
+@log_timing
+def convert_half_rdms_si_to_sa(_terms_rdm_si):
+    "Convert Half-Transition RDM Objects from Spin-Integrated to Spin-Adapted"
+
+    options.print_divider()
+    print("Converting Half-RDMs to spin-adapted formulation...\n")
+    sys.stdout.flush()
+
+    # Define spin map for 1e-, 2e-, 3e-, and 4e- indices
+    spin_map = {options.alpha_type: 'a', options.beta_type: 'b'}
+
+    # Convert 0.5-RDMs
+    print("Converting C RDMs to spin-adapted formulation...")
+    terms_rdm0_sa = []
+    for term_rdm0_si in _terms_rdm_si:
+        # List for storing C RDMs
+        tens_rdm0 = []
+        tens_rdm0_ind = []
+
+        # Append all C RDMs to list
+        for ten_ind, ten in enumerate(term_rdm0_si.tensors):
+            if isinstance(ten, creDesTensor):
+                # C (IP)
+                if ten.nCre == 1 and ten.nDes == 0:
+                    tens_rdm0.append(ten)
+                    tens_rdm0_ind.append(ten_ind)
+
+        if tens_rdm0:
+            tens_rdm0_sa = []
+            consts_rdm0_sa = []
+
+            for ten_rdm0 in tens_rdm0:
+                ten_rdm0_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm0.indices]
+                spin_pat = ''.join(spin_map[s] for s in ten_rdm0_spin_inds)
+
+                ten_rdm0_tens_sa = []
+                const_rdm0_tens_sa = []
+
+                if spin_pat in ('a', 'b'):
+                    ten_rdm0_sa = ten_rdm0.copy()
+                    ten_rdm0_sa.name = ten_rdm0.name + "_" + spin_pat
+                    const_rdm0_sa = 1.0
+
+                    ten_rdm0_tens_sa.append(ten_rdm0_sa)
+                    const_rdm0_tens_sa.append(const_rdm0_sa)
+
+                else:
+                    ten_rdm0_sa = ten_rdm0.copy()
+                    const_rdm0_sa = 0.0
+
+                    ten_rdm0_tens_sa.append(ten_rdm0_sa)
+                    const_rdm0_tens_sa.append(const_rdm0_sa)
+
+                tens_rdm0_sa.append(ten_rdm0_tens_sa)
+                consts_rdm0_sa.append(const_rdm0_tens_sa)
+
+            tens_rdm0_sa_permut = []
+            for item in list(itertools.product(*tens_rdm0_sa)):
+                tens_rdm0_sa_permut.append(list(item))
+
+            consts_rdm0_sa_permut = []
+            for item in list(itertools.product(*consts_rdm0_sa)):
+                consts_rdm0_sa_permut.append(list(item))
+
+            consts_rdm0_sa_prod = []
+            for iter in consts_rdm0_sa_permut:
+                prod = 1.0
+                for const in iter:
+                    prod = prod * const
+                consts_rdm0_sa_prod.append(prod)
+
+            for tens_rdm0_sa_ind, tens_rdm0_sa in enumerate(tens_rdm0_sa_permut):
+                term_rdm0_sa = term_rdm0_si.copy()
+                term_rdm0_sa.scale(consts_rdm0_sa_prod[tens_rdm0_sa_ind])
+
+                for ten_rdm0_sa_ind, ten_rdm0_sa in zip(tens_rdm0_ind, tens_rdm0_sa):
+                    term_rdm0_sa.tensors[ten_rdm0_sa_ind] = ten_rdm0_sa
+                    term_rdm0_sa.tensors[ten_rdm0_sa_ind].symmetries = []
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_rdm0_sa, consts_rdm0_sa_prod[tens_rdm0_sa_ind]))
+
+                terms_rdm0_sa.append(term_rdm0_sa)
+
+        else:
+            terms_rdm0_sa.append(term_rdm0_si)
+
+    # Convert CCA RDMs
+    print("Converting CCA RDMs to spin-adapted formulation...")
+
+    terms_rdm1_sa = []
+    for term_rdm1_si in terms_rdm0_sa:
+        # List for storing CCA RDMs
+        tens_rdm1 = []
+        tens_rdm1_ind = []
+
+        # Append all CCA RDMs to list
+        for ten_ind, ten in enumerate(term_rdm1_si.tensors):
+            if isinstance(ten, creDesTensor):
+                # CCA (IP)
+                if ten.nCre == 2 and ten.nDes == 1:
+                    tens_rdm1.append(ten)
+                    tens_rdm1_ind.append(ten_ind)
+
+        if tens_rdm1:
+            tens_rdm1_sa = []
+            consts_rdm1_sa = []
+
+            for ten_rdm1 in tens_rdm1:
+                ten_rdm1_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm1.indices]
+                spin_pat = ''.join(spin_map[s] for s in ten_rdm1_spin_inds)
+
+                ten_rdm1_tens_sa = []
+                const_rdm1_tens_sa = []
+
+                if spin_pat in ('aaa', 'abb', 'baa', 'bbb'):
+                    ten_rdm1_sa = ten_rdm1.copy()
+                    ten_rdm1_sa.name = ten_rdm1.name + "_" + spin_pat
+                    const_rdm1_sa = 1.0
+                    ten_rdm1_tens_sa.append(ten_rdm1_sa)
+                    const_rdm1_tens_sa.append(const_rdm1_sa)
+
+                elif spin_pat in ('bab', 'aba'):
+                    ten_rdm1_sa = ten_rdm1.copy()
+                    ten_rdm1_sa.indices = [ten_rdm1_sa.indices[i] for i in [1, 0, 2]]
+                    spin_pat = spin_pat[1] + spin_pat[0] + spin_pat[2]
+                    ten_rdm1_sa.name = ten_rdm1.name + "_" + spin_pat
+                    const_rdm1_sa = -1.0
+                    ten_rdm1_tens_sa.append(ten_rdm1_sa)
+                    const_rdm1_tens_sa.append(const_rdm1_sa)
+
+                else:
+                    ten_rdm1_sa = ten_rdm1.copy()
+                    const_rdm1_sa = 0.0
+                    ten_rdm1_tens_sa.append(ten_rdm1_sa)
+                    const_rdm1_tens_sa.append(const_rdm1_sa)
+
+                tens_rdm1_sa.append(ten_rdm1_tens_sa)
+                consts_rdm1_sa.append(const_rdm1_tens_sa)
+
+            tens_rdm1_sa_permut = []
+            for item in list(itertools.product(*tens_rdm1_sa)):
+                tens_rdm1_sa_permut.append(list(item))
+
+            consts_rdm1_sa_permut = []
+            for item in list(itertools.product(*consts_rdm1_sa)):
+                consts_rdm1_sa_permut.append(list(item))
+
+            consts_rdm1_sa_prod = []
+            for iter in consts_rdm1_sa_permut:
+                prod = 1.0
+                for const in iter:
+                    prod = prod * const
+                consts_rdm1_sa_prod.append(prod)
+
+            for tens_rdm1_sa_ind, tens_rdm1_sa in enumerate(tens_rdm1_sa_permut):
+                term_rdm1_sa = term_rdm1_si.copy()
+                term_rdm1_sa.scale(consts_rdm1_sa_prod[tens_rdm1_sa_ind])
+
+                for ten_rdm1_sa_ind, ten_rdm1_sa in zip(tens_rdm1_ind, tens_rdm1_sa):
+                    term_rdm1_sa.tensors[ten_rdm1_sa_ind] = ten_rdm1_sa
+                    term_rdm1_sa.tensors[ten_rdm1_sa_ind].symmetries = []
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_rdm1_sa, consts_rdm1_sa_prod[tens_rdm1_sa_ind]))
+
+                terms_rdm1_sa.append(term_rdm1_sa)
+
+        else:
+            terms_rdm1_sa.append(term_rdm1_si)
+
+    # Convert CCCAA RDMs
+    print("Converting CCCAA RDMs to spin-adapted formulation...")
+
+    terms_rdm2_sa = []
+    for term_rdm2_si in terms_rdm1_sa:
+        # List for storing CCCAA RDMs
+        tens_rdm2 = []
+        tens_rdm2_ind = []
+
+        # Append all CCCAA RDMs to list
+        for ten_ind, ten in enumerate(term_rdm2_si.tensors):
+            if isinstance(ten, creDesTensor):
+                # CCCAA (IP)
+                if ten.nCre == 3 and ten.nDes == 2:
+                    tens_rdm2.append(ten)
+                    tens_rdm2_ind.append(ten_ind)
+
+        if tens_rdm2:
+            tens_rdm2_sa = []
+            consts_rdm2_sa = []
+
+            for ten_rdm2 in tens_rdm2:
+                ten_rdm2_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm2.indices]
+                spin_pat = ''.join(spin_map[s] for s in ten_rdm2_spin_inds)
+
+                ten_rdm2_tens_sa = []
+                const_rdm2_tens_sa = []
+                # Unique
+                if spin_pat in ('aaaaa', 'abbbb', 'aabab', 'bbbbb', 'baaaa', 'bbaba'):
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    ten_rdm2_sa.name = ten_rdm2.name + "_" + spin_pat
+                    const_rdm2_sa = 1.0
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+                # Redundant
+                # aabba -> aabab
+                # bbaab -> bbaba
+                elif spin_pat in ('aabba', 'bbaab'):
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    ten_rdm2_sa.indices = [ten_rdm2_sa.indices[i] for i in [0, 1, 2, 4, 3]]
+                    spin_pat = spin_pat[:3] + spin_pat[4] + spin_pat[3]
+                    ten_rdm2_sa.name = ten_rdm2.name + "_" + spin_pat
+                    const_rdm2_sa = -1.0
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+                # abaab -> aabab
+                # babba -> bbaba
+                elif spin_pat in ('abaab', 'babba'):
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    ten_rdm2_sa.indices = [ten_rdm2_sa.indices[i] for i in [0, 2, 1, 3, 4]]
+                    spin_pat = spin_pat[0] + spin_pat[2] + spin_pat[1] + spin_pat[3:]
+                    ten_rdm2_sa.name = ten_rdm2.name + "_" + spin_pat
+                    const_rdm2_sa = -1.0
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+                # ababa -> aabab
+                # babab -> bbaba
+                elif spin_pat in ('ababa', 'babab'):
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    ten_rdm2_sa.indices = [ten_rdm2_sa.indices[i] for i in [0, 2, 1, 4, 3]]
+                    spin_pat = spin_pat[0] + spin_pat[2] + spin_pat[1] + spin_pat[4] + spin_pat[3]
+                    ten_rdm2_sa.name = ten_rdm2.name + "_" + spin_pat
+                    const_rdm2_sa = 1.0
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+                # baaab -> aabab
+                # abbba -> bbaba
+                elif spin_pat in ('baaab', 'abbba'):
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    ten_rdm2_sa.indices = [ten_rdm2_sa.indices[i] for i in [1, 2, 0, 3, 4]]
+                    spin_pat = spin_pat[1] + spin_pat[2] + spin_pat[0] + spin_pat[3] + spin_pat[4]
+                    ten_rdm2_sa.name = ten_rdm2.name + "_" + spin_pat
+                    const_rdm2_sa = 1.0
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+                # baaba -> aabab
+                # abbab -> bbaba
+                elif spin_pat in ('baaba', 'abbab'):
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    ten_rdm2_sa.indices = [ten_rdm2_sa.indices[i] for i in [1, 2, 0, 4, 3]]
+                    spin_pat = spin_pat[1] + spin_pat[2] + spin_pat[0] + spin_pat[4] + spin_pat[3]
+                    ten_rdm2_sa.name = ten_rdm2.name + "_" + spin_pat
+                    const_rdm2_sa = -1.0
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+                # abaaa -> baaaa
+                # babbb -> abbbb
+                elif spin_pat in ('abaaa', 'babbb'):
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    ten_rdm2_sa.indices = [ten_rdm2_sa.indices[i] for i in [1, 0, 2, 3, 4]]
+                    spin_pat = spin_pat[1] + spin_pat[0] + spin_pat[2] + spin_pat[3] + spin_pat[4]
+                    ten_rdm2_sa.name = ten_rdm2.name + "_" + spin_pat
+                    const_rdm2_sa = -1.0
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+                # bbabb -> abbbb
+                # aabaa -> baaaa
+                elif spin_pat in ('bbabb', 'aabaa'):
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    ten_rdm2_sa.indices = [ten_rdm2_sa.indices[i] for i in [2, 0, 1, 3, 4]]
+                    spin_pat = spin_pat[2] + spin_pat[0] + spin_pat[1] + spin_pat[3] + spin_pat[4]
+                    ten_rdm2_sa.name = ten_rdm2.name + "_" + spin_pat
+                    const_rdm2_sa = 1.0
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+                else:
+                    ten_rdm2_sa = ten_rdm2.copy()
+                    const_rdm2_sa = 0.0
+
+                    ten_rdm2_tens_sa.append(ten_rdm2_sa)
+                    const_rdm2_tens_sa.append(const_rdm2_sa)
+
+                tens_rdm2_sa.append(ten_rdm2_tens_sa)
+                consts_rdm2_sa.append(const_rdm2_tens_sa)
+
+            tens_rdm2_sa_permut = []
+            for item in list(itertools.product(*tens_rdm2_sa)):
+                tens_rdm2_sa_permut.append(list(item))
+
+            consts_rdm2_sa_permut = []
+            for item in list(itertools.product(*consts_rdm2_sa)):
+                consts_rdm2_sa_permut.append(list(item))
+
+            consts_rdm2_sa_prod = []
+            for iter in consts_rdm2_sa_permut:
+                prod = 1.0
+                for const in iter:
+                    prod = prod * const
+                consts_rdm2_sa_prod.append(prod)
+
+            for tens_rdm2_sa_ind, tens_rdm2_sa in enumerate(tens_rdm2_sa_permut):
+                term_rdm2_sa = term_rdm2_si.copy()
+                term_rdm2_sa.scale(consts_rdm2_sa_prod[tens_rdm2_sa_ind])
+
+                for ten_rdm2_sa_ind, ten_rdm2_sa in zip(tens_rdm2_ind, tens_rdm2_sa):
+                    term_rdm2_sa.tensors[ten_rdm2_sa_ind] = ten_rdm2_sa
+                    term_rdm2_sa.tensors[ten_rdm2_sa_ind].symmetries = []
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_rdm2_sa, consts_rdm2_sa_prod[tens_rdm2_sa_ind]))
+
+                terms_rdm2_sa.append(term_rdm2_sa)
+
+        else:
+            terms_rdm2_sa.append(term_rdm2_si)
+
+    termChop(terms_rdm2_sa)
+
+    return terms_rdm2_sa
+
+
 def convert_t_amplitudes_si_to_sa(_terms_t_si):
     "Convert T Amplitudes Objects from Spin-Integrated to Spin-Adapted"
 
@@ -5518,15 +5844,34 @@ def update_sa_tensors_symmetries(_terms_sa, trans_rdm = False):
             elif _tensor_sa.name in ['t1', 't2'] and len(_tensor_sa.indices) == 4:
                 _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = t2_sa_symm
 
-            elif isinstance(_tensor_sa, creDesTensor) and len(_tensor_sa.indices) == 2:
-                _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm1_sa_symm
-
-            elif isinstance(_tensor_sa, creDesTensor) and len(_tensor_sa.indices) == 4:
-                _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm2_sa_symm
-
-            elif isinstance(_tensor_sa, creDesTensor) and len(_tensor_sa.indices) == 6:
-                _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm3_sa_symm
-
-            elif isinstance(_tensor_sa, creDesTensor) and len(_tensor_sa.indices) == 8:
-                _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm4_sa_symm
+            elif isinstance(_tensor_sa, creDesTensor):
+                if len(_tensor_sa.indices) == 2:
+                    _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm1_sa_symm
+                elif len(_tensor_sa.indices) == 4:
+                    _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm2_sa_symm
+                elif len(_tensor_sa.indices) == 6:
+                    _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm3_sa_symm
+                elif len(_tensor_sa.indices) == 8:
+                    _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm4_sa_symm
+                elif _tensor_sa.nCre == 1 and _tensor_sa.nDes == 0:
+                    _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = []
+                elif _tensor_sa.nCre == 2 and _tensor_sa.nDes == 1:
+                    rdm_cca_symm = []
+                    if _tensor_sa.name[-3:] in ('aaa', 'bbb'):
+                        rdm_cca_symm = [symmetry((1,0,2), -1)]
+                    _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm_cca_symm
+                elif _tensor_sa.nCre == 3 and _tensor_sa.nDes == 2:
+                    if _tensor_sa.name[-5:] in ('aaaaa', 'bbbbb'):
+                        rdm_cccaa_symm = [symmetry((1,0,2,3,4), -1), symmetry((0,2,1,3,4), -1), symmetry((0,1,2,4,3), -1)]
+                    elif _tensor_sa.name[-5:] in ('abbbb', 'baaaa'):
+                        rdm_cccaa_symm = [symmetry((0,2,1,3,4), -1), symmetry((0,1,2,4,3), -1)]
+                    elif _tensor_sa.name[-5:] in ('aabab', 'bbaba'):
+                        rdm_cccaa_symm = [symmetry((1,0,2,3,4), -1)]
+                    else:
+                        raise Exception("Uknown symmetry for CCCAA RDM!")
+                    _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm_cccaa_symm
+                elif _tensor_sa.nCre == 4 and _tensor_sa.nDes == 3:
+                    # TODO
+                    rdm_ccccaaa_symm = [symmetry((0,2,1,3,5,4,6), 1)]
+                    _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm_ccccaaa_symm
 
