@@ -5454,9 +5454,612 @@ def convert_half_rdms_si_to_sa(_terms_rdm_si):
         else:
             terms_rdm2_sa.append(term_rdm2_si)
 
-    termChop(terms_rdm2_sa)
+    # Convert CCCCAAA RDMs
+    print("Converting CCCCAAA RDMs to spin-adapted formulation...")
 
-    return terms_rdm2_sa
+    terms_rdm3_sa = []
+    for term_rdm3_si in terms_rdm2_sa:
+        # List for storing CCCCAAA RDMs
+        tens_rdm3 = []
+        tens_rdm3_ind = []
+
+        # Append all CCCCAAA RDMs to list
+        for ten_ind, ten in enumerate(term_rdm3_si.tensors):
+            if isinstance(ten, creDesTensor):
+                # CCCCAAA (IP)
+                if ten.nCre == 4 and ten.nDes == 3:
+                    tens_rdm3.append(ten)
+                    tens_rdm3_ind.append(ten_ind)
+        # CCCCAAA
+        if tens_rdm3:
+            tens_rdm3_sa = []
+            consts_rdm3_sa = []
+
+            for ten_rdm3 in tens_rdm3:
+                ten_rdm3_spin_inds = [get_spin_index_type(ind) for ind in ten_rdm3.indices]
+                spin_pat = ''.join(spin_map[s] for s in ten_rdm3_spin_inds)
+
+                ten_rdm3_tens_sa = []
+                const_rdm3_tens_sa = []
+                # Unique
+                if spin_pat in ('aaaaaaa', 'aaabaab', 'aabbabb', 'abbbbbb', 'bbbbbbb', 'bbbabba', 'bbaabaa', 'baaaaaa'):
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+                    const_rdm3_sa = 1.0
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+                # Redundant
+                # Permutation: (0, 1, 3, 2, 4, 5, 6), sign = -1
+                #   aabaaab -> aaabaab
+                #   bbabbba -> bbbabba
+                elif spin_pat in ("aabaaab", "bbabbba"):
+                    perm = [0, 1, 3, 2, 4, 5, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 2, 3, 1, 4, 5, 6), sign = +1
+                #   abaaaab -> aaabaab
+                #   babbbba -> bbbabba
+                elif spin_pat in ("abaaaab", "babbbba"):
+                    perm = [0, 2, 3, 1, 4, 5, 6]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 2, 3, 0, 4, 5, 6), sign = -1
+                #   baaaaab -> aaabaab
+                #   abbbbba -> bbbabba
+                elif spin_pat in ("baaaaab", "abbbbba"):
+                    perm = [1, 2, 3, 0, 4, 5, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 1, 2, 3, 4, 6, 5), sign = -1
+                #   aaababa -> aaabaab
+                #   bbbabab -> bbbabba
+                elif spin_pat in ("aaababa", "bbbabab"):
+                    perm = [0, 1, 2, 3, 4, 6, 5]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 1, 3, 2, 4, 6, 5), sign = +1
+                #   aabaaba -> aaabaab
+                #   bbabbab -> bbbabba
+                elif spin_pat in ("aabaaba", "bbabbab"):
+                    perm = [0, 1, 3, 2, 4, 6, 5]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 2, 3, 1, 4, 6, 5), sign = -1
+                #   abaaaba -> aaabaab
+                #   babbbab -> bbbabba
+                elif spin_pat in ("abaaaba", "babbbab"):
+                    perm = [0, 2, 3, 1, 4, 6, 5]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 2, 3, 0, 4, 6, 5), sign = +1
+                #   baaaaba -> aaabaab
+                #   abbbbab -> bbbabba
+                elif spin_pat in ("baaaaba", "abbbbab"):
+                    perm = [1, 2, 3, 0, 4, 6, 5]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 1, 2, 3, 5, 6, 4), sign = +1
+                #   aaabbaa -> aaabaab
+                #   bbbaabb -> bbbabba
+                elif spin_pat in ("aaabbaa", "bbbaabb"):
+                    perm = [0, 1, 2, 3, 5, 6, 4]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 1, 3, 2, 5, 6, 4), sign = -1
+                #   aababaa -> aaabaab
+                #   bbababb -> bbbabba
+                elif spin_pat in ("aababaa", "bbababb"):
+                    perm = [0, 1, 3, 2, 5, 6, 4]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 2, 3, 1, 5, 6, 4), sign = +1
+                #   abaabaa -> aaabaab
+                #   babbabb -> bbbabba
+                elif spin_pat in ("abaabaa", "babbabb"):
+                    perm = [0, 2, 3, 1, 5, 6, 4]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 2, 3, 0, 5, 6, 4), sign = -1
+                #   baaabaa -> aaabaab
+                #   abbbabb -> bbbabba
+                elif spin_pat in ("baaabaa", "abbbabb"):
+                    perm = [1, 2, 3, 0, 5, 6, 4]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 2, 1, 3, 4, 5, 6), sign = -1
+                #   abababb -> aabbabb
+                #   bababaa -> bbaabaa
+                elif spin_pat in ("abababb", "bababaa"):
+                    perm = [0, 2, 1, 3, 4, 5, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 3, 1, 2, 4, 5, 6), sign = +1
+                #   abbaabb -> aabbabb
+                #   baabbaa -> bbaabaa
+                elif spin_pat in ("abbaabb", "baabbaa"):
+                    perm = [0, 3, 1, 2, 4, 5, 6]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 2, 0, 3, 4, 5, 6), sign = +1
+                #   baababb -> aabbabb
+                #   abbabaa -> bbaabaa
+                elif spin_pat in ("baababb", "abbabaa"):
+                    perm = [1, 2, 0, 3, 4, 5, 6]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 3, 0, 2, 4, 5, 6), sign = -1
+                #   babaabb -> aabbabb
+                #   ababbaa -> bbaabaa
+                elif spin_pat in ("babaabb", "ababbaa"):
+                    perm = [1, 3, 0, 2, 4, 5, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (2, 3, 0, 1, 4, 5, 6), sign = +1
+                #   bbaaabb -> aabbabb
+                #   aabbbaa -> bbaabaa
+                elif spin_pat in ("bbaaabb", "aabbbaa"):
+                    perm = [2, 3, 0, 1, 4, 5, 6]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 1, 2, 3, 5, 4, 6), sign = -1
+                #   aabbbab -> aabbabb
+                #   bbaaaba -> bbaabaa
+                elif spin_pat in ("aabbbab", "bbaaaba"):
+                    perm = [0, 1, 2, 3, 5, 4, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 2, 1, 3, 5, 4, 6), sign = +1
+                #   ababbab -> aabbabb
+                #   babaaba -> bbaabaa
+                elif spin_pat in ("ababbab", "babaaba"):
+                    perm = [0, 2, 1, 3, 5, 4, 6]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 3, 1, 2, 5, 4, 6), sign = -1
+                #   abbabab -> aabbabb
+                #   baababa -> bbaabaa
+                elif spin_pat in ("abbabab", "baababa"):
+                    perm = [0, 3, 1, 2, 5, 4, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 2, 0, 3, 5, 4, 6), sign = -1
+                #   baabbab -> aabbabb
+                #   abbaaba -> bbaabaa
+                elif spin_pat in ("baabbab", "abbaaba"):
+                    perm = [1, 2, 0, 3, 5, 4, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 3, 0, 2, 5, 4, 6), sign = +1
+                #   bababab -> aabbabb
+                #   abababa -> bbaabaa
+                elif spin_pat in ("bababab", "abababa"):
+                    perm = [1, 3, 0, 2, 5, 4, 6]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (2, 3, 0, 1, 5, 4, 6), sign = -1
+                #   bbaabab -> aabbabb
+                #   aabbaba -> bbaabaa
+                elif spin_pat in ("bbaabab", "aabbaba"):
+                    perm = [2, 3, 0, 1, 5, 4, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 1, 2, 3, 6, 4, 5), sign = +1
+                #   aabbbba -> aabbabb
+                #   bbaaaab -> bbaabaa
+                elif spin_pat in ("aabbbba", "bbaaaab"):
+                    perm = [0, 1, 2, 3, 6, 4, 5]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 2, 1, 3, 6, 4, 5), sign = -1
+                #   ababbba -> aabbabb
+                #   babaaab -> bbaabaa
+                elif spin_pat in ("ababbba", "babaaab"):
+                    perm = [0, 2, 1, 3, 6, 4, 5]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (0, 3, 1, 2, 6, 4, 5), sign = +1
+                #   abbabba -> aabbabb
+                #   baabaab -> bbaabaa
+                elif spin_pat in ("abbabba", "baabaab"):
+                    perm = [0, 3, 1, 2, 6, 4, 5]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 2, 0, 3, 6, 4, 5), sign = +1
+                #   baabbba -> aabbabb
+                #   abbaaab -> bbaabaa
+                elif spin_pat in ("baabbba", "abbaaab"):
+                    perm = [1, 2, 0, 3, 6, 4, 5]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 3, 0, 2, 6, 4, 5), sign = -1
+                #   bababba -> aabbabb
+                #   ababaab -> bbaabaa
+                elif spin_pat in ("bababba", "ababaab"):
+                    perm = [1, 3, 0, 2, 6, 4, 5]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (2, 3, 0, 1, 6, 4, 5), sign = +1
+                #   bbaabba -> aabbabb
+                #   aabbaab -> bbaabaa
+                elif spin_pat in ("bbaabba", "aabbaab"):
+                    perm = [2, 3, 0, 1, 6, 4, 5]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (1, 0, 2, 3, 4, 5, 6), sign = -1
+                #   babbbbb -> abbbbbb
+                #   abaaaaa -> baaaaaa
+                elif spin_pat in ("babbbbb", "abaaaaa"):
+                    perm = [1, 0, 2, 3, 4, 5, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (2, 0, 1, 3, 4, 5, 6), sign = +1
+                #   bbabbbb -> abbbbbb
+                #   aabaaaa -> baaaaaa
+                elif spin_pat in ("bbabbbb", "aabaaaa"):
+                    perm = [2, 0, 1, 3, 4, 5, 6]
+                    sign = +1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                # Permutation: (3, 0, 1, 2, 4, 5, 6), sign = -1
+                #   bbbabbb -> abbbbbb
+                #   aaabaaa -> baaaaaa
+                elif spin_pat in ("bbbabbb", "aaabaaa"):
+                    perm = [3, 0, 1, 2, 4, 5, 6]
+                    sign = -1
+
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    ten_rdm3_sa.indices = [ten_rdm3.indices[i] for i in perm]
+
+                    spin_pat = ''.join(spin_pat[i] for i in perm)
+                    ten_rdm3_sa.name = ten_rdm3.name + "_" + spin_pat
+
+                    const_rdm3_sa = sign
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                else:
+                    ten_rdm3_sa = ten_rdm3.copy()
+                    const_rdm3_sa = 0.0
+
+                    ten_rdm3_tens_sa.append(ten_rdm3_sa)
+                    const_rdm3_tens_sa.append(const_rdm3_sa)
+
+                tens_rdm3_sa.append(ten_rdm3_tens_sa)
+                consts_rdm3_sa.append(const_rdm3_tens_sa)
+
+            tens_rdm3_sa_permut = []
+            for item in list(itertools.product(*tens_rdm3_sa)):
+                tens_rdm3_sa_permut.append(list(item))
+
+            consts_rdm3_sa_permut = []
+            for item in list(itertools.product(*consts_rdm3_sa)):
+                consts_rdm3_sa_permut.append(list(item))
+
+            consts_rdm3_sa_prod = []
+            for iter in consts_rdm3_sa_permut:
+                prod = 1.0
+                for const in iter:
+                    prod = prod * const
+                consts_rdm3_sa_prod.append(prod)
+
+            for tens_rdm3_sa_ind, tens_rdm3_sa in enumerate(tens_rdm3_sa_permut):
+                term_rdm3_sa = term_rdm3_si.copy()
+                term_rdm3_sa.scale(consts_rdm3_sa_prod[tens_rdm3_sa_ind])
+
+                for ten_rdm3_sa_ind, ten_rdm3_sa in zip(tens_rdm3_ind, tens_rdm3_sa):
+                    term_rdm3_sa.tensors[ten_rdm3_sa_ind] = ten_rdm3_sa
+                    term_rdm3_sa.tensors[ten_rdm3_sa_ind].symmetries = []
+
+                if options.verbose:
+                    print("--> {:} (factor = {:.5f})".format(term_rdm3_sa, consts_rdm3_sa_prod[tens_rdm3_sa_ind]))
+
+                terms_rdm3_sa.append(term_rdm3_sa)
+
+        else:
+            terms_rdm3_sa.append(term_rdm3_si)
+
+    termChop(terms_rdm3_sa)
+
+    return terms_rdm3_sa
 
 
 def convert_t_amplitudes_si_to_sa(_terms_t_si):
@@ -5863,15 +6466,24 @@ def update_sa_tensors_symmetries(_terms_sa, trans_rdm = False):
                 elif _tensor_sa.nCre == 3 and _tensor_sa.nDes == 2:
                     if _tensor_sa.name[-5:] in ('aaaaa', 'bbbbb'):
                         rdm_cccaa_symm = [symmetry((1,0,2,3,4), -1), symmetry((0,2,1,3,4), -1), symmetry((0,1,2,4,3), -1)]
-                    elif _tensor_sa.name[-5:] in ('abbbb', 'baaaa'):
-                        rdm_cccaa_symm = [symmetry((0,2,1,3,4), -1), symmetry((0,1,2,4,3), -1)]
                     elif _tensor_sa.name[-5:] in ('aabab', 'bbaba'):
                         rdm_cccaa_symm = [symmetry((1,0,2,3,4), -1)]
+                    elif _tensor_sa.name[-5:] in ('abbbb', 'baaaa'):
+                        rdm_cccaa_symm = [symmetry((0,2,1,3,4), -1), symmetry((0,1,2,4,3), -1)]
                     else:
-                        raise Exception("Uknown symmetry for CCCAA RDM!")
+                        raise Exception("Unknown symmetry for CCCAA RDM!")
                     _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm_cccaa_symm
                 elif _tensor_sa.nCre == 4 and _tensor_sa.nDes == 3:
                     # TODO
-                    rdm_ccccaaa_symm = [symmetry((0,2,1,3,5,4,6), 1)]
+                    if _tensor_sa.name[-7:] in ('aaaaaaa', 'bbbbbbb'):
+                        rdm_ccccaaa_symm = [symmetry((1,0,2,3,4,5,6), -1), symmetry((0,2,1,3,4,5,6), -1), symmetry((0,1,3,2,4,5,6), -1), symmetry((0,1,2,3,5,4,6), -1), symmetry((0,1,2,3,4,6,5), -1)]
+                    elif _tensor_sa.name[-7:] in ('aaabaab', 'bbbabba'):
+                        rdm_ccccaaa_symm = [symmetry((1,0,2,3,4,5,6), -1), symmetry((0,2,1,3,4,5,6), -1), symmetry((0,1,2,3,5,4,6), -1)]
+                    elif _tensor_sa.name[-7:] in ('aabbabb', 'bbaabaa'):
+                        rdm_ccccaaa_symm = [symmetry((1,0,2,3,4,5,6), -1), symmetry((0,1,3,2,4,5,6), -1), symmetry((0,1,2,3,4,6,5), -1)]
+                    elif _tensor_sa.name[-7:] in ('abbbbbb', 'baaaaaa'):
+                        rdm_ccccaaa_symm = [symmetry((0,2,1,3,4,5,6), -1), symmetry((0,1,3,2,4,5,6), -1), symmetry((0,1,2,3,5,4,6), -1), symmetry((0,1,2,3,4,6,5), -1)]
+                    else:
+                        raise Exception("Unknown symmetry for CCCCAAA RDM!")
                     _terms_sa[_term_ind].tensors[_tensor_ind].symmetries = rdm_ccccaaa_symm
 
