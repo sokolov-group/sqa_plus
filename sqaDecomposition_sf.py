@@ -21,11 +21,11 @@
 # Canonical Transformation theory with respect to spin-free operators.
 #
 
-from sqaIndex import index
-from sqaTensor import tensor, sfExOp
-from sqaTerm import term, multiplyTerms, termChop
-from sqaMisc import makePermutations, get_num_perms
-from sqaOptions import options
+from .sqaIndex import index
+from .sqaTensor import tensor, sfExOp
+from .sqaTerm import term, multiplyTerms, termChop
+from .sqaMisc import makePermutations, get_num_perms
+from .sqaOptions import options
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ def decomp_3rdms_to_2rdms_sf(inTerms, d3name, d1, d2, indexOrder = '1212'):
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1, tensor) ) or (len(d1.indices) != 2):
         raise TypeError("d1 must be a tensor with 2 indices")
@@ -106,7 +106,7 @@ def decomp_4rdms_to_2rdms_sf(inTerms, d4name, d1, d2, d2_hom, d2_het):
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1, tensor) ) or (len(d1.indices) != 2):
         raise TypeError("d1 must be a tensor with 2 indices")
@@ -175,7 +175,7 @@ def decomp_4rdms_to_3rdms_sf(inTerms, d4name, d1, d2, d2_hom, d2_het, d3):
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1, tensor) ) or (len(d1.indices) != 2):
         raise TypeError("d1 must be a tensor with 2 indices")
@@ -1014,7 +1014,7 @@ def decomp_3ops_to_2ops_2rdms_sf(inTerms, d1, d2, indexOrder = '1212'):
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1, tensor) ) or (len(d1.indices) != 2):
         raise TypeError("d1 must be a tensor with 2 indices")
@@ -1079,7 +1079,7 @@ def decomp_4ops_to_2ops_2rdms_sf(inTerms, d1, d2):
     TypeErrorMessage = "inTerms must be a list of term objects"
 
     # Check input
-    if type(inTerms) != type([]):
+    if not isinstance(inTerms, list):
         raise TypeError(TypeErrorMessage)
     if ( not isinstance(d1, tensor) ) or (len(d1.indices) != 2):
         raise TypeError("d1 must be a tensor with 2 indices")

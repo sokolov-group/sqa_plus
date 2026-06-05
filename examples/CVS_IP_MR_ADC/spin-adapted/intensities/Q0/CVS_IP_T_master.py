@@ -459,7 +459,7 @@ if q_order == 0:
 
 elif q_order == 1:
     # First-order excitation operator
-    print("## Calculating the excitation operator [q^(0), T - T^\dag] ...")
+    print("## Calculating the excitation operator [q^(0), T - T^\\dag] ...")
     terms_T = sqa_plus.Tamplitude(1)
 
     ## Calculating the commutator
@@ -468,13 +468,13 @@ elif q_order == 1:
 
 elif q_order == 2:
     # First-order excitation operator
-    print("## Calculating the excitation operator [q^(0), T - T^\dag] ...")
+    print("## Calculating the excitation operator [q^(0), T - T^\\dag] ...")
     terms_T1 = sqa_plus.Tamplitude(1)
 
     print("## Calculating the commutator...")
     terms_q = sqa_plus.commutator(term_q0, terms_T1)
 
-    print("## Calculating the excitation operator 1/2 * [[q^(0), T - T^\dag], T - T^\dag] ...")
+    print("## Calculating the excitation operator 1/2 * [[q^(0), T - T^\\dag], T - T^\\dag] ...")
     terms_T1_2 = sqa_plus.Tamplitude(1)
 
     print("## Calculating the commutator...")
@@ -484,7 +484,7 @@ elif q_order == 2:
       term_q.scale(0.5)
 
     # First-order excitation operator
-    print("## Calculating the excitation operator [q^(0), T^(2) - T^(2)^\dag] ...")
+    print("## Calculating the excitation operator [q^(0), T^(2) - T^(2)^\\dag] ...")
     terms_T2 = sqa_plus.Tamplitude(2)
 
     print("## Calculating the commutator...")
@@ -492,7 +492,7 @@ elif q_order == 2:
 
     terms_q.extend(terms_q_2)
 
-print("\n## Calculating h [q, T - T^\dag] ...")
+print("\n## Calculating h [q, T - T^\\dag] ...")
 terms_IP_T = []
 for term_q in terms_q:
     terms_IP_T.append(sqa_plus.multiplyTerms(term_q, term_h))

@@ -1,22 +1,11 @@
 
-----------------------------------------------------------------------------------------------------
-sqa_plus: Code generator for quasi-particle systems.
-Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
-Available at https://github.com/sokolov-group/sqa_plus
-
-Licensed under the GNU General Public License v3.0;
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------------------------
-
-
 ------------------------------- Spin-Adapted Preconditioner cce bab --------------------------------
 
 
 ## Generating operators ...
 
+##  Left Op:  (   1.00000) cre(B) des(L) des(K)
+## Right Op:  (   1.00000) cre(I) cre(J) des(A)
 
 ----------------------------------------- Hamiltonian (0) ------------------------------------------
 
@@ -43,26 +32,25 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
 ------------------------------------------ Final results -------------------------------------------
 
- (  -1.00000) e(A) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
- (   1.00000) e(I) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
- (   1.00000) e(J) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
+ (  -1.00000) kdelta(A,B) kdelta(I,K) kdelta(J,L) e(A)
+ (   1.00000) kdelta(A,B) kdelta(I,K) kdelta(J,L) e(I)
+ (   1.00000) kdelta(A,B) kdelta(I,K) kdelta(J,L) e(J)
 
 Total terms : 3
-SQA automation time :  0.035 seconds
+SQA automation time :  0.015 seconds
 
 ------------------------ Converting Spin-Integrated Tensors to Spin-Adapted ------------------------
 
-----------------------------------------------------------------------------------------------------
 Convert Cre/Des objects to RDM objects...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -95,7 +83,7 @@ Done!
 Reordering indices according to core < active < virtual...
 Done!
 ----------------------------------------------------------------------------------------------------
-Dummy indices relabelling...
+Dummy indices relabeling...
 Done!
 ----------------------------------------------------------------------------------------------------
 
@@ -104,13 +92,13 @@ Done!
 
 -------------------------------------- Spin-adapted equations --------------------------------------
 
- (  -1.00000) e(A) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
- (   1.00000) e(I) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
- (   1.00000) e(J) kdelta(A,B) kdelta(I,K) kdelta(J,L) 
+ (  -1.00000) kdelta(A,B) kdelta(I,K) kdelta(J,L) e(A)
+ (   1.00000) kdelta(A,B) kdelta(I,K) kdelta(J,L) e(I)
+ (   1.00000) kdelta(A,B) kdelta(I,K) kdelta(J,L) e(J)
 
 Total spin-integrated terms: 3
 Total spin-adapted terms: 3
-Spin-adaptation automation time :  0.015 seconds
+Spin-adaptation automation time :  0.007 seconds
 ----------------------------------------------------------------------------------------------------
 
 --------------------------------------------- WARNING ----------------------------------------------
@@ -128,8 +116,8 @@ Done!
 
 --------------------------------------- genEinsum equations ----------------------------------------
 
-precond_cce =- einsum('A,AA,II,JJ->IJA', e_extern, np.identity(nextern), np.identity(ncvs), np.identity(ncvs), optimize = einsum_type)
-precond_cce += einsum('I,AA,II,JJ->IJA', e_cvs, np.identity(nextern), np.identity(ncvs), np.identity(ncvs), optimize = einsum_type)
-precond_cce += einsum('J,AA,II,JJ->IJA', e_cvs, np.identity(nextern), np.identity(ncvs), np.identity(ncvs), optimize = einsum_type)
+precond_cce__bab =- einsum('AA,II,JJ,A->IJA', np.identity(nextern), np.identity(ncvs), np.identity(ncvs), e_extern, optimize = einsum_type)
+precond_cce__bab += einsum('AA,II,JJ,I->IJA', np.identity(nextern), np.identity(ncvs), np.identity(ncvs), e_cvs, optimize = einsum_type)
+precond_cce__bab += einsum('AA,II,JJ,J->IJA', np.identity(nextern), np.identity(ncvs), np.identity(ncvs), e_cvs, optimize = einsum_type)
 ----------------------------------------------------------------------------------------------------
-> Total elapsed time: 0.14 seconds.
+> Total elapsed time: 0.05 seconds.

@@ -39,95 +39,90 @@
 #    - kroneckerDelta is a two-index tensor representing the Kronecker delta function.
 #
 
-from sqaIndex import index
-from sqaSymmetry import symmetry
+from functools import total_ordering
+from itertools import dropwhile
+from .sqaIndex import index
+from .sqaSymmetry import symmetry
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
+@total_ordering
 class tensor:
-    "A class to represent tensors in operator algebra. Integrals and density matrices are examples."
-
-    #------------------------------------------------------------------------------------------------
+    """A class to represent tensors in operator algebra. Integrals and density matrices are examples."""
 
     freelyCommutes = True
 
-    #------------------------------------------------------------------------------------------------
+    def __init__(self, name, indices=None, symmetries=None):
+        """Initialize a tensor with a name, indices, and symmetries."""
 
-    def __init__(self, name, indices = [], symmetries = []):
-
-        # Initialize data
-        (self.permutations,self.factors) = (None,None)
-        self.indices = []
-        self.symmetries = []
+        # Initialize permutation
+        self.permutations = None
+        self.factors = None
 
         # Process name
         self.name = str(name)
 
         # Process indices
-        indicesError = "indices must be a list of index objects"
-        if not isinstance(indices, type([])):
-            raise TypeError(indicesError)
-        for i in indices:
-            if not isinstance(i, index):
-                raise TypeError(indicesError)
-            self.indices.append( i.copy() )
+        if indices is None:
+            indices = []
+
+        if not isinstance(indices, list) or not all(isinstance(i, index) for i in indices):
+            raise TypeError("indices must be a list of index objects")
+        self.indices = [i.copy() for i in indices]
 
         # Process symmetries
-        symmetryError = "symmetries must be a list of symmetry objects"
-        if not isinstance(symmetries, type([])):
-            raise TypeError(symmetryError)
+        if symmetries is None:
+            symmetries = []
+
+        if not isinstance(symmetries, list) or not all(isinstance(sym, symmetry) for sym in symmetries):
+            raise TypeError("symmetries must be a list of symmetry objects")
+
+        self.symmetries = []
         for sym in symmetries:
-            if not isinstance(sym, symmetry):
-                raise TypeError(symmetryError)
-            for s in self.symmetries:
-                if s.pattern == sym.pattern:
-                    raise ValueError("a tensor cannot have two symmetries with the same pattern")
-            self.symmetries.append( sym.copy() )
+            if any(s.pattern == sym.pattern for s in self.symmetries):
+                raise ValueError("a tensor cannot have two symmetries with the same pattern")
+            self.symmetries.append(sym.copy())
 
     #------------------------------------------------------------------------------------------------
 
-    def __cmp__(self,other):
-        if (not isinstance(other,tensor)):
+    def _comparison_key(self):
+        """Return tuple for comparison: (name, indices, symmetries)."""
+        return (self.name, self.indices, self.symmetries)
+
+    def __eq__(self, other):
+        if not isinstance(other, tensor):
+            return False
+
+        # If other belongs to a tensor subclass, use the subclass's comparison method
+        if type(other) is not type(self):
+            return other == self
+
+        return self._comparison_key() == other._comparison_key()
+
+    def __lt__(self, other):
+        if not isinstance(other, tensor):
             raise TypeError("A tensor may only be compared to another tensor")
 
         # If other belongs to a tensor subclass, use the subclass's comparison method
-        if isinstance(other,kroneckerDelta) or \
-             isinstance(other,creOp) or \
-             isinstance(other,desOp) or \
-             isinstance(other,creDesTensor) or \
-             isinstance(other,sfExOp):
-            return    - cmp(other,self)
+        if type(other) is not type(self):
+            return self < other
 
-        # compare name next
-        retval = cmp(self.name,other.name)
-        if retval != 0:
-            return retval
-
-        # compare indices next
-        retval = cmp(self.indices,other.indices)
-        if retval != 0:
-            return retval
-
-        # compare symmetries next
-        retval = cmp(self.symmetries,other.symmetries)
-        return retval
+        return self._comparison_key() < other._comparison_key()
 
     #------------------------------------------------------------------------------------------------
 
     def __str__(self):
-        retval = self.name + "("
-        for i in range(len(self.indices)):
-            retval += self.indices[i].name #+ " " + str(self.indices[i].type)
-            if i < len(self.indices)-1:
-                retval += ","
-        retval += ")"
-        return retval
+        indices_str = ",".join(index.name for index in self.indices)
+        return f"{self.name}({indices_str})"
+
+    def __repr__(self):
+        return str(self)
 
     #------------------------------------------------------------------------------------------------
 
     def copy(self):
-        "Returns a copy of the tensor"
+        """Returns a copy of the tensor"""
         retval = tensor(self.name, self.indices, self.symmetries)
         if self.permutations != None and self.factors != None:
             retval.permutations = [ perm + [] for perm in self.permutations ]
@@ -137,172 +132,124 @@ class tensor:
     #------------------------------------------------------------------------------------------------
 
     def symPermutes(self, force = False):
-        "Returns the index permutations and resulting factors allowed by the tensor's symmetry"
+        """Returns the index permutations and resulting factors allowed by the tensor's symmetry."""
 
 #        # If the result is already known, return it
 #        if not force and self.permutations != None and self.factors != None:
 #            return (self.permutations,self.factors)
-        
-        # Otherwise, compute the permutations and corresponding factors
-        tuples = [range(len(self.indices))]
+
+        # Compute the permutations and corresponding factors
+        permutations = [list(range(len(self.indices)))]
         factors = [1]
-        allFound = False
-        while not allFound:
-            allFound = True
-            newTuples = []
-            newFactors = []
-            for j in range(len(tuples)):
-                for sym in self.symmetries:
-                    newTuples.append([])
-                    newFactors.append(sym.factor * factors[j])
-                    for i in sym.pattern:
-                        newTuples[-1].append(tuples[j][i])
-            while len(newTuples) > 0:
-                isNew = True
-                for tup in tuples:
-                    if tup == newTuples[0]:
-                        isNew = False
-                        break
-                if isNew:
-                    allFound = False
-                    tuples.append(newTuples[0])
-                    factors.append(newFactors[0])
-                    #print tuples[-1]
-                del(newTuples[0],newFactors[0])
+        known_perm = {tuple(permutations[0])}
+
+        idx = 0
+        while idx < len(permutations):
+            perm = permutations[idx]
+            factor = factors[idx]
+
+            # Generate new permutations
+            for sym in self.symmetries:
+                new_perm = [perm[i] for i in sym.pattern]
+                new_perm_tuple = tuple(new_perm)
+    
+                if new_perm_tuple not in known_perm:
+                    known_perm.add(new_perm_tuple)
+                    permutations.append(new_perm)
+                    factors.append(sym.factor * factor)
+
+            idx += 1
 
         # Save the results for later so they don't need to be computed again
-        self.permutations, self.factors = tuples, factors
-
-        return (self.permutations,self.factors)
+        self.permutations, self.factors = permutations, factors
+        return permutations, factors
 
     #------------------------------------------------------------------------------------------------
 
-    def sortIndeces(self):
-        "Sorts the indices alphabetically within the constraints of symmetry and returns the resulting factor."
+    def sortIndices(self):
+        """Sort indices alphabetically within symmetry constraints. Returns the resulting symmetry factor."""
 
         # If the tensor has no symmetry, do nothing
-        if len(self.symmetries) == 0:
+        if not self.symmetries:
             return 1
 
-        # Get the permutation tuples allowed by symmetry and the corresponding factors
-        tuples,factors = [],[]
-        (tup,fac) = self.symPermutes()
-        tuples.extend(tup)
-        factors.extend(fac)
+        # Get allowed symmetry permutations and corresponding factors
+        tuples, factors = map(list, self.symPermutes())
+        scores = [0] * len(tuples)
+        n_ind = len(self.indices)
 
         # Score the different permutations and select the winner
-        scores = []
-        for tup in tuples:
-            scores.append(0)
-        for i in range(len(self.indices)-1):
-            for j in range(i+1,len(self.indices)):
-                for k in range(len(tuples)):
-                    if self.indices[tuples[k][i]] < self.indices[tuples[k][j]]:
-                        scores[k] += 1
-            # At each iteration, determine the max score and keep only the tuples with that score
-            maxScore = max(scores)
-            i = 0
-            while i < len(scores):
-                if scores[i] < maxScore:
-                    del(scores[i],tuples[i],factors[i])
-                else:
-                    i += 1
-            if len(scores) == 0:
+        for i in range(n_ind - 1):
+            for j in range(i+1, n_ind):
+                for p, tup in enumerate(tuples):
+                    if self.indices[tup[i]] < self.indices[tup[j]]:
+                        scores[p] += 1
+
+            # Determine max score and keep only tuples with that score
+            max_score = max(scores)
+            keep = [p for p, s in enumerate(scores) if s == max_score]
+            tuples = [tuples[p] for p in keep]
+            factors = [factors[p] for p in keep]
+            scores = [scores[p] for p in keep]
+
+            if not tuples:
                 break
 
-        # Raise an error if a unique winner was not found
-        if len(scores) > 1:
-            unique = True
-            for i in range(1,len(scores)):
-                for j in range(len(tuples[i])):
-                    if self.indices[tuples[i][j]] != self.indices[tuples[0][j]]:
-                        unique = False
-                        break
-                if not unique:
-                    break
-            if not unique:
-                print("No unique winner produced when sorting the indices of tensor %s" %(str(self)))
-                raise RuntimeError("Scoring system did not produce unique winner.")
+        # Raise an error if no unique winner found
+        if len(tuples) > 1:
+            ref = [self.indices[p] for p in tuples[0]]
 
-        # Sort indices in the uniquely determined order and return the resulting factor
-        newIndeces = []
-        for i in range(len(tuples[0])):
-            newIndeces.append(self.indices[tuples[0][i]])
-        self.indices = newIndeces
+            for tup in tuples[1:]:
+                compare = [self.indices[p] for p in tup]
+                if any(i != j for i,j in zip(compare, ref)):
+                    msg = f"No unique winner produced when sorting indices of tensor {self!s}"
+                    raise RuntimeError("Scoring system did not produce unique winner.\n" + msg)
+
+        # Set the sorted indices and return factor
+        self.indices = [self.indices[p] for p in tuples[0]]
         return factors[0]
 
-    #------------------------------------------------------------------------------------------------
-
-    def hasIndex(self,i):
-        "Returns True if i is one of the tensor's indices and False otherwise."
-        if not isinstance(i,index):
-            raise TypeError("i must be of the index class")
-        return (i in self.indices)
-
-    #------------------------------------------------------------------------------------------------
-
-
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
-
+@total_ordering
 class kroneckerDelta(tensor):
-    "A tensor representation of the kronecker delta function."
-
-    #------------------------------------------------------------------------------------------------
+    """A tensor representation of the kronecker delta function."""
 
     freelyCommutes = True
-    symmetries = [symmetry((1,0),1)]
-    name = "kdelta"
 
-    #------------------------------------------------------------------------------------------------
-
-    def __init__(self,indices):
+    def __init__(self, indices):
         if len(indices) != 2:
             raise ValueError("The kronecker delta function takes exactly two indices")
-        self.indices = []
-        for i in indices:
-            self.indices.append( i.copy() )
-        (self.permutations,self.factors) = (None,None)
+
+        # Initialize attributes
+        self.permutations = None
+        self.factors = None
+        self.name = "kdelta"
+        self.indices = [i.copy() for i in indices]
+        self.symmetries = [symmetry((1, 0), 1)]
 
     #------------------------------------------------------------------------------------------------
 
-    def __cmp__(self,other):
-
-        # comparison to another kroneckerDelta
+    def __eq__(self, other):
         if isinstance(other, kroneckerDelta):
-            retval = cmp(self.name,other.name)
-            if retval != 0:
-                return retval
-            retval = cmp(self.indices,other.indices)
-            if retval != 0:
-                return retval
-            retval = cmp(self.symmetries,other.symmetries)
-            return retval
+            return self._comparison_key() == other._comparison_key()
+        return False
 
-        # kroneckerDelta class is less than the creOp, desOp, creDesTensor and sfExOp sub classes
-        elif isinstance(other, creOp):
-            return -1
-        elif isinstance(other, desOp):
-            return -1
-        elif isinstance(other, creDesTensor):
-            return -1
-        elif isinstance(other, sfExOp):
-            return -1
-
-        # kroneckerDelta class is greater than other tensor classes
+    def __lt__(self, other):
+        if isinstance(other, kroneckerDelta):
+            return self._comparison_key() < other._comparison_key()
+        elif isinstance(other, (creOp, desOp, creDesTensor, sfExOp)):
+            return True
         elif isinstance(other, tensor):
-            return 1
-
-        # Raise error if other is not a tensor
+            return False
         else:
-            raise TypeError("A kronekerDelta may only be compared to another tensor")
-        return 0
+            raise TypeError("A kroneckerDelta may only be compared to another tensor")
 
     #------------------------------------------------------------------------------------------------
 
     def copy(self):
-        "Returns a copy of the knroneckerDelta object"
+        "Returns a copy of the kroneckerDelta object"
         return kroneckerDelta(self.indices)
 
     #------------------------------------------------------------------------------------------------
@@ -311,7 +258,7 @@ class kroneckerDelta(tensor):
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
-
+@total_ordering
 class sfExOp(tensor):
     """
     A tensor representation of a spin free excitation operator.
@@ -319,83 +266,55 @@ class sfExOp(tensor):
     Note that the indices i,j,k,l refer to spacial orbitals and sigma,tau refer to spins.
     """
 
-    #------------------------------------------------------------------------------------------------
-
     freelyCommutes = False
-
-    #------------------------------------------------------------------------------------------------
 
     def __init__(self, indices):
         # Check that there are an even number of indices
-        if len(indices)/2 != (len(indices)+1)/2:
+        if len(indices) % 2 != 0:
             raise ValueError("A spin free excitation operator (the sfExOp class) must have an even number of indices")
 
-        # Initialize order
-        self.order = len(indices)/2
+        # Initialize attributes
+        self.permutations = None
+        self.factors = None
+        self.order = len(indices) // 2
+        self.name = f"E{self.order}"
+        self.indices = [i.copy() for i in indices]
+        self._init_symmetries()
 
-        # Initialize name
-        self.name = "E%i" %self.order
-
-        # Initialize indices
-        self.indices = []
-        for i in indices:
-            self.indices.append( i.copy() )
-
-        # Initialize permutations and factors
-        (self.permutations,self.factors) = (None,None)
-
-        # Initialize symmetries
+    def _init_symmetries(self):
+        """Generate symmetries for spin-free excitation operators."""
         self.symmetries = []
-        for i in range(self.order-1):
-            if i == 0:
-                temp_tup = (1,)
-            else:
-                temp_tup = (0,)
-            for j in range(1,2*self.order):
+        for i in range(self.order - 1):
+            pattern = [1] if i == 0 else [0]
+            for j in range(1, 2 * self.order):
                 if j == i:
-                    temp_tup = temp_tup + (i+1,)
-                elif j == i+1:
-                    temp_tup = temp_tup + (i,)
-                elif j == i+self.order:
-                    temp_tup = temp_tup + (i+1+self.order,)
-                elif j == i+1+self.order:
-                    temp_tup = temp_tup + (i+self.order,)
+                    pattern.append(i + 1)
+                elif j == i + 1:
+                    pattern.append(i)
+                elif j == i + self.order:
+                    pattern.append(i + 1 + self.order)
+                elif j == i + 1 + self.order:
+                    pattern.append(i + self.order)
                 else:
-                    temp_tup = temp_tup + (j,)
-            self.symmetries.append(symmetry(temp_tup, 1))
-                    
+                    pattern.append(j)
+            self.symmetries.append(symmetry(tuple(pattern), 1))
 
     #------------------------------------------------------------------------------------------------
 
-    def __cmp__(self,other):
+    def __eq__(self, other):
+        if isinstance(other, sfExOp):
+            return self._comparison_key() == other._comparison_key()
+        return False
 
-        # comparison to another sfExOp
-        if isinstance(other,sfExOp):
-            retval = cmp(self.name,other.name)
-            if retval != 0:
-                return retval
-            retval = cmp(self.indices,other.indices)
-            if retval != 0:
-                return retval
-            retval = cmp(self.symmetries,other.symmetries)
-            return retval
-
-        # sfExOp class is less than the creOp, desOp, and creDesTensor classes
-        elif isinstance(other,creOp):
-            return -1
-        elif isinstance(other,desOp):
-            return -1
-        elif isinstance(other,creDesTensor):
-            return -1
-
-        # sfExOp class is greater than other tensor subclasses
-        elif isinstance(other,tensor):
-            return 1
-
-        # raise an error if other is not a tensor
+    def __lt__(self, other):
+        if isinstance(other, sfExOp):
+            return self._comparison_key() < other._comparison_key()
+        elif isinstance(other, (creOp, desOp, creDesTensor)):
+            return True
+        elif isinstance(other, tensor):
+            return False
         else:
             raise TypeError("An sfExOp object may only be compared to another tensor")
-        return 0
 
     #------------------------------------------------------------------------------------------------
 
@@ -407,295 +326,141 @@ class sfExOp(tensor):
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
+@total_ordering
 class creDesTensor(tensor):
 
     freelyCommutes = False
 
-    def __init__(self, ops, trans_rdm = False, symmetries = False):
+    def __init__(self, ops, trans_rdm=False, symmetries=None, name=None):
 
-        TypeErrorMessage = "ops must be a normal ordered list of creOp and desOp objects"
-        if not type(ops) == type([]):
-            raise TypeError(TypeErrorMessage)
+        if not isinstance(ops, list) or any(not isinstance(op, (creOp, desOp)) for op in ops):
+            raise TypeError("ops must be a normal ordered list of creOp and desOp objects")
 
-        # Initialize list of cre/des operators
-        self.ops = ops
+        # Initialize attributes
+        self.permutations = None
+        self.factors = None
 
-        # Initialize name
         self.trans_rdm = trans_rdm
+        if name is None:
+            self.name = 'trdm' if trans_rdm else 'rdm'
+        else:
+            self.name = name
 
-        # Initialize list of cre/des operators
         self.ops = ops
 
-        # Initialize permutations and factors
-        (self.permutations, self.factors) = (None, None)
+        # Ensure normal-ordering (no creOp after any desOp)
+        if any(isinstance(op, creOp) for op in dropwhile(lambda op: not isinstance(op, desOp), ops)):
+            raise TypeError("ops must be a normal ordered list of creOp and desOp objects")
 
-        # Count the number of creation/destruction operators
-        self.nCre = 0
-        self.nDes = 0
+        # Count creation/destruction operators and build index list
+        self.nCre = sum(1 for op in ops if isinstance(op, creOp))
+        self.nDes = sum(1 for op in ops if isinstance(op, desOp))
 
-        # Build the index list
-        self.indices = []
-        desFlag = False
-
-        for op in ops:
-
-            # Ensure normal-ordering
-            if (not isinstance(op, creOp)) and (not isinstance(op, desOp)):
-                raise TypeError(TypeErrorMessage)
-
-            if isinstance(op, desOp):
-                self.nDes += 1
-                desFlag = True
-
-            if isinstance(op, creOp):
-                self.nCre += 1
-                if desFlag:
-                    raise TypeError(TypeErrorMessage)
-
-            self.indices.append(op.indices[0].copy())
-
-        # Create count of total indices
-        self.nInd = self.nCre + self.nDes
+        self.indices = [op.indices[0].copy() for op in ops]
 
         # Initialize symmetries
-        if symmetries:
-            self.symmetries = symmetries
-        else:
+        self._init_symmetries(symmetries)
+
+    def _init_symmetries(self, symmetries):
+        """Initialize symmetries for RDM tensor."""
+        if symmetries is None or symmetries is False:
             self.symmetries = []
-            if len(self.indices) > 1:
-                swapValues = range(len(self.indices)-1)
+            n = len(self.indices)
 
+            if n > 1:
+                swap_values = list(range(n - 1))
                 if self.nCre > 0:
-                    del(swapValues[self.nCre-1])
+                    del swap_values[self.nCre - 1]
 
-                for i in swapValues:
-                    if i == 0:
-                        temp_tup = (1,)
-                    else:
-                        temp_tup = (0,)
-
-                    for j in range(1,len(self.indices)):
-                        if j == i:
-                            temp_tup = temp_tup + (i+1,)
-                        elif j == i+1:
-                            temp_tup = temp_tup + (i,)
-                        else:
-                            temp_tup = temp_tup + (j,)
-
-                    self.symmetries.append(symmetry(temp_tup, -1))
+                for i in swap_values:
+                    pattern = list(range(n))
+                    pattern[i], pattern[i + 1] = i + 1, i
+                    self.symmetries.append(symmetry(tuple(pattern), -1))
 
             # Add bra/ket symmetries for ground-state RDMs
-            if (len(self.indices) % 2 == 0) and self.trans_rdm == False:
-                reversed_range = tuple(range(len(self.indices))[::-1])
-                self.symmetries.append(symmetry(reversed_range, 1))
-
-            # Print warning if number of indices is odd and trans_rdm is False
-            if (len(self.indices) % 2 != 0) and self.trans_rdm == False:
-                print ('trans_rdm flag is set to True, but an ODD number of cre/des operators are present. Switching trans_rdm flag to TRUE !!')
-                self.trans_rdm == True
-
-        # Initialize name
-        if trans_rdm:
-            self.name = 'trdm'
-        else:
-            self.name = 'rdm'
-
-    def __cmp__(self,other):
-
-        # comparison to another creDesTensor
-        if isinstance(other, creDesTensor):
-            retval = cmp(self.name,other.name)
-            if retval != 0:
-                return retval
-            retval = cmp(self.indices,other.indices)
-            if retval != 0:
-                return retval
-            retval = cmp(self.symmetries,other.symmetries)
-            return retval
-
-        # creDesTensor class is less than the creOp and desOp classes
-        elif isinstance(other,creOp):
-            return -1
-        elif isinstance(other,desOp):
-            return -1
-
-        # creDesTensor class is greater than other tensor subclasses
-        elif isinstance(other,tensor):
-            return 1
-        # Raise an error if other is not a tensor
-        else:
-            raise TypeError("A creDesTensor object may only be compared to another tensor")
-
-    def copy(self):
-        ops = []
-
-        for i in range(self.nCre):
-            ops.append(creOp(self.indices[i]))
-
-        for i in range(self.nCre,len(self.indices)):
-            ops.append(desOp(self.indices[i]))
-
-        return creDesTensor(list(ops), self.trans_rdm, self.symmetries)
-
-#--------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------
-
-class creDesTensor_original(tensor):
-    """
-    A tensor representation of a string of creation/destruction operators
-    """
-
-    #------------------------------------------------------------------------------------------------
-
-    freelyCommutes = False
-    name = "creDesTensor"
-
-    #------------------------------------------------------------------------------------------------
-
-    def __init__(self, ops):
-        
-        TypeErrorMessage = "ops must be a normal ordered list of creOp and desOp objects"
-        if not type(ops) == type([]):
-            raise TypeError(TypeErrorMessage)
-
-        # Initialize permutations and factors
-        (self.permutations,self.factors) = (None,None)
-
-        # Build the index list and count the number of creation operators
-        self.nCre = 0
-        self.indices = []
-        desFlag = False
-        for op in ops:
-            if (not isinstance(op, creOp)) and (not isinstance(op, desOp)):
-                raise TypeError(TypeErrorMessage)
-            if isinstance(op, desOp):
-                desFlag = True
-            if isinstance(op, creOp):
-                self.nCre += 1
-                if desFlag:
-                    raise TypeError(TypeErrorMessage)
-            self.indices.append(op.indices[0].copy())
-
-        # Initialize symmetries
-        self.symmetries = []
-        swapValues = range(len(self.indices)-1)
-        if self.nCre > 0:
-            del(swapValues[self.nCre-1])
-        for i in swapValues:
-            if i == 0:
-                temp_tup = (1,)
-            else:
-                temp_tup = (0,)
-            for j in range(1,len(self.indices)):
-                if j == i:
-                    temp_tup = temp_tup + (i+1,)
-                elif j == i+1:
-                    temp_tup = temp_tup + (i,)
+            if not self.trans_rdm:
+                nInd = len(self.indices)
+                if nInd % 2 == 0:
+                    reversed_range = tuple(range(nInd - 1, -1, -1))
+                    self.symmetries.append(symmetry(reversed_range, 1))
                 else:
-                    temp_tup = temp_tup + (j,)
-            self.symmetries.append(symmetry(temp_tup, -1))
-                    
+                    print('WARN: trans_rdm set to False with odd number of cre/des operators, switching trans_rdm to True!')
+                    self.trans_rdm = True
+        else:
+            self.symmetries = symmetries
+
     #------------------------------------------------------------------------------------------------
 
-    def __cmp__(self,other):
-
-        # comparison to another creDesTensor
+    def __eq__(self, other):
         if isinstance(other, creDesTensor):
-            retval = cmp(self.name,other.name)
-            if retval != 0:
-                return retval
-            retval = cmp(self.indices,other.indices)
-            if retval != 0:
-                return retval
-            retval = cmp(self.symmetries,other.symmetries)
-            return retval
+            return self._comparison_key() == other._comparison_key()
+        return False
 
-        # creDesTensor class is less than the creOp and desOp classes
-        elif isinstance(other,creOp):
-            return -1
-        elif isinstance(other,desOp):
-            return -1
-
-        # creDesTensor class is greater than other tensor subclasses
-        elif isinstance(other,tensor):
-            return 1
-
-        # raise an error if other is not a tensor
+    def __lt__(self, other):
+        if isinstance(other, creDesTensor):
+            return self._comparison_key() < other._comparison_key()
+        elif isinstance(other, (creOp, desOp)):
+            return True
+        elif isinstance(other, tensor):
+            return False
         else:
             raise TypeError("A creDesTensor object may only be compared to another tensor")
-        return 0
-
-    #------------------------------------------------------------------------------------------------
 
     def copy(self):
         ops = []
-        for i in range(self.nCre):
-            ops.append(creOp(self.indices[i]))
-        for i in range(self.nCre,len(self.indices)):
-            ops.append(desOp(self.indices[i]))
-        return creDesTensor(ops)
+        ops.extend(creOp(self.indices[i]) for i in range(self.nCre))
+        ops.extend(desOp(self.indices[i]) for i in range(self.nCre, len(self.indices)))
 
-    #------------------------------------------------------------------------------------------------
+        name = None
+        if self.name not in ('rdm', 'trdm'):
+            name = self.name
+
+        return creDesTensor(list(ops), self.trans_rdm, self.symmetries, name)
 
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
-
+@total_ordering
 class creOp(tensor):
-    """
-    A tensor representation for a creation operator
-    """
-
-    #------------------------------------------------------------------------------------------------
+    """A tensor representation for a creation operator."""
 
     freelyCommutes = False
-    name = "cre"
-    symmetries = []
-
-    #------------------------------------------------------------------------------------------------
 
     def __init__(self, indices):
-
-        # Initialize index
-        if type(indices) == type([]) and len(indices) == 1 and isinstance(indices[0], index):
-            inputIndex = indices[0].copy()
+        # Process index
+        if isinstance(indices, list):
+            if len(indices) != 1 or not isinstance(indices[0], index):
+                raise TypeError("indices must be an index or a list of indices with length 1")
+            input_index = indices[0].copy()
         elif isinstance(indices, index):
-            inputIndex = indices.copy()
+            input_index = indices.copy()
         else:
             raise TypeError("indices must be an index or a list of indices with length 1")
-        self.indices = [inputIndex]
 
-        # Initialize permutations and factors
-        (self.permutations,self.factors) = (None,None)
+        # Initialize attributes
+        self.permutations = None
+        self.factors = None
+        self.name = "cre"
+        self.indices = [input_index]
+        self.symmetries = []
 
     #------------------------------------------------------------------------------------------------
 
-    def __cmp__(self,other):
+    def __eq__(self, other):
+        if isinstance(other, creOp):
+            return self._comparison_key() == other._comparison_key()
+        return False
 
-        # comparison to another creOp
-        if isinstance(other,creOp):
-            retval = cmp(self.name,other.name)
-            if retval != 0:
-                return retval
-            retval = cmp(self.indices,other.indices)
-            if retval != 0:
-                return retval
-            retval = cmp(self.symmetries,other.symmetries)
-            return retval
-
-        # creOp class is less than the desOp class
-        elif isinstance(other,desOp):
-            return -1
-
-        # creOp class is greater than other tensor subclasses
-        elif isinstance(other,tensor):
-            return 1
-
-        # raise an error if other is not a tensor
+    def __lt__(self, other):
+        if isinstance(other, creOp):
+            return self._comparison_key() < other._comparison_key()
+        elif isinstance(other, desOp):
+            return True
+        elif isinstance(other, tensor):
+            return False
         else:
-            raise TypeError("An creOp object may only be compared to another tensor")
-        return 0
+            raise TypeError("A creOp object may only be compared to another tensor")
 
     #------------------------------------------------------------------------------------------------
 
@@ -708,57 +473,44 @@ class creOp(tensor):
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
-
+@total_ordering
 class desOp(tensor):
-    """
-    A tensor representation for a destruction operator
-    """
-
-    #------------------------------------------------------------------------------------------------
+    """A tensor representation for a destruction operator."""
 
     freelyCommutes = False
-    name = "des"
-    symmetries = []
-
-    #------------------------------------------------------------------------------------------------
 
     def __init__(self, indices):
-
-        # Initialize index
-        if type(indices) == type([]) and len(indices) == 1 and isinstance(indices[0], index):
-            inputIndex = indices[0].copy()
+        # Process index
+        if isinstance(indices, list):
+            if len(indices) != 1 or not isinstance(indices[0], index):
+                raise TypeError("indices must be an index or a list of indices with length 1")
+            input_index = indices[0].copy()
         elif isinstance(indices, index):
-            inputIndex = indices.copy()
+            input_index = indices.copy()
         else:
             raise TypeError("indices must be an index or a list of indices with length 1")
-        self.indices = [inputIndex]
 
-        # Initialize permutations and factors
-        (self.permutations,self.factors) = (None,None)
+        # Initialize attributes
+        self.permutations = None
+        self.factors = None
+        self.name = "des"
+        self.indices = [input_index]
+        self.symmetries = []
 
     #------------------------------------------------------------------------------------------------
 
-    def __cmp__(self,other):
+    def __eq__(self, other):
+        if isinstance(other, desOp):
+            return self._comparison_key() == other._comparison_key()
+        return False
 
-        # comparison to another desOp
-        if isinstance(other,desOp):
-            retval = cmp(self.name,other.name)
-            if retval != 0:
-                return retval
-            retval = cmp(self.indices,other.indices)
-            if retval != 0:
-                return retval
-            retval = cmp(self.symmetries,other.symmetries)
-            return retval
-
-        # desOp class is greater than other tensor subclasses
-        elif isinstance(other,tensor):
-            return 1
-
-        # raise an error if other is not a tensor
+    def __lt__(self, other):
+        if isinstance(other, desOp):
+            return self._comparison_key() < other._comparison_key()
+        elif isinstance(other, tensor):
+            return False
         else:
-            raise TypeError("An desOp object may only be compared to another tensor")
-        return 0
+            raise TypeError("A desOp object may only be compared to another tensor")
 
     #------------------------------------------------------------------------------------------------
 

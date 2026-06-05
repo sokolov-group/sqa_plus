@@ -1,0 +1,3 @@
+precond_cce =- einsum('A,AA,II,JJ->IJA', e_extern, np.identity(nextern), np.identity(ncvs), np.identity(ncvs), optimize = einsum_type)
+precond_cce += einsum('I,AA,II,JJ->IJA', e_cvs, np.identity(nextern), np.identity(ncvs), np.identity(ncvs), optimize = einsum_type)
+precond_cce += einsum('J,AA,II,JJ->IJA', e_cvs, np.identity(nextern), np.identity(ncvs), np.identity(ncvs), optimize = einsum_type)

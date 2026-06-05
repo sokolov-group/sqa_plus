@@ -52,7 +52,7 @@ terms_V = sqa_plus.Vperturbation()
 
 ## Define terms
 if amplitude_string == 't1_0':
-    print("## Create V: a_I^\dag a_J^\dag a_B a_A * V...\n")
+    print("## Create V: a_I^\\dag a_J^\\dag a_B a_A * V...\n")
 
     terms_op = [sqa_plus.term(1.0, [], [cre_i, cre_j, des_b, des_a])]
 
@@ -61,7 +61,7 @@ if amplitude_string == 't1_0':
 
 elif amplitude_string == 't1_0p':
     if v_block_string == 'V1':
-        print("## Create V: - 1.0 * a_I^\dag a_A * V...\n")
+        print("## Create V: - 1.0 * a_I^\\dag a_A * V...\n")
 
         terms_op = [sqa_plus.term(- 1.0, [], [cre_i, des_a])]
 
@@ -69,7 +69,7 @@ elif amplitude_string == 't1_0p':
         final_indices_string = 'IA'
 
     elif v_block_string == 'V2':
-        print("## Create V: - 1.0 * a_I^\dag a_X^\dag a_Y a_A * V...\n")
+        print("## Create V: - 1.0 * a_I^\\dag a_X^\\dag a_Y a_A * V...\n")
 
         terms_op = [sqa_plus.term(- 1.0, [], [cre_i, cre_x, des_y, des_a])]
 
@@ -77,7 +77,7 @@ elif amplitude_string == 't1_0p':
         final_indices_string = 'IAXY'
 
 elif amplitude_string == 't1_m1':
-    print("## Create V: a_I^\dag a_X^\dag a_B a_A * V...\n")
+    print("## Create V: a_I^\\dag a_X^\\dag a_B a_A * V...\n")
 
     terms_op = [sqa_plus.term(1.0, [], [cre_i, cre_x, des_b, des_a])]
 
@@ -85,7 +85,7 @@ elif amplitude_string == 't1_m1':
     final_indices_string = 'IXAB'
 
 elif amplitude_string == 't1_p1':
-    print("## Create V: a_I^\dag a_J^\dag a_X a_A * V...\n")
+    print("## Create V: a_I^\\dag a_J^\\dag a_X a_A * V...\n")
 
     terms_op = [sqa_plus.term(1.0, [], [cre_i, cre_j, des_x, des_a])]
 
@@ -93,7 +93,7 @@ elif amplitude_string == 't1_p1':
     final_indices_string = 'IJAX'
 
 elif amplitude_string == 't1_m2':
-    print("## Create V: a_X^\dag a_Y^\dag a_B a_A * V...\n")
+    print("## Create V: a_X^\\dag a_Y^\\dag a_B a_A * V...\n")
 
     terms_op = [sqa_plus.term(1.0, [], [cre_x, cre_y, des_b, des_a])]
 
@@ -101,7 +101,7 @@ elif amplitude_string == 't1_m2':
     final_indices_string = 'XYAB'
 
 elif amplitude_string == 't1_p2':
-    print("## Create V: a_I^\dag a_J^\dag a_Y a_X * V...\n")
+    print("## Create V: a_I^\\dag a_J^\\dag a_Y a_X * V...\n")
 
     terms_op = [sqa_plus.term(1.0, [], [cre_i, cre_j, des_y, des_x])]
 
@@ -110,7 +110,7 @@ elif amplitude_string == 't1_p2':
 
 elif amplitude_string == 't1_m1p':
     if v_block_string == 'V1':
-        print("## Create V: - 1.0 * a_X^\dag a_A * V...\n")
+        print("## Create V: - 1.0 * a_X^\\dag a_A * V...\n")
 
         terms_op = [sqa_plus.term(- 1.0, [], [cre_x, des_a])]
 
@@ -118,7 +118,7 @@ elif amplitude_string == 't1_m1p':
         final_indices_string = 'XA'
 
     elif v_block_string == 'V2':
-        print("## Create V: - 1.0 * a_X^\dag a_Y^\dag a_Z a_A * V...\n")
+        print("## Create V: - 1.0 * a_X^\\dag a_Y^\\dag a_Z a_A * V...\n")
 
         terms_op = [sqa_plus.term(- 1.0, [], [cre_x, cre_y, des_z, des_a])]
 
@@ -127,7 +127,7 @@ elif amplitude_string == 't1_m1p':
 
 elif amplitude_string == 't1_p1p':
     if v_block_string == 'V1':
-        print("## Create V: - 1.0 * a_I^\dag a_X * V...\n")
+        print("## Create V: - 1.0 * a_I^\\dag a_X * V...\n")
 
         terms_op = [sqa_plus.term(- 1.0, [], [cre_i, des_x])]
 
@@ -135,7 +135,7 @@ elif amplitude_string == 't1_p1p':
         final_indices_string = 'IX'
 
     elif v_block_string == 'V2':
-        print("## Create V: - 1.0 * a_I^\dag a_X^\dag a_Y a_Z * V...\n")
+        print("## Create V: - 1.0 * a_I^\\dag a_X^\\dag a_Y a_Z * V...\n")
 
         terms_op = [sqa_plus.term(- 1.0, [], [cre_i, cre_x, des_y, des_z])]
 

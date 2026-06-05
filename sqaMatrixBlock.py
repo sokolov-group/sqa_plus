@@ -20,18 +20,21 @@
 #
 
 import sys, time
-from sqaTensor import kroneckerDelta, sfExOp, creOp, desOp
-from sqaTerm import term, termChop, combineTerms
-from sqaMisc import makeTuples, allDifferent
-from sqaSymmetry import symmetry
-from sqaOptions import options
+from .sqaTensor import kroneckerDelta, sfExOp, creOp, desOp
+from .sqaTerm import term, termChop, combineTerms
+from .sqaMisc import makeTuples, allDifferent
+from .sqaSymmetry import symmetry
+from .sqaOptions import options
 
-from sqaNormalOrder import normalOrder
+from .sqaNormalOrder import normalOrder
 
-from sqaIndex import get_spatial_index_type, get_spin_index_type, \
+from .sqaIndex import get_spatial_index_type, get_spin_index_type, \
                      is_core_index_type, is_active_index_type, is_virtual_index_type, \
                      is_cvs_core_index_type, is_cvs_valence_index_type
 
+from .utils import log_timing
+
+@log_timing
 def matrixBlock(terms):
     "Construct matrix block."
 
@@ -58,7 +61,7 @@ def matrixBlock(terms):
     fTerms = normalOrderCore(nterms)
     del(nterms)
 
-    # Evaluate Kroneker delta
+    # Evaluate Kronecker delta
     for t in fTerms:
         t.contractDeltaFuncs()
 
@@ -71,14 +74,10 @@ def matrixBlock(terms):
     contractDeltaFuncs_nondummy(fTerms)
 
     # If (remove_trans_rdm_constant = True) => Remove those constant terms
-    if (remove_trans_rdm_constant):
+    if remove_trans_rdm_constant:
         for trm in fTerms:
-            iremove = True
-            for i in range(len(trm.tensors)):
-                t = trm.tensors[i]
-                if (isinstance(t, creOp) or isinstance(t, desOp)):
-                   iremove = False
-            if (iremove):
+            # If no creation/destruction operators, set the constant to zero
+            if not any(isinstance(t, (creOp, desOp)) for t in trm.tensors):
                 trm.numConstant = 0.0
         termChop(fTerms)
 
@@ -107,7 +106,7 @@ def dummyLabel(_terms, keep_user_defined_dummy_names = True):
     # Import options from sqaOptions class
     user_defined_indices = options.user_defined_indices
 
-    print("Dummy indices relabelling...")
+    print("Dummy indices relabeling...")
     sys.stdout.flush()
 
     for _term_ind, _term in enumerate(_terms):
@@ -118,13 +117,9 @@ def dummyLabel(_terms, keep_user_defined_dummy_names = True):
         virtInd = list('abcdefgh')
 
         if keep_user_defined_dummy_names:
-            for reserved_index_name in user_defined_indices:
-                if reserved_index_name in coreInd:
-                    coreInd.remove(reserved_index_name)
-                elif reserved_index_name in actvInd:
-                    actvInd.remove(reserved_index_name)
-                elif reserved_index_name in virtInd:
-                    virtInd.remove(reserved_index_name)
+            coreInd = [c for c in coreInd if c not in user_defined_indices]
+            actvInd = [a for a in actvInd if a not in user_defined_indices]
+            virtInd = [v for v in virtInd if v not in user_defined_indices]
 
         if options.verbose:
             _term_unlabeled = _term.copy()
@@ -141,22 +136,20 @@ def dummyLabel(_terms, keep_user_defined_dummy_names = True):
                 if (index_summed and 
                     ((keep_user_defined_dummy_names and not index_user_defined)
                       or not keep_user_defined_dummy_names)):
-                    if index_name not in mymap.keys():
+                    if index_name not in mymap:
                         if is_core_index_type(index_type):
-                            mymap[index_name] = coreInd[0]
-                            coreInd.pop(0)
+                            mymap[index_name] = coreInd.pop(0)
                         elif is_active_index_type(index_type):
-                            mymap[index_name] = actvInd[0]
-                            actvInd.pop(0)
+                            mymap[index_name] = actvInd.pop(0)
                         elif is_virtual_index_type(index_type):
-                            mymap[index_name] = virtInd[0]
-                            virtInd.pop(0)
+                            mymap[index_name] = virtInd.pop(0)
 
                     # Update the label
-                    _terms[_term_ind].tensors[_tensor_ind].indices[_index_ind].name = mymap[index_name]
+                    ##_terms[_term_ind].tensors[_tensor_ind].indices[_index_ind].name = mymap[index_name]
+                    _tensor.indices[_index_ind].name = mymap[index_name]
 
         if options.verbose:
-            print("{:} ---> {:}".format(_term_unlabeled, _terms[_term_ind]))
+            print(f"{_term_unlabeled} ---> {_term}")
 
     print("Done!")
     options.print_divider()
@@ -170,17 +163,16 @@ def filterVirtual(_terms):
     sys.stdout.flush()
 
     for t_term in _terms:
-        for t_tensor in t_term.tensors:
-            for t_tensor_index in range(len(t_tensor.indices)):
-
-                index_type = t_tensor.indices[t_tensor_index].indType
-
-                if isinstance(t_tensor, desOp):
-                    if is_virtual_index_type(index_type):
-                        t_term.numConstant = 0.0
-                elif isinstance(t_tensor, creOp):
-                    if is_virtual_index_type(index_type):
-                        t_term.numConstant = 0.0
+        # Collect all indices for cre/desOp in t_term
+        cre_des_indices = (
+            ind
+            for t_tensor in t_term.tensors
+            if isinstance(t_tensor, (creOp, desOp))
+            for ind in t_tensor.indices
+        )
+        # Set t_term to 0 if any indices are virtual type
+        if any(is_virtual_index_type(ind.indType) for ind in cre_des_indices):
+            t_term.numConstant = 0.0
 
     if options.verbose:
         print("")
@@ -200,17 +192,16 @@ def filterCore(_terms):
     sys.stdout.flush()
 
     for t_term in _terms:
-        for t_tensor in t_term.tensors:
-            for t_tensor_index in range(len(t_tensor.indices)):
-
-                index_type = t_tensor.indices[t_tensor_index].indType
-
-                if isinstance(t_tensor, desOp):
-                    if is_core_index_type(index_type):
-                        t_term.numConstant = 0.0
-                elif isinstance(t_tensor, creOp):
-                    if is_core_index_type(index_type):
-                        t_term.numConstant = 0.0
+        # Collect all indices for cre/desOp in t_term
+        cre_des_indices = (
+            ind
+            for t_tensor in t_term.tensors
+            if isinstance(t_tensor, (creOp, desOp))
+            for ind in t_tensor.indices
+        )
+        # Set t_term to 0 if any indices are core type
+        if any(is_core_index_type(ind.indType) for ind in cre_des_indices):
+            t_term.numConstant = 0.0
 
     if options.verbose:
         print("")
@@ -247,114 +238,80 @@ def normOrderCor(_term):
         raise TypeError("Input term must be of class term")
 
     # determine what types of operators the term contains
-    has_creDesOps = False
-    has_sfExOps = False
-    for _tensor in _term.tensors:
-        if isinstance(_tensor, creOp) or isinstance(_tensor, desOp):
-            has_creDesOps = True
-        elif isinstance(_tensor, sfExOp):
-            has_sfExOps = True
+    has_creDesOps = any(isinstance(_tensor, (creOp, desOp)) for _tensor in _term.tensors)
+    has_sfExOps = any(isinstance(_tensor, sfExOp) for _tensor in _term.tensors)
 
     # If term has both creation/destruction operators and spin free excitation operators raise an error
     if has_creDesOps and has_sfExOps:
         raise RuntimeError("Normal ordering not implemented when both creOp/desOp and sfExOp tensors are present")
 
-    # Normal ordering for creOp/desOp
-    elif has_creDesOps:
-
-        # Separate the cre/des operators from other tensors
-        ops = []
-        nonOps = []
-        for _tensor in _term.tensors:
-            if isinstance(_tensor, creOp) or isinstance(_tensor, desOp):
-                ops.append(_tensor.copy())
-            else:
-                nonOps.append(_tensor.copy())
-
-        # Generate all contraction pairs
-        contractionPairs = []
-        for i in range(len(ops)):
-            iTerm = ops[i]
-            iType = iTerm.indices[0].indType
-
-            for j in range(i+1,len(ops)):
-                jTerm = ops[j]
-                jType = jTerm.indices[0].indType
-
-                if isinstance(iTerm, creOp) and isinstance(jTerm, desOp):
-                    if is_core_index_type(iType) or is_core_index_type(jType):
-                        contractionPairs.append((i,j));
-
-        # Determine maximum contraction order
-        creCount = 0
-        maxConOrder = 0
-        for i in range(len(ops)-1,-1,-1):
-            iTerm = ops[i]
-            if isinstance(iTerm, desOp):
-                creCount +=1
-            elif isinstance(iTerm, creOp) and creCount > 0:
-                maxConOrder += 1
-                creCount -= 1
-        del(creCount,iTerm)
-
-        # Generate all contractions
-        contractions = []
-        for i in range(maxConOrder+1):
-            subCons = makeTuples(i,contractionPairs)
-            j = 0
-            while j < len(subCons):
-                creOpTags = []
-                desOpTags = []
-                for k in range(i):
-                    creOpTags.append(subCons[j][k][1])
-                    desOpTags.append(subCons[j][k][0])
-                if allDifferent(creOpTags) and allDifferent(desOpTags):
-                    j += 1
-                else:
-                    del(subCons[j])
-            for j in range(len(subCons)):
-                contractions.append(subCons[j])
-        del(subCons,creOpTags,desOpTags,contractionPairs)
-
-        # For each contraction, generate the resulting term
-        ordered_terms = []
-        for contraction in contractions:
-            conSign = 1
-            deltaFuncs = []
-            subOpString = []
-            subOpString.extend(ops)
-            for conPair in contraction:
-                index1 = ops[conPair[0]].indices[0]
-                index2 = ops[conPair[1]].indices[0]
-                deltaFuncs.append(kroneckerDelta([index1,index2]))
-                subOpString[conPair[0]] = 'contracted'
-                subOpString[conPair[1]] = 'contracted'
-                for q in subOpString[conPair[0]+1:conPair[1]]:
-                    if not (q is 'contracted'):
-                        conSign *= -1
-            i = 0
-            while i < len(subOpString):
-                if subOpString[i] is 'contracted':
-                    del(subOpString[i])
-                else:
-                    i += 1
-            (sortSign, sortedOps) = sortOpsCore(subOpString)
-            totalSign = conSign * sortSign
-
-            ordered_tensors = []
-            ordered_tensors.extend(nonOps)
-            ordered_tensors.extend(deltaFuncs)
-            ordered_tensors.extend(sortedOps)
-            ordered_terms.append(term(totalSign * _term.numConstant, _term.constants, ordered_tensors))
-
-    # Normal ordering for sfExOps
-    elif has_sfExOps:
-        # Make separate lists of the spin free excitation operators and other tensors
+    # Normal ordering for spin-free excitation operators
+    if has_sfExOps:
         raise Exception('This code does not support for now')
 
-    else:
-        ordered_terms = []
-        ordered_terms = [_term]
+    # If no creation/destruction operators present, do nothing
+    if not has_creDesOps:
+        return [_term]
+
+    # Perform normal ordering for creation/destruction operators #
+
+    # Separate cre/desOp from other tensors
+    ops = [_tensor.copy() for _tensor in _term.tensors if isinstance(_tensor, (creOp, desOp))]
+    nonOps = [_tensor.copy() for _tensor in _term.tensors if not isinstance(_tensor, (creOp, desOp))]
+
+    # Generate all contraction pairs
+    contractionPairs = [
+        (i, j)
+        for i in range(len(ops))
+        for j in range(i+1, len(ops))
+        if isinstance(ops[i], creOp) and isinstance(ops[j], desOp)
+        and (is_core_index_type(ops[i].indices[0].indType) or is_core_index_type(ops[j].indices[0].indType))
+    ]
+
+    # Determine maximum contraction order
+    creCount = 0
+    maxConOrder = 0
+    for iTerm in reversed(ops):
+        if isinstance(iTerm, desOp):
+            creCount += 1
+        elif isinstance(iTerm, creOp) and creCount > 0:
+            maxConOrder += 1
+            creCount -= 1
+
+    # Generate all contractions
+    contractions = []
+    for i in range(maxConOrder + 1):
+        subCons = makeTuples(i, contractionPairs)
+        # Filter to keep only valid contractions (no duplicate tags)
+        contractions.extend([
+            con for con in subCons
+            if allDifferent([con[k][1] for k in range(i)]) and
+               allDifferent([con[k][0] for k in range(i)])
+        ])
+
+    # For each contraction, generate the resulting term
+    ordered_terms = []
+    for contraction in contractions:
+        conSign = 1
+        deltaFuncs = []
+        subOpString = list(ops)
+
+        for conPair in contraction:
+            index1 = ops[conPair[0]].indices[0]
+            index2 = ops[conPair[1]].indices[0]
+            deltaFuncs.append(kroneckerDelta([index1, index2]))
+            subOpString[conPair[0]] = 'contracted'
+            subOpString[conPair[1]] = 'contracted'
+            # Count sign flips
+            conSign *= (-1) ** sum(1 for q in subOpString[conPair[0]+1:conPair[1]] if q != 'contracted')
+
+        # Remove contracted operators
+        subOpString = [op for op in subOpString if op != 'contracted']
+        sortSign, sortedOps = sortOpsCore(subOpString)
+        totalSign = conSign * sortSign
+
+        ordered_tensors = nonOps + deltaFuncs + sortedOps
+        ordered_terms.append(term(totalSign * _term.numConstant, _term.constants, ordered_tensors))
 
     if options.verbose:
         print("Terms after normal ordering:")
@@ -365,59 +322,53 @@ def normOrderCor(_term):
 
 def sortOpsCore(_unsorted_ops, returnPermutation = False):
     """
-    Sorts a list of creation/destruction operators into normal order and alphabetically.
-    Performs no contractions.  Returns the overall sign resulting from the sort and the sorted operator list.
+    Sorts a list of creation/destruction operators into normal order and alphabetically, without performing contractions.
+    Returns the overall sign resulting from the sort and the sorted operator list.
     """
-    sorted_ops = _unsorted_ops + []
-    i = 0
+    sorted_ops = list(_unsorted_ops)
+    n_ops = len(sorted_ops)
     sign = 1
 
+    perm = None
     if returnPermutation:
-        perm = range(len(_unsorted_ops))
+        perm = list(range(n_ops))
 
-    while i < len(sorted_ops)-1:
-        if isinstance(sorted_ops[i], creOp) and is_core_index_type(sorted_ops[i].indices[0]):
+    i = 0
+    while i < n_ops-1:
+        # Bubble core creation operators to the right
+        current_op = sorted_ops[i]
+        if isinstance(current_op, creOp) and is_core_index_type(current_op.indices[0]):
             j = i
-            for k in range(i,(len(sorted_ops)-1)):
-                if isinstance(sorted_ops[k+1], creOp) and is_core_index_type(sorted_ops[k+1].indices[0]):
-                    i += 1
-                    j = i
-                else:
-                    i = j
-                    break
-            if ((i+1) > (len(sorted_ops)-1)):
+            while j+1 < n_ops and isinstance(sorted_ops[j+1], creOp) and is_core_index_type(sorted_ops[j+1].indices[0]):
+                j += 1
+            if j+1 >= n_ops:
                 break
 
-            temp = sorted_ops[i]
-            sorted_ops[i] = sorted_ops[i+1]
-            sorted_ops[i+1] = temp
-
-            if returnPermutation:
-                temp = perm[i]
-                perm[i] = perm[i+1]
-                perm[i+1] = temp
-            i = 0
+            sorted_ops[j], sorted_ops[j+1] = sorted_ops[j+1], sorted_ops[j]
             sign *= -1
+            if perm is not None:
+                perm[j], perm[j+1] = perm[j+1], perm[j]
 
-        elif isinstance(sorted_ops[i+1], desOp) and is_core_index_type(sorted_ops[i+1].indices[0]):
-            temp = sorted_ops[i]
-            sorted_ops[i] = sorted_ops[i+1]
-            sorted_ops[i+1] = temp
-
-            if returnPermutation:
-                temp = perm[i+1]
-                perm[i+1] = perm[i]
-                perm[i] = temp
             i = 0
+            continue
+
+        # Bubble core destruction operators to the left
+        next_op = sorted_ops[i+1]
+        if isinstance(next_op, desOp) and is_core_index_type(next_op.indices[0]):
+            sorted_ops[i], sorted_ops[i+1] = next_op, current_op
             sign *= -1
-            if (sorted_ops[i+1].name == sorted_ops[i].name):
+            if perm is not None:
+                perm[i], perm[i+1] = perm[i+1], perm[i]
+
+            if sorted_ops[i+1].name == sorted_ops[i].name:
                 break
-        else:
-            i += 1
 
-    if returnPermutation:
-        return (sign, sorted_ops, perm)
-    return (sign, sorted_ops)
+            i = 0
+            continue
+
+        i += 1
+
+    return (sign, sorted_ops) if not returnPermutation else (sign, sorted_ops, perm)
 
 def contractDeltaFuncs_nondummy(_terms):
     "Contracts delta function for both non-dummy indices only wrt to orbitals subspaces, otherwise use 'contractDeltaFuncs' function."
@@ -426,16 +377,17 @@ def contractDeltaFuncs_nondummy(_terms):
     sys.stdout.flush()
 
     for term in _terms:
-        for i in range(len(term.tensors)):
-            t = term.tensors[i]
+        for t in term.tensors:
+            if not isinstance(t, kroneckerDelta):
+                continue
 
-            if isinstance(t, kroneckerDelta):
-                i0 = t.indices[0]
-                i1 = t.indices[1]
-                if not (i0.isSummed and i1.isSummed):
-                    if not ((get_spatial_index_type(i0) == get_spatial_index_type(i1)) and
-                            (get_spin_index_type(i0) == get_spin_index_type(i1))):
-                        term.numConstant = 0.0
+            i0, i1 = t.indices[0], t.indices[1]
+            both_summed = i0.isSummed and i1.isSummed
+            spatial_match = get_spatial_index_type(i0) == get_spatial_index_type(i1)
+            spin_match = get_spin_index_type(i0) == get_spin_index_type(i1)
+            if not both_summed and not (spatial_match and spin_match):
+                term.numConstant = 0.0
+                break
 
     termChop(_terms)
 
@@ -508,7 +460,7 @@ def reorder_tensor_indices(_terms):
                 order_factor = permutes_factors[permutes_rank_ind]
 
                 # Legacy ordering to obtain spin-orbital Prism integrals exceptions
-                if (ordered_tensor.name in ['v', 't1', 't2']) and legacy_ordering and not chemists_notation:
+                if (ordered_tensor.name in ['t1', 't2']) and legacy_ordering and not chemists_notation:
 
                     inds_ccae = [options.core_type,   options.core_type,   options.active_type, options.virtual_type]
                     inds_caae = [options.core_type,   options.active_type, options.active_type, options.virtual_type]

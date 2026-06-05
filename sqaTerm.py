@@ -25,126 +25,104 @@
 # For example, the Hamiltonian in second quantization can be written as a list of terms.
 #
 
-import threading
-from sqaIndex import index
-from sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
-from sqaMisc import makePermutations
-from sqaOptions import options
-import time
+from functools import total_ordering
+from multiprocessing import Pool, cpu_count, get_context
+from collections import deque, defaultdict
+from itertools import islice, count
 
+from .sqaIndex import index, ind_type_order
+from .sqaTensor import tensor, kroneckerDelta, sfExOp, creOp, desOp
+from .sqaMisc import makePermutations
+from .sqaOptions import options
+
+from .utils import log_timing
+from .worker import process_chunk
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
 
+@total_ordering
 class term:
     "A class for terms used in operator algebra. Each term is a multiplicative string of constants, tensors, and operators."
-
+    TOL = 1e-6
     #------------------------------------------------------------------------------------------------
 
     def __init__(self, numConstant, constList, tensorList, isInCanonicalForm = False):
         self.constants = []
         self.tensors = []
-        if type(numConstant) == type(1.0) or type(numConstant) == type(1):
+        if isinstance(numConstant, (int, float)):
             self.numConstant = float(numConstant)
         else:
             raise TypeError("numConstant must be given as a float or an int.")
-        for c in constList:
-            if type(c) != type('a'):
-                raise TypeError("constList must be a list of strings")
-            self.constants.append(c)
-        for t in tensorList:
-            if not isinstance(t, tensor):
-                raise TypeError("tensorList must be a list of tensor objects")
-            self.tensors.append(t.copy())
-        if type(isInCanonicalForm) == type(True):
+
+        if not all(isinstance(c, str) for c in constList):
+            raise TypeError("constList must be a list of strings.")
+        self.constants.extend(constList)
+
+        if not all(isinstance(t, tensor) for t in tensorList):
+            raise TypeError("tensorList must be a list of tensor objects.")
+        self.tensors.extend(t.copy() for t in tensorList)
+
+        if isinstance(isInCanonicalForm, bool):
             self.isInCanonicalForm = isInCanonicalForm
         else:
             raise TypeError("if specified, isInCanonicalForm must be True or False")
 
     #------------------------------------------------------------------------------------------------
 
-    def __cmp__(self,other):
-        if not isinstance(other,term):
+    def _comparison_key(self):
+        """
+        Return tuple for comparison:
+        (nr creOps, nr desOps, sfExOp ranks, nr constants, nr tensors, tensor names, tensors, constants)
+        """
+        return (
+            self.nCreOps(),
+            self.nDesOps(),
+            self.sfExOp_ranks(),
+            len(self.constants),
+            len(self.tensors),
+            tuple(t.name for t in self.tensors),
+            tuple(self.tensors),
+            tuple(self.constants),
+        )
+
+    def __eq__(self, other):
+        if not isinstance(other, term):
             raise TypeError("term object can only be compared to other term objects.")
 
-        # sort by number of loose creation operators first
-        retval = cmp(self.nCreOps(),other.nCreOps())
-        if retval != 0:
-            return retval
+        # compare keys and numerical constants
+        return (
+            self._comparison_key() == other._comparison_key() and
+            abs(self.numConstant - other.numConstant) < term.TOL
+        )
 
-        # next sort by number of loose destruction operators
-        retval = cmp(self.nDesOps(),other.nDesOps())
-        if retval != 0:
-            return retval
+    def __lt__(self, other):
+        if not isinstance(other, term):
+            raise TypeError("term object can only be compared to other term objects.")
 
-        # next sort by the orders of the spin free excitation operators
-        retval = cmp(self.sfExOp_ranks(),other.sfExOp_ranks())
-        if retval != 0:
-            return retval
+        if self._comparison_key() != other._comparison_key():
+            return self._comparison_key() < other._comparison_key()
 
-        # next sort by the number of constants
-        retval = cmp(len(self.constants),len(other.constants))
-        if retval != 0:
-            return retval
-
-        # next sort by the number of tensors
-        retval = cmp(len(self.tensors),len(other.tensors))
-        if retval != 0:
-            return retval
-
-        # next sort by the tensors' names
-        retval = cmp([t.name for t in self.tensors], [t.name for t in other.tensors])
-        if retval != 0:
-            return retval
-
-        # next sort by the tensors
-        retval = cmp(self.tensors,other.tensors)
-        if retval != 0:
-            return retval
-
-        # next sort by the constants
-        retval = cmp(self.constants,other.constants)
-        if retval != 0:
-            return retval
-
-        # finally compare the numerical constants
-        numDiff = self.numConstant - other.numConstant
-        if abs(numDiff) < 1e-6:
-            return 0
-        elif numDiff < 0:
-            return -1
-        elif numDiff > 0:
-            return 1
-        else:
-            raise RuntimeError("Failure in comparison of terms' numeric constants.")
-        return numDiff
+        # if keys equal, compare numerical constants
+        if abs(self.numConstant - other.numConstant) < term.TOL:
+            return False
+        return self.numConstant < other.numConstant
 
     #------------------------------------------------------------------------------------------------
 
     def __str__(self):
 
-        # numerical constant
-        retval = " (%10.5f) " %self.numConstant
-
-        # non-numerical constants
-        for i in range(len(self.constants)):
-            retval += self.constants[i] + " "
-
-        # tensors
-        for t in self.tensors:
-            retval += str(t) + " "
-        
-        return retval
+        retval = [f" ({self.numConstant:10.5f})", " ".join(self.constants), " ".join(str(t) for t in self.tensors)]
+        return " ".join(filter(None, retval))
 
     #------------------------------------------------------------------------------------------------
 
     def __add__(self,other):
-        "Adds the terms self and other.    Only works if the constants, tensors, and operators of two terms all match."
-        if self.sameForm(other):
-            retval = self.copy()
-            retval.numConstant += other.numConstant
-        else:
+        "Adds the terms self and other. Only works if the constants, tensors, and operators of two terms all match."
+        if not self.sameForm(other):
             raise RuntimeError("self and other must have the same constants, tensors, and operators")
+        retval = self.copy()
+        retval.numConstant += other.numConstant
         return retval
 
     #------------------------------------------------------------------------------------------------
@@ -157,44 +135,34 @@ class term:
 
     def nCreOps(self):
         "Returns the number of loose creation operators in the term"
-        retval = 0
-        for t in self.tensors:
-            if isinstance(t, creOp):
-                retval += 1
+        retval = sum(isinstance(t, creOp) for t in self.tensors)
         return retval
 
     #------------------------------------------------------------------------------------------------
 
     def nDesOps(self):
         "Returns the number of loose destruction operators in the term"
-        retval = 0
-        for t in self.tensors:
-            if isinstance(t, desOp):
-                retval += 1
+        retval = sum(isinstance(t, desOp) for t in self.tensors)
         return retval
 
     #------------------------------------------------------------------------------------------------
 
     def sfExOp_ranks(self):
         "Returns a list of the ranks of the spin free excitation operators in the term"
-        retval = []
-        for t in self.tensors:
-            if isinstance(t, sfExOp):
-                retval.append(len(t.indices)/2)
+        retval = [t.order for t in self.tensors if isinstance(t, sfExOp)]
         return retval
 
     #------------------------------------------------------------------------------------------------
 
     def scale(self, factor):
         "Multiplies the term by factor."
-        if type(factor) == type(1.0) or type(factor) == type(1):
-            self.numConstant *= factor
-        else:
+        if not isinstance(factor, (int, float)):
             raise ValueError("factor must an integer or float")
+        self.numConstant *= factor
 
     #------------------------------------------------------------------------------------------------
 
-    def sameForm(self,other):
+    def sameForm(self, other):
         "Determines whether the terms are of the same form."
         self.makeCanonical()
         other.makeCanonical()
@@ -210,710 +178,430 @@ class term:
         i = 0
         while i < len(self.tensors):
             t = self.tensors[i]
-            
-            # If the term is a delta funciton with a repeated index, remove it
-            if isinstance(t, kroneckerDelta) and (t.indices[0] == t.indices[1]) and (t.indices[0].userDefined == t.indices[1].userDefined):
-                del(self.tensors[i])
 
-            # If the term is a delta funciton with contractable indices, contract them and remove the delta func
-            elif isinstance(t, kroneckerDelta) and (t.indices[0].isSummed or t.indices[1].isSummed):
-                i0 = t.indices[0]
-                i1 = t.indices[1]
-
-                # Check that the indices have the same number of type groups
-                if len(i0.indType) != len(i1.indType):
-                    raise RuntimeError("Cannot contract indices %s, %s.    They have different numbers of type groups." %(str(i0), str(i1)))
-
-                # Determine the type of the new index based on the overlap between
-                # the types of the two indices
-                typeOverlap = []
-                for j in range(len(i0.indType)):
-                    typeOverlap.append([])
-                    for typeString in i0.indType[j]:
-                        if typeString in i1.indType[j]:
-                            typeOverlap[-1].append(typeString)
-
-#                for l0 in i0.indType:
-#                    typeOverlap.append([])
-#                    for s0 in l0:
-#                        for l1 in i1.indType:
-#                            if s0 in l1:
-#                                typeOverlap[-1].append(s0)
-
-                # If there is no overlap between any of the type groups, the delta function is zero
-                if ( len(i0.indType) > 0 or len(i1.indType) > 0 ) and [] in typeOverlap:
-                    self.numConstant = 0.0
-                    return
-
-                # Create the new index
-                if not i0.isSummed:
-                    newIndex = index(i0.name, typeOverlap, i0.isSummed, i0.userDefined)
-                else:
-                    newIndex = index(i1.name, typeOverlap, i1.isSummed, i1.userDefined)
-
-                # Remove the delta function
-                del(self.tensors[i])
-
-                # Excecute the index replacement
-                for ten in self.tensors:
-                    for j in range(len(ten.indices)):
-                        if ten.indices[j] in [i0,i1]:
-                            ten.indices[j] = newIndex.copy()
-
-            # Otherwise move on to the next tensor
-            else:
+            # Skip non-kronecker delta functions
+            if not isinstance(t, kroneckerDelta):
                 i += 1
+                continue
 
+            # Kronecker delta indices
+            i0, i1 = t.indices[0], t.indices[1]
+
+            # Remove delta functions with a repeated index
+            if (i0 == i1) and (i0.userDefined == i1.userDefined):
+                del self.tensors[i]
+                continue
+
+            # Skip delta functions with no contractible indices
+            if not (i0.isSummed or i1.isSummed):
+                i += 1
+                continue
+
+            # Perform contraction for delta functions with contractible indices
+            # Validate that indices are compatible
+            if len(i0.indType) != len(i1.indType):
+                raise RuntimeError(f"Cannot contract indices {i0}, {i1}. They have different numbers of type groups.")
+
+            # Determine new index type based on type overlap
+            typeOverlap = [
+                [typeString for typeString in i0.indType[j] if typeString in i1.indType[j]]
+                for j in range(len(i0.indType))
+            ]
+
+            # If no overlap, then delta function is zero
+            if (len(i0.indType) > 0 or len(i1.indType) > 0) and [] in typeOverlap:
+                self.numConstant = 0.0
+                return
+
+            # Create the new index
+            if not i0.isSummed:
+                newIndex = index(i0.name, typeOverlap, i0.isSummed, i0.userDefined)
+            else:
+                newIndex = index(i1.name, typeOverlap, i1.isSummed, i1.userDefined)
+
+            # Remove the delta function
+            del self.tensors[i]
+
+            # Replace old indices with new index
+            for ten in self.tensors:
+                ten.indices = [
+                    newIndex.copy() if old_idx in (i0, i1) else old_idx
+                    for old_idx in ten.indices
+                ]
 
     #------------------------------------------------------------------------------------------------
 
     def generateAlphabet(self):
-        "Returns a list of strings that shares no elements with the term's index names."
+        """ Returns a list of strings that share no elements with the term's index names. """
 
-        # Compile list of index names in self
-        usedNames = []
-        for t in self.tensors:
-            for i in t.indices:
-                if i.userDefined:
-                    i.name = 'user_' + i.userDefined
-                if not (i.name in usedNames):
-                    usedNames.append(i.name)
+        # Set of index names used in self
+        used_names = {
+            (f"user_{idx.userDefined}" if idx.userDefined else idx.name)
+            for t in self.tensors
+            for idx in t.indices
+        }
 
-        # Generate an alphabet with no elements overlapping with usedNames
-        alphabet = []
-        i = 0
-        while len(alphabet) < len(usedNames):
-            if not (str(i) in usedNames):
-                alphabet.append(str(i))
-            i += 1
+        # Generate an alphabet with no elements overlapping with used_names
+        alphabet = list(
+            islice((idx for idx in map(str, count()) if idx not in used_names), len(used_names))
+        )
 
         return alphabet
 
     #------------------------------------------------------------------------------------------------
 
     def isNormalOrdered(self):
-        "Returns true if the term is in normal order and false otherwise"
-
-        creFlag    = False 
-        desFlag    = False
-        sfExFlag = False
+        """ Returns True if term is normal-ordered, False otherwise. """
+        seen_tensor_types = set()
         for t in self.tensors:
-            if ( isinstance(t,creOp) or isinstance(t,sfExOp) ) and ( desFlag or sfExFlag ):
+            if isinstance(t, (creOp, sfExOp)) and seen_tensor_types.intersection((desOp, sfExOp)):
                 return False
-            if isinstance(t, creOp):
-                creFlag = True
-            if isinstance(t, desOp):
-                desFlag = True
-            if isinstance(t, sfExOp):
-                sfExFlag = True
+            seen_tensor_types.add(type(t))
         return True
 
     #------------------------------------------------------------------------------------------------
 
     def makeCanonical(self, rename_user_defined = True):
-        "Converts the term to a unique canonical form."
-
+        """ Converts the term to a unique canonical form. """
         # Use the non recursive function
         self.makeCanonical_non_recursive(rename_user_defined)
         return
 
-        # If the tensor is already in canonical form, do nothing
-        if self.isInCanonicalForm:
-            return
-
-#        print "Converting to canonical form:"
-#        print self
-
-        # If the term is not normal ordered, raise an error
-        if not self.isNormalOrdered():
-            raise RuntimeError("A term must have normal ordered operators to be converted to canonical form.")
-
-        # Sort the constants
-        self.constants.sort()
-
-        # If there are no tensors in the term then skip the tensor sorting.
-        if len(self.tensors) == 0:
-            self.isInCanonicalForm = True
-            return
-
-        # Create all tensor lists in which the tensors are sorted by type and name.
-        # There can be more than one term here if there are multiple tensors with the same name.
-        candidateTensorLists = self.getCandidateTensorLists()
-
-        # Generate an alphabet for use in renaming indices
-        # This is done to avoid renaming with an index name already in use.
-        # Should try using numbers, i.e. '1', '2', '3', etc.
-        alphabet = self.generateAlphabet()
-
-        # For each candidate list, rename the indices canonically and record the score for that list.
-        bestScore = [-1]
-        nTopScore = 0
-        for i in range(len(candidateTensorLists)):
-            (score,map,sign,newTensorList) = getcim(candidateTensorLists[i],alphabet)
-            if score > bestScore:
-                (bestScore,bestMap,bestSign,bestTensorList) = (score,map,sign,newTensorList)
-                nTopScore = 1
-            elif score == bestScore:
-                nTopScore += 1
-
-        # Check to see that only one candidate achieved the top score
-        if nTopScore > 1:
-            raise RuntimeError("%i candidates tied for the top score." %nTopScore)
-
-        # Set the tensors and their indices in the canonical order (the order with the highest score)
-        self.tensors = bestTensorList
-
-        # Apply the sign produced from the index sorting
-        self.scale(bestSign)
-
-        # Create an index mapping that converts to a canonical alphabet, i.e. a-z
-        map = bestMap
-        alphabet = list('abcdefghijklmnopqrstuvwxyz')
-        if len(alphabet) < len(map):
-            raise RuntimeError("Alphabet smaller than number of indices, no more names left!")
-        canonMap = {}
-        while map.keys():
-            minVal = min(map.values())
-            for key in map.keys():
-                if map[key] == minVal:
-                    canonMap[map[key].tup()] = map[key].copy()
-                    canonMap[map[key].tup()].name = alphabet.pop(0)
-                    del map[key]
-                    break
-        map = canonMap
-
-        # Rename the indices using the canonical mapping
-        for t in self.tensors:
-            for i in range(len(t.indices)):
-                if t.indices[i].tup() in map.keys():
-                    t.indices[i] = map[t.indices[i].tup()].copy()
-
-        # Turn on the canonical form flag to avoid calling this function again unnecessarily
-        self.isInCanonicalForm = True
-
     #------------------------------------------------------------------------------------------------
 
     def makeCanonical_non_recursive(self, rename_user_defined = True):
-        "Converts the term to a unique canonical form using a non-recursive algorithm."
+        """Converts the term to a unique canonical form using a non-recursive algorithm."""
 
-        # If the tensor is already in canonical form, do nothing
+        # Early exit checks
         if self.isInCanonicalForm:
             return
 
-        # If the term is not normal ordered, raise an error
-        if not self.isNormalOrdered():
-            raise RuntimeError("A term must have normal ordered operators to be converted to canonical form.")
-
-        # Sort the constants
-        self.constants.sort()
-
-        # If there are no tensors in the term then skip the tensor sorting.
-        if len(self.tensors) == 0:
+        if not self.tensors:
             self.isInCanonicalForm = True
             return
 
-        # Sort the freely commuting tensors by number and name
-        fcList = []
-        ncList = []
-        for t in self.tensors:
-            if t.freelyCommutes:
-                fcList.append(t)
-            else:
-                ncList.append(t)
-        fcList.sort(lambda x,y: cmp(x.name,y.name))
+        if not self.isNormalOrdered():
+            raise RuntimeError("A term must have normal ordered operators to be converted to canonical form.")
 
-        nameGroups = []
-        uniqueNames = []
-        for t in fcList:
-            if t.name in uniqueNames:
-                nameGroups[-1].append(t)
-            else:
-                uniqueNames.append(t.name)
-                nameGroups.append([t])
-        nameGroups.sort(lambda x,y: cmp(len(x),len(y)))
-        for t in ncList:
-            nameGroups.append([t])
-        del(uniqueNames,fcList,ncList,t)
+        # Sort constants
+        self.constants.sort()
 
-        # Generate an alphabet for use in renaming indices
-        # This is done to avoid renaming with an index name already in use.
-        # Should try using numbers, i.e. '1', '2', '3', etc.
+        # Partition tensors based on commutation properties
+        fc_list = [t for t in self.tensors if t.freelyCommutes]
+        nc_list = [t for t in self.tensors if not t.freelyCommutes]
+
+        # Sort freely commuting tensors
+        fc_groups = defaultdict(list)
+        for t in fc_list:
+            fc_groups[t.name].append(t)
+
+        # external group sort
+        def group_key(g):
+            return g[0].__class__.__name__, len(g), g[0].name
+
+        # internal group sort
+        def element_key(t):
+            score = [ind_type_order(ind.indType) for ind in t.indices]
+            return len(t.indices), tuple(sorted(score)), tuple(score)
+
+        fc_groups = [sorted(g, key=element_key) for g in fc_groups.values()]
+        fc_groups = sorted(fc_groups, key=group_key)
+
+        # Add non-commuting tensors as individual groups
+        name_groups = fc_groups + [[t] for t in nc_list]
+
+        # Generate alphabet for renaming indices
         alphabet = self.generateAlphabet()
 
+        # Initialize best state tracking
+        best_state = {
+            'tensor_list': None,
+            'factor': None,
+            'map': None,
+            'score': None,
+            'index_list': None,
+            'count': 0,
+        }
+
+        job_stack = deque([({}, 0, 0, 0, [])])
+
         # Determine the best ordering and index mapping
-        best_tensor_list = None
-        best_factor = None
-        bestMap = None
-        bestScore = [-1]
-        nTopScore = 0
-        # job format:    (map, gCount, tCount, aCount, gPerms)
-        jobStack = [({},0,0,0,[])]
-        while jobStack:
+        while job_stack:
+            current_map, g_count, t_count, a_count, g_perms = job_stack.pop()
 
-            # get the next job
-            map,gCount,tCount,aCount,gPerms = jobStack.pop()
+            # ===== Terminal Case: All Groups Processed =====
+            if g_count == len(name_groups):
+                ten_list, index_list, factor = self._get_tensor_list(name_groups, g_perms, current_map)
+                self._update_best_state(best_state, ten_list, index_list, factor, current_map)
+                continue
 
-            # If there are no name groups remaining, compute the score
-            if gCount == len(nameGroups):
+            # ===== Case: Only creOp/desOp Tensors Left =====
+            if all(len(group) == 1 and isinstance(group[0], (creOp, desOp)) for group in name_groups[g_count:]):
+                ten_list, index_list, factor = self._get_tensor_list(name_groups[:g_count], g_perms, current_map)
 
-                # Compute a new tensor list in which any dummy indices are given their
-                # new names and all indices are sorted.
-                # Also compute a list of these ordered indices.
-                # Also compute the multiplicitive factor generated by sorting the indices.
-                tenList = []
-                indexList = []
-                factor = 1
-                for i in range(len(nameGroups)):
-                    for j in range(len(nameGroups[i])):
-                        tenList.append(nameGroups[i][gPerms[i][j]].copy())
-                        for k in range(len(tenList[-1].indices)):
-                            if tenList[-1].indices[k].isSummed:
-                                tenList[-1].indices[k] = map[tenList[-1].indices[k].tup()]
-                        factor *= tenList[-1].sortIndeces()
-                        for ind in tenList[-1].indices:
-                            indexList.append(ind)
+                # Process ops
+                op_list = [name_groups[i][0].copy() for i in range(g_count, len(name_groups))]
+                new_maps_count = 0
 
-                # Compute a score based on how alphabetical the indices are
-                score = []
-                for i in range(len(indexList)-1):
-                    score.append(0)
-                    for j in range(i+1,len(indexList)):
-                        if indexList[i] < indexList[j]:
-                            score[-1] += 1
-
-                # If the current score is the best score, save the result
-                if score > bestScore:
-                    nTopScore = 1
-                    bestScore = score
-                    bestMap = map
-                    best_factor = factor
-                    best_tensor_list = tenList
-
-                # If the current score ties for the best, count the number of best scores
-                elif score == bestScore:
-                    nTopScore += 1
-
-            # If only cre/des operators remain, sort them and compute the score
-            elif min([ (len(i) == 1 and (isinstance(i[0], creOp) or isinstance(i[0], desOp))) for i in nameGroups[gCount:] ]):
-
-                # Compute a new tensor list in which any dummy indices are given their
-                # new names and all indices are sorted.
-                # Also compute a list of these ordered indices.
-                # Also compute the multiplicitive factor generated by sorting the indices.
-                tenList = []
-                indexList = []
-                factor = 1
-                for i in range(gCount):
-                    for j in range(len(nameGroups[i])):
-                        tenList.append(nameGroups[i][gPerms[i][j]].copy())
-                        for k in range(len(tenList[-1].indices)):
-                            if tenList[-1].indices[k].isSummed:
-                                tenList[-1].indices[k] = map[tenList[-1].indices[k].tup()]
-                        factor *= tenList[-1].sortIndeces()
-                        for ind in tenList[-1].indices:
-                            indexList.append(ind)
-
-                # Apply the input mapping to the creation/destruction operators
-                # Create and apply a new mapping for any new dummy indices
-                opList = [nameGroups[i][0].copy() for i in range(gCount,len(nameGroups))]
-                nNewMaps = 0
-                for op in opList:
-                    if op.indices[0].tup() in map:
-                        op.indices[0] = map[op.indices[0].tup()]
+                for op in op_list:
+                    if op.indices[0].tup() in current_map:
+                        op.indices[0] = current_map[op.indices[0].tup()]
                     elif op.indices[0].isSummed:
-                        map[op.indices[0].tup()] = index(alphabet[aCount+nNewMaps], op.indices[0].indType, op.indices[0].isSummed, op.indices[0].userDefined)
-                        nNewMaps += 1
-                        op.indices[0] = map[op.indices[0].tup()]
+                        current_map[op.indices[0].tup()] = index(
+                            alphabet[a_count + new_maps_count],
+                            op.indices[0].indType,
+                            op.indices[0].isSummed,
+                            op.indices[0].userDefined
+                        )
+                        op.indices[0] = current_map[op.indices[0].tup()]
+                        new_maps_count += 1
 
-                # Sort the operators and apply the resulting sign
-                (s,opList) = sortOps(opList)
-                factor *= s
+                sign, op_list = sortOps(op_list)
+                factor *= sign
 
-                # Add the operators' indices to the ordered list of indices.
-                # Also add the sorted operators to the new tensor list.
-                for op in opList:
-                    indexList.append(op.indices[0])
-                    tenList.append(op)
+                index_list.extend(op.indices[0] for op in op_list)
+                ten_list.extend(op_list)
 
-                # Compute a score based on how alphabetical the indices are
-                score = []
-                for i in range(len(indexList)-1):
-                    score.append(0)
-                    for j in range(i+1,len(indexList)):
-                        if indexList[i] < indexList[j]:
-                            score[-1] += 1
+                self._update_best_state(best_state, ten_list, index_list, factor, current_map)
+                continue
 
-                # If the current score is the best score, save the result
-                if score > bestScore:
-                    nTopScore = 1
-                    bestScore = score
-                    bestMap = map
-                    best_factor = factor
-                    best_tensor_list = tenList
+            # ===== Case: Single sfExOp Tensor Left =====
+            if (g_count == len(name_groups) - 1 and len(name_groups[g_count]) == 1 and
+                isinstance(name_groups[g_count][0], sfExOp)):
 
-                # If the current score ties for the best, count the number of best scores
-                elif score == bestScore:
-                    nTopScore += 1
+                ten_list, index_list, factor = self._get_tensor_list(name_groups[:g_count], g_perms, current_map)
 
-            # If only a sfExOp remains, sort its indices and compute the score
-            elif (gCount == len(nameGroups)-1) and (len(nameGroups[gCount]) == 1) and isinstance(nameGroups[gCount][0], sfExOp):
+                t = name_groups[g_count][0].copy()
+                new_maps_count = 0
 
-                # Compute a new tensor list in which any dummy indices are given their
-                # new names and all indices are sorted.
-                # Also compute a list of these ordered indices.
-                # Also compute the multiplicitive factor generated by sorting the indices.
-                tenList = []
-                indexList = []
-                factor = 1
-                for i in range(gCount):
-                    for j in range(len(nameGroups[i])):
-                        tenList.append(nameGroups[i][gPerms[i][j]].copy())
-                        for k in range(len(tenList[-1].indices)):
-                            if tenList[-1].indices[k].isSummed:
-                                tenList[-1].indices[k] = map[tenList[-1].indices[k].tup()]
-                        factor *= tenList[-1].sortIndeces()
-                        for ind in tenList[-1].indices:
-                            indexList.append(ind)
-
-                # Apply the input mapping to the sfExOp
-                # Create and apply a new mapping for any new dummy indices
-                t = nameGroups[gCount][0].copy()
-                nNewMaps = 0
                 for i in range(len(t.indices)):
-                    if t.indices[i].tup() in map:
-                        t.indices[i] = map[t.indices[i].tup()]
+                    if t.indices[i].tup() in current_map:
+                        t.indices[i] = current_map[t.indices[i].tup()]
                     elif t.indices[i].isSummed:
-                        map[t.indices[i].tup()] = index(alphabet[aCount+nNewMaps], t.indices[i].indType, t.indices[i].isSummed, t.indices[i].userDefined)
-                        nNewMaps += 1
-                        t.indices[i] = map[t.indices[i].tup()]
+                        current_map[t.indices[i].tup()] = index(
+                            alphabet[a_count + new_maps_count],
+                            t.indices[i].indType,
+                            t.indices[i].isSummed,
+                            t.indices[i].userDefined
+                        )
+                        t.indices[i] = current_map[t.indices[i].tup()]
+                        new_maps_count += 1
 
-                # Sort the indices of the sfExOp (go go gadget bubble sort!)
+                # Sort sfExOp indices using bubble sort
                 i = 0
                 while i < t.order-1:
                     if t.indices[i] > t.indices[i+1]:
-                        temp = t.indices[i+1]
-                        t.indices[i+1] = t.indices[i]
-                        t.indices[i] = temp
-                        temp = t.indices[i+t.order+1]
-                        t.indices[i+t.order+1] = t.indices[i+t.order]
-                        t.indices[i+t.order] = temp
+                        t.indices[i], t.indices[i+1] = t.indices[i+1], t.indices[i]
+                        j = i + t.order
+                        t.indices[j], t.indices[j+1] = t.indices[j+1], t.indices[j]
                         i = 0
                     else:
                         i += 1
 
-                # Add the sfExOp to the new tensor list
-                tenList.append(t)
+                ten_list.append(t)
+                index_list.extend(t.indices)
 
-                # Add the sfExOp's indices to the ordered index list
-                for i in t.indices:
-                    indexList.append(i)
+                self._update_best_state(best_state, ten_list, index_list, factor, current_map)
+                continue
 
-                # Compute a score based on how alphabetical the indices are
-                score = []
-                for i in range(len(indexList)-1):
-                    score.append(0)
-                    for j in range(i+1,len(indexList)):
-                        if str(indexList[i].name) < str(indexList[j].name):
-                            score[-1] += 1
+            # ===== Start New Name Group =====
+            if len(g_perms) <= g_count:
+                with_mapped = []
+                without_mapped = []
 
-                # If the current score is the best score, save the result
-                if score > bestScore:
-                    nTopScore = 1
-                    bestScore = score
-                    bestMap = map
-                    best_factor = factor
-                    best_tensor_list = tenList
+                for i, tensor in enumerate(name_groups[g_count]):
+                    least_mapped = False
+                    for ind in tensor.indices:
+                        if ind.tup() in current_map:
+                            mapped_val = current_map[ind.tup()]
+                            if least_mapped is False or mapped_val < least_mapped:
+                                least_mapped = mapped_val
 
-                # If the current score ties for the best, count the number of best scores
-                elif score == bestScore:
-                    nTopScore += 1
-
-            # If starting a new name group, sort the group's names based on the input mapping
-            # and schedule a new job for each permutation of the tensors with no index assignments
-            elif len(gPerms) <= gCount:
-                withMapped = []
-                withoutMapped = []
-                for i in range(len(nameGroups[gCount])):
-                    leastMapped = False
-                    for ind in nameGroups[gCount][i].indices:
-                        if (ind.tup() in map) and ((leastMapped is False) or (map[ind.tup()] < leastMapped)):
-                            leastMapped = map[ind.tup()]
-                    if leastMapped is False:
-                        withoutMapped.append(i)
+                    if least_mapped is False:
+                        without_mapped.append(i)
                     else:
-                        withMapped.append((leastMapped,i))
-                withMapped.sort(lambda x,y: cmp(x[0],y[0]))
-                withMapped = [i[1] for i in withMapped]
-                if len(withoutMapped) <= 1:
-                    jobStack.append((map,gCount,tCount,aCount,gPerms + [withMapped + withoutMapped]))
+                        with_mapped.append((least_mapped, i))
+
+                with_mapped.sort(key=lambda x: x[0])
+
+                if len(without_mapped) <= 1:
+                    sorted_indices = [i[1] for i in with_mapped] + without_mapped
+                    job_stack.append((current_map, g_count, t_count, a_count, g_perms + [sorted_indices]))
                 else:
-                    for perm in makePermutations(len(withoutMapped)):
-                        new_gPerm = withMapped + [withoutMapped[i] for i in perm]
-                        jobStack.append((map,gCount,tCount,aCount,gPerms + [new_gPerm]))
-                    del(new_gPerm,perm)
-                del(withMapped,withoutMapped,leastMapped)
+                    for perm in makePermutations(len(without_mapped)):
+                        new_perm = [i[1] for i in with_mapped] + [without_mapped[j] for j in perm]
+                        job_stack.append((current_map, g_count, t_count, a_count, g_perms + [new_perm]))
 
-            # If continuing an existing group, schedule a new job for each equivelent ordering
-            # of the current tensor's indices
-            else:
+                continue
 
-                # Give the current tensor a convenient name
-                t = nameGroups[gCount][gPerms[gCount][tCount]]
+            # ===== Continue Existing Group =====
+            t = name_groups[g_count][g_perms[g_count][t_count]]
+            sym_perms, _ = t.symPermutes()
 
-                # Get the tensor's symmetry permutations
-                (symPerms,factors) = t.symPermutes()
+            next_g_count = g_count
+            next_t_count = t_count + 1
+            if next_t_count == len(name_groups[g_count]):
+                next_g_count += 1
+                next_t_count = 0
 
-                # Compute gCount and tCount for the next job
-                next_gCount = gCount
-                next_tCount = tCount + 1
-                if next_tCount == len(nameGroups[gCount]):
-                    next_gCount += 1
-                    next_tCount = 0
+            # Schedule new jobs for each symmetry-equivalent index ordering of current tensor, t
+            for perm in sym_perms:
+                new_map = dict(current_map)
+                new_maps_count = 0
 
-                # For each of the tensor's symmetry-equivelent index orderings, create mappings for any
-                # un-mapped dummy indices and schedule a new job
-                for perm in symPerms:
-                    nNewMaps = 0
-                    newMap = {}
-                    newMap.update(map)
-                    for ind in [t.indices[perm[i]] for i in range(len(t.indices))]:
-                        if ind.isSummed and ind.tup() not in newMap:
-                            newMap[ind.tup()] = index(alphabet[aCount+nNewMaps], ind.indType, ind.isSummed, ind.userDefined)
-                            nNewMaps += 1
-                    jobStack.append((newMap,next_gCount,next_tCount,aCount+nNewMaps,gPerms))
+                for ind in [t.indices[perm[i]] for i in range(len(t.indices))]:
+                    if ind.isSummed and ind.tup() not in new_map:
+                        new_map[ind.tup()] = index(
+                            alphabet[a_count + new_maps_count],
+                            ind.indType,
+                            ind.isSummed,
+                            ind.userDefined
+                        )
+                        new_maps_count += 1
 
-#        # Check to see that only one candidate achieved the top score
-#        if nTopScore > 1:
-#            #raise RuntimeError("%i candidates tied for the top score." %nTopScore)
-#            print "WARNING: %i candidates tied for the top score." %nTopScore
+                job_stack.append((new_map, next_g_count, next_t_count, a_count + new_maps_count, g_perms))
 
+        # Finalize canonical alphabet mapping
+        best_map = best_state['map'] or {}
+        alphabet_list = list('abcdefghijklmnopqrstuvwxyz')
+        filtered_alphabet = [c for c in alphabet_list if c not in options.user_defined_indices]
 
-        # Set the tensor list as the list with the 'best' index naming and ordering
-        if best_tensor_list is not None:
-                self.tensors = best_tensor_list 
-
-        # Apply the factor produced from the canonical ordering
-        if best_factor is not None:
-                self.scale(best_factor)
-
-        if bestMap is None:
-                bestMap = map
-
-        # Create an index mapping that converts to a canonical alphabet, i.e. a-z
-        alphabet = list('abcdefghijklmnopqrstuvwxyz')
-
-        filtered_alphabet = []
-        for character in alphabet:
-            if character not in options.user_defined_indices:
-                filtered_alphabet.append(character)
-        alphabet = filtered_alphabet
-
-        if len(alphabet) < len(bestMap):
+        if len(filtered_alphabet) < len(best_map):
             raise RuntimeError("Alphabet smaller than number of indices, no more names left!")
-        canonMap = {}
-        while bestMap.keys():
-            minVal = min(bestMap.values())
-            for key in bestMap.keys():
-                if bestMap[key] == minVal:
-                    canonMap[bestMap[key].tup()] = bestMap[key].copy()
-                    canonMap[bestMap[key].tup()].name = alphabet.pop(0)
-                    del bestMap[key]
-                    break
 
-        # Rename the indices using the canonical mapping
-        for t in self.tensors:
+        canon_map = {}
+        for _, val in sorted(best_map.items(), key=lambda kv: kv[1].name):
+            canon_map[val.tup()] = val.copy()
+            canon_map[val.tup()].name = filtered_alphabet.pop(0)
+
+        # Apply canonical mapping to final tensor list
+        for t in (best_state['tensor_list'] or []):
             for i in range(len(t.indices)):
-                if t.indices[i].tup() in canonMap.keys():
-                    t.indices[i] = canonMap[t.indices[i].tup()].copy()
+                if t.indices[i].tup() in canon_map:
+                    t.indices[i] = canon_map[t.indices[i].tup()].copy()
                 if rename_user_defined and t.indices[i].userDefined:
                     t.indices[i].rename()
 
-        # Turn on the canonical form flag to avoid calling this function again unnecessarily
+        #if best_state['count'] > 1:
+        #    print(f'Multiple states are best (count = {best_state['count']})...')
+
+        # Finalize results
+        self.tensors = best_state['tensor_list'] or []
+        if best_state['factor'] is not None:
+            self.scale(best_state['factor'])
         self.isInCanonicalForm = True
 
-    #------------------------------------------------------------------------------------------------
+    def _get_tensor_list(self, name_groups, g_perms, current_map):
+        """Compute a new tensor list with renamed dummy indices, a list of the ordered dummy indices,
+        and the multiplicative factor generated by sorting the indices."""
+        ten_list = []
+        index_list = []
+        factor = 1
+        # Build tensor and index lists using group permutations
+        for group, perm in zip(name_groups, g_perms):
+            for t_ind in perm:
+                t_src = group[t_ind].copy()
+                # Rename summed (dummy) indices using current_map
+                t_src.indices = [
+                    current_map[idx.tup()] if idx.isSummed else idx
+                    for idx in t_src.indices
+                ]
+                # Sort indices in-place and accumulate resulting factor
+                factor *= t_src.sortIndices()
+                index_list.extend(t_src.indices)
+                ten_list.append(t_src)
+        return ten_list, index_list, factor
 
-    def getCandidateTensorLists(self):
-        """
-        Create all tensor lists in which the term's tensors are sorted by name.
-        Multiple lists occur when there are multiple freely commuting tensors with the same name.
-        """
+    def _update_best_state(self, best_state, ten_list, index_list, factor, current_map):
+        """Update best state if current candidate is better."""
+        # Compute a score for index_list based on how alphabetical the indices are
+        score = []
+        for i in range(len(index_list) - 1):
+            count = sum(
+                1 for j in range(i + 1, len(index_list))
+                if index_list[i] < index_list[j]
+            )
+            score.append(count)
 
-        # Separate the tensors into two lists:    freely commuting and non-commuting
-        fcList = []
-        ncList = []
-        for t in self.tensors:
-            if t.freelyCommutes:
-                fcList.append(t.copy())
-            else:
-                ncList.append(t.copy())
-
-        if len(fcList) > 0:
-
-            # Sort the freely commuting tensors by name
-            fcList.sort(lambda x,y: cmp(x.name,y.name))
-
-            # For the freely commuting tensors, compile a list of unique tensor names and the number of times they occur
-            uniqueNames = []
-            nameCounts = []
-            for ten in fcList:
-                if ten.name in uniqueNames:
-                    nameCounts[uniqueNames.index(ten.name)] += 1
-                else:
-                    uniqueNames.append(ten.name)
-                    nameCounts.append(1)
-
-            # For each unique name, generate ordering permutations
-            permutes = []
-            for i in nameCounts:
-                permutes.append(makePermutations(i))
-
-            # Combine the name perturbations above into all possible lists in which the freely commuting tensors
-            # are ordered by name
-            tensorsByName = []
-            total = 0
-            for i in nameCounts:
-                tensorsByName.append(fcList[total:total+i])
-                total += i
-            candidateLists = []
-            for perm in permutes[0]:
-                candidateLists.append([])
-                for p in perm:
-                    candidateLists[-1].append(tensorsByName[0][p].copy())
-            for i in range(1,len(uniqueNames)):
-                nOldVariants = len(candidateLists)
-                for perm in permutes[i]:
-                    for j in range(nOldVariants):
-                        candidateLists.append([])
-                        candidateLists[-1].extend(candidateLists[j])
-                        for p in perm:
-                            candidateLists[-1].append(tensorsByName[i][p].copy())
-                del(candidateLists[0:nOldVariants])
-
-        else:
-            candidateLists = [[]]
-
-        # Append the non-commuting tensors to each candidate list
-        for l in candidateLists:
-            for t in ncList:
-                l.append(t.copy())
-
-        # Return the list of candidate tensor orders
-        return candidateLists
-
-    #------------------------------------------------------------------------------------------------
-
+        # Update state tracker 
+        if best_state['score'] is None or score > best_state['score']:
+            best_state.update({
+                'tensor_list': ten_list,
+                'factor': factor,
+                'map': current_map,
+                'score': score,
+                'index_list': index_list,
+                'count': 1
+            })
+        elif score == best_state['score']:
+            best_state['count'] += 1
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
+@log_timing
+def combineTerms(term_list, max_processes = None):
+    """Combines like terms in list of terms."""
 
-def combineTerms(termList, maxThreads = 1):
-    "Combines any like terms in termList"
+    if not term_list:
+        return
+
+    if max_processes is None:
+        max_processes = int(cpu_count()/2)
+    else:
+        max_processes = max(1, max_processes)
 
     if options.verbose:
-        print('')
-        print('Combining like terms:')
-        print('Converting %i terms to canonical form...' %(len(termList)))
+        print('\nCombining like terms:')
+        print('Converting %i terms to canonical form...' %(len(term_list)))
+        print('Using max threads %i' %(max_processes))
 
-    startTime = time.time()
+    # Canonicalize terms
+    n_terms = len(term_list)
+    if max_processes > 1 and n_terms > 100:
+        # Process chunks in parallel to reduce serialization overhead
+        chunk_size = max(1, n_terms // (max_processes * 4))
+        chunks = [term_list[i:i+chunk_size] for i in range(0, n_terms, chunk_size)]
 
-    # Put the terms in termList into their canonical (unique) forms
-    if maxThreads > 1:
+        with get_context("fork").Pool(processes=max_processes, maxtasksperchild=1) as pool:
+            processed_chunks = pool.map(process_chunk, chunks)
 
-        # Initialize counters and locks
-        termCount = [0]
-        printCount = [0]
-        tLock = threading.Lock()
-        pLock = threading.Lock()
-
-        # Define function to use in threads
-        def threadFunc(nTerms):
-
-            batchSize = 100
-
-            # Get first batch
-            tLock.acquire()
-            i = termCount[0]
-            termCount[0] += batchSize
-            tLock.release()
-            k = i + batchSize
-
-            while i < nTerms:
-
-                termList[i].makeCanonical(rename_user_defined = False)
-
-#                pLock.acquire()
-#                print '%6i    %s' %(printCount[0],str(termList[i]))
-#                printCount[0] += 1
-#                pLock.release()
-
-                i += 1
-
-                if i == k:
-                    # Get next batch
-                    tLock.acquire()
-                    i = termCount[0]
-                    termCount[0] += batchSize
-                    tLock.release()
-                    k = i + batchSize
-
-        # Start threads
-        threads = []
-        nTerms = len(termList)
-        for i in range(maxThreads):
-            threads.append(threading.Thread(target=threadFunc, args=(nTerms,)))
-            threads[-1].start()
-
-        # Wait for the threads to finish
-        for thread in threads:
-            thread.join()
+        # Flatten results
+        term_list[:] = [t for chunk in processed_chunks for t in chunk]
 
     else:
-        # Convert the terms to canonical form in the main thread
-        for i in range(len(termList)):
+        # Convert terms in serial
+        for i, t in enumerate(term_list, start = 1):
             if options.verbose:
-                print '%6i    %s' %(i,str(termList[i]))
-            termList[i].makeCanonical(rename_user_defined = False)
+                print('%6i    %s' % (i, t))
+            t.makeCanonical(rename_user_defined = False)
 
     # Sort the terms
-    termList.sort()
+    term_list.sort()
 
     # Combine any terms with the same canonical form
-    i = 0
-    while i < len(termList)-1:
-        if termList[i].sameForm(termList[i+1]):
-            termList[i+1] += termList[i]
-            del(termList[i])
+    new_term_list = []
+    for t in term_list:
+        if (new_term_list and
+            new_term_list[-1].constants == t.constants and
+            new_term_list[-1].tensors == t.tensors
+        ):
+            new_term_list[-1].numConstant += t.numConstant
         else:
-            i += 1
+            new_term_list.append(t)
+    term_list[:] = new_term_list
 
     # Rename user defined dummy indices
-    for _term in termList:
+    for _term in term_list:
         for _tensor in _term.tensors:
-            for _ind in range(len(_tensor.indices)):
-                _tensor.indices[_ind].rename()
-
-#    i = 0
-#    while i < len(termList)-1:
-#        j = i + 1
-#        while j < len(termList):
-#            if termList[j].sameForm(termList[i]):
-#                termList[i] += termList[j]
-#                del(termList[j#            else:
-#            else:
-#                j += 1
-#        i += 1
+            for idx in _tensor.indices:
+                idx.rename()
 
     # Remove terms with coefficients of zero
-    termChop(termList)
-
-    if options.verbose:
-        print("Finished combining terms in %.3f seconds" %(time.time() - startTime))
-        print("")
+    termChop(term_list)
 
     # Sort the terms
-    termList.sort()
+    term_list.sort()
 
 
 #--------------------------------------------------------------------------------------------------
@@ -923,254 +611,60 @@ def combineTerms(termList, maxThreads = 1):
 def multiplyTerms(t1,t2):
     if (not isinstance(t1,term)) or (not isinstance(t2,term)):
         raise TypeError("t1 and t2 must be of type term")
-    numConst = t1.numConstant * t2.numConstant
-    constList = []
-    constList.extend(t1.constants)
-    constList.extend(t2.constants)
-    tensorList = []
-    tensorList.extend(t1.tensors)
-    tensorList.extend(t2.tensors)
-    return term(numConst,constList,tensorList)
-
+    return term(t1.numConstant*t2.numConstant, t1.constants+t2.constants, t1.tensors+t2.tensors)
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
 
-def termChop(termList, tolerance = 1e-6):
+def termChop(termList):
     "Removes any terms with zero constant factors from termList."
     TypeErrorMessage = "termList must be a list of terms"
-    if type(termList) != type([]):
+    if not isinstance(termList, list):
         raise TypeError(TypeErrorMessage)
-    i = 0
-    while i < len(termList):
-        if not isinstance(termList[i],term):
-            raise TypeError(TypeErrorMessage)
-        if abs(termList[i].numConstant) < tolerance:
-            del(termList[i])
-        else:
-            i += 1
 
+    if not all(isinstance(t, term) for t in termList):
+        raise TypeError(TypeErrorMessage)
+
+    termList[:] = [t for t in termList if abs(t.numConstant) >= term.TOL]
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
-
-
-def getcim(tenList, alphabet, tenCount = 0, alphaCount = 0, inputMaps = {}):
-    """
-    Determines the index mapping necessary to canonicalize the indices in tenList.
-    Assumes any creation/destruction operators are in normal order.
-    """
-
-    # Determine what types of tensors are left to process
-    no_tensors_left    = ( tenCount == len(tenList) )
-    only_sfExOp_left = ( (tenCount == len(tenList)-1) and isinstance(tenList[-1], sfExOp) )
-    only_creDes_left = ( tenCount < len(tenList) )
-    for t in tenList[tenCount:]:
-        if ( not isinstance(t, creOp) ) and ( not isinstance(t, desOp) ):
-            only_creDes_left = False
-            break
-
-    if no_tensors_left or only_creDes_left or only_sfExOp_left:
-
-        # Copy the input mapping into a new map that can be added to
-        map = {}
-        map.update(inputMaps)
-
-        # For the preceeding tensors, create an ordered list of indeces
-        # and a list of tensors with the canonical index sorting
-        indexList = []
-        newTensorList = []
-        sign = 1
-        for t in tenList[:tenCount]:
-            tcopy = t.copy()
-            for j in range(len(tcopy.indices)):
-                if tcopy.indices[j].tup() in map.keys():
-                    tcopy.indices[j] = map[tcopy.indices[j].tup()]
-            # Keep track of the sign produced by sorting the tensor's indices
-            sign *= tcopy.sortIndeces()
-            newTensorList.append(tcopy)
-            for ind in tcopy.indices:
-                indexList.append(ind)
-
-    if only_creDes_left:
-
-        # Apply the input mapping to the creation/destruction operators
-        # Create and apply a new mapping for any new dummy indices
-        opList = []
-        for op in tenList[tenCount:]:
-            opList.append(op.copy())
-        nNewMaps = 0
-        for op in opList:
-            if op.indices[0].tup() in map.keys():
-                # Apply input mapping
-                op.indices[0] = map[op.indices[0].tup()].copy()
-            elif op.indices[0].isSummed:
-                # Create new mapping
-                map[op.indices[0].tup()] = index(alphabet[alphaCount+nNewMaps], op.indices[0].indType, op.indices[0].isSummed, op.indices[0].userDefined)
-                nNewMaps += 1
-                op.indices[0] = map[op.indices[0].tup()].copy()
-
-        # Sort the operators and apply the resulting sign
-        (s,opList) = sortOps(opList)
-        sign *= s
-
-        # Add the operators' indices to the ordered list of indices.
-        # Also add the sorted operators to the new tensor list.
-        for op in opList:
-            indexList.append(op.indices[0])
-            newTensorList.append(op)
-
-    if only_sfExOp_left:
-
-        # Apply the input mapping to the sfExOp
-        # Create and apply a new mapping for any new dummy indices
-        t = tenList[-1].copy()
-        nNewMaps = 0
-        for i in range(len(t.indices)):
-            if t.indices[i].tup() in map.keys():
-                # Apply input mapping
-                t.indices[i] = map[t.indices[i].tup()].copy()
-            elif t.indices[i].isSummed:
-                # Create new mapping
-                map[t.indices[i].tup()] = index(alphabet[alphaCount+nNewMaps], t.indices[i].indType, t.indices[i].isSummed, t.indices[i].userDefined)
-                nNewMaps += 1
-                t.indices[i] = map[t.indices[i].tup()].copy()
-
-        # Sort the indices of the sfExOp (go go gadget bubble sort!)
-        i = 0
-        while i < t.order-1:
-            if t.indices[i] > t.indices[i+1]:
-                temp = t.indices[i+1]
-                t.indices[i+1] = t.indices[i]
-                t.indices[i] = temp
-                temp = t.indices[i+t.order+1]
-                t.indices[i+t.order+1] = t.indices[i+t.order]
-                t.indices[i+t.order] = temp
-                i = 0
-            else:
-                i += 1
-
-        # Add the sfExOp to the new tensor list
-        newTensorList.append(t)
-
-        # Add the sfExOp's indices to the ordered index list
-        for i in t.indices:
-            indexList.append(i)
-                
-
-    if no_tensors_left or only_creDes_left or only_sfExOp_left:
-
-        # Compute a score based on how alphabetical the ordered list of indices is
-        score = []
-        for i in range(len(indexList)-1):
-            score.append(0)
-            for j in range(i+1,len(indexList)):
-                if indexList[i] < indexList[j]:
-                    score[-1] += 1
-
-        # Return the score, the mapping, the resulting sign, and the canonical tensor list produced by the mapping
-        return (score,map,sign,newTensorList)
-
-    # Otherwise, process the next tensor
-    else:
-
-        # Get the tensor's symmetry permutations
-        (symPerms,factors) = tenList[tenCount].symPermutes()
-
-        # Make a copy of the tensor to be processed
-        t = tenList[tenCount].copy()
-
-        # Apply all index maps from previous tensors to the current tensor
-        for i in range(len(t.indices)):
-            if t.indices[i].tup() in inputMaps:
-                t.indices[i] = inputMaps[t.indices[i].tup()]
-
-        # Determine the permutation that maximizes alphabetical order of the mapped indices
-        bestPermScore = -1
-        for perm in symPerms:
-            permScore = 0
-            indList = []
-            for j in range(len(t.indices)):
-                indList.append(t.indices[perm[j]])
-            for i in range(len(indList)-1):
-                for j in range(i+1,len(indList)):
-                    if indList[j] in inputMaps.values() and indList[i] in inputMaps.values() and indList[i] < indList[j]:
-                        permScore += 1
-            if permScore > bestPermScore:
-                bestPermScore = permScore
-                bestInitialPerm = perm
-
-        # Does it matter if there are more than one perm with max score?
-        # I think it doesn't, one can select any of them
-
-        # Reset the indices and sort them according to bestInitialPerm
-        t = tenList[tenCount].copy()
-        tcopy = t.copy()
-        for i in range(len(t.indices)):
-            tcopy.indices[bestInitialPerm[i]] = t.indices[i]
-        t = tcopy
-
-        # make a mapping of the next alphabet elements, in order, to the unassigned indices
-        # also make any symmetry equivalent mappings
-        bestScore = [-1]
-        for k in range(len(symPerms)):
-            nNewMaps = 0
-            map = {}
-            map.update(inputMaps)
-            for i in range(len(t.indices)):
-                p = symPerms[k][i]
-                if t.indices[p].isSummed and ( not (t.indices[p].tup() in map) ):
-                    map[t.indices[p].tup()] = index(alphabet[alphaCount+nNewMaps], t.indices[p].indType, t.indices[p].isSummed, t.indices[p].userDefined)
-                    nNewMaps += 1
-            (score,map,sign,newTensorList) = getcim(tenList, alphabet, tenCount+1, alphaCount+nNewMaps, map)
-            if score > bestScore: #is it possible to have multiple top scores here? I think so.    Does it matter?
-                bestScore = score
-                bestMaps = map
-                bestSign = sign
-                bestNewTensorList = newTensorList
-
-        # return the mapping that gives the best overall score
-        return (bestScore,bestMaps,bestSign,bestNewTensorList)
-
-
-#--------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------
-
 
 def sortOps(unsortedOps, returnPermutation = False):
     """
-    Sorts a list of creation/destruction operators into normal order and alphebetically.
-    Performs no contractions.    Returns the overall sign resulting from the sort and the sorted operator list.
+    Sorts a list of creation/destruction operators into normal order and alphabetically, without performing contractions.
+    Returns the overall sign resulting from the sort and the sorted operator list. Optionally also returns the permutation.
     """
-    sortedOps = unsortedOps + []
+    sortedOps = list(unsortedOps)
+    n_ops = len(unsortedOps)
+
     i = 0
     sign = 1
+
     if returnPermutation:
-        perm = range(len(unsortedOps))
-    while i < len(sortedOps)-1:
+        perm = list(range(n_ops))
+
+    while i < n_ops-1:
         if sortedOps[i] <= sortedOps[i+1]:
-             i += 1
+            i += 1
         else:
-            temp = sortedOps[i]
-            sortedOps[i] = sortedOps[i+1]
-            sortedOps[i+1] = temp
+            sortedOps[i], sortedOps[i+1] = sortedOps[i+1], sortedOps[i]
             if returnPermutation:
-                temp = perm[i]
-                perm[i] = perm[i+1]
-                perm[i+1] = temp
+                perm[i], perm[i+1] = perm[i+1], perm[i]
             i = 0
             sign *= -1
+
     if returnPermutation:
-        return (sign,sortedOps,perm)
-    return (sign,sortedOps)
+        return sign, sortedOps, perm
+    return sign, sortedOps
 
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
 
-def removeCoreOpPairs(inList):
+def removeCoreOpPairs(term_list):
     """
     Removes pairs of core creation and core destruction operators corresponding to the same core index.
     Does not remove a pair if it's creation or destruction operator is repeated.
@@ -1178,342 +672,241 @@ def removeCoreOpPairs(inList):
     The terms must be in normal order.
     """
 
+    from .sqaIndex import is_core_index_type
+
     # prepare input argument
-    if type(inList) != type([]):
+    if not isinstance(term_list, list):
         raise TypeError("input must be a list of terms")
 
-    # loop over input terms
-    for t in inList:
+    if not all(isinstance(t, term) for t in term_list):
+        raise TypeError("term_list must be a list of term objects")
 
-        # Check that the term is indeed a term
-        if not isinstance(t, term):
-            raise TypeError("input must be a term or list of terms")
+    if not all(t.isNormalOrdered() for t in term_list):
+        raise ValueError("core index removal function only works for normal ordered terms")
 
-        # Check that the term is normal ordered
-        if not t.isNormalOrdered():
-            raise ValueError("core index removal function only works for normal ordered terms")
+    for t in term_list:
 
         # Initialize a counter for unremoved creation operators
-        creCount = 0
+        cre_count = 0
 
-        # Loop over the term's tensors
         i = 0
         while i < len(t.tensors):
+            cre_op_tensor = t.tensors[i]
 
-            # Initialize flags
-            operatorsRemoved = False
-            repeatedCreOp = False
-            repeatedDesOp = False
-
-            # if the tensor is a core creation operator
-            if isinstance(t.tensors[i], creOp) and options.core_type in t.tensors[i].indices[0].indType:
-
-                # Check whether the creation operator is a repeat of an earlier creation operator
-                for k in range(i):
-                    if t.tensors[k] == t.tensors[i]:
-                        repeatedCreOp = True
-
-                # If a repeat, move to the next tensor
-                if not repeatedCreOp:
-
-                    # otherwise...
-                    
-                    # create the matching destruction operator
-                    matchingDesOp = desOp(t.tensors[i].indices[0])
-
-                    # search for the matching destruction operator
-                    for j in range(i+1,len(t.tensors)):
-
-                        # if a repeat of the creation operator is found, move to the next tensor
-                        if t.tensors[j] == t.tensors[i]:
-                            break
-
-                        # if the matching destruction operator is found
-                        if t.tensors[j] == matchingDesOp:
-
-                            # initialize a counter for the number of operator commutations necessary to move the
-                            # matching creation and destruction operators to the begining and end of the term,
-                            # respectively
-                            commCount = creCount
-
-                            # count the number of destruction operators after the matching destruction operator
-                            for k in range(j+1, len(t.tensors)):
-                                if isinstance(t.tensors[k], desOp):
-                                    commCount += 1
-
-                                # while counting, check whether a repeat of the matching destruction operator is present
-                                if t.tensors[k] == t.tensors[j]:
-                                    repeatedDesOp = True
-
-                            # if there is a repeat of the matching destruction operator, move to the next tensor
-                            if repeatedDesOp:
-                                break
-
-                            # scale the term by the factor resulting from commuting the creation operator and
-                            # matching destruction operator to the beginning and end of the term, respectively
-                            t.scale((-1)**commCount)
-
-                            # delete the creation and matching destruction operators
-                            del t.tensors[j]
-                            del t.tensors[i]
-
-                            # set the operator removal flag to true
-                            operatorsRemoved = True
-
-                            # move to the next tensor
-                            break
-
-            # If no operators were removed...
-            if not operatorsRemoved:
-
-                # If the current tensor is a creation operator, increase the creation operator count
-                if isinstance(t.tensors[i], creOp):
-                    creCount += 1
-
-                # increment the index
+            # if tensor is not core creOp, move on
+            if not (isinstance(cre_op_tensor, creOp) and is_core_index_type(cre_op_tensor.indices[0])):
                 i += 1
+                continue
 
+            # if core creOp is a repeat, skip
+            if any(t.tensors[k] == cre_op_tensor for k in range(i)):
+                cre_count += 1
+                i += 1
+                continue
+
+            matching_des_op = desOp(cre_op_tensor.indices[0])
+
+            # Search for the matching desOp
+            j = -1
+            for idx in range(i + 1, len(t.tensors)):
+                if t.tensors[idx] == cre_op_tensor:  # repeated creOp blocks match
+                    break
+                if t.tensors[idx] == matching_des_op:
+                    j = idx
+                    break
+
+            if j == -1:
+                cre_count += 1
+                i += 1
+                continue
+
+            # Skip if the matching destruction operator is repeated after j
+            if any(t.tensors[k] == matching_des_op for k in range(j + 1, len(t.tensors))):
+                cre_count += 1
+                i += 1
+                continue
+
+            # Scale by commutation sign, then delete the matched pair
+            des_ops_after_j = sum(
+                1 for k in range(j + 1, len(t.tensors)) if isinstance(t.tensors[k], desOp)
+            )
+            t.scale((-1) ** (cre_count + des_ops_after_j))
+
+            del t.tensors[j]
+            del t.tensors[i]
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
 
-def removeCoreOps_sf(inList):
+def removeCoreOps_sf(term_list):
     """
-    Removes core indices from inList's terms' spin-free excitation operators.
+    Remove core indices from spin-free excitation operators in term_list.
     This function assumes that the spin-free operators will be converted to density matrices
-    by taking their expectation value immediately after this function is finished.
-    Terms that have a zero expectation value due to the nature of their spin-free operator's core
-    indices are deleted from inList.
+    by taking their expectation value immediately after this function.
+    Terms with zero expectation value due to the nature of their spin-free operator's core
+    indices are deleted from term_list.
     """
 
     if options.verbose:
         print("removing core creation and destruction operators in preperation for conversion to RDMs by an expectation value...")
         print("")
 
-    # loop repeatedly through the terms until no core indices are left
-    hasCore = True
-    while hasCore:
+    from .sqaIndex import is_core_index_type
 
-        hasCore = False
+    if not isinstance(term_list, list):
+        raise TypeError("input must be a list of terms")
+    if not all(isinstance(t, term) for t in term_list):
+        raise TypeError("term_list must be a list of term objects")
+    if not all(t.isNormalOrdered() for t in term_list):
+        raise ValueError("core index removal function only works for normal ordered terms")
 
-        # process each term
+    has_core = True
+    while has_core:
+        has_core = False
         t_num = 0
-        while t_num < len(inList):
 
-            # use a short name for the current term
-            t = inList[t_num]
+        while t_num < len(term_list):
+            t = term_list[t_num]
 
-            # check that t is a term
-            if not isinstance(t, term):
-                raise TypeError("inList must be a list of term objects")
+            if any(isinstance(ten, (creOp, desOp)) for ten in t.tensors):
+                raise TypeError("input terms may not contain creOp or desOp objects")
 
-            # check for normal ordering
-            if not t.isNormalOrdered():
-                raise ValueError("input terms must be normal ordered")
+            # Find the spin-free excitation operator, if any
+            op_pos = next((i for i, ten in enumerate(t.tensors) if isinstance(ten, sfExOp)), None)
 
-            # check for spin-orbital creation and destruction operators
-            for ten in t.tensors:
-                if isinstance(ten, creOp) or isinstance(ten, desOp):
-                    raise TypeError("input terms may not contain creOp or desOp objects")
-
-            # find the spin-free excitation operator
-            op = None
-            for i in xrange(len(t.tensors)):
-                if isinstance(t.tensors[i], sfExOp):
-                    op = t.tensors[i]
-                    opPos = i
-
-            # if there is no spin-free excitation operator, skip the term
-            if op is None:
+            if op_pos is None:
                 t_num += 1
                 continue
 
-            # ensure the sfExOp has no indices with multiple type groups or a type group with core and non-core types
+            op = t.tensors[op_pos]
+
+            # Validate index type groups
             for ind in op.indices:
                 if len(ind.indType) > 1:
-                    raise ValueError("index %s in term (%s) has more than one type group:    %s" %(ind.name, str(t), str(typeGroup)))
+                    raise ValueError("index %s in term (%s) has more than one type group:    %s" % (ind.name, str(t), str(ind.indType)))
                 for typeGroup in ind.indType:
                     if options.core_type[0] in typeGroup and len(typeGroup) > 1:
-                        raise ValueError("index %s in term (%s) has a type group including core and non-core types:    %s" %(ind.name, str(t), str(typeGroup)))
+                        raise ValueError("index %s in term (%s) has a type group including core and non-core types:    %s" % (ind.name, str(t), str(typeGroup)))
 
-            # compute the operator's order
-            order = len(op.indices)/2
+            order = len(op.indices) // 2
 
-            # find a core index
-            cInd = None
-            for i in xrange(2*order):
-                if op.indices[i].indType == (options.core_type,):
-                    cInd = op.indices[i]
-                    break
+            # Find the first core index
+            c_ind = next((op.indices[i] for i in range(2 * order) if op.indices[i].indType == (options.core_type,)), None)
 
-            # if there are no core indices, move to the next term
-            if cInd is None:
+            if c_ind is None:
                 t_num += 1
                 continue
 
-            # if there is a core index, request another loop through the terms because all core indices have not been found
-            hasCore = True
+            # A core index exists, request another pass through the terms
+            has_core = True
 
-            # count the number of times the targeted core index appears among creation and destruction operators
-            nCre = 0
-            nDes = 0
-            for i in xrange(order):
-                if op.indices[i] == cInd:
-                    nCre += 1
-                if op.indices[order+i] == cInd:
-                    nDes += 1
+            n_cre = sum(1 for i in range(order) if op.indices[i] == c_ind)
+            n_des = sum(1 for i in range(order) if op.indices[order + i] == c_ind)
 
-            # if the term is equal to zero, remove it and move to the next term
-            if nCre != nDes or nCre > 2 or nDes > 2:
-                del inList[t_num]
+            if n_cre != n_des or n_cre > 2 or n_des > 2:
+                del term_list[t_num]
                 continue
 
-            # organize the operator's indices into vertical pairs of cre/des operator indices
-            pairs = [ [op.indices[i],op.indices[order+i]] for i in xrange(order)]
+            pairs = [[op.indices[i], op.indices[order + i]] for i in range(order)]
 
-            # print out the initial term
             if options.verbose:
                 print("    initial term: ", t)
-#                print "verticle pairs: ",
-#                for p in pairs:
-#                    print " [%s,%s]" %(p[0].name, p[1].name),
-#                print ""
 
-            # make sure the number of pairs is equal to the operator's order
             if len(pairs) != order:
                 raise ValueError("number of pairs not equal to operator's order")
 
-            # determine the new operator's indices.
-            # record how many pairs there were with both elements equal to the targeted core operator
-            nMatch = 0
-            topUnmatched = []
-            botUnmatched = []
-            i = order-1
+            # Partition pairs by how they relate to the core index
+            n_match = 0
+            top_unmatched = []
+            bot_unmatched = []
+            i = order - 1
             while i >= 0:
-                if pairs[i][0] == cInd and pairs[i][1] == cInd:
+                if pairs[i][0] == c_ind and pairs[i][1] == c_ind:
                     del pairs[i]
-                    nMatch += 1
-                elif pairs[i][0] == cInd:
-                    botUnmatched.append(pairs.pop(i)[1])
-                elif pairs[i][1] == cInd:
-                    topUnmatched.append(pairs.pop(i)[0])
+                    n_match += 1
+                elif pairs[i][0] == c_ind:
+                    bot_unmatched.append(pairs.pop(i)[1])
+                elif pairs[i][1] == c_ind:
+                    top_unmatched.append(pairs.pop(i)[0])
                 i -= 1
-            newIndices = []
-            newIndices.extend(topUnmatched)
-            for p in pairs:
-                newIndices.append(p[0])
-            newIndices.extend(botUnmatched)
-            for p in pairs:
-                newIndices.append(p[1])
 
-            # replace the old operator with the new operator in which the targeted core index has been removed
-            if len(newIndices) > 0:
-                t.tensors[opPos] = sfExOp(newIndices)
-            # if there are no indices left after the core index's removal, remove the old operator
+            new_indices = (
+                top_unmatched
+                + [p[0] for p in pairs]
+                + bot_unmatched
+                + [p[1] for p in pairs]
+            )
+
+            if new_indices:
+                t.tensors[op_pos] = sfExOp(new_indices)
             else:
-                del t.tensors[opPos]
+                del t.tensors[op_pos]
 
-            # apply the appropriate constant factor
-            if     nCre == 1 and nMatch == 1:
-                t.scale(2.0)
-            elif nCre == 1 and nMatch == 0:
-                t.scale(-1.0)
-            elif nCre == 2 and nMatch == 2:
-                t.scale(2.0)
-            elif nCre == 2 and nMatch == 1:
-                t.scale(-1.0)
-            elif nCre == 2 and nMatch == 0:
-                t.scale(1.0)
-            else:
-                raise ValueError("unexpected values:    nCre = %i, nMatch = %i" %(nCre, nMatch))
+            scale_map = {
+                (1, 1):  2.0,
+                (1, 0): -1.0,
+                (2, 2):  2.0,
+                (2, 1): -1.0,
+                (2, 0):  1.0,
+            }
+            scale = scale_map.get((n_cre, n_match))
+            if scale is None:
+                raise ValueError("unexpected values:    nCre = %i, nMatch = %i" % (n_cre, n_match))
+            t.scale(scale)
 
-            # print out the final term
             if options.verbose:
-#                print "    topUnmatched: ",
-#                for p in topUnmatched:
-#                    print " %s" %(p.name),
-#                print ""
-#                print "    botUnmatched: ",
-#                for p in botUnmatched:
-#                    print " %s" %(p.name),
-#                print ""
                 print("        final term: ", t)
 
-            # for the special case of two unmatched pairs, the result is a sum of two different operators.
-            # the first replaced the original operator, and the second is added here.
-            if nCre == 2 and nMatch == 0:
-                inList.append(t.copy())
-                if len(newIndices) < 4:
-                    raise ValueError("expected at least 4 remaining indices for nCre == 2 and nMatch == 0 case, but only %i are present" %len(newIndices))
-                (newIndices[0], newIndices[1]) = (newIndices[1], newIndices[0])
-                inList[-1].tensors[opPos] = sfExOp(newIndices)
-                # print out the additional final term
+            # Special case: two unmatched pairs produce a second term with swapped top indices
+            if n_cre == 2 and n_match == 0:
+                if len(new_indices) < 4:
+                    raise ValueError(
+                        "expected at least 4 remaining indices for nCre == 2 and nMatch == 0 case, "
+                        "but only %i are present" % len(new_indices)
+                    )
+                term_list.append(t.copy())
+                new_indices[0], new_indices[1] = new_indices[1], new_indices[0]
+                term_list[-1].tensors[op_pos] = sfExOp(new_indices)
                 if options.verbose:
-                    print("2nd final term: ", inList[-1])
+                    print("2nd final term: ", term_list[-1])
 
-            # print a blank line
             if options.verbose:
                 print("")
 
-            # increment the index to the next term
             t_num += 1
 
-
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
 
 
-def removeVirtOps_sf(inList):
+def removeVirtOps_sf(term_list):
     """
-    Removes from inList any terms containing a spin-free operator with a virtual index.
+    Removes from term_list any terms containing a spin-free operator with a virtual index.
     """
+
+    from .sqaIndex import is_virtual_index_type
 
     if options.verbose:
-        print("removing terms containing a spin-free operator with a virtual index...")
-        print("")
+        print("removing terms containing a spin-free operator with a virtual index...\n")
 
-    # loop over the terms in inList
-    i = 0
-    while i < len(inList):
+    if not all(isinstance(t, term) for t in term_list):
+        raise TypeError("term_list must be a list of term objects")
 
-        # ensure that each element of inList is a term object
-        if not isinstance(inList[i], term):
-            raise TypeError("inList must be a list of term objects")
-
-        # determine if the term's spin-free excitation operators have any virtual indices
-        hasVirtual = False
-        for ten in inList[i].tensors:
-            if isinstance(ten, sfExOp):
-                for ind in ten.indices:
-                    if options.virtual_type in ind.indType:
-                        hasVirtual = True
-
-        # remove the term if a spin-free excitation operator had a virtual index
-        if hasVirtual:
-            if options.verbose:
-                print(" removing term: ", inList[i])
-            del inList[i]
-
-        # otherwise, move to the next term
-        else:
-            i += 1
+    # Filter out sfExOp terms with virtual indices and log removals
+    terms_to_remove = [
+        t for t in term_list
+        if any(
+            is_virtual_index_type(ind)
+            for ten in t.tensors if isinstance(ten, sfExOp)
+            for ind in ten.indices)
+    ]
 
     if options.verbose:
-        print("")
+        for t in terms_to_remove:
+            print(" removing term: ", t)
 
+    term_list[:] = [t for t in term_list if t not in terms_to_remove]
 
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------
-def count_ind(x):
-        num_ind = 0
-        for tensor in x.tensors:
-                num_ind += len(tensor.indices)
-        return num_ind    
-
-def make_str(x):
-        ind_str = ''
-        for tensor in x.tensors:
-                for ind in tensor.indices:
-                        ind_str += ind.name
-        return ind_str 

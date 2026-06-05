@@ -46,7 +46,7 @@ terms_Heff = sqa_plus.dyallH_act()
 
 ## Define terms
 if amplitude_string == 't1_0p':
-    print("## Create K_caca: a_X^\dag a_Y [H_{act}, a_Z^\dag a_W] ...\n")
+    print("## Create K_caca: a_X^\\dag a_Y [H_{act}, a_Z^\\dag a_W] ...\n")
 
     term_l_op = sqa_plus.term(1.0, [], [cre_x, des_y])
     term_r_op = sqa_plus.term(1.0, [], [cre_z, des_w])
@@ -55,7 +55,7 @@ if amplitude_string == 't1_0p':
     final_indices_string = 'XYWZ'
 
 elif amplitude_string == 't1_m1':
-    print("## Create K_ca: a_X^\dag [H_{act}, a_Y] ...\n")
+    print("## Create K_ca: a_X^\\dag [H_{act}, a_Y] ...\n")
 
     term_l_op = sqa_plus.term(1.0, [], [cre_x])
     term_r_op = sqa_plus.term(1.0, [], [des_y])
@@ -64,7 +64,7 @@ elif amplitude_string == 't1_m1':
     final_indices_string = 'XY'
 
 elif amplitude_string == 't1_p1':
-    print("## Create K_ac: a_X [H_{act}, a_Y^\dag] ...\n")
+    print("## Create K_ac: a_X [H_{act}, a_Y^\\dag] ...\n")
 
     term_l_op = sqa_plus.term(1.0, [], [des_x])
     term_r_op = sqa_plus.term(1.0, [], [cre_y])
@@ -73,7 +73,7 @@ elif amplitude_string == 't1_p1':
     final_indices_string = 'XY'
 
 elif amplitude_string == 't1_m2':
-    print("## Create K_ccaa: a_X^\dag a_Y^\dag [H_{act}, a_W a_Z] ...\n")
+    print("## Create K_ccaa: a_X^\\dag a_Y^\\dag [H_{act}, a_W a_Z] ...\n")
 
     term_l_op = sqa_plus.term(1.0, [], [cre_x, cre_y])
     term_r_op = sqa_plus.term(1.0, [], [des_w, des_z])
@@ -82,7 +82,7 @@ elif amplitude_string == 't1_m2':
     final_indices_string = 'XYZW'
 
 elif amplitude_string == 't1_p2':
-    print("## Create K_aacc: a_Z a_W [H_{act}, a_X^\dag a_Y^\dag] ...\n")
+    print("## Create K_aacc: a_Z a_W [H_{act}, a_X^\\dag a_Y^\\dag] ...\n")
 
     term_l_op = sqa_plus.term(1.0, [], [des_z, des_w])
     term_r_op = sqa_plus.term(1.0, [], [cre_x, cre_y])
@@ -92,7 +92,7 @@ elif amplitude_string == 't1_p2':
 
 elif amplitude_string == 't1_m1p':
     if k_block_string == 'K11':
-        print("## Create K11: a_X^\dag [H_{act}, a_Y] ...\n")
+        print("## Create K11: a_X^\\dag [H_{act}, a_Y] ...\n")
 
         term_l_op = sqa_plus.term(1.0, [], [cre_x])
         term_r_op = sqa_plus.term(1.0, [], [des_y])
@@ -101,7 +101,7 @@ elif amplitude_string == 't1_m1p':
         final_indices_string = 'XY'
 
     elif k_block_string == 'K12':
-        print("## Create K12: a_X^\dag [H_{act}, a_Z^\dag a_W a_Y] ...\n")
+        print("## Create K12: a_X^\\dag [H_{act}, a_Z^\\dag a_W a_Y] ...\n")
 
         term_l_op = sqa_plus.term(1.0, [], [cre_x])
         term_r_op = sqa_plus.term(1.0, [], [cre_z, des_w, des_y])
@@ -110,7 +110,7 @@ elif amplitude_string == 't1_m1p':
         final_indices_string = 'XZWY'
 
     elif k_block_string == 'K22':
-        print("## Create K22: a_X^\dag a_Z^\dag a_W [H_{act}, a_U^\dag a_V a_Y] ...\n")
+        print("## Create K22: a_X^\\dag a_Z^\\dag a_W [H_{act}, a_U^\\dag a_V a_Y] ...\n")
 
         term_l_op = sqa_plus.term(1.0, [], [cre_x, cre_z, des_w])
         term_r_op = sqa_plus.term(1.0, [], [cre_u, des_v, des_y])
@@ -120,7 +120,7 @@ elif amplitude_string == 't1_m1p':
 
 elif amplitude_string == 't1_p1p':
     if k_block_string == 'K11':
-        print("## Create K11: a_X [H_{act}, a_Y^\dag] ...\n")
+        print("## Create K11: a_X [H_{act}, a_Y^\\dag] ...\n")
 
         term_l_op = sqa_plus.term(1.0, [], [des_x])
         term_r_op = sqa_plus.term(1.0, [], [cre_y])
@@ -129,7 +129,7 @@ elif amplitude_string == 't1_p1p':
         final_indices_string = 'XY'
 
     elif k_block_string == 'K12':
-        print("## Create K12: a_X [H_{act}, a_Y^\dag a_W^\dag a_Z] ...\n")
+        print("## Create K12: a_X [H_{act}, a_Y^\\dag a_W^\\dag a_Z] ...\n")
 
         term_l_op = sqa_plus.term(1.0, [], [des_x])
         term_r_op = sqa_plus.term(1.0, [], [cre_y, cre_w, des_z])
@@ -138,7 +138,7 @@ elif amplitude_string == 't1_p1p':
         final_indices_string = 'XYWZ'
 
     elif k_block_string == 'K22':
-        print("## Create K22: a_U^\dag a_V a_X [H_{act}, a_Y^\dag a_W^\dag a_Z] ...\n")
+        print("## Create K22: a_U^\\dag a_V a_X [H_{act}, a_Y^\\dag a_W^\\dag a_Z] ...\n")
 
         term_l_op = sqa_plus.term(1.0, [], [cre_u, des_v, des_x])
         term_r_op = sqa_plus.term(1.0, [], [cre_y, cre_w, des_z])

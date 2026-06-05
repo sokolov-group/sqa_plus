@@ -17,121 +17,115 @@
 #
 # Authors: Eric Neuscamman <eric.neuscamman@gmail.com>
 #          Alexander Yu. Sokolov <alexander.y.sokolov@gmail.com>
-#  .       Koushik Chatterjee <koushikchatterjee7@gmail.com>
-#          Illia Mazin <ilia.mazin@gmail.com>
+#          Koushik Chatterjee <koushikchatterjee7@gmail.com>
+#          Ilia Mazin <ilia.mazin@gmail.com>
 #          Carlos E. V. de Moura <carlosevmoura@gmail.com>
-#
+#          Donna H. Odhiambo <donna.odhiambo@proton.me>
 
-import sys
-print("""
-----------------------------------------------------------------------------------------------------
+"""
 sqa_plus: Code generator for quasi-particle systems.
 Copyright 2009-2022 SecondQuantizationAlgebra Developers. All Rights Reserved.
 Available at https://github.com/sokolov-group/sqa_plus
+"""
+__version__ = "1.0.0"
 
-Licensed under the GNU General Public License v3.0;
+from .utils import setup_logging
+setup_logging()
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-----------------------------------------------------------------------------------------------------
-""")
+from .sqaOptions import options
 
-sys.stdout.flush()
+from .sqaIndex import index
 
-from sqaOptions import \
-  options
+from .sqaSymmetry import symmetry
 
-from sqaIndex import \
-  index
+from .sqaTensor import (
+    creOp,
+    desOp,
+    kroneckerDelta,
+    sfExOp,
+    creDesTensor,
+    tensor
+)
 
-from sqaSymmetry import \
-  symmetry
-
-from sqaTensor import \
-  creOp,              \
-  desOp,              \
-  kroneckerDelta,     \
-  sfExOp,             \
-  creDesTensor,       \
-  tensor
-
-from sqaTerm import  \
-  combineTerms,      \
-  multiplyTerms,     \
-  removeCoreOpPairs, \
-  removeCoreOps_sf,  \
-  removeVirtOps_sf,  \
-  sortOps,           \
-  term,              \
+from .sqaTerm import (
+  combineTerms,      
+  multiplyTerms,     
+  removeCoreOpPairs, 
+  removeCoreOps_sf,  
+  removeVirtOps_sf,  
+  sortOps,           
+  term,              
   termChop
+)
 
-from sqaNormalOrder import \
-  normalOrder
+from .sqaNormalOrder import normalOrder
 
-from sqaIntermediates import \
-  genIntermediates
+from .sqaIntermediates import genIntermediates
 
-from sqaCommutator import \
-  commutator
+from .sqaCommutator import commutator
 
-from sqaMisc import       \
-  allDifferent,           \
-  get_num_perms,          \
-  makePermutations,       \
-  makeTuples,             \
-  assign_rdm_types,       \
-  combine_transpose,      \
-  convert_ops_to_rdms_so
+from .sqaMisc import (
+  allDifferent,     
+  get_num_perms,    
+  makePermutations, 
+  makeTuples,       
+  assign_rdm_types, 
+  combine_transpose,
+)
 
-from sqaDecomposition_sf import  \
-  decomp_3op_to_2op_2rdm_sf,     \
-  decomp_3ops_to_2ops_2rdms_sf,  \
-  decomp_3rdm_to_2rdm_sf,        \
-  decomp_3rdms_to_2rdms_sf,      \
-  decomp_4op_to_2op_2rdm_sf,     \
-  decomp_4ops_to_2ops_2rdms_sf,  \
-  decomp_4rdm_to_2rdm_sf,        \
-  decomp_4rdm_to_3rdm_sf,        \
-  decomp_4rdms_to_2rdms_sf,      \
+from .sqaDecomposition_sf import (
+  decomp_3op_to_2op_2rdm_sf,   
+  decomp_3ops_to_2ops_2rdms_sf,
+  decomp_3rdm_to_2rdm_sf,      
+  decomp_3rdms_to_2rdms_sf,    
+  decomp_4op_to_2op_2rdm_sf,   
+  decomp_4ops_to_2ops_2rdms_sf,
+  decomp_4rdm_to_2rdm_sf,      
+  decomp_4rdm_to_3rdm_sf,      
+  decomp_4rdms_to_2rdms_sf,    
   decomp_4rdms_to_3rdms_sf
+)
 
-from sqaDecomposition_so import  \
-  decomp_3op_to_2op_2rdm_so,     \
-  decomp_3op_to_2op_3rdm_so,     \
-  decomp_3ops_to_2ops_2rdms_so,  \
-  decomp_3ops_to_2ops_3rdms_so,  \
-  decomp_3rdm_to_2rdm_so,        \
-  decomp_3rdms_to_2rdms_so,      \
-  decomp_4op_to_2op_2rdm_so,     \
-  decomp_4op_to_2op_3rdm_so,     \
-  decomp_4ops_to_2ops_2rdms_so,  \
-  decomp_4ops_to_2ops_3rdms_so,  \
-  decomp_4rdm_to_2rdm_so,        \
-  decomp_4rdm_to_3rdm_so,        \
-  decomp_4rdms_to_2rdms_so,      \
+from .sqaDecomposition_so import (
+  decomp_3op_to_2op_2rdm_so,     
+  decomp_3op_to_2op_3rdm_so,     
+  decomp_3ops_to_2ops_2rdms_so,  
+  decomp_3ops_to_2ops_3rdms_so,  
+  decomp_3rdm_to_2rdm_so,        
+  decomp_3rdms_to_2rdms_so,      
+  decomp_4op_to_2op_2rdm_so,     
+  decomp_4op_to_2op_3rdm_so,     
+  decomp_4ops_to_2ops_2rdms_so,  
+  decomp_4ops_to_2ops_3rdms_so,  
+  decomp_4rdm_to_2rdm_so,        
+  decomp_4rdm_to_3rdm_so,        
+  decomp_4rdms_to_2rdms_so,      
   decomp_4rdms_to_3rdms_so
+)
 
-from sqaMatrixBlock import    \
-  matrixBlock,                \
-  dummyLabel,                 \
-  filterVirtual,              \
-  filterCore,                 \
-  normalOrderCore,            \
-  sortOpsCore,                \
+from .sqaMatrixBlock import (
+  matrixBlock,             
+  dummyLabel,              
+  filterVirtual,           
+  filterCore,              
+  normalOrderCore,         
+  sortOpsCore,             
   contractDeltaFuncs_nondummy
+)
 
-from sqaHeff import         \
-  Heff,                     \
-  dyallH,                   \
-  dyallH_act,               \
-  Tamplitude,               \
+from .sqaHeff import (
+  Heff,             
+  dyallH,           
+  dyallH_act,       
+  Tamplitude,       
   Vperturbation
+)
 
-from sqaEinsum import genEinsum
+from .sqaEinsum import genEinsum
 
-from sqaIndexList import    \
-  indexLists,               \
+from .sqaIndexList import  (
+  indexLists,            
   dummyIndexList
+)
 
-from sqaSpinAdapted import convertSpinIntegratedToAdapted
+from .sqaSpinAdapted import convertSpinIntegratedToAdapted

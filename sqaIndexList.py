@@ -18,8 +18,8 @@
 # Author: Carlos E. V. de Moura <carlosevmoura@gmail.com>
 #
 
-from sqaIndex import index
-from sqaOptions import options
+from .sqaIndex import index
+from .sqaOptions import options
 
 class dummyIndexList:
     "A list of indices created on demand."
